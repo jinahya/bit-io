@@ -113,7 +113,9 @@
         <groupId>com.github.github</groupId>
         <artifactId>site-maven-plugin</artifactId>
         <configuration>
-          <path>${project.version}</path>
+          <server>github</server>
+          <message>site@github</message>
+          <path>site/${project.version}</path>
         </configuration>
         <executions>
           <execution>

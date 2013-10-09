@@ -7,7 +7,7 @@
   <!--groupId>com.googlecode.jinahya</groupId-->
   <groupId>com.github.jinahya</groupId>
   <artifactId>bit-io</artifactId>
-  <version>1.0.2-SNAPSHOT</version>
+  <version>1.0.2</version>
   <packaging>jar</packaging>
   <parent>
     <groupId>org.sonatype.oss</groupId>
@@ -241,6 +241,7 @@
     <connection>scm:git:git@github.com:jinahya/bit-io.git</connection>
     <developerConnection>scm:git:git@github.com:jinahya/bit-io.git</developerConnection>
     <url>https://github.com/jinahya/bit-io</url>
+    <tag>1.0.2</tag>
   </scm>
   <prerequisites>
     <maven>3.0.5</maven>

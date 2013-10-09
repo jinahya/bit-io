@@ -114,8 +114,9 @@
         <artifactId>site-maven-plugin</artifactId>
         <configuration>
           <server>github</server>
-          <message>site@github</message>
+          <message>creating site for ${project.version}</message>
           <path>site/${project.version}</path>
+          <merge>true</merge>
         </configuration>
         <executions>
           <execution>

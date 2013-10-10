@@ -56,5 +56,5 @@ public class BitInputOutputTest {
         Assert.assertEquals(actual, expected);
     }
 
-
 }
+

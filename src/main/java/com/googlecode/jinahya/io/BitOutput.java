@@ -49,6 +49,8 @@ public class BitOutput {
         void writeUnsignedByte(final int value) throws IOException;
 
 
+        void close() throws IOException;
+
     }
 
 
@@ -64,10 +66,11 @@ public class BitOutput {
          * @param stream the output to which composite bytes are written.
          */
         public StreamOutput(final OutputStream stream) {
+
             super();
 
             if (stream == null) {
-                throw new NullPointerException("stream");
+                //throw new NullPointerException("stream");
             }
 
             this.stream = stream;
@@ -77,67 +80,28 @@ public class BitOutput {
         @Override
         public void writeUnsignedByte(final int value) throws IOException {
 
+            if (stream == null) {
+                throw new IllegalStateException("stream is currently null");
+            }
+
             stream.write(value);
+        }
+
+
+        @Override
+        public void close() throws IOException {
+
+            if (stream != null) {
+                stream.flush();
+                stream.close();
+            }
         }
 
 
         /**
          * output.
          */
-        private final OutputStream stream;
-
-
-    }
-
-
-    /**
-     * A {@link ByteOutput} implementation for {@link WritableByteChannel}s.
-     *
-     * @deprecated Wrong implementation; Use {@link BufferOutput}.
-     */
-    @Deprecated
-    public static class ChannelOutput implements ByteOutput {
-
-
-        public ChannelOutput(final WritableByteChannel channel) {
-            super();
-
-            if (channel == null) {
-                throw new NullPointerException("channel");
-            }
-
-            if (!channel.isOpen()) {
-                throw new IllegalArgumentException("closed channel");
-            }
-
-            this.channel = channel;
-            buffer = ByteBuffer.allocate(1);
-        }
-
-
-        @Override
-        public void writeUnsignedByte(final int value) throws IOException {
-
-            buffer.put((byte) value); // ----------------------------------- put
-
-            buffer.flip(); // --------------------------------------------- flip
-
-            while (channel.write(buffer) != 1); // ----------------------- write
-
-            buffer.clear(); // ------------------------------------------- clear
-        }
-
-
-        /**
-         * channel.
-         */
-        private final WritableByteChannel channel;
-
-
-        /**
-         * buffer.
-         */
-        private final ByteBuffer buffer;
+        protected OutputStream stream;
 
 
     }
@@ -159,7 +123,7 @@ public class BitOutput {
             super();
 
             if (buffer == null) {
-                throw new NullPointerException("buffer");
+                //throw new NullPointerException("buffer");
             }
 
             this.buffer = buffer;
@@ -169,14 +133,99 @@ public class BitOutput {
         @Override
         public void writeUnsignedByte(final int value) throws IOException {
 
+            if (buffer == null) {
+                throw new IllegalStateException("buffer is currently null");
+            }
+
             buffer.put(((byte) value)); // BufferOverflowException
+        }
+
+
+        @Override
+        public void close() throws IOException {
         }
 
 
         /**
          * buffer.
          */
-        private final ByteBuffer buffer;
+        protected ByteBuffer buffer;
+
+
+    }
+
+
+    /**
+     * A {@link ByteOutput} implementation for {@link WritableByteChannel}s.
+     *
+     * @deprecated Wrong implementation; Use {@link BufferOutput}.
+     */
+    @Deprecated
+    public static class ChannelOutput extends BufferOutput {
+
+
+        public ChannelOutput(final ByteBuffer buffer,
+                             final WritableByteChannel channel) {
+
+            super(buffer);
+
+            if (channel == null) {
+                //throw new NullPointerException("channel");
+            }
+
+            this.channel = channel;
+        }
+
+
+        public ChannelOutput(final WritableByteChannel channel) {
+
+            this(ByteBuffer.allocate(1024), channel);
+        }
+
+
+        @Override
+        public void writeUnsignedByte(final int value) throws IOException {
+
+            if (buffer == null) {
+                throw new IllegalStateException("buffer is currently null");
+            }
+
+            if (channel == null) {
+                throw new IllegalStateException("channel is currently null");
+            }
+
+            if (!buffer.hasRemaining()) {
+                buffer.flip(); // limit -> position, position -> zero
+                while (buffer.position() == 0) {
+                    channel.write(buffer);
+                }
+                buffer.compact(); // position -> n + 1, limit -> capacity
+            }
+
+            super.writeUnsignedByte(value);
+        }
+
+
+        @Override
+        public void close() throws IOException {
+
+            if (channel != null) {
+                if (buffer != null) {
+                    buffer.flip(); // limit -> position, position -> zero
+                    while (buffer.hasRemaining()) {
+                        channel.write(buffer);
+                    }
+                    buffer.clear(); // this may be required for further access
+                }
+                channel.close();
+            }
+        }
+
+
+        /**
+         * channel.
+         */
+        protected WritableByteChannel channel;
 
 
     }
@@ -188,7 +237,7 @@ public class BitOutput {
      * @param output target byte output
      */
     public BitOutput(final ByteOutput output) {
-        
+
         super();
 
         if (output == null) {
@@ -217,6 +266,10 @@ public class BitOutput {
 
         if (length > 8) {
             throw new IllegalArgumentException("length(" + length + ") > 8");
+        }
+
+        if (output == null) {
+            throw new IllegalStateException("output is currently null");
         }
 
         final int required = length - (8 - index);
@@ -254,6 +307,7 @@ public class BitOutput {
      * @throws IOException if an I/O error occurs
      */
     public void writeBoolean(final boolean value) throws IOException {
+
         writeUnsignedByte(1, value ? 0x01 : 0x00);
     }
 
@@ -385,6 +439,7 @@ public class BitOutput {
      * @throws IOException if an I/O error occurs.
      */
     public void writeFloat(final float value) throws IOException {
+
         writeInt(32, Float.floatToRawIntBits(value));
     }
 
@@ -624,12 +679,29 @@ public class BitOutput {
     }
 
 
+    public int align() throws IOException {
+
+        return align(1);
+    }
+
+
+    public void close() throws IOException {
+
+        align(1);
+
+        if (output != null) {
+            output.close();
+        }
+    }
+
+
     /**
      * Returns the number of bytes written so far excluding current byte.
      *
      * @return the number of bytes written so far.
      */
     public int getCount() {
+
         return count;
     }
 
@@ -659,3 +731,4 @@ public class BitOutput {
 
 
 }
+

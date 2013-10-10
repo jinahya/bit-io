@@ -18,6 +18,7 @@
 package com.googlecode.jinahya.io;
 
 
+import com.googlecode.jinahya.io.BitOutput.BufferOutput;
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -50,6 +51,8 @@ public class BitInput {
         int readUnsignedByte() throws IOException;
 
 
+        void close() throws IOException;
+
     }
 
 
@@ -65,10 +68,11 @@ public class BitInput {
          * @param stream the stream to wrap.
          */
         public StreamInput(final InputStream stream) {
+
             super();
 
             if (stream == null) {
-                throw new NullPointerException("stream");
+                //throw new NullPointerException("stream");
             }
 
             this.stream = stream;
@@ -77,14 +81,76 @@ public class BitInput {
 
         @Override
         public int readUnsignedByte() throws IOException {
+
+            if (stream == null) {
+                throw new IllegalStateException("null stream");
+            }
+
             return stream.read();
+        }
+
+
+        @Override
+        public void close() throws IOException {
+
+            if (stream != null) {
+                stream.close();
+            }
         }
 
 
         /**
          * input.
          */
-        private final InputStream stream;
+        protected InputStream stream;
+
+
+    }
+
+
+    /**
+     * A {@link ByteInput} implementation for {@link ByteBuffer}s.
+     */
+    public static class BufferInput implements ByteInput {
+
+
+        /**
+         * Creates a new instance.
+         *
+         * @param buffer the buffer to wrap.
+         */
+        public BufferInput(final ByteBuffer buffer) {
+
+            super();
+
+            if (buffer == null) {
+                //throw new NullPointerException("buffer");
+            }
+
+            this.buffer = buffer;
+        }
+
+
+        @Override
+        public int readUnsignedByte() throws IOException {
+
+            if (buffer == null) {
+                throw new IllegalStateException("null buffer");
+            }
+
+            return (buffer.get() & 0xFF); // BufferUnderflowException
+        }
+
+
+        @Override
+        public void close() throws IOException {
+        }
+
+
+        /**
+         * buffer.
+         */
+        protected ByteBuffer buffer;
 
 
     }
@@ -96,7 +162,25 @@ public class BitInput {
      * @deprecated Wrong implementation; Use {@link BufferOutput}.
      */
     @Deprecated
-    public static class ChannelInput implements ByteInput {
+    public static class ChannelInput extends BufferInput {
+
+
+        /**
+         * Creates a new instance.
+         *
+         * @param channel the channel to wrap
+         */
+        public ChannelInput(final ByteBuffer buffer,
+                            final ReadableByteChannel channel) {
+
+            super(buffer);
+
+            if (channel == null) {
+                //throw new NullPointerException("null channel");
+            }
+
+            this.channel = channel;
+        }
 
 
         /**
@@ -105,91 +189,52 @@ public class BitInput {
          * @param channel the channel to wrap
          */
         public ChannelInput(final ReadableByteChannel channel) {
-            super();
 
-            if (channel == null) {
-                throw new NullPointerException("null channel");
-            }
-
-            if (!channel.isOpen()) {
-                throw new IllegalArgumentException("closed channel");
-            }
-
-            this.channel = channel;
-            buffer = ByteBuffer.allocate(1);
+            this(ByteBuffer.allocate(1024), channel);
         }
 
 
         @Override
         public int readUnsignedByte() throws IOException {
 
-            buffer.clear(); // ------------------------------------------- clear
-
-            for (int read = -1;;) {
-                read = channel.read(buffer); // --------------------------- read
-                if (read == -1) {
-                    throw new EOFException("eof");
-                }
-                if (read == 1) {
-                    break;
-                }
+            if (buffer == null) {
+                throw new IllegalStateException("buffer is currently null");
             }
 
-            buffer.flip(); // --------------------------------------------- flip
+            if (channel == null) {
+                throw new IllegalStateException("channel is currently null");
+            }
 
-            return (buffer.get() & 0xFF); // ------------------------------- get
+            while (!buffer.hasRemaining()) {
+                buffer.clear(); // position -> zero, limit -> capacity
+                while (buffer.position() == 0) {
+                    if (channel.read(buffer) == -1) {
+                        return -1;
+                        //throw new EOFException("eof");
+                    }
+                }
+                // buffer filled with at least one byte; position > 0
+                buffer.flip(); // limit -> position, position -> zero
+                break;
+            }
+
+            return super.readUnsignedByte();
+        }
+
+
+        @Override
+        public void close() throws IOException {
+
+            if (channel != null) {
+                channel.close();
+            }
         }
 
 
         /**
          * channel.
          */
-        private final ReadableByteChannel channel;
-
-
-        /**
-         * buffer.
-         */
-        private final ByteBuffer buffer;
-
-
-    }
-
-
-    /**
-     * A {@link ByteInput} implementation for {@link ByteBuffer}s.
-     */
-    public static class BufferOutput implements ByteInput {
-
-
-        /**
-         * Creates a new instance.
-         *
-         * @param buffer the buffer to wrap.
-         */
-        public BufferOutput(final ByteBuffer buffer) {
-
-            super();
-
-            if (buffer == null) {
-                throw new NullPointerException("buffer");
-            }
-
-            this.buffer = buffer;
-        }
-
-
-        @Override
-        public int readUnsignedByte() throws IOException {
-
-            return (buffer.get() & 0xFF); // BufferUnderflowException
-        }
-
-
-        /**
-         * buffer.
-         */
-        private final ByteBuffer buffer;
+        protected ReadableByteChannel channel;
 
 
     }
@@ -229,6 +274,10 @@ public class BitInput {
 
         if (length > 8) {
             throw new IllegalArgumentException("length(" + length + ") > 8");
+        }
+
+        if (input == null) {
+            throw new IllegalStateException("input is currently null");
         }
 
         if (index == 8) {
@@ -581,6 +630,22 @@ public class BitInput {
     }
 
 
+    public int align() throws IOException {
+
+        return align(1);
+    }
+
+
+    public void close() throws IOException {
+
+        align();
+        
+        if (input != null) {
+            input.close();
+        }
+    }
+
+
     /**
      * Returns the number of bytes read so far including current byte.
      *
@@ -616,3 +681,4 @@ public class BitInput {
 
 
 }
+

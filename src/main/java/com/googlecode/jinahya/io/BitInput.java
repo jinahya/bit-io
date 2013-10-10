@@ -205,7 +205,7 @@ public class BitInput {
                 throw new IllegalStateException("channel is currently null");
             }
 
-            while (!buffer.hasRemaining()) {
+            if (!buffer.hasRemaining()) {
                 buffer.clear(); // position -> zero, limit -> capacity
                 while (buffer.position() == 0) {
                     if (channel.read(buffer) == -1) {
@@ -215,7 +215,6 @@ public class BitInput {
                 }
                 // buffer filled with at least one byte; position > 0
                 buffer.flip(); // limit -> position, position -> zero
-                break;
             }
 
             return super.readUnsignedByte();
@@ -639,7 +638,7 @@ public class BitInput {
     public void close() throws IOException {
 
         align();
-        
+
         if (input != null) {
             input.close();
         }

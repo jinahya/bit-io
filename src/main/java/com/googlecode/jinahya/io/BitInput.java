@@ -38,7 +38,7 @@ public class BitInput {
     /**
      * An interface for reading bytes.
      */
-    public static interface ByteInput {
+    public interface ByteInput { // static? redundant.
 
 
         /**

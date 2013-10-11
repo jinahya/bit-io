@@ -2,8 +2,14 @@ bit-io
 ======
 
 ## Abstract
-You can only read/write bytes with Java.
+You can only read/write in octets(bytes) with Java.<br/>
 How can you read a `17-bit-long` unsigned integer or write an `1-bit-long` boolean value?
+
+### Apache Maven
+Check the [Maven Central Repository](http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22com.github.jinahya%22%20AND%20a%3A%22bit-io%22) for the latest release.
+### Apidocs
+* [1.0.4-SNAPSHOT](http://jinahya.github.io/bit-io/site/1.0.4-SNAPSHOT/apidocs/index.html)
+* [1.0.3](http://jinahya.github.io/bit-io/site/1.0.3/apidocs/index.html)
 
 ## For Reading Bits
 You can read bits from an instance of `BitInput`([src](src/main/java/com/github/jinahya/io/BitInput.java)).

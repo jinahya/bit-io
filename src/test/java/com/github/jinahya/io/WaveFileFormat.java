@@ -15,11 +15,11 @@
  */
 
 
-package com.googlecode.jinahya.io;
+package com.github.jinahya.io;
 
 
-import static com.googlecode.jinahya.io.FileFormat.read;
-import static com.googlecode.jinahya.io.FileFormat.toggleEndian;
+import static com.github.jinahya.io.FileFormat.read;
+import static com.github.jinahya.io.FileFormat.toggleEndian;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 

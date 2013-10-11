@@ -15,7 +15,7 @@
  */
 
 
-package com.googlecode.jinahya.io;
+package com.github.jinahya.io;
 
 
 import java.util.Random;

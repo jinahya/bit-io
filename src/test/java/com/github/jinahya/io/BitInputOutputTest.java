@@ -15,11 +15,11 @@
  */
 
 
-package com.googlecode.jinahya.io;
+package com.github.jinahya.io;
 
 
-import com.googlecode.jinahya.io.BitInput.StreamInput;
-import com.googlecode.jinahya.io.BitOutput.StreamOutput;
+import com.github.jinahya.io.BitInput.StreamInput;
+import com.github.jinahya.io.BitOutput.StreamOutput;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

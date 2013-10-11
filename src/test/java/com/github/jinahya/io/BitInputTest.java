@@ -15,12 +15,12 @@
  */
 
 
-package com.googlecode.jinahya.io;
+package com.github.jinahya.io;
 
 
-import com.googlecode.jinahya.io.BitOutput.StreamOutput;
-import java.io.ByteArrayOutputStream;
-import java.io.FilterOutputStream;
+import com.github.jinahya.io.BitInput.StreamInput;
+import java.io.ByteArrayInputStream;
+import java.io.FilterInputStream;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.concurrent.ThreadLocalRandom;
@@ -32,16 +32,19 @@ import org.testng.annotations.Test;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class BitOutputTest {
+public class BitInputTest {
 
 
     @Test
-    public void testWriteBoolean() throws IOException {
+    public void testReadBoolean() throws IOException {
 
-        final BitOutput output = new BitOutput(new StreamOutput(
-            new ByteArrayOutputStream()));
+        final BitInput input = new BitInput(new StreamInput(
+            new ByteArrayInputStream(new byte[]{(byte) 0x80}))); // 1000 0000
 
-        output.writeBoolean(ThreadLocalRandom.current().nextBoolean());
+        Assert.assertTrue(input.readBoolean());
+        for (int i = 0; i < 7; i++) {
+            Assert.assertFalse(input.readBoolean());
+        }
     }
 
 
@@ -49,31 +52,31 @@ public class BitOutputTest {
     public void testAlign()
         throws IOException, NoSuchFieldException, IllegalAccessException {
 
-        final BitOutput output =
-            new BitOutput(new StreamOutput(new FilterOutputStream(null) {
+        final BitInput input = new BitInput(new StreamInput(
+            new FilterInputStream(null) {
 
 
             @Override
-            public void write(final int b) throws IOException {
-                // does nothin'
+            public int read() throws IOException {
+                return ThreadLocalRandom.current().nextInt(0, 256);
             }
 
 
         }));
+        Assert.assertEquals(input.align(1), 0);
 
+        input.readUnsignedByte(6);
+        Assert.assertEquals(input.align(1), 2);
 
-        Assert.assertEquals(output.align(1), 0);
+        input.readUnsignedByte(5);
 
-        output.writeUnsignedByte(6, 0x00);
-        Assert.assertEquals(output.align(1), 2);
-
-        output.writeUnsignedByte(5, 0x00);
-        final Field field = BitOutput.class.getDeclaredField("count");
+        final Field field = BitInput.class.getDeclaredField("count");
         if (!field.isAccessible()) {
             field.setAccessible(true);
         }
-        field.set(output, -2);
-        Assert.assertEquals(output.align(1), 3);
+        field.set(input, -2);
+
+        Assert.assertEquals(input.align(1), 3);
 
     }
 

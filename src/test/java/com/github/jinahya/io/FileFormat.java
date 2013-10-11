@@ -15,10 +15,10 @@
  */
 
 
-package com.googlecode.jinahya.io;
+package com.github.jinahya.io;
 
 
-import com.googlecode.jinahya.io.BitInput.StreamInput;
+import com.github.jinahya.io.BitInput.StreamInput;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;

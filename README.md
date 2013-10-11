@@ -37,4 +37,5 @@ final BitOutput bitOutput = new BitOutput(byteOutput);
 | unsignedInt   | `readUnsignedInt(length)`  | `writeUnsignedInt(length, value)`  | 1 <= length < 32    |
 | signedInt     | `readInt(length)`          | `writeInt(length, value`           | 1 < length <= 32    |
 | unsigned long | `readUnsignedLong(length)` | `writeUnsignedLong(length, value)` | 1 <= length < 64    |
+| signed long   | `readLong(length)`         | `writeLong(length, value)`         | 1 < length <= 64    |
 

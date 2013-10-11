@@ -45,3 +45,12 @@ final BitOutput bitOutput = new BitOutput(byteOutput);
 | unsigned long | `readUnsignedLong(length)` | `writeUnsignedLong(length, value)` | 1 <= length < 64    |
 | signed long   | `readLong(length)`         | `writeLong(length, value)`         | 1 < length <= 64    |
 
+## Aligning
+You should align to octets when you finished read/writing bits.
+```java
+final BitInput bitInput;
+bitInput.align(); // aligns to 8-bit
+
+final BitOutput bitOutput;
+bitOutput.align(4); // aligns to 32-bit
+```

@@ -262,6 +262,15 @@ public class BitInput {
     }
 
 
+    /**
+     * Reads next unsigned byte from the {@code input} and increments the
+     * {@code count}.
+     *
+     * @return next unsigned byte
+     *
+     * @throws IOException if an I/O error occurs.
+     * @throws IllegalStateException if {@code input} is currently {@code null}.
+     */
     private int octet() throws IOException {
 
         assert index == 8; // index to read

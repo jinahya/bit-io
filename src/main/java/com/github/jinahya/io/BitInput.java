@@ -38,7 +38,7 @@ public class BitInput {
     /**
      * An interface for reading bytes.
      */
-    public interface ByteInput { // static? redundant.
+    public interface ByteInput {
 
 
         /**
@@ -51,7 +51,13 @@ public class BitInput {
         int readUnsignedByte() throws IOException;
 
 
+        /**
+         * Closes this byte input.
+         *
+         * @throws IOException if an I/O error occurs.
+         */
         void close() throws IOException;
+
 
     }
 
@@ -83,7 +89,7 @@ public class BitInput {
         public int readUnsignedByte() throws IOException {
 
             if (stream == null) {
-                throw new IllegalStateException("null stream");
+                throw new IllegalStateException("the stream is currently null");
             }
 
             return stream.read();
@@ -135,7 +141,7 @@ public class BitInput {
         public int readUnsignedByte() throws IOException {
 
             if (buffer == null) {
-                throw new IllegalStateException("null buffer");
+                throw new IllegalStateException("the buffer is currently null");
             }
 
             return (buffer.get() & 0xFF); // BufferUnderflowException
@@ -198,11 +204,12 @@ public class BitInput {
         public int readUnsignedByte() throws IOException {
 
             if (buffer == null) {
-                throw new IllegalStateException("buffer is currently null");
+                throw new IllegalStateException("the buffer is currently null");
             }
 
             if (channel == null) {
-                throw new IllegalStateException("channel is currently null");
+                throw new IllegalStateException(
+                    "the channel is currently null");
             }
 
             if (!buffer.hasRemaining()) {
@@ -210,7 +217,6 @@ public class BitInput {
                 while (buffer.position() == 0) {
                     if (channel.read(buffer) == -1) {
                         return -1;
-                        //throw new EOFException("eof");
                     }
                 }
                 // buffer filled with at least one byte; position > 0
@@ -256,6 +262,25 @@ public class BitInput {
     }
 
 
+    private int octet() throws IOException {
+
+        assert index == 8; // index to read
+
+        if (input == null) {
+            throw new IllegalStateException("the input is currently null");
+        }
+
+        final int octet = input.readUnsignedByte();
+        if (octet == -1) {
+            throw new EOFException("eof");
+        }
+
+        count++;
+
+        return octet;
+    }
+
+
     /**
      * Reads an {@code length}-bit unsigned byte value.
      *
@@ -275,16 +300,12 @@ public class BitInput {
             throw new IllegalArgumentException("length(" + length + ") > 8");
         }
 
-        if (input == null) {
-            throw new IllegalStateException("input is currently null");
-        }
-
         if (index == 8) {
-            int octet = input.readUnsignedByte();
-            if (octet == -1) {
-                throw new EOFException("eof");
+            int octet = octet();
+            if (length == 8) {
+                // direct return
+                return octet;
             }
-            count++;
             for (int i = 7; i >= 0; i--) {
                 bitset.set(i, (octet & 0x01) == 0x01);
                 octet >>= 1;

@@ -49,7 +49,13 @@ public class BitOutput {
         void writeUnsignedByte(final int value) throws IOException;
 
 
+        /**
+         * Closes this byte output.
+         *
+         * @throws IOException if an I/O error occurs.
+         */
         void close() throws IOException;
+
 
     }
 
@@ -249,6 +255,29 @@ public class BitOutput {
 
 
     /**
+     * Writes given {@code value} to {@code output} and increments
+     * {@code count}.
+     *
+     * @param value the value to write
+     *
+     * @throws IOException if an I/O error occurs.
+     * @throws IllegalStateException if {@code output} is currently {@code null}
+     */
+    private void octet(final int value) throws IOException {
+
+        assert index == 8;
+
+        if (output == null) {
+            throw new IllegalStateException("the output is currently null");
+        }
+
+        output.writeUnsignedByte(value);
+
+        count++;
+    }
+
+
+    /**
      * Writes an {@code length}-bit unsigned byte value. The lower
      * {@code length} bits in given {@code value} are written.
      *
@@ -268,8 +297,10 @@ public class BitOutput {
             throw new IllegalArgumentException("length(" + length + ") > 8");
         }
 
-        if (output == null) {
-            throw new IllegalStateException("output is currently null");
+        if (index == 8 && length == 8) {
+            // direct write
+            octet(value);
+            return;
         }
 
         final int required = length - (8 - index);
@@ -291,8 +322,7 @@ public class BitOutput {
                 octet <<= 1;
                 octet |= (bitset.get(i) ? 0x01 : 0x00);
             }
-            output.writeUnsignedByte(octet);
-            count++;
+            octet(octet);
             index = 0;
         }
     }

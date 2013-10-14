@@ -31,7 +31,7 @@ import org.testng.annotations.Test;
  *
  * @author Jin Kwon <onacit at gmail.com>
  */
-public class BitInputOutputTest {
+public class BitIoTest {
 
 
     @Test(invocationCount = 128)
@@ -39,7 +39,7 @@ public class BitInputOutputTest {
 
         final int scale = RandomLengths.newScaleBytes();
         final int range = RandomLengths.newRangeBytes();
-        final byte[] expected = RandomValues.newValueBytes(scale, range);
+        final byte[] expected = BitIoTests.newValueBytes(scale, range);
 
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
         final BitOutput output = new BitOutput(new StreamOutput(baos));
@@ -55,6 +55,30 @@ public class BitInputOutputTest {
 
         Assert.assertEquals(actual, expected);
     }
+
+
+    @Test(enabled = true, invocationCount = 128)
+    public void testUsAsciiString() throws IOException {
+
+        final String expected = BitIoTests.newValueUsAsciiString();
+
+        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        final BitOutput output = new BitOutput(new StreamOutput(baos));
+
+        output.writeUsAsciiString(expected);
+        output.align();
+        output.close();
+
+        final ByteArrayInputStream bais =
+            new ByteArrayInputStream(baos.toByteArray());
+        final BitInput input = new BitInput(new StreamInput(bais));
+
+        final String actual = input.readUsAsciiString();
+        input.close();
+
+        Assert.assertEquals(actual, expected);
+    }
+
 
 }
 

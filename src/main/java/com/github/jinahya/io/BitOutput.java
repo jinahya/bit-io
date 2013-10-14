@@ -406,10 +406,10 @@ public class BitOutput {
 
 
     /**
-     * Writes an unsigned short value. Only the lower {@code length} bits in
-     * given {@code value} are written.
+     * Writes an unsigned short value. Only the lower specified number of bits
+     * in given {@code value} are written.
      *
-     * @param length the bit length between 0 exclusive and 16 inclusive.
+     * @param length the number of bits between 0 exclusive and 16 inclusive.
      * @param value the value to write
      *
      * @throws IOException if an I/O error occurs
@@ -700,7 +700,8 @@ public class BitOutput {
      *
      * @see #writeBytes(int, int, byte[])
      */
-    public void writeString(final String value, final String charsetName)
+    public void writeString(final int scale, final int range,
+                            final String value, final String charsetName)
         throws IOException {
 
         if (value == null) {
@@ -713,7 +714,14 @@ public class BitOutput {
 
         final byte[] bytes = value.getBytes(charsetName);
 
-        writeBytes(16, 8, bytes);
+        writeBytes(scale, range, bytes);
+    }
+
+
+    public void writeString(final String value, final String charsetName)
+        throws IOException {
+
+        writeString(16, 8, value, charsetName);
     }
 
 
@@ -726,17 +734,12 @@ public class BitOutput {
      * @throws NullPointerException if {@code value} is {@code null}.
      * @throws IOException if an I/O error occurs.
      *
+     * @see #writeString(int, int, java.lang.String, java.lang.String)
      * @see #writeBytes(int, int, byte[])
      */
     public void writeUsAsciiString(final String value) throws IOException {
 
-        if (value == null) {
-            throw new NullPointerException("value");
-        }
-
-        final byte[] bytes = value.getBytes("US-ASCII");
-
-        writeBytes(16, 7, bytes);
+        writeString(16, 7, value, "US-ASCII");
     }
 
 
@@ -750,18 +753,18 @@ public class BitOutput {
      * @throws IOException if an I/O error occurs.
      */
     @Deprecated
-    public int align(final int length) throws IOException {
+    public long align(final int length) throws IOException {
 
         if (length < 1) {
             throw new IllegalArgumentException("length(" + length + ") < 1");
         }
 
-        int bits = 0;
+        long bits = 0;
 
         // writing(padding) remained bits into current byte
         if (index > 0) {
             bits = (8 - index);
-            writeUnsignedByte(bits, 0x00); // count incremented
+            writeUnsignedByte((int) bits, 0x00); // count incremented
         }
 
         int bytes = count % length;
@@ -785,10 +788,19 @@ public class BitOutput {
     }
 
 
+    /**
+     * Aligns to specified number of bytes.
+     *
+     * @param length the number of bytes to align.
+     *
+     * @return the number of bits padded for alignment
+     *
+     * @throws IOException if an I/O error occurs.
+     */
     public int align(final short length) throws IOException {
 
-        if (length < 1) {
-            throw new IllegalArgumentException("length(" + length + ") < 1");
+        if (length <= 0) {
+            throw new IllegalArgumentException("length(" + length + ") <= 0");
         }
 
         int bits = 0;

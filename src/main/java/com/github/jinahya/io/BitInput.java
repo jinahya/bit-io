@@ -645,27 +645,19 @@ public class BitInput {
      *
      * @return a String read.
      *
-     * @throws IOException if an I/O error occurs.
-    public String readString(final int scale, final Charset charset)
-        throws IOException {
-
-        if (scale <= 0) {
-            throw new IllegalArgumentException("scale(" + scale + ") <= 0");
-        }
-
-        if (scale > 16) {
-            throw new IllegalArgumentException("scale(" + scale + ") > 16");
-        }
-
-        if (charset == null) {
-            throw new NullPointerException("charsetName");
-        }
-
-        return new String(readBytes(scale, 8), charset);
-    }
-    */
-
-
+     * @throws IOException if an I/O error occurs. public String
+     * readString(final int scale, final Charset charset) throws IOException {
+     *
+     * if (scale <= 0) { throw new IllegalArgumentException("scale(" + scale +
+     * ") <= 0"); }
+     *
+     * if (scale > 16) { throw new IllegalArgumentException("scale(" + scale +
+     * ") > 16"); }
+     *
+     * if (charset == null) { throw new NullPointerException("charsetName"); }
+     *
+     * return new String(readBytes(scale, 8), charset); }
+     */
     /*
      * Reads a full scale String.
      *
@@ -673,47 +665,38 @@ public class BitInput {
      *
      * @return a String read.
      *
-     * @throws IOException if an I/O error occurs.
-    public String readString(final Charset charset) throws IOException {
-
-        if (charset == null) {
-            throw new NullPointerException("charset");
-        }
-
-        return readString(16, charset);
-    }
-    */
-
-
+     * @throws IOException if an I/O error occurs. public String
+     * readString(final Charset charset) throws IOException {
+     *
+     * if (charset == null) { throw new NullPointerException("charset"); }
+     *
+     * return readString(16, charset); }
+     */
     /**
      * Reads a string.
      *
      * @param scale byte array length scale; between 0 exclusive and 16
      * inclusive.
+     * @param range valid bit range in each bytes; between 0 exclusive and 8
      * @param charsetName the character set name to encode output string.
      *
      * @return a String read.
      *
      * @throws IOException if an I/O error occurs.
-     * 
+     *
      * @see #readBytes(int, int)
      */
-    public String readString(final int scale, final String charsetName)
+    public String readString(final int scale, final int range,
+                             final String charsetName)
         throws IOException {
-
-        if (scale <= 0) {
-            throw new IllegalArgumentException("scale(" + scale + ") <= 0");
-        }
-
-        if (scale > 16) {
-            throw new IllegalArgumentException("scale(" + scale + ") > 16");
-        }
 
         if (charsetName == null) {
             throw new NullPointerException("charsetName");
         }
 
-        return new String(readBytes(scale, 8), charsetName);
+        final byte[] bytes = readBytes(scale, range);
+
+        return new String(bytes, charsetName);
     }
 
 
@@ -728,36 +711,25 @@ public class BitInput {
      */
     public String readString(final String charsetName) throws IOException {
 
-        return readString(16, charsetName);
+        if (charsetName == null) {
+            throw new NullPointerException("charsetName");
+        }
+
+        return readString(16, 8, charsetName);
     }
 
 
     /**
      * Reads a US-ASCII string with specified scale.
      *
-     * @param scale array length scale; between 0 exclusive and 16 inclusive.
-     *
      * @return a US-ASCII String.
      *
      * @throws IllegalArgumentException if {@code scale} is not valid.
      * @throws IOException if an I/O error occurs.
      */
-    public String readUsAsciiString(final int scale) throws IOException {
-
-        return readString(scale, "US-ASCII");
-    }
-
-
-    /**
-     * Reads a full-scale(16) {@code US-ASCII} string.
-     *
-     * @return a {@code US-ASCII} string.
-     *
-     * @throws IOException if an I/O error occurs.
-     */
     public String readUsAsciiString() throws IOException {
 
-        return readUsAsciiString(16);
+        return readString(16, 7, "US-ASCII");
     }
 
 
@@ -771,18 +743,18 @@ public class BitInput {
      * @throws IOException if an I/O error occurs.
      */
     @Deprecated
-    public int align(final int length) throws IOException {
+    public long align(final int length) throws IOException {
 
         if (length <= 0) {
             throw new IllegalArgumentException("length(" + length + ") <= 0");
         }
 
-        int bits = 0;
+        long bits = 0;
 
         // reading(discarding) remained bits from current byte.
         if (index < 8) {
             bits = 8 - index;
-            readUnsignedByte(bits); // count increments
+            readUnsignedByte((int) bits); // count increments
         }
 
         int bytes = count % length;

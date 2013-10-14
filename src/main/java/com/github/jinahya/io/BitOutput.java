@@ -22,7 +22,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
 import java.nio.channels.WritableByteChannel;
-import java.util.BitSet;
 
 
 /**
@@ -56,7 +55,6 @@ public class BitOutput {
          */
         void close() throws IOException;
 
-
     }
 
 
@@ -67,9 +65,10 @@ public class BitOutput {
 
 
         /**
-         * Creates a new instance.
+         * Creates a new instance with given output stream.
          *
-         * @param stream the output to which composite bytes are written.
+         * @param stream the output stream. {@code null} for lazy
+         * initialization.
          */
         public StreamOutput(final OutputStream stream) {
 
@@ -83,17 +82,33 @@ public class BitOutput {
         }
 
 
+        /**
+         * {@inheritDoc }. The {@link #stream} must be initialized and set if
+         * {@code null} passed when this instance was created.
+         *
+         * @param value {@inheritDoc }
+         *
+         * @throws IOException {@inheritDoc }
+         * @throws IllegalStateException if {@link #stream} is currently
+         * {@code null}.
+         */
         @Override
         public void writeUnsignedByte(final int value) throws IOException {
 
             if (stream == null) {
-                throw new IllegalStateException("stream is currently null");
+                throw new IllegalStateException("the stream is currently null");
             }
 
             stream.write(value);
         }
 
 
+        /**
+         * {@inheritDoc } This method, if {@link #stream} is not {@code null},
+         * flushes and closes the {@link #stream}.
+         *
+         * @throws IOException {@inheritDoc }
+         */
         @Override
         public void close() throws IOException {
 
@@ -105,7 +120,7 @@ public class BitOutput {
 
 
         /**
-         * output.
+         * the output stream.
          */
         protected OutputStream stream;
 
@@ -122,7 +137,8 @@ public class BitOutput {
         /**
          * Creates a new instance.
          *
-         * @param buffer the buffer to wrap.
+         * @param buffer the buffer to wrap. {@code null} for lazy
+         * initialization.
          */
         public BufferOutput(final ByteBuffer buffer) {
 
@@ -136,6 +152,16 @@ public class BitOutput {
         }
 
 
+        /**
+         * {@inheritDoc } The {@link #buffer} must be initialized and set if
+         * {@code null} passed when this instance was created.
+         *
+         * @param value {@inheritDoc }
+         *
+         * @throws IOException {@inheritDoc }
+         * @throws IllegalStateException if {@link #buffer} is currently
+         * {@code null}.
+         */
         @Override
         public void writeUnsignedByte(final int value) throws IOException {
 
@@ -147,13 +173,18 @@ public class BitOutput {
         }
 
 
+        /**
+         * {@inheritDoc } This method does nothing.
+         *
+         * @throws IOException {@inheritDoc }
+         */
         @Override
         public void close() throws IOException {
         }
 
 
         /**
-         * buffer.
+         * the output buffer.
          */
         protected ByteBuffer buffer;
 
@@ -170,6 +201,13 @@ public class BitOutput {
     public static class ChannelOutput extends BufferOutput {
 
 
+        /**
+         * Creates a new instance.
+         *
+         * @param buffer the buffer. {@code null} for lazy initialization.
+         * @param channel the output channel. {@code null} for lazy
+         * initialization.
+         */
         public ChannelOutput(final ByteBuffer buffer,
                              final WritableByteChannel channel) {
 
@@ -183,21 +221,39 @@ public class BitOutput {
         }
 
 
+        /**
+         * Creates a new instance.
+         *
+         * @param channel the output channel. {@code null} for lazy
+         * initialization.
+         */
         public ChannelOutput(final WritableByteChannel channel) {
 
             this(ByteBuffer.allocate(1024), channel);
         }
 
 
+        /**
+         * {@inheritDoc } Both {@link #buffer} and {@link #channel} must be
+         * initialized and set if either of them passed as {@code null} when
+         * this instance was created.
+         *
+         * @param value {@inheritDoc }
+         *
+         * @throws IOException {@inheritDoc }
+         * @throws IllegalStateException if either {@link #buffer} or
+         * {@link #channel} is currently {@code null}.
+         */
         @Override
         public void writeUnsignedByte(final int value) throws IOException {
 
             if (buffer == null) {
-                throw new IllegalStateException("buffer is currently null");
+                throw new IllegalStateException("the buffer is currently null");
             }
 
             if (channel == null) {
-                throw new IllegalStateException("channel is currently null");
+                throw new IllegalStateException(
+                    "the channel is currently null");
             }
 
             if (!buffer.hasRemaining()) {
@@ -212,6 +268,13 @@ public class BitOutput {
         }
 
 
+        /**
+         * {@inheritDoc } This method, if both {@link #buffer} and
+         * {@link #channel} is not {@code null}, writes all remaining bytes in
+         * {@link #buffer} to {@link #channel} and closes the {@link #channel}.
+         *
+         * @throws IOException if an I/O error occurs.
+         */
         @Override
         public void close() throws IOException {
 
@@ -229,7 +292,7 @@ public class BitOutput {
 
 
         /**
-         * channel.
+         * the output channel.
          */
         protected WritableByteChannel channel;
 
@@ -241,6 +304,8 @@ public class BitOutput {
      * Creates a new instance.
      *
      * @param output target byte output
+     *
+     * @throws NullPointerException if {@code output} is null.
      */
     public BitOutput(final ByteOutput output) {
 
@@ -261,14 +326,13 @@ public class BitOutput {
      * @param value the value to write
      *
      * @throws IOException if an I/O error occurs.
-     * @throws IllegalStateException if {@code output} is currently {@code null}
      */
     private void octet(final int value) throws IOException {
 
         assert index == 8;
 
         if (output == null) {
-            throw new IllegalStateException("the output is currently null");
+            //throw new IllegalStateException("the output is currently null");
         }
 
         output.writeUnsignedByte(value);
@@ -311,7 +375,8 @@ public class BitOutput {
         }
 
         for (int i = index + length - 1; i >= index; i--) {
-            bitset.set(i, ((value & 0x01) == 0x01 ? true : false));
+            //bitset.set(i, ((value & 0x01) == 0x01 ? true : false));
+            flags[i] = (value & 0x01) == 0x01 ? true : false;
             value >>= 1;
         }
         index += length;
@@ -320,7 +385,8 @@ public class BitOutput {
             int octet = 0x00;
             for (int i = 0; i < 8; i++) {
                 octet <<= 1;
-                octet |= (bitset.get(i) ? 0x01 : 0x00);
+                //octet |= (bitset.get(i) ? 0x01 : 0x00);
+                octet |= (flags[i] ? 0x01 : 0x00);
             }
             octet(octet);
             index = 0;
@@ -666,11 +732,11 @@ public class BitOutput {
 
 
     /**
-     * Aligns to given {@code length} bytes.
+     * Aligns to specified number of bytes
      *
-     * @param length number of bytes to align; must be non-zero positive.
+     * @param length the number of bytes to align; must be non-zero positive.
      *
-     * @return number of bits padded for alignment.
+     * @return the number of bits padded.
      *
      * @throws IOException if an I/O error occurs.
      */
@@ -709,12 +775,25 @@ public class BitOutput {
     }
 
 
+    /**
+     * Aligns to a single byte.
+     *
+     * @return the number of bits padded.
+     *
+     * @throws IOException if an I/O error occurs.
+     */
     public int align() throws IOException {
 
         return align(1);
     }
 
 
+    /**
+     * Closes this instance. This method aligns to a single byte and closes
+     * {@code output}.
+     *
+     * @throws IOException if an I/O error occurs.
+     */
     public void close() throws IOException {
 
         align(1);
@@ -745,7 +824,8 @@ public class BitOutput {
     /**
      * bits in current byte.
      */
-    private final BitSet bitset = new BitSet(8);
+    //private final BitSet bitset = new BitSet(8);
+    private final boolean[] flags = new boolean[8];
 
 
     /**

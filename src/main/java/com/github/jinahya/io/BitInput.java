@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.channels.ReadableByteChannel;
+import java.nio.charset.Charset;
 
 
 /**
@@ -57,6 +58,7 @@ public class BitInput {
          */
         void close() throws IOException;
 
+
     }
 
 
@@ -85,7 +87,7 @@ public class BitInput {
 
 
         /**
-         * {@inheritDoc}. The {@link #stream} must be initialized and set if
+         * {@inheritDoc}. The {@code stream} must be initialized and set if
          * {@code null} passed when this instance created.
          *
          * @return the next unsigned byte.
@@ -325,8 +327,6 @@ public class BitInput {
      */
     private int octet() throws IOException {
 
-        assert index == 8; // index to read
-
         if (input == null) {
             //throw new IllegalStateException("the input is currently null");
         }
@@ -395,7 +395,8 @@ public class BitInput {
 
 
     /**
-     * Reads a 1-bit boolean value.
+     * Reads a 1-bit boolean value. {@code true} for {@code 0b1} and
+     * {@code false} for {@code 0b0}.
      *
      * @return a boolean value.
      *
@@ -636,10 +637,90 @@ public class BitInput {
     }
 
 
-    /**
+    /*
      * Reads a String.
      *
-     * @param charsetName the charset name to decode the string.
+     * @param scale array length scale; between 0 exclusive and 16 inclusive.
+     * @param charset the character set name to encode output string.
+     *
+     * @return a String read.
+     *
+     * @throws IOException if an I/O error occurs.
+    public String readString(final int scale, final Charset charset)
+        throws IOException {
+
+        if (scale <= 0) {
+            throw new IllegalArgumentException("scale(" + scale + ") <= 0");
+        }
+
+        if (scale > 16) {
+            throw new IllegalArgumentException("scale(" + scale + ") > 16");
+        }
+
+        if (charset == null) {
+            throw new NullPointerException("charsetName");
+        }
+
+        return new String(readBytes(scale, 8), charset);
+    }
+    */
+
+
+    /*
+     * Reads a full scale String.
+     *
+     * @param charset the character set to encode output string.
+     *
+     * @return a String read.
+     *
+     * @throws IOException if an I/O error occurs.
+    public String readString(final Charset charset) throws IOException {
+
+        if (charset == null) {
+            throw new NullPointerException("charset");
+        }
+
+        return readString(16, charset);
+    }
+    */
+
+
+    /**
+     * Reads a string.
+     *
+     * @param scale byte array length scale; between 0 exclusive and 16
+     * inclusive.
+     * @param charsetName the character set name to encode output string.
+     *
+     * @return a String read.
+     *
+     * @throws IOException if an I/O error occurs.
+     * 
+     * @see #readBytes(int, int)
+     */
+    public String readString(final int scale, final String charsetName)
+        throws IOException {
+
+        if (scale <= 0) {
+            throw new IllegalArgumentException("scale(" + scale + ") <= 0");
+        }
+
+        if (scale > 16) {
+            throw new IllegalArgumentException("scale(" + scale + ") > 16");
+        }
+
+        if (charsetName == null) {
+            throw new NullPointerException("charsetName");
+        }
+
+        return new String(readBytes(scale, 8), charsetName);
+    }
+
+
+    /**
+     * Reads a full scale string.
+     *
+     * @param charsetName the character set name to encode output string.
      *
      * @return a String read.
      *
@@ -647,24 +728,36 @@ public class BitInput {
      */
     public String readString(final String charsetName) throws IOException {
 
-        if (charsetName == null) {
-            throw new NullPointerException("charsetName");
-        }
-
-        return new String(readBytes(16, 8), charsetName);
+        return readString(16, charsetName);
     }
 
 
     /**
-     * Reads an ASCII string with {@code scale} of 16.
+     * Reads a US-ASCII string with specified scale.
      *
-     * @return an US-ASCII String.
+     * @param scale array length scale; between 0 exclusive and 16 inclusive.
+     *
+     * @return a US-ASCII String.
+     *
+     * @throws IllegalArgumentException if {@code scale} is not valid.
+     * @throws IOException if an I/O error occurs.
+     */
+    public String readUsAsciiString(final int scale) throws IOException {
+
+        return readString(scale, "US-ASCII");
+    }
+
+
+    /**
+     * Reads a full-scale(16) {@code US-ASCII} string.
+     *
+     * @return a {@code US-ASCII} string.
      *
      * @throws IOException if an I/O error occurs.
      */
     public String readUsAsciiString() throws IOException {
 
-        return new String(readBytes(16, 7), "US-ASCII");
+        return readUsAsciiString(16);
     }
 
 
@@ -677,7 +770,54 @@ public class BitInput {
      *
      * @throws IOException if an I/O error occurs.
      */
+    @Deprecated
     public int align(final int length) throws IOException {
+
+        if (length <= 0) {
+            throw new IllegalArgumentException("length(" + length + ") <= 0");
+        }
+
+        int bits = 0;
+
+        // reading(discarding) remained bits from current byte.
+        if (index < 8) {
+            bits = 8 - index;
+            readUnsignedByte(bits); // count increments
+        }
+
+        int bytes = count % length;
+
+        if (bytes == 0) {
+            return bits;
+        }
+
+        if (bytes > 0) {
+            bytes = length - bytes;
+        } else {
+            bytes = 0 - bytes;
+        }
+
+        for (; bytes > 0; bytes--) {
+            readUnsignedByte(8);
+            bits += 8;
+        }
+
+        return bits;
+    }
+
+
+    /**
+     * Aligns to given number of bytes.
+     *
+     * @param length the number of bytes to align; must be non-zero positive.
+     *
+     * @return the number of bits discarded
+     *
+     * @throws IllegalArgumentException if {@code length} is less than or equals
+     * to zero.
+     * @throws IOException if an I/O error occurs.
+     */
+    public int align(final short length) throws IOException {
 
         if (length <= 0) {
             throw new IllegalArgumentException("length(" + length + ") <= 0");
@@ -718,22 +858,26 @@ public class BitInput {
      * @return the number of bits discarded
      *
      * @throws IOException if an I/O error occurs.
+     *
+     * @see #align(short)
      */
     public int align() throws IOException {
 
-        return align(1);
+        return align((short) 1);
     }
 
 
     /**
-     * Closes this input. This method aligns to 8-bit(1-byte) and closes the
+     * Closes this input. This method aligns to a single byte and closes the
      * {@code input}.
      *
      * @throws IOException if an I/O error occurs.
+     *
+     * @see #align()
      */
     public void close() throws IOException {
 
-        align(1);
+        align();
 
         if (input != null) {
             input.close();
@@ -742,9 +886,9 @@ public class BitInput {
 
 
     /**
-     * Returns the number of octets read from the {@code input} so far.
+     * Returns the number of bytes read from the {@code input} so far.
      *
-     * @return the number of octets read from the {@code input} so far.
+     * @return the number of bytes read from the {@code input} so far.
      */
     public int getCount() {
 
@@ -759,9 +903,8 @@ public class BitInput {
 
 
     /**
-     * bits in current octet.
+     * bit flags.
      */
-    //private final BitSet bitset = new BitSet(8);
     private final boolean[] flags = new boolean[8];
 
 

@@ -42,9 +42,9 @@ public class BitInput {
 
 
         /**
-         * Reads an unsigned 8-bit integer.
+         * Reads the next unsigned 8-bit integer.
          *
-         * @return an unsigned 8-bit integer. -1 for EOF.
+         * @return the next unsigned 8-bit integer. -1 for EOF.
          *
          * @throws IOException if an I/O error occurs.
          */
@@ -58,7 +58,6 @@ public class BitInput {
          */
         void close() throws IOException;
 
-
     }
 
 
@@ -71,7 +70,8 @@ public class BitInput {
         /**
          * Creates a new instance.
          *
-         * @param stream the stream to wrap.
+         * @param stream the stream to wrap. {@code null} for lazy
+         * initialization.
          */
         public StreamInput(final InputStream stream) {
 
@@ -85,6 +85,16 @@ public class BitInput {
         }
 
 
+        /**
+         * {@inheritDoc}. The {@link #stream} must be initialized and set if
+         * {@code null} passed when this instance created.
+         *
+         * @return the next unsigned byte.
+         *
+         * @throws IOException if an I/O error occurs.
+         * @throws IllegalStateException if {@link #stream} is currently
+         * {@code null}.
+         */
         @Override
         public int readUnsignedByte() throws IOException {
 
@@ -96,6 +106,12 @@ public class BitInput {
         }
 
 
+        /**
+         * {@inheritDoc }. This method closes the {@link #stream} if it is not
+         * {@code null}.
+         *
+         * @throws IOException if an I/O error occurs.
+         */
         @Override
         public void close() throws IOException {
 
@@ -106,7 +122,7 @@ public class BitInput {
 
 
         /**
-         * input.
+         * the input stream.
          */
         protected InputStream stream;
 
@@ -123,7 +139,8 @@ public class BitInput {
         /**
          * Creates a new instance.
          *
-         * @param buffer the buffer to wrap.
+         * @param buffer the buffer to wrap. {@code null} for lazy
+         * initialization.
          */
         public BufferInput(final ByteBuffer buffer) {
 
@@ -137,6 +154,16 @@ public class BitInput {
         }
 
 
+        /**
+         * {@inheritDoc }. The {@link #buffer} must be initialized and set if
+         * {@code null} passed when this instance created.
+         *
+         * @return {@inheritDoc }
+         *
+         * @throws IOException if an I/O error occurs.
+         * @throws IllegalStateException if {@code buffer} is currently
+         * {@code null}.
+         */
         @Override
         public int readUnsignedByte() throws IOException {
 
@@ -148,6 +175,11 @@ public class BitInput {
         }
 
 
+        /**
+         * {@inheritDoc }. This method does nothing.
+         *
+         * @throws IOException if an I/O error occurs.
+         */
         @Override
         public void close() throws IOException {
         }
@@ -174,7 +206,10 @@ public class BitInput {
         /**
          * Creates a new instance.
          *
-         * @param channel the channel to wrap
+         * @param buffer the buffer to use. {@code null} for lazy
+         * initialization.
+         * @param channel the channel to wrap. {@code null} for lazy
+         * initialization.
          */
         public ChannelInput(final ByteBuffer buffer,
                             final ReadableByteChannel channel) {
@@ -190,9 +225,10 @@ public class BitInput {
 
 
         /**
-         * Creates a new instance.
+         * Creates a new instance with a default buffer.
          *
-         * @param channel the channel to wrap
+         * @param channel the channel to wrap. {@code null} for lazy
+         * initialization.
          */
         public ChannelInput(final ReadableByteChannel channel) {
 
@@ -200,6 +236,17 @@ public class BitInput {
         }
 
 
+        /**
+         * {@inheritDoc }. The {@link #buffer} and {@link #channel} must be
+         * initialized and set if either passed as {@code null} when this
+         * instance created.
+         *
+         * @return {@inheritDoc }
+         *
+         * @throws IOException if an I/O error occurs.
+         * @throws IllegalStateException if either {@code buffer} or
+         * {@code channel} is {@code null}.
+         */
         @Override
         public int readUnsignedByte() throws IOException {
 
@@ -227,6 +274,12 @@ public class BitInput {
         }
 
 
+        /**
+         * {@inheritDoc }. This method closes the {@link #channel} if it's not
+         * {@code null}.
+         *
+         * @throws IOException if an I/O error occurs.
+         */
         @Override
         public void close() throws IOException {
 
@@ -246,7 +299,7 @@ public class BitInput {
 
 
     /**
-     * Creates a new instance.
+     * Creates a new instance the specified byte input.
      *
      * @param input the byte input
      */
@@ -262,12 +315,20 @@ public class BitInput {
     }
 
 
+    /**
+     * Reads the next octet from the {@link #index} and increments the
+     * {@link #count}.
+     *
+     * @return the next octet.
+     *
+     * @throws IOException if an I/O error occurs.
+     */
     private int octet() throws IOException {
 
         assert index == 8; // index to read
 
         if (input == null) {
-            throw new IllegalStateException("the input is currently null");
+            //throw new IllegalStateException("the input is currently null");
         }
 
         final int octet = input.readUnsignedByte();
@@ -282,7 +343,7 @@ public class BitInput {
 
 
     /**
-     * Reads an {@code length}-bit unsigned byte value.
+     * Reads an unsigned byte value.
      *
      * @param length bit length between 0 (exclusive) and 8 (inclusive).
      *
@@ -307,7 +368,8 @@ public class BitInput {
                 return octet;
             }
             for (int i = 7; i >= 0; i--) {
-                bitset.set(i, (octet & 0x01) == 0x01);
+                //bitset.set(i, (octet & 0x01) == 0x01);
+                flags[i] = (octet & 0x01) == 0x01;
                 octet >>= 1;
             }
             index = 0;
@@ -324,7 +386,8 @@ public class BitInput {
         int value = 0x00;
         for (int i = 0; i < length; i++) {
             value <<= 1;
-            value |= (bitset.get(index++) ? 0x01 : 0x00);
+            //value |= (bitset.get(index++) ? 0x01 : 0x00);
+            value |= (flags[index++] ? 0x01 : 0x00);
         }
 
         return value;
@@ -332,8 +395,7 @@ public class BitInput {
 
 
     /**
-     * Reads a {@code 1}-bit boolean value. {@code 0x00} for {@code false} and
-     * {@code 0x01} for {@code true}.
+     * Reads a 1-bit boolean value.
      *
      * @return a boolean value.
      *
@@ -346,7 +408,7 @@ public class BitInput {
 
 
     /**
-     * Reads an {@code length}-bit unsigned short value.
+     * Reads an unsigned short value.
      *
      * @param length bit length between 0 (exclusive) and 16 (inclusive).
      *
@@ -607,11 +669,11 @@ public class BitInput {
 
 
     /**
-     * Align to given {@code length} bytes.
+     * Aligns to given {@code length} bytes.
      *
      * @param length number of bytes to align; must be non-zero positive.
      *
-     * @return the number of bits discarded for alignment.
+     * @return the number of bits discarded
      *
      * @throws IOException if an I/O error occurs.
      */
@@ -650,15 +712,28 @@ public class BitInput {
     }
 
 
+    /**
+     * Aligns to a single byte.
+     *
+     * @return the number of bits discarded
+     *
+     * @throws IOException if an I/O error occurs.
+     */
     public int align() throws IOException {
 
         return align(1);
     }
 
 
+    /**
+     * Closes this input. This method aligns to 8-bit(1-byte) and closes the
+     * {@code input}.
+     *
+     * @throws IOException if an I/O error occurs.
+     */
     public void close() throws IOException {
 
-        align();
+        align(1);
 
         if (input != null) {
             input.close();
@@ -667,11 +742,12 @@ public class BitInput {
 
 
     /**
-     * Returns the number of bytes read so far including current byte.
+     * Returns the number of octets read from the {@code input} so far.
      *
-     * @return the number of bytes read so far.
+     * @return the number of octets read from the {@code input} so far.
      */
     public int getCount() {
+
         return count;
     }
 
@@ -685,7 +761,10 @@ public class BitInput {
     /**
      * bits in current octet.
      */
-    private final BitSet bitset = new BitSet(8);
+    //private final BitSet bitset = new BitSet(8);
+
+
+    private final boolean[] flags = new boolean[8];
 
 
     /**

@@ -21,10 +21,12 @@ final BitInput input = new BitInput(new BufferInput(buffer));
 final ReadableByteChannel channel;
 final BitInput input = new BitInput(new ChannelInput(channel));
 
-final boolean b = input.readBoolean();    // 1-bit boolean          1  1
-final int ui6 = input.readUnsignedInt(6); // 6-bit unsigned int     6  7
-final long sl47 = input.readLong(47);     // 47-bit signed long    47 54
-input1.aling(1);                          // aligns to 8-bit octet  2 56
+final boolean b = input.readBoolean();    // 1-bit boolean            1    1
+final int ui6 = input.readUnsignedInt(6); // 6-bit unsigned int       6    7
+final long sl47 = input.readLong(47);     // 47-bit signed long      47   54
+
+final int discarded = input1.aling(1);    // aligns to 8-bit octet    2   56
+assret discasded == 2;
 ```
 ## Writing Bits
 ```java
@@ -37,8 +39,10 @@ final BitOutput output = new BitOutput(new BufferOutput(buffer));
 final WritableByteChannel channel;
 final BitOutput output = new BitOutput(new ChannelOutput(channel));
 
-output.writeBoolean(true);        // 1-bit boolean           1  1
-output.writeInt(7, -1);           // 7-bit signed int        7  8
-output.writeUnsignedLong(33, 1L); // 49-bit signed long     33 41
-input1.aling(4);                  // aligns to 32-bit octet 23 64
+output.writeBoolean(true);          // 1-bit boolean             1    1
+output.writeInt(7, -1);             // 7-bit signed int          7    8
+output.writeUnsignedLong(33, 1L);   // 49-bit signed long       33   41
+
+final int padded = input1.aling(4); // aligns to 32-bit octet   23   64
+assert padded == 23;
 ```

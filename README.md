@@ -26,7 +26,7 @@ final int ui6 = input.readUnsignedInt(6); // 6-bit unsigned int       6    7
 final long sl47 = input.readLong(47);     // 47-bit signed long      47   54
 
 final int discarded = input1.aling(1);    // aligns to 8-bit octet    2   56
-assret discasded == 2;
+assert discasded == 2;
 ```
 ## Writing Bits
 ```java

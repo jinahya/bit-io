@@ -5,7 +5,7 @@ a small library for reading or writing none octet aligned values such as `1-bit 
 ### Apache Maven
 Check the [Maven Central Repository](http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22com.github.jinahya%22%20AND%20a%3A%22bit-io%22) for the latest release.
 ### Jenkins
-[jinahya.com/jnekins/bit-io](https://jinahya.com/jenkins/job/com.github.jinahya%20bit-io/)
+[jinahya.com/jenkins](https://jinahya.com/jenkins/job/com.github.jinahya%20bit-io/)
 ### Apidocs
 * [1.0.4-SNAPSHOT](http://jinahya.github.io/bit-io/site/1.0.4-SNAPSHOT/apidocs/index.html)
 * [1.0.3](http://jinahya.github.io/bit-io/site/1.0.3/apidocs/index.html)

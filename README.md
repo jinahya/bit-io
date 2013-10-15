@@ -25,7 +25,7 @@ final boolean b = input.readBoolean();    // 1-bit boolean            1    1
 final int ui6 = input.readUnsignedInt(6); // 6-bit unsigned int       6    7
 final long sl47 = input.readLong(47);     // 47-bit signed long      47   54
 
-final int discarded = input.aling(1);    // aligns to 8-bit          2   56
+final int discarded = input.aling(1);    // aligns to 8-bit           2   56
 assert discasded == 2;
 ```
 ## Writing Bits

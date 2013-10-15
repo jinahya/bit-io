@@ -43,6 +43,6 @@ output.writeBoolean(true);          // 1-bit boolean             1    1
 output.writeInt(7, -1);             // 7-bit signed int          7    8
 output.writeUnsignedLong(33, 1L);   // 49-bit signed long       33   41
 
-final int padded = input1.aling(4); // aligns to 32-bit octet   23   64
+final int padded = output.aling(4); // aligns to 32-bit octet   23   64
 assert padded == 23;
 ```

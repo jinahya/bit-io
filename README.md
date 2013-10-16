@@ -3,6 +3,8 @@ bit-io
 
 ### Apache Maven
 Check the [Maven Central Repository](http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22com.github.jinahya%22%20AND%20a%3A%22bit-io%22) for the latest release.
+### Jenkins
+[jinahya.com](https://jinahya.com/jenkins/job/com.github.jinahya%20bit-io/)
 ### Apidocs
 * [1.0.4-SNAPSHOT](http://jinahya.github.io/bit-io/site/1.0.4-SNAPSHOT/apidocs/index.html)
 * [1.0.3](http://jinahya.github.io/bit-io/site/1.0.3/apidocs/index.html)

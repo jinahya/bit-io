@@ -45,7 +45,7 @@ public class BitIoTest {
         final BitOutput output = new BitOutput(new StreamOutput(baos));
 
         output.writeBytes(scale, range, expected);
-        output.align(1);
+        output.align((short) 1);
 
         final ByteArrayInputStream bais =
             new ByteArrayInputStream(baos.toByteArray());
@@ -74,6 +74,29 @@ public class BitIoTest {
         final BitInput input = new BitInput(new StreamInput(bais));
 
         final String actual = input.readUsAsciiString();
+        input.close();
+
+        Assert.assertEquals(actual, expected);
+    }
+
+
+    @Test(enabled = true, invocationCount = 128)
+    public void testUtf8String() throws IOException {
+
+        final String expected = BitIoTests.newValueUtf8String();
+
+        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        final BitOutput output = new BitOutput(new StreamOutput(baos));
+
+        output.writeString(expected, "UTF-8");
+        output.align((short) 1);
+        output.close();
+
+        final ByteArrayInputStream bais =
+            new ByteArrayInputStream(baos.toByteArray());
+        final BitInput input = new BitInput(new StreamInput(bais));
+
+        final String actual = input.readString("UTF-8");
         input.close();
 
         Assert.assertEquals(actual, expected);

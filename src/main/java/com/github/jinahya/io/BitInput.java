@@ -24,7 +24,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.channels.ReadableByteChannel;
-import java.nio.charset.Charset;
 
 
 /**
@@ -42,9 +41,9 @@ public class BitInput {
 
 
         /**
-         * Reads the next unsigned 8-bit integer.
+         * Reads the next unsigned 8-bit byte.
          *
-         * @return the next unsigned 8-bit integer. -1 for EOF.
+         * @return the next unsigned 8-bit byte. -1 for EOF.
          *
          * @throws IOException if an I/O error occurs.
          */
@@ -87,14 +86,14 @@ public class BitInput {
 
 
         /**
-         * {@inheritDoc}. The {@code stream} must be initialized and set if
+         * {@inheritDoc}. The {@link #stream} must be initialized and set if
          * {@code null} passed when this instance created.
          *
-         * @return the next unsigned byte.
+         * @return {@inheritDoc}
          *
          * @throws IOException if an I/O error occurs.
-         * @throws IllegalStateException if {@link #stream} is currently
-         * {@code null}.
+         * @throws IllegalStateException if {
+         * @lnik #stream} is currently {@code null}.
          */
         @Override
         public int readUnsignedByte() throws IOException {
@@ -245,8 +244,8 @@ public class BitInput {
          * @return {@inheritDoc }
          *
          * @throws IOException if an I/O error occurs.
-         * @throws IllegalStateException if either {@code buffer} or
-         * {@code channel} is {@code null}.
+         * @throws IllegalStateException if either {@link #buffer} or
+         * {@link #channel} is {@code null}.
          */
         @Override
         public int readUnsignedByte() throws IOException {
@@ -327,9 +326,9 @@ public class BitInput {
      */
     private int octet() throws IOException {
 
-        if (input == null) {
-            //throw new IllegalStateException("the input is currently null");
-        }
+        //if (input == null) {
+        //    throw new IllegalStateException("the input is currently null");
+        //}
 
         final int octet = input.readUnsignedByte();
         if (octet == -1) {
@@ -405,6 +404,34 @@ public class BitInput {
     public boolean readBoolean() throws IOException {
 
         return readUnsignedByte(1) == 0x01;
+    }
+
+
+    /**
+     * Reads a boolean flag for nullability of subsequent object.
+     *
+     * @return {@code true} if the subsequent object is {@code null} or
+     * {@code false} if is not {@code null}.
+     *
+     * @throws IOException if an I/O error occurs.
+     */
+    protected boolean isNull() throws IOException {
+
+        return readUnsignedByte(1) == 0x00;
+    }
+
+
+    /**
+     * Reads a boolean flag for nullability of subsequent object.
+     *
+     * @return {@code true} if the subsequent object is not {@code null} or
+     * {@code false} if the subsequent object is {@code null}.
+     *
+     * @throws IOException if an I/O error occurs.
+     */
+    protected boolean isNotNull() throws IOException {
+
+        return !isNull();
     }
 
 
@@ -736,11 +763,13 @@ public class BitInput {
     /**
      * Aligns to given {@code length} bytes.
      *
-     * @param length number of bytes to align; must be non-zero positive.
+     * @param length number of bytes to align; must be positive.
      *
      * @return the number of bits discarded
      *
      * @throws IOException if an I/O error occurs.
+     *
+     * @deprecated by {@link #align(short) }
      */
     @Deprecated
     public long align(final int length) throws IOException {
@@ -781,7 +810,7 @@ public class BitInput {
     /**
      * Aligns to given number of bytes.
      *
-     * @param length the number of bytes to align; must be non-zero positive.
+     * @param length the number of bytes to align; must be positive.
      *
      * @return the number of bits discarded
      *
@@ -825,31 +854,16 @@ public class BitInput {
 
 
     /**
-     * Aligns to a single byte.
-     *
-     * @return the number of bits discarded
-     *
-     * @throws IOException if an I/O error occurs.
-     *
-     * @see #align(short)
-     */
-    public int align() throws IOException {
-
-        return align((short) 1);
-    }
-
-
-    /**
      * Closes this input. This method aligns to a single byte and closes the
      * {@code input}.
      *
      * @throws IOException if an I/O error occurs.
      *
-     * @see #align()
+     * @see #align(short)
      */
     public void close() throws IOException {
 
-        align();
+        align((short) 1);
 
         if (input != null) {
             input.close();

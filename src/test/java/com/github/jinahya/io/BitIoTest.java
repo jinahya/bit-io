@@ -66,7 +66,7 @@ public class BitIoTest {
         final BitOutput output = new BitOutput(new StreamOutput(baos));
 
         output.writeUsAsciiString(expected);
-        output.align();
+        output.align((short) 1);
         output.close();
 
         final ByteArrayInputStream bais =

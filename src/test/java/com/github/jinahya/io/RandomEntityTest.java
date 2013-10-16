@@ -69,7 +69,7 @@ public class RandomEntityTest {
             actual[i] = new RandomEntity();
             actual[i].read(input);
         }
-        input.align(1);
+        input.align((short) 1);
 
         Assert.assertEquals(actual, expected);
     }
@@ -167,7 +167,7 @@ public class RandomEntityTest {
             actual[i] = new RandomEntity();
             actual[i].read(input);
         }
-        input.align(1);
+        input.align((short) 1);
 
         Assert.assertEquals(actual, expected);
     }
@@ -201,10 +201,11 @@ public class RandomEntityTest {
             actual[i] = new RandomEntity();
             actual[i].read(input);
         }
-        input.align(1);
+        input.align((short) 1);
 
         Assert.assertEquals(actual, expected);
     }
 
 
 }
+

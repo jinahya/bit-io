@@ -63,10 +63,10 @@ public class BitInputTest {
 
 
         }));
-        Assert.assertEquals(input.align(1), 0);
+        Assert.assertEquals(input.align((short) 1), 0);
 
         input.readUnsignedByte(6);
-        Assert.assertEquals(input.align(1), 2);
+        Assert.assertEquals(input.align((short) 1), 2);
 
         input.readUnsignedByte(5);
 
@@ -76,7 +76,7 @@ public class BitInputTest {
         }
         field.set(input, -2);
 
-        Assert.assertEquals(input.align(1), 3);
+        Assert.assertEquals(input.align((short)1), 3);
 
     }
 

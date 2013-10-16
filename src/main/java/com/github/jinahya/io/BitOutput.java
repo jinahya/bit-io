@@ -55,6 +55,7 @@ public class BitOutput {
          */
         void close() throws IOException;
 
+
     }
 
 
@@ -83,14 +84,14 @@ public class BitOutput {
 
 
         /**
-         * {@inheritDoc }. The {@link #stream} must be initialized and set if
+         * {@inheritDoc }. The {@code stream} must be initialized and set if
          * {@code null} passed when this instance was created.
          *
          * @param value {@inheritDoc }
          *
-         * @throws IOException {@inheritDoc }
-         * @throws IllegalStateException if {@link #stream} is currently
+         * @throws IllegalStateException if {@code stream} is currently
          * {@code null}.
+         * @throws IOException {@inheritDoc }
          */
         @Override
         public void writeUnsignedByte(final int value) throws IOException {
@@ -104,8 +105,8 @@ public class BitOutput {
 
 
         /**
-         * {@inheritDoc } This method, if {@link #stream} is not {@code null},
-         * flushes and closes the {@link #stream}.
+         * Closes this byte output. This method, if {@code stream} is not
+         * {@code null}, flushes and closes the {@code stream}.
          *
          * @throws IOException {@inheritDoc }
          */
@@ -153,14 +154,14 @@ public class BitOutput {
 
 
         /**
-         * {@inheritDoc } The {@link #buffer} must be initialized and set if
+         * {@inheritDoc } The {@code buffer} must be initialized and set if
          * {@code null} passed when this instance was created.
          *
          * @param value {@inheritDoc }
          *
-         * @throws IOException {@inheritDoc }
-         * @throws IllegalStateException if {@link #buffer} is currently
+         * @throws IllegalStateException if {@code buffer} is currently
          * {@code null}.
+         * @throws IOException {@inheritDoc }
          */
         @Override
         public void writeUnsignedByte(final int value) throws IOException {
@@ -174,7 +175,7 @@ public class BitOutput {
 
 
         /**
-         * {@inheritDoc } This method does nothing.
+         * Closes this byte output. This method does nothing.
          *
          * @throws IOException {@inheritDoc }
          */
@@ -234,15 +235,15 @@ public class BitOutput {
 
 
         /**
-         * {@inheritDoc } Both {@link #buffer} and {@link #channel} must be
+         * {@inheritDoc} Both {@code buffer} and {@code channel} must be
          * initialized and set if either of them passed as {@code null} when
          * this instance was created.
          *
          * @param value {@inheritDoc }
          *
+         * @throws IllegalStateException if either {@code buffer} or
+         * {@code channel} is currently {@code null}.
          * @throws IOException {@inheritDoc }
-         * @throws IllegalStateException if either {@link #buffer} or
-         * {@link #channel} is currently {@code null}.
          */
         @Override
         public void writeUnsignedByte(final int value) throws IOException {
@@ -269,9 +270,9 @@ public class BitOutput {
 
 
         /**
-         * {@inheritDoc } This method, if both {@link #buffer} and
-         * {@link #channel} is not {@code null}, writes all remaining bytes in
-         * {@link #buffer} to {@link #channel} and closes the {@link #channel}.
+         * Closes this byte output. This method, if both {@code buffer} and
+         * {@code channel} is not {@code null}, writes all remaining bytes in
+         * {@code buffer} to {@code channel} and closes the {@code channel}.
          *
          * @throws IOException if an I/O error occurs.
          */
@@ -329,8 +330,6 @@ public class BitOutput {
      */
     private void octet(final int value) throws IOException {
 
-        assert index == 8;
-
         if (output == null) {
             //throw new IllegalStateException("the output is currently null");
         }
@@ -342,8 +341,8 @@ public class BitOutput {
 
 
     /**
-     * Writes an {@code length}-bit unsigned byte value. The lower
-     * {@code length} bits in given {@code value} are written.
+     * Writes an unsigned byte. Only the lower {@code length} bits in given
+     * {@code value} are written.
      *
      * @param length bit length between 0 (exclusive) and 8 (inclusive).
      * @param value the value to write
@@ -361,7 +360,7 @@ public class BitOutput {
             throw new IllegalArgumentException("length(" + length + ") > 8");
         }
 
-        if (index == 8 && length == 8) {
+        if (index == 0 && length == 8) {
             // direct write
             octet(value);
             return;
@@ -375,7 +374,6 @@ public class BitOutput {
         }
 
         for (int i = index + length - 1; i >= index; i--) {
-            //bitset.set(i, ((value & 0x01) == 0x01 ? true : false));
             flags[i] = (value & 0x01) == 0x01 ? true : false;
             value >>= 1;
         }
@@ -385,7 +383,6 @@ public class BitOutput {
             int octet = 0x00;
             for (int i = 0; i < 8; i++) {
                 octet <<= 1;
-                //octet |= (bitset.get(i) ? 0x01 : 0x00);
                 octet |= (flags[i] ? 0x01 : 0x00);
             }
             octet(octet);
@@ -395,8 +392,8 @@ public class BitOutput {
 
 
     /**
-     * Writes a 1-bit boolean value. {@code 0x00} for {@code false} and
-     * {@code 0x01} for {@code true}.
+     * Writes a 1-bit boolean value. {@code 0b1} for {@code true} and
+     * {@code 0b0} for {@code false}.
      *
      * @param value the value to write
      *
@@ -408,11 +405,27 @@ public class BitOutput {
     }
 
 
+    protected boolean isNull(final Object value) throws IOException {
+
+        final boolean flag = value == null;
+
+        writeUnsignedByte(1, flag ? 0x00 : 0x01);
+
+        return flag;
+    }
+
+
+    protected boolean isNotNull(final Object value) throws IOException {
+
+        return !isNull(value);
+    }
+
+
     /**
-     * Writes an {@code length}-bit unsigned short value. Only the lower
-     * {@code length} bits in given {@code value} are written.
+     * Writes an unsigned short value. Only the lower specified number of bits
+     * in given {@code value} are written.
      *
-     * @param length the bit length between 0 exclusive and 16 inclusive.
+     * @param length the number of bits between 0 exclusive and 16 inclusive.
      * @param value the value to write
      *
      * @throws IOException if an I/O error occurs
@@ -442,8 +455,7 @@ public class BitOutput {
 
 
     /**
-     * Writes a {@code length}-bit unsigned int value. The value must be valid
-     * in bit range.
+     * Writes an unsigned int value. The value must be valid in bit range.
      *
      * @param length bit length between 1 inclusive and 32 exclusive.
      * @param value the value to write
@@ -480,8 +492,7 @@ public class BitOutput {
 
 
     /**
-     * Writes a {@code length}-bit signed int value. The {@code value} must be
-     * valid in bit range.
+     * Writes a signed int value. The {@code value} must be valid in bit range.
      *
      * @param length bit length between 1 (exclusive) and 32 (inclusive).
      * @param value the value to write
@@ -533,6 +544,8 @@ public class BitOutput {
      * @param value the value to write.
      *
      * @throws IOException if an I/O error occurs.
+     *
+     * @see Float#floatToRawIntBits(float)
      */
     public void writeFloat(final float value) throws IOException {
 
@@ -541,8 +554,8 @@ public class BitOutput {
 
 
     /**
-     * Writes a {@code length}-bit unsigned long value. The {@code value} must
-     * be valid in bit range.
+     * Writes an unsigned long value. The {@code value} must be valid in bit
+     * range.
      *
      * @param length bit length between 1 (inclusive) and 64 (exclusive).
      * @param value the value to write.
@@ -579,8 +592,7 @@ public class BitOutput {
 
 
     /**
-     * Writes a {@code length}-bit signed long value. The {@code value} must be
-     * valid in bit range.
+     * Writes a signed long value. The {@code value} must be valid in bit range.
      *
      * @param length bit length between 1 (exclusive) and 64 (inclusive).
      * @param value the value whose lower {@code length}-bits are written.
@@ -633,6 +645,8 @@ public class BitOutput {
      * @param value the value to write
      *
      * @throws IOException if an I/O error occurs.
+     *
+     * @see Double#doubleToRawLongBits(double)
      */
     public void writeDouble(final double value) throws IOException {
 
@@ -641,16 +655,23 @@ public class BitOutput {
 
 
     /**
-     * Writes an array of bytes.
+     * Writes specified number of bytes in {@code value} starting from
+     * {@code offset}.
      *
-     * @param scale array length scale; between 0 exclusive and 16 inclusive.
-     * @param range valid bit range in each bytes; between 0 exclusive and 8
-     * inclusive.
+     * @param scale the number of bits required for length of the array; between
+     * 0 exclusive and 16 inclusive.
+     * @param range the number of lower valid bits in each byte; between 0
+     * exclusive and 8 inclusive.
      * @param value the array of bytes to write.
+     * @param offset the offset in byte array
+     * @param length the number of bytes from {@code offset} to write
      *
+     * @throws IllegalArgumentexception if either {@code scale} or {@code range}
+     * is not valid, or {@code value} is too long.
      * @throws IOException if an I/O error occurs.
      */
-    public void writeBytes(final int scale, final int range, final byte[] value)
+    public void writeBytes(final int scale, final int range, final byte[] value,
+                           int offset, final int length)
         throws IOException {
 
         if (scale <= 0) {
@@ -670,80 +691,186 @@ public class BitOutput {
         }
 
         if (value == null) {
-            throw new NullPointerException("bytes");
+            throw new NullPointerException("value == null");
         }
 
-        if ((value.length >> scale) > 0) {
+        if (offset < 0) {
+            throw new IllegalArgumentException("offset(" + offset + ") < 0");
+        }
+
+        if (length < 0) {
+            throw new IllegalArgumentException("length(" + length + ") < 0");
+        }
+
+        if (offset + length > value.length) {
             throw new IllegalArgumentException(
-                "bytes.length(" + value.length + ") >> scale(" + scale + ") = "
-                + (value.length >> scale) + " > 0");
+                "offset(" + offset + ") + length(" + length + ") = "
+                + (offset + length) + ") > value.length(" + value.length + ")");
         }
 
-        writeUnsignedShort(scale, value.length);
+        if ((length >> scale) > 0) {
+            throw new IllegalArgumentException(
+                "length(" + length + ") >> scale(" + scale + ") = "
+                + (length >> scale) + " > 0");
+        }
 
-        for (int i = 0; i < value.length; i++) {
-            writeUnsignedByte(range, value[i]);
+        writeUnsignedShort(scale, length);
+
+        for (int i = 0; i < length; i++) {
+            writeUnsignedByte(range, value[offset++]);
         }
     }
 
 
+    public void writeBytes(final int scale, final int range, final byte[] value)
+        throws IOException {
+
+        writeBytes(scale, range, value, 0, value.length);
+    }
+
+
     /**
-     * Writes a String.
+     * Writes an array of bytes.
      *
-     * @param value the string to write.
-     * @param charsetName the charset name to encode the string.
+     * @param value the array of bytes to write.
      *
      * @throws IOException if an I/O error occurs.
+     *
+     * @see #writeBytes(byte[], int, int)
+     */
+    public void writeBytes(final byte[] value) throws IOException {
+
+        if (value == null) {
+            throw new NullPointerException("value == null");
+        }
+
+        writeBytes(16, 8, value);
+    }
+
+
+    /**
+     * Writes a string.
+     *
+     * @param scale
+     * @param range
+     * @param value the string to write.
+     * @param charsetName the charset name to decode the string.
+     *
+     * @throws NullPointerException if either {@code value} or
+     * {@code charsetName} is {@code null}.
+     * @throws IOException if an I/O error occurs.
+     *
+     * @see #writeBytes(int, int, byte[])
+     */
+    public void writeString(final int scale, final int range,
+                            final String value, final String charsetName)
+        throws IOException {
+
+        if (value == null) {
+            throw new NullPointerException("value == null");
+        }
+
+        if (charsetName == null) {
+            throw new NullPointerException("charsetName == null");
+        }
+
+        writeBytes(scale, range, value.getBytes(charsetName));
+    }
+
+
+    /**
+     * Writes a string with {@code scale} of 16 and {@code range} of 8.
+     *
+     * @param value the string to write.
+     * @param charsetName the charset name to decode the string
+     *
+     * @throws IOException if an I/O error occurs.
+     *
+     * @see #writeString(int, int, java.lang.String, java.lang.String)
      */
     public void writeString(final String value, final String charsetName)
         throws IOException {
 
-        if (value == null) {
-            throw new NullPointerException("value");
-        }
-
-        if (charsetName == null) {
-            throw new NullPointerException("charsetName");
-        }
-
-        final byte[] bytes = value.getBytes(charsetName);
-
-        writeBytes(16, 8, bytes);
+        writeString(16, 8, value, charsetName);
     }
 
 
     /**
-     * Writes an ASCII encoded string.
+     * Writes a {@code US-ASCII} encoded string with {@code scale} of 16 and
+     * {@code range} of 7.
      *
-     * @param value the String to write.
+     * @param value the string to write.
      *
      * @throws IOException if an I/O error occurs.
+     *
+     * @see #writeString(int, int, java.lang.String, java.lang.String)
      */
     public void writeUsAsciiString(final String value) throws IOException {
 
-        if (value == null) {
-            throw new NullPointerException("value");
-        }
-
-        final byte[] bytes = value.getBytes("US-ASCII");
-
-        writeBytes(16, 7, bytes);
+        writeString(16, 7, value, "US-ASCII");
     }
 
 
     /**
-     * Aligns to specified number of bytes
+     * Aligns to specified number of bytes.
      *
-     * @param length the number of bytes to align; must be non-zero positive.
+     * @param length the number of bytes to align. must be positive.
      *
-     * @return the number of bits padded.
+     * @return the number of bits padded for alignment
+     *
+     * @throws IOException if an I/O error occurs.
+     *
+     * @deprecated
+     */
+    @Deprecated
+    public long align(final int length) throws IOException {
+
+        if (length <= 0) {
+            throw new IllegalArgumentException("length(" + length + ") <= 0");
+        }
+
+        long bits = 0;
+
+        // writing(padding) remained bits into current byte
+        if (index > 0) {
+            bits = (8 - index);
+            writeUnsignedByte((int) bits, 0x00); // count incremented
+        }
+
+        int bytes = count % length;
+
+        if (bytes == 0) {
+            return bits;
+        }
+
+        if (bytes > 0) {
+            bytes = length - bytes;
+        } else {
+            bytes = 0 - bytes;
+        }
+
+        for (; bytes > 0; bytes--) {
+            writeUnsignedByte(8, 0x00);
+            bits += 8;
+        }
+
+        return bits;
+    }
+
+
+    /**
+     * Aligns to specified number of bytes.
+     *
+     * @param length the number of bytes to align. must be positive.
+     *
+     * @return the number of bits padded for alignment
      *
      * @throws IOException if an I/O error occurs.
      */
-    public int align(final int length) throws IOException {
+    public int align(final short length) throws IOException {
 
-        if (length < 1) {
-            throw new IllegalArgumentException("length(" + length + ") < 1");
+        if (length <= 0) {
+            throw new IllegalArgumentException("length(" + length + ") <= 0");
         }
 
         int bits = 0;
@@ -776,19 +903,6 @@ public class BitOutput {
 
 
     /**
-     * Aligns to a single byte.
-     *
-     * @return the number of bits padded.
-     *
-     * @throws IOException if an I/O error occurs.
-     */
-    public int align() throws IOException {
-
-        return align(1);
-    }
-
-
-    /**
      * Closes this instance. This method aligns to a single byte and closes
      * {@code output}.
      *
@@ -796,7 +910,7 @@ public class BitOutput {
      */
     public void close() throws IOException {
 
-        align(1);
+        align((short) 1);
 
         if (output != null) {
             output.close();
@@ -822,9 +936,8 @@ public class BitOutput {
 
 
     /**
-     * bits in current byte.
+     * bit flags.
      */
-    //private final BitSet bitset = new BitSet(8);
     private final boolean[] flags = new boolean[8];
 
 

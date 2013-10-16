@@ -18,8 +18,10 @@
 package com.github.jinahya.io;
 
 
+import java.nio.charset.StandardCharsets;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.testng.Assert;
 
 
@@ -27,7 +29,7 @@ import org.testng.Assert;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-final class RandomValues {
+final class BitIoTests {
 
 
     static int assertValueIntUnsigned(final int length, final int value) {
@@ -165,9 +167,36 @@ final class RandomValues {
     }
 
 
-    private RandomValues() {
+    static String newValueUtf8String() {
+
+        final Random random = ThreadLocalRandom.current();
+
+        String string;
+
+        do {
+            final int count = random.nextInt(32768); // = 65536 / 2
+            string = RandomStringUtils.random(count);
+        } while (string.getBytes(StandardCharsets.UTF_8).length >= 65536);
+
+        return string;
+    }
+
+
+    static String newValueUsAsciiString() {
+
+        final Random random = ThreadLocalRandom.current();
+
+        final int count = random.nextInt(65536);
+
+        return RandomStringUtils.randomAscii(count);
+
+    }
+
+
+    private BitIoTests() {
         super();
     }
 
 
 }
+

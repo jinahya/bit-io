@@ -37,8 +37,8 @@ public class BitIoTest {
     @Test(invocationCount = 128)
     public void testBytes() throws IOException {
 
-        final int scale = RandomLengths.newScaleBytes();
-        final int range = RandomLengths.newRangeBytes();
+        final int scale = BitIoTests.newByteArrayScale();
+        final int range = BitIoTests.newByteArrayRange();
         final byte[] expected = BitIoTests.newValueBytes(scale, range);
 
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();

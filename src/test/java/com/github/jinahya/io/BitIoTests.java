@@ -140,19 +140,44 @@ final class BitIoTests {
     }
 
 
-    static byte[] newValueBytes(Integer scale, Integer range) {
+    static int assertByteArrayScale(final int scale) {
 
-        if (scale == null) {
-            scale = RandomLengths.newScaleBytes();
-        }
+        assert scale > 0 : "scale(" + scale + ") <= 0";
+        assert scale <= 16 : "scale(" + scale + ") > 16";
 
-        RandomLengths.assertScaleBytes(scale);
+        return scale;
+    }
 
-        if (range == null) {
-            range = RandomLengths.newRangeBytes();
-        }
 
-        RandomLengths.assertRangeBytes(range);
+    static int newByteArrayScale() {
+
+        final int scale = ThreadLocalRandom.current().nextInt(1, 17);
+
+        return assertByteArrayScale(scale);
+    }
+
+
+    static int assertByteArrayRange(final int range) {
+
+        assert range > 0 : "range(" + range + ") <= 0";
+        assert range <= 8 : " range(" + range + ") > 8";
+
+        return range;
+    }
+
+
+    static int newByteArrayRange() {
+
+        final int range = ThreadLocalRandom.current().nextInt(1, 9);
+
+        return assertByteArrayRange(range);
+    }
+
+
+    static byte[] newValueBytes(final int scale, final int range) {
+
+        assertByteArrayScale(scale);
+        assertByteArrayRange(range);
 
         final Random random = ThreadLocalRandom.current();
 

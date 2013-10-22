@@ -329,7 +329,6 @@ public class BitInput {
         //if (input == null) {
         //    throw new IllegalStateException("the input is currently null");
         //}
-
         final int octet = input.readUnsignedByte();
         if (octet == -1) {
             throw new EOFException("eof");
@@ -632,17 +631,20 @@ public class BitInput {
     }
 
 
-    public void readBytes(final int scale, final int range, final byte[] value,
-                          int offset, final int length)
+    /**
+     * Reads a series of bytes.
+     *
+     * @param range the number of valid bits in each byte; between 0 exclusive
+     * and 8 inclusive
+     * @param value the array to which each byte are stored
+     * @param offset starting offset in the array
+     * @param length the number of bytes to read
+     *
+     * @throws IOException
+     */
+    protected void readBytes(final int range, final byte[] value, int offset,
+                             final int length)
         throws IOException {
-
-        if (scale <= 0) {
-            throw new IllegalArgumentException("scale(" + scale + ") <= 0");
-        }
-
-        if (scale > 16) {
-            throw new IllegalArgumentException("scale(" + scale + ") > 16");
-        }
 
         if (range <= 0) {
             throw new IllegalArgumentException("range(" + range + ") <= 0");
@@ -670,15 +672,61 @@ public class BitInput {
                 + (offset + length) + " > value.length(" + value.length + ")");
         }
 
-        if ((length >> scale) > 0) {
-            throw new IllegalArgumentException(
-                "length(" + length + ") >> scale(" + scale + ") = "
-                + (length >> scale) + " > 0");
+        for (int i = 0; i < length; i++) {
+            value[offset++] = (byte) readUnsignedByte(range);
         }
+    }
+
+
+    /**
+     * Reads a series of bytes.
+     *
+     * @param scale the number of bits required for {@code length}; between 0
+     * exclusive and 16 exclusive.
+     * @param range the number of valid bits in each byte; between 0 exclusive
+     * and 8 inclusive
+     * @param value the array to which each byte are stored
+     * @param offset starting offset in the array
+     *
+     * @return the number of bytes read
+     *
+     * @throws IOException if an I/O error occurs.
+     */
+    public int readBytes(final int scale, final int range, final byte[] value,
+                         int offset)
+        throws IOException {
+
+        if (scale <= 0) {
+            throw new IllegalArgumentException("scale(" + scale + ") <= 0");
+        }
+
+        if (scale > 16) {
+            throw new IllegalArgumentException("scale(" + scale + ") > 16");
+        }
+
+        if (range <= 0) {
+            throw new IllegalArgumentException("range(" + range + ") <= 0");
+        }
+
+        if (range > 8) {
+            throw new IllegalArgumentException("range(" + range + ") > 8");
+        }
+
+        if (value == null) {
+            throw new NullPointerException("value == null");
+        }
+
+        if (offset < 0) {
+            throw new IllegalArgumentException("offset(" + offset + ") < 0");
+        }
+
+        final int length = readUnsignedShort(scale);
 
         for (int i = 0; i < length; i++) {
             value[offset++] = (byte) readUnsignedByte(range);
         }
+
+        return length;
     }
 
 
@@ -687,8 +735,8 @@ public class BitInput {
      *
      * @param scale the number of bits for array length; between 0 exclusive and
      * 16 inclusive.
-     * @param range the number of valid low bits in each byte; between 0
-     * exclusive and 8 inclusive.
+     * @param range the number of valid bits in each byte; between 0 exclusive
+     * and 8 inclusive.
      *
      * @return an array of bytes.
      *
@@ -724,29 +772,15 @@ public class BitInput {
 
 
     /**
-     * Reads a string.
+     * Reads an array of bytes.
      *
-     * @param scale the number of bits for array length; between 0 exclusive and
-     * 16 inclusive.
-     * @param range the number of lower valid bits in each byte; between 0
-     * exclusive and 8
-     * @param charsetName the character set name to encode output string.
-     *
-     * @return a string
+     * @return an array of bytes
      *
      * @throws IOException if an I/O error occurs.
-     *
-     * @see #readBytes(int, int)
      */
-    public String readString(final int scale, final int range,
-                             final String charsetName)
-        throws IOException {
+    public byte[] readBytes() throws IOException {
 
-        if (charsetName == null) {
-            throw new NullPointerException("charsetName");
-        }
-
-        return new String(readBytes(scale, range), charsetName);
+        return readBytes(16, 8);
     }
 
 
@@ -761,7 +795,11 @@ public class BitInput {
      */
     public String readString(final String charsetName) throws IOException {
 
-        return readString(16, 8, charsetName);
+        if (charsetName == null) {
+            throw new NullPointerException("charsetName");
+        }
+
+        return new String(readBytes(16, 8), charsetName);
     }
 
 
@@ -774,14 +812,14 @@ public class BitInput {
      */
     public String readUsAsciiString() throws IOException {
 
-        return readString(16, 7, "US-ASCII");
+        return new String(readBytes(16, 7), "US-ASCII");
     }
 
 
     /**
      * Aligns to given number of bytes.
      *
-     * @param length number of bytes to align; must be positive.
+     * @param length number of bytes to align; must be greater than zero.
      *
      * @return the number of bits discarded
      *

@@ -663,7 +663,7 @@ public class BitOutput {
      * @param range the number of lower valid bits in each byte; between 0
      * exclusive and 8 inclusive.
      * @param value the array of bytes to write.
-     * @param offset the offset in byte array
+     * @param offset the starting offset in byte array
      * @param length the number of bytes from {@code offset} to write
      *
      * @throws IllegalArgumentexception if either {@code scale} or {@code range}
@@ -722,6 +722,17 @@ public class BitOutput {
     }
 
 
+    /**
+     * Writes an array of bytes.
+     *
+     * @param scale the number of bits for array length between 0 exclusive and
+     * 16 inclusive.
+     * @param range the number of lower bits in each byte to write between 0
+     * exclusive and 8 inclusive.
+     * @param value the array of bytes to write
+     *
+     * @throws IOException if an I/O error occurs.
+     */
     public void writeBytes(final int scale, final int range, final byte[] value)
         throws IOException {
 
@@ -729,52 +740,9 @@ public class BitOutput {
     }
 
 
-    /**
-     * Writes an array of bytes.
-     *
-     * @param value the array of bytes to write.
-     *
-     * @throws IOException if an I/O error occurs.
-     *
-     * @see #writeBytes(byte[], int, int)
-     */
-    public void writeBytes(final byte[] value) throws IOException {
+    public void writeBytes(final byte[] bytes) throws IOException {
 
-        if (value == null) {
-            throw new NullPointerException("value == null");
-        }
-
-        writeBytes(16, 8, value);
-    }
-
-
-    /**
-     * Writes a string.
-     *
-     * @param scale
-     * @param range
-     * @param value the string to write.
-     * @param charsetName the charset name to decode the string.
-     *
-     * @throws NullPointerException if either {@code value} or
-     * {@code charsetName} is {@code null}.
-     * @throws IOException if an I/O error occurs.
-     *
-     * @see #writeBytes(int, int, byte[])
-     */
-    public void writeString(final int scale, final int range,
-                            final String value, final String charsetName)
-        throws IOException {
-
-        if (value == null) {
-            throw new NullPointerException("value == null");
-        }
-
-        if (charsetName == null) {
-            throw new NullPointerException("charsetName == null");
-        }
-
-        writeBytes(scale, range, value.getBytes(charsetName));
+        writeBytes(16, 8, bytes);
     }
 
 
@@ -786,12 +754,12 @@ public class BitOutput {
      *
      * @throws IOException if an I/O error occurs.
      *
-     * @see #writeString(int, int, java.lang.String, java.lang.String)
+     * @see #writeBytes(int, int, byte[])
      */
     public void writeString(final String value, final String charsetName)
         throws IOException {
 
-        writeString(16, 8, value, charsetName);
+        writeBytes(16, 8, value.getBytes(charsetName));
     }
 
 
@@ -803,11 +771,11 @@ public class BitOutput {
      *
      * @throws IOException if an I/O error occurs.
      *
-     * @see #writeString(int, int, java.lang.String, java.lang.String)
+     * @see #writeBytes(int, int, byte[])
      */
     public void writeUsAsciiString(final String value) throws IOException {
 
-        writeString(16, 7, value, "US-ASCII");
+        writeBytes(16, 7, value.getBytes("US-ASCII"));
     }
 
 
@@ -820,7 +788,7 @@ public class BitOutput {
      *
      * @throws IOException if an I/O error occurs.
      *
-     * @deprecated
+     * @deprecated by {@link #align(short) }
      */
     @Deprecated
     public long align(final int length) throws IOException {

@@ -35,7 +35,7 @@ public class BitOutput {
     /**
      * An interface for writing bytes.
      */
-    public interface ByteOutput { // status? redundant.
+    public interface ByteOutput { // status? redundant!
 
 
         /**
@@ -84,7 +84,7 @@ public class BitOutput {
 
 
         /**
-         * {@inheritDoc }. The {@code stream} must be initialized and set if
+         * {@inheritDoc} The {@code stream} must be initialized and set if
          * {@code null} passed when this instance was created.
          *
          * @param value {@inheritDoc }
@@ -105,8 +105,8 @@ public class BitOutput {
 
 
         /**
-         * Closes this byte output. This method, if {@code stream} is not
-         * {@code null}, flushes and closes the {@code stream}.
+         * {@inheritDoc} This method, if {@code stream} is not {@code null},
+         * flushes and closes the {@code stream}.
          *
          * @throws IOException {@inheritDoc }
          */
@@ -154,7 +154,7 @@ public class BitOutput {
 
 
         /**
-         * {@inheritDoc } The {@code buffer} must be initialized and set if
+         * {@inheritDoc} The {@code buffer} must be initialized and set if
          * {@code null} passed when this instance was created.
          *
          * @param value {@inheritDoc }
@@ -270,9 +270,9 @@ public class BitOutput {
 
 
         /**
-         * Closes this byte output. This method, if both {@code buffer} and
-         * {@code channel} is not {@code null}, writes all remaining bytes in
-         * {@code buffer} to {@code channel} and closes the {@code channel}.
+         * {@inheritDoc} This method, if both {@code buffer} and {@code channel}
+         * is not {@code null}, writes all remaining bytes in {@code buffer} to
+         * {@code channel} and closes the {@code channel}.
          *
          * @throws IOException if an I/O error occurs.
          */
@@ -725,10 +725,10 @@ public class BitOutput {
     /**
      * Writes an array of bytes.
      *
-     * @param scale the number of bits for array length between 0 exclusive and
-     * 16 inclusive.
+     * @param scale the number of bits for array length between 0 (exclusive)
+     * and 16 (inclusive).
      * @param range the number of lower bits in each byte to write between 0
-     * exclusive and 8 inclusive.
+     * (exclusive) and 8 (inclusive).
      * @param value the array of bytes to write
      *
      * @throws IOException if an I/O error occurs.

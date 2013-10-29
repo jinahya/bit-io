@@ -887,9 +887,9 @@ public class BitOutput {
 
 
     /**
-     * Returns the number of bytes written so far excluding current byte.
+     * Returns the number of bytes written to the {@code output} so far.
      *
-     * @return the number of bytes written so far.
+     * @return the number of bytes written to the {@code output} so far.
      */
     public int getCount() {
 

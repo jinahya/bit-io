@@ -910,7 +910,7 @@ public class BitInput {
 
 
     /**
-     * Closes this input. This method aligns to a single byte and closes the
+     * Closes this instance. This method aligns to a single byte and closes the
      * {@code input}.
      *
      * @throws IOException if an I/O error occurs.

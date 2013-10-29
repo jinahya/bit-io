@@ -875,6 +875,8 @@ public class BitOutput {
      * {@code output}.
      *
      * @throws IOException if an I/O error occurs.
+     *
+     * @see #align(short)
      */
     public void close() throws IOException {
 

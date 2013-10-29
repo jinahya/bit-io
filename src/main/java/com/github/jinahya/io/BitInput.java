@@ -951,7 +951,7 @@ public class BitInput {
 
 
     /**
-     * bit index to read.
+     * next bit index to read.
      */
     private int index = 8;
 

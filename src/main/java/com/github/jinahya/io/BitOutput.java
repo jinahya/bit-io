@@ -910,7 +910,7 @@ public class BitOutput {
 
 
     /**
-     * bit index to write.
+     * next bit index to write.
      */
     private int index = 0;
 

@@ -6,7 +6,7 @@ a small library for reading or writing none octet aligned values such as `1-bit 
 
 
 ### maven central
-Check the [Maven Central Repository](http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22com.github.jinahya%22%20AND%20a%3A%22bit-io%22) for the latest release.
+check the [maven central repository](http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22com.github.jinahya%22%20AND%20a%3A%22bit-io%22) for latest releases.
 
 ### jenkins
 [jinahya.com/jenkins](https://jinahya.com/jenkins/job/com.github.jinahya%20bit-io/)

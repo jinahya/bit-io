@@ -27,7 +27,7 @@ import java.nio.channels.WritableByteChannel;
 /**
  * A wrapper class for writing arbitrary length of bits.
  *
- * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
+ * @author <a href="mailto:onacit@gmail.com">Jin Kwon</a>
  */
 public class BitOutput {
 

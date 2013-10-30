@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.channels.ReadableByteChannel;
+import java.nio.channels.WritableByteChannel;
 
 
 /**
@@ -176,12 +177,79 @@ public class BitInput {
 
 
         /**
-         * {@inheritDoc }. This method does nothing.
+         * {@inheritDoc}
          *
-         * @throws IOException if an I/O error occurs.
+         * @throws IOException {@inheritDoc}
          */
         @Override
         public void close() throws IOException {
+        }
+
+
+        protected void replenish(final ReadableByteChannel channel,
+                                 final int least)
+            throws IOException {
+
+            if (channel == null) {
+                throw new NullPointerException("null channel");
+            }
+
+            if (buffer == null) {
+                throw new IllegalStateException("the buffer is currently null");
+            }
+
+            if (least < 0) {
+                throw new IllegalArgumentException("least(" + least + ") < 0");
+            }
+
+            if (least > buffer.capacity()) {
+                throw new IllegalArgumentException(
+                    "least(" + least + ") > buffer.capacity("
+                    + buffer.capacity() + ")");
+            }
+
+            buffer.compact(); // position -> n + 1, limit -> capacity
+
+            while (buffer.position() < least) {
+                if (channel.read(buffer) == -1) {
+                    throw new EOFException("eof");
+                }
+            }
+
+            buffer.flip(); // limit -> position, position -> zero
+        }
+
+
+        protected void replenish(final ReadableByteChannel channel)
+            throws IOException {
+
+            if (buffer == null) {
+                throw new IllegalStateException("the buffer is currently null");
+            }
+
+            replenish(channel, buffer.capacity());
+        }
+
+
+        /**
+         * Returns current value of {@code buffer}.
+         *
+         * @return current value of {@code buffer}.
+         */
+        public ByteBuffer getBuffer() {
+
+            return buffer;
+        }
+
+
+        /**
+         * Replaces current value of {@code buffer} with given.
+         *
+         * @param buffer the new value of {@code buffer}.
+         */
+        public void setBuffer(final ByteBuffer buffer) {
+
+            this.buffer = buffer;
         }
 
 
@@ -196,10 +264,7 @@ public class BitInput {
 
     /**
      * A {@link ByteInput} implementation for {@link ReadableByteChannel}s.
-     *
-     * @deprecated Wrong implementation; Use {@link BufferOutput}.
      */
-    @Deprecated
     public static class ChannelInput extends BufferInput {
 
 
@@ -215,10 +280,6 @@ public class BitInput {
                             final ReadableByteChannel channel) {
 
             super(buffer);
-
-            if (channel == null) {
-                //throw new NullPointerException("null channel");
-            }
 
             this.channel = channel;
         }
@@ -286,6 +347,28 @@ public class BitInput {
             if (channel != null) {
                 channel.close();
             }
+        }
+
+
+        /**
+         * Returns the current value of {@code channel}.
+         *
+         * @return current value of {@code channel}.
+         */
+        public ReadableByteChannel getChannel() {
+
+            return channel;
+        }
+
+
+        /**
+         * Replaces the current value of {@code channel} with given.
+         *
+         * @param channel new value for {@code channel}
+         */
+        public void setChannel(final ReadableByteChannel channel) {
+
+            this.channel = channel;
         }
 
 

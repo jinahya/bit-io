@@ -21,6 +21,7 @@ package com.github.jinahya.io;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
+import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.WritableByteChannel;
 
 
@@ -184,6 +185,47 @@ public class BitOutput {
         }
 
 
+        protected void drain(final WritableByteChannel channel)
+            throws IOException {
+
+            if (channel == null) {
+                throw new NullPointerException("null channel");
+            }
+
+            if (buffer == null) {
+                throw new IllegalStateException("the buffer is currently null");
+            }
+
+            buffer.flip(); // limit -> position, position -> zero
+            while (buffer.hasRemaining()) {
+                channel.write(buffer);
+            }
+            buffer.clear(); // this may be required for further access
+        }
+
+
+        /**
+         * Returns current value of {@code buffer}.
+         *
+         * @return current value of {@code buffer}.
+         */
+        public ByteBuffer getBuffer() {
+
+            return buffer;
+        }
+
+
+        /**
+         * Replaces current value of {@code buffer} with given.
+         *
+         * @param buffer the new value of {@code buffer}.
+         */
+        public void setBuffer(final ByteBuffer buffer) {
+
+            this.buffer = buffer;
+        }
+
+
         /**
          * the output buffer.
          */
@@ -195,10 +237,7 @@ public class BitOutput {
 
     /**
      * A {@link ByteOutput} implementation for {@link WritableByteChannel}s.
-     *
-     * @deprecated Wrong implementation; Use {@link BufferOutput}.
      */
-    @Deprecated
     public static class ChannelOutput extends BufferOutput {
 
 
@@ -270,25 +309,43 @@ public class BitOutput {
 
 
         /**
-         * {@inheritDoc} This method, if both {@code buffer} and {@code channel}
-         * is not {@code null}, writes all remaining bytes in {@code buffer} to
-         * {@code channel} and closes the {@code channel}.
+         * Closes this byte output. This method, if both {@code buffer} and
+         * {@code channel} is not {@code null}, writes all remaining bytes in
+         * {@code buffer} to {@code channel} and closes the {@code channel}.
          *
-         * @throws IOException if an I/O error occurs.
+         * @throws IOException {@inheritDoc}
          */
         @Override
         public void close() throws IOException {
 
             if (channel != null) {
                 if (buffer != null) {
-                    buffer.flip(); // limit -> position, position -> zero
-                    while (buffer.hasRemaining()) {
-                        channel.write(buffer);
-                    }
-                    buffer.clear(); // this may be required for further access
+                    drain(channel);
                 }
                 channel.close();
             }
+        }
+
+
+        /**
+         * Returns the current value of {@code channel}.
+         *
+         * @return current value of {@code channel}.
+         */
+        public WritableByteChannel getChannel() {
+
+            return channel;
+        }
+
+
+        /**
+         * Replaces the current value of {@code channel} with given.
+         *
+         * @param channel new value for {@code channel}
+         */
+        public void setChannel(final WritableByteChannel channel) {
+
+            this.channel = channel;
         }
 
 

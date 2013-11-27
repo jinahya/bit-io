@@ -18,13 +18,12 @@
 package com.github.jinahya.io;
 
 
-import com.github.jinahya.io.BitOutput.BufferOutput;
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 import java.nio.channels.ReadableByteChannel;
-import java.nio.channels.WritableByteChannel;
 
 
 /**
@@ -44,7 +43,8 @@ public class BitInput {
         /**
          * Reads the next unsigned 8-bit byte.
          *
-         * @return the next unsigned 8-bit byte. -1 for EOF.
+         * @return the next unsigned 8-bit byte, or {@code -1} if the end of the
+         * stream is reached.
          *
          * @throws IOException if an I/O error occurs.
          */
@@ -52,7 +52,8 @@ public class BitInput {
 
 
         /**
-         * Closes this byte input.
+         * Closes this byte input and releases any system resources associated
+         * with the input.
          *
          * @throws IOException if an I/O error occurs.
          */
@@ -71,15 +72,16 @@ public class BitInput {
         /**
          * Creates a new instance.
          *
-         * @param stream the stream to wrap. {@code null} for lazy
-         * initialization.
+         * @param stream the stream to wrap.
+         *
+         * @throws NullPointerException if {@code stream} is {@code null}.
          */
         public StreamInput(final InputStream stream) {
 
             super();
 
             if (stream == null) {
-                //throw new NullPointerException("stream");
+                throw new NullPointerException("stream");
             }
 
             this.stream = stream;
@@ -87,45 +89,53 @@ public class BitInput {
 
 
         /**
-         * {@inheritDoc}. The {@link #stream} must be initialized and set if
-         * {@code null} passed when this instance created.
+         * {@inheritDoc}
+         * <p/>
+         * The {@code readUnsignedByte()} method of {@code StreamInput} class
+         * calls {@link InputStream#read()} on {@link #stream} and returns the
+         * result.
          *
          * @return {@inheritDoc}
          *
-         * @throws IOException if an I/O error occurs.
-         * @throws IllegalStateException if {
-         * @lnik #stream} is currently {@code null}.
+         * @throws IOException {@inheritDoc}
          */
         @Override
         public int readUnsignedByte() throws IOException {
-
-            if (stream == null) {
-                throw new IllegalStateException("the stream is currently null");
-            }
 
             return stream.read();
         }
 
 
         /**
-         * {@inheritDoc }. This method closes the {@link #stream} if it is not
-         * {@code null}.
+         * {@inheritDoc}
+         * <p/>
+         * The {@code close()} method of {@code StreamInput} class calls
+         * {@link InputStream#close()} on {@link #stream}.
          *
-         * @throws IOException if an I/O error occurs.
+         * @throws IOException {@inheritDoc }
          */
         @Override
         public void close() throws IOException {
 
-            if (stream != null) {
-                stream.close();
-            }
+            stream.close();
         }
 
 
         /**
-         * the input stream.
+         * Returns the underlying stream instance.
+         *
+         * @return the underlying stream instance.
          */
-        protected InputStream stream;
+        public InputStream getStream() {
+
+            return stream;
+        }
+
+
+        /**
+         * The underlying input stream.
+         */
+        protected final InputStream stream;
 
 
     }
@@ -138,17 +148,18 @@ public class BitInput {
 
 
         /**
-         * Creates a new instance.
+         * Creates a new instance on top of specified byte buffer.
          *
-         * @param buffer the buffer to wrap. {@code null} for lazy
-         * initialization.
+         * @param buffer the buffer to wrap.
+         *
+         * @throws NullPointerException if {@code buffer} is {@code null}.
          */
         public BufferInput(final ByteBuffer buffer) {
 
             super();
 
             if (buffer == null) {
-                //throw new NullPointerException("buffer");
+                throw new NullPointerException("buffer");
             }
 
             this.buffer = buffer;
@@ -156,78 +167,37 @@ public class BitInput {
 
 
         /**
-         * {@inheritDoc }. The {@link #buffer} must be initialized and set if
-         * {@code null} passed when this instance created.
+         * {@inheritDoc}
+         * <p/>
+         * The {@code readUnsignedByte()} method of {@code ByteBuffer} class
+         * calls {@link ByteBuffer#get()} and returns the result.
          *
          * @return {@inheritDoc }
          *
-         * @throws IOException if an I/O error occurs.
-         * @throws IllegalStateException if {@code buffer} is currently
-         * {@code null}.
+         * @throws IOException {@inheritDoc}
          */
         @Override
         public int readUnsignedByte() throws IOException {
 
-            if (buffer == null) {
-                throw new IllegalStateException("the buffer is currently null");
+            try {
+                return (buffer.get() & 0xFF);
+            } catch (final BufferUnderflowException bue) {
+                return -1;
             }
-
-            return (buffer.get() & 0xFF); // BufferUnderflowException
         }
 
 
         /**
          * {@inheritDoc}
+         * <p/>
+         * The {@code close()} method of {@code BufferInput} class does nothing.
          *
          * @throws IOException {@inheritDoc}
          */
         @Override
         public void close() throws IOException {
-        }
 
-
-        protected void replenish(final ReadableByteChannel channel,
-                                 final int least)
-            throws IOException {
-
-            if (channel == null) {
-                throw new NullPointerException("null channel");
-            }
-
-            if (buffer == null) {
-                throw new IllegalStateException("the buffer is currently null");
-            }
-
-            if (least < 0) {
-                throw new IllegalArgumentException("least(" + least + ") < 0");
-            }
-
-            if (least > buffer.capacity()) {
-                throw new IllegalArgumentException(
-                    "least(" + least + ") > buffer.capacity("
-                    + buffer.capacity() + ")");
-            }
-
-            buffer.compact(); // position -> n + 1, limit -> capacity
-
-            while (buffer.position() < least) {
-                if (channel.read(buffer) == -1) {
-                    throw new EOFException("eof");
-                }
-            }
-
-            buffer.flip(); // limit -> position, position -> zero
-        }
-
-
-        protected void replenish(final ReadableByteChannel channel)
-            throws IOException {
-
-            if (buffer == null) {
-                throw new IllegalStateException("the buffer is currently null");
-            }
-
-            replenish(channel, buffer.capacity());
+            // do nothing
         }
 
 
@@ -243,20 +213,9 @@ public class BitInput {
 
 
         /**
-         * Replaces current value of {@code buffer} with given.
-         *
-         * @param buffer the new value of {@code buffer}.
+         * The underlying buffer.
          */
-        public void setBuffer(final ByteBuffer buffer) {
-
-            this.buffer = buffer;
-        }
-
-
-        /**
-         * buffer.
-         */
-        protected ByteBuffer buffer;
+        protected final ByteBuffer buffer;
 
 
     }
@@ -269,27 +228,34 @@ public class BitInput {
 
 
         /**
-         * Creates a new instance.
+         * Creates a new instance on top of specified channel.
          *
-         * @param buffer the buffer to use. {@code null} for lazy
-         * initialization.
-         * @param channel the channel to wrap. {@code null} for lazy
-         * initialization.
+         * @param buffer the buffer to use
+         * @param channel the channel to wrap.
+         *
+         * @throws NullPointerException if either {@code buffer} or
+         * {@code channel} is {@code null}.
+         *
          */
         public ChannelInput(final ByteBuffer buffer,
                             final ReadableByteChannel channel) {
 
             super(buffer);
 
+            if (channel == null) {
+                throw new NullPointerException("null channel");
+            }
+
             this.channel = channel;
         }
 
 
         /**
-         * Creates a new instance with a default buffer.
+         * Creates a new instance on top of specified channel.
          *
-         * @param channel the channel to wrap. {@code null} for lazy
-         * initialization.
+         * @param channel the channel to wrap.
+         *
+         * @throws NullPointerException if {@code channel} is {@code null}.
          */
         public ChannelInput(final ReadableByteChannel channel) {
 
@@ -298,26 +264,21 @@ public class BitInput {
 
 
         /**
-         * {@inheritDoc }. The {@link #buffer} and {@link #channel} must be
-         * initialized and set if either passed as {@code null} when this
-         * instance created.
+         * {@inheritDoc}
+         * <p/>
+         * The {@code readUnsignedByte()} method of {@code ChannelInput} class
+         * first tries to replenish the {@link #buffer} if it is drained and
+         * calls {@link BufferInput#readUnsignedByte()} and returns the result.
          *
          * @return {@inheritDoc }
          *
-         * @throws IOException if an I/O error occurs.
-         * @throws IllegalStateException if either {@link #buffer} or
-         * {@link #channel} is {@code null}.
+         * @throws IOException {@inheritDoc}
          */
         @Override
         public int readUnsignedByte() throws IOException {
-
-            if (buffer == null) {
-                throw new IllegalStateException("the buffer is currently null");
-            }
-
-            if (channel == null) {
-                throw new IllegalStateException(
-                    "the channel is currently null");
+            
+            if (buffer.capacity() == 0) {
+                throw new IllegalStateException("buffer.capacity == 0");
             }
 
             if (!buffer.hasRemaining()) {
@@ -327,7 +288,7 @@ public class BitInput {
                         return -1;
                     }
                 }
-                // buffer filled with at least one byte; position > 0
+                assert buffer.position() > 0;
                 buffer.flip(); // limit -> position, position -> zero
             }
 
@@ -336,24 +297,24 @@ public class BitInput {
 
 
         /**
-         * {@inheritDoc }. This method closes the {@link #channel} if it's not
-         * {@code null}.
+         * {@inheritDoc }
+         * <p/>
+         * The {@code close()} method of {@code ChannelInput} class calls
+         * {@link java.nio.channels.Channel#close()} on {@link #channel}.
          *
-         * @throws IOException if an I/O error occurs.
+         * @throws IOException {@inheritDoc}
          */
         @Override
         public void close() throws IOException {
 
-            if (channel != null) {
-                channel.close();
-            }
+            channel.close();
         }
 
 
         /**
-         * Returns the current value of {@code channel}.
+         * Returns the underlying channel on which this input built.
          *
-         * @return current value of {@code channel}.
+         * @return the underlying channel
          */
         public ReadableByteChannel getChannel() {
 
@@ -362,20 +323,9 @@ public class BitInput {
 
 
         /**
-         * Replaces the current value of {@code channel} with given.
-         *
-         * @param channel new value for {@code channel}
+         * The underlying channel instance.
          */
-        public void setChannel(final ReadableByteChannel channel) {
-
-            this.channel = channel;
-        }
-
-
-        /**
-         * channel.
-         */
-        protected ReadableByteChannel channel;
+        protected final ReadableByteChannel channel;
 
 
     }
@@ -487,7 +437,7 @@ public class BitInput {
 
 
     /**
-     * Reads a boolean flag for nullability of subsequent object.
+     * Reads a boolean flag for nullability of the subsequent object.
      *
      * @return {@code true} if the subsequent object is {@code null} or
      * {@code false} if the subsequent object is not {@code null}.
@@ -902,53 +852,6 @@ public class BitInput {
     /**
      * Aligns to given number of bytes.
      *
-     * @param length number of bytes to align; must be greater than zero.
-     *
-     * @return the number of bits discarded
-     *
-     * @throws IOException if an I/O error occurs.
-     *
-     * @deprecated by {@link #align(short) }
-     */
-    @Deprecated
-    public long align(final int length) throws IOException {
-
-        if (length <= 0) {
-            throw new IllegalArgumentException("length(" + length + ") <= 0");
-        }
-
-        long bits = 0;
-
-        // reading(discarding) remained bits from current byte.
-        if (index < 8) {
-            bits = 8 - index;
-            readUnsignedByte((int) bits); // count increments
-        }
-
-        int bytes = count % length;
-
-        if (bytes == 0) {
-            return bits;
-        }
-
-        if (bytes > 0) {
-            bytes = length - bytes;
-        } else {
-            bytes = 0 - bytes;
-        }
-
-        for (; bytes > 0; bytes--) {
-            readUnsignedByte(8);
-            bits += 8;
-        }
-
-        return bits;
-    }
-
-
-    /**
-     * Aligns to given number of bytes.
-     *
      * @param length the number of bytes to align; must be positive.
      *
      * @return the number of bits discarded
@@ -971,7 +874,7 @@ public class BitInput {
             readUnsignedByte(bits); // count increments
         }
 
-        int bytes = count % length;
+        long bytes = count % length;
 
         if (bytes == 0) {
             return bits;
@@ -983,7 +886,7 @@ public class BitInput {
             bytes = 0 - bytes;
         }
 
-        for (; bytes > 0; bytes--) {
+        for (; bytes > 0L; bytes--) {
             readUnsignedByte(8);
             bits += 8;
         }
@@ -1015,7 +918,7 @@ public class BitInput {
      *
      * @return the number of bytes read from the {@code input} so far.
      */
-    public int getCount() {
+    public long getCount() {
 
         return count;
     }
@@ -1034,15 +937,16 @@ public class BitInput {
 
 
     /**
-     * bit index to read.
+     * The next bit index to read.
      */
     private int index = 8;
 
 
     /**
-     * number of bytes read so far.
+     * The number of bytes read so far.
      */
-    private int count = 0;
+    //private int count = 0;
+    private long count = 0;
 
 
 }

@@ -21,7 +21,6 @@ package com.github.jinahya.io;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
-import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.WritableByteChannel;
 
 
@@ -67,17 +66,18 @@ public class BitOutput {
 
 
         /**
-         * Creates a new instance with given output stream.
+         * Creates a new instance on top of specified output stream.
          *
-         * @param stream the output stream. {@code null} for lazy
-         * initialization.
+         * @param stream the output stream to wrap.
+         *
+         * @throws NullPointerException if {@code stream} is {@code null}.
          */
         public StreamOutput(final OutputStream stream) {
 
             super();
 
             if (stream == null) {
-                //throw new NullPointerException("stream");
+                throw new NullPointerException("null stream");
             }
 
             this.stream = stream;
@@ -85,46 +85,44 @@ public class BitOutput {
 
 
         /**
-         * {@inheritDoc} The {@code stream} must be initialized and set if
-         * {@code null} passed when this instance was created.
+         * {@inheritDoc}
+         * <p/>
+         * The {@code writeUnsginedByte(int)} method of {@code StreamOutput}
+         * class calls {@link OutputStream#write(int)} on {@link #stream} with
+         * {@code value}.
          *
          * @param value {@inheritDoc }
          *
-         * @throws IllegalStateException if {@code stream} is currently
-         * {@code null}.
          * @throws IOException {@inheritDoc }
          */
         @Override
         public void writeUnsignedByte(final int value) throws IOException {
-
-            if (stream == null) {
-                throw new IllegalStateException("the stream is currently null");
-            }
 
             stream.write(value);
         }
 
 
         /**
-         * {@inheritDoc} This method, if {@code stream} is not {@code null},
-         * flushes and closes the {@code stream}.
+         * {@inheritDoc}
+         * <p/>
+         * The {@code close()} method of {@code StreamOutput} class calls
+         * {@link OutputStream#flush()} and {@link OutputStream#close()} in
+         * series on {@link #stream}.
          *
          * @throws IOException {@inheritDoc }
          */
         @Override
         public void close() throws IOException {
 
-            if (stream != null) {
-                stream.flush();
-                stream.close();
-            }
+            stream.flush();
+            stream.close();
         }
 
 
         /**
-         * the output stream.
+         * The underlying output stream.
          */
-        protected OutputStream stream;
+        protected final OutputStream stream;
 
 
     }
@@ -137,17 +135,18 @@ public class BitOutput {
 
 
         /**
-         * Creates a new instance.
+         * Creates a new instance on the of specified byte buffer.
          *
-         * @param buffer the buffer to wrap. {@code null} for lazy
-         * initialization.
+         * @param buffer the byte buffer to wrap.
+         *
+         * @throws NullPointerException if {@code buffer} is {@code null}.
          */
         public BufferOutput(final ByteBuffer buffer) {
 
             super();
 
             if (buffer == null) {
-                //throw new NullPointerException("buffer");
+                throw new NullPointerException("null buffer");
             }
 
             this.buffer = buffer;
@@ -155,59 +154,42 @@ public class BitOutput {
 
 
         /**
-         * {@inheritDoc} The {@code buffer} must be initialized and set if
-         * {@code null} passed when this instance was created.
+         * {@inheritDoc}
+         * <p/>
+         * The {@code writeUnsignedByte(int)} method of {@code BufferOutput}
+         * calls {@link ByteBuffer#put(byte)} on {@link #buffer} with
+         * {@code value}.
          *
          * @param value {@inheritDoc }
          *
-         * @throws IllegalStateException if {@code buffer} is currently
-         * {@code null}.
          * @throws IOException {@inheritDoc }
          */
         @Override
         public void writeUnsignedByte(final int value) throws IOException {
-
-            if (buffer == null) {
-                throw new IllegalStateException("buffer is currently null");
-            }
 
             buffer.put(((byte) value)); // BufferOverflowException
         }
 
 
         /**
-         * Closes this byte output. This method does nothing.
+         * {@inheritDoc}
+         * <p/>
+         * The {@code close()} method of {@code BufferOutput} class does
+         * nothing.
          *
          * @throws IOException {@inheritDoc }
          */
         @Override
         public void close() throws IOException {
-        }
 
-
-        protected void drain(final WritableByteChannel channel)
-            throws IOException {
-
-            if (channel == null) {
-                throw new NullPointerException("null channel");
-            }
-
-            if (buffer == null) {
-                throw new IllegalStateException("the buffer is currently null");
-            }
-
-            buffer.flip(); // limit -> position, position -> zero
-            while (buffer.hasRemaining()) {
-                channel.write(buffer);
-            }
-            buffer.clear(); // this may be required for further access
+            // do nothing.
         }
 
 
         /**
-         * Returns current value of {@code buffer}.
+         * Returns the underlying byte buffer on which this output built.
          *
-         * @return current value of {@code buffer}.
+         * @return the underlying byte buffer.
          */
         public ByteBuffer getBuffer() {
 
@@ -216,20 +198,9 @@ public class BitOutput {
 
 
         /**
-         * Replaces current value of {@code buffer} with given.
-         *
-         * @param buffer the new value of {@code buffer}.
+         * The underlying byte buffer.
          */
-        public void setBuffer(final ByteBuffer buffer) {
-
-            this.buffer = buffer;
-        }
-
-
-        /**
-         * the output buffer.
-         */
-        protected ByteBuffer buffer;
+        protected final ByteBuffer buffer;
 
 
     }
@@ -242,11 +213,13 @@ public class BitOutput {
 
 
         /**
-         * Creates a new instance.
+         * Creates a new instance on top of specified byte channel.
          *
-         * @param buffer the buffer. {@code null} for lazy initialization.
-         * @param channel the output channel. {@code null} for lazy
-         * initialization.
+         * @param buffer the buffer to use
+         * @param channel the output channel to wrap.
+         *
+         * @throws NullPointerException if either {@code buffer} or
+         * {@code channel} is {@code null}
          */
         public ChannelOutput(final ByteBuffer buffer,
                              final WritableByteChannel channel) {
@@ -254,7 +227,7 @@ public class BitOutput {
             super(buffer);
 
             if (channel == null) {
-                //throw new NullPointerException("channel");
+                throw new NullPointerException("channel");
             }
 
             this.channel = channel;
@@ -274,26 +247,23 @@ public class BitOutput {
 
 
         /**
-         * {@inheritDoc} Both {@code buffer} and {@code channel} must be
-         * initialized and set if either of them passed as {@code null} when
-         * this instance was created.
+         * {@inheritDoc}
+         * <p/>
+         * The {@code writeUnsignedByte(int)} method of {@code ChannelOutput}
+         * first tries to drain the {@link #buffer} to {@link #channel} if it is
+         * full and calls {@link BufferOutput#writeUnsignedByte(int)} with
+         * {@code value}.
          *
          * @param value {@inheritDoc }
          *
-         * @throws IllegalStateException if either {@code buffer} or
-         * {@code channel} is currently {@code null}.
+         * @throws RuntimeException if {@link #buffer}'s capacity is zero.
          * @throws IOException {@inheritDoc }
          */
         @Override
         public void writeUnsignedByte(final int value) throws IOException {
 
-            if (buffer == null) {
-                throw new IllegalStateException("the buffer is currently null");
-            }
-
-            if (channel == null) {
-                throw new IllegalStateException(
-                    "the channel is currently null");
+            if (buffer.capacity() == 0) {
+                throw new RuntimeException("buffer.capacity == 0");
             }
 
             if (!buffer.hasRemaining()) {
@@ -309,28 +279,30 @@ public class BitOutput {
 
 
         /**
-         * Closes this byte output. This method, if both {@code buffer} and
-         * {@code channel} is not {@code null}, writes all remaining bytes in
-         * {@code buffer} to {@code channel} and closes the {@code channel}.
+         * {@inheritDoc}
+         * <p/>
+         * The {@code close()} method of {@code ChannelOutput} class first
+         * writes all remaining bytes in {@link #buffer} to {@link #channel} and
+         * closes the {@link #channel}.
          *
          * @throws IOException {@inheritDoc}
          */
         @Override
         public void close() throws IOException {
 
-            if (channel != null) {
-                if (buffer != null) {
-                    drain(channel);
-                }
-                channel.close();
+            buffer.flip(); // limit -> position, position -> zero
+            while (buffer.hasRemaining()) {
+                channel.write(buffer);
             }
+
+            channel.close();
         }
 
 
         /**
-         * Returns the current value of {@code channel}.
+         * Returns the underlying byte channel on which this output built.
          *
-         * @return current value of {@code channel}.
+         * @return the underlying byte channel.
          */
         public WritableByteChannel getChannel() {
 
@@ -339,18 +311,7 @@ public class BitOutput {
 
 
         /**
-         * Replaces the current value of {@code channel} with given.
-         *
-         * @param channel new value for {@code channel}
-         */
-        public void setChannel(final WritableByteChannel channel) {
-
-            this.channel = channel;
-        }
-
-
-        /**
-         * the output channel.
+         * The underlying byte channel.
          */
         protected WritableByteChannel channel;
 
@@ -359,18 +320,18 @@ public class BitOutput {
 
 
     /**
-     * Creates a new instance.
+     * Creates a new instance on top of specified byte output.
      *
-     * @param output target byte output
+     * @param output the byte output to wrap
      *
-     * @throws NullPointerException if {@code output} is null.
+     * @throws NullPointerException if {@code output} is {@code null}.
      */
     public BitOutput(final ByteOutput output) {
 
         super();
 
         if (output == null) {
-            throw new NullPointerException("output");
+            throw new NullPointerException("null output");
         }
 
         this.output = output;
@@ -378,7 +339,7 @@ public class BitOutput {
 
 
     /**
-     * Writes given {@code value} to {@code output} and increments
+     * Writes given {@code value} to {@link #output} and increments
      * {@code count}.
      *
      * @param value the value to write
@@ -386,10 +347,6 @@ public class BitOutput {
      * @throws IOException if an I/O error occurs.
      */
     private void octet(final int value) throws IOException {
-
-        if (output == null) {
-            //throw new IllegalStateException("the output is currently null");
-        }
 
         output.writeUnsignedByte(value);
 
@@ -462,6 +419,16 @@ public class BitOutput {
     }
 
 
+    /**
+     * Writes a boolean flag whether specified object, which is the subsequent
+     * object, is {@code null} or not.
+     *
+     * @param value the object to check
+     *
+     * @return {@code true} if {@code value} is {@code} or {@code false} if not.
+     *
+     * @throws IOException if an I/O error occurs.
+     */
     protected boolean isNull(final Object value) throws IOException {
 
         final boolean flag = value == null;
@@ -482,7 +449,8 @@ public class BitOutput {
      * Writes an unsigned short value. Only the lower specified number of bits
      * in given {@code value} are written.
      *
-     * @param length the number of bits between 0 exclusive and 16 inclusive.
+     * @param length the number of bits between {@code 0} exclusive and
+     * {@code 16} inclusive.
      * @param value the value to write
      *
      * @throws IOException if an I/O error occurs
@@ -514,7 +482,8 @@ public class BitOutput {
     /**
      * Writes an unsigned int value. The value must be valid in bit range.
      *
-     * @param length bit length between 1 inclusive and 32 exclusive.
+     * @param length bit length between {@code 1} inclusive and {@code 32}
+     * exclusive.
      * @param value the value to write
      *
      * @throws IOException if an I/O error occurs.
@@ -551,7 +520,8 @@ public class BitOutput {
     /**
      * Writes a signed int value. The {@code value} must be valid in bit range.
      *
-     * @param length bit length between 1 (exclusive) and 32 (inclusive).
+     * @param length bit length between {@code 1} exclusive and {@code 32}
+     * inclusive.
      * @param value the value to write
      *
      * @throws IOException if an I/O error occurs.
@@ -567,14 +537,14 @@ public class BitOutput {
         }
 
         if (length != 32) {
-            if (value < 0x00) { // negative
-                if (value >> (length - 1) != ~0) {
+            if (value < 0) { // negative
+                if ((value >> (length - 1)) != -1) {
                     throw new IllegalArgumentException(
                         "value(" + value + ") >> (length(" + length
-                        + ") - 1) != ~0");
+                        + ") - 1) != -1");
                 }
             } else { // positive
-                if (value >> (length - 1) != 0) {
+                if ((value >> (length - 1)) != 0) {
                     throw new IllegalArgumentException(
                         "value(" + value + ") >> (length(" + length
                         + ") - 1) != 0");
@@ -668,13 +638,13 @@ public class BitOutput {
         }
 
         if (length < 64) {
-            if (value < 0L) {
-                if ((value >> (length - 1)) != ~0L) {
+            if (value < 0L) { // negative
+                if ((value >> (length - 1)) != -1L) {
                     throw new IllegalArgumentException(
                         "(value(" + value + ") >> (length(" + length
-                        + ") - 1)) != ~0L");
+                        + ") - 1)) != -1L");
                 }
-            } else {
+            } else { // positive
                 if ((value >> (length - 1)) != 0L) {
                     throw new IllegalArgumentException(
                         "(value(" + value + ") >> (length(" + length

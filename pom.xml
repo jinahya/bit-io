@@ -4,7 +4,6 @@
   <modelVersion>4.0.0</modelVersion>
 
   <!-- The Basics -->
-  <!--groupId>com.googlecode.jinahya</groupId-->
   <groupId>com.github.jinahya</groupId>
   <artifactId>bit-io</artifactId>
   <version>1.0.4-SNAPSHOT</version>
@@ -43,6 +42,10 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <maven.compiler.source>1.5</maven.compiler.source>
+    <maven.compiler.target>1.5</maven.compiler.target>
+    <maven.compiler.testSource>1.7</maven.compiler.testSource>
+    <maven.compiler.testTarget>1.7</maven.compiler.testTarget>
   </properties>
 
   <!-- Build Settings -->
@@ -60,7 +63,7 @@
         <plugin>
           <groupId>com.github.github</groupId>
           <artifactId>site-maven-plugin</artifactId>
-          <version>0.8</version>
+          <version>0.9</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -129,29 +132,9 @@
             <goals>
               <goal>site</goal>
             </goals>
-            <phase>site</phase>
+            <!--phase>site-deploy</phase-->
           </execution>
         </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <configuration>
-          <source>1.5</source>
-          <target>1.5</target>
-          <testSource>1.7</testSource>
-          <testTarget>1.7</testTarget>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-release-plugin</artifactId>
-        <!--
-        <configuration>
-          <goals>deploy</goals>
-          <tagBase>https://jinahya.googlecode.com/svn/tags/${project.groupId}</tagBase>
-        </configuration>
-        -->
       </plugin>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
@@ -283,7 +266,7 @@
     <connection>scm:git:git@github.com:jinahya/bit-io.git</connection>
     <developerConnection>scm:git:git@github.com:jinahya/bit-io.git</developerConnection>
     <url>https://github.com/jinahya/bit-io</url>
-    <tag>1.0.3</tag>
+    <tag>HEAD</tag>
   </scm>
   <prerequisites>
     <maven>3.0.5</maven>

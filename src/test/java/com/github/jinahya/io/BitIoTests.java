@@ -32,21 +32,36 @@ import org.testng.Assert;
 final class BitIoTests {
 
 
+    static int assertLengthIntUnsigned(final int length) {
+
+        assert length > 0;
+        assert length < 32;
+
+        return length;
+    }
+
+
+    static int newLengthIntUnsigned() {
+
+        final int length = ThreadLocalRandom.current().nextInt(1, 32);
+
+        return assertLengthIntUnsigned(length);
+    }
+
+
     static int assertValueIntUnsigned(final int length, final int value) {
 
-        RandomLengths.assertLengthIntUnsigned(length);
+        assertLengthIntUnsigned(length);
 
-        Assert.assertTrue((value >> length) == 0);
+        assert (value >> length) == 0;
 
         return value;
     }
 
 
-    static int newValueIntUnsigned(Integer length) {
+    static int newValueIntUnsigned(final int length) {
 
-        if (length == null) {
-            length = RandomLengths.newLengthIntUnsigned();
-        }
+        assertLengthIntUnsigned(length);
 
         final Random random = ThreadLocalRandom.current();
 
@@ -56,11 +71,28 @@ final class BitIoTests {
     }
 
 
+    static int assertLengthInt(final int length) {
+
+        assert length > 1;
+        assert length <= 32;
+
+        return length;
+    }
+
+
+    static int newLengthInt() {
+
+        final int length = ThreadLocalRandom.current().nextInt(2, 33);
+
+        return assertLengthInt(length);
+    }
+
+
     static int assertValueInt(final int length, final int value) {
 
-        RandomLengths.assertLengthInt(length);
+        assertLengthInt(length);
 
-        if (length != 32) {
+        if (length < 32) {
             if (value < 0L) {
                 Assert.assertTrue((value >> length) == ~0);
             } else {
@@ -72,11 +104,9 @@ final class BitIoTests {
     }
 
 
-    static int newValueInt(Integer length) {
+    static int newValueInt(final int length) {
 
-        if (length == null) {
-            length = RandomLengths.newLengthInt();
-        }
+        assertLengthInt(length);
 
         final Random random = ThreadLocalRandom.current();
 
@@ -86,9 +116,26 @@ final class BitIoTests {
     }
 
 
+    static int assertLengthLongUnsigned(final int length) {
+
+        assert length >= 1;
+        assert length < 64;
+
+        return length;
+    }
+
+
+    static int newLengthLongUnsigned() {
+
+        final int length = ThreadLocalRandom.current().nextInt(1, 64);
+
+        return assertLengthLongUnsigned(length);
+    }
+
+
     static long assertValueLongUnsigned(final int length, final long value) {
 
-        RandomLengths.assertLengthLongUnsigned(length);
+        assertLengthLongUnsigned(length);
 
         Assert.assertTrue((value >> length) == 0L);
 
@@ -96,25 +143,39 @@ final class BitIoTests {
     }
 
 
-    static long newValueLongUnsigned(Integer length) {
+    static long newValueLongUnsigned(final int length) {
 
-        if (length == null) {
-            length = RandomLengths.newLengthLongUnsigned();
-        }
+        assertLengthLongUnsigned(length);
 
-        final Random random = ThreadLocalRandom.current();
-
-        final long value = random.nextLong() >>> (64 - length);
+        final long value =
+            ThreadLocalRandom.current().nextLong() >>> (64 - length);
 
         return assertValueLongUnsigned(length, value);
     }
 
 
+    static int assertLengthLong(final int length) {
+
+        assert length > 1;
+        assert length <= 64;
+
+        return length;
+    }
+
+
+    static int newLengthLong() {
+
+        final int length = ThreadLocalRandom.current().nextInt(2, 65);
+
+        return assertLengthLong(length);
+    }
+
+
     static long assertValueLong(final int length, final long value) {
 
-        RandomLengths.assertLengthLong(length);
+        assertLengthLong(length);
 
-        if (length != 64) {
+        if (length < 64) {
             if (value < 0L) {
                 Assert.assertTrue((value >> length) == ~0L);
             } else {
@@ -126,33 +187,55 @@ final class BitIoTests {
     }
 
 
-    static long newValueLong(Integer length) {
+    static long newValueLong(final int length) {
 
-        if (length == null) {
-            length = RandomLengths.newLengthLong();
-        }
+        assertLengthLong(length);
 
-        final Random random = ThreadLocalRandom.current();
-
-        final long value = random.nextLong() >> (64 - length);
+        final long value =
+            ThreadLocalRandom.current().nextLong() >> (64 - length);
 
         return assertValueLong(length, value);
     }
 
 
-    static byte[] newValueBytes(Integer scale, Integer range) {
+    static int assertByteArrayScale(final int scale) {
 
-        if (scale == null) {
-            scale = RandomLengths.newScaleBytes();
-        }
+        assert scale > 0 : "scale(" + scale + ") <= 0";
+        assert scale <= 16 : "scale(" + scale + ") > 16";
 
-        RandomLengths.assertScaleBytes(scale);
+        return scale;
+    }
 
-        if (range == null) {
-            range = RandomLengths.newRangeBytes();
-        }
 
-        RandomLengths.assertRangeBytes(range);
+    static int newByteArrayScale() {
+
+        final int scale = ThreadLocalRandom.current().nextInt(1, 17);
+
+        return assertByteArrayScale(scale);
+    }
+
+
+    static int assertByteArrayRange(final int range) {
+
+        assert range > 0 : "range(" + range + ") <= 0";
+        assert range <= 8 : " range(" + range + ") > 8";
+
+        return range;
+    }
+
+
+    static int newByteArrayRange() {
+
+        final int range = ThreadLocalRandom.current().nextInt(1, 9);
+
+        return assertByteArrayRange(range);
+    }
+
+
+    static byte[] newValueBytes(final int scale, final int range) {
+
+        assertByteArrayScale(scale);
+        assertByteArrayRange(range);
 
         final Random random = ThreadLocalRandom.current();
 

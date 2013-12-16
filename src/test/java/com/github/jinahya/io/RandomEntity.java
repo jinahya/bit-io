@@ -49,28 +49,28 @@ public class RandomEntity implements Serializable {
         uil = new int[random.nextInt(128)];
         uiv = new int[uil.length];
         for (int i = 0; i < uiv.length; i++) {
-            uil[i] = RandomLengths.newLengthIntUnsigned();
+            uil[i] = BitIoTests.newLengthIntUnsigned();
             uiv[i] = BitIoTests.newValueIntUnsigned(uil[i]);
         }
 
         sil = new int[random.nextInt(128)];
         siv = new int[sil.length];
         for (int i = 0; i < siv.length; i++) {
-            sil[i] = RandomLengths.newLengthInt();
+            sil[i] = BitIoTests.newLengthInt();
             siv[i] = BitIoTests.newValueInt(sil[i]);
         }
 
         ull = new int[random.nextInt(128)];
         ulv = new long[ull.length];
         for (int i = 0; i < ulv.length; i++) {
-            ull[i] = RandomLengths.newLengthLongUnsigned();
+            ull[i] = BitIoTests.newLengthLongUnsigned();
             ulv[i] = BitIoTests.newValueLongUnsigned(ull[i]);
         }
 
         sll = new int[random.nextInt(128)];
         slv = new long[sll.length];
         for (int i = 0; i < slv.length; i++) {
-            sll[i] = RandomLengths.newLengthLong();
+            sll[i] = BitIoTests.newLengthLong();
             slv[i] = BitIoTests.newValueLong(sll[i]);
         }
 
@@ -78,8 +78,8 @@ public class RandomEntity implements Serializable {
         bar = new int[bas.length];
         bav = new byte[bar.length][];
         for (int i = 0; i < bav.length; i++) {
-            bas[i] = RandomLengths.newScaleBytes();
-            bar[i] = RandomLengths.newRangeBytes();
+            bas[i] = BitIoTests.newByteArrayScale();
+            bar[i] = BitIoTests.newByteArrayRange();
             bav[i] = BitIoTests.newValueBytes(bas[i], bar[i]);
         }
     }
@@ -322,3 +322,4 @@ public class RandomEntity implements Serializable {
 
 
 }
+

@@ -2,15 +2,20 @@ bit-io
 ======
 a small library for reading or writing none octet aligned values such as `1-bit boolean` or `17-bit unsigned int`.
 
-### Apache Maven
-Check the [Maven Central Repository](http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22com.github.jinahya%22%20AND%20a%3A%22bit-io%22) for the latest release.
-### Jenkins
-[jinahya.com/jenkins](https://jinahya.com/jenkins/job/com.github.jinahya%20bit-io/)
-### Apidocs
-* [1.0.4-SNAPSHOT](http://jinahya.github.io/bit-io/site/1.0.4-SNAPSHOT/apidocs/index.html)
-* [1.0.3](http://jinahya.github.io/bit-io/site/1.0.3/apidocs/index.html)
+[wanna donate some?](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=GWDFLJNSZSEGG&lc=KR&item_name=github&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted)
 
-## Reading Bits
+
+### maven
+[maven central](http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22com.github.jinahya%22%20AND%20a%3A%22bit-io%22)
+
+### jenkins
+[jinahya.com/jenkins](https://jinahya.com/jenkins/job/com.github.jinahya%20bit-io/)
+
+### apidocs
+* 1.0.4-SNAPSHOT ([github](http://jinahya.github.io/bit-io/site/1.0.4-SNAPSHOT/apidocs/index.html)) ([jinahya](https://jinahya.com/mvn/site/com.github.jinahya/bit-io/1.0.4-SNAPSHOT/apidocs/index.html))
+* 1.0.3 ([github](http://jinahya.github.io/bit-io/site/1.0.3/apidocs/index.html)) ([jinahya](https://jinahya.com/mvn/site/com.github.jinahya/bit-io/1.0.3/apidocs/index.html))
+
+## reading bits
 ```java
 final InputStream stream;
 final BitInput input = new BitInput(new StreamInput(stream));
@@ -28,7 +33,7 @@ final long sl47 = input.readLong(47);         // 47-bit signed long  47   54
 final int discarded = input.aling((short) 1); // aligns to 8-bit      2   56
 assert discarded == 2;
 ```
-## Writing Bits
+## writing bits
 ```java
 final OutputStream stream;
 final BitOutput output = new BitOutput(new StreamOutput(stream));

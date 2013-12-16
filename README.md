@@ -1,58 +1,53 @@
 bit-io
 ======
+a small library for reading or writing none octet aligned values such as `1-bit boolean` or `17-bit unsigned int`.
 
-### Apache Maven
-Check the [Maven Central Repository](http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22com.github.jinahya%22%20AND%20a%3A%22bit-io%22) for the latest release.
-### Jenkins
-[jinahya.com](https://jinahya.com/jenkins/job/com.github.jinahya%20bit-io/)
-### Apidocs
-* [1.0.4-SNAPSHOT](http://jinahya.github.io/bit-io/site/1.0.4-SNAPSHOT/apidocs/index.html)
-* [1.0.3](http://jinahya.github.io/bit-io/site/1.0.3/apidocs/index.html)
+[wanna donate some?](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=GWDFLJNSZSEGG&lc=KR&item_name=github&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted)
 
-## Abstract
-You can only read/write in octets(bytes) with Java.<br/>
-How can you read a `17-bit unsigned integer` or write an `1-bit boolean` value?
 
-## For Reading Bits
-You can read bits from an instance of `BitInput`([src](src/main/java/com/github/jinahya/io/BitInput.java)).
+### maven
+[maven central](http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22com.github.jinahya%22%20AND%20a%3A%22bit-io%22)
 
-### Preparing a `ByteInput`
-The `BitInput` class takes one argument which must be an instance of `ByteInput`.
-There are already implementations for this interface such as `StreamInput` or `BufferInput`, or `ChannelInput`.
+### jenkins
+[jinahya.com/jenkins](https://jinahya.com/jenkins/job/com.github.jinahya%20bit-io/)
 
-### Creating a `BitInput`
+### apidocs
+* 1.0.4-SNAPSHOT ([github](http://jinahya.github.io/bit-io/site/1.0.4-SNAPSHOT/apidocs/index.html)) ([jinahya](https://jinahya.com/mvn/site/com.github.jinahya/bit-io/1.0.4-SNAPSHOT/apidocs/index.html))
+* 1.0.3 ([github](http://jinahya.github.io/bit-io/site/1.0.3/apidocs/index.html)) ([jinahya](https://jinahya.com/mvn/site/com.github.jinahya/bit-io/1.0.3/apidocs/index.html))
+
+## reading bits
 ```java
-final BitInput bitInput = new BitInput(byteInput);
+final InputStream stream;
+final BitInput input = new BitInput(new StreamInput(stream));
+
+final ByteBuffer buffer;
+final BitInput input = new BitInput(new BufferInput(buffer));
+
+final ReadableByteChannel channel;
+final BitInput input = new BitInput(new ChannelInput(channel));
+
+final boolean b = input.readBoolean();        // 1-bit boolean        1    1
+final int ui6 = input.readUnsignedInt(6);     // 6-bit unsigned int   6    7
+final long sl47 = input.readLong(47);         // 47-bit signed long  47   54
+
+final int discarded = input.aling((short) 1); // aligns to 8-bit      2   56
+assert discarded == 2;
 ```
-
-## For Writing Bits
-You can read bits from an instance of `BitOutput`([src](src/main/java/com/github/jinahya/io/BitOutput.java)).
-
-### Preparing a `ByteOutput`
-The `BitOutput` class takes one argument which must be an instance of `ByteOutput`.
-There are already implementations for this interface such as `StreamOutput` or `BufferOutput`, or `ChannelOutput`.
-
-### Creating a `BitOutput`
+## writing bits
 ```java
-final BitOutput bitOutput = new BitOutput(byteOutput);
-```
+final OutputStream stream;
+final BitOutput output = new BitOutput(new StreamOutput(stream));
 
-## Reading/Writing Bits
+final ByteBuffer buffer;
+final BitOutput output = new BitOutput(new BufferOutput(buffer));
 
-| type          | read                       | write                              | notes               |
-| ------------- | -------------------------- | ---------------------------------- | ------------------- |
-| boolean       | `readBoolean()`            | `writeBoolean()`                   | consumes only 1 bit |
-| unsigned int  | `readUnsignedInt(length)`  | `writeUnsignedInt(length, value)`  | 1 <= length < 32    |
-| signed int    | `readInt(length)`          | `writeInt(length, value`           | 1 < length <= 32    |
-| unsigned long | `readUnsignedLong(length)` | `writeUnsignedLong(length, value)` | 1 <= length < 64    |
-| signed long   | `readLong(length)`         | `writeLong(length, value)`         | 1 < length <= 64    |
+final WritableByteChannel channel;
+final BitOutput output = new BitOutput(new ChannelOutput(channel));
 
-## Aligning
-You should align to octets when you finished read/writing bits.
-```java
-final BitInput bitInput;
-bitInput.align(); // aligns to 8-bit
+output.writeBoolean(true);                  // 1-bit boolean          1    1
+output.writeInt(7, -1);                     // 7-bit signed int       7    8
+output.writeUnsignedLong(33, 1L);           // 49-bit signed long    33   41
 
-final BitOutput bitOutput;
-bitOutput.align(4); // aligns to 32-bit
+final int padded = output.aling((short) 4); // aligns to 32-bit      23   64
+assert padded == 23;
 ```

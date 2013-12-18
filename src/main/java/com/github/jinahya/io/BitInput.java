@@ -276,7 +276,7 @@ public class BitInput {
          */
         @Override
         public int readUnsignedByte() throws IOException {
-            
+
             if (buffer.capacity() == 0) {
                 throw new IllegalStateException("buffer.capacity == 0");
             }
@@ -896,8 +896,8 @@ public class BitInput {
 
 
     /**
-     * Closes this instance. This method aligns to a single byte and closes the
-     * {@code input}.
+     * Closes this bit input. This method aligns to a single byte and closes the
+     * underlying byte input.
      *
      * @throws IOException if an I/O error occurs.
      *

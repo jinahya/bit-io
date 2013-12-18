@@ -236,7 +236,7 @@
   <!-- More Project Information -->
   <name>${project.artifactId}</name>
   <!--url>https://jinahya.com/mvn/site/${project.groupId}/${project.artifactId}/${project.version}</url-->
-  <url>http://jinahya.github.io/bit-bio/site/${project.version}</url>
+  <url>http://jinahya.github.io/bit-io/site/${project.version}</url>
   <inceptionYear>2011</inceptionYear>
   <licenses>
     <license>

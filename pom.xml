@@ -264,7 +264,10 @@
   <contributors />
 
   <!-- Environment Settings -->
-  <issueManagement />
+  <issueManagement>
+    <system>GitHub Issues</system>
+    <url>https://github.com/jinahya/${project.artifactId}/issues</url>
+  </issueManagement>
   <ciManagement />
   <mailingLists />
   <scm>

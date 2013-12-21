@@ -81,7 +81,7 @@ public class BitInput {
             super();
 
             if (stream == null) {
-                throw new NullPointerException("stream");
+                throw new NullPointerException("null stream");
             }
 
             this.stream = stream;
@@ -92,8 +92,8 @@ public class BitInput {
          * {@inheritDoc}
          * <p/>
          * The {@code readUnsignedByte()} method of {@code StreamInput} class
-         * calls {@link InputStream#read()} on {@link #stream} and returns the
-         * result.
+         * calls {@link InputStream#read()} on underlying {@link #stream} and
+         * returns the result.
          *
          * @return {@inheritDoc}
          *
@@ -110,7 +110,7 @@ public class BitInput {
          * {@inheritDoc}
          * <p/>
          * The {@code close()} method of {@code StreamInput} class calls
-         * {@link InputStream#close()} on {@link #stream}.
+         * {@link InputStream#close()} on underlying {@link #stream}.
          *
          * @throws IOException {@inheritDoc }
          */
@@ -122,9 +122,9 @@ public class BitInput {
 
 
         /**
-         * Returns the underlying stream instance.
+         * Returns the underlying {@link #stream}.
          *
-         * @return the underlying stream instance.
+         * @return the underlying {@link #stream}.
          */
         public InputStream getStream() {
 
@@ -159,7 +159,7 @@ public class BitInput {
             super();
 
             if (buffer == null) {
-                throw new NullPointerException("buffer");
+                throw new NullPointerException("null buffer");
             }
 
             this.buffer = buffer;
@@ -170,7 +170,8 @@ public class BitInput {
          * {@inheritDoc}
          * <p/>
          * The {@code readUnsignedByte()} method of {@code ByteBuffer} class
-         * calls {@link ByteBuffer#get()} and returns the result.
+         * calls {@link ByteBuffer#get()} on underlying {@link #buffer} and
+         * returns the result.
          *
          * @return {@inheritDoc }
          *
@@ -202,9 +203,9 @@ public class BitInput {
 
 
         /**
-         * Returns current value of {@code buffer}.
+         * Returns the underlying {@link #buffer}.
          *
-         * @return current value of {@code buffer}.
+         * @return the underlying {@link #buffer}.
          */
         public ByteBuffer getBuffer() {
 
@@ -230,8 +231,8 @@ public class BitInput {
         /**
          * Creates a new instance on top of specified channel.
          *
-         * @param buffer the buffer to use
-         * @param channel the channel to wrap.
+         * @param buffer the buffer to buffering input.
+         * @param channel the underlying channel.
          *
          * @throws NullPointerException if either {@code buffer} or
          * {@code channel} is {@code null}.
@@ -341,7 +342,7 @@ public class BitInput {
         super();
 
         if (input == null) {
-            throw new NullPointerException("input");
+            throw new NullPointerException("null input");
         }
 
         this.input = input;
@@ -355,13 +356,9 @@ public class BitInput {
      * @return next unsigned byte
      *
      * @throws IOException if an I/O error occurs.
-     * @throws IllegalStateException if {@code input} is currently {@code null}.
      */
     private int octet() throws IOException {
 
-        //if (input == null) {
-        //    throw new IllegalStateException("the input is currently null");
-        //}
         final int octet = input.readUnsignedByte();
         if (octet == -1) {
             throw new EOFException("eof");
@@ -475,6 +472,7 @@ public class BitInput {
      *
      * @return the unsigned short value.
      *
+     * @throws IllegalArgumentException if {@code length} is not valid.
      * @throws IOException if an I/O error occurs.
      */
     protected int readUnsignedShort(final int length) throws IOException {
@@ -513,7 +511,7 @@ public class BitInput {
      *
      * @return the unsigned int value
      *
-     * @throws IllealArgumentException if {@code length} is not valid.
+     * @throws IllegalArgumentException if {@code length} is not valid.
      * @throws IOException if an I/O error occurs
      */
     public int readUnsignedInt(final int length) throws IOException {
@@ -715,7 +713,7 @@ public class BitInput {
      * Reads a series of bytes.
      *
      * @param scale the number of bits required for {@code length}; between 0
-     * exclusive and 16 exclusive.
+     * exclusive and 16 inclusive.
      * @param range the number of valid bits in each byte; between 0 exclusive
      * and 8 inclusive
      * @param value the array to which each byte are stored
@@ -937,13 +935,13 @@ public class BitInput {
 
 
     /**
-     * The next bit index to read.
+     * next bit index to read.
      */
     private int index = 8;
 
 
     /**
-     * The number of bytes read so far.
+     * number of bytes read so far.
      */
     //private int count = 0;
     private long count = 0;

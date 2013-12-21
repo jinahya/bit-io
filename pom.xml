@@ -50,14 +50,15 @@
 
   <!-- Build Settings -->
   <build>
+    <!--
     <extensions>
       <extension>
         <groupId>org.apache.maven.wagon</groupId>
         <artifactId>wagon-webdav-jackrabbit</artifactId>
         <version>2.4</version>
-        <!--version>2.5</version-->
       </extension>
     </extensions>
+    -->
     <pluginManagement>
       <plugins>
         <plugin>
@@ -235,7 +236,6 @@
 
   <!-- More Project Information -->
   <name>${project.artifactId}</name>
-  <!--url>https://jinahya.com/mvn/site/${project.groupId}/${project.artifactId}/${project.version}</url-->
   <url>http://jinahya.github.io/bit-io/site/${project.version}</url>
   <inceptionYear>2011</inceptionYear>
   <licenses>
@@ -245,13 +245,6 @@
       <distribution>repo</distribution>
       <comments>A business-friendly OSS license</comments>
     </license>
-    <!--
-    <license>
-      <name>GNU Lesser General Public License</name>
-      <url>http://www.gnu.org/licenses/lgpl-3.0.txt</url>
-      <distribution>repo</distribution>
-    </license>
-    -->
   </licenses>
   <organization />
   <developers>
@@ -277,7 +270,6 @@
     <tag>HEAD</tag>
   </scm>
   <prerequisites>
-    <!--maven>3.0.5</maven-->
     <maven>3.1.1</maven>
   </prerequisites>
   <repositories />

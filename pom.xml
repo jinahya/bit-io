@@ -6,7 +6,7 @@
   <!-- The Basics -->
   <groupId>com.github.jinahya</groupId>
   <artifactId>bit-io</artifactId>
-  <version>1.0.4-SNAPSHOT</version>
+  <version>1.1-SNAPSHOT</version>
   <packaging>jar</packaging>
   <parent>
     <groupId>org.sonatype.oss</groupId>
@@ -21,6 +21,11 @@
         <version>3.1</version>
       </dependency>
       <dependency>
+        <groupId>org.mockito</groupId>
+        <artifactId>mockito-all</artifactId>
+        <version>1.9.5</version>
+      </dependency>
+      <dependency>
         <groupId>org.testng</groupId>
         <artifactId>testng</artifactId>
         <version>6.8.7</version>
@@ -31,6 +36,11 @@
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-all</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -50,15 +60,6 @@
 
   <!-- Build Settings -->
   <build>
-    <!--
-    <extensions>
-      <extension>
-        <groupId>org.apache.maven.wagon</groupId>
-        <artifactId>wagon-webdav-jackrabbit</artifactId>
-        <version>2.4</version>
-      </extension>
-    </extensions>
-    -->
     <pluginManagement>
       <plugins>
         <plugin>
@@ -274,14 +275,7 @@
   </prerequisites>
   <repositories />
   <pluginRepositories />
-  <distributionManagement>
-    <!--
-    <site>
-      <id>jinahya.com</id>
-      <url>dav+${project.url}</url>
-    </site>
-    -->
-  </distributionManagement>
+  <distributionManagement/>
   <profiles>
     <profile>
       <id>release-sign-artifacts</id>

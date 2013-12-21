@@ -15,308 +15,20 @@
  */
 
 
-package com.github.jinahya.io;
+package com.github.jinahya.io.bit;
 
 
+import java.io.Closeable;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.nio.ByteBuffer;
-import java.nio.channels.WritableByteChannel;
 
 
 /**
  * A wrapper class for writing arbitrary length of bits.
  *
  * @author <a href="mailto:onacit@gmail.com">Jin Kwon</a>
+ * @param <T> underlying byte target type parameter
  */
-public class BitOutput {
-
-
-    /**
-     * An interface for writing bytes.
-     */
-    public interface ByteOutput { // status? redundant!
-
-
-        /**
-         * Writes an unsigned 8-bit integer.
-         *
-         * @param value an unsigned 8-bit integer.
-         *
-         * @throws IOException if an I/O error occurs.
-         */
-        void writeUnsignedByte(final int value) throws IOException;
-
-
-        /**
-         * Closes this byte output.
-         *
-         * @throws IOException if an I/O error occurs.
-         */
-        void close() throws IOException;
-
-
-    }
-
-
-    /**
-     * A {@link ByteOutput} implementation for {@link OutputStream}s.
-     */
-    public static class StreamOutput implements ByteOutput {
-
-
-        /**
-         * Creates a new instance on top of specified output stream.
-         *
-         * @param stream the output stream to wrap.
-         *
-         * @throws NullPointerException if {@code stream} is {@code null}.
-         */
-        public StreamOutput(final OutputStream stream) {
-
-            super();
-
-            if (stream == null) {
-                throw new NullPointerException("null stream");
-            }
-
-            this.stream = stream;
-        }
-
-
-        /**
-         * {@inheritDoc}
-         * <p/>
-         * The {@code writeUnsginedByte(int)} method of {@code StreamOutput}
-         * class calls {@link OutputStream#write(int)} on {@link #stream} with
-         * {@code value}.
-         *
-         * @param value {@inheritDoc }
-         *
-         * @throws IOException {@inheritDoc }
-         */
-        @Override
-        public void writeUnsignedByte(final int value) throws IOException {
-
-            stream.write(value);
-        }
-
-
-        /**
-         * {@inheritDoc}
-         * <p/>
-         * The {@code close()} method of {@code StreamOutput} class calls
-         * {@link OutputStream#flush()} and {@link OutputStream#close()} in
-         * series on {@link #stream}.
-         *
-         * @throws IOException {@inheritDoc }
-         */
-        @Override
-        public void close() throws IOException {
-
-            stream.flush();
-            stream.close();
-        }
-
-
-        /**
-         * The underlying output stream.
-         */
-        protected final OutputStream stream;
-
-
-    }
-
-
-    /**
-     * A {@link ByteOutput} implementation for {@link ByteBuffer}s.
-     */
-    public static class BufferOutput implements ByteOutput {
-
-
-        /**
-         * Creates a new instance on the of specified byte buffer.
-         *
-         * @param buffer the byte buffer to wrap.
-         *
-         * @throws NullPointerException if {@code buffer} is {@code null}.
-         */
-        public BufferOutput(final ByteBuffer buffer) {
-
-            super();
-
-            if (buffer == null) {
-                throw new NullPointerException("null buffer");
-            }
-
-            this.buffer = buffer;
-        }
-
-
-        /**
-         * {@inheritDoc}
-         * <p/>
-         * The {@code writeUnsignedByte(int)} method of {@code BufferOutput}
-         * calls {@link ByteBuffer#put(byte)} on {@link #buffer} with
-         * {@code value}.
-         *
-         * @param value {@inheritDoc }
-         *
-         * @throws IOException {@inheritDoc }
-         */
-        @Override
-        public void writeUnsignedByte(final int value) throws IOException {
-
-            buffer.put(((byte) value)); // BufferOverflowException
-        }
-
-
-        /**
-         * {@inheritDoc}
-         * <p/>
-         * The {@code close()} method of {@code BufferOutput} class does
-         * nothing.
-         *
-         * @throws IOException {@inheritDoc }
-         */
-        @Override
-        public void close() throws IOException {
-
-            // do nothing.
-        }
-
-
-        /**
-         * Returns the underlying byte buffer on which this output built.
-         *
-         * @return the underlying byte buffer.
-         */
-        public ByteBuffer getBuffer() {
-
-            return buffer;
-        }
-
-
-        /**
-         * The underlying byte buffer.
-         */
-        protected final ByteBuffer buffer;
-
-
-    }
-
-
-    /**
-     * A {@link ByteOutput} implementation for {@link WritableByteChannel}s.
-     */
-    public static class ChannelOutput extends BufferOutput {
-
-
-        /**
-         * Creates a new instance on top of specified byte channel.
-         *
-         * @param buffer the buffer to use
-         * @param channel the output channel to wrap.
-         *
-         * @throws NullPointerException if either {@code buffer} or
-         * {@code channel} is {@code null}
-         */
-        public ChannelOutput(final ByteBuffer buffer,
-                             final WritableByteChannel channel) {
-
-            super(buffer);
-
-            if (channel == null) {
-                throw new NullPointerException("channel");
-            }
-
-            this.channel = channel;
-        }
-
-
-        /**
-         * Creates a new instance.
-         *
-         * @param channel the output channel. {@code null} for lazy
-         * initialization.
-         */
-        public ChannelOutput(final WritableByteChannel channel) {
-
-            this(ByteBuffer.allocate(1024), channel);
-        }
-
-
-        /**
-         * {@inheritDoc}
-         * <p/>
-         * The {@code writeUnsignedByte(int)} method of {@code ChannelOutput}
-         * first tries to drain the {@link #buffer} to {@link #channel} if it is
-         * full and calls {@link BufferOutput#writeUnsignedByte(int)} with
-         * {@code value}.
-         *
-         * @param value {@inheritDoc }
-         *
-         * @throws RuntimeException if {@link #buffer}'s capacity is zero.
-         * @throws IOException {@inheritDoc }
-         */
-        @Override
-        public void writeUnsignedByte(final int value) throws IOException {
-
-            if (buffer.capacity() == 0) {
-                throw new RuntimeException("buffer.capacity == 0");
-            }
-
-            if (!buffer.hasRemaining()) {
-                buffer.flip(); // limit -> position, position -> zero
-                while (buffer.position() == 0) {
-                    channel.write(buffer);
-                }
-                buffer.compact(); // position -> n + 1, limit -> capacity
-            }
-
-            super.writeUnsignedByte(value);
-        }
-
-
-        /**
-         * {@inheritDoc}
-         * <p/>
-         * The {@code close()} method of {@code ChannelOutput} class first
-         * writes all remaining bytes in {@link #buffer} to {@link #channel} and
-         * closes the {@link #channel}.
-         *
-         * @throws IOException {@inheritDoc}
-         */
-        @Override
-        public void close() throws IOException {
-
-            buffer.flip(); // limit -> position, position -> zero
-            while (buffer.hasRemaining()) {
-                channel.write(buffer);
-            }
-
-            channel.close();
-        }
-
-
-        /**
-         * Returns the underlying byte channel on which this output built.
-         *
-         * @return the underlying byte channel.
-         */
-        public WritableByteChannel getChannel() {
-
-            return channel;
-        }
-
-
-        /**
-         * The underlying byte channel.
-         */
-        protected WritableByteChannel channel;
-
-
-    }
+public class BitOutput<T> implements Closeable {
 
 
     /**
@@ -326,7 +38,7 @@ public class BitOutput {
      *
      * @throws NullPointerException if {@code output} is {@code null}.
      */
-    public BitOutput(final ByteOutput output) {
+    public BitOutput(final ByteOutput<T> output) {
 
         super();
 
@@ -346,7 +58,11 @@ public class BitOutput {
      *
      * @throws IOException if an I/O error occurs.
      */
-    private void octet(final int value) throws IOException {
+    protected void writeUnsignedByte(final int value) throws IOException {
+
+        if (output == null) {
+            throw new IllegalStateException("null output");
+        }
 
         output.writeUnsignedByte(value);
 
@@ -376,7 +92,7 @@ public class BitOutput {
 
         if (index == 0 && length == 8) {
             // direct write
-            octet(value);
+            writeUnsignedByte(value);
             return;
         }
 
@@ -399,7 +115,7 @@ public class BitOutput {
                 octet <<= 1;
                 octet |= (flags[i] ? 0x01 : 0x00);
             }
-            octet(octet);
+            writeUnsignedByte(octet);
             index = 0;
         }
     }
@@ -693,7 +409,7 @@ public class BitOutput {
      * @param offset the starting offset in byte array
      * @param length the number of bytes from {@code offset} to write
      *
-     * @throws IllegalArgumentexception if either {@code scale} or {@code range}
+     * @throws IllegalArgumentException if either {@code scale} or {@code range}
      * is not valid, or {@code value} is too long.
      * @throws IOException if an I/O error occurs.
      */
@@ -904,21 +620,33 @@ public class BitOutput {
      * @throws IOException if an I/O error occurs.
      *
      * @see #align(short)
+     * @see ByteOutput#close()
      */
+    @Override
     public void close() throws IOException {
 
         align((short) 1);
 
-        if (output != null) {
-            output.close();
-        }
+        output.close();
+    }
+
+
+    public ByteOutput<T> getOutput() {
+
+        return output;
+    }
+
+
+    public void setOutput(final ByteOutput<T> output) {
+
+        this.output = output;
     }
 
 
     /**
-     * Returns the number of bytes written to the {@code output} so far.
+     * Returns the number of bytes written to the underlying byte output so far.
      *
-     * @return the number of bytes written to the {@code output} so far.
+     * @return the number of bytes written to the underlying byte output so far.
      */
     public int getCount() {
 
@@ -929,7 +657,7 @@ public class BitOutput {
     /**
      * target byte output.
      */
-    protected final ByteOutput output;
+    protected ByteOutput<T> output;
 
 
     /**

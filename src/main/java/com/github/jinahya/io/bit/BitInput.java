@@ -21,7 +21,6 @@ package com.github.jinahya.io.bit;
 import java.io.Closeable;
 import java.io.EOFException;
 import java.io.IOException;
-import java.nio.charset.Charset;
 
 
 /**

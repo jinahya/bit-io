@@ -19,7 +19,6 @@ package com.github.jinahya.io.bit;
 
 
 import java.io.IOException;
-import java.util.concurrent.atomic.AtomicLong;
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
@@ -32,7 +31,46 @@ import org.mockito.stubbing.Answer;
 public class ByteInputTest {
 
 
-    public static ByteInput mock(final long limit) throws IOException {
+    private static class UnsignedByteAnswer implements Answer<Integer> {
+
+
+        public UnsignedByteAnswer(final long limit) {
+
+            super();
+
+            if (limit < -1L) {
+                throw new IllegalArgumentException(
+                    "limit(" + limit + ") < -1L");
+            }
+
+            this.limit = limit;
+
+            count = 0L;
+        }
+
+
+        @Override
+        public Integer answer(final InvocationOnMock invocation)
+            throws Throwable {
+
+            if (limit != -1L && count++ >= limit) {
+                return -1;
+            }
+
+            return (int) (System.currentTimeMillis() & 0xFF);
+        }
+
+
+        private final long limit;
+
+
+        private volatile long count;
+
+
+    }
+
+
+    public static ByteInput<?> mock(final long limit) throws IOException {
 
         if (limit < -1L) {
             throw new IllegalArgumentException("limit(" + limit + ") < -1L");
@@ -40,26 +78,8 @@ public class ByteInputTest {
 
         final ByteInput<?> mock = Mockito.mock(ByteInput.class);
 
-        final AtomicLong count = new AtomicLong();
-
-        Mockito
-            .when(mock.readUnsignedByte())
-            .thenAnswer(new Answer<Integer>() {
-
-
-                @Override
-                public Integer answer(final InvocationOnMock invocation)
-                throws Throwable {
-
-                    if (limit != -1L && count.getAndIncrement() >= limit) {
-                        return -1;
-                    }
-
-                    return (int) (System.currentTimeMillis() & 0xFF);
-                }
-
-
-            });
+        Mockito.when(mock.readUnsignedByte())
+            .thenAnswer(new UnsignedByteAnswer(limit));
 
         return mock;
     }

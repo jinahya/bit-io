@@ -33,9 +33,10 @@ public class BitInput<T> implements Closeable {
 
 
     /**
-     * Creates a new instance the specified byte input.
+     * Creates a new instance on top of specified byte input.
      *
-     * @param input the byte input
+     * @param input the byte input on which this bit input is built or
+     * {@code null} for lazy initialization.
      */
     public BitInput(final ByteInput<T> input) {
 
@@ -47,14 +48,20 @@ public class BitInput<T> implements Closeable {
 
     /**
      * Reads next unsigned byte from the {@link #input} and increments the
-     * {@code count}. Override this method if the {@link #index} must be lazily
-     * provided.
+     * {@code count}. Override this method if the {@link #input} must be lazily
+     * initialized and set.
      *
      * @return next unsigned byte
      *
+     * @throws IllegalStateException if {@code #input} is currently
+     * {@code null}.
      * @throws IOException if an I/O error occurs.
      */
     protected int readUnsignedByte() throws IOException {
+
+        if (input == null) {
+            throw new IllegalStateException("the input is currently null");
+        }
 
         final int value = input.readUnsignedByte();
         if (value == -1) {
@@ -147,7 +154,7 @@ public class BitInput<T> implements Closeable {
 
 
     /**
-     * Reads a boolean flag for nullability of subsequent object.
+     * Reads a boolean flag for nullability of the subsequent object.
      *
      * @return {@code true} if the subsequent object is not {@code null} or
      * {@code false} if the subsequent object is {@code null}.
@@ -165,7 +172,8 @@ public class BitInput<T> implements Closeable {
     /**
      * Reads an unsigned short value.
      *
-     * @param length the number of bits between 0 exclusive and 16 inclusive
+     * @param length the number of bits between 0 (exclusive) and 16
+     * (inclusive).
      *
      * @return the unsigned short value.
      *
@@ -204,7 +212,8 @@ public class BitInput<T> implements Closeable {
     /**
      * Reads an unsigned int value.
      *
-     * @param length the number of bits between 1 inclusive and 32 exclusive
+     * @param length the number of bits between 1 (inclusive) and 32
+     * (exclusive).
      *
      * @return the unsigned int value
      *
@@ -241,11 +250,12 @@ public class BitInput<T> implements Closeable {
 
 
     /**
-     * Reads a signed int.
+     * Reads a signed int value.
      *
-     * @param length the number of bits between 1 exclusive and 32 inclusive.
+     * @param length the number of bits between 1 (exclusive) and 32
+     * (inclusive).
      *
-     * @return an signed int
+     * @return a signed int value.
      *
      * @throws IOException if an I/O error occurs.
      */
@@ -282,9 +292,10 @@ public class BitInput<T> implements Closeable {
     /**
      * Reads an unsigned long value.
      *
-     * @param length the number of bits between 1 inclusive and 64 exclusive
+     * @param length the number of bits between 1 (inclusive) and 64
+     * (exclusive).
      *
-     * @return an unsigned long value
+     * @return an unsigned long value.
      *
      * @throws IllegalArgumentException if {@code length} is not valid
      * @throws IOException if an I/O error occurs
@@ -321,7 +332,8 @@ public class BitInput<T> implements Closeable {
     /**
      * Reads a signed long value.
      *
-     * @param length the number of bits between 1 exclusive and 64 inclusive
+     * @param length the number of bits between 1 (exclusive) and 64
+     * (inclusive).
      *
      * @return a signed long value
      *
@@ -362,8 +374,8 @@ public class BitInput<T> implements Closeable {
     /**
      * Reads a series of bytes.
      *
-     * @param range the number of valid bits in each byte; between 0 exclusive
-     * and 8 inclusive
+     * @param range the number of valid bits in each byte; between 0 (exclusive)
+     * and 8 (inclusive).
      * @param value the array to which each byte are stored
      * @param offset starting offset in the array
      * @param length the number of bytes to read
@@ -410,9 +422,9 @@ public class BitInput<T> implements Closeable {
      * Reads a series of bytes.
      *
      * @param scale the number of bits required for {@code length}; between 0
-     * exclusive and 16 inclusive.
-     * @param range the number of valid bits in each byte; between 0 exclusive
-     * and 8 inclusive
+     * (exclusive) and 16 (inclusive).
+     * @param range the number of valid bits in each byte; between 0 (exclusive)
+     * and 8 (inclusive).
      * @param value the array to which each byte are stored
      * @param offset starting offset in the array
      *
@@ -420,6 +432,8 @@ public class BitInput<T> implements Closeable {
      * {@code readUnsignedShort(scale)}
      *
      * @throws IOException if an I/O error occurs.
+     *
+     * @see #readBytes(int, byte[], int, int)
      */
     public int readBytes(final int scale, final int range, final byte[] value,
                          final int offset)
@@ -444,14 +458,16 @@ public class BitInput<T> implements Closeable {
     /**
      * Reads an array of bytes.
      *
-     * @param scale the number of bits for array length; between 0 exclusive and
-     * 16 inclusive.
-     * @param range the number of valid bits in each byte; between 0 exclusive
-     * and 8 inclusive.
+     * @param scale the number of bits for array length; between 0 (exclusive)
+     * and 16 (inclusive).
+     * @param range the number of valid bits in each byte; between 0 (exclusive)
+     * and 8 (inclusive).
      *
      * @return an array of bytes.
      *
      * @throws IOException if an I/O error occurs.
+     *
+     * @see #readBytes(int, byte[], int, int)
      */
     public byte[] readBytes(final int scale, final int range)
         throws IOException {
@@ -473,12 +489,17 @@ public class BitInput<T> implements Closeable {
 
 
     /**
-     * Reads a string.
+     * Reads a string. This method reads a byte array via
+     * {@link #readBytes(int, int)} with {@code scale} of {@code 16} and
+     * {@code range} of {@code 8} and returns the output string created by
+     * {@link String#String(byte[], java.lang.String)} with the byte array and
+     * given {@code charsetName}.
      *
      * @param charsetName the character set name to encode output string.
      *
-     * @return a string
+     * @return a {@code charsetName} encoded string.
      *
+     * @throws NullPointerException if {@code charsetName} is {@code null}.
      * @throws IOException if an I/O error occurs.
      */
     public String readString(final String charsetName) throws IOException {
@@ -492,9 +513,13 @@ public class BitInput<T> implements Closeable {
 
 
     /**
-     * Reads a US-ASCII string.
+     * Reads a US-ASCII string. This method reads a byte array via
+     * {@link #readBytes(int, int)} with {@code scale} of {@code 16} and
+     * {@code range} of {@code 7} and returns the output string created by
+     * {@link String#String(byte[], java.lang.String)} with the byte array and
+     * {@code US-ASCII}.
      *
-     * @return a US-ASCII encoded string.
+     * @return a {@code US-ASCII} encoded string.
      *
      * @throws IOException if an I/O error occurs.
      */
@@ -550,12 +575,22 @@ public class BitInput<T> implements Closeable {
     }
 
 
+    /**
+     * Returns the current value of {@link #input}.
+     *
+     * @return the current value of {@link #input}.
+     */
     public ByteInput<T> getInput() {
 
         return input;
     }
 
 
+    /**
+     * Replaces the value of {@link #input} with given.
+     *
+     * @param input a new value for {@link #input}.
+     */
     public void setInput(final ByteInput<T> input) {
 
         this.input = input;
@@ -563,8 +598,8 @@ public class BitInput<T> implements Closeable {
 
 
     /**
-     * Closes this bit input. This method aligns to a single byte and closes the
-     * underlying byte input.
+     * Closes this bit input. This method, if {@link #input} is not
+     * {@code null}, aligns to a single byte and closes {@link #input}.
      *
      * @throws IOException if an I/O error occurs.
      *
@@ -574,9 +609,10 @@ public class BitInput<T> implements Closeable {
     @Override
     public void close() throws IOException {
 
-        align((short) 1);
-
-        input.close();
+        if (input != null) {
+            align((short) 1);
+            input.close();
+        }
     }
 
 
@@ -592,7 +628,7 @@ public class BitInput<T> implements Closeable {
 
 
     /**
-     * The source byte input.
+     * The underlying byte input.
      */
     protected ByteInput<T> input;
 

@@ -34,34 +34,32 @@ public class BitOutput<T> implements Closeable {
     /**
      * Creates a new instance on top of specified byte output.
      *
-     * @param output the byte output to wrap
-     *
-     * @throws NullPointerException if {@code output} is {@code null}.
+     * @param output the byte output on which this bit input is built or
+     * {@code null} if {@link #output} may be lazily initialized and set.
      */
     public BitOutput(final ByteOutput<T> output) {
 
         super();
-
-        if (output == null) {
-            throw new NullPointerException("null output");
-        }
 
         this.output = output;
     }
 
 
     /**
-     * Writes given {@code value} to {@link #output} and increments
-     * {@code count}.
+     * Writes given unsigned byte to underlying byte output and increments
+     * count. Override this method if {@link #output} must be lazily initialized
+     * and set.
      *
      * @param value the value to write
      *
+     * @throws IllegalStateException if {@link #output} is currently
+     * {@code null}.
      * @throws IOException if an I/O error occurs.
      */
     protected void writeUnsignedByte(final int value) throws IOException {
 
         if (output == null) {
-            throw new IllegalStateException("null output");
+            throw new IllegalStateException("the output is currently null");
         }
 
         output.writeUnsignedByte(value);
@@ -519,53 +517,6 @@ public class BitOutput<T> implements Closeable {
     public void writeUsAsciiString(final String value) throws IOException {
 
         writeBytes(16, 7, value.getBytes("US-ASCII"));
-    }
-
-
-    /**
-     * Aligns to specified number of bytes.
-     *
-     * @param length the number of bytes to align. must be positive.
-     *
-     * @return the number of bits padded for alignment
-     *
-     * @throws IOException if an I/O error occurs.
-     *
-     * @deprecated by {@link #align(short) }
-     */
-    @Deprecated
-    public long align(final int length) throws IOException {
-
-        if (length <= 0) {
-            throw new IllegalArgumentException("length(" + length + ") <= 0");
-        }
-
-        long bits = 0;
-
-        // writing(padding) remained bits into current byte
-        if (index > 0) {
-            bits = (8 - index);
-            writeUnsignedByte((int) bits, 0x00); // count incremented
-        }
-
-        int bytes = count % length;
-
-        if (bytes == 0) {
-            return bits;
-        }
-
-        if (bytes > 0) {
-            bytes = length - bytes;
-        } else {
-            bytes = 0 - bytes;
-        }
-
-        for (; bytes > 0; bytes--) {
-            writeUnsignedByte(8, 0x00);
-            bits += 8;
-        }
-
-        return bits;
     }
 
 

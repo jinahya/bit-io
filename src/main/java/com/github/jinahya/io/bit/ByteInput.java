@@ -30,15 +30,18 @@ public abstract class ByteInput<T> implements Closeable {
 
 
     /**
-     * Creates a new instance with given underlying input source.
+     * Creates a new instance built on top of the specified underlying byte
+     * source.
      *
-     * @param input the underlying input source.
+     * @param source the underlying byte source to be assigned to the field
+     * {@link #source} for later use, or {@code null} if this instance to be
+     * created without an underlying byte source.
      */
-    public ByteInput(final T input) {
+    public ByteInput(final T source) {
 
         super();
 
-        this.source = input;
+        this.source = source;
     }
 
 

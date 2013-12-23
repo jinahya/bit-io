@@ -31,9 +31,12 @@ public abstract class ByteOutput<T> implements Closeable {
 
 
     /**
-     * Creates a new instance with given target.
+     * Creates a new instance built on top of the specified underlying byte
+     * target.
      *
-     * @param target the target byte consumer.
+     * @param target the underlying byte target to be assigned to the field
+     * {@link #target} for later use, or {@code null} if this instance is to be
+     * created without an underlying byte target.
      */
     public ByteOutput(final T target) {
 

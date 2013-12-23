@@ -18,71 +18,11 @@
 package com.github.jinahya.io.bit;
 
 
-import java.io.IOException;
-import org.mockito.Mockito;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
-
-
 /**
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
 public class ByteInputTest {
-
-
-    private static class UnsignedByteAnswer implements Answer<Integer> {
-
-
-        public UnsignedByteAnswer(final long limit) {
-
-            super();
-
-            if (limit < -1L) {
-                throw new IllegalArgumentException(
-                    "limit(" + limit + ") < -1L");
-            }
-
-            this.limit = limit;
-
-            count = 0L;
-        }
-
-
-        @Override
-        public Integer answer(final InvocationOnMock invocation)
-            throws Throwable {
-
-            if (limit != -1L && count++ >= limit) {
-                return -1;
-            }
-
-            return (int) (System.currentTimeMillis() & 0xFF);
-        }
-
-
-        private final long limit;
-
-
-        private volatile long count;
-
-
-    }
-
-
-    public static ByteInput<?> mock(final long limit) throws IOException {
-
-        if (limit < -1L) {
-            throw new IllegalArgumentException("limit(" + limit + ") < -1L");
-        }
-
-        final ByteInput<?> mock = Mockito.mock(ByteInput.class);
-
-        Mockito.when(mock.readUnsignedByte())
-            .thenAnswer(new UnsignedByteAnswer(limit));
-
-        return mock;
-    }
 
 
 }

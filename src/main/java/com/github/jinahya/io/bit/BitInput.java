@@ -47,20 +47,20 @@ public class BitInput<T> implements Closeable {
 
 
     /**
-     * Reads next unsigned byte from the {@link #input} and increments the
-     * {@code count}. Override this method if the {@link #input} must be lazily
-     * initialized and set.
+     * Reads an unsigned byte from the {@link #input} and increments the
+     * {@code count}. Override this method if the {@link #input} is intended to
+     * be lazily initialized and set.
      *
-     * @return next unsigned byte
+     * @return an unsigned byte value read
      *
      * @throws IllegalStateException if {@code #input} is currently
      * {@code null}.
      * @throws IOException if an I/O error occurs.
      */
-    protected int readUnsignedByte() throws IOException {
+    protected int octet() throws IOException {
 
         if (input == null) {
-            throw new IllegalStateException("the input is currently null");
+            throw new IllegalStateException("#input is currently null");
         }
 
         final int value = input.readUnsignedByte();
@@ -77,7 +77,8 @@ public class BitInput<T> implements Closeable {
     /**
      * Reads an unsigned byte value.
      *
-     * @param length bit length between 0 (exclusive) and 8 (inclusive).
+     * @param length the number of valid bits in value; between {@code 0}
+     * (exclusive) and {@code 8} (inclusive).
      *
      * @return an unsigned byte value.
      *
@@ -94,7 +95,7 @@ public class BitInput<T> implements Closeable {
         }
 
         if (index == 8) {
-            int octet = readUnsignedByte();
+            int octet = octet();
             if (length == 8) {
                 return octet;
             }
@@ -149,7 +150,7 @@ public class BitInput<T> implements Closeable {
      */
     protected boolean isNull() throws IOException {
 
-        return readUnsignedByte(1) == 0x00;
+        return readBoolean();
     }
 
 
@@ -376,11 +377,11 @@ public class BitInput<T> implements Closeable {
      *
      * @param range the number of valid bits in each byte; between 0 (exclusive)
      * and 8 (inclusive).
-     * @param value the array to which each byte are stored
-     * @param offset starting offset in the array
+     * @param value the array to which each byte are stored.
+     * @param offset starting offset in the array.
      * @param length the number of bytes to read
      *
-     * @throws IOException
+     * @throws IOException if an I/O error occurs.
      */
     protected void readBytes(final int range, final byte[] value, int offset,
                              final int length)
@@ -402,6 +403,11 @@ public class BitInput<T> implements Closeable {
             throw new IllegalArgumentException("offset(" + offset + ") < 0");
         }
 
+        if (offset > value.length) {
+            throw new IllegalArgumentException(
+                "offset(" + offset + ") >= value.length(" + value.length + ")");
+        }
+
         if (length < 0) {
             throw new IllegalArgumentException("length(" + length + ") < 0");
         }
@@ -421,8 +427,8 @@ public class BitInput<T> implements Closeable {
     /**
      * Reads a series of bytes.
      *
-     * @param scale the number of bits required for {@code length}; between 0
-     * (exclusive) and 16 (inclusive).
+     * @param scale the number of bits required for calculating the number of
+     * bytes to read; between 0 (exclusive) and 16 (inclusive).
      * @param range the number of valid bits in each byte; between 0 (exclusive)
      * and 8 (inclusive).
      * @param value the array to which each byte are stored
@@ -458,8 +464,8 @@ public class BitInput<T> implements Closeable {
     /**
      * Reads an array of bytes.
      *
-     * @param scale the number of bits for array length; between 0 (exclusive)
-     * and 16 (inclusive).
+     * @param scale the number of bits for calculating the number of bytes to
+     * read; between 0 (exclusive) and 16 (inclusive).
      * @param range the number of valid bits in each byte; between 0 (exclusive)
      * and 8 (inclusive).
      *
@@ -532,18 +538,23 @@ public class BitInput<T> implements Closeable {
     /**
      * Aligns to given number of bytes.
      *
-     * @param length the number of bytes to align; must be positive.
+     * @param length the number of bytes to align; between 0 (exclusive) and
+     * {@value Short#MAX_VALUE} (inclusive).
      *
      * @return the number of bits discarded for alignment
      *
-     * @throws IllegalArgumentException if {@code length} is less than or equals
-     * to zero.
+     * @throws IllegalArgumentException if {@code length} is not valid.
      * @throws IOException if an I/O error occurs.
      */
-    public int align(final short length) throws IOException {
+    public int align(final int length) throws IOException {
 
         if (length <= 0) {
             throw new IllegalArgumentException("length(" + length + ") <= 0");
+        }
+
+        if (length > Short.MAX_VALUE) {
+            throw new IllegalArgumentException(
+                "length(" + length + ") > " + Short.MAX_VALUE);
         }
 
         int bits = 0;

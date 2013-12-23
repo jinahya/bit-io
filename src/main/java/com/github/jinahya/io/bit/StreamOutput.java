@@ -44,7 +44,8 @@ public class StreamOutput extends ByteOutput<OutputStream> {
      * <p/>
      * The {@code writeUnsginedByte(int)} method of {@code StreamOutput} class
      * calls {@link OutputStream#write(int)} on {@link #target} with
-     * {@code value}.
+     * {@code value}. Override this method if {@link #target} is intended to be
+     * lazily initialized and set.
      *
      * @param value {@inheritDoc }
      *
@@ -58,7 +59,7 @@ public class StreamOutput extends ByteOutput<OutputStream> {
     public void writeUnsignedByte(final int value) throws IOException {
 
         if (target == null) {
-            throw new IllegalStateException("null target");
+            throw new IllegalStateException("#target is currently null");
         }
 
         target.write(value);
@@ -68,9 +69,9 @@ public class StreamOutput extends ByteOutput<OutputStream> {
     /**
      * {@inheritDoc}
      * <p/>
-     * The {@code close()} method of {@code StreamOutput} class calls
-     * {@link OutputStream#flush()} and {@link OutputStream#close()} in series
-     * on {@link #target} if it is not {@code null}.
+     * The {@code close} method of {@code StreamOutput} class calls, if
+     * {@link #target} is not null, {@link OutputStream#flush()} and
+     * {@link OutputStream#close()} in series on {@link #target}.
      *
      * @throws IOException {@inheritDoc }
      *

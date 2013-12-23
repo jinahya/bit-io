@@ -34,6 +34,7 @@ public class StreamInput extends ByteInput<InputStream> {
      * @param source the stream on which this byte input is built.
      */
     public StreamInput(final InputStream source) {
+
         super(source);
     }
 
@@ -41,9 +42,8 @@ public class StreamInput extends ByteInput<InputStream> {
     /**
      * {@inheritDoc}
      * <p/>
-     * The {@code readUnsignedByte()} method of {@code StreamInput} class
-     * calls {@link InputStream#read()} on {@link #source} and returns the
-     * result.
+     * The {@code readUnsignedByte()} method of {@code StreamInput} class calls
+     * {@link InputStream#read()} on {@link #source} and returns the result.
      *
      * @return {@inheritDoc}
      *
@@ -53,9 +53,11 @@ public class StreamInput extends ByteInput<InputStream> {
      */
     @Override
     public int readUnsignedByte() throws IOException {
+
         if (source == null) {
-            throw new IllegalStateException("null source");
+            throw new IllegalStateException("#source is currently null");
         }
+
         return source.read();
     }
 
@@ -63,18 +65,19 @@ public class StreamInput extends ByteInput<InputStream> {
     /**
      * {@inheritDoc}
      * <p/>
-     * The {@code close()} method of {@code StreamInput} class calls
-     * {@link InputStream#close()} on {@link #source} if it is not
-     * {@code null}.
+     * The {@code close()} method of {@code StreamInput} class calls, if it is
+     * not {@code null}, {@link InputStream#close()} on {@link #source}.
      *
      * @throws IOException {@inheritDoc }
      */
     @Override
     public void close() throws IOException {
+
         if (source != null) {
             source.close();
         }
     }
-    
+
+
 }
 

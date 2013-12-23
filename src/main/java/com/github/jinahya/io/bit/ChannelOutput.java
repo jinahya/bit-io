@@ -54,17 +54,19 @@ public class ChannelOutput extends ByteOutput<WritableByteChannel> {
      *
      * @param value {@inheritDoc }
      *
+     * @throws IllegalStateException if either {@link #target} or
+     * {@link #buffer} is {@code null}.
      * @throws IOException {@inheritDoc }
      */
     @Override
     public void writeUnsignedByte(final int value) throws IOException {
 
         if (buffer == null) {
-            throw new IllegalStateException("null buffer");
+            throw new IllegalStateException("#buffer is currently null");
         }
 
         if (buffer.capacity() == 0) {
-            throw new IllegalStateException("buffer.capacity == 0");
+            throw new IllegalStateException("#buffer.capacity == 0");
         }
 
         if (!buffer.hasRemaining()) {
@@ -84,9 +86,9 @@ public class ChannelOutput extends ByteOutput<WritableByteChannel> {
      * {@inheritDoc}
      * <p/>
      * The {@code close()} method of {@code ChannelOutput} class first writes,
-     * if {@link #buffer} is not {@code null}, all remaining bytes in
-     * {@link #buffer} to {@link #target} and closes, if {@link #target} is not
-     * null, {@link #target}.
+     * if both {@link #buffer} and {@link #target} are not {@code null}, all
+     * remaining bytes in {@link #buffer} to {@link #target} and closes, if
+     * {@link #target} is not {@code null}, the {@link #target}.
      *
      * @throws IOException {@inheritDoc}
      */
@@ -94,12 +96,14 @@ public class ChannelOutput extends ByteOutput<WritableByteChannel> {
     public void close() throws IOException {
 
         if (target != null) {
+
             if (buffer != null) {
                 buffer.flip(); // limit -> position, position -> zero
                 while (buffer.hasRemaining()) {
                     target.write(buffer);
                 }
             }
+
             target.close();
         }
     }
@@ -116,12 +120,20 @@ public class ChannelOutput extends ByteOutput<WritableByteChannel> {
     }
 
 
+    /**
+     * Replaces the value of {@link #buffer} with given.
+     *
+     * @param buffer the new value for {@link #buffer}.
+     */
     public void setBuffer(final ByteBuffer buffer) {
 
         this.buffer = buffer;
     }
 
 
+    /**
+     * The byte buffer for buffering the channel.
+     */
     protected ByteBuffer buffer;
 
 

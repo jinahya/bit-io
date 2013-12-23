@@ -24,7 +24,7 @@ import java.io.IOException;
 
 /**
  *
- * @param <T>
+ * @param <T> underlying byte source type parameter
  */
 public abstract class ByteInput<T> implements Closeable {
 
@@ -35,7 +35,9 @@ public abstract class ByteInput<T> implements Closeable {
      * @param input the underlying input source.
      */
     public ByteInput(final T input) {
+
         super();
+
         this.source = input;
     }
 
@@ -51,12 +53,30 @@ public abstract class ByteInput<T> implements Closeable {
     public abstract int readUnsignedByte() throws IOException;
 
 
+    /**
+     * Closes this input and releases any system resources associated with it.
+     *
+     * @throws IOException if an I/O error occurs.
+     */
+    public abstract void close() throws IOException;
+
+
+    /**
+     * Returns the current value of {@link #source}.
+     *
+     * @return the current value of {@link #source}.
+     */
     public T getSource() {
 
         return source;
     }
 
 
+    /**
+     * Replaces the value of {@link #source} with given.
+     *
+     * @param source new value for {@link #source}.
+     */
     public void setSource(final T source) {
 
         this.source = source;

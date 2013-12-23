@@ -46,20 +46,20 @@ public class BitOutput<T> implements Closeable {
 
 
     /**
-     * Writes given unsigned byte to underlying byte output and increments
-     * count. Override this method if {@link #output} must be lazily initialized
-     * and set.
+     * Writes an unsigned byte value to {@link #output} and increments
+     * {@code count}. Override this method if {@link #output} is intended to be
+     * lazily initialized and set.
      *
-     * @param value the value to write
+     * @param value the unsigned byte value to write
      *
      * @throws IllegalStateException if {@link #output} is currently
      * {@code null}.
      * @throws IOException if an I/O error occurs.
      */
-    protected void writeUnsignedByte(final int value) throws IOException {
+    protected void octet(final int value) throws IOException {
 
         if (output == null) {
-            throw new IllegalStateException("the output is currently null");
+            throw new IllegalStateException("the #output is currently null");
         }
 
         output.writeUnsignedByte(value);
@@ -69,10 +69,11 @@ public class BitOutput<T> implements Closeable {
 
 
     /**
-     * Writes an unsigned byte. Only the lower {@code length} bits in given
-     * {@code value} are written.
+     * Writes an unsigned byte value. Only the lower {@code length} bits in
+     * given {@code value} are written.
      *
-     * @param length bit length between 0 (exclusive) and 8 (inclusive).
+     * @param length the number of lower bits to write; between 0 (exclusive)
+     * and 8 (inclusive).
      * @param value the value to write
      *
      * @throws IOException if an I/O error occurs.
@@ -90,7 +91,7 @@ public class BitOutput<T> implements Closeable {
 
         if (index == 0 && length == 8) {
             // direct write
-            writeUnsignedByte(value);
+            octet(value);
             return;
         }
 
@@ -113,7 +114,7 @@ public class BitOutput<T> implements Closeable {
                 octet <<= 1;
                 octet |= (flags[i] ? 0x01 : 0x00);
             }
-            writeUnsignedByte(octet);
+            octet(octet);
             index = 0;
         }
     }
@@ -134,25 +135,45 @@ public class BitOutput<T> implements Closeable {
 
 
     /**
-     * Writes a boolean flag whether specified object, which is the subsequent
-     * object, is {@code null} or not.
+     * Writes a boolean flag whether specified (subsequent) object is
+     * {@code null} or not. This method writes either {@code true} if
+     * {@code value} is {@code null} or {@code false} if {@code value} is not
+     * {@code null}.
      *
-     * @param value the object to check
+     * @param value the (subsequent) object to check
      *
-     * @return {@code true} if {@code value} is {@code} or {@code false} if not.
+     * @return the written value; either {@code true} if {@code value} is
+     * {@code null} or {@code false} if {@code value} is not {@code null}.
      *
      * @throws IOException if an I/O error occurs.
+     *
+     * @see #isNotNull(java.lang.Object)
      */
     protected boolean isNull(final Object value) throws IOException {
 
         final boolean flag = value == null;
 
-        writeUnsignedByte(1, flag ? 0x00 : 0x01);
+        writeBoolean(flag);
 
         return flag;
     }
 
 
+    /**
+     * Writes a boolean flag whether specified (subsequent) object is
+     * {@code null} or not. The method writes either {@code true} if
+     * {@code value} is not {@code null} or {@code false} if {@code value} is
+     * {@code null}.
+     *
+     * @param value the (subsequent) object to check
+     *
+     * @return the written value; either {@code true} if {@code value} is not
+     * {@code null} or {@code false} if {@code value} is {@code null}.
+     *
+     * @throws IOException if an I/O error occurs.
+     *
+     * @see #isNull(java.lang.Object)
+     */
     protected boolean isNotNull(final Object value) throws IOException {
 
         return !isNull(value);
@@ -163,8 +184,8 @@ public class BitOutput<T> implements Closeable {
      * Writes an unsigned short value. Only the lower specified number of bits
      * in given {@code value} are written.
      *
-     * @param length the number of bits between {@code 0} exclusive and
-     * {@code 16} inclusive.
+     * @param length the number of lower bits to write; between {@code 0}
+     * exclusive and {@code 16} inclusive.
      * @param value the value to write
      *
      * @throws IOException if an I/O error occurs
@@ -194,10 +215,11 @@ public class BitOutput<T> implements Closeable {
 
 
     /**
-     * Writes an unsigned int value. The value must be valid in bit range.
+     * Writes an unsigned int value. Only the lower specified number of bits in
+     * {@code value} are written.
      *
-     * @param length bit length between {@code 1} inclusive and {@code 32}
-     * exclusive.
+     * @param length the number of lower bits to write; between {@code 1}
+     * inclusive and {@code 32} exclusive.
      * @param value the value to write
      *
      * @throws IOException if an I/O error occurs.
@@ -213,7 +235,7 @@ public class BitOutput<T> implements Closeable {
             throw new IllegalArgumentException("length(" + length + ") >= 32");
         }
 
-        if ((value >> length) != 0x00) {
+        if (false && (value >> length) != 0x00) {
             throw new IllegalArgumentException(
                 "value(" + value + ") >> length(" + length + ") != 0x00");
         }
@@ -232,10 +254,11 @@ public class BitOutput<T> implements Closeable {
 
 
     /**
-     * Writes a signed int value. The {@code value} must be valid in bit range.
+     * Writes a signed int value. Only the number of specified bits in
+     * {@code value} are written including the sign bit at {@code length}.
      *
-     * @param length bit length between {@code 1} exclusive and {@code 32}
-     * inclusive.
+     * @param length the number of lower bits in {@code value} to write; between
+     * {@code 1} exclusive and {@code 32} inclusive.
      * @param value the value to write
      *
      * @throws IOException if an I/O error occurs.
@@ -250,7 +273,7 @@ public class BitOutput<T> implements Closeable {
             throw new IllegalArgumentException("length(" + length + ") > 32");
         }
 
-        if (length != 32) {
+        if (false && length != 32) {
             if (value < 0) { // negative
                 if ((value >> (length - 1)) != -1) {
                     throw new IllegalArgumentException(
@@ -266,16 +289,19 @@ public class BitOutput<T> implements Closeable {
             }
         }
 
-        final int quotient = length / 16;
-        final int remainder = length % 16;
+//        final int quotient = length / 16;
+//        final int remainder = length % 16;
+//
+//        if (remainder > 0) {
+//            writeUnsignedShort(remainder, value >> (quotient * 16));
+//        }
+//
+//        for (int i = quotient - 1; i >= 0; i--) {
+//            writeUnsignedShort(16, value >> (16 * i));
+//        }
 
-        if (remainder > 0) {
-            writeUnsignedShort(remainder, value >> (quotient * 16));
-        }
-
-        for (int i = quotient - 1; i >= 0; i--) {
-            writeUnsignedShort(16, value >> (16 * i));
-        }
+        writeUnsignedByte(1, value >> (length - 1));
+        writeUnsignedInt((length - 1), value);
     }
 
 
@@ -295,10 +321,11 @@ public class BitOutput<T> implements Closeable {
 
 
     /**
-     * Writes an unsigned long value. The {@code value} must be valid in bit
-     * range.
+     * Writes an unsigned long value. Only the number of specified bits in
+     * {@code value} are writtern.
      *
-     * @param length bit length between 1 (inclusive) and 64 (exclusive).
+     * @param length the number of lower valid bits to write; between 1
+     * (inclusive) and 64 (exclusive).
      * @param value the value to write.
      *
      * @throws IOException if an I/O error occurs.
@@ -314,29 +341,31 @@ public class BitOutput<T> implements Closeable {
             throw new IllegalArgumentException("length(" + length + ") >= 64");
         }
 
-        if ((value >> length) != 0L) {
+        if (false && (value >> length) != 0L) {
             throw new IllegalArgumentException(
                 "(value(" + value + ") >> length(" + length + ")) != 0L");
         }
 
-        final int quotient = length / 16;
-        final int remainder = length % 16;
+        final int quotient = length / 31;
+        final int remainder = length % 31;
 
         if (remainder > 0) {
-            writeUnsignedShort(remainder, (int) (value >> (quotient * 16)));
+            writeUnsignedInt(remainder, (int) (value >> (quotient * 31)));
         }
 
         for (int i = quotient - 1; i >= 0; i--) {
-            writeUnsignedShort(16, (int) (value >> (i * 16)));
+            writeUnsignedInt(31, (int) (value >> (i * 31)));
         }
     }
 
 
     /**
-     * Writes a signed long value. The {@code value} must be valid in bit range.
+     * Writes a signed long value. Only the number of specified bits in
+     * {@code value} are written including the sign bit at {@code length}.
      *
-     * @param length bit length between 1 (exclusive) and 64 (inclusive).
-     * @param value the value whose lower {@code length}-bits are written.
+     * @param length the number of lower valid bits to write; between 1
+     * (exclusive) and 64 (inclusive).
+     * @param value the value to write.
      *
      * @throws IOException if an I/O error occurs.
      */
@@ -351,7 +380,7 @@ public class BitOutput<T> implements Closeable {
             throw new IllegalArgumentException("length(" + length + ") > 64");
         }
 
-        if (length < 64) {
+        if (false && length < 64) {
             if (value < 0L) { // negative
                 if ((value >> (length - 1)) != -1L) {
                     throw new IllegalArgumentException(
@@ -367,16 +396,19 @@ public class BitOutput<T> implements Closeable {
             }
         }
 
-        final int quotient = length / 16;
-        final int remainder = length % 16;
+//        final int quotient = length / 16;
+//        final int remainder = length % 16;
+//
+//        if (remainder > 0) {
+//            writeUnsignedShort(remainder, (int) (value >> (quotient * 16)));
+//        }
+//
+//        for (int i = quotient - 1; i >= 0; i--) {
+//            writeUnsignedShort(16, (int) (value >> (i * 16)));
+//        }
 
-        if (remainder > 0) {
-            writeUnsignedShort(remainder, (int) (value >> (quotient * 16)));
-        }
-
-        for (int i = quotient - 1; i >= 0; i--) {
-            writeUnsignedShort(16, (int) (value >> (i * 16)));
-        }
+        writeUnsignedByte(1, (int) (value >> (length - 1)));
+        writeUnsignedLong((length - 1), value);
     }
 
 
@@ -396,32 +428,20 @@ public class BitOutput<T> implements Closeable {
 
 
     /**
-     * Writes specified number of bytes in {@code value} starting from
-     * {@code offset}.
+     * Writes a specified number of bytes in given array starting at given
+     * offset.
      *
-     * @param scale the number of bits required for length of the array; between
-     * 0 exclusive and 16 inclusive.
-     * @param range the number of lower valid bits in each byte; between 0
-     * exclusive and 8 inclusive.
-     * @param value the array of bytes to write.
-     * @param offset the starting offset in byte array
-     * @param length the number of bytes from {@code offset} to write
+     * @param range the number of valid bits in each byte; between 0 (exclusive)
+     * and 8 (inclusive).
+     * @param value the array of bytes
+     * @param offset the starting offset in the array.
+     * @param length the number of bytes to write
      *
-     * @throws IllegalArgumentException if either {@code scale} or {@code range}
-     * is not valid, or {@code value} is too long.
      * @throws IOException if an I/O error occurs.
      */
-    public void writeBytes(final int scale, final int range, final byte[] value,
-                           int offset, final int length)
+    protected void writeBytes(final int range, final byte[] value, int offset,
+                              final int length)
         throws IOException {
-
-        if (scale <= 0) {
-            throw new IllegalArgumentException("scale(" + scale + ") <= 0");
-        }
-
-        if (scale > 16) {
-            throw new IllegalArgumentException("scale(" + scale + ") > 16");
-        }
 
         if (range <= 0) {
             throw new IllegalArgumentException("range(" + range + ") <= 0");
@@ -439,6 +459,11 @@ public class BitOutput<T> implements Closeable {
             throw new IllegalArgumentException("offset(" + offset + ") < 0");
         }
 
+        if (offset > value.length) {
+            throw new IllegalArgumentException(
+                "offset(" + offset + ") >= value.length(" + value.length + ")");
+        }
+
         if (length < 0) {
             throw new IllegalArgumentException("length(" + length + ") < 0");
         }
@@ -446,7 +471,46 @@ public class BitOutput<T> implements Closeable {
         if (offset + length > value.length) {
             throw new IllegalArgumentException(
                 "offset(" + offset + ") + length(" + length + ") = "
-                + (offset + length) + ") > value.length(" + value.length + ")");
+                + (offset + length) + " > value.length(" + value.length + ")");
+        }
+
+        for (int i = 0; i < length; i++) {
+            writeUnsignedByte(range, value[offset++]);
+        }
+    }
+
+
+    /**
+     * Writes specified number of bytes in {@code value} starting from
+     * {@code offset}.
+     *
+     * @param scale the number of bits required for length of the array; between
+     * 0 exclusive and 16 inclusive.
+     * @param range the number of lower valid bits in each byte; between 0
+     * exclusive and 8 inclusive.
+     * @param value the array of bytes to write.
+     * @param offset the starting offset in byte array
+     * @param length the number of bytes from {@code offset} to write
+     *
+     * @throws IllegalArgumentException if either {@code scale} or {@code range}
+     * is not valid or {@code offset} is not valid, or {@code length} is not
+     * valid.
+     * @throws IOException if an I/O error occurs.
+     */
+    public void writeBytes(final int scale, final int range, final byte[] value,
+                           int offset, final int length)
+        throws IOException {
+
+        if (scale <= 0) {
+            throw new IllegalArgumentException("scale(" + scale + ") <= 0");
+        }
+
+        if (scale > 16) {
+            throw new IllegalArgumentException("scale(" + scale + ") > 16");
+        }
+
+        if (length < 0) {
+            throw new IllegalArgumentException("length(" + length + ") < 0");
         }
 
         if ((length >> scale) > 0) {
@@ -457,9 +521,7 @@ public class BitOutput<T> implements Closeable {
 
         writeUnsignedShort(scale, length);
 
-        for (int i = 0; i < length; i++) {
-            writeUnsignedByte(range, value[offset++]);
-        }
+        writeBytes(range, value, offset, length);
     }
 
 
@@ -481,18 +543,15 @@ public class BitOutput<T> implements Closeable {
     }
 
 
-    public void writeBytes(final byte[] bytes) throws IOException {
-
-        writeBytes(16, 8, bytes);
-    }
-
-
     /**
-     * Writes a string with {@code scale} of 16 and {@code range} of 8.
+     * Writes a string value. This method writes the decoded byte array with
+     * {@code scale} of {@code 16} and {@code range} of {@code 8}.
      *
-     * @param value the string to write.
-     * @param charsetName the charset name to decode the string
+     * @param value the string value to write.
+     * @param charsetName the character set name to decode the string
      *
+     * @throws NullPointerException if {@code value} or {@code charsetName} is
+     * {@code null}
      * @throws IOException if an I/O error occurs.
      *
      * @see #writeBytes(int, int, byte[])
@@ -500,21 +559,35 @@ public class BitOutput<T> implements Closeable {
     public void writeString(final String value, final String charsetName)
         throws IOException {
 
+        if (value == null) {
+            throw new NullPointerException("null value");
+        }
+
+        if (charsetName == null) {
+            throw new NullPointerException("null charsetName");
+        }
+
         writeBytes(16, 8, value.getBytes(charsetName));
     }
 
 
     /**
-     * Writes a {@code US-ASCII} encoded string with {@code scale} of 16 and
-     * {@code range} of 7.
+     * Writes a {@code US-ASCII} encoded string value. This method writes the
+     * decoded byte array with {@code scale} of {@code 16} and {@code range} of
+     * {@code 7}.
      *
-     * @param value the string to write.
+     * @param value the string value to write.
      *
+     * @throws NullPointerException if {@code value} is {@code null}.
      * @throws IOException if an I/O error occurs.
      *
      * @see #writeBytes(int, int, byte[])
      */
     public void writeUsAsciiString(final String value) throws IOException {
+
+        if (value == null) {
+            throw new NullPointerException("null value");
+        }
 
         writeBytes(16, 7, value.getBytes("US-ASCII"));
     }
@@ -523,16 +596,23 @@ public class BitOutput<T> implements Closeable {
     /**
      * Aligns to specified number of bytes.
      *
-     * @param length the number of bytes to align. must be positive.
+     * @param length the number of bytes to align; between 0 (exclusive) and
+     * {@value Short#MAX_VALUE} (inclusive).
      *
      * @return the number of bits padded for alignment
      *
+     * @throws IllegalArgumentException if {@code length} is not valid.
      * @throws IOException if an I/O error occurs.
      */
-    public int align(final short length) throws IOException {
+    public int align(final int length) throws IOException {
 
         if (length <= 0) {
             throw new IllegalArgumentException("length(" + length + ") <= 0");
+        }
+
+        if (length > Short.MAX_VALUE) {
+            throw new IllegalArgumentException(
+                "length(" + length + ") > " + Short.MAX_VALUE);
         }
 
         int bits = 0;
@@ -543,7 +623,7 @@ public class BitOutput<T> implements Closeable {
             writeUnsignedByte(bits, 0x00); // count incremented
         }
 
-        int bytes = count % length;
+        long bytes = count % length;
 
         if (bytes == 0) {
             return bits;
@@ -576,9 +656,10 @@ public class BitOutput<T> implements Closeable {
     @Override
     public void close() throws IOException {
 
-        align((short) 1);
-
-        output.close();
+        if (output != null) {
+            align((short) 1);
+            output.close();
+        }
     }
 
 
@@ -599,7 +680,7 @@ public class BitOutput<T> implements Closeable {
      *
      * @return the number of bytes written to the underlying byte output so far.
      */
-    public int getCount() {
+    public long getCount() {
 
         return count;
     }
@@ -626,7 +707,7 @@ public class BitOutput<T> implements Closeable {
     /**
      * number of bytes written so far.
      */
-    private int count = 0;
+    private long count = 0;
 
 
 }

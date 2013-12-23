@@ -50,6 +50,7 @@ public class ChannelInput extends ByteInput<ReadableByteChannel> {
      * @param channel the underlying source channel.
      */
     public ChannelInput(final ReadableByteChannel channel) {
+
         this(channel, ByteBuffer.allocate(1));
     }
 
@@ -63,23 +64,26 @@ public class ChannelInput extends ByteInput<ReadableByteChannel> {
      *
      * @return {@inheritDoc }
      *
-     * @throws IllegalStateException if {@link #buffer} is currently
-     * {@code null} or has zero capacity.
-     * @throws IllegalStateException if {@link #source} is currently
-     * {@code null}.
+     * @throws IllegalStateException if either {@link #source} or
+     * {@link #buffer} is currently {@code null} or the {@link #buffer} has zero
+     * capacity.
      * @throws IOException {@inheritDoc}
      */
     @Override
     public int readUnsignedByte() throws IOException {
+
         if (buffer == null) {
-            throw new IllegalStateException("null buffer");
+            throw new IllegalStateException("#buffer is currently null");
         }
+
         if (buffer.capacity() == 0) {
-            throw new IllegalStateException("buffer.capacity == 0");
+            throw new IllegalStateException("#buffer.capacity == 0");
         }
+
         if (source == null) {
-            throw new IllegalStateException("null source");
+            throw new IllegalStateException("#source is currently null");
         }
+
         if (!buffer.hasRemaining()) {
             buffer.clear(); // position -> zero, limit -> capacity
             while (buffer.position() == 0) {
@@ -90,6 +94,7 @@ public class ChannelInput extends ByteInput<ReadableByteChannel> {
             assert buffer.position() > 0;
             buffer.flip(); // limit -> position, position -> zero
         }
+
         return buffer.get();
     }
 
@@ -106,22 +111,38 @@ public class ChannelInput extends ByteInput<ReadableByteChannel> {
      */
     @Override
     public void close() throws IOException {
+
         if (source != null) {
             source.close();
         }
     }
 
 
+    /**
+     * Returns the current value of {@link #buffer}.
+     *
+     * @return the current value of {@link #buffer}.
+     */
     public ByteBuffer getBuffer() {
+
         return buffer;
     }
 
 
+    /**
+     * Replaces the value of {@link #buffer} with given.
+     *
+     * @param buffer new value for {@link #buffer}.
+     */
     public void setBuffer(final ByteBuffer buffer) {
+
         this.buffer = buffer;
     }
 
 
+    /**
+     * The byte buffer for buffering the channel.
+     */
     protected ByteBuffer buffer;
 
 

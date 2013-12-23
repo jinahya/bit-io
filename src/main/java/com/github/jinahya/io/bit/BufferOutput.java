@@ -58,7 +58,7 @@ public class BufferOutput extends ByteOutput<ByteBuffer> {
     public void writeUnsignedByte(final int value) throws IOException {
 
         if (target == null) {
-            throw new IllegalStateException("null target");
+            throw new IllegalStateException("#target is currently null");
         }
 
         target.put((byte) value); // BufferOverflowException, ReadOnlyBufferException

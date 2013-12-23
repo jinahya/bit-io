@@ -22,18 +22,18 @@ package com.github.jinahya.io.bit;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class L {
+public class RandomLengthPack {
 
 
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 13 * hash + this.lIntUnsigned;
-        hash = 13 * hash + this.lInt;
-        hash = 13 * hash + this.lLongUnsigned;
-        hash = 13 * hash + this.lLong;
-        hash = 13 * hash + this.sBytes;
-        hash = 13 * hash + this.rByhtes;
+        hash = 13 * hash + lengthIntUnsigned;
+        hash = 13 * hash + lengthInt;
+        hash = 13 * hash + lengthLongUnsigned;
+        hash = 13 * hash + lengthLong;
+        hash = 13 * hash + scaleBytes;
+        hash = 13 * hash + rrangeBytes;
         return hash;
     }
 
@@ -46,45 +46,45 @@ public class L {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final L other = (L) obj;
-        if (this.lIntUnsigned != other.lIntUnsigned) {
+        final RandomLengthPack that = (RandomLengthPack) obj;
+        if (lengthIntUnsigned != that.lengthIntUnsigned) {
             return false;
         }
-        if (this.lInt != other.lInt) {
+        if (lengthInt != that.lengthInt) {
             return false;
         }
-        if (this.lLongUnsigned != other.lLongUnsigned) {
+        if (lengthLongUnsigned != that.lengthLongUnsigned) {
             return false;
         }
-        if (this.lLong != other.lLong) {
+        if (lengthLong != that.lengthLong) {
             return false;
         }
-        if (this.sBytes != other.sBytes) {
+        if (scaleBytes != that.scaleBytes) {
             return false;
         }
-        if (this.rByhtes != other.rByhtes) {
+        if (rrangeBytes != that.rrangeBytes) {
             return false;
         }
         return true;
     }
 
 
-    final int lIntUnsigned = BitIoTests.lengthIntUnsigned();
+    final int lengthIntUnsigned = BitIoTests.lengthIntUnsigned();
 
 
-    final int lInt = BitIoTests.lengthInt();
+    final int lengthInt = BitIoTests.lengthInt();
 
 
-    final int lLongUnsigned = BitIoTests.lengthLongUnsigned();
+    final int lengthLongUnsigned = BitIoTests.lengthLongUnsigned();
 
 
-    final int lLong = BitIoTests.lengthLong();
+    final int lengthLong = BitIoTests.lengthLong();
 
 
-    final int sBytes = BitIoTests.scaleBytes();
+    final int scaleBytes = BitIoTests.scaleBytes();
 
 
-    final int rByhtes = BitIoTests.rangeBytes();
+    final int rrangeBytes = BitIoTests.rangeBytes();
 
 
 }

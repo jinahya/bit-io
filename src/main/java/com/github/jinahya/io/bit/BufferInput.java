@@ -32,9 +32,10 @@ public class BufferInput extends ByteInput<ByteBuffer> {
     /**
      * Creates a new instance on top of specified byte buffer.
      *
-     * @param source the buffer to wrap.
+     * @param source the source byte buffer.
      */
     public BufferInput(final ByteBuffer source) {
+
         super(source);
     }
 
@@ -42,23 +43,30 @@ public class BufferInput extends ByteInput<ByteBuffer> {
     /**
      * {@inheritDoc}
      * <p/>
-     * The {@code readUnsignedByte()} method of {@code ByteBuffer} class
-     * calls {@link ByteBuffer#get()} on {@link #source} and returns the
-     * result.
+     * The {@code readUnsignedByte()} method of {@code ByteBuffer} class calls
+     * {@link ByteBuffer#get()} on {@link #source} and returns the result.
      *
      * @return {@inheritDoc }
      *
+     * @throws IllegalStateException if {@link #source} is currently
+     * {@code null}.
      * @throws IOException {@inheritDoc}
      *
      * @see ByteBuffer#get()
      */
     @Override
     public int readUnsignedByte() throws IOException {
+
+        if (source == null) {
+            throw new IllegalStateException("#source is currently null");
+        }
+
         try {
             return source.get() & 0xFF;
         } catch (final BufferUnderflowException bue) {
             return -1;
         }
+
     }
 
 
@@ -71,7 +79,10 @@ public class BufferInput extends ByteInput<ByteBuffer> {
      */
     @Override
     public void close() throws IOException {
+
+        // empty
     }
-    
+
+
 }
 

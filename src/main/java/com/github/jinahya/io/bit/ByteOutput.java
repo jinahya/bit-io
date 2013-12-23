@@ -53,12 +53,30 @@ public abstract class ByteOutput<T> implements Closeable {
     public abstract void writeUnsignedByte(final int value) throws IOException;
 
 
+    /**
+     * Closes this input and releases any system resources associated with it.
+     *
+     * @throws IOException if an I/O error occurs.
+     */
+    public abstract void close() throws IOException;
+
+
+    /**
+     * Returns the current value of {@link #target}.
+     *
+     * @return the current value of {@link #target}.
+     */
     public T getTarget() {
 
         return target;
     }
 
 
+    /**
+     * Replaces the value of {@link #target} with given.
+     *
+     * @param target new value for {@link #target}.
+     */
     public void setTarget(final T target) {
 
         this.target = target;

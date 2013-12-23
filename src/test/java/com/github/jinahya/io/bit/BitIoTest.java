@@ -71,6 +71,46 @@ public class BitIoTest {
 
 
     @Test(invocationCount = 1)
+    public static void boolean_nullable() throws IOException {
+
+        final ThreadLocalRandom random = ThreadLocalRandom.current();
+        final int count = random.nextInt(128);
+
+        final ByteArrayOutputStream target = new ByteArrayOutputStream();
+        final ByteOutput<OutputStream> byteOutput = new StreamOutput(target);
+        final BitOutput<OutputStream> bitOutput = new BitOutput<>(byteOutput);
+
+        final List<Boolean> expected = new ArrayList<>(count);
+        for (int i = 0; i < count; i++) {
+            final Boolean value
+                = random.nextBoolean() ? null : random.nextBoolean();
+            expected.add(value);
+            if (bitOutput.isNotNull(value)) {
+                bitOutput.writeBoolean(value);
+            }
+        }
+        bitOutput.align(1);
+
+        final ByteArrayInputStream source
+            = new ByteArrayInputStream(target.toByteArray());
+        final ByteInput<InputStream> byteInput = new StreamInput(source);
+        final BitInput<InputStream> bitInput = new BitInput<>(byteInput);
+
+        final List<Boolean> actual = new ArrayList<>(count);
+        for (int i = 0; i < count; i++) {
+            if (bitInput.isNull()) {
+                actual.add(null);
+            } else {
+                actual.add(bitInput.readBoolean());
+            }
+        }
+        bitInput.align(1);
+
+        Assert.assertEquals(actual, expected);
+    }
+
+
+    @Test(invocationCount = 1)
     public static void int_unsigned_() throws IOException {
 
         final ThreadLocalRandom random = ThreadLocalRandom.current();

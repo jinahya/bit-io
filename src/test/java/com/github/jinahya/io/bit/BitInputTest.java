@@ -29,16 +29,16 @@ import org.testng.annotations.Test;
 public class BitInputTest {
 
 
-    public static BitInput<Void> mockedBitInput(final long limit) {
+    public static BitInput<Void> mockedInstance(final long limit) {
 
-        return new BitInput<>(new MockedByteInput(limit));
+        return new BitInput<>(new MockedByteReader(limit));
     }
 
 
     @Test(invocationCount = 128)
     public void readBoolean() throws IOException {
 
-        final BitInput<Void> input = mockedBitInput(-1L);
+        final BitInput<?> input = mockedInstance(-1L);
 
         final boolean value = input.readBoolean();
     }
@@ -47,7 +47,7 @@ public class BitInputTest {
     @Test(invocationCount = 128)
     public void readUnsignedInt() throws IOException {
 
-        final BitInput<Void> input = mockedBitInput(-1L);
+        final BitInput<?> input = mockedInstance(-1L);
 
         final int length = BitIoTests.lengthIntUnsigned();
 
@@ -58,7 +58,7 @@ public class BitInputTest {
     @Test(invocationCount = 128)
     public void readInt() throws IOException {
 
-        final BitInput<Void> input = mockedBitInput(-1L);
+        final BitInput<?> input = mockedInstance(-1L);
 
         final int length = BitIoTests.lengthInt();
 
@@ -67,9 +67,18 @@ public class BitInputTest {
 
 
     @Test(invocationCount = 128)
+    public void readFloat() throws IOException {
+
+        final BitInput<?> input = mockedInstance(-1L);
+
+        final float value = input.readFloat();
+    }
+
+
+    @Test(invocationCount = 128)
     public void readUnsignedLong() throws IOException {
 
-        final BitInput<Void> input = mockedBitInput(-1L);
+        final BitInput<?> input = mockedInstance(-1L);
 
         final int length = BitIoTests.lengthLongUnsigned();
 
@@ -80,7 +89,7 @@ public class BitInputTest {
     @Test(invocationCount = 128)
     public void readLong() throws IOException {
 
-        final BitInput<Void> input = mockedBitInput(-1L);
+        final BitInput<?> input = mockedInstance(-1L);
 
         final int length = BitIoTests.lengthLong();
 
@@ -89,14 +98,23 @@ public class BitInputTest {
 
 
     @Test(invocationCount = 128)
+    public void readDouble() throws IOException {
+
+        final BitInput<?> input = mockedInstance(-1L);
+
+        final double value = input.readDouble();
+    }
+
+
+    @Test(invocationCount = 128)
     public void readBytes() throws IOException {
 
-        final BitInput<Void> input = mockedBitInput(-1L);
+        final BitInput<?> input = mockedInstance(-1L);
 
         final int scale = BitIoTests.scaleBytes();
         final int range = BitIoTests.rangeBytes();
 
-        final byte[] bytes = input.readBytes(scale, range);
+        final byte[] value = input.readBytes(scale, range);
     }
 
 

@@ -18,6 +18,11 @@
 package com.github.jinahya.io.bit;
 
 
+import java.io.IOException;
+import java.util.concurrent.ThreadLocalRandom;
+import org.testng.annotations.Test;
+
+
 /**
  *
  * @author <a href="mailto:onacit@gmail.com">Jin Kwon</a>
@@ -25,9 +30,85 @@ package com.github.jinahya.io.bit;
 public class BitOutputTest {
 
 
-    public static BitOutput<Void> mockedBitOutput(final long limit) {
+    public static BitOutput<Void> mockedInstance(final long limit) {
 
-        return new BitOutput<>(new MockedByteOutput(limit));
+        return new BitOutput<>(new MockedByteWriter(limit));
+    }
+
+
+    static ThreadLocalRandom random() {
+
+        return ThreadLocalRandom.current();
+    }
+
+
+    @Test(invocationCount = 128)
+    public void writeBoolean() throws IOException {
+
+        final BitOutput<?> output = mockedInstance(-1L);
+
+        output.writeBoolean(BitIoTests.valueBoolean());
+    }
+
+
+    @Test(invocationCount = 128)
+    public void writeUnsignedInt() throws IOException {
+
+        final BitOutput<?> output = mockedInstance(-1L);
+
+        final int length = BitIoTests.lengthIntUnsigned();
+        final int value = BitIoTests.valueIntUnsigned(length);
+
+        output.writeUnsignedInt(length, value);
+    }
+
+
+    @Test(invocationCount = 128)
+    public void readInt() throws IOException {
+
+        final BitOutput<?> output = mockedInstance(-1L);
+
+        final int length = BitIoTests.lengthInt();
+        final int value = BitIoTests.valueInt(length);
+
+        output.writeInt(length, value);
+    }
+
+
+    @Test(invocationCount = 128)
+    public void readUnsignedLong() throws IOException {
+
+        final BitOutput<?> output = mockedInstance(-1L);
+
+        final int length = BitIoTests.lengthLongUnsigned();
+        final long value = BitIoTests.valueLongUnsigned(length);
+
+        output.writeUnsignedLong(length, value);
+    }
+
+
+    @Test(invocationCount = 128)
+    public void readLong() throws IOException {
+
+        final BitOutput<?> output = mockedInstance(-1L);
+
+        final int length = BitIoTests.lengthLong();
+        final long value = BitIoTests.valueLong(length);
+
+        output.writeLong(length, value);
+    }
+
+
+    @Test(invocationCount = 128)
+    public void readBytes() throws IOException {
+
+        final BitOutput<?> output = mockedInstance(-1L);
+
+        final int scale = BitIoTests.scaleBytes();
+        final int range = BitIoTests.rangeBytes();
+        final byte[] value = BitIoTests.valueBytes(scale, range);
+
+        output.writeBytes(scale, range, value);
     }
 
 

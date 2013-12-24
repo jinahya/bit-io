@@ -644,33 +644,43 @@ public class BitOutput<T> implements Closeable {
 
 
     /**
-     * Closes this instance. This method aligns to a single byte and closes
-     * {@code output}.
+     * Closes this instance. This method, if {@link #writer} is not
+     * {@code null}, aligns to a single byte and closes the {@link #writer}.
      *
      * @throws IOException if an I/O error occurs.
      *
-     * @see #align(short)
-     * @see ByteOutput#close()
+     * @see #align(int)
+     * @see ByteWriter#close()
      */
     @Override
     public void close() throws IOException {
 
         if (writer != null) {
-            align((short) 1);
+            align(1);
             writer.close();
         }
     }
 
 
-    public ByteWriter<T> getOutput() {
+    /**
+     * Return the current value of {@link #writer}.
+     *
+     * @return the current value of {@link #writer}.
+     */
+    public ByteWriter<T> getWriter() {
 
         return writer;
     }
 
 
-    public void setOutput(final ByteWriter<T> output) {
+    /**
+     * Replaces the value of {@link #writer} with given.
+     *
+     * @param writer new value for {@link #writer}.
+     */
+    public void setWriter(final ByteWriter<T> writer) {
 
-        this.writer = output;
+        this.writer = writer;
     }
 
 
@@ -686,7 +696,7 @@ public class BitOutput<T> implements Closeable {
 
 
     /**
-     * target byte output.
+     * The underlying byte writer.
      */
     protected ByteWriter<T> writer;
 

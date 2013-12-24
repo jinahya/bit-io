@@ -22,8 +22,7 @@ package com.github.jinahya.io.bit;
  *
  * @author Jin Kwon <jinahya at gmail.com>
  */
-public class ByteInputTest {
-
+public class ByteReaderTest {
 
 }
 

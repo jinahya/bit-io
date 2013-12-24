@@ -20,8 +20,6 @@ package com.github.jinahya.io.bit;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.testng.Assert;
@@ -46,7 +44,7 @@ final class BitIoTests {
     }
 
 
-    static int assertLengthIntUnsigned(final int length) {
+    private static int assertLengthIntUnsigned(final int length) {
 
         assert length > 0;
         assert length < 32;
@@ -63,7 +61,8 @@ final class BitIoTests {
     }
 
 
-    static int assertValueIntUnsigned(final int value, final int length) {
+    private static int assertValueIntUnsigned(final int value,
+                                              final int length) {
 
         assertLengthIntUnsigned(length);
 
@@ -92,7 +91,7 @@ final class BitIoTests {
     }
 
 
-    static int assertLengthInt(final int length) {
+    private static int assertLengthInt(final int length) {
 
         assert length > 1;
         assert length <= 32;
@@ -109,7 +108,7 @@ final class BitIoTests {
     }
 
 
-    static int assertValueInt(final int value, final int length) {
+    private static int assertValueInt(final int value, final int length) {
 
         assertLengthInt(length);
 
@@ -141,6 +140,12 @@ final class BitIoTests {
         lengths.add(length);
 
         return valueInt(length);
+    }
+
+
+    static float valueFloat() {
+
+        return (float) random().nextLong() / (float) random().nextInt();
     }
 
 
@@ -208,7 +213,7 @@ final class BitIoTests {
     }
 
 
-    static long assertValueLong(final long value, final int length) {
+    private static long assertValueLong(final long value, final int length) {
 
         assertLengthLong(length);
 
@@ -240,6 +245,12 @@ final class BitIoTests {
         lengths.add(length);
 
         return valueLong(lengths);
+    }
+
+
+    static double valueDouble() {
+
+        return (double) random().nextLong() / (double) random().nextInt();
     }
 
 
@@ -311,63 +322,6 @@ final class BitIoTests {
         final int count = random().nextInt(65536);
 
         return RandomStringUtils.randomAscii(count);
-    }
-
-
-    static void random(final List<Class<?>> types, final List<Boolean> signes,
-                       final List<Integer> lengths, final List<Object> values) {
-
-        Objects.requireNonNull(types, "null types");
-
-        Objects.requireNonNull(signes, "null signes");
-
-        Objects.requireNonNull(lengths, "null lengths");
-
-        Objects.requireNonNull(values, "null values");
-
-        final ThreadLocalRandom random = ThreadLocalRandom.current();
-
-        final int count = random.nextInt(128, 1024);
-        for (int i = 0; i < count; i++) {
-
-            switch (random.nextInt(10)) {
-                case 0: // boolean
-                    types.add(Boolean.TYPE);
-                    signes.add(null);
-                    lengths.add(null);
-                    values.add(random.nextBoolean());
-                    break;
-                case 1: // unsigned int
-                    types.add(Integer.TYPE);
-                    signes.add(Boolean.FALSE);
-                     {
-                        final int length = BitIoTests.lengthIntUnsigned();
-                        lengths.add(length);
-                        final int value = BitIoTests.valueIntUnsigned(length);
-                        values.add(value);
-                    }
-                    break;
-                case 2: // int
-                    types.add(Integer.TYPE);
-                    signes.add(Boolean.TRUE);
-                     {
-                        final int length = BitIoTests.lengthInt();
-                        lengths.add(length);
-                        final int value = BitIoTests.valueInt(length);
-                        values.add(value);
-                    }
-                    break;
-                case 3: // unsigned long
-                    types.add(Long.TYPE);
-                    signes.add(Boolean.FALSE);
-                    values.add(BitIoTests.valueLongUnsigned(lengths));
-                    break;
-                case 4: // long
-                    types.add(Long.TYPE);
-                    signes.add(Boolean.TRUE);
-                    values.add(BitIoTests.valueLong(lengths));
-            }
-        }
     }
 
 

@@ -591,7 +591,7 @@ public class BitInput<T> implements Closeable {
      *
      * @return the current value of {@link #reader}.
      */
-    public ByteReader<T> getInput() {
+    public ByteReader<T> getReader() {
 
         return reader;
     }
@@ -600,37 +600,37 @@ public class BitInput<T> implements Closeable {
     /**
      * Replaces the value of {@link #reader} with given.
      *
-     * @param input a new value for {@link #reader}.
+     * @param reader a new value for {@link #reader}.
      */
-    public void setInput(final ByteReader<T> input) {
+    public void setReader(final ByteReader<T> reader) {
 
-        this.reader = input;
+        this.reader = reader;
     }
 
 
     /**
      * Closes this bit input. This method, if {@link #reader} is not
-     * {@code null}, aligns to a single byte and closes {@link #reader}.
+     * {@code null}, aligns to a single byte and closes the {@link #reader}.
      *
      * @throws IOException if an I/O error occurs.
      *
-     * @see #align(short)
-     * @see ByteInput#close()
+     * @see #align(int)
+     * @see ByteReader#close()
      */
     @Override
     public void close() throws IOException {
 
         if (reader != null) {
-            align((short) 1);
+            align(1);
             reader.close();
         }
     }
 
 
     /**
-     * Returns the number of bytes read from the underlying byte input so far.
+     * Returns the number of bytes read from the underlying byte reader so far.
      *
-     * @return the number of bytes read from the underlying byte input so far.
+     * @return the number of bytes read from the underlying byte reader so far.
      */
     public long getCount() {
 

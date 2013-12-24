@@ -25,19 +25,19 @@ import java.nio.channels.ReadableByteChannel;
 
 
 /**
- * A {@link ByteInput} implementation for {@link ReadableByteChannel}s.
+ * A {@link ByteReader} implementation for {@link ReadableByteChannel}s.
  */
-public class ChannelInput extends ByteInput<ReadableByteChannel> {
+public class ChannelReader extends ByteReader<ReadableByteChannel> {
 
 
     /**
      * Creates a new instance on top of specified channel.
      *
      * @param source the underlying source channel.
-     * @param buffer the buffer to buffering input.
+     * @param buffer the buffer to buffering the channel.
      */
-    public ChannelInput(final ReadableByteChannel source,
-                        final ByteBuffer buffer) {
+    public ChannelReader(final ReadableByteChannel source,
+                         final ByteBuffer buffer) {
 
         super(source);
 
@@ -48,15 +48,16 @@ public class ChannelInput extends ByteInput<ReadableByteChannel> {
     /**
      * {@inheritDoc}
      * <p/>
-     * The {@code readUnsignedByte()} method of {@code ChannelInput} class first
-     * tries to replenish {@link #buffer}, if it is drained, from
-     * {@link #source} calls {@link ByteBuffer#get()} and returns the result.
+     * The {@code readUnsignedByte()} method of {@code ChannelReader} class
+     * first tries to replenish {@link #buffer}, if it is drained, from
+     * {@link #source} and calls {@link ByteBuffer#get()} and returns the
+     * result. Override this method if either {@link #source} or {@link #buffer}
+     * is intended to be lazily initialized and set.
      *
      * @return {@inheritDoc }
      *
-     * @throws IllegalStateException if either {@link #source} or
-     * {@link #buffer} is currently {@code null} or the {@link #buffer} has zero
-     * capacity.
+     * @throws IllegalStateException {@inheritDoc} Or if {@link #buffer} is
+     * currently {@code null} or its capacity is zero.
      * @throws IOException {@inheritDoc}
      */
     @Override
@@ -92,8 +93,9 @@ public class ChannelInput extends ByteInput<ReadableByteChannel> {
     /**
      * {@inheritDoc }
      * <p/>
-     * The {@code close()} method of {@code ChannelInput} class calls
-     * {@link java.nio.channels.Channel#close()} on {@link #source}.
+     * The {@code close()} method of {@code ChannelReader} class calls, if
+     * {@link #source} is not {@code  null} and its {@link Channel#isOpen()}
+     * returns {@code true}, {@link Channel#close()} on {@link #source}.
      *
      * @throws IOException {@inheritDoc}
      *
@@ -131,7 +133,7 @@ public class ChannelInput extends ByteInput<ReadableByteChannel> {
 
 
     /**
-     * The byte buffer for buffering the channel.
+     * The byte buffer for buffering the underlying channel.
      */
     protected ByteBuffer buffer;
 

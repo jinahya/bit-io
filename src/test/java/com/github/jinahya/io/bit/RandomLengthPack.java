@@ -33,7 +33,7 @@ public class RandomLengthPack {
         hash = 13 * hash + lengthLongUnsigned;
         hash = 13 * hash + lengthLong;
         hash = 13 * hash + scaleBytes;
-        hash = 13 * hash + rrangeBytes;
+        hash = 13 * hash + rangeBytes;
         return hash;
     }
 
@@ -62,7 +62,7 @@ public class RandomLengthPack {
         if (scaleBytes != that.scaleBytes) {
             return false;
         }
-        if (rrangeBytes != that.rrangeBytes) {
+        if (rangeBytes != that.rangeBytes) {
             return false;
         }
         return true;
@@ -84,7 +84,7 @@ public class RandomLengthPack {
     final int scaleBytes = BitIoTests.scaleBytes();
 
 
-    final int rrangeBytes = BitIoTests.rangeBytes();
+    final int rangeBytes = BitIoTests.rangeBytes();
 
 
 }

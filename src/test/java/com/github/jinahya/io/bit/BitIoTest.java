@@ -44,27 +44,27 @@ public class BitIoTest {
         final int count = random.nextInt(128);
 
         final ByteArrayOutputStream target = new ByteArrayOutputStream();
-        final ByteOutput<OutputStream> byteOutput = new StreamOutput(target);
-        final BitOutput<OutputStream> bitOutput = new BitOutput<>(byteOutput);
+        final ByteWriter<OutputStream> writer = new StreamWriter(target);
+        final BitOutput<OutputStream> output = new BitOutput<>(writer);
 
         final List<Boolean> expected = new ArrayList<>(count);
         for (int i = 0; i < count; i++) {
             final boolean value = random.nextBoolean();
             expected.add(value);
-            bitOutput.writeBoolean(value);
+            output.writeBoolean(value);
         }
-        bitOutput.align(1);
+        output.align(1);
 
         final ByteArrayInputStream source
             = new ByteArrayInputStream(target.toByteArray());
-        final ByteInput<InputStream> byteInput = new StreamInput(source);
-        final BitInput<InputStream> bitInput = new BitInput<>(byteInput);
+        final ByteReader<InputStream> reader = new StreamReader(source);
+        final BitInput<InputStream> input = new BitInput<>(reader);
 
         final List<Boolean> actual = new ArrayList<>(count);
         for (int i = 0; i < count; i++) {
-            actual.add(bitInput.readBoolean());
+            actual.add(input.readBoolean());
         }
-        bitInput.align(1);
+        input.align(1);
 
         Assert.assertEquals(actual, expected);
     }
@@ -77,34 +77,35 @@ public class BitIoTest {
         final int count = random.nextInt(128);
 
         final ByteArrayOutputStream target = new ByteArrayOutputStream();
-        final ByteOutput<OutputStream> byteOutput = new StreamOutput(target);
-        final BitOutput<OutputStream> bitOutput = new BitOutput<>(byteOutput);
+        final ByteWriter<OutputStream> writer = new StreamWriter(target);
+        final BitOutput<OutputStream> output = new BitOutput<>(writer);
 
         final List<Boolean> expected = new ArrayList<>(count);
         for (int i = 0; i < count; i++) {
             final Boolean value
                 = random.nextBoolean() ? null : random.nextBoolean();
             expected.add(value);
-            if (bitOutput.isNotNull(value)) {
-                bitOutput.writeBoolean(value);
+            if (output.isNotNull(value)) {
+                output.writeBoolean(value);
             }
         }
-        bitOutput.align(1);
+        output.align(1);
 
-        final ByteArrayInputStream source
-            = new ByteArrayInputStream(target.toByteArray());
-        final ByteInput<InputStream> byteInput = new StreamInput(source);
-        final BitInput<InputStream> bitInput = new BitInput<>(byteInput);
+        final byte[] bytes = target.toByteArray();
+
+        final ByteArrayInputStream source = new ByteArrayInputStream(bytes);
+        final ByteReader<InputStream> reader = new StreamReader(source);
+        final BitInput<InputStream> input = new BitInput<>(reader);
 
         final List<Boolean> actual = new ArrayList<>(count);
         for (int i = 0; i < count; i++) {
-            if (bitInput.isNull()) {
+            if (input.isNull()) {
                 actual.add(null);
             } else {
-                actual.add(bitInput.readBoolean());
+                actual.add(input.readBoolean());
             }
         }
-        bitInput.align(1);
+        input.align(1);
 
         Assert.assertEquals(actual, expected);
     }
@@ -123,30 +124,31 @@ public class BitIoTest {
         }
 
         final ByteArrayOutputStream target = new ByteArrayOutputStream();
-        final ByteOutput<OutputStream> byteOutput = new StreamOutput(target);
-        final BitOutput<OutputStream> bitOutput = new BitOutput<>(byteOutput);
+        final ByteWriter<OutputStream> writer = new StreamWriter(target);
+        final BitOutput<OutputStream> output = new BitOutput<>(writer);
 
         final List<Integer> expected = new ArrayList<>(lengths.size());
         for (int i = 0; i < lengths.size(); i++) {
             final int length = lengths.get(i);
             final int value = BitIoTests.valueIntUnsigned(length);
             expected.add(value);
-            bitOutput.writeUnsignedInt(length, value);
+            output.writeUnsignedInt(length, value);
         }
-        bitOutput.align(1);
+        output.align(1);
 
-        final ByteArrayInputStream source
-            = new ByteArrayInputStream(target.toByteArray());
-        final ByteInput<InputStream> byteInput = new StreamInput(source);
-        final BitInput<InputStream> bitInput = new BitInput<>(byteInput);
+        final byte[] bytes = target.toByteArray();
+
+        final ByteArrayInputStream source = new ByteArrayInputStream(bytes);
+        final ByteReader<InputStream> reader = new StreamReader(source);
+        final BitInput<InputStream> input = new BitInput<>(reader);
 
         final List<Integer> actual = new ArrayList<>(lengths.size());
         for (int i = 0; i < lengths.size(); i++) {
             final int length = lengths.get(i);
-            final int value = bitInput.readUnsignedInt(length);
+            final int value = input.readUnsignedInt(length);
             actual.add(value);
         }
-        bitInput.align(1);
+        input.align(1);
 
         Assert.assertEquals(actual, expected);
     }
@@ -165,30 +167,31 @@ public class BitIoTest {
         }
 
         final ByteArrayOutputStream target = new ByteArrayOutputStream();
-        final ByteOutput<OutputStream> byteOutput = new StreamOutput(target);
-        final BitOutput<OutputStream> bitOutput = new BitOutput<>(byteOutput);
+        final ByteWriter<OutputStream> writer = new StreamWriter(target);
+        final BitOutput<OutputStream> output = new BitOutput<>(writer);
 
         final List<Integer> expected = new ArrayList<>(lengths.size());
         for (int i = 0; i < lengths.size(); i++) {
             final int length = lengths.get(i);
             final int value = BitIoTests.valueInt(length);
             expected.add(value);
-            bitOutput.writeInt(length, value);
+            output.writeInt(length, value);
         }
-        bitOutput.align(1);
+        output.align(1);
 
-        final ByteArrayInputStream source
-            = new ByteArrayInputStream(target.toByteArray());
-        final ByteInput<InputStream> byteInput = new StreamInput(source);
-        final BitInput<InputStream> bitInput = new BitInput<>(byteInput);
+        final byte[] bytes = target.toByteArray();
+
+        final ByteArrayInputStream source = new ByteArrayInputStream(bytes);
+        final ByteReader<InputStream> reader = new StreamReader(source);
+        final BitInput<InputStream> input = new BitInput<>(reader);
 
         final List<Integer> actual = new ArrayList<>(lengths.size());
         for (int i = 0; i < lengths.size(); i++) {
             final int length = lengths.get(i);
-            final int value = bitInput.readInt(length);
+            final int value = input.readInt(length);
             actual.add(value);
         }
-        bitInput.align(1);
+        input.align(1);
 
         Assert.assertEquals(actual, expected);
     }
@@ -207,30 +210,31 @@ public class BitIoTest {
         }
 
         final ByteArrayOutputStream target = new ByteArrayOutputStream();
-        final ByteOutput<OutputStream> byteOutput = new StreamOutput(target);
-        final BitOutput<OutputStream> bitOutput = new BitOutput<>(byteOutput);
+        final ByteWriter<OutputStream> writer = new StreamWriter(target);
+        final BitOutput<OutputStream> output = new BitOutput<>(writer);
 
         final List<Long> expected = new ArrayList<>(lengths.size());
         for (int i = 0; i < lengths.size(); i++) {
             final int length = lengths.get(i);
             final long value = BitIoTests.valueLongUnsigned(length);
             expected.add(value);
-            bitOutput.writeUnsignedLong(length, value);
+            output.writeUnsignedLong(length, value);
         }
-        bitOutput.align(1);
+        output.align(1);
 
-        final ByteArrayInputStream source
-            = new ByteArrayInputStream(target.toByteArray());
-        final ByteInput<InputStream> byteInput = new StreamInput(source);
-        final BitInput<InputStream> bitInput = new BitInput<>(byteInput);
+        final byte[] bytes = target.toByteArray();
+
+        final ByteArrayInputStream source = new ByteArrayInputStream(bytes);
+        final ByteReader<InputStream> reader = new StreamReader(source);
+        final BitInput<InputStream> input = new BitInput<>(reader);
 
         final List<Long> actual = new ArrayList<>(lengths.size());
         for (int i = 0; i < lengths.size(); i++) {
             final int length = lengths.get(i);
-            final long value = bitInput.readUnsignedLong(length);
+            final long value = input.readUnsignedLong(length);
             actual.add(value);
         }
-        bitInput.align(1);
+        input.align(1);
 
         Assert.assertEquals(actual, expected);
     }
@@ -249,30 +253,31 @@ public class BitIoTest {
         }
 
         final ByteArrayOutputStream target = new ByteArrayOutputStream();
-        final ByteOutput<OutputStream> byteOutput = new StreamOutput(target);
-        final BitOutput<OutputStream> bitOutput = new BitOutput<>(byteOutput);
+        final ByteWriter<OutputStream> writer = new StreamWriter(target);
+        final BitOutput<OutputStream> output = new BitOutput<>(writer);
 
         final List<Long> expected = new ArrayList<>(lengths.size());
         for (int i = 0; i < lengths.size(); i++) {
             final int length = lengths.get(i);
             final long value = BitIoTests.valueLong(length);
             expected.add(value);
-            bitOutput.writeLong(length, value);
+            output.writeLong(length, value);
         }
-        bitOutput.align(1);
+        output.align(1);
 
-        final ByteArrayInputStream source
-            = new ByteArrayInputStream(target.toByteArray());
-        final ByteInput<InputStream> byteInput = new StreamInput(source);
-        final BitInput<InputStream> bitInput = new BitInput<>(byteInput);
+        final byte[] bytes = target.toByteArray();
+
+        final ByteArrayInputStream source = new ByteArrayInputStream(bytes);
+        final ByteReader<InputStream> reader = new StreamReader(source);
+        final BitInput<InputStream> input = new BitInput<>(reader);
 
         final List<Long> actual = new ArrayList<>(lengths.size());
         for (int i = 0; i < lengths.size(); i++) {
             final int length = lengths.get(i);
-            final long value = bitInput.readLong(length);
+            final long value = input.readLong(length);
             actual.add(value);
         }
-        bitInput.align(1);
+        input.align(1);
 
         Assert.assertEquals(actual, expected);
     }
@@ -294,8 +299,8 @@ public class BitIoTest {
         }
 
         final ByteArrayOutputStream target = new ByteArrayOutputStream();
-        final ByteOutput<OutputStream> byteOutput = new StreamOutput(target);
-        final BitOutput<OutputStream> bitOutput = new BitOutput<>(byteOutput);
+        final ByteWriter<OutputStream> writer = new StreamWriter(target);
+        final BitOutput<OutputStream> output = new BitOutput<>(writer);
 
         final List<byte[]> expected = new ArrayList<>(count);
         for (int i = 0; i < count; i++) {
@@ -303,22 +308,23 @@ public class BitIoTest {
             final int range = ranges.get(i);
             final byte[] value = BitIoTests.valueBytes(scale, range);
             expected.add(value);
-            bitOutput.writeBytes(scale, range, value);
+            output.writeBytes(scale, range, value);
         }
-        bitOutput.align(1);
+        output.align(1);
 
-        final ByteArrayInputStream source
-            = new ByteArrayInputStream(target.toByteArray());
-        final ByteInput<InputStream> byteInput = new StreamInput(source);
-        final BitInput<InputStream> bitInput = new BitInput<>(byteInput);
+        final byte[] bytes = target.toByteArray();
+
+        final ByteArrayInputStream source = new ByteArrayInputStream(bytes);
+        final ByteReader<InputStream> reader = new StreamReader(source);
+        final BitInput<InputStream> input = new BitInput<>(reader);
 
         final List<byte[]> actual = new ArrayList<>(count);
         for (int i = 0; i < count; i++) {
             final int scale = scales.get(i);
             final int range = ranges.get(i);
-            actual.add(bitInput.readBytes(scale, range));
+            actual.add(input.readBytes(scale, range));
         }
-        bitInput.align(1);
+        input.align(1);
 
         Assert.assertEquals(actual, expected);
     }
@@ -331,28 +337,29 @@ public class BitIoTest {
         final int count = random.nextInt(128);
 
         final ByteArrayOutputStream target = new ByteArrayOutputStream();
-        final ByteOutput<OutputStream> byteOutput = new StreamOutput(target);
-        final BitOutput<OutputStream> bitOutput = new BitOutput<>(byteOutput);
+        final ByteWriter<OutputStream> writer = new StreamWriter(target);
+        final BitOutput<OutputStream> output = new BitOutput<>(writer);
 
         final List<String> expected = new ArrayList<>(count);
         for (int i = 0; i < count; i++) {
             final String value = BitIoTests.valueStringUtf8();
             expected.add(value);
-            bitOutput.writeString(value, "UTF-8");
+            output.writeString(value, "UTF-8");
         }
-        bitOutput.align(1);
+        output.align(1);
 
-        final ByteArrayInputStream source
-            = new ByteArrayInputStream(target.toByteArray());
-        final ByteInput<InputStream> byteInput = new StreamInput(source);
-        final BitInput<InputStream> bitInput = new BitInput<>(byteInput);
+        final byte[] bytes = target.toByteArray();
+
+        final ByteArrayInputStream source = new ByteArrayInputStream(bytes);
+        final ByteReader<InputStream> reader = new StreamReader(source);
+        final BitInput<InputStream> input = new BitInput<>(reader);
 
         final List<String> actual = new ArrayList<>(count);
         for (int i = 0; i < count; i++) {
-            final String value = bitInput.readString("UTF-8");
+            final String value = input.readString("UTF-8");
             actual.add(value);
         }
-        bitInput.align(1);
+        input.align(1);
 
         Assert.assertEquals(actual, expected);
     }
@@ -365,28 +372,29 @@ public class BitIoTest {
         final int count = random.nextInt(128);
 
         final ByteArrayOutputStream target = new ByteArrayOutputStream();
-        final ByteOutput<OutputStream> byteOutput = new StreamOutput(target);
-        final BitOutput<OutputStream> bitOutput = new BitOutput<>(byteOutput);
+        final ByteWriter<OutputStream> writer = new StreamWriter(target);
+        final BitOutput<OutputStream> output = new BitOutput<>(writer);
 
         final List<String> expected = new ArrayList<>(count);
         for (int i = 0; i < count; i++) {
             final String value = BitIoTests.valueStringUsAscii();
             expected.add(value);
-            bitOutput.writeUsAsciiString(value);
+            output.writeUsAsciiString(value);
         }
-        bitOutput.align(1);
+        output.align(1);
 
-        final ByteArrayInputStream source
-            = new ByteArrayInputStream(target.toByteArray());
-        final ByteInput<InputStream> byteInput = new StreamInput(source);
-        final BitInput<InputStream> bitInput = new BitInput<>(byteInput);
+        final byte[] bytes = target.toByteArray();
+
+        final ByteArrayInputStream source = new ByteArrayInputStream(bytes);
+        final ByteReader<InputStream> reader = new StreamReader(source);
+        final BitInput<InputStream> input = new BitInput<>(reader);
 
         final List<String> actual = new ArrayList<>(count);
         for (int i = 0; i < count; i++) {
-            final String value = bitInput.readUsAsciiString();
+            final String value = input.readUsAsciiString();
             actual.add(value);
         }
-        bitInput.align(1);
+        input.align(1);
 
         Assert.assertEquals(actual, expected);
     }
@@ -399,42 +407,43 @@ public class BitIoTest {
 
         final int count = random.nextInt(128);
 
-        final RandomLengthPack ls[] = new RandomLengthPack[count];
-        for (int i = 0; i < ls.length; i++) {
-            ls[i] = new RandomLengthPack();
+        final RandomLengthPack lengths[] = new RandomLengthPack[count];
+        for (int i = 0; i < lengths.length; i++) {
+            lengths[i] = new RandomLengthPack();
         }
 
-        final RandomValuePack evs[] = new RandomValuePack[ls.length];
-        for (int i = 0; i < evs.length; i++) {
-            evs[0] = new RandomValuePack(ls[i]);
+        final RandomValuePack expected[] = new RandomValuePack[lengths.length];
+        for (int i = 0; i < expected.length; i++) {
+            expected[0] = new RandomValuePack(lengths[i]);
         }
 
-        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        try (final ByteOutput<OutputStream> byt = new StreamOutput(baos)) {
-            try (final BitOutput<OutputStream> bit = new BitOutput<>(byt)) {
-                for (int i = 0; i < evs.length; i++) {
-                    evs[i] = new RandomValuePack(ls[i]);
-                    evs[i].write(bit);
+        final ByteArrayOutputStream target = new ByteArrayOutputStream();
+        try (final ByteWriter<?> writer = new StreamWriter(target)) {
+            try (final BitOutput<?> output = new BitOutput<>(writer)) {
+                for (int i = 0; i < expected.length; i++) {
+                    expected[i] = new RandomValuePack(lengths[i]);
+                    expected[i].write(output);
                 }
-                bit.align((short) 1);
+                output.align((short) 1);
             }
         }
 
-        final RandomValuePack[] avs = new RandomValuePack[ls.length];
+        final byte[] bytes = target.toByteArray();
 
-        final ByteArrayInputStream bais
-            = new ByteArrayInputStream(baos.toByteArray());
-        try (final ByteInput<InputStream> byt = new StreamInput(bais)) {
-            try (final BitInput<InputStream> bit = new BitInput<>(byt)) {
-                for (int i = 0; i < avs.length; i++) {
-                    avs[i] = new RandomValuePack(ls[i]);
-                    avs[i].read(bit);
+        final RandomValuePack[] actual = new RandomValuePack[lengths.length];
+
+        final ByteArrayInputStream source = new ByteArrayInputStream(bytes);
+        try (final ByteReader<?> reader = new StreamReader(source)) {
+            try (final BitInput<?> input = new BitInput<>(reader)) {
+                for (int i = 0; i < actual.length; i++) {
+                    actual[i] = new RandomValuePack(lengths[i]);
+                    actual[i].read(input);
                 }
-                bit.align((short) 1);
+                input.align((short) 1);
             }
         }
 
-        Assert.assertEquals(avs, evs);
+        Assert.assertEquals(actual, expected);
     }
 
 

@@ -50,7 +50,7 @@ public class RandomValuePack {
 
         valueLong = input.readLong(lengths.lengthLong);
 
-        valueBytes = input.readBytes(lengths.scaleBytes, lengths.rrangeBytes);
+        valueBytes = input.readBytes(lengths.scaleBytes, lengths.rangeBytes);
 
         valueStringUtf8 = input.readString("UTF-8");
 
@@ -63,20 +63,23 @@ public class RandomValuePack {
         valueBoolean = BitIoTests.valueBoolean();
         output.writeBoolean(valueBoolean);
 
-        valueIntUnsigned = BitIoTests.valueIntUnsigned(lengths.lengthIntUnsigned);
+        valueIntUnsigned
+            = BitIoTests.valueIntUnsigned(lengths.lengthIntUnsigned);
         output.writeUnsignedInt(lengths.lengthIntUnsigned, valueIntUnsigned);
 
         valueInt = BitIoTests.valueInt(lengths.lengthInt);
         output.writeInt(lengths.lengthInt, valueInt);
 
-        valueLongUnsigned = BitIoTests.valueLongUnsigned(lengths.lengthLongUnsigned);
+        valueLongUnsigned
+            = BitIoTests.valueLongUnsigned(lengths.lengthLongUnsigned);
         output.writeUnsignedLong(lengths.lengthLongUnsigned, valueLongUnsigned);
 
         valueLong = BitIoTests.valueLong(lengths.lengthLong);
         output.writeLong(lengths.lengthLong, valueLong);
 
-        valueBytes = BitIoTests.valueBytes(lengths.scaleBytes, lengths.rrangeBytes);
-        output.writeBytes(lengths.scaleBytes, lengths.rrangeBytes, valueBytes);
+        valueBytes
+            = BitIoTests.valueBytes(lengths.scaleBytes, lengths.rangeBytes);
+        output.writeBytes(lengths.scaleBytes, lengths.rangeBytes, valueBytes);
 
         valueStringUtf8 = BitIoTests.valueStringUtf8();
         output.writeString(valueStringUtf8, "UTF-8");
@@ -143,10 +146,10 @@ public class RandomValuePack {
     }
 
 
-    final RandomLengthPack lengths;
+    private final RandomLengthPack lengths;
 
 
-    boolean valueBoolean;
+    private boolean valueBoolean;
 
 
     private int valueIntUnsigned;

@@ -24,9 +24,9 @@ import java.nio.channels.WritableByteChannel;
 
 
 /**
- * A {@link ByteOutput} implementation for {@link WritableByteChannel}s.
+ * A {@link ByteWriter} implementation for {@link WritableByteChannel}s.
  */
-public class ChannelOutput extends ByteOutput<WritableByteChannel> {
+public class ChannelWriter extends ByteWriter<WritableByteChannel> {
 
 
     /**
@@ -36,7 +36,7 @@ public class ChannelOutput extends ByteOutput<WritableByteChannel> {
      * @param target the target channel to which bytes are written.
      * @param buffer the buffer to buffering the output
      */
-    public ChannelOutput(final WritableByteChannel target,
+    public ChannelWriter(final WritableByteChannel target,
                          final ByteBuffer buffer) {
 
         super(target);
@@ -48,15 +48,16 @@ public class ChannelOutput extends ByteOutput<WritableByteChannel> {
     /**
      * {@inheritDoc}
      * <p/>
-     * The {@code writeUnsignedByte(int)} method of {@code ChannelOutput} first
+     * The {@code writeUnsignedByte(int)} method of {@code ChannelWriter} first
      * tries to drain {@link #buffer}, if it is fully replenished, to
      * {@link #target} and calls {@link ByteBuffer#put(byte)} with
-     * {@code value}.
+     * {@code value}. Override this method if either {@link #target} or
+     * {@link #buffer} is intended to be lazily initialized and set.
      *
      * @param value {@inheritDoc }
      *
-     * @throws IllegalStateException if either {@link #target} or
-     * {@link #buffer} is {@code null}.
+     * @throws IllegalStateException {@inheritDoc}. Or if {@link #buffer} is
+     * {@code null} or its capacity is zero.
      * @throws IOException {@inheritDoc }
      */
     @Override
@@ -68,6 +69,10 @@ public class ChannelOutput extends ByteOutput<WritableByteChannel> {
 
         if (buffer.capacity() == 0) {
             throw new IllegalStateException("#buffer.capacity == 0");
+        }
+
+        if (target == null) {
+            throw new IllegalStateException("#target is currently null");
         }
 
         if (!buffer.hasRemaining()) {

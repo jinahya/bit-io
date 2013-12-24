@@ -34,35 +34,36 @@ public class BitOutput<T> implements Closeable {
     /**
      * Creates a new instance on top of specified byte output.
      *
-     * @param output the byte output on which this bit input is built or
-     * {@code null} if {@link #output} may be lazily initialized and set.
+     * @param writer the byte writer on which this bit output is built, or
+     * {@code null} if {@link #writer} is intended to be lazily initialized and
+     * set.
      */
-    public BitOutput(final ByteOutput<T> output) {
+    public BitOutput(final ByteWriter<T> writer) {
 
         super();
 
-        this.output = output;
+        this.writer = writer;
     }
 
 
     /**
-     * Writes an unsigned byte value to {@link #output} and increments
-     * {@code count}. Override this method if {@link #output} is intended to be
+     * Writes an unsigned byte value to {@link #writer} and increments
+     * {@code count}. Override this method if {@link #writer} is intended to be
      * lazily initialized and set.
      *
      * @param value the unsigned byte value to write
      *
-     * @throws IllegalStateException if {@link #output} is currently
+     * @throws IllegalStateException if {@link #writer} is currently
      * {@code null}.
      * @throws IOException if an I/O error occurs.
      */
     protected void octet(final int value) throws IOException {
 
-        if (output == null) {
-            throw new IllegalStateException("the #output is currently null");
+        if (writer == null) {
+            throw new IllegalStateException("#writer is currently null");
         }
 
-        output.writeUnsignedByte(value);
+        writer.writeUnsignedByte(value);
 
         count++;
     }
@@ -299,7 +300,6 @@ public class BitOutput<T> implements Closeable {
 //        for (int i = quotient - 1; i >= 0; i--) {
 //            writeUnsignedShort(16, value >> (16 * i));
 //        }
-
         writeUnsignedByte(1, value >> (length - 1));
         writeUnsignedInt((length - 1), value);
     }
@@ -406,7 +406,6 @@ public class BitOutput<T> implements Closeable {
 //        for (int i = quotient - 1; i >= 0; i--) {
 //            writeUnsignedShort(16, (int) (value >> (i * 16)));
 //        }
-
         writeUnsignedByte(1, (int) (value >> (length - 1)));
         writeUnsignedLong((length - 1), value);
     }
@@ -656,22 +655,22 @@ public class BitOutput<T> implements Closeable {
     @Override
     public void close() throws IOException {
 
-        if (output != null) {
+        if (writer != null) {
             align((short) 1);
-            output.close();
+            writer.close();
         }
     }
 
 
-    public ByteOutput<T> getOutput() {
+    public ByteWriter<T> getOutput() {
 
-        return output;
+        return writer;
     }
 
 
-    public void setOutput(final ByteOutput<T> output) {
+    public void setOutput(final ByteWriter<T> output) {
 
-        this.output = output;
+        this.writer = output;
     }
 
 
@@ -689,7 +688,7 @@ public class BitOutput<T> implements Closeable {
     /**
      * target byte output.
      */
-    protected ByteOutput<T> output;
+    protected ByteWriter<T> writer;
 
 
     /**

@@ -23,17 +23,18 @@ import java.io.InputStream;
 
 
 /**
- * A {@link ByteInput} implementation for {@link InputStream}s.
+ * A {@link ByteReader} implementation for {@link InputStream}s.
  */
-public class StreamInput extends ByteInput<InputStream> {
+public class StreamReader extends ByteReader<InputStream> {
 
 
     /**
-     * Creates a new instance.
+     * Creates a new instance built on top of the specified input stream.
      *
-     * @param source the stream on which this byte input is built.
+     * @param source the input stream on which this byte input is built, or
+     * {@code null} if it is intended to be lazily initialized and set.
      */
-    public StreamInput(final InputStream source) {
+    public StreamReader(final InputStream source) {
 
         super(source);
     }
@@ -42,13 +43,14 @@ public class StreamInput extends ByteInput<InputStream> {
     /**
      * {@inheritDoc}
      * <p/>
-     * The {@code readUnsignedByte()} method of {@code StreamInput} class calls
+     * The {@code readUnsignedByte()} method of {@code StreamReader} class calls
      * {@link InputStream#read()} on {@link #source} and returns the result.
+     * Override this method if {@link #source} is intended to be lazily
+     * initialized and set.
      *
      * @return {@inheritDoc}
      *
-     * @throws IllegalStateException if {@link #source} is currently
-     * {@code null}
+     * @throws IllegalStateException {@inheritDoc}
      * @throws IOException {@inheritDoc}
      */
     @Override

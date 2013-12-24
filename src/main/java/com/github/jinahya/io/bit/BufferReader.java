@@ -24,17 +24,17 @@ import java.nio.ByteBuffer;
 
 
 /**
- * A {@link ByteInput} implementation for {@link ByteBuffer}s.
+ * A {@link ByteReader} implementation for {@link ByteBuffer}s.
  */
-public class BufferInput extends ByteInput<ByteBuffer> {
+public class BufferReader extends ByteReader<ByteBuffer> {
 
 
     /**
-     * Creates a new instance on top of specified byte buffer.
+     * Creates a new instance built on top of the specified byte buffer.
      *
      * @param source the source byte buffer.
      */
-    public BufferInput(final ByteBuffer source) {
+    public BufferReader(final ByteBuffer source) {
 
         super(source);
     }
@@ -43,13 +43,12 @@ public class BufferInput extends ByteInput<ByteBuffer> {
     /**
      * {@inheritDoc}
      * <p/>
-     * The {@code readUnsignedByte()} method of {@code ByteBuffer} class calls
+     * The {@code readUnsignedByte()} method of {@code ByteReader} class calls
      * {@link ByteBuffer#get()} on {@link #source} and returns the result.
      *
      * @return {@inheritDoc }
      *
-     * @throws IllegalStateException if {@link #source} is currently
-     * {@code null}.
+     * @throws IllegalStateException {@inheritDoc}
      * @throws IOException {@inheritDoc}
      *
      * @see ByteBuffer#get()
@@ -73,7 +72,7 @@ public class BufferInput extends ByteInput<ByteBuffer> {
     /**
      * {@inheritDoc}
      * <p/>
-     * The {@code close()} method of {@code BufferInput} class does nothing.
+     * The {@code close()} method of {@code BufferReader} class does nothing.
      *
      * @throws IOException {@inheritDoc}
      */

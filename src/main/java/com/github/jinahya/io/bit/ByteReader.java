@@ -26,7 +26,7 @@ import java.io.IOException;
  *
  * @param <T> underlying byte source type parameter
  */
-public abstract class ByteInput<T> implements Closeable {
+public abstract class ByteReader<T> implements Closeable {
 
 
     /**
@@ -37,7 +37,7 @@ public abstract class ByteInput<T> implements Closeable {
      * {@link #source} for later use, or {@code null} if this instance to be
      * created without an underlying byte source.
      */
-    public ByteInput(final T source) {
+    public ByteReader(final T source) {
 
         super();
 
@@ -48,16 +48,20 @@ public abstract class ByteInput<T> implements Closeable {
     /**
      * Reads the next unsigned 8-bit byte.
      *
-     * @return the next unsigned 8-bit byte, or {@code -1} if the end of the
-     * stream is reached.
+     * @return the next unsigned 8-bit byte value between {@code 0} (inclusive)
+     * and {@code 256} (exclusive), or {@code -1} if the end of the stream is
+     * reached.
      *
+     * @throws IllegalStateException if {@link #source} is currently
+     * {@code null}.
      * @throws IOException if an I/O error occurs.
      */
     public abstract int readUnsignedByte() throws IOException;
 
 
     /**
-     * Closes this input and releases any system resources associated with it.
+     * Closes this byte reader and releases any system resources associated with
+     * it.
      *
      * @throws IOException if an I/O error occurs.
      */

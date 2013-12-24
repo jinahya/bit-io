@@ -33,37 +33,37 @@ public class BitInput<T> implements Closeable {
 
 
     /**
-     * Creates a new instance on top of specified byte input.
+     * Creates a new instance on top of specified byte reader.
      *
-     * @param input the byte input on which this bit input is built or
+     * @param reader the byte reader on which this bit input is built or
      * {@code null} for lazy initialization.
      */
-    public BitInput(final ByteInput<T> input) {
+    public BitInput(final ByteReader<T> reader) {
 
         super();
 
-        this.input = input;
+        this.reader = reader;
     }
 
 
     /**
-     * Reads an unsigned byte from the {@link #input} and increments the
-     * {@code count}. Override this method if the {@link #input} is intended to
+     * Reads an unsigned byte from the {@link #reader} and increments the
+     * {@code count}. Override this method if the {@link #reader} is intended to
      * be lazily initialized and set.
      *
      * @return an unsigned byte value read
      *
-     * @throws IllegalStateException if {@code #input} is currently
+     * @throws IllegalStateException if {@link #reader} is currently
      * {@code null}.
      * @throws IOException if an I/O error occurs.
      */
     protected int octet() throws IOException {
 
-        if (input == null) {
-            throw new IllegalStateException("#input is currently null");
+        if (reader == null) {
+            throw new IllegalStateException("#reader is currently null");
         }
 
-        final int value = input.readUnsignedByte();
+        final int value = reader.readUnsignedByte();
         if (value == -1) {
             throw new EOFException("eof");
         }
@@ -587,30 +587,30 @@ public class BitInput<T> implements Closeable {
 
 
     /**
-     * Returns the current value of {@link #input}.
+     * Returns the current value of {@link #reader}.
      *
-     * @return the current value of {@link #input}.
+     * @return the current value of {@link #reader}.
      */
-    public ByteInput<T> getInput() {
+    public ByteReader<T> getInput() {
 
-        return input;
+        return reader;
     }
 
 
     /**
-     * Replaces the value of {@link #input} with given.
+     * Replaces the value of {@link #reader} with given.
      *
-     * @param input a new value for {@link #input}.
+     * @param input a new value for {@link #reader}.
      */
-    public void setInput(final ByteInput<T> input) {
+    public void setInput(final ByteReader<T> input) {
 
-        this.input = input;
+        this.reader = input;
     }
 
 
     /**
-     * Closes this bit input. This method, if {@link #input} is not
-     * {@code null}, aligns to a single byte and closes {@link #input}.
+     * Closes this bit input. This method, if {@link #reader} is not
+     * {@code null}, aligns to a single byte and closes {@link #reader}.
      *
      * @throws IOException if an I/O error occurs.
      *
@@ -620,9 +620,9 @@ public class BitInput<T> implements Closeable {
     @Override
     public void close() throws IOException {
 
-        if (input != null) {
+        if (reader != null) {
             align((short) 1);
-            input.close();
+            reader.close();
         }
     }
 
@@ -641,7 +641,7 @@ public class BitInput<T> implements Closeable {
     /**
      * The underlying byte input.
      */
-    protected ByteInput<T> input;
+    protected ByteReader<T> reader;
 
 
     /**

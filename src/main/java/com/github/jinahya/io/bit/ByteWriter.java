@@ -27,7 +27,7 @@ import java.io.IOException;
  * @author Jin Kwon <onacit at gmail.com>
  * @param <T>
  */
-public abstract class ByteOutput<T> implements Closeable {
+public abstract class ByteWriter<T> implements Closeable {
 
 
     /**
@@ -38,7 +38,7 @@ public abstract class ByteOutput<T> implements Closeable {
      * {@link #target} for later use, or {@code null} if this instance is to be
      * created without an underlying byte target.
      */
-    public ByteOutput(final T target) {
+    public ByteWriter(final T target) {
 
         super();
 
@@ -49,15 +49,19 @@ public abstract class ByteOutput<T> implements Closeable {
     /**
      * Writes an unsigned 8-bit integer.
      *
-     * @param value an unsigned 8-bit integer.
+     * @param value an unsigned 8-bit byte value between {@code 0} (inclusive)
+     * and {@code 256} (exclusive).
      *
+     * @throws IllegalStateException if {@link #target} is currently
+     * {@code null}.
      * @throws IOException if an I/O error occurs.
      */
     public abstract void writeUnsignedByte(final int value) throws IOException;
 
 
     /**
-     * Closes this input and releases any system resources associated with it.
+     * Closes this byte writer and releases any system resources associated with
+     * it.
      *
      * @throws IOException if an I/O error occurs.
      */
@@ -87,7 +91,7 @@ public abstract class ByteOutput<T> implements Closeable {
 
 
     /**
-     * The target byte consumer.
+     * The underlying byte target.
      */
     protected T target;
 

@@ -19,21 +19,21 @@ package com.github.jinahya.io.bit;
 
 
 import java.io.IOException;
-import java.io.OutputStream;
+import java.nio.ByteBuffer;
 
 
 /**
- * A {@link ByteOutput} implementation for {@link OutputStream}s.
+ * A {@link ByteWriter} implementation for {@link ByteBuffer}s.
  */
-public class StreamOutput extends ByteOutput<OutputStream> {
+public class BufferWriter extends ByteWriter<ByteBuffer> {
 
 
     /**
-     * Creates a new instance on top of specified output stream.
+     * Creates a new instance on the top of specified byte buffer.
      *
-     * @param target the target output stream
+     * @param target the target byte buffer
      */
-    public StreamOutput(final OutputStream target) {
+    public BufferWriter(final ByteBuffer target) {
 
         super(target);
     }
@@ -42,18 +42,16 @@ public class StreamOutput extends ByteOutput<OutputStream> {
     /**
      * {@inheritDoc}
      * <p/>
-     * The {@code writeUnsginedByte(int)} method of {@code StreamOutput} class
-     * calls {@link OutputStream#write(int)} on {@link #target} with
-     * {@code value}. Override this method if {@link #target} is intended to be
-     * lazily initialized and set.
+     * The {@code writeUnsignedByte(int)} method of {@code BufferWriter} class
+     * calls {@link ByteBuffer#put(byte)} on the underlying byte buffer with
+     * {@code value}.
      *
      * @param value {@inheritDoc }
      *
-     * @throws IllegalStateException if {@link #target} is currently
-     * {@code null}.
+     * @throws IllegalStateException {@inheritDoc}
      * @throws IOException {@inheritDoc }
      *
-     * @see OutputStream#write(int)
+     * @see ByteBuffer#put(byte)
      */
     @Override
     public void writeUnsignedByte(final int value) throws IOException {
@@ -62,29 +60,21 @@ public class StreamOutput extends ByteOutput<OutputStream> {
             throw new IllegalStateException("#target is currently null");
         }
 
-        target.write(value);
+        target.put((byte) value); // BufferOverflowException, ReadOnlyBufferException
     }
 
 
     /**
      * {@inheritDoc}
      * <p/>
-     * The {@code close} method of {@code StreamOutput} class calls, if
-     * {@link #target} is not null, {@link OutputStream#flush()} and
-     * {@link OutputStream#close()} in series on {@link #target}.
+     * The {@code close()} method of {@code BufferWriter} class does nothing.
      *
      * @throws IOException {@inheritDoc }
-     *
-     * @see OutputStream#flush()
-     * @see OutputStream#close()
      */
     @Override
     public void close() throws IOException {
 
-        if (target != null) {
-            target.flush();
-            target.close();
-        }
+        // do nothing
     }
 
 

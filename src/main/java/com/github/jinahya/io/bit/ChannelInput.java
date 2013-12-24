@@ -20,6 +20,7 @@ package com.github.jinahya.io.bit;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.nio.channels.Channel;
 import java.nio.channels.ReadableByteChannel;
 
 
@@ -41,17 +42,6 @@ public class ChannelInput extends ByteInput<ReadableByteChannel> {
         super(source);
 
         this.buffer = buffer;
-    }
-
-
-    /**
-     * Creates a new instance on top of specified channel.
-     *
-     * @param channel the underlying source channel.
-     */
-    public ChannelInput(final ReadableByteChannel channel) {
-
-        this(channel, ByteBuffer.allocate(1));
     }
 
 
@@ -112,7 +102,7 @@ public class ChannelInput extends ByteInput<ReadableByteChannel> {
     @Override
     public void close() throws IOException {
 
-        if (source != null) {
+        if (source != null && source.isOpen()) {
             source.close();
         }
     }

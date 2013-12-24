@@ -65,8 +65,9 @@ public class StreamInput extends ByteInput<InputStream> {
     /**
      * {@inheritDoc}
      * <p/>
-     * The {@code close()} method of {@code StreamInput} class calls, if it is
-     * not {@code null}, {@link InputStream#close()} on {@link #source}.
+     * The {@code close()} method of {@code StreamInput} class calls, if
+     * {@link #source} is not {@code null}, {@link InputStream#close()} on
+     * {@link #source}.
      *
      * @throws IOException {@inheritDoc }
      */

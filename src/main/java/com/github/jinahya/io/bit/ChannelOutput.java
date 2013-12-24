@@ -30,7 +30,8 @@ public class ChannelOutput extends ByteOutput<WritableByteChannel> {
 
 
     /**
-     * Creates a new instance on top of specified byte channel.
+     * Creates a new instance built on top of the specified underlying byte
+     * channel.
      *
      * @param target the target channel to which bytes are written.
      * @param buffer the buffer to buffering the output
@@ -95,7 +96,7 @@ public class ChannelOutput extends ByteOutput<WritableByteChannel> {
     @Override
     public void close() throws IOException {
 
-        if (target != null) {
+        if (target != null && target.isOpen()) {
 
             if (buffer != null) {
                 buffer.flip(); // limit -> position, position -> zero
@@ -110,9 +111,9 @@ public class ChannelOutput extends ByteOutput<WritableByteChannel> {
 
 
     /**
-     * Returns the underlying byte channel on which this output built.
+     * Returns the current value of {@link #buffer}.
      *
-     * @return the underlying byte channel.
+     * @return the current value of {@link #buffer}.
      */
     public ByteBuffer getBuffer() {
 

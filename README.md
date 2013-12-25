@@ -7,17 +7,6 @@ a small library for reading or writing none octet aligned values such as `1-bit 
 ## versions
 * 1.1-SNAPSHOT ([site](http://jinahya.github.io/bit-io/site/1.1-SNAPSHOT/index.html)) ([apidocs](http://jinahya.github.io/bit-io/site/1.1-SNAPSHOT/apidocs/index.html))
 
-
-### maven
-[maven central](http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22com.github.jinahya%22%20AND%20a%3A%22bit-io%22)
-
-### jenkins
-[jinahya.com/jenkins](https://jinahya.com/jenkins/job/com.github.jinahya%20bit-io/)
-
-### sites(apidocs)
-* 1.0.4-SNAPSHOT ([github](http://jinahya.github.io/bit-io/site/1.0.4-SNAPSHOT/apidocs/index.html)) ([jinahya](https://jinahya.com/mvn/site/com.github.jinahya/bit-io/1.0.4-SNAPSHOT/apidocs/index.html))
-* 1.0.3 ([github](http://jinahya.github.io/bit-io/site/1.0.3/apidocs/index.html)) ([jinahya](https://jinahya.com/mvn/site/com.github.jinahya/bit-io/1.0.3/apidocs/index.html))
-
 ## Usages
 ### reading
 ```java

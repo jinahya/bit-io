@@ -24,9 +24,9 @@ import java.nio.channels.WritableByteChannel;
 
 
 /**
- * A {@link ByteWriter} implementation for {@link WritableByteChannel}s.
+ * A {@link ByteOutput} implementation for {@link WritableByteChannel}s.
  */
-public class ChannelWriter extends ByteWriter<WritableByteChannel> {
+public class ChannelOutput extends ByteOutput<WritableByteChannel> {
 
 
     /**
@@ -36,7 +36,7 @@ public class ChannelWriter extends ByteWriter<WritableByteChannel> {
      * @param target the target channel to which bytes are written.
      * @param buffer the buffer to buffering the output
      */
-    public ChannelWriter(final WritableByteChannel target,
+    public ChannelOutput(final WritableByteChannel target,
                          final ByteBuffer buffer) {
 
         super(target);

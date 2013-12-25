@@ -25,9 +25,9 @@ import java.nio.channels.ReadableByteChannel;
 
 
 /**
- * A {@link ByteReader} implementation for {@link ReadableByteChannel}s.
+ * A {@link ByteInput} implementation for {@link ReadableByteChannel}s.
  */
-public class ChannelReader extends ByteReader<ReadableByteChannel> {
+public class ChannelInput extends ByteInput<ReadableByteChannel> {
 
 
     /**
@@ -36,7 +36,7 @@ public class ChannelReader extends ByteReader<ReadableByteChannel> {
      * @param source the underlying source channel.
      * @param buffer the buffer to buffering the channel.
      */
-    public ChannelReader(final ReadableByteChannel source,
+    public ChannelInput(final ReadableByteChannel source,
                          final ByteBuffer buffer) {
 
         super(source);

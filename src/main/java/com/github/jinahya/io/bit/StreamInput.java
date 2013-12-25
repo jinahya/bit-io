@@ -19,22 +19,22 @@ package com.github.jinahya.io.bit;
 
 
 import java.io.IOException;
-import java.nio.BufferUnderflowException;
-import java.nio.ByteBuffer;
+import java.io.InputStream;
 
 
 /**
- * A {@link ByteReader} implementation for {@link ByteBuffer}s.
+ * A {@link ByteInput} implementation for {@link InputStream}s.
  */
-public class BufferReader extends ByteReader<ByteBuffer> {
+public class StreamInput extends ByteInput<InputStream> {
 
 
     /**
-     * Creates a new instance built on top of the specified byte buffer.
+     * Creates a new instance built on top of the specified input stream.
      *
-     * @param source the source byte buffer.
+     * @param source the input stream on which this byte input is built, or
+     * {@code null} if it is intended to be lazily initialized and set.
      */
-    public BufferReader(final ByteBuffer source) {
+    public StreamInput(final InputStream source) {
 
         super(source);
     }
@@ -43,15 +43,15 @@ public class BufferReader extends ByteReader<ByteBuffer> {
     /**
      * {@inheritDoc}
      * <p/>
-     * The {@code readUnsignedByte()} method of {@code ByteReader} class calls
-     * {@link ByteBuffer#get()} on {@link #source} and returns the result.
+     * The {@code readUnsignedByte()} method of {@code StreamReader} class calls
+     * {@link InputStream#read()} on {@link #source} and returns the result.
+     * Override this method if {@link #source} is intended to be lazily
+     * initialized and set.
      *
-     * @return {@inheritDoc }
+     * @return {@inheritDoc}
      *
      * @throws IllegalStateException {@inheritDoc}
      * @throws IOException {@inheritDoc}
-     *
-     * @see ByteBuffer#get()
      */
     @Override
     public int readUnsignedByte() throws IOException {
@@ -60,26 +60,25 @@ public class BufferReader extends ByteReader<ByteBuffer> {
             throw new IllegalStateException("#source is currently null");
         }
 
-        try {
-            return source.get() & 0xFF;
-        } catch (final BufferUnderflowException bue) {
-            return -1;
-        }
-
+        return source.read();
     }
 
 
     /**
      * {@inheritDoc}
      * <p/>
-     * The {@code close()} method of {@code BufferReader} class does nothing.
+     * The {@code close()} method of {@code StreamInput} class calls, if
+     * {@link #source} is not {@code null}, {@link InputStream#close()} on
+     * {@link #source}.
      *
-     * @throws IOException {@inheritDoc}
+     * @throws IOException {@inheritDoc }
      */
     @Override
     public void close() throws IOException {
 
-        // empty
+        if (source != null) {
+            source.close();
+        }
     }
 
 

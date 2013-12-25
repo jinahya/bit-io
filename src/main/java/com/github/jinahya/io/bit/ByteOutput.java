@@ -27,7 +27,7 @@ import java.io.IOException;
  * @author Jin Kwon <onacit at gmail.com>
  * @param <T>
  */
-public abstract class ByteWriter<T> implements Closeable {
+public abstract class ByteOutput<T> implements Closeable {
 
 
     /**
@@ -38,7 +38,7 @@ public abstract class ByteWriter<T> implements Closeable {
      * {@link #target} for later use, or {@code null} if this instance is to be
      * created without an underlying byte target.
      */
-    public ByteWriter(final T target) {
+    public ByteOutput(final T target) {
 
         super();
 
@@ -65,6 +65,7 @@ public abstract class ByteWriter<T> implements Closeable {
      *
      * @throws IOException if an I/O error occurs.
      */
+    @Override
     public abstract void close() throws IOException;
 
 

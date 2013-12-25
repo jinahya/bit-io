@@ -24,46 +24,44 @@ import java.io.IOException;
 
 
 /**
- * A wrapper class for reading arbitrary length of bits.
+ * A class for reading arbitrary length of bits.
  *
- * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
+ * @author Jin Kwon <onacit at gmail.com>
  * @param <T> underlying byte source type parameter
  */
 public class BitInput<T> implements Closeable {
 
 
     /**
-     * Creates a new instance on top of specified byte reader.
+     * Creates a new instance built on top of specified byte input.
      *
-     * @param reader the byte reader on which this bit input is built or
-     * {@code null} for lazy initialization.
+     * @param input the byte input on which this bit input is built.
+     *
+     * @throws NullPointerException if {@code input} is {@code null}.
      */
-    public BitInput(final ByteReader<T> reader) {
+    public BitInput(final ByteInput<T> input) {
 
         super();
 
-        this.reader = reader;
+        if (input == null) {
+            throw new NullPointerException("null input");
+        }
+
+        this.input = input;
     }
 
 
     /**
-     * Reads an unsigned byte from the {@link #reader} and increments the
-     * {@code count}. Override this method if the {@link #reader} is intended to
-     * be lazily initialized and set.
+     * Reads an unsigned byte from {@code input} and increments the
+     * {@code count}.
      *
-     * @return an unsigned byte value read
+     * @return an unsigned byte value.
      *
-     * @throws IllegalStateException if {@link #reader} is currently
-     * {@code null}.
      * @throws IOException if an I/O error occurs.
      */
-    protected int octet() throws IOException {
+    private int octet() throws IOException {
 
-        if (reader == null) {
-            throw new IllegalStateException("#reader is currently null");
-        }
-
-        final int value = reader.readUnsignedByte();
+        final int value = input.readUnsignedByte();
         if (value == -1) {
             throw new EOFException("eof");
         }
@@ -587,50 +585,39 @@ public class BitInput<T> implements Closeable {
 
 
     /**
-     * Returns the current value of {@link #reader}.
+     * Returns the underlying byte input.
      *
-     * @return the current value of {@link #reader}.
+     * @return the underlying byte input.
      */
-    public ByteReader<T> getReader() {
+    public ByteInput<T> getInput() {
 
-        return reader;
+        return input;
     }
 
 
     /**
-     * Replaces the value of {@link #reader} with given.
-     *
-     * @param reader a new value for {@link #reader}.
-     */
-    public void setReader(final ByteReader<T> reader) {
-
-        this.reader = reader;
-    }
-
-
-    /**
-     * Closes this bit input. This method, if {@link #reader} is not
-     * {@code null}, aligns to a single byte and closes the {@link #reader}.
+     * Closes this bit input. This method aligns to a single byte and closes the
+     * underlying byte input.
      *
      * @throws IOException if an I/O error occurs.
      *
      * @see #align(int)
-     * @see ByteReader#close()
+     * @see ByteInput#close()
      */
     @Override
     public void close() throws IOException {
 
-        if (reader != null) {
+        if (input != null) {
             align(1);
-            reader.close();
+            input.close();
         }
     }
 
 
     /**
-     * Returns the number of bytes read from the underlying byte reader so far.
+     * Returns the number of bytes read from the underlying byte input so far.
      *
-     * @return the number of bytes read from the underlying byte reader so far.
+     * @return the number of bytes read so far.
      */
     public long getCount() {
 
@@ -641,23 +628,23 @@ public class BitInput<T> implements Closeable {
     /**
      * The underlying byte input.
      */
-    protected ByteReader<T> reader;
+    private final ByteInput<T> input;
 
 
     /**
-     * bit flags.
+     * The array of bit flags.
      */
     private final boolean[] flags = new boolean[8];
 
 
     /**
-     * next bit index to read.
+     * The next bit index to read.
      */
     private int index = 8;
 
 
     /**
-     * number of bytes read so far.
+     * The number of bytes read so far.
      */
     private long count = 0;
 

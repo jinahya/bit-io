@@ -23,47 +23,44 @@ import java.io.IOException;
 
 
 /**
- * A wrapper class for writing arbitrary length of bits.
+ * A class for writing arbitrary length of bits.
  *
- * @author <a href="mailto:onacit@gmail.com">Jin Kwon</a>
+ * @author Jin Kwon <onacit at gmail.com>
  * @param <T> underlying byte target type parameter
  */
 public class BitOutput<T> implements Closeable {
 
 
     /**
-     * Creates a new instance on top of specified byte output.
+     * Creates a new instance built on top of the specified byte writer.
      *
-     * @param writer the byte writer on which this bit output is built, or
-     * {@code null} if {@link #writer} is intended to be lazily initialized and
-     * set.
+     * @param output the byte writer on which this bit output is built.
+     *
+     * @throws NullPointerException if {@code writer} is {@code null}.
      */
-    public BitOutput(final ByteWriter<T> writer) {
+    public BitOutput(final ByteOutput<T> output) {
 
         super();
 
-        this.writer = writer;
+        if (output == null) {
+            throw new NullPointerException("null output");
+        }
+
+        this.output = output;
     }
 
 
     /**
-     * Writes an unsigned byte value to {@link #writer} and increments
-     * {@code count}. Override this method if {@link #writer} is intended to be
-     * lazily initialized and set.
+     * Writes given unsigned byte value to {@code output} and increments
+     * {@code count}.
      *
-     * @param value the unsigned byte value to write
+     * @param value the unsigned byte value
      *
-     * @throws IllegalStateException if {@link #writer} is currently
-     * {@code null}.
      * @throws IOException if an I/O error occurs.
      */
-    protected void octet(final int value) throws IOException {
+    private void octet(final int value) throws IOException {
 
-        if (writer == null) {
-            throw new IllegalStateException("#writer is currently null");
-        }
-
-        writer.writeUnsignedByte(value);
+        output.writeUnsignedByte(value);
 
         count++;
     }
@@ -644,8 +641,8 @@ public class BitOutput<T> implements Closeable {
 
 
     /**
-     * Closes this instance. This method, if {@link #writer} is not
-     * {@code null}, aligns to a single byte and closes the {@link #writer}.
+     * Closes this instance. This method, if {@link #output} is not
+     * {@code null}, aligns to a single byte and closes the {@link #output}.
      *
      * @throws IOException if an I/O error occurs.
      *
@@ -655,39 +652,28 @@ public class BitOutput<T> implements Closeable {
     @Override
     public void close() throws IOException {
 
-        if (writer != null) {
+        if (output != null) {
             align(1);
-            writer.close();
+            output.close();
         }
     }
 
 
     /**
-     * Return the current value of {@link #writer}.
+     * Return the underlying byte output.
      *
-     * @return the current value of {@link #writer}.
+     * @return the underlying byte output.
      */
-    public ByteWriter<T> getWriter() {
+    public ByteOutput<T> getOutput() {
 
-        return writer;
-    }
-
-
-    /**
-     * Replaces the value of {@link #writer} with given.
-     *
-     * @param writer new value for {@link #writer}.
-     */
-    public void setWriter(final ByteWriter<T> writer) {
-
-        this.writer = writer;
+        return output;
     }
 
 
     /**
      * Returns the number of bytes written to the underlying byte output so far.
      *
-     * @return the number of bytes written to the underlying byte output so far.
+     * @return the number of bytes written so far.
      */
     public long getCount() {
 
@@ -698,7 +684,7 @@ public class BitOutput<T> implements Closeable {
     /**
      * The underlying byte writer.
      */
-    protected ByteWriter<T> writer;
+    private final ByteOutput<T> output;
 
 
     /**

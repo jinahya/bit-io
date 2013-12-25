@@ -23,17 +23,19 @@ import java.nio.ByteBuffer;
 
 
 /**
- * A {@link ByteWriter} implementation for {@link ByteBuffer}s.
+ * A {@link ByteOutput} implementation writes bytes to an underlying
+ * {@link ByteBuffer}.
  */
-public class BufferWriter extends ByteWriter<ByteBuffer> {
+public class BufferOutput extends ByteOutput<ByteBuffer> {
 
 
     /**
-     * Creates a new instance on the top of specified byte buffer.
+     * Creates a new instance built on the top of the specified byte buffer.
      *
-     * @param target the target byte buffer
+     * @param target the target byte buffer on which this byte writer is built
+     * on, or {@code null} if it is intended to be lazily initialized and set.
      */
-    public BufferWriter(final ByteBuffer target) {
+    public BufferOutput(final ByteBuffer target) {
 
         super(target);
     }
@@ -44,7 +46,7 @@ public class BufferWriter extends ByteWriter<ByteBuffer> {
      * <p/>
      * The {@code writeUnsignedByte(int)} method of {@code BufferWriter} class
      * calls {@link ByteBuffer#put(byte)} on the underlying byte buffer with
-     * {@code value}.
+     * given {@code value}.
      *
      * @param value {@inheritDoc }
      *

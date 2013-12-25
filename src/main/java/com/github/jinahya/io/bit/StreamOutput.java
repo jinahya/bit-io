@@ -23,9 +23,9 @@ import java.io.OutputStream;
 
 
 /**
- * A {@link ByteWriter} implementation for {@link OutputStream}s.
+ * A {@link ByteOutput} implementation for {@link OutputStream}s.
  */
-public class StreamWriter extends ByteWriter<OutputStream> {
+public class StreamOutput extends ByteOutput<OutputStream> {
 
 
     /**
@@ -34,7 +34,7 @@ public class StreamWriter extends ByteWriter<OutputStream> {
      * @param target the target output stream or {@code null} if it is intended
      * to be lazily initialized and set.
      */
-    public StreamWriter(final OutputStream target) {
+    public StreamOutput(final OutputStream target) {
 
         super(target);
     }

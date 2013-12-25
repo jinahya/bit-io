@@ -25,10 +25,10 @@ import java.io.IOException;
  *
  * @author <a href="mailto:onacit@gmail.com">Jin Kwon</a>
  */
-public class MockedByteWriter extends ByteWriter<Void> {
+public class MockedByteWriter extends ByteOutput<Void> {
 
 
-    public static ByteWriter<Void> newUnlimitedInstance() {
+    public static ByteOutput<Void> newUnlimitedInstance() {
 
         return new MockedByteWriter(-1L);
     }

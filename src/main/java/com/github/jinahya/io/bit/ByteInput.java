@@ -26,7 +26,7 @@ import java.io.IOException;
  *
  * @param <T> underlying byte source type parameter
  */
-public abstract class ByteReader<T> implements Closeable {
+public abstract class ByteInput<T> implements Closeable {
 
 
     /**
@@ -37,7 +37,7 @@ public abstract class ByteReader<T> implements Closeable {
      * {@link #source} for later use, or {@code null} if this instance to be
      * created without an underlying byte source.
      */
-    public ByteReader(final T source) {
+    public ByteInput(final T source) {
 
         super();
 
@@ -65,6 +65,7 @@ public abstract class ByteReader<T> implements Closeable {
      *
      * @throws IOException if an I/O error occurs.
      */
+    @Override
     public abstract void close() throws IOException;
 
 

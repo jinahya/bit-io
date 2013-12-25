@@ -37,7 +37,8 @@ public class BitInput<T> implements Closeable {
      *
      * @param input the byte input on which this bit input is built.
      *
-     * @throws NullPointerException if {@code input} is {@code null}.
+     * @throws NullPointerException if the specified {@code input} is
+     * {@code null}.
      */
     public BitInput(final ByteInput<T> input) {
 

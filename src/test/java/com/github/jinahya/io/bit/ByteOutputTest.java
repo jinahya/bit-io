@@ -20,9 +20,11 @@ package com.github.jinahya.io.bit;
 
 /**
  *
- * @author Jin Kwon <jinahya at gmail.com>
+ * @author <a href="mailto:onacit@gmail.com">Jin Kwon</a>
+ * @param <T> byte output type parameter
+ * @param <U> byte target type parameter
  */
-public class ByteReaderTest {
+public abstract class ByteOutputTest<T extends ByteOutput<U>, U> {
 
 }
 

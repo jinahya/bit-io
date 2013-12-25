@@ -19,6 +19,7 @@ package com.github.jinahya.io.bit;
 
 
 import java.io.IOException;
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
 
@@ -31,7 +32,7 @@ public class BitInputTest {
 
     public static BitInput<Void> mockedInstance(final long limit) {
 
-        return new BitInput<>(new MockedByteReader(limit));
+        return new BitInput<>(new MockedByteInput(limit));
     }
 
 
@@ -115,6 +116,15 @@ public class BitInputTest {
         final int range = BitIoTests.rangeBytes();
 
         final byte[] value = input.readBytes(scale, range);
+    }
+
+
+    @Test
+    public void getCount_() {
+
+        final BitInput<?> input = mockedInstance(-1L);
+
+        Assert.assertEquals(input.getCount(), 0L);
     }
 
 

@@ -25,16 +25,16 @@ import java.io.IOException;
  *
  * @author <a href="mailto:onacit@gmail.com">Jin Kwon</a>
  */
-public class MockedByteReader extends ByteInput<Void> {
+public class MockedByteInput extends ByteInput<Void> {
 
 
     public static ByteInput<Void> newUnlimitedInstance() {
 
-        return new MockedByteReader(-1L);
+        return new MockedByteInput(-1L);
     }
 
 
-    public MockedByteReader(final long limit) {
+    public MockedByteInput(final long limit) {
 
         super(null);
 

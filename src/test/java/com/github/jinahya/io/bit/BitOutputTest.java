@@ -32,7 +32,7 @@ public class BitOutputTest {
 
     public static BitOutput<Void> mockedInstance(final long limit) {
 
-        return new BitOutput<>(new MockedByteWriter(limit));
+        return new BitOutput<>(new MockedByteOutput(limit));
     }
 
 

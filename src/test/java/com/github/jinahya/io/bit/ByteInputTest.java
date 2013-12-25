@@ -20,9 +20,12 @@ package com.github.jinahya.io.bit;
 
 /**
  *
- * @author Jin Kwon <jinahya at gmail.com>
+ * @author <a href="mailto:onacit@gmail.com">Jin Kwon</a>
+ * @param <T> byte input type parameter
+ * @param <U> byte source type parameter
  */
-public class ByteWriterTest {
+public abstract class ByteInputTest<T extends ByteInput<U>, U> {
+
 
 }
 

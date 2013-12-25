@@ -32,11 +32,12 @@ public class BitOutput<T> implements Closeable {
 
 
     /**
-     * Creates a new instance built on top of the specified byte writer.
+     * Creates a new instance built on top of the specified byte input.
      *
-     * @param output the byte writer on which this bit output is built.
+     * @param output the byte input on which this bit output is built.
      *
-     * @throws NullPointerException if {@code writer} is {@code null}.
+     * @throws NullPointerException if the specified {@code output} is
+     * {@code null}.
      */
     public BitOutput(final ByteOutput<T> output) {
 
@@ -647,7 +648,7 @@ public class BitOutput<T> implements Closeable {
      * @throws IOException if an I/O error occurs.
      *
      * @see #align(int)
-     * @see ByteWriter#close()
+     * @see ByteInput#close()
      */
     @Override
     public void close() throws IOException {
@@ -682,7 +683,7 @@ public class BitOutput<T> implements Closeable {
 
 
     /**
-     * The underlying byte writer.
+     * The underlying byte input.
      */
     private final ByteOutput<T> output;
 

@@ -42,8 +42,7 @@ public class BitIoTest {
         final int count = random.nextInt(128);
 
         final ByteArrayOutputStream target = new ByteArrayOutputStream();
-        final ByteOutput<?> writer = new StreamOutput(target);
-        final BitOutput<?> output = new BitOutput<>(writer);
+        final BitOutput<?> output = new BitOutput<>(new StreamOutput(target));
 
         final List<Boolean> expected = new ArrayList<>(count);
         for (int i = 0; i < count; i++) {
@@ -56,8 +55,7 @@ public class BitIoTest {
         final byte[] bytes = target.toByteArray();
 
         final ByteArrayInputStream source = new ByteArrayInputStream(bytes);
-        final ByteInput<?> reader = new StreamInput(source);
-        final BitInput<?> input = new BitInput<>(reader);
+        final BitInput<?> input = new BitInput<>(new StreamInput(source));
 
         final List<Boolean> actual = new ArrayList<>(count);
         for (int i = 0; i < count; i++) {
@@ -76,8 +74,7 @@ public class BitIoTest {
         final int count = random.nextInt(128);
 
         final ByteArrayOutputStream target = new ByteArrayOutputStream();
-        final ByteOutput<?> writer = new StreamOutput(target);
-        final BitOutput<?> output = new BitOutput<>(writer);
+        final BitOutput<?> output = new BitOutput<>(new StreamOutput(target));
 
         final List<Boolean> expected = new ArrayList<>(count);
         for (int i = 0; i < count; i++) {
@@ -93,8 +90,7 @@ public class BitIoTest {
         final byte[] bytes = target.toByteArray();
 
         final ByteArrayInputStream source = new ByteArrayInputStream(bytes);
-        final ByteInput<?> reader = new StreamInput(source);
-        final BitInput<?> input = new BitInput<>(reader);
+        final BitInput<?> input = new BitInput<>(new StreamInput(source));
 
         final List<Boolean> actual = new ArrayList<>(count);
         for (int i = 0; i < count; i++) {
@@ -123,8 +119,7 @@ public class BitIoTest {
         }
 
         final ByteArrayOutputStream target = new ByteArrayOutputStream();
-        final ByteOutput<?> writer = new StreamOutput(target);
-        final BitOutput<?> output = new BitOutput<>(writer);
+        final BitOutput<?> output = new BitOutput<>(new StreamOutput(target));
 
         final List<Integer> expected = new ArrayList<>(lengths.size());
         for (int i = 0; i < lengths.size(); i++) {
@@ -138,8 +133,7 @@ public class BitIoTest {
         final byte[] bytes = target.toByteArray();
 
         final ByteArrayInputStream source = new ByteArrayInputStream(bytes);
-        final ByteInput<?> reader = new StreamInput(source);
-        final BitInput<?> input = new BitInput<>(reader);
+        final BitInput<?> input = new BitInput<>(new StreamInput(source));
 
         final List<Integer> actual = new ArrayList<>(lengths.size());
         for (int i = 0; i < lengths.size(); i++) {
@@ -166,8 +160,7 @@ public class BitIoTest {
         }
 
         final ByteArrayOutputStream target = new ByteArrayOutputStream();
-        final ByteOutput<?> writer = new StreamOutput(target);
-        final BitOutput<?> output = new BitOutput<>(writer);
+        final BitOutput<?> output = new BitOutput<>(new StreamOutput(target));
 
         final List<Integer> expected = new ArrayList<>(lengths.size());
         for (int i = 0; i < lengths.size(); i++) {
@@ -181,8 +174,7 @@ public class BitIoTest {
         final byte[] bytes = target.toByteArray();
 
         final ByteArrayInputStream source = new ByteArrayInputStream(bytes);
-        final ByteInput<?> reader = new StreamInput(source);
-        final BitInput<?> input = new BitInput<>(reader);
+        final BitInput<?> input = new BitInput<>(new StreamInput(source));
 
         final List<Integer> actual = new ArrayList<>(lengths.size());
         for (int i = 0; i < lengths.size(); i++) {
@@ -203,8 +195,7 @@ public class BitIoTest {
         final int count = random.nextInt(128);
 
         final ByteArrayOutputStream target = new ByteArrayOutputStream();
-        final ByteOutput<?> writer = new StreamOutput(target);
-        final BitOutput<?> output = new BitOutput<>(writer);
+        final BitOutput<?> output = new BitOutput<>(new StreamOutput(target));
 
         final List<Float> expected = new ArrayList<>(count);
         for (int i = 0; i < count; i++) {
@@ -217,8 +208,7 @@ public class BitIoTest {
         final byte[] bytes = target.toByteArray();
 
         final ByteArrayInputStream source = new ByteArrayInputStream(bytes);
-        final ByteInput<?> reader = new StreamInput(source);
-        final BitInput<?> input = new BitInput<>(reader);
+        final BitInput<?> input = new BitInput<>(new StreamInput(source));
 
         final List<Float> actual = new ArrayList<>(count);
         for (int i = 0; i < count; i++) {
@@ -234,8 +224,7 @@ public class BitIoTest {
     private static void float_(final float expected) throws IOException {
 
         final ByteArrayOutputStream target = new ByteArrayOutputStream();
-        final ByteOutput<?> writer = new StreamOutput(target);
-        final BitOutput<?> output = new BitOutput<>(writer);
+        final BitOutput<?> output = new BitOutput<>(new StreamOutput(target));
 
         output.writeFloat(expected);
         output.align(1);
@@ -243,8 +232,7 @@ public class BitIoTest {
         final byte[] bytes = target.toByteArray();
 
         final ByteArrayInputStream source = new ByteArrayInputStream(bytes);
-        final ByteInput<?> reader = new StreamInput(source);
-        final BitInput<?> input = new BitInput<>(reader);
+        final BitInput<?> input = new BitInput<>(new StreamInput(source));
 
         final float actual = input.readFloat();
         input.align(1);
@@ -280,8 +268,7 @@ public class BitIoTest {
         }
 
         final ByteArrayOutputStream target = new ByteArrayOutputStream();
-        final ByteOutput<?> writer = new StreamOutput(target);
-        final BitOutput<?> output = new BitOutput<>(writer);
+        final BitOutput<?> output = new BitOutput<>(new StreamOutput(target));
 
         final List<Long> expected = new ArrayList<>(lengths.size());
         for (int i = 0; i < lengths.size(); i++) {
@@ -295,8 +282,7 @@ public class BitIoTest {
         final byte[] bytes = target.toByteArray();
 
         final ByteArrayInputStream source = new ByteArrayInputStream(bytes);
-        final ByteInput<?> reader = new StreamInput(source);
-        final BitInput<?> input = new BitInput<>(reader);
+        final BitInput<?> input = new BitInput<>(new StreamInput(source));
 
         final List<Long> actual = new ArrayList<>(lengths.size());
         for (int i = 0; i < lengths.size(); i++) {
@@ -323,8 +309,7 @@ public class BitIoTest {
         }
 
         final ByteArrayOutputStream target = new ByteArrayOutputStream();
-        final ByteOutput<?> writer = new StreamOutput(target);
-        final BitOutput<?> output = new BitOutput<>(writer);
+        final BitOutput<?> output = new BitOutput<>(new StreamOutput(target));
 
         final List<Long> expected = new ArrayList<>(lengths.size());
         for (int i = 0; i < lengths.size(); i++) {
@@ -338,8 +323,7 @@ public class BitIoTest {
         final byte[] bytes = target.toByteArray();
 
         final ByteArrayInputStream source = new ByteArrayInputStream(bytes);
-        final ByteInput<?> reader = new StreamInput(source);
-        final BitInput<?> input = new BitInput<>(reader);
+        final BitInput<?> input = new BitInput<>(new StreamInput(source));
 
         final List<Long> actual = new ArrayList<>(lengths.size());
         for (int i = 0; i < lengths.size(); i++) {
@@ -360,8 +344,7 @@ public class BitIoTest {
         final int count = random.nextInt(128);
 
         final ByteArrayOutputStream target = new ByteArrayOutputStream();
-        final ByteOutput<?> writer = new StreamOutput(target);
-        final BitOutput<?> output = new BitOutput<>(writer);
+        final BitOutput<?> output = new BitOutput<>(new StreamOutput(target));
 
         final List<Double> expected = new ArrayList<>(count);
         for (int i = 0; i < count; i++) {
@@ -374,8 +357,7 @@ public class BitIoTest {
         final byte[] bytes = target.toByteArray();
 
         final ByteArrayInputStream source = new ByteArrayInputStream(bytes);
-        final ByteInput<?> reader = new StreamInput(source);
-        final BitInput<?> input = new BitInput<>(reader);
+        final BitInput<?> input = new BitInput<>(new StreamInput(source));
 
         final List<Double> actual = new ArrayList<>(count);
         for (int i = 0; i < count; i++) {
@@ -391,8 +373,7 @@ public class BitIoTest {
     private static void double_(final double expected) throws IOException {
 
         final ByteArrayOutputStream target = new ByteArrayOutputStream();
-        final ByteOutput<?> writer = new StreamOutput(target);
-        final BitOutput<?> output = new BitOutput<>(writer);
+        final BitOutput<?> output = new BitOutput<>(new StreamOutput(target));
 
         output.writeDouble(expected);
         output.align(1);
@@ -400,8 +381,7 @@ public class BitIoTest {
         final byte[] bytes = target.toByteArray();
 
         final ByteArrayInputStream source = new ByteArrayInputStream(bytes);
-        final ByteInput<?> reader = new StreamInput(source);
-        final BitInput<?> input = new BitInput<>(reader);
+        final BitInput<?> input = new BitInput<>(new StreamInput(source));
 
         final double actual = input.readDouble();
         input.align(1);
@@ -440,8 +420,7 @@ public class BitIoTest {
         }
 
         final ByteArrayOutputStream target = new ByteArrayOutputStream();
-        final ByteOutput<?> writer = new StreamOutput(target);
-        final BitOutput<?> output = new BitOutput<>(writer);
+        final BitOutput<?> output = new BitOutput<>(new StreamOutput(target));
 
         final List<byte[]> expected = new ArrayList<>(count);
         for (int i = 0; i < count; i++) {
@@ -456,8 +435,7 @@ public class BitIoTest {
         final byte[] bytes = target.toByteArray();
 
         final ByteArrayInputStream source = new ByteArrayInputStream(bytes);
-        final ByteInput<?> reader = new StreamInput(source);
-        final BitInput<?> input = new BitInput<>(reader);
+        final BitInput<?> input = new BitInput<>(new StreamInput(source));
 
         final List<byte[]> actual = new ArrayList<>(count);
         for (int i = 0; i < count; i++) {
@@ -478,8 +456,7 @@ public class BitIoTest {
         final int count = random.nextInt(128);
 
         final ByteArrayOutputStream target = new ByteArrayOutputStream();
-        final ByteOutput<?> writer = new StreamOutput(target);
-        final BitOutput<?> output = new BitOutput<>(writer);
+        final BitOutput<?> output = new BitOutput<>(new StreamOutput(target));
 
         final List<String> expected = new ArrayList<>(count);
         for (int i = 0; i < count; i++) {
@@ -492,8 +469,7 @@ public class BitIoTest {
         final byte[] bytes = target.toByteArray();
 
         final ByteArrayInputStream source = new ByteArrayInputStream(bytes);
-        final ByteInput<?> reader = new StreamInput(source);
-        final BitInput<?> input = new BitInput<>(reader);
+        final BitInput<?> input = new BitInput<>(new StreamInput(source));
 
         final List<String> actual = new ArrayList<>(count);
         for (int i = 0; i < count; i++) {
@@ -513,8 +489,7 @@ public class BitIoTest {
         final int count = random.nextInt(128);
 
         final ByteArrayOutputStream target = new ByteArrayOutputStream();
-        final ByteOutput<?> writer = new StreamOutput(target);
-        final BitOutput<?> output = new BitOutput<>(writer);
+        final BitOutput<?> output = new BitOutput<>(new StreamOutput(target));
 
         final List<String> expected = new ArrayList<>(count);
         for (int i = 0; i < count; i++) {
@@ -527,8 +502,7 @@ public class BitIoTest {
         final byte[] bytes = target.toByteArray();
 
         final ByteArrayInputStream source = new ByteArrayInputStream(bytes);
-        final ByteInput<?> reader = new StreamInput(source);
-        final BitInput<?> input = new BitInput<>(reader);
+        final BitInput<?> input = new BitInput<>(new StreamInput(source));
 
         final List<String> actual = new ArrayList<>(count);
         for (int i = 0; i < count; i++) {
@@ -559,14 +533,13 @@ public class BitIoTest {
         }
 
         final ByteArrayOutputStream target = new ByteArrayOutputStream();
-        try (final ByteOutput<?> writer = new StreamOutput(target)) {
-            try (final BitOutput<?> output = new BitOutput<>(writer)) {
-                for (int i = 0; i < expected.length; i++) {
-                    expected[i] = new RandomValuePack(lengths[i]);
-                    expected[i].write(output);
-                }
-                output.align((short) 1);
+        try (final BitOutput<?> output
+            = new BitOutput<>(new StreamOutput(target))) {
+            for (int i = 0; i < expected.length; i++) {
+                expected[i] = new RandomValuePack(lengths[i]);
+                expected[i].write(output);
             }
+            output.align((short) 1);
         }
 
         final byte[] bytes = target.toByteArray();
@@ -574,14 +547,13 @@ public class BitIoTest {
         final RandomValuePack[] actual = new RandomValuePack[lengths.length];
 
         final ByteArrayInputStream source = new ByteArrayInputStream(bytes);
-        try (final ByteInput<?> reader = new StreamInput(source)) {
-            try (final BitInput<?> input = new BitInput<>(reader)) {
-                for (int i = 0; i < actual.length; i++) {
-                    actual[i] = new RandomValuePack(lengths[i]);
-                    actual[i].read(input);
-                }
-                input.align((short) 1);
+        try (final BitInput<?> input
+            = new BitInput<>(new StreamInput(source))) {
+            for (int i = 0; i < actual.length; i++) {
+                actual[i] = new RandomValuePack(lengths[i]);
+                actual[i].read(input);
             }
+            input.align((short) 1);
         }
 
         Assert.assertEquals(actual, expected);

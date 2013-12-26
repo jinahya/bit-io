@@ -39,7 +39,7 @@ public class BitIoTest {
     public static void boolean_() throws IOException {
 
         final ThreadLocalRandom random = ThreadLocalRandom.current();
-        final int count = random.nextInt(128);
+        final int count = random.nextInt(32);
 
         final ByteArrayOutputStream target = new ByteArrayOutputStream();
         final BitOutput<?> output = new BitOutput<>(new StreamOutput(target));
@@ -71,7 +71,7 @@ public class BitIoTest {
     public static void boolean_nullable() throws IOException {
 
         final ThreadLocalRandom random = ThreadLocalRandom.current();
-        final int count = random.nextInt(128);
+        final int count = random.nextInt(32);
 
         final ByteArrayOutputStream target = new ByteArrayOutputStream();
         final BitOutput<?> output = new BitOutput<>(new StreamOutput(target));
@@ -110,7 +110,7 @@ public class BitIoTest {
     public static void int_unsigned_() throws IOException {
 
         final ThreadLocalRandom random = ThreadLocalRandom.current();
-        final int count = random.nextInt(128);
+        final int count = random.nextInt(32);
 
         final List<Integer> lengths = new ArrayList<>(count);
         for (int i = 0; i < count; i++) {
@@ -151,7 +151,7 @@ public class BitIoTest {
     public static void int_() throws IOException {
 
         final ThreadLocalRandom random = ThreadLocalRandom.current();
-        final int count = random.nextInt(128);
+        final int count = random.nextInt(32);
 
         final List<Integer> lengths = new ArrayList<>(count);
         for (int i = 0; i < count; i++) {
@@ -192,7 +192,7 @@ public class BitIoTest {
     public static void float_() throws IOException {
 
         final ThreadLocalRandom random = ThreadLocalRandom.current();
-        final int count = random.nextInt(128);
+        final int count = random.nextInt(32);
 
         final ByteArrayOutputStream target = new ByteArrayOutputStream();
         final BitOutput<?> output = new BitOutput<>(new StreamOutput(target));
@@ -259,7 +259,7 @@ public class BitIoTest {
     public static void long_unsigned_() throws IOException {
 
         final ThreadLocalRandom random = ThreadLocalRandom.current();
-        final int count = random.nextInt(128);
+        final int count = random.nextInt(32);
 
         final List<Integer> lengths = new ArrayList<>(count);
         for (int i = 0; i < count; i++) {
@@ -300,7 +300,7 @@ public class BitIoTest {
     public static void long_() throws IOException {
 
         final ThreadLocalRandom random = ThreadLocalRandom.current();
-        final int count = random.nextInt(128);
+        final int count = random.nextInt(32);
 
         final List<Integer> lengths = new ArrayList<>(count);
         for (int i = 0; i < count; i++) {
@@ -341,7 +341,7 @@ public class BitIoTest {
     public static void double_() throws IOException {
 
         final ThreadLocalRandom random = ThreadLocalRandom.current();
-        final int count = random.nextInt(128);
+        final int count = random.nextInt(32);
 
         final ByteArrayOutputStream target = new ByteArrayOutputStream();
         final BitOutput<?> output = new BitOutput<>(new StreamOutput(target));
@@ -408,7 +408,7 @@ public class BitIoTest {
     public static void bytes_() throws IOException {
 
         final ThreadLocalRandom random = ThreadLocalRandom.current();
-        final int count = random.nextInt(128);
+        final int count = random.nextInt(32);
 
         final List<Integer> scales = new ArrayList<>();
         final List<Integer> ranges = new ArrayList<>();
@@ -453,7 +453,7 @@ public class BitIoTest {
     public static void string_utf8_() throws IOException {
 
         final ThreadLocalRandom random = ThreadLocalRandom.current();
-        final int count = random.nextInt(128);
+        final int count = random.nextInt(32);
 
         final ByteArrayOutputStream target = new ByteArrayOutputStream();
         final BitOutput<?> output = new BitOutput<>(new StreamOutput(target));
@@ -486,7 +486,7 @@ public class BitIoTest {
     public static void string_usAscii_() throws IOException {
 
         final ThreadLocalRandom random = ThreadLocalRandom.current();
-        final int count = random.nextInt(128);
+        final int count = random.nextInt(32);
 
         final ByteArrayOutputStream target = new ByteArrayOutputStream();
         final BitOutput<?> output = new BitOutput<>(new StreamOutput(target));
@@ -520,7 +520,7 @@ public class BitIoTest {
 
         final ThreadLocalRandom random = ThreadLocalRandom.current();
 
-        final int count = random.nextInt(128);
+        final int count = random.nextInt(32);
 
         final RandomLengthPack lengths[] = new RandomLengthPack[count];
         for (int i = 0; i < lengths.length; i++) {

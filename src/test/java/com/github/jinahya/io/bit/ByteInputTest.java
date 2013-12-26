@@ -18,6 +18,9 @@
 package com.github.jinahya.io.bit;
 
 
+import org.testng.annotations.Test;
+
+
 /**
  *
  * @author <a href="mailto:onacit@gmail.com">Jin Kwon</a>
@@ -25,6 +28,13 @@ package com.github.jinahya.io.bit;
  * @param <U> byte source type parameter
  */
 public abstract class ByteInputTest<T extends ByteInput<U>, U> {
+
+
+    @Test(expectedExceptions = {NullPointerException.class})
+    public void createWithNullByteInput() {
+
+        final BitInput<?> input = new BitInput<>(null);
+    }
 
 
 }

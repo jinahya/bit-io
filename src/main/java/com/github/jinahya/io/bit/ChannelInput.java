@@ -37,7 +37,7 @@ public class ChannelInput extends ByteInput<ReadableByteChannel> {
      * @param buffer the buffer to buffering the channel.
      */
     public ChannelInput(final ReadableByteChannel source,
-                         final ByteBuffer buffer) {
+                        final ByteBuffer buffer) {
 
         super(source);
 

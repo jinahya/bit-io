@@ -36,6 +36,13 @@ public class BitInputTest {
     }
 
 
+    @Test(expectedExceptions = {NullPointerException.class})
+    public void createWithNullByteInput() {
+
+        final BitInput<?> input = new BitInput<>(null);
+    }
+
+
     @Test(invocationCount = 128)
     public void readBoolean() throws IOException {
 

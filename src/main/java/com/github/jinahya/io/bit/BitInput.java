@@ -546,7 +546,7 @@ public class BitInput<T> implements Closeable {
      * Aligns to given number of bytes.
      *
      * @param length the number of bytes to align; between 0 (exclusive) and
-     * {@value Short#MAX_VALUE} (inclusive).
+     * {@value java.lang.Short#MAX_VALUE} (inclusive).
      *
      * @return the number of bits discarded for alignment
      *

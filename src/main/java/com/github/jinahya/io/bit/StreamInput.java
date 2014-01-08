@@ -31,8 +31,7 @@ public class StreamInput extends ByteInput<InputStream> {
     /**
      * Creates a new instance built on top of the specified input stream.
      *
-     * @param source the input stream on which this byte input is built, or
-     * {@code null} if it is intended to be lazily initialized and set.
+     * @param source {@inheritDoc}
      */
     public StreamInput(final InputStream source) {
 

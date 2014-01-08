@@ -33,8 +33,9 @@ public class ChannelOutput extends ByteOutput<WritableByteChannel> {
      * Creates a new instance built on top of the specified underlying byte
      * channel.
      *
-     * @param target the target channel to which bytes are written.
-     * @param buffer the buffer to buffering the output
+     * @param target {@inheritDoc}
+     * @param buffer the buffer to buffering the output, or {@code null} if if
+     * is intended to be lazily initialized and set.
      */
     public ChannelOutput(final WritableByteChannel target,
                          final ByteBuffer buffer) {
@@ -63,6 +64,10 @@ public class ChannelOutput extends ByteOutput<WritableByteChannel> {
     @Override
     public void writeUnsignedByte(final int value) throws IOException {
 
+        if (target == null) {
+            throw new IllegalStateException("#target is currently null");
+        }
+
         if (buffer == null) {
             throw new IllegalStateException("#buffer is currently null");
         }
@@ -71,10 +76,7 @@ public class ChannelOutput extends ByteOutput<WritableByteChannel> {
             throw new IllegalStateException("#buffer.capacity == 0");
         }
 
-        if (target == null) {
-            throw new IllegalStateException("#target is currently null");
-        }
-
+        assert buffer.capacity() > 0;
         if (!buffer.hasRemaining()) {
             buffer.flip(); // limit -> position, position -> zero
             while (buffer.position() == 0) {
@@ -84,7 +86,7 @@ public class ChannelOutput extends ByteOutput<WritableByteChannel> {
         }
         assert buffer.hasRemaining();
 
-        buffer.put((byte) value); // BufferOverflowException, ReadOnlyBufferException
+        buffer.put((byte) value);
     }
 
 
@@ -139,6 +141,9 @@ public class ChannelOutput extends ByteOutput<WritableByteChannel> {
 
     /**
      * The byte buffer for buffering the channel.
+     *
+     * @see #getBuffer()
+     * @see #setBuffer(java.nio.ByteBuffer)
      */
     protected ByteBuffer buffer;
 

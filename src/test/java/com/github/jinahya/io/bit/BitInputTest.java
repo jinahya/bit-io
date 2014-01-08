@@ -36,6 +36,56 @@ public class BitInputTest {
     }
 
 
+    @Test
+    public void readUnsignedByte() throws IOException {
+
+        final BitInput<?> input = mockedInstance(-1L);
+
+        try {
+            input.readUnsignedByte(0);
+            Assert.fail("passed: readUnsignedByte(0)");
+        } catch (final IllegalArgumentException iae) {
+            // expected
+        }
+
+        for (int length = 1; length <= 8; length++) {
+            input.readUnsignedByte(length);
+        }
+
+        try {
+            input.readUnsignedByte(9);
+            Assert.fail("passed: readUnsignedByte(9)");
+        } catch (final IllegalArgumentException iae) {
+            // expected
+        }
+    }
+
+
+    @Test
+    public void readUnsignedShort() throws IOException {
+
+        final BitInput<?> input = mockedInstance(-1L);
+
+        try {
+            input.readUnsignedShort(0);
+            Assert.fail("passed: readUnsignedShort(0)");
+        } catch (final IllegalArgumentException iae) {
+            // expected
+        }
+
+        for (int length = 1; length <= 16; length++) {
+            input.readUnsignedShort(length);
+        }
+
+        try {
+            input.readUnsignedShort(17);
+            Assert.fail("passed: readUnsignedShort(17)");
+        } catch (final IllegalArgumentException iae) {
+            // expected
+        }
+    }
+
+
     @Test(expectedExceptions = {NullPointerException.class})
     public void createWithNullByteInput() {
 

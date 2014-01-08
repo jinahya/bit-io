@@ -93,6 +93,9 @@ public abstract class ByteInput<T> implements Closeable {
 
     /**
      * The underlying byte source.
+     *
+     * @see #getSource()
+     * @see #setSource(java.lang.Object)
      */
     protected T source;
 

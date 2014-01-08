@@ -93,6 +93,9 @@ public abstract class ByteOutput<T> implements Closeable {
 
     /**
      * The underlying byte target.
+     *
+     * @see #getTarget()
+     * @see #setTarget(java.lang.Object)
      */
     protected T target;
 

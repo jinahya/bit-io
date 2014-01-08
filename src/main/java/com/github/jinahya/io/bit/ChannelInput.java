@@ -33,8 +33,9 @@ public class ChannelInput extends ByteInput<ReadableByteChannel> {
     /**
      * Creates a new instance on top of specified channel.
      *
-     * @param source the underlying source channel.
-     * @param buffer the buffer to buffering the channel.
+     * @param source {@inheritDoc}
+     * @param buffer the buffer to buffering the channel, or {@code null} if it
+     * is intended to be lazily initialized and set.
      */
     public ChannelInput(final ReadableByteChannel source,
                         final ByteBuffer buffer) {
@@ -63,6 +64,10 @@ public class ChannelInput extends ByteInput<ReadableByteChannel> {
     @Override
     public int readUnsignedByte() throws IOException {
 
+        if (source == null) {
+            throw new IllegalStateException("#source is currently null");
+        }
+
         if (buffer == null) {
             throw new IllegalStateException("#buffer is currently null");
         }
@@ -71,10 +76,7 @@ public class ChannelInput extends ByteInput<ReadableByteChannel> {
             throw new IllegalStateException("#buffer.capacity == 0");
         }
 
-        if (source == null) {
-            throw new IllegalStateException("#source is currently null");
-        }
-
+        assert buffer.capacity() > 0;
         if (!buffer.hasRemaining()) {
             buffer.clear(); // position -> zero, limit -> capacity
             while (buffer.position() == 0) {
@@ -85,6 +87,7 @@ public class ChannelInput extends ByteInput<ReadableByteChannel> {
             assert buffer.position() > 0;
             buffer.flip(); // limit -> position, position -> zero
         }
+        assert buffer.hasRemaining();
 
         return buffer.get();
     }

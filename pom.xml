@@ -279,18 +279,7 @@
     <maven>3.1.1</maven>
   </prerequisites>
   <repositories/>
-  <pluginRepositories>
-    <pluginRepository>
-      <id>apache-snapshots</id>
-      <url>https://repository.apache.org/snapshots</url>
-      <releases>
-        <enabled>false</enabled>
-      </releases>
-      <snapshots>
-        <updatePolicy>daily</updatePolicy>
-      </snapshots>
-    </pluginRepository>
-  </pluginRepositories>
+  <pluginRepositories/>
   <distributionManagement/>
   <profiles>
     <profile>

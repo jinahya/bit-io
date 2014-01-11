@@ -2,12 +2,12 @@ bit-io
 ======
 a small library for reading or writing none octet aligned values such as `1-bit boolean` or `17-bit unsigned int`.
 
-[wanna donate some?](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=GWDFLJNSZSEGG&lc=KR&item_name=github&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted)
-
 ## versions
-* 1.1-SNAPSHOT ([site](http://jinahya.github.io/bit-io/site/1.1-SNAPSHOT/index.html)) ([apidocs](http://jinahya.github.io/bit-io/site/1.1-SNAPSHOT/apidocs/index.html))
+* 1.1.1-SNAPSHOT ([site](http://jinahya.github.io/bit-io/site/1.1.1-SNAPSHOT/index.html)) ([apidocs](http://jinahya.github.io/bit-io/site/1.1.1-SNAPSHOT/apidocs/index.html))
+* 1.1 ([site](http://jinahya.github.io/bit-io/site/1.1/index.html)) ([apidocs](http://jinahya.github.io/bit-io/site/1.1/apidocs/index.html))
 
-## Usages
+
+## usages
 ### reading
 ```java
 final InputStream stream;
@@ -44,3 +44,5 @@ output.writeUnsignedLong(33, 1L);   // 49-bit signed long  33   41
 final int padded = output.aling(4); // aligns to 32-bit    23   64
 assert padded == 23;
 ```
+
+[wanna donate some?](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=GWDFLJNSZSEGG&lc=KR&item_name=github&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted)

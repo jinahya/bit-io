@@ -32,7 +32,7 @@ public class BufferInput extends ByteInput<ByteBuffer> {
     /**
      * Creates a new instance built on top of the specified byte buffer.
      *
-     * @param source the source byte buffer.
+     * @param source {@inheritDoc}
      */
     public BufferInput(final ByteBuffer source) {
 

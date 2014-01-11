@@ -32,8 +32,7 @@ public class BufferOutput extends ByteOutput<ByteBuffer> {
     /**
      * Creates a new instance built on the top of the specified byte buffer.
      *
-     * @param target the target byte buffer on which this byte writer is built
-     * on, or {@code null} if it is intended to be lazily initialized and set.
+     * @param target {@code inheritDoc}
      */
     public BufferOutput(final ByteBuffer target) {
 

@@ -31,8 +31,7 @@ public class StreamOutput extends ByteOutput<OutputStream> {
     /**
      * Creates a new instance built on top of the specified output stream.
      *
-     * @param target the target output stream or {@code null} if it is intended
-     * to be lazily initialized and set.
+     * @param target {@inheritDoc}
      */
     public StreamOutput(final OutputStream target) {
 
@@ -51,7 +50,7 @@ public class StreamOutput extends ByteOutput<OutputStream> {
      * @param value {@inheritDoc }
      *
      * @throws IllegalStateException {@inheritDoc}
-     * @throws IOException {@inheritDoc }
+     * @throws IOException {@inheritDoc}
      *
      * @see OutputStream#write(int)
      */

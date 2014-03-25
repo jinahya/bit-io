@@ -20,6 +20,9 @@ package com.github.jinahya.io.bit;
 
 import java.io.Closeable;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.ByteBuffer;
+import java.nio.channels.ReadableByteChannel;
 
 
 /**
@@ -29,13 +32,32 @@ import java.io.IOException;
 public abstract class ByteInput<T> implements Closeable {
 
 
+    public static ByteInput<ByteBuffer> newInstance(final ByteBuffer source) {
+
+        return new BufferInput(source);
+    }
+
+
+    public static ByteInput<InputStream> newInstance(final InputStream source) {
+
+        return new StreamInput(source);
+    }
+
+
+    public static ByteInput<ReadableByteChannel> newInstance(
+            final ReadableByteChannel source, final ByteBuffer buffer) {
+
+        return new ChannelInput(source, buffer);
+    }
+
+
     /**
      * Creates a new instance built on top of the specified underlying byte
      * source.
      *
      * @param source the underlying byte source to be assigned to the field
-     * {@link #source} for later use, or {@code null} if this instance to be
-     * created without an underlying byte source.
+     * {@link #source} for later use, or {@code null} if this instance is
+     * intended to be created without an underlying byte source.
      */
     public ByteInput(final T source) {
 
@@ -60,7 +82,7 @@ public abstract class ByteInput<T> implements Closeable {
 
 
     /**
-     * Closes this byte reader and releases any system resources associated with
+     * Closes this byte input and releases any system resources associated with
      * it.
      *
      * @throws IOException if an I/O error occurs.

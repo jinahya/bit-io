@@ -103,7 +103,7 @@ public class ChannelOutput extends ByteOutput<WritableByteChannel> {
     @Override
     public void close() throws IOException {
 
-        if (target != null && target.isOpen()) {
+        if (target != null) {
 
             if (buffer != null) {
                 buffer.flip(); // limit -> position, position -> zero

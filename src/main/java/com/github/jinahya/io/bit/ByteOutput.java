@@ -20,6 +20,9 @@ package com.github.jinahya.io.bit;
 
 import java.io.Closeable;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.ByteBuffer;
+import java.nio.channels.WritableByteChannel;
 
 
 /**
@@ -30,13 +33,33 @@ import java.io.IOException;
 public abstract class ByteOutput<T> implements Closeable {
 
 
+    public static ByteOutput<ByteBuffer> newInstance(final ByteBuffer target) {
+
+        return new BufferOutput(target);
+    }
+
+
+    public static ByteOutput<OutputStream> newInstance(
+            final OutputStream target) {
+
+        return new StreamOutput(target);
+    }
+
+
+    public static ByteOutput<WritableByteChannel> newInstance(
+            final WritableByteChannel target, final ByteBuffer buffer) {
+
+        return new ChannelOutput(target, buffer);
+    }
+
+
     /**
      * Creates a new instance built on top of the specified underlying byte
      * target.
      *
      * @param target the underlying byte target to be assigned to the field
-     * {@link #target} for later use, or {@code null} if this instance is to be
-     * created without an underlying byte target.
+     * {@link #target} for later use, or {@code null} if this instance is
+     * intended to be created without an underlying byte target.
      */
     public ByteOutput(final T target) {
 
@@ -60,7 +83,7 @@ public abstract class ByteOutput<T> implements Closeable {
 
 
     /**
-     * Closes this byte writer and releases any system resources associated with
+     * Closes this byte output and releases any system resources associated with
      * it.
      *
      * @throws IOException if an I/O error occurs.

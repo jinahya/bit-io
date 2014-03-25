@@ -43,7 +43,7 @@ public class BufferOutput extends ByteOutput<ByteBuffer> {
     /**
      * {@inheritDoc}
      * <p/>
-     * The {@code writeUnsignedByte(int)} method of {@code BufferWriter} class
+     * The {@code writeUnsignedByte(int)} method of {@code BufferOutput} class
      * calls {@link ByteBuffer#put(byte)} on the underlying byte buffer with
      * given {@code value}.
      *

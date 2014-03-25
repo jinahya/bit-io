@@ -21,6 +21,9 @@ package com.github.jinahya.io.bit;
 import java.io.Closeable;
 import java.io.EOFException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.ByteBuffer;
+import java.nio.channels.ReadableByteChannel;
 
 
 /**
@@ -30,6 +33,63 @@ import java.io.IOException;
  * @param <T> underlying byte source type parameter
  */
 public class BitInput<T> implements Closeable {
+
+
+    /**
+     * Creates a new instance with given {@code ByteBuffer}.
+     *
+     * @param source The {@code ByteBuffer} to wrap or {@code null} if it's
+     * intended to lazily initialized and set.
+     *
+     * @return a new instance.
+     *
+     * @see #getInput()
+     * @see ByteInput#setSource(java.lang.Object)
+     */
+    public static BitInput<ByteBuffer> newInstance(final ByteBuffer source) {
+
+        return new BitInput<ByteBuffer>(ByteInput.newInstance(source));
+    }
+
+
+    /**
+     * Creates a new instance with given {@code InputStream}.
+     *
+     * @param source the {@code InputStream} to wrap or {@code null} if it is
+     * intended to be lazily initialized and set.
+     *
+     * @return a new instance.
+     *
+     * @see #getInput()
+     * @see ByteInput#setSource(java.lang.Object)
+     */
+    public static BitInput<InputStream> newInstance(final InputStream source) {
+
+        return new BitInput<InputStream>(ByteInput.newInstance(source));
+    }
+
+
+    /**
+     * Creates a new Instance with given {@code ReadableByteChannel} and
+     * {@code ByteBuffer}.
+     *
+     * @param source the {@code ReadableByteChannel} to wrap or {@code null} if
+     * it is intended to lazily initialized and set.
+     * @param buffer the {@code ByteBuffer} to buffering input or {@code null}
+     * if it is intended to lazily initialized and set.
+     *
+     * @return a new instance
+     *
+     * @see #getInput()
+     * @see ByteInput#setSource(java.lang.Object)
+     * @see ChannelInput#setBuffer(java.nio.ByteBuffer)
+     */
+    public static BitInput<ReadableByteChannel> newInstance(
+            final ReadableByteChannel source, final ByteBuffer buffer) {
+
+        return new BitInput<ReadableByteChannel>(
+                ByteInput.newInstance(source, buffer));
+    }
 
 
     /**
@@ -386,7 +446,7 @@ public class BitInput<T> implements Closeable {
      */
     protected void readBytes(final int range, final byte[] value, int offset,
                              final int length)
-        throws IOException {
+            throws IOException {
 
         if (range <= 0) {
             throw new IllegalArgumentException("range(" + range + ") <= 0");
@@ -406,7 +466,7 @@ public class BitInput<T> implements Closeable {
 
         if (offset > value.length) {
             throw new IllegalArgumentException(
-                "offset(" + offset + ") >= value.length(" + value.length + ")");
+                    "offset(" + offset + ") >= value.length(" + value.length + ")");
         }
 
         if (length < 0) {
@@ -415,8 +475,8 @@ public class BitInput<T> implements Closeable {
 
         if (offset + length > value.length) {
             throw new IllegalArgumentException(
-                "offset(" + offset + ") + length(" + length + ") = "
-                + (offset + length) + " > value.length(" + value.length + ")");
+                    "offset(" + offset + ") + length(" + length + ") = "
+                    + (offset + length) + " > value.length(" + value.length + ")");
         }
 
         for (int i = 0; i < length; i++) {
@@ -444,7 +504,7 @@ public class BitInput<T> implements Closeable {
      */
     public int readBytes(final int scale, final int range, final byte[] value,
                          final int offset)
-        throws IOException {
+            throws IOException {
 
         if (scale <= 0) {
             throw new IllegalArgumentException("scale(" + scale + ") <= 0");
@@ -477,7 +537,7 @@ public class BitInput<T> implements Closeable {
      * @see #readBytes(int, byte[], int, int)
      */
     public byte[] readBytes(final int scale, final int range)
-        throws IOException {
+            throws IOException {
 
         if (scale <= 0) {
             throw new IllegalArgumentException("scale(" + scale + ") <= 0");
@@ -561,7 +621,7 @@ public class BitInput<T> implements Closeable {
 
         if (length > Short.MAX_VALUE) {
             throw new IllegalArgumentException(
-                "length(" + length + ") > " + Short.MAX_VALUE);
+                    "length(" + length + ") > " + Short.MAX_VALUE);
         }
 
         int bits = 0;
@@ -594,17 +654,6 @@ public class BitInput<T> implements Closeable {
 
 
     /**
-     * Returns the underlying byte input.
-     *
-     * @return the underlying byte input.
-     */
-    public ByteInput<T> getInput() {
-
-        return input;
-    }
-
-
-    /**
      * Closes this bit input. This method aligns to a single byte and closes the
      * underlying byte input.
      *
@@ -631,6 +680,17 @@ public class BitInput<T> implements Closeable {
     public long getCount() {
 
         return count;
+    }
+
+
+    /**
+     * Returns the underlying byte input.
+     *
+     * @return the underlying byte input.
+     */
+    public ByteInput<T> getInput() {
+
+        return input;
     }
 
 

@@ -20,6 +20,9 @@ package com.github.jinahya.io.bit;
 
 import java.io.Closeable;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.ByteBuffer;
+import java.nio.channels.WritableByteChannel;
 
 
 /**
@@ -29,6 +32,27 @@ import java.io.IOException;
  * @param <T> underlying byte target type parameter
  */
 public class BitOutput<T> implements Closeable {
+
+
+    public static BitOutput<ByteBuffer> newInstance(final ByteBuffer target) {
+
+        return new BitOutput<ByteBuffer>(ByteOutput.newInstance(target));
+    }
+
+
+    public static BitOutput<OutputStream> newInstance(
+            final OutputStream target) {
+
+        return new BitOutput<OutputStream>(ByteOutput.newInstance(target));
+    }
+
+
+    public static BitOutput<WritableByteChannel> newInstance(
+            final WritableByteChannel target, final ByteBuffer buffer) {
+
+        return new BitOutput<WritableByteChannel>(
+                ByteOutput.newInstance(target, buffer));
+    }
 
 
     /**
@@ -78,7 +102,7 @@ public class BitOutput<T> implements Closeable {
      * @throws IOException if an I/O error occurs.
      */
     protected void writeUnsignedByte(final int length, int value)
-        throws IOException {
+            throws IOException {
 
         if (length <= 0) {
             throw new IllegalArgumentException("length(" + length + ") <= 0");
@@ -190,7 +214,7 @@ public class BitOutput<T> implements Closeable {
      * @throws IOException if an I/O error occurs
      */
     protected void writeUnsignedShort(final int length, final int value)
-        throws IOException {
+            throws IOException {
 
         if (length <= 0) {
             throw new IllegalArgumentException("length(" + length + ") <= 0");
@@ -224,7 +248,7 @@ public class BitOutput<T> implements Closeable {
      * @throws IOException if an I/O error occurs.
      */
     public void writeUnsignedInt(final int length, final int value)
-        throws IOException {
+            throws IOException {
 
         if (length < 1) {
             throw new IllegalArgumentException("length(" + length + ") < 1");
@@ -236,7 +260,7 @@ public class BitOutput<T> implements Closeable {
 
         if (false && (value >> length) != 0x00) {
             throw new IllegalArgumentException(
-                "value(" + value + ") >> length(" + length + ") != 0x00");
+                    "value(" + value + ") >> length(" + length + ") != 0x00");
         }
 
         final int quotient = length / 16;
@@ -276,14 +300,14 @@ public class BitOutput<T> implements Closeable {
             if (value < 0) { // negative
                 if ((value >> (length - 1)) != -1) {
                     throw new IllegalArgumentException(
-                        "value(" + value + ") >> (length(" + length
-                        + ") - 1) != -1");
+                            "value(" + value + ") >> (length(" + length
+                            + ") - 1) != -1");
                 }
             } else { // positive
                 if ((value >> (length - 1)) != 0) {
                     throw new IllegalArgumentException(
-                        "value(" + value + ") >> (length(" + length
-                        + ") - 1) != 0");
+                            "value(" + value + ") >> (length(" + length
+                            + ") - 1) != 0");
                 }
             }
         }
@@ -329,7 +353,7 @@ public class BitOutput<T> implements Closeable {
      * @throws IOException if an I/O error occurs.
      */
     public void writeUnsignedLong(final int length, final long value)
-        throws IOException {
+            throws IOException {
 
         if (length < 1) {
             throw new IllegalArgumentException("length(" + length + ") < 1");
@@ -341,7 +365,7 @@ public class BitOutput<T> implements Closeable {
 
         if (false && (value >> length) != 0L) {
             throw new IllegalArgumentException(
-                "(value(" + value + ") >> length(" + length + ")) != 0L");
+                    "(value(" + value + ") >> length(" + length + ")) != 0L");
         }
 
         final int quotient = length / 31;
@@ -368,7 +392,7 @@ public class BitOutput<T> implements Closeable {
      * @throws IOException if an I/O error occurs.
      */
     public void writeLong(final int length, final long value)
-        throws IOException {
+            throws IOException {
 
         if (length <= 1) {
             throw new IllegalArgumentException("length(" + length + ") <= 1");
@@ -382,14 +406,14 @@ public class BitOutput<T> implements Closeable {
             if (value < 0L) { // negative
                 if ((value >> (length - 1)) != -1L) {
                     throw new IllegalArgumentException(
-                        "(value(" + value + ") >> (length(" + length
-                        + ") - 1)) != -1L");
+                            "(value(" + value + ") >> (length(" + length
+                            + ") - 1)) != -1L");
                 }
             } else { // positive
                 if ((value >> (length - 1)) != 0L) {
                     throw new IllegalArgumentException(
-                        "(value(" + value + ") >> (length(" + length
-                        + ") - 1)) != 0L");
+                            "(value(" + value + ") >> (length(" + length
+                            + ") - 1)) != 0L");
                 }
             }
         }
@@ -438,7 +462,7 @@ public class BitOutput<T> implements Closeable {
      */
     protected void writeBytes(final int range, final byte[] value, int offset,
                               final int length)
-        throws IOException {
+            throws IOException {
 
         if (range <= 0) {
             throw new IllegalArgumentException("range(" + range + ") <= 0");
@@ -458,7 +482,7 @@ public class BitOutput<T> implements Closeable {
 
         if (offset > value.length) {
             throw new IllegalArgumentException(
-                "offset(" + offset + ") >= value.length(" + value.length + ")");
+                    "offset(" + offset + ") >= value.length(" + value.length + ")");
         }
 
         if (length < 0) {
@@ -467,8 +491,8 @@ public class BitOutput<T> implements Closeable {
 
         if (offset + length > value.length) {
             throw new IllegalArgumentException(
-                "offset(" + offset + ") + length(" + length + ") = "
-                + (offset + length) + " > value.length(" + value.length + ")");
+                    "offset(" + offset + ") + length(" + length + ") = "
+                    + (offset + length) + " > value.length(" + value.length + ")");
         }
 
         for (int i = 0; i < length; i++) {
@@ -496,7 +520,7 @@ public class BitOutput<T> implements Closeable {
      */
     public void writeBytes(final int scale, final int range, final byte[] value,
                            int offset, final int length)
-        throws IOException {
+            throws IOException {
 
         if (scale <= 0) {
             throw new IllegalArgumentException("scale(" + scale + ") <= 0");
@@ -512,8 +536,8 @@ public class BitOutput<T> implements Closeable {
 
         if ((length >> scale) > 0) {
             throw new IllegalArgumentException(
-                "length(" + length + ") >> scale(" + scale + ") = "
-                + (length >> scale) + " > 0");
+                    "length(" + length + ") >> scale(" + scale + ") = "
+                    + (length >> scale) + " > 0");
         }
 
         writeUnsignedShort(scale, length);
@@ -534,7 +558,7 @@ public class BitOutput<T> implements Closeable {
      * @throws IOException if an I/O error occurs.
      */
     public void writeBytes(final int scale, final int range, final byte[] value)
-        throws IOException {
+            throws IOException {
 
         writeBytes(scale, range, value, 0, value.length);
     }
@@ -554,7 +578,7 @@ public class BitOutput<T> implements Closeable {
      * @see #writeBytes(int, int, byte[])
      */
     public void writeString(final String value, final String charsetName)
-        throws IOException {
+            throws IOException {
 
         if (value == null) {
             throw new NullPointerException("null value");
@@ -609,7 +633,7 @@ public class BitOutput<T> implements Closeable {
 
         if (length > Short.MAX_VALUE) {
             throw new IllegalArgumentException(
-                "length(" + length + ") > " + Short.MAX_VALUE);
+                    "length(" + length + ") > " + Short.MAX_VALUE);
         }
 
         int bits = 0;

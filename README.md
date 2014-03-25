@@ -41,7 +41,6 @@ final long sl47 = bitInput.readLong(47);     // 47-bit signed long  47   54
 final int discarded = bitInput.aling(1);     // aligns to 8-bit      2   56
 assert discarded == 2;
 
-// octet sequence
 biiiiiil llllllll llllllll llllllll llllllll llllllll lllllldd
 ```
 ### Writing
@@ -77,7 +76,6 @@ bitOutput.writeUnsignedLong(33, 1L);   // 33-bit signed long  33   41
 final int padded = bitOutput.aling(4); // aligns to 32-bit    23   64
 assert padded == 23;
 
-// octet sequence
 biiiiiii llllllll llllllll llllllll llllllll lppppppp pppppppp pppppppp pppppppp
 ```
 

@@ -2,23 +2,41 @@ bit-io
 ======
 A small library for reading or writing none octet aligned values such as `1-bit boolean` or `17-bit unsigned int`.
 
-## versions
-* 1.1.1-SNAPSHOT ([site](http://jinahya.github.io/bit-io/site/1.1.1-SNAPSHOT/index.html)) ([apidocs](http://jinahya.github.io/bit-io/site/1.1.1-SNAPSHOT/apidocs/index.html))
-* 1.1 ([site](http://jinahya.github.io/bit-io/site/1.1/index.html)) ([apidocs](http://jinahya.github.io/bit-io/site/1.1/apidocs/index.html))
-
+## Versions
+|Version|Site|Apidocs|
+|-------|----|-------|
+|1.1.1-SNAPSHOT|[site](http://jinahya.github.io/bit-io/site/1.1.1-SNAPSHOT/index.html)|[apidocs](http://jinahya.github.io/bit-io/site/1.1.1-SNAPSHOT/apidocs/index.html)|
+|1.1|[site](http://jinahya.github.io/bit-io/site/1.1/index.html)|[apidocs](http://jinahya.github.io/bit-io/site/1.1/apidocs/index.html)|
 
 ## Usages
 ### Reading
+#### Preparing `ByteInput`
 ```java
-final InputStream stream;
-final BitInput<?> input = new BitInput<>(new StreamInput(stream));
+// Using an InputStream
+final InputStream byteSource;
+final ByteInput<InputStream> byteInput = new StreamByteInput(byteSource);
 
-final ByteBuffer buffer;
-final BitInput<?> input = new BitInput<>(new BufferInput(buffer));
+// Using a ByteBuffer
+final ByteBuffer byteSource;
+final ByteInput<ByteBuffer> byteInput = new BufferInput(byteSource);
 
-final ReadableByteChannel channel;
-final BitInput<?> input = new BitInput<>(new ChannelInput(channel));
+// Using a ReadableByteChannel
+final ReadableByteChannel byteSource;
+final ByteInput<ReadableByteChannel> byteInput = new ChannelInput(byteSource);
+```
+#### Creating `BitInput`
+```java
+final ByteInput<InputStream> byteInput;
+final BitInput<InputStream> bitInput = new BitInput<>(byteIput);
 
+final ByteInput<ByteBuffer> byteInput;
+final BitInput<ByteBuffer> bitInput = new BitInput<>(byteInput);
+
+final ByteInput<ReadableByteChannel> byteInput;
+final BitInput<ReadableByteChannel> bitInput = new BitInput<>(byteInput);
+```
+#### Reading Values.
+```java
 final boolean b = input.readBoolean();    // 1-bit boolean        1    1
 final int ui6 = input.readUnsignedInt(6); // 6-bit unsigned int   6    7
 final long sl47 = input.readLong(47);     // 47-bit signed long  47   54

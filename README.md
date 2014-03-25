@@ -32,12 +32,17 @@ final BitInput<ReadbleByteChannel> bitInput = BitInput.newInstance(source); // d
 ```
 #### Reading values.
 ```java
-final boolean b = input.readBoolean();    // 1-bit boolean        1    1
-final int ui6 = input.readUnsignedInt(6); // 6-bit unsigned int   6    7
-final long sl47 = input.readLong(47);     // 47-bit signed long  47   54
+final BitInput<?> bitInput;
 
-final int discarded = input.aling(1);     // aligns to 8-bit      2   56
+final boolean b = bitInput.readBoolean();    // 1-bit boolean        1    1
+final int ui6 = bitInput.readUnsignedInt(6); // 6-bit unsigned int   6    7
+final long sl47 = bitInput.readLong(47);     // 47-bit signed long  47   54
+
+final int discarded = bitInput.aling(1);     // aligns to 8-bit      2   56
 assert discarded == 2;
+
+// octet sequence
+biiiiiil llllllll llllllll llllllll llllllll llllllll lllllldd
 ```
 ### Writing
 #### Creating instances
@@ -71,6 +76,9 @@ bitOutput.writeUnsignedLong(33, 1L);   // 33-bit signed long  33   41
 
 final int padded = bitOutput.aling(4); // aligns to 32-bit    23   64
 assert padded == 23;
+
+// octet sequence
+biiiiiii llllllll llllllll llllllll llllllll lppppppp pppppppp pppppppp pppppppp
 ```
 
 [wanna donate some?](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=GWDFLJNSZSEGG&lc=KR&item_name=github&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted)

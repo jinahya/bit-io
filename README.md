@@ -1,14 +1,14 @@
 bit-io
 ======
-a small library for reading or writing none octet aligned values such as `1-bit boolean` or `17-bit unsigned int`.
+A small library for reading or writing none octet aligned values such as `1-bit boolean` or `17-bit unsigned int`.
 
 ## versions
 * 1.1.1-SNAPSHOT ([site](http://jinahya.github.io/bit-io/site/1.1.1-SNAPSHOT/index.html)) ([apidocs](http://jinahya.github.io/bit-io/site/1.1.1-SNAPSHOT/apidocs/index.html))
 * 1.1 ([site](http://jinahya.github.io/bit-io/site/1.1/index.html)) ([apidocs](http://jinahya.github.io/bit-io/site/1.1/apidocs/index.html))
 
 
-## usages
-### reading
+## Usages
+### Reading
 ```java
 final InputStream stream;
 final BitInput<?> input = new BitInput<>(new StreamInput(stream));

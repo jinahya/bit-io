@@ -117,7 +117,7 @@
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>animal-sniffer-maven-plugin</artifactId>
-          <version>1.10</version>
+          <version>1.11</version>
         </plugin>
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
@@ -127,6 +127,12 @@
       </plugins>
     </pluginManagement>
     <plugins>
+      <plugin>
+        <groupId>com.atlassian.maven.plugins</groupId>
+        <artifactId>maven-jgitflow-plugin</artifactId>
+        <configuration>
+        </configuration>
+      </plugin>
       <plugin>
         <groupId>com.github.github</groupId>
         <artifactId>site-maven-plugin</artifactId>
@@ -150,8 +156,8 @@
         <artifactId>maven-release-plugin</artifactId>
         <configuration>
           <tagNameFormat>@{project.version}</tagNameFormat>
-	  <pushChanges>false</pushChanges>
-	  <localCheckout>true</localCheckout>
+          <pushChanges>false</pushChanges>
+          <localCheckout>true</localCheckout>
         </configuration>
       </plugin>
       <plugin>
@@ -167,8 +173,8 @@
             <configuration>
               <signature>
                 <groupId>org.codehaus.mojo.signature</groupId>
-                <artifactId>java15</artifactId>
-                <version>1.0</version>
+                <artifactId>java16</artifactId>
+                <version>1.1</version>
               </signature>
             </configuration>
           </execution>

@@ -19,6 +19,8 @@ package com.github.jinahya.io.bit;
 
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.ByteBuffer;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -28,6 +30,15 @@ import org.testng.annotations.Test;
  * @author Jin Kwon <jinahya at gmail.com>
  */
 public class BitInputTest {
+
+
+    @Test
+    public static void newInstance_() {
+
+        BitInput.newInstance((ByteBuffer) null);
+        BitInput.newInstance((InputStream) null);
+        BitInput.newInstance(null, null);
+    }
 
 
     public static BitInput<Void> mockedInstance(final long limit) {

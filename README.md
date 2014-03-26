@@ -32,11 +32,13 @@ final BitInput<ReadbleByteChannel> bitInput = BitInput.newInstance(source); // d
 ```
 #### Reading values.
 ```java
-final boolean b = input.readBoolean();    // 1-bit boolean        1    1
-final int ui6 = input.readUnsignedInt(6); // 6-bit unsigned int   6    7
-final long sl47 = input.readLong(47);     // 47-bit signed long  47   54
+final BitInput bitInput;
 
-final int discarded = input.aling(1);     // aligns to 8-bit      2   56
+final boolean b = bitInput.readBoolean();    // 1-bit boolean        1    1
+final int ui6 = bitInput.readUnsignedInt(6); // 6-bit unsigned int   6    7
+final long sl47 = bitInput.readLong(47);     // 47-bit signed long  47   54
+
+final int discarded = bitInput.aling(1);     // aligns to 8-bit      2   56
 assert discarded == 2;
 ```
 ### Writing

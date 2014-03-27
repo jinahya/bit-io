@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Jin Kwon <onacit at gmail.com>.
+ * Copyright 2013 <a href="mailto:onacit@gmail.com">Jin Kwon</a>.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,7 +27,7 @@ import java.nio.channels.WritableByteChannel;
 
 /**
  *
- * @author Jin Kwon <onacit at gmail.com>
+ * @author <a href="mailto:onacit@gmail.com">Jin Kwon</a>
  * @param <T>
  */
 public abstract class ByteOutput<T> implements Closeable {

@@ -27,7 +27,7 @@ import org.testng.annotations.Test;
 
 /**
  *
- * @author Jin Kwon <jinahya at gmail.com>
+ * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
 public class BitInputTest {
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Jin Kwon <onacit at gmail.com>.
+ * Copyright 2013 <a href="mailto:onacit@gmail.com">Jin Kwon</a>.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,12 +40,10 @@ public class StreamInput extends ByteInput<InputStream> {
 
 
     /**
-     * {@inheritDoc}
-     * <p/>
-     * The {@code readUnsignedByte()} method of {@code StreamReader} class calls
-     * {@link InputStream#read()} on {@link #source} and returns the result.
-     * Override this method if {@link #source} is intended to be lazily
-     * initialized and set.
+     * {@inheritDoc} The {@code readUnsignedByte()} method of
+     * {@code StreamReader} class calls {@link InputStream#read()} on
+     * {@link #source} and returns the result. Override this method if
+     * {@link #source} is intended to be lazily initialized and set.
      *
      * @return {@inheritDoc}
      *
@@ -64,11 +62,9 @@ public class StreamInput extends ByteInput<InputStream> {
 
 
     /**
-     * {@inheritDoc}
-     * <p/>
-     * The {@code close()} method of {@code StreamInput} class calls, if
-     * {@link #source} is not {@code null}, {@link InputStream#close()} on
-     * {@link #source}.
+     * {@inheritDoc} The {@code close()} method of {@code StreamInput} class
+     * calls, if {@link #source} is not {@code null},
+     * {@link InputStream#close()} on {@link #source}.
      *
      * @throws IOException {@inheritDoc }
      */

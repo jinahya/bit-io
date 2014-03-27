@@ -28,18 +28,36 @@ import java.nio.channels.WritableByteChannel;
 /**
  * A class for writing arbitrary length of bits.
  *
- * @author Jin Kwon <onacit at gmail.com>
+ * @author <a href="mailto:onacit@gmail.com">Jin Kwon</a>
  * @param <T> underlying byte target type parameter
  */
 public class BitOutput<T> implements Closeable {
 
 
+    /**
+     * Creates a new instance with given {@code ByteBuffer}.
+     *
+     * @param target the {@code ByteBuffer} instance to which composed octets
+     * are written; {@code null} if it's intended to lazily initialized and set.
+     *
+     * @return a new instance.
+     *
+     * @see ByteOutput#setTarget(java.lang.Object)
+     */
     public static BitOutput<ByteBuffer> newInstance(final ByteBuffer target) {
 
         return new BitOutput<ByteBuffer>(ByteOutput.newInstance(target));
     }
 
 
+    /**
+     * Creates a new instance with given {@code OutputStream}.
+     *
+     * @param target the {@code OutputStream} or {@code null} if it's intended
+     * to be lazily initialized and set.
+     *
+     * @return a new instance.
+     */
     public static BitOutput<OutputStream> newInstance(
             final OutputStream target) {
 

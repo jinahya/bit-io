@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Jin Kwon <onacit at gmail.com>.
+ * Copyright 2013 <a href="mailto:onacit@gmail.com">Jin Kwon</a>.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,12 +40,10 @@ public class StreamOutput extends ByteOutput<OutputStream> {
 
 
     /**
-     * {@inheritDoc}
-     * <p/>
-     * The {@code writeUnsginedByte(int)} method of {@code StreamReader} class
-     * calls {@link OutputStream#write(int)} on {@link #target} with
-     * {@code value}. Override this method if {@link #target} is intended to be
-     * lazily initialized and set.
+     * {@inheritDoc} The {@code writeUnsginedByte(int)} method of
+     * {@code StreamReader} class calls {@link OutputStream#write(int)} on
+     * {@link #target} with {@code value}. Override this method if
+     * {@link #target} is intended to be lazily initialized and set.
      *
      * @param value {@inheritDoc }
      *
@@ -66,11 +64,10 @@ public class StreamOutput extends ByteOutput<OutputStream> {
 
 
     /**
-     * {@inheritDoc}
-     * <p/>
-     * The {@code close} method of {@code StreamOutput} class calls, if
-     * {@link #target} is not {@code null}, {@link OutputStream#flush()} and
-     * {@link OutputStream#close()} in series on {@link #target}.
+     * {@inheritDoc} The {@code close} method of {@code StreamOutput} class
+     * calls, if {@link #target} is not {@code null},
+     * {@link OutputStream#flush()} and {@link OutputStream#close()} in series
+     * on {@link #target}.
      *
      * @throws IOException {@inheritDoc }
      *

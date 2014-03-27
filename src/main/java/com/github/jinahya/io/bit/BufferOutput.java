@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Jin Kwon <onacit at gmail.com>.
+ * Copyright 2013 <a href="mailto:onacit@gmail.com">Jin Kwon</a>.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,16 +23,16 @@ import java.nio.ByteBuffer;
 
 
 /**
- * A {@link ByteOutput} implementation writes bytes to an underlying
- * {@link ByteBuffer}.
+ * A {@link ByteOutput} implementation writes bytes to underlying
+ * {@link ByteBuffer}s.
  */
 public class BufferOutput extends ByteOutput<ByteBuffer> {
 
 
     /**
-     * Creates a new instance built on the top of the specified byte buffer.
+     * Creates a new instance with given {@code ByteBufer}.
      *
-     * @param target {@code inheritDoc}
+     * @param target the {@code ByteBuffer} to wrap.
      */
     public BufferOutput(final ByteBuffer target) {
 
@@ -41,11 +41,9 @@ public class BufferOutput extends ByteOutput<ByteBuffer> {
 
 
     /**
-     * {@inheritDoc}
-     * <p/>
-     * The {@code writeUnsignedByte(int)} method of {@code BufferOutput} class
-     * calls {@link ByteBuffer#put(byte)} on the underlying byte buffer with
-     * given {@code value}.
+     * {@inheritDoc} The {@code writeUnsignedByte(int)} method of
+     * {@code BufferOutput} class calls {@link ByteBuffer#put(byte)} on the
+     * underlying byte buffer with given {@code value}.
      *
      * @param value {@inheritDoc }
      *
@@ -66,9 +64,8 @@ public class BufferOutput extends ByteOutput<ByteBuffer> {
 
 
     /**
-     * {@inheritDoc}
-     * <p/>
-     * The {@code close()} method of {@code BufferWriter} class does nothing.
+     * {@inheritDoc} The {@code close()} method of {@code BufferWriter} class
+     * does nothing.
      *
      * @throws IOException {@inheritDoc }
      */

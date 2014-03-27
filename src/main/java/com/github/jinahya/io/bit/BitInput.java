@@ -29,8 +29,9 @@ import java.nio.channels.ReadableByteChannel;
 /**
  * A class for reading arbitrary length of bits.
  *
- * @author Jin Kwon <onacit at gmail.com>
  * @param <T> underlying byte source type parameter
+ *
+ * @author <a href="mailto:onacit@gmail.com">Jin Kwon</a>
  */
 public class BitInput<T> implements Closeable {
 

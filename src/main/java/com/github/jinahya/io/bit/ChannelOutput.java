@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Jin Kwon <onacit at gmail.com>.
+ * Copyright 2013 <a href="mailto:onacit@gmail.com">Jin Kwon</a>.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,13 +47,12 @@ public class ChannelOutput extends ByteOutput<WritableByteChannel> {
 
 
     /**
-     * {@inheritDoc}
-     * <p/>
-     * The {@code writeUnsignedByte(int)} method of {@code ChannelWriter} first
-     * tries to drain {@link #buffer}, if it is fully replenished, to
-     * {@link #target} and calls {@link ByteBuffer#put(byte)} with
-     * {@code value}. Override this method if either {@link #target} or
-     * {@link #buffer} is intended to be lazily initialized and set.
+     * {@inheritDoc} The {@code writeUnsignedByte(int)} method of
+     * {@code ChannelWriter} first tries to drain {@link #buffer}, if it is
+     * fully replenished, to {@link #target} and calls
+     * {@link ByteBuffer#put(byte)} with {@code value}. Override this method if
+     * either {@link #target} or {@link #buffer} is intended to be lazily
+     * initialized and set.
      *
      * @param value {@inheritDoc }
      *
@@ -91,12 +90,10 @@ public class ChannelOutput extends ByteOutput<WritableByteChannel> {
 
 
     /**
-     * {@inheritDoc}
-     * <p/>
-     * The {@code close()} method of {@code ChannelOutput} class first writes,
-     * if both {@link #buffer} and {@link #target} are not {@code null}, all
-     * remaining bytes in {@link #buffer} to {@link #target} and closes, if
-     * {@link #target} is not {@code null}, the {@link #target}.
+     * {@inheritDoc} The {@code close()} method of {@code ChannelOutput} class
+     * first writes, if both {@link #buffer} and {@link #target} are not
+     * {@code null}, all remaining bytes in {@link #buffer} to {@link #target}
+     * and closes, if {@link #target} is not {@code null}, the {@link #target}.
      *
      * @throws IOException {@inheritDoc}
      */

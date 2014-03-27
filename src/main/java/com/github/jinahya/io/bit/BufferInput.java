@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Jin Kwon <onacit at gmail.com>.
+ * Copyright 2013 <a href="mailto:onacit@gmail.com">Jin Kwon</a>.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,10 +41,9 @@ public class BufferInput extends ByteInput<ByteBuffer> {
 
 
     /**
-     * {@inheritDoc}
-     * <p/>
-     * The {@code readUnsignedByte()} method of {@code ByteReader} class calls
-     * {@link ByteBuffer#get()} on {@link #source} and returns the result.
+     * {@inheritDoc} The {@code readUnsignedByte()} method of {@code ByteReader}
+     * class calls {@link ByteBuffer#get()} on {@link #source} and returns the
+     * result.
      *
      * @return {@inheritDoc }
      *
@@ -70,9 +69,8 @@ public class BufferInput extends ByteInput<ByteBuffer> {
 
 
     /**
-     * {@inheritDoc}
-     * <p/>
-     * The {@code close()} method of {@code BufferReader} class does nothing.
+     * {@inheritDoc} The {@code close()} method of {@code BufferReader} class
+     * does nothing.
      *
      * @throws IOException {@inheritDoc}
      */

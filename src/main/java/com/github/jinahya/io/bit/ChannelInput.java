@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Jin Kwon <onacit at gmail.com>.
+ * Copyright 2013 <a href="mailto:onacit@gmail.com">Jin Kwon</a>.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,13 +47,11 @@ public class ChannelInput extends ByteInput<ReadableByteChannel> {
 
 
     /**
-     * {@inheritDoc}
-     * <p/>
-     * The {@code readUnsignedByte()} method of {@code ChannelReader} class
-     * first tries to replenish {@link #buffer}, if it is drained, from
-     * {@link #source} and calls {@link ByteBuffer#get()} and returns the
-     * result. Override this method if either {@link #source} or {@link #buffer}
-     * is intended to be lazily initialized and set.
+     * {@inheritDoc} The {@code readUnsignedByte()} method of
+     * {@code ChannelReader} class first tries to replenish {@link #buffer}, if
+     * it is drained, from {@link #source} and calls {@link ByteBuffer#get()}
+     * and returns the result. Override this method if either {@link #source} or
+     * {@link #buffer} is intended to be lazily initialized and set.
      *
      * @return {@inheritDoc }
      *
@@ -94,11 +92,10 @@ public class ChannelInput extends ByteInput<ReadableByteChannel> {
 
 
     /**
-     * {@inheritDoc }
-     * <p/>
-     * The {@code close()} method of {@code ChannelReader} class calls, if
-     * {@link #source} is not {@code  null} and its {@link Channel#isOpen()}
-     * returns {@code true}, {@link Channel#close()} on {@link #source}.
+     * {@inheritDoc } The {@code close()} method of {@code ChannelReader} class
+     * calls, if {@link #source} is not {@code  null} and its
+     * {@link Channel#isOpen()} returns {@code true}, {@link Channel#close()} on
+     * {@link #source}.
      *
      * @throws IOException {@inheritDoc}
      *

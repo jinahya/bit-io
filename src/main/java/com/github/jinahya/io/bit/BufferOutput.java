@@ -26,7 +26,7 @@ import java.nio.ByteBuffer;
  * A {@link ByteOutput} implementation writes bytes to underlying
  * {@link ByteBuffer}s.
  */
-public class BufferOutput extends ByteOutput<ByteBuffer> {
+public class BufferOutput extends CloseableByteOutput<ByteBuffer> {
 
 
     /**

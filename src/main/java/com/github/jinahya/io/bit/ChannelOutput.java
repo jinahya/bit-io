@@ -26,7 +26,7 @@ import java.nio.channels.WritableByteChannel;
 /**
  * A {@link ByteOutput} implementation for {@link WritableByteChannel}s.
  */
-public class ChannelOutput extends ByteOutput<WritableByteChannel> {
+public class ChannelOutput extends CloseableByteOutput<WritableByteChannel> {
 
 
     /**

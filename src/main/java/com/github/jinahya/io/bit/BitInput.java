@@ -18,79 +18,17 @@
 package com.github.jinahya.io.bit;
 
 
-import java.io.Closeable;
 import java.io.EOFException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.ByteBuffer;
-import java.nio.channels.ReadableByteChannel;
 
 
 /**
  * A class for reading arbitrary length of bits.
  *
- * @param <T> underlying byte source type parameter
- *
  * @author <a href="mailto:onacit@gmail.com">Jin Kwon</a>
+ * @param <T>
  */
-public class BitInput<T> implements Closeable {
-
-
-    /**
-     * Creates a new instance with given {@code ByteBuffer}.
-     *
-     * @param source The {@code ByteBuffer} to wrap or {@code null} if it's
-     * intended to lazily initialized and set.
-     *
-     * @return a new instance.
-     *
-     * @see #getInput()
-     * @see ByteInput#setSource(java.lang.Object)
-     */
-    public static BitInput<ByteBuffer> newInstance(final ByteBuffer source) {
-
-        return new BitInput<ByteBuffer>(ByteInput.newInstance(source));
-    }
-
-
-    /**
-     * Creates a new instance with given {@code InputStream}.
-     *
-     * @param source the {@code InputStream} to wrap or {@code null} if it is
-     * intended to be lazily initialized and set.
-     *
-     * @return a new instance.
-     *
-     * @see #getInput()
-     * @see ByteInput#setSource(java.lang.Object)
-     */
-    public static BitInput<InputStream> newInstance(final InputStream source) {
-
-        return new BitInput<InputStream>(ByteInput.newInstance(source));
-    }
-
-
-    /**
-     * Creates a new Instance with given {@code ReadableByteChannel} and
-     * {@code ByteBuffer}.
-     *
-     * @param source the {@code ReadableByteChannel} to wrap or {@code null} if
-     * it is intended to lazily initialized and set.
-     * @param buffer the {@code ByteBuffer} to buffering input or {@code null}
-     * if it is intended to lazily initialized and set.
-     *
-     * @return a new instance
-     *
-     * @see #getInput()
-     * @see ByteInput#setSource(java.lang.Object)
-     * @see ChannelInput#setBuffer(java.nio.ByteBuffer)
-     */
-    public static BitInput<ReadableByteChannel> newInstance(
-            final ReadableByteChannel source, final ByteBuffer buffer) {
-
-        return new BitInput<ReadableByteChannel>(
-                ByteInput.newInstance(source, buffer));
-    }
+public class BitInput<T extends ByteInput> {
 
 
     /**
@@ -101,7 +39,7 @@ public class BitInput<T> implements Closeable {
      * @throws NullPointerException if the specified {@code input} is
      * {@code null}.
      */
-    public BitInput(final ByteInput<T> input) {
+    public BitInput(final T input) {
 
         super();
 
@@ -655,25 +593,6 @@ public class BitInput<T> implements Closeable {
 
 
     /**
-     * Closes this bit input. This method aligns to a single byte and closes the
-     * underlying byte input.
-     *
-     * @throws IOException if an I/O error occurs.
-     *
-     * @see #align(int)
-     * @see ByteInput#close()
-     */
-    @Override
-    public void close() throws IOException {
-
-        if (input != null) {
-            align(1);
-            input.close();
-        }
-    }
-
-
-    /**
      * Returns the number of bytes read from the underlying byte input so far.
      *
      * @return the number of bytes read so far.
@@ -685,20 +604,9 @@ public class BitInput<T> implements Closeable {
 
 
     /**
-     * Returns the underlying byte input.
-     *
-     * @return the underlying byte input.
-     */
-    public ByteInput<T> getInput() {
-
-        return input;
-    }
-
-
-    /**
      * The underlying byte input.
      */
-    private final ByteInput<T> input;
+    protected final T input;
 
 
     /**

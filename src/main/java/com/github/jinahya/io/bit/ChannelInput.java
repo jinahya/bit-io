@@ -25,9 +25,9 @@ import java.nio.channels.ReadableByteChannel;
 
 
 /**
- * A {@link ByteInput} implementation for {@link ReadableByteChannel}s.
+ * A {@link CloseableByteInput} implementation for {@link ReadableByteChannel}s.
  */
-public class ChannelInput extends ByteInput<ReadableByteChannel> {
+public class ChannelInput extends CloseableByteInput<ReadableByteChannel> {
 
 
     /**

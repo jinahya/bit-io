@@ -23,9 +23,9 @@ import java.io.InputStream;
 
 
 /**
- * A {@link ByteInput} implementation for {@link InputStream}s.
+ * A {@link CloseableByteInput} implementation for {@link InputStream}s.
  */
-public class StreamInput extends ByteInput<InputStream> {
+public class StreamInput extends CloseableByteInput<InputStream> {
 
 
     /**

@@ -18,59 +18,16 @@
 package com.github.jinahya.io.bit;
 
 
-import java.io.Closeable;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.nio.ByteBuffer;
-import java.nio.channels.WritableByteChannel;
 
 
 /**
  * A class for writing arbitrary length of bits.
  *
  * @author <a href="mailto:onacit@gmail.com">Jin Kwon</a>
- * @param <T> underlying byte target type parameter
+ * @param <T>
  */
-public class BitOutput<T> implements Closeable {
-
-
-    /**
-     * Creates a new instance with given {@code ByteBuffer}.
-     *
-     * @param target the {@code ByteBuffer} instance to which composed octets
-     * are written; {@code null} if it's intended to lazily initialized and set.
-     *
-     * @return a new instance.
-     *
-     * @see ByteOutput#setTarget(java.lang.Object)
-     */
-    public static BitOutput<ByteBuffer> newInstance(final ByteBuffer target) {
-
-        return new BitOutput<ByteBuffer>(ByteOutput.newInstance(target));
-    }
-
-
-    /**
-     * Creates a new instance with given {@code OutputStream}.
-     *
-     * @param target the {@code OutputStream} or {@code null} if it's intended
-     * to be lazily initialized and set.
-     *
-     * @return a new instance.
-     */
-    public static BitOutput<OutputStream> newInstance(
-            final OutputStream target) {
-
-        return new BitOutput<OutputStream>(ByteOutput.newInstance(target));
-    }
-
-
-    public static BitOutput<WritableByteChannel> newInstance(
-            final WritableByteChannel target, final ByteBuffer buffer) {
-
-        return new BitOutput<WritableByteChannel>(
-                ByteOutput.newInstance(target, buffer));
-    }
+public class BitOutput<T extends ByteOutput> {
 
 
     /**
@@ -81,7 +38,7 @@ public class BitOutput<T> implements Closeable {
      * @throws NullPointerException if the specified {@code output} is
      * {@code null}.
      */
-    public BitOutput(final ByteOutput<T> output) {
+    public BitOutput(final T output) {
 
         super();
 
@@ -684,36 +641,6 @@ public class BitOutput<T> implements Closeable {
 
 
     /**
-     * Closes this instance. This method, if {@link #output} is not
-     * {@code null}, aligns to a single byte and closes the {@link #output}.
-     *
-     * @throws IOException if an I/O error occurs.
-     *
-     * @see #align(int)
-     * @see ByteInput#close()
-     */
-    @Override
-    public void close() throws IOException {
-
-        if (output != null) {
-            align(1);
-            output.close();
-        }
-    }
-
-
-    /**
-     * Return the underlying byte output.
-     *
-     * @return the underlying byte output.
-     */
-    public ByteOutput<T> getOutput() {
-
-        return output;
-    }
-
-
-    /**
      * Returns the number of bytes written to the underlying byte output so far.
      *
      * @return the number of bytes written so far.
@@ -727,7 +654,7 @@ public class BitOutput<T> implements Closeable {
     /**
      * The underlying byte input.
      */
-    private final ByteOutput<T> output;
+    protected final T output;
 
 
     /**

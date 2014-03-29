@@ -24,9 +24,9 @@ import java.nio.ByteBuffer;
 
 
 /**
- * A {@link ByteInput} implementation for {@link ByteBuffer}s.
+ * A {@link CloseableByteInput} implementation for {@link ByteBuffer}s.
  */
-public class BufferInput extends ByteInput<ByteBuffer> {
+public class BufferInput extends CloseableByteInput<ByteBuffer> {
 
 
     /**
@@ -64,7 +64,6 @@ public class BufferInput extends ByteInput<ByteBuffer> {
         } catch (final BufferUnderflowException bue) {
             return -1;
         }
-
     }
 
 

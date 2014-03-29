@@ -25,7 +25,7 @@ import java.io.OutputStream;
 /**
  * A {@link ByteOutput} implementation for {@link OutputStream}s.
  */
-public class StreamOutput extends ByteOutput<OutputStream> {
+public class StreamOutput extends CloseableByteOutput<OutputStream> {
 
 
     /**

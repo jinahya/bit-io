@@ -21,6 +21,7 @@ package com.github.jinahya.io.bit;
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.ByteBuffer;
 
 
 /**
@@ -33,16 +34,21 @@ public class BitInput {
 
     public static BitInput newInstance(final InputStream source) {
 
-        return new BitInput(new ByteInput() {
+        if (source == null) {
+            throw new NullPointerException("null source");
+        }
 
-            @Override
-            public int readUnsignedByte() throws IOException {
-
-                return source.read();
-            }
+        return new BitInput(new StreamInput(source));
+    }
 
 
-        });
+    public static BitInput newInstance(final ByteBuffer source) {
+
+        if (source == null) {
+            throw new NullPointerException("null source");
+        }
+
+        return new BitInput(new BufferInput(source));
     }
 
 

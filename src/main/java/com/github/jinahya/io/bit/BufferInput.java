@@ -19,7 +19,6 @@ package com.github.jinahya.io.bit;
 
 
 import java.io.IOException;
-import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 
 
@@ -51,6 +50,9 @@ public class BufferInput extends AbstractByteInput<ByteBuffer> {
      * @throws IOException {@inheritDoc}
      *
      * @see ByteBuffer#get()
+     * @see #source
+     * @see #getSource()
+     * @see #setSource(java.lang.Object)
      */
     @Override
     public int readUnsignedByte() throws IOException {
@@ -59,11 +61,7 @@ public class BufferInput extends AbstractByteInput<ByteBuffer> {
             throw new IllegalStateException("#source is currently null");
         }
 
-        try {
-            return source.get() & 0xFF;
-        } catch (final BufferUnderflowException bue) {
-            return -1;
-        }
+        return source.get() & 0xFF;
     }
 
 

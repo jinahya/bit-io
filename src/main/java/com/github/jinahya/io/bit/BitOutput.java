@@ -19,6 +19,8 @@ package com.github.jinahya.io.bit;
 
 
 import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.ByteBuffer;
 
 
 /**
@@ -27,6 +29,26 @@ import java.io.IOException;
  * @author <a href="mailto:onacit@gmail.com">Jin Kwon</a>
  */
 public class BitOutput {
+
+
+    public static BitOutput newInstance(final OutputStream target) {
+
+        if (target == null) {
+            throw new NullPointerException("null target");
+        }
+
+        return new BitOutput(new StreamOutput(target));
+    }
+
+
+    public static BitOutput newInstance(final ByteBuffer target) {
+
+        if (target == null) {
+            throw new NullPointerException("null target");
+        }
+
+        return new BitOutput(new BufferOutput(target));
+    }
 
 
     /**

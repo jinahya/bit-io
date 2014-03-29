@@ -18,6 +18,7 @@
 package com.github.jinahya.io.bit;
 
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -58,7 +59,12 @@ public class StreamInput extends AbstractByteInput<InputStream> {
             throw new IllegalStateException("#source is currently null");
         }
 
-        return source.read();
+        final int read = source.read();
+        if (read == -1) {
+            throw new EOFException("eof");
+        }
+
+        return read;
     }
 
 

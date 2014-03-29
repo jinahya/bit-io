@@ -25,7 +25,7 @@ import java.io.OutputStream;
 /**
  * A {@link ByteOutput} implementation for {@link OutputStream}s.
  */
-public class StreamOutput extends CloseableByteOutput<OutputStream> {
+public class StreamOutput extends AbstractByteOutput<OutputStream> {
 
 
     /**
@@ -60,27 +60,6 @@ public class StreamOutput extends CloseableByteOutput<OutputStream> {
         }
 
         target.write(value);
-    }
-
-
-    /**
-     * {@inheritDoc} The {@code close} method of {@code StreamOutput} class
-     * calls, if {@link #target} is not {@code null},
-     * {@link OutputStream#flush()} and {@link OutputStream#close()} in series
-     * on {@link #target}.
-     *
-     * @throws IOException {@inheritDoc }
-     *
-     * @see OutputStream#flush()
-     * @see OutputStream#close()
-     */
-    @Override
-    public void close() throws IOException {
-
-        if (target != null) {
-            target.flush();
-            target.close();
-        }
     }
 
 

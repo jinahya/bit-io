@@ -26,7 +26,7 @@ import java.nio.ByteBuffer;
  * A {@link ByteOutput} implementation writes bytes to underlying
  * {@link ByteBuffer}s.
  */
-public class BufferOutput extends CloseableByteOutput<ByteBuffer> {
+public class BufferOutput extends AbstractByteOutput<ByteBuffer> {
 
 
     /**
@@ -60,19 +60,6 @@ public class BufferOutput extends CloseableByteOutput<ByteBuffer> {
         }
 
         target.put((byte) value); // BufferOverflowException, ReadOnlyBufferException
-    }
-
-
-    /**
-     * Closes this buffer output. The {@code close()} method of
-     * {@code BufferWriter} class does nothing.
-     *
-     * @throws IOException {@inheritDoc }
-     */
-    @Override
-    public void close() throws IOException {
-
-        // do nothing
     }
 
 

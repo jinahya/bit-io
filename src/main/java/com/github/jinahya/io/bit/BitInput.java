@@ -20,15 +20,30 @@ package com.github.jinahya.io.bit;
 
 import java.io.EOFException;
 import java.io.IOException;
+import java.io.InputStream;
 
 
 /**
  * A class for reading arbitrary length of bits.
  *
  * @author <a href="mailto:onacit@gmail.com">Jin Kwon</a>
- * @param <T> byte input type parameter.
  */
-public class BitInput<T extends ByteInput> {
+public class BitInput {
+
+
+    public static BitInput newInstance(final InputStream source) {
+
+        return new BitInput(new ByteInput() {
+
+            @Override
+            public int readUnsignedByte() throws IOException {
+
+                return source.read();
+            }
+
+
+        });
+    }
 
 
     /**
@@ -39,7 +54,7 @@ public class BitInput<T extends ByteInput> {
      * @throws NullPointerException if the specified {@code input} is
      * {@code null}.
      */
-    public BitInput(final T input) {
+    public BitInput(final ByteInput input) {
 
         super();
 
@@ -606,7 +621,7 @@ public class BitInput<T extends ByteInput> {
     /**
      * The underlying byte input.
      */
-    protected final T input;
+    protected final ByteInput input;
 
 
     /**

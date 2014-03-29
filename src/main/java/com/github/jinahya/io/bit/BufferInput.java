@@ -26,7 +26,7 @@ import java.nio.ByteBuffer;
 /**
  * A {@link CloseableByteInput} implementation for {@link ByteBuffer}s.
  */
-public class BufferInput extends CloseableByteInput<ByteBuffer> {
+public class BufferInput extends AbstractByteInput<ByteBuffer> {
 
 
     /**
@@ -64,19 +64,6 @@ public class BufferInput extends CloseableByteInput<ByteBuffer> {
         } catch (final BufferUnderflowException bue) {
             return -1;
         }
-    }
-
-
-    /**
-     * Closes this byte input. The {@code close()} method of
-     * {@code BufferReader} class does nothing.
-     *
-     * @throws IOException {@inheritDoc}
-     */
-    @Override
-    public void close() throws IOException {
-
-        // empty
     }
 
 

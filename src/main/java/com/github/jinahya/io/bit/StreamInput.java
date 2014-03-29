@@ -23,9 +23,9 @@ import java.io.InputStream;
 
 
 /**
- * A {@link CloseableByteInput} implementation for {@link InputStream}s.
+ * A {@link AbstractByteInput} implementation for {@link InputStream}s.
  */
-public class StreamInput extends CloseableByteInput<InputStream> {
+public class StreamInput extends AbstractByteInput<InputStream> {
 
 
     /**
@@ -59,22 +59,6 @@ public class StreamInput extends CloseableByteInput<InputStream> {
         }
 
         return source.read();
-    }
-
-
-    /**
-     * {@inheritDoc} The {@code close()} method of {@code StreamInput} class
-     * calls, if {@link #source} is not {@code null},
-     * {@link InputStream#close()} on {@link #source}.
-     *
-     * @throws IOException {@inheritDoc }
-     */
-    @Override
-    public void close() throws IOException {
-
-        if (source != null) {
-            source.close();
-        }
     }
 
 

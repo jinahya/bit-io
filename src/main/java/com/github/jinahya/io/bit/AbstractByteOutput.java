@@ -18,15 +18,12 @@
 package com.github.jinahya.io.bit;
 
 
-import java.io.Closeable;
-
-
 /**
  *
  * @author <a href="mailto:onacit@gmail.com">Jin Kwon</a>
  * @param <T> byte target type parameter
  */
-public abstract class CloseableByteOutput<T> implements ByteOutput, Closeable {
+public abstract class AbstractByteOutput<T> implements ByteOutput {
 
 
     /**
@@ -35,7 +32,7 @@ public abstract class CloseableByteOutput<T> implements ByteOutput, Closeable {
      * @param target the underlying byte target. or {@code null} if it is
      * intended to be lazily initialized and set.
      */
-    public CloseableByteOutput(final T target) {
+    public AbstractByteOutput(final T target) {
 
         super();
 

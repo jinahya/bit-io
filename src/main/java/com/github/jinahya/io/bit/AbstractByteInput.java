@@ -18,14 +18,11 @@
 package com.github.jinahya.io.bit;
 
 
-import java.io.Closeable;
-
-
 /**
  *
  * @param <T> underlying byte source type parameter
  */
-public abstract class CloseableByteInput<T> implements ByteInput, Closeable {
+public abstract class AbstractByteInput<T> implements ByteInput {
 
 
     /**
@@ -36,7 +33,7 @@ public abstract class CloseableByteInput<T> implements ByteInput, Closeable {
      * {@link #source} for later use, or {@code null} if this instance is
      * intended to be created without an underlying byte source.
      */
-    public CloseableByteInput(final T source) {
+    public AbstractByteInput(final T source) {
 
         super();
 

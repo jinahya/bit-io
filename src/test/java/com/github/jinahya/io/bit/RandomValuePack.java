@@ -38,7 +38,7 @@ public class RandomValuePack {
     }
 
 
-    void read(final BitInput<?> input) throws IOException {
+    void read(final BitInput input) throws IOException {
 
         valueBoolean = input.readBoolean();
 
@@ -58,7 +58,7 @@ public class RandomValuePack {
     }
 
 
-    void write(final BitOutput<?> output) throws IOException {
+    void write(final BitOutput output) throws IOException {
 
         valueBoolean = BitIoTests.valueBoolean();
         output.writeBoolean(valueBoolean);

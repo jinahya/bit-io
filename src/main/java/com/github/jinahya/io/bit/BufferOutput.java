@@ -64,8 +64,8 @@ public class BufferOutput extends CloseableByteOutput<ByteBuffer> {
 
 
     /**
-     * {@inheritDoc} The {@code close()} method of {@code BufferWriter} class
-     * does nothing.
+     * Closes this buffer output. The {@code close()} method of
+     * {@code BufferWriter} class does nothing.
      *
      * @throws IOException {@inheritDoc }
      */

@@ -25,7 +25,7 @@ import java.io.IOException;
  * A class for writing arbitrary length of bits.
  *
  * @author <a href="mailto:onacit@gmail.com">Jin Kwon</a>
- * @param <T>
+ * @param <T> byte output type parameter
  */
 public class BitOutput<T extends ByteOutput> {
 

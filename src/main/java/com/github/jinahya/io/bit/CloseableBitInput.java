@@ -26,8 +26,8 @@ import java.io.IOException;
  * A class for reading arbitrary length of bits.
  *
  * @author <a href="mailto:onacit@gmail.com">Jin Kwon</a>
- * @param <T>
- * @param <U>
+ * @param <T> closeable byte input type parameter
+ * @param <U> byte source type parameter
  */
 public class CloseableBitInput<T extends CloseableByteInput<U>, U>
         extends BitInput<T>
@@ -55,7 +55,7 @@ public class CloseableBitInput<T extends CloseableByteInput<U>, U>
      * @throws IOException if an I/O error occurs.
      *
      * @see #align(int)
-     * @see ByteInput#close()
+     * @see CloseableByteInput#close()
      */
     @Override
     public void close() throws IOException {

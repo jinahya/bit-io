@@ -35,8 +35,6 @@ public interface ByteOutput {
      * @param value an unsigned 8-bit byte value between {@code 0} (inclusive)
      * and {@code 256} (exclusive).
      *
-     * @throws IllegalStateException if {@link #target} is currently
-     * {@code null}.
      * @throws IOException if an I/O error occurs.
      */
     void writeUnsignedByte(final int value) throws IOException;

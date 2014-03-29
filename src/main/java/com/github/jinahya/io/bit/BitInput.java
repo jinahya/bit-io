@@ -26,7 +26,7 @@ import java.io.IOException;
  * A class for reading arbitrary length of bits.
  *
  * @author <a href="mailto:onacit@gmail.com">Jin Kwon</a>
- * @param <T>
+ * @param <T> byte input type parameter.
  */
 public class BitInput<T extends ByteInput> {
 

@@ -104,7 +104,7 @@ public class ChannelInput extends CloseableByteInput<ReadableByteChannel> {
     @Override
     public void close() throws IOException {
 
-        if (source != null && source.isOpen()) {
+        if (source != null) {
             source.close();
         }
     }

@@ -26,8 +26,8 @@ import java.io.IOException;
  * A class for writing arbitrary length of bits.
  *
  * @author <a href="mailto:onacit@gmail.com">Jin Kwon</a>
- * @param <T> underlying byte target type parameter
- * @param <U>
+ * @param <T> closeable byte output type parameter
+ * @param <U> byte target type parameter
  */
 public class CloseableBitOutput<T extends CloseableByteOutput<T>, U>
         extends BitOutput<T>
@@ -55,7 +55,7 @@ public class CloseableBitOutput<T extends CloseableByteOutput<T>, U>
      * @throws IOException if an I/O error occurs.
      *
      * @see #align(int)
-     * @see ByteInput#close()
+     * @see CloseableByteInput#close()
      */
     @Override
     public void close() throws IOException {

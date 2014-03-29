@@ -47,7 +47,8 @@ public class StreamInput extends CloseableByteInput<InputStream> {
      *
      * @return {@inheritDoc}
      *
-     * @throws IllegalStateException {@inheritDoc}
+     * @throws IllegalStateException id {@link #source} is currently
+     * {@code null}.
      * @throws IOException {@inheritDoc}
      */
     @Override

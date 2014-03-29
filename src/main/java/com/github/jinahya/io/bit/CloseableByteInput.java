@@ -19,9 +19,6 @@ package com.github.jinahya.io.bit;
 
 
 import java.io.Closeable;
-import java.io.InputStream;
-import java.nio.ByteBuffer;
-import java.nio.channels.ReadableByteChannel;
 
 
 /**
@@ -29,25 +26,6 @@ import java.nio.channels.ReadableByteChannel;
  * @param <T> underlying byte source type parameter
  */
 public abstract class CloseableByteInput<T> implements ByteInput, Closeable {
-
-
-    public static CloseableByteInput<ByteBuffer> newInstance(final ByteBuffer source) {
-
-        return new BufferInput(source);
-    }
-
-
-    public static CloseableByteInput<InputStream> newInstance(final InputStream source) {
-
-        return new StreamInput(source);
-    }
-
-
-    public static CloseableByteInput<ReadableByteChannel> newInstance(
-            final ReadableByteChannel source, final ByteBuffer buffer) {
-
-        return new ChannelInput(source, buffer);
-    }
 
 
     /**

@@ -24,18 +24,16 @@ import java.io.Closeable;
 /**
  *
  * @author <a href="mailto:onacit@gmail.com">Jin Kwon</a>
- * @param <T>
+ * @param <T> byte target type parameter
  */
 public abstract class CloseableByteOutput<T> implements ByteOutput, Closeable {
 
 
     /**
-     * Creates a new instance built on top of the specified underlying byte
-     * target.
+     * Creates a new instance wrapping specified byte target.
      *
-     * @param target the underlying byte target to be assigned to the field
-     * {@link #target} for later use, or {@code null} if this instance is
-     * intended to be created without an underlying byte target.
+     * @param target the underlying byte target. or {@code null} if it is
+     * intended to be lazily initialized and set.
      */
     public CloseableByteOutput(final T target) {
 

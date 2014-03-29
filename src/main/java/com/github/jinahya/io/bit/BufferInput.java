@@ -68,8 +68,8 @@ public class BufferInput extends CloseableByteInput<ByteBuffer> {
 
 
     /**
-     * {@inheritDoc} The {@code close()} method of {@code BufferReader} class
-     * does nothing.
+     * Closes this byte input. The {@code close()} method of
+     * {@code BufferReader} class does nothing.
      *
      * @throws IOException {@inheritDoc}
      */

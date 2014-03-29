@@ -48,13 +48,6 @@ final ByteOutput<ByteBuffer> byteOutput = new BufferOutput(target);
 final ByteOutput<ByteBuffer> byteOutput = ByteOutput.newInstance(target);
 final BitOutput<ByteBuffer> bitOutput = new BitOutput<>(byteOutput);
 final BitOutput<ByteBuffer> bitOutput = BitOutput.newInstance(target); // direct
-
-final WritableByteChnnale target;
-final ByteBuffer buffer;
-final ByteOutput<WritableByteChannel> byteOutput = new ChannelOutput(target);
-final ByteOutput<WritableByteChannel> byteOutput = ByteOutput.newInstance(target);
-final BitOutput<WritableByteChannel> bitOutput = new BitOutput<>(byteOutput);
-final BitOutput<WritableByteChannel> bitOutput = BitOutput.newInstance(target); // direct
 ```
 #### Writing values.
 ```java

@@ -13,22 +13,14 @@ A small library for reading or writing none octet aligned values such as `1-bit 
 #### Creating instances
 ```java
 final InputStream source;
-final ByteInput<InputStream> byteInput = new StreamByteInput(source);
-final ByteInput<InputStream> byteInput = ByteInput.newInstance(source);
-final BitInput<InputStream> bitInput = new BitInput<>(byteInput);
-final BitInput<InputStream> bitInput = BitInput.newInsatnce(source); // direct
+final ByteInput byteInput = new StreamInput(source);
+final BitInput bitInput = new BitInput(byteInput);
+final BitInput bitInput = BitInput.newInsatnce(source); // direct
 
 final ByteBuffer source;
-final ByteInput<ByteBuffer> byteInput = new BufferInput(source);
-final ByteInput<ByteBuffer> byteInput = ByteInput.newInstance(source);
-final BitInput<ByteBuffer> bitInput = new BitInput<>(byteInput);
-final BitInput<ByteBuffer> bitInput = BitInput.newInstance(source); // direct
-
-final ReadableByteChannel source;
-final ByteInput<ReadableByteChannel> byteInput = new ChannelInput(source);
-final ByteInput<ReadableByteChannel> byteINput = ByteInput.newInstance(source);
-final BitInput<ReadableByteChannel> bitInput = new BitInput<>(byteInput);
-final BitInput<ReadbleByteChannel> bitInput = BitInput.newInstance(source); // direct
+final ByteInput byteInput = new BufferInput(source);
+final BitInput bitInput = new BitInput(byteInput);
+final BitInput bitInput = BitInput.newInstance(source); // direct
 ```
 #### Reading values.
 ```java
@@ -47,10 +39,9 @@ biiiiiil llllllll llllllll llllllll llllllll llllllll lllllldd
 #### Creating instances
 ```java
 final OutputStream target;
-final ByteOutput<OutputStream> byteOutput = new StreamOutput(target);
-final ByteOutput<OutputStream> byteOutput = ByteOutput.newInstance(target);
-final BitOutput<OutputStream> bitInput = new BitOutput<>(byteOutput);
-final BitOutput<OutputStream> bitInput = BitOutput.newInstance(target); // direct
+final ByteOutput byteOutput = new StreamOutput(target);
+final BitOutput bitInput = new BitOutput(byteOutput);
+final BitOutput bitInput = BitOutput.newInstance(target); // direct
 
 final ByteBuffer target;
 final ByteOutput<ByteBuffer> byteOutput = new BufferOutput(target);

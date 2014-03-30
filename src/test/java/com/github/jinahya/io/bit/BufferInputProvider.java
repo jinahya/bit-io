@@ -18,27 +18,22 @@
 package com.github.jinahya.io.bit;
 
 
-import java.io.IOException;
+import com.google.inject.Provider;
+import java.nio.ByteBuffer;
 
 
 /**
- * An interface for suppling bytes.
  *
  * @author Jin Kwon
  */
-//@FunctionalInterface
-public interface ByteInput {
+public class BufferInputProvider implements Provider<BufferInput> {
 
 
-    /**
-     * Reads the next unsigned 8-bit byte.
-     *
-     * @return the next unsigned 8-bit byte value between {@code 0} (inclusive)
-     * and {@code 256} (exclusive)
-     *
-     * @throws IOException if an I/O error occurs.
-     */
-    int readUnsignedByte() throws IOException;
+    @Override
+    public BufferInput get() {
+
+        return new BufferInput(ByteBuffer.allocate(1024));
+    }
 
 
 }

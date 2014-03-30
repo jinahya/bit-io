@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 <a href="mailto:onacit@gmail.com">Jin Kwon</a>.
+ * Copyright 2013 Jin Kwon.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +24,8 @@ import java.nio.ByteBuffer;
 
 /**
  * A {@link ByteOutput} implementation for {@link ByteBuffer}s.
+ *
+ * @author Jin Kwon
  */
 public class BufferOutput extends AbstractByteOutput<ByteBuffer> {
 
@@ -42,14 +44,18 @@ public class BufferOutput extends AbstractByteOutput<ByteBuffer> {
     /**
      * {@inheritDoc} The {@code writeUnsignedByte(int)} method of
      * {@code BufferOutput} class calls {@link ByteBuffer#put(byte)} on the
-     * underlying byte buffer with given {@code value}.
+     * underlying byte buffer with given {@code value}. Override this method if
+     * {@link #target} is intended to be lazily initialized and set.
      *
      * @param value {@inheritDoc }
      *
-     * @throws IllegalStateException {@inheritDoc}
+     * @throws IllegalStateException if {@link #target} is currently
+     * {@code null}.
      * @throws IOException {@inheritDoc }
      *
      * @see ByteBuffer#put(byte)
+     * @see #target
+     * @see #setTarget(java.lang.Object)
      */
     @Override
     public void writeUnsignedByte(final int value) throws IOException {

@@ -22,6 +22,7 @@ import java.io.IOException;
 
 
 /**
+ * An interface for consuming bytes.
  *
  * @author <a href="mailto:onacit@gmail.com">Jin Kwon</a>
  */

@@ -6,7 +6,7 @@
   <!-- The Basics -->
   <groupId>com.github.jinahya</groupId>
   <artifactId>bit-io</artifactId>
-  <version>1.1.1</version>
+  <version>1.1.2</version>
   <packaging>jar</packaging>
   <parent>
     <groupId>org.sonatype.oss</groupId>
@@ -15,6 +15,11 @@
   </parent>
   <dependencyManagement>
     <dependencies>
+      <dependency>
+        <groupId>ch.qos.logback</groupId>
+        <artifactId>logback-classic</artifactId>
+        <version>1.1.1</version>
+      </dependency>
       <dependency>
         <groupId>com.google.inject</groupId>
         <artifactId>guice</artifactId>
@@ -31,6 +36,11 @@
         <version>1.9.5</version>
       </dependency>
       <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-api</artifactId>
+        <version>1.7.6</version>
+      </dependency>
+      <dependency>
         <groupId>org.testng</groupId>
         <artifactId>testng</artifactId>
         <version>6.8.8</version>
@@ -38,6 +48,11 @@
     </dependencies>
   </dependencyManagement>
   <dependencies>
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+      <scope>test</scope>
+    </dependency>
     <dependency>
       <groupId>com.google.inject</groupId>
       <artifactId>guice</artifactId>
@@ -52,6 +67,11 @@
       <groupId>org.mockito</groupId>
       <artifactId>mockito-all</artifactId>
       <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.testng</groupId>
@@ -300,7 +320,7 @@
     <connection>scm:git:git@github.com:jinahya/bit-io.git</connection>
     <developerConnection>scm:git:git@github.com:jinahya/bit-io.git</developerConnection>
     <url>https://github.com/jinahya/bit-io</url>
-    <tag>1.1.1</tag>
+    <tag>1.1.2</tag>
   </scm>
   <prerequisites>
     <maven>3.1.1</maven>

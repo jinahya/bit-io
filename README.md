@@ -31,7 +31,7 @@ final boolean b = bitInput.readBoolean();    // 1-bit boolean        1    1
 final int ui6 = bitInput.readUnsignedInt(6); // 6-bit unsigned int   6    7
 final long sl47 = bitInput.readLong(47);     // 47-bit signed long  47   54
 
-final int discarded = bitInput.aling(1);     // aligns to 8-bit      2   56
+final int discarded = bitInput.align(1);     // aligns to 8-bit      2   56
 assert discarded == 2;
 
 biiiiiil llllllll llllllll llllllll llllllll llllllll lllllldd
@@ -57,7 +57,7 @@ bitOutput.writeBoolean(true);          // 1-bit boolean        1    1
 bitOutput.writeInt(7, -1);             // 7-bit signed int     7    8
 bitOutput.writeUnsignedLong(33, 1L);   // 33-bit signed long  33   41
 
-final int padded = bitOutput.aling(4); // aligns to 32-bit    23   64
+final int padded = bitOutput.align(4); // aligns to 32-bit    23   64
 assert padded == 23;
 
 biiiiiii llllllll llllllll llllllll llllllll lppppppp pppppppp pppppppp pppppppp

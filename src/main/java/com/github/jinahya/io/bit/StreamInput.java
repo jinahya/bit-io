@@ -24,7 +24,7 @@ import java.io.InputStream;
 
 
 /**
- * A {@link AbstractByteInput} implementation for {@link InputStream}s.
+ * A {@link ByteInput} implementation for {@link InputStream}s.
  */
 public class StreamInput extends AbstractByteInput<InputStream> {
 

@@ -23,7 +23,7 @@ import java.nio.ByteBuffer;
 
 
 /**
- * A {@link CloseableByteInput} implementation for {@link ByteBuffer}s.
+ * A {@link ByteInput} implementation for {@link ByteBuffer}s.
  */
 public class BufferInput extends AbstractByteInput<ByteBuffer> {
 

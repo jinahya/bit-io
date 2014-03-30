@@ -23,8 +23,7 @@ import java.nio.ByteBuffer;
 
 
 /**
- * A {@link ByteOutput} implementation writes bytes to underlying
- * {@link ByteBuffer}s.
+ * A {@link ByteOutput} implementation for {@link ByteBuffer}s.
  */
 public class BufferOutput extends AbstractByteOutput<ByteBuffer> {
 

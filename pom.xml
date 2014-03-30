@@ -6,7 +6,7 @@
   <!-- The Basics -->
   <groupId>com.github.jinahya</groupId>
   <artifactId>bit-io</artifactId>
-  <version>1.1.1-SNAPSHOT</version>
+  <version>1.1.1</version>
   <packaging>jar</packaging>
   <parent>
     <groupId>org.sonatype.oss</groupId>
@@ -300,14 +300,14 @@
     <connection>scm:git:git@github.com:jinahya/bit-io.git</connection>
     <developerConnection>scm:git:git@github.com:jinahya/bit-io.git</developerConnection>
     <url>https://github.com/jinahya/bit-io</url>
-    <tag>HEAD</tag>
+    <tag>1.1.1</tag>
   </scm>
   <prerequisites>
     <maven>3.1.1</maven>
   </prerequisites>
-  <repositories/>
-  <pluginRepositories/>
-  <distributionManagement/>
+  <repositories />
+  <pluginRepositories />
+  <distributionManagement />
   <profiles>
     <profile>
       <id>release-sign-artifacts</id>

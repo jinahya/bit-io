@@ -12,19 +12,19 @@ A small library for reading or writing none octet aligned values such as `1-bit 
 ### Reading
 #### Creating instances
 ```java
-final InputStream source;
-final ByteInput byteInput = new StreamInput(source);
+final InputStream byteSource;
+final ByteInput byteInput = new StreamInput(byteSource);
 final BitInput bitInput = new BitInput(byteInput);
-final BitInput bitInput = BitInput.newInsatnce(source); // direct
+final BitInput bitInput = BitInput.newInsatnce(byteSource); // direct
 
-final ByteBuffer source;
-final ByteInput byteInput = new BufferInput(source);
+final ByteBuffer byteSource;
+final ByteInput byteInput = new BufferInput(byteSource);
 final BitInput bitInput = new BitInput(byteInput);
-final BitInput bitInput = BitInput.newInstance(source); // direct
+final BitInput bitInput = BitInput.newInstance(byteSource); // direct
 ```
 #### Reading values.
 ```java
-final BitInput<?> bitInput;
+final BitInput bitInput;
 
 final boolean b = bitInput.readBoolean();    // 1-bit boolean        1    1
 final int ui6 = bitInput.readUnsignedInt(6); // 6-bit unsigned int   6    7
@@ -38,20 +38,19 @@ biiiiiil llllllll llllllll llllllll llllllll llllllll lllllldd
 ### Writing
 #### Creating instances
 ```java
-final OutputStream target;
-final ByteOutput byteOutput = new StreamOutput(target);
+final OutputStream byteTarget;
+final ByteOutput byteOutput = new StreamOutput(byteTarget);
 final BitOutput bitInput = new BitOutput(byteOutput);
-final BitOutput bitInput = BitOutput.newInstance(target); // direct
+final BitOutput bitInput = BitOutput.newInstance(byteTarget); // direct
 
-final ByteBuffer target;
-final ByteOutput<ByteBuffer> byteOutput = new BufferOutput(target);
-final ByteOutput<ByteBuffer> byteOutput = ByteOutput.newInstance(target);
-final BitOutput<ByteBuffer> bitOutput = new BitOutput<>(byteOutput);
-final BitOutput<ByteBuffer> bitOutput = BitOutput.newInstance(target); // direct
+final ByteBuffer byteTarget;
+final ByteOutput byteOutput = new BufferOutput(byteTarget);
+final BitOutput bitOutput = new BitOutput(byteOutput);
+final BitOutput bitOutput = BitOutput.newInstance(byteTarget); // direct
 ```
 #### Writing values.
 ```java
-final BitOutput<?> bitOutput;
+final BitOutput bitOutput;
 
 bitOutput.writeBoolean(true);          // 1-bit boolean        1    1
 bitOutput.writeInt(7, -1);             // 7-bit signed int     7    8

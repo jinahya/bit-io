@@ -47,10 +47,13 @@ public class StreamOutput extends AbstractByteOutput<OutputStream> {
      *
      * @param value {@inheritDoc }
      *
-     * @throws IllegalStateException {@inheritDoc}
+     * @throws IllegalStateException if {@link #target} is currently
+     * {@code null}.
      * @throws IOException {@inheritDoc}
      *
      * @see OutputStream#write(int)
+     * @see #target
+     * @see #setTarget(java.lang.Object)
      */
     @Override
     public void writeUnsignedByte(final int value) throws IOException {

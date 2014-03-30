@@ -18,27 +18,27 @@
 package com.github.jinahya.io.bit;
 
 
-import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.ByteBuffer;
 
 
 /**
- * An interface for suppling bytes.
  *
  * @author Jin Kwon
  */
-//@FunctionalInterface
-public interface ByteInput {
+public class ByteOutputs {
 
 
-    /**
-     * Reads the next unsigned 8-bit byte.
-     *
-     * @return the next unsigned 8-bit byte value between {@code 0} (inclusive)
-     * and {@code 256} (exclusive)
-     *
-     * @throws IOException if an I/O error occurs.
-     */
-    int readUnsignedByte() throws IOException;
+    public static ByteOutput lambda(final OutputStream target) {
+
+        return (a) -> target.write(a);
+    }
+
+
+    public static ByteOutput lambda(final ByteBuffer target) {
+
+        return (a) -> target.put((byte) a);
+    }
 
 
 }

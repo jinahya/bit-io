@@ -31,6 +31,24 @@ import java.nio.ByteBuffer;
 public class BitOutput {
 
 
+    /*
+     *
+     * @param <T> byte target type parameter. @param target byte target. @param
+     * function byte output function.
+     *
+     * @return a new instance. public static <T> Supplier<BitOutput>
+     * newInstance( final Supplier<T> target, final Function<T, ByteOutput>
+     * function) {
+     *
+     * return () -> new BitOutput(function.apply(target.get())); }
+     */
+    /**
+     * Creates a new instance supplying bytes to specified target.
+     *
+     * @param target the byte target.
+     *
+     * @return a new instance.
+     */
     public static BitOutput newInstance(final OutputStream target) {
 
         if (target == null) {

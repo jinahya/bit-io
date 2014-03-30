@@ -19,6 +19,8 @@ package com.github.jinahya.io.bit;
 
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.ByteBuffer;
 import org.mockito.Mockito;
 
 
@@ -27,6 +29,18 @@ import org.mockito.Mockito;
  * @author Jin Kwon
  */
 public class ByteInputs {
+
+
+    public static ByteInput lambda(final InputStream source) {
+
+        return () -> source.read();
+    }
+
+
+    public static ByteInput lambda(final ByteBuffer source) {
+
+        return () -> source.get() & 0xFF;
+    }
 
 
     public static ByteInput mock() throws IOException {

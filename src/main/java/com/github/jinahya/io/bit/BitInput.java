@@ -32,16 +32,49 @@ import java.nio.ByteBuffer;
 public class BitInput {
 
 
+    /*
+     * Creates a new instance.
+     *
+     * @param <T> byte source type parameter
+     * @param source byte source supplier
+     * @param function byte input function
+     *
+     * @return
+    public static <T> Supplier<BitInput> newInstance(
+            final Supplier<T> source, final Function<T, ByteInput> function) {
+
+        return () -> new BitInput(function.apply(source.get()));
+    }
+    */
+
+
+    /**
+     * Creates a new instance consuming bytes from given byte source.
+     *
+     * @param source the byte source
+     *
+     * @return a new instance
+     *
+     * @throws NullPointerException if {@code source} is {@code null}.
+     */
     public static BitInput newInstance(final InputStream source) {
 
         if (source == null) {
             throw new NullPointerException("null source");
         }
 
+        // @todo: lambda this
         return new BitInput(new StreamInput(source));
     }
 
 
+    /**
+     * Creates a new instance consuming bytes from specified byte source.
+     *
+     * @param source the byte source.
+     *
+     * @return a new instance.
+     */
     public static BitInput newInstance(final ByteBuffer source) {
 
         if (source == null) {

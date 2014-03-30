@@ -24,7 +24,7 @@ final BitInput bitInput = BitInput.newInstance(source); // direct
 ```
 #### Reading values.
 ```java
-final BitInput<?> bitInput;
+final BitInput bitInput;
 
 final boolean b = bitInput.readBoolean();    // 1-bit boolean        1    1
 final int ui6 = bitInput.readUnsignedInt(6); // 6-bit unsigned int   6    7
@@ -45,13 +45,12 @@ final BitOutput bitInput = BitOutput.newInstance(target); // direct
 
 final ByteBuffer target;
 final ByteOutput<ByteBuffer> byteOutput = new BufferOutput(target);
-final ByteOutput<ByteBuffer> byteOutput = ByteOutput.newInstance(target);
-final BitOutput<ByteBuffer> bitOutput = new BitOutput<>(byteOutput);
+final BitOutput<ByteBuffer> bitOutput = new BitOutput(byteOutput);
 final BitOutput<ByteBuffer> bitOutput = BitOutput.newInstance(target); // direct
 ```
 #### Writing values.
 ```java
-final BitOutput<?> bitOutput;
+final BitOutput bitOutput;
 
 bitOutput.writeBoolean(true);          // 1-bit boolean        1    1
 bitOutput.writeInt(7, -1);             // 7-bit signed int     7    8

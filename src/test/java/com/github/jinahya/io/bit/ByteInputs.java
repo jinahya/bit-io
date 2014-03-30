@@ -19,25 +19,25 @@ package com.github.jinahya.io.bit;
 
 
 import java.io.IOException;
+import org.mockito.Mockito;
 
 
 /**
  *
  * @author Jin Kwon
  */
-//@FunctionalInterface
-public interface ByteInput {
+public class ByteInputs {
 
 
-    /**
-     * Reads the next unsigned 8-bit byte.
-     *
-     * @return the next unsigned 8-bit byte value between {@code 0} (inclusive)
-     * and {@code 256} (exclusive)
-     *
-     * @throws IOException if an I/O error occurs.
-     */
-    int readUnsignedByte() throws IOException;
+    public static ByteInput mock() throws IOException {
+
+        final ByteInput mock = Mockito.mock(ByteInput.class);
+
+        Mockito.when(mock.readUnsignedByte())
+                .thenReturn((int) (System.currentTimeMillis() & 0xFF));
+
+        return mock;
+    }
 
 
 }

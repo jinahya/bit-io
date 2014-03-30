@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Jin Kwon <onacit at gmail.com>.
+ * Copyright 2013 <a href="mailto:onacit@gmail.com">Jin Kwon</a>.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@
 package com.github.jinahya.io.bit;
 
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -25,7 +26,7 @@ import java.io.InputStream;
 /**
  * A {@link ByteInput} implementation for {@link InputStream}s.
  */
-public class StreamInput extends ByteInput<InputStream> {
+public class StreamInput extends AbstractByteInput<InputStream> {
 
 
     /**
@@ -40,16 +41,15 @@ public class StreamInput extends ByteInput<InputStream> {
 
 
     /**
-     * {@inheritDoc}
-     * <p/>
-     * The {@code readUnsignedByte()} method of {@code StreamReader} class calls
-     * {@link InputStream#read()} on {@link #source} and returns the result.
-     * Override this method if {@link #source} is intended to be lazily
-     * initialized and set.
+     * {@inheritDoc} The {@code readUnsignedByte()} method of
+     * {@code StreamReader} class calls {@link InputStream#read()} on
+     * {@link #source} and returns the result. Override this method if
+     * {@link #source} is intended to be lazily initialized and set.
      *
      * @return {@inheritDoc}
      *
-     * @throws IllegalStateException {@inheritDoc}
+     * @throws IllegalStateException id {@link #source} is currently
+     * {@code null}.
      * @throws IOException {@inheritDoc}
      */
     @Override
@@ -59,25 +59,12 @@ public class StreamInput extends ByteInput<InputStream> {
             throw new IllegalStateException("#source is currently null");
         }
 
-        return source.read();
-    }
-
-
-    /**
-     * {@inheritDoc}
-     * <p/>
-     * The {@code close()} method of {@code StreamInput} class calls, if
-     * {@link #source} is not {@code null}, {@link InputStream#close()} on
-     * {@link #source}.
-     *
-     * @throws IOException {@inheritDoc }
-     */
-    @Override
-    public void close() throws IOException {
-
-        if (source != null) {
-            source.close();
+        final int read = source.read();
+        if (read == -1) {
+            throw new EOFException("eof");
         }
+
+        return read;
     }
 
 

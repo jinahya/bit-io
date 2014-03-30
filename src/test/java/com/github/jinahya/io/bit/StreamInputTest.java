@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 <a href="mailto:onacit@gmail.com">Jin Kwon</a>.
+ * Copyright 2014 Jin Kwon.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,54 +18,17 @@
 package com.github.jinahya.io.bit;
 
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import org.testng.Assert;
-import org.testng.annotations.Test;
+import org.testng.annotations.Guice;
 
 
 /**
  *
- * @author <a href="mailto:onacit@gmail.com">Jin Kwon</a>
+ * @author Jin Kwon
  */
-public class StreamInputTest extends ByteInputTest<StreamInput, InputStream> {
-
-
-    @Test
-    public void readUnsignedByte_() throws IOException {
-
-        final ByteArrayInputStream source
-            = new ByteArrayInputStream(new byte[]{0x00});
-
-        final ByteInput<InputStream> input = new StreamInput(source);
-
-        input.readUnsignedByte();
-    }
-
-
-    @Test
-    public void readUnsignedByte_eof() throws IOException {
-
-        final ByteArrayInputStream source
-            = new ByteArrayInputStream(new byte[0]);
-
-        final ByteInput<InputStream> input = new StreamInput(source);
-
-        Assert.assertEquals(input.readUnsignedByte(), -1);
-    }
-
-
-    @Test
-    public void close() throws IOException {
-
-        new StreamInput(new ByteArrayInputStream(new byte[]{0x00})).close();
-
-        new StreamInput(new ByteArrayInputStream(new byte[0])).close();
-
-        new StreamInput(null).close();
-    }
-
+@Guice(modules = {StreamInputModule.class})
+public class StreamInputTest
+        extends AbstractByteInputTest<StreamInput, InputStream> {
 
 }
 

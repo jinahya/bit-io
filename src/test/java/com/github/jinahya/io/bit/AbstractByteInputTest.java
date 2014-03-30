@@ -18,27 +18,14 @@
 package com.github.jinahya.io.bit;
 
 
-import java.io.IOException;
-
-
 /**
  *
  * @author Jin Kwon
+ * @param <T>
+ * @param <U>
  */
-//@FunctionalInterface
-public interface ByteInput {
-
-
-    /**
-     * Reads the next unsigned 8-bit byte.
-     *
-     * @return the next unsigned 8-bit byte value between {@code 0} (inclusive)
-     * and {@code 256} (exclusive)
-     *
-     * @throws IOException if an I/O error occurs.
-     */
-    int readUnsignedByte() throws IOException;
-
+public abstract class AbstractByteInputTest<T extends AbstractByteInput<U>, U>
+        extends ByteInputTest<T> {
 
 }
 

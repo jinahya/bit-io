@@ -18,27 +18,23 @@
 package com.github.jinahya.io.bit;
 
 
-import java.io.IOException;
+import com.google.inject.Module;
+import org.testng.IModuleFactory;
+import org.testng.ITestContext;
 
 
 /**
  *
  * @author Jin Kwon
  */
-//@FunctionalInterface
-public interface ByteInput {
+public class ByteInputModuleFactory implements IModuleFactory {
 
 
-    /**
-     * Reads the next unsigned 8-bit byte.
-     *
-     * @return the next unsigned 8-bit byte value between {@code 0} (inclusive)
-     * and {@code 256} (exclusive)
-     *
-     * @throws IOException if an I/O error occurs.
-     */
-    int readUnsignedByte() throws IOException;
+    @Override
+    public Module createModule(final ITestContext testContext, final Class<?> testClass) {
 
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 
 }
 

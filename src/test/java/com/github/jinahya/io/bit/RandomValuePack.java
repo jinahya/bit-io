@@ -25,7 +25,7 @@ import java.util.Objects;
 
 /**
  *
- * @author Jin Kwon <jinahya at gmail.com>
+ * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
  */
 public class RandomValuePack {
 
@@ -38,7 +38,7 @@ public class RandomValuePack {
     }
 
 
-    void read(final BitInput<?> input) throws IOException {
+    void read(final BitInput input) throws IOException {
 
         valueBoolean = input.readBoolean();
 
@@ -58,7 +58,7 @@ public class RandomValuePack {
     }
 
 
-    void write(final BitOutput<?> output) throws IOException {
+    void write(final BitOutput output) throws IOException {
 
         valueBoolean = BitIoTests.valueBoolean();
         output.writeBoolean(valueBoolean);

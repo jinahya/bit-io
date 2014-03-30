@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Jin Kwon <jinahya at gmail.com>.
+ * Copyright 2014 Jin Kwon.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,23 +18,36 @@
 package com.github.jinahya.io.bit;
 
 
+import java.io.IOException;
+import javax.inject.Inject;
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
 
 /**
  *
- * @author <a href="mailto:onacit@gmail.com">Jin Kwon</a>
- * @param <T> byte input type parameter
- * @param <U> byte source type parameter
+ * @author Jin Kwon
+ * @param <T>
  */
-public abstract class ByteInputTest<T extends ByteInput<U>, U> {
+public abstract class ByteInputTest<T extends ByteInput> {
 
 
-    @Test(expectedExceptions = {NullPointerException.class})
-    public void createWithNullByteInput() {
+    @Test
+    public void readUnsignedByte_() throws IOException {
 
-        final BitInput<?> input = new BitInput<>(null);
+        final int actual = input.readUnsignedByte();
+
+        if (actual == -1) {
+            return;
+        }
+
+        Assert.assertTrue(actual >= 0);
+        Assert.assertTrue(actual < 256);
     }
+
+
+    @Inject
+    protected T input;
 
 
 }

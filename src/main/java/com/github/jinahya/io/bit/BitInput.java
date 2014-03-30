@@ -18,18 +18,38 @@
 package com.github.jinahya.io.bit;
 
 
-import java.io.Closeable;
 import java.io.EOFException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.ByteBuffer;
 
 
 /**
  * A class for reading arbitrary length of bits.
  *
- * @author Jin Kwon <onacit at gmail.com>
- * @param <T> underlying byte source type parameter
+ * @author <a href="mailto:onacit@gmail.com">Jin Kwon</a>
  */
-public class BitInput<T> implements Closeable {
+public class BitInput {
+
+
+    public static BitInput newInstance(final InputStream source) {
+
+        if (source == null) {
+            throw new NullPointerException("null source");
+        }
+
+        return new BitInput(new StreamInput(source));
+    }
+
+
+    public static BitInput newInstance(final ByteBuffer source) {
+
+        if (source == null) {
+            throw new NullPointerException("null source");
+        }
+
+        return new BitInput(new BufferInput(source));
+    }
 
 
     /**
@@ -40,7 +60,7 @@ public class BitInput<T> implements Closeable {
      * @throws NullPointerException if the specified {@code input} is
      * {@code null}.
      */
-    public BitInput(final ByteInput<T> input) {
+    public BitInput(final ByteInput input) {
 
         super();
 
@@ -386,7 +406,7 @@ public class BitInput<T> implements Closeable {
      */
     protected void readBytes(final int range, final byte[] value, int offset,
                              final int length)
-        throws IOException {
+            throws IOException {
 
         if (range <= 0) {
             throw new IllegalArgumentException("range(" + range + ") <= 0");
@@ -406,7 +426,7 @@ public class BitInput<T> implements Closeable {
 
         if (offset > value.length) {
             throw new IllegalArgumentException(
-                "offset(" + offset + ") >= value.length(" + value.length + ")");
+                    "offset(" + offset + ") >= value.length(" + value.length + ")");
         }
 
         if (length < 0) {
@@ -415,8 +435,8 @@ public class BitInput<T> implements Closeable {
 
         if (offset + length > value.length) {
             throw new IllegalArgumentException(
-                "offset(" + offset + ") + length(" + length + ") = "
-                + (offset + length) + " > value.length(" + value.length + ")");
+                    "offset(" + offset + ") + length(" + length + ") = "
+                    + (offset + length) + " > value.length(" + value.length + ")");
         }
 
         for (int i = 0; i < length; i++) {
@@ -444,7 +464,7 @@ public class BitInput<T> implements Closeable {
      */
     public int readBytes(final int scale, final int range, final byte[] value,
                          final int offset)
-        throws IOException {
+            throws IOException {
 
         if (scale <= 0) {
             throw new IllegalArgumentException("scale(" + scale + ") <= 0");
@@ -477,7 +497,7 @@ public class BitInput<T> implements Closeable {
      * @see #readBytes(int, byte[], int, int)
      */
     public byte[] readBytes(final int scale, final int range)
-        throws IOException {
+            throws IOException {
 
         if (scale <= 0) {
             throw new IllegalArgumentException("scale(" + scale + ") <= 0");
@@ -561,7 +581,7 @@ public class BitInput<T> implements Closeable {
 
         if (length > Short.MAX_VALUE) {
             throw new IllegalArgumentException(
-                "length(" + length + ") > " + Short.MAX_VALUE);
+                    "length(" + length + ") > " + Short.MAX_VALUE);
         }
 
         int bits = 0;
@@ -594,36 +614,6 @@ public class BitInput<T> implements Closeable {
 
 
     /**
-     * Returns the underlying byte input.
-     *
-     * @return the underlying byte input.
-     */
-    public ByteInput<T> getInput() {
-
-        return input;
-    }
-
-
-    /**
-     * Closes this bit input. This method aligns to a single byte and closes the
-     * underlying byte input.
-     *
-     * @throws IOException if an I/O error occurs.
-     *
-     * @see #align(int)
-     * @see ByteInput#close()
-     */
-    @Override
-    public void close() throws IOException {
-
-        if (input != null) {
-            align(1);
-            input.close();
-        }
-    }
-
-
-    /**
      * Returns the number of bytes read from the underlying byte input so far.
      *
      * @return the number of bytes read so far.
@@ -637,7 +627,7 @@ public class BitInput<T> implements Closeable {
     /**
      * The underlying byte input.
      */
-    private final ByteInput<T> input;
+    protected final ByteInput input;
 
 
     /**

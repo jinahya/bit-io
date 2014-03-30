@@ -44,9 +44,9 @@ final BitOutput bitInput = new BitOutput(byteOutput);
 final BitOutput bitInput = BitOutput.newInstance(target); // direct
 
 final ByteBuffer target;
-final ByteOutput<ByteBuffer> byteOutput = new BufferOutput(target);
-final BitOutput<ByteBuffer> bitOutput = new BitOutput(byteOutput);
-final BitOutput<ByteBuffer> bitOutput = BitOutput.newInstance(target); // direct
+final ByteOutput byteOutput = new BufferOutput(target);
+final BitOutput bitOutput = new BitOutput(byteOutput);
+final BitOutput bitOutput = BitOutput.newInstance(target); // direct
 ```
 #### Writing values.
 ```java

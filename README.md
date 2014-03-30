@@ -60,7 +60,7 @@ bitOutput.writeUnsignedLong(33, 1L);   // 33-bit signed long  33   41
 final int padded = bitOutput.align(4); // aligns to 32-bit    23   64
 assert padded == 23;
 
-biiiiiii llllllll llllllll llllllll llllllll lppppppp pppppppp pppppppp pppppppp
+biiiiiii llllllll llllllll llllllll llllllll lppppppp pppppppp pppppppp
 ```
 
 #### [Wanna donate some?](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=GWDFLJNSZSEGG&lc=KR&item_name=github&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted)

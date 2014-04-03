@@ -15,17 +15,22 @@
  */
 
 
-package com.github.jinahya.io.bit;
+package com.github.jinahya.io.bit.candidate;
+
+
+import com.github.jinahya.io.bit.BitInput;
+import java.io.IOException;
 
 
 /**
  *
  * @author Jin Kwon
- * @param <T> byte input type parameter.
- * @param <U> byte source type parameter.
  */
-public abstract class AbstractByteInputTest<T extends AbstractByteInput<U>, U>
-        extends ByteInputTest<T> {
+public interface BitReadable {
+
+
+    void read(BitInput input) throws IOException;
+
 
 }
 

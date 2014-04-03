@@ -18,14 +18,22 @@
 package com.github.jinahya.io.bit;
 
 
+import com.google.inject.Provider;
+
+
 /**
  *
  * @author Jin Kwon
- * @param <T> byte input type parameter.
- * @param <U> byte source type parameter.
  */
-public abstract class AbstractByteInputTest<T extends AbstractByteInput<U>, U>
-        extends ByteInputTest<T> {
+public class ByteInputProvider implements Provider<ByteInput> {
+
+
+    @Override
+    public ByteInput get() {
+
+        return new ByteInputMock();
+    }
+
 
 }
 

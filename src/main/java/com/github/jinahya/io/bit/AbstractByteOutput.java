@@ -19,6 +19,7 @@ package com.github.jinahya.io.bit;
 
 
 /**
+ * An abstract class for implementing {@code ByteOutput}s.
  *
  * @author <a href="mailto:onacit@gmail.com">Jin Kwon</a>
  * @param <T> byte target type parameter
@@ -29,7 +30,7 @@ public abstract class AbstractByteOutput<T> implements ByteOutput {
     /**
      * Creates a new instance wrapping specified byte target.
      *
-     * @param target the underlying byte target. or {@code null} if it is
+     * @param target the underlying byte target or {@code null} if it is
      * intended to be lazily initialized and set.
      */
     public AbstractByteOutput(final T target) {
@@ -44,7 +45,10 @@ public abstract class AbstractByteOutput<T> implements ByteOutput {
      * Returns the current value of {@link #target}.
      *
      * @return the current value of {@link #target}.
+     *
+     * @deprecated Use {@link #target}.
      */
+    @Deprecated
     public T getTarget() {
 
         return target;
@@ -55,7 +59,10 @@ public abstract class AbstractByteOutput<T> implements ByteOutput {
      * Replaces the value of {@link #target} with given.
      *
      * @param target new value for {@link #target}.
+     *
+     * @deprecated Use {@link #target}.
      */
+    @Deprecated
     public void setTarget(final T target) {
 
         this.target = target;

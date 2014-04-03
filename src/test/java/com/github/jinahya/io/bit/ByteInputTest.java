@@ -27,7 +27,7 @@ import org.testng.annotations.Test;
 /**
  *
  * @author Jin Kwon
- * @param <T>
+ * @param <T> byte input type parameter
  */
 public abstract class ByteInputTest<T extends ByteInput> {
 

@@ -21,6 +21,7 @@ package com.github.jinahya.io.bit;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
 
 
 /**
@@ -28,7 +29,7 @@ import java.nio.ByteBuffer;
  *
  * @author <a href="mailto:onacit@gmail.com">Jin Kwon</a>
  */
-public class BitOutput {
+public class BitOutput extends BitBase {
 
 
     /*
@@ -474,29 +475,24 @@ public class BitOutput {
      *
      * @throws IOException if an I/O error occurs.
      */
-    protected void writeBytes(final int range, final byte[] value, int offset,
-                              final int length)
+    void writeBytes(final int range, final byte[] value, int offset,
+                    final int length)
             throws IOException {
 
-        if (range <= 0) {
-            throw new IllegalArgumentException("range(" + range + ") <= 0");
-        }
-
-        if (range > 8) {
-            throw new IllegalArgumentException("range(" + range + ") > 8");
-        }
+        requireValidBytesRange(range);
 
         if (value == null) {
-            throw new NullPointerException("value == null");
+            throw new NullPointerException("null value");
         }
 
         if (offset < 0) {
             throw new IllegalArgumentException("offset(" + offset + ") < 0");
         }
 
-        if (offset > value.length) {
+        if (false && offset >= value.length) {
             throw new IllegalArgumentException(
-                    "offset(" + offset + ") >= value.length(" + value.length + ")");
+                    "offset(" + offset + ") >= value.length(" + value.length
+                    + ")");
         }
 
         if (length < 0) {
@@ -506,7 +502,8 @@ public class BitOutput {
         if (offset + length > value.length) {
             throw new IllegalArgumentException(
                     "offset(" + offset + ") + length(" + length + ") = "
-                    + (offset + length) + " > value.length(" + value.length + ")");
+                    + (offset + length) + " > value.length(" + value.length
+                    + ")");
         }
 
         for (int i = 0; i < length; i++) {
@@ -536,13 +533,7 @@ public class BitOutput {
                            int offset, final int length)
             throws IOException {
 
-        if (scale <= 0) {
-            throw new IllegalArgumentException("scale(" + scale + ") <= 0");
-        }
-
-        if (scale > 16) {
-            throw new IllegalArgumentException("scale(" + scale + ") > 16");
-        }
+        requireValidBytesScale(scale);
 
         if (length < 0) {
             throw new IllegalArgumentException("length(" + length + ") < 0");
@@ -602,7 +593,23 @@ public class BitOutput {
             throw new NullPointerException("null charsetName");
         }
 
-        writeBytes(16, 8, value.getBytes(charsetName));
+        writeBytes(BYTES_SCALE_MAX, BYTES_RANGE_MAX,
+                   value.getBytes(charsetName));
+    }
+
+
+    public void writeString(final String value, final Charset charset)
+            throws IOException {
+
+        if (value == null) {
+            throw new NullPointerException("null value");
+        }
+
+        if (charset == null) {
+            throw new NullPointerException("null charset");
+        }
+
+        writeBytes(BYTES_SCALE_MAX, BYTES_RANGE_MAX, value.getBytes(charset));
     }
 
 
@@ -624,7 +631,7 @@ public class BitOutput {
             throw new NullPointerException("null value");
         }
 
-        writeBytes(16, 7, value.getBytes("US-ASCII"));
+        writeBytes(BYTES_SCALE_MAX, 7, value.getBytes("US-ASCII"));
     }
 
 

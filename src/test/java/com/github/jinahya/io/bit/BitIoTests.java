@@ -20,7 +20,9 @@ package com.github.jinahya.io.bit;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Collection;
+import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.IntStream;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.testng.Assert;
 
@@ -61,6 +63,26 @@ final class BitIoTests {
     }
 
 
+    static void lengthIntUnsigned(final int size,
+                                  final Collection<Integer> lengths) {
+
+        if (size < 0) {
+            throw new IllegalArgumentException("size(" + size + ") < 0");
+        }
+
+        if (lengths == null) {
+            throw new NullPointerException("null lengths");
+        }
+
+        final IntStream.Builder builder = IntStream.builder();
+        for (int i = 0; i < size; i++) {
+            builder.add(lengthIntUnsigned());
+        }
+
+        builder.build().forEach(lengths::add);
+    }
+
+
     private static int assertValueIntUnsigned(final int value,
                                               final int length) {
 
@@ -82,12 +104,16 @@ final class BitIoTests {
     }
 
 
-    static int valueIntUnsigned(final Collection<Integer> lengths) {
+    static void valueIntUnsigned(final Collection<Integer> lengths,
+                                 final Collection<Integer> values) {
 
-        final int length = lengthIntUnsigned();
-        lengths.add(length);
+        Objects.requireNonNull(lengths, "null lengths");
 
-        return valueIntUnsigned(length);
+        Objects.requireNonNull(values, "null values");
+
+        lengths.stream()
+                .map(BitIoTests::valueIntUnsigned)
+                .forEach(values::add);
     }
 
 
@@ -105,6 +131,25 @@ final class BitIoTests {
         final int length = random().nextInt(2, 33);
 
         return assertLengthInt(length);
+    }
+
+
+    static void lengthInt(final int size, final Collection<Integer> lengths) {
+
+        if (size < 0) {
+            throw new IllegalArgumentException("size(" + size + ") < 0");
+        }
+
+        if (lengths == null) {
+            throw new NullPointerException("null lengths");
+        }
+
+        final IntStream.Builder builder = IntStream.builder();
+        for (int i = 0; i < size; i++) {
+            builder.add(lengthInt());
+        }
+
+        builder.build().forEach(lengths::add);
     }
 
 
@@ -131,6 +176,19 @@ final class BitIoTests {
         final int value = random().nextInt() >> (32 - length); // length == 32 ?
 
         return assertValueInt(value, length);
+    }
+
+
+    static void valueInt(final Collection<Integer> lengths,
+                         final Collection<Integer> values) {
+
+        Objects.requireNonNull(lengths, "null lengths");
+
+        Objects.requireNonNull(values, "null values");
+
+        lengths.stream()
+                .map(BitIoTests::valueInt)
+                .forEach(values::add);
     }
 
 

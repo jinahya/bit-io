@@ -18,10 +18,10 @@
 package com.github.jinahya.io.bit;
 
 
-import java.io.IOException;
+import java.io.EOFException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
-import org.mockito.Mockito;
+import java.nio.channels.ReadableByteChannel;
 
 
 /**
@@ -31,26 +31,58 @@ import org.mockito.Mockito;
 public class ByteInputs {
 
 
-    public static ByteInput lambda(final InputStream source) {
+    public static ByteInput newInstance(final InputStream source) {
+
+        if (source == null) {
+            throw new NullPointerException("null source");
+        }
 
         return () -> source.read();
     }
 
 
-    public static ByteInput lambda(final ByteBuffer source) {
+    public static ByteInput newInstance(final ByteBuffer source) {
+
+        if (source == null) {
+            throw new NullPointerException("null source");
+        }
 
         return () -> source.get() & 0xFF;
     }
 
 
-    public static ByteInput mock() throws IOException {
+    public static ByteInput newInstance(final ReadableByteChannel source) {
 
-        final ByteInput mock = Mockito.mock(ByteInput.class);
+        if (source == null) {
+            throw new NullPointerException("null source");
+        }
 
-        Mockito.when(mock.readUnsignedByte())
-                .thenReturn((int) (System.currentTimeMillis() & 0xFF));
+        final int capacity = 1;
+        final ByteBuffer buffer = ByteBuffer.allocate(capacity);
+        assert buffer.capacity() != 0;
+        //buffer.compact(); // position->n;limit->capacity
+        //buffer.flip(); // limit->position; position->zero
+        buffer.position(buffer.limit()); // drain
+        assert !buffer.hasRemaining();
 
-        return mock;
+        return () -> {
+            if (!buffer.hasRemaining()) {
+                do {
+                    if (source.read(buffer) == -1) {
+                        throw new EOFException("no bytes in channel");
+                    }
+                } while (buffer.position() == 0);
+            }
+            buffer.flip();
+            assert buffer.hasRemaining();
+            return buffer.get() & 0xFF;
+        };
+    }
+
+
+    public static ByteInput newInstance() {
+
+        return () -> (int) (System.currentTimeMillis() & 0xFF);
     }
 
 

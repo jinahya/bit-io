@@ -18,14 +18,22 @@
 package com.github.jinahya.io.bit;
 
 
+import java.io.IOException;
+
+
 /**
  *
  * @author Jin Kwon
- * @param <T> byte input type parameter.
- * @param <U> byte source type parameter.
  */
-public abstract class AbstractByteInputTest<T extends AbstractByteInput<U>, U>
-        extends ByteInputTest<T> {
+public class ByteInputMock implements ByteInput {
+
+
+    @Override
+    public int readUnsignedByte() throws IOException {
+
+        return (int) (System.currentTimeMillis() & 0xFF);
+    }
+
 
 }
 

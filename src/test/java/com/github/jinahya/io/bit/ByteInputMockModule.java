@@ -18,14 +18,22 @@
 package com.github.jinahya.io.bit;
 
 
+import com.google.inject.AbstractModule;
+
+
 /**
  *
  * @author Jin Kwon
- * @param <T> byte input type parameter.
- * @param <U> byte source type parameter.
  */
-public abstract class AbstractByteInputTest<T extends AbstractByteInput<U>, U>
-        extends ByteInputTest<T> {
+public class ByteInputMockModule extends AbstractModule {
+
+
+    @Override
+    protected void configure() {
+
+        bind(ByteInput.class).to(ByteInputMock.class);
+    }
+
 
 }
 

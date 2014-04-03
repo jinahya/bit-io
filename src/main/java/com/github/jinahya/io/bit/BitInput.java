@@ -22,6 +22,9 @@ import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 
 /**
@@ -29,23 +32,7 @@ import java.nio.ByteBuffer;
  *
  * @author <a href="mailto:onacit@gmail.com">Jin Kwon</a>
  */
-public class BitInput {
-
-
-    /*
-     * Creates a new instance.
-     *
-     * @param <T> byte source type parameter
-     * @param source byte source supplier
-     * @param function byte input function
-     *
-     * @return
-    public static <T> Supplier<BitInput> newInstance(
-            final Supplier<T> source, final Function<T, ByteInput> function) {
-
-        return () -> new BitInput(function.apply(source.get()));
-    }
-    */
+public class BitInput extends BitBase {
 
 
     /**
@@ -427,6 +414,108 @@ public class BitInput {
 
 
     /**
+     *
+     * @param scale
+     * @param range
+     * @param output
+     *
+     * @throws IOException if an I/O error occurs.
+     *
+     * @see #BYTES_SCALE_MIN
+     * @see #BYTES_SCALE_MAX
+     * @see #BYTES_RANGE_MIN
+     * @see #BYTES_RANGE_MAX
+     * @see #requireValidBytesScale(int)
+     * @see #requireValidBytesRange(int)
+     */
+    public void readBytes(final int scale, final int range,
+                          final Supplier<ByteOutput> output)
+            throws IOException {
+
+        requireValidBytesScale(scale);
+
+        requireValidBytesRange(range);
+
+        if (output == null) {
+            throw new NullPointerException("null output");
+        }
+
+        final int length = readUnsignedShort(scale);
+        for (int i = 0; i < length; i++) {
+            output.get().writeUnsignedByte(readUnsignedByte(range));
+        }
+    }
+
+
+    /**
+     * Reads a sequence of bytes.
+     *
+     * @param scale the number of bits required for calculating the number of
+     * bytes to read; between 0 (exclusive) and 16 (inclusive).
+     * @param range the number of valid bits in each byte; between 0 (exclusive)
+     * and 8 (inclusive).
+     * @param output
+     *
+     * @throws IOException if an I/O error occurs.
+     */
+    public void readBytes(final int scale, final int range,
+                          final ByteOutput output)
+            throws IOException {
+
+        requireValidBytesScale(scale);
+
+        requireValidBytesRange(range);
+
+        if (output == null) {
+            throw new NullPointerException("null output");
+        }
+
+        final int length = readUnsignedShort(scale);
+        for (int i = 0; i < length; i++) {
+            output.writeUnsignedByte(readUnsignedByte(range));
+        }
+    }
+
+
+    public void readBytes(final int scale, final int range,
+                          final Consumer<Byte> consumer)
+            throws IOException {
+
+        requireValidBytesScale(scale);
+
+        requireValidBytesRange(range);
+
+        if (consumer == null) {
+            throw new NullPointerException("null consumer");
+        }
+
+        final int length = readUnsignedShort(scale);
+        for (int i = 0; i < length; i++) {
+            consumer.accept((byte) readUnsignedByte(range));
+        }
+    }
+
+
+    public void readBytes(final int scale, final int range,
+                          final ByteBuffer output)
+            throws IOException {
+
+        requireValidBytesScale(scale);
+
+        requireValidBytesRange(range);
+
+        if (output == null) {
+            throw new NullPointerException("null output");
+        }
+
+        final int length = readUnsignedShort(scale);
+        for (int i = 0; i < length; i++) {
+            output.put((byte) readUnsignedByte(range));
+        }
+    }
+
+
+    /**
      * Reads a sequence of bytes.
      *
      * @param range the number of valid bits in each byte; between 0 (exclusive)
@@ -441,13 +530,7 @@ public class BitInput {
                              final int length)
             throws IOException {
 
-        if (range <= 0) {
-            throw new IllegalArgumentException("range(" + range + ") <= 0");
-        }
-
-        if (range > 8) {
-            throw new IllegalArgumentException("range(" + range + ") > 8");
-        }
+        requireValidBytesRange(range);
 
         if (value == null) {
             throw new NullPointerException("value == null");
@@ -457,9 +540,11 @@ public class BitInput {
             throw new IllegalArgumentException("offset(" + offset + ") < 0");
         }
 
-        if (offset > value.length) {
+        if (false && offset >= value.length) {
+            // ? offset == value.length && length == 0
             throw new IllegalArgumentException(
-                    "offset(" + offset + ") >= value.length(" + value.length + ")");
+                    "offset(" + offset + ") >= value.length(" + value.length
+                    + ")");
         }
 
         if (length < 0) {
@@ -469,7 +554,8 @@ public class BitInput {
         if (offset + length > value.length) {
             throw new IllegalArgumentException(
                     "offset(" + offset + ") + length(" + length + ") = "
-                    + (offset + length) + " > value.length(" + value.length + ")");
+                    + (offset + length) + " > value.length(" + value.length
+                    + ")");
         }
 
         for (int i = 0; i < length; i++) {
@@ -496,18 +582,10 @@ public class BitInput {
      * @see #readBytes(int, byte[], int, int)
      */
     public int readBytes(final int scale, final int range, final byte[] value,
-                         final int offset)
+                         int offset)
             throws IOException {
 
-        if (scale <= 0) {
-            throw new IllegalArgumentException("scale(" + scale + ") <= 0");
-        }
-
-        if (scale > 16) {
-            throw new IllegalArgumentException("scale(" + scale + ") > 16");
-        }
-
-        final int length = readUnsignedShort(scale);
+        final int length = readUnsignedShort(requireValidBytesScale(scale));
 
         readBytes(range, value, offset, length);
 
@@ -532,13 +610,7 @@ public class BitInput {
     public byte[] readBytes(final int scale, final int range)
             throws IOException {
 
-        if (scale <= 0) {
-            throw new IllegalArgumentException("scale(" + scale + ") <= 0");
-        }
-
-        if (scale > 16) {
-            throw new IllegalArgumentException("scale(" + scale + ") > 16");
-        }
+        requireValidBytesScale(scale);
 
         final byte[] value = new byte[readUnsignedShort(scale)];
 
@@ -571,7 +643,18 @@ public class BitInput {
             throw new NullPointerException("null charsetName");
         }
 
-        return new String(readBytes(16, 8), charsetName);
+        return new String(readBytes(BYTES_SCALE_MAX, BYTES_RANGE_MAX),
+                          charsetName);
+    }
+
+
+    public String readString(final Charset charset) throws IOException {
+
+        if (charset == null) {
+            throw new NullPointerException("null charset");
+        }
+
+        return new String(readBytes(BYTES_SCALE_MAX, BYTES_RANGE_MAX), charset);
     }
 
 
@@ -591,7 +674,7 @@ public class BitInput {
      */
     public String readUsAsciiString() throws IOException {
 
-        return new String(readBytes(16, 7), "US-ASCII");
+        return new String(readBytes(BYTES_SCALE_MAX, 7), "US-ASCII");
     }
 
 

@@ -175,7 +175,9 @@
         <executions>
           <execution>
             <goals>
+	      <!--
               <goal>site</goal>
+	      -->
             </goals>
             <phase>site</phase>
           </execution>
@@ -198,7 +200,9 @@
             <id>check-signature-java15</id>
             <phase>process-classes</phase> <!-- default -->
             <goals>
+              <!--
               <goal>check</goal>
+              -->
             </goals>
             <configuration>
               <signature>
@@ -212,7 +216,9 @@
             <id>check-signature-android-api-signature-10</id>
             <phase>process-classes</phase> <!-- default -->
             <goals>
+              <!--
               <goal>check</goal>
+              -->
             </goals>
             <configuration>
               <signature>

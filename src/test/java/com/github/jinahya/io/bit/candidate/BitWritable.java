@@ -15,10 +15,10 @@
  */
 
 
-package com.github.jinahya.io.bit;
+package com.github.jinahya.io.bit.candidate;
 
 
-import com.google.inject.AbstractModule;
+import com.github.jinahya.io.bit.BitOutput;
 import java.io.IOException;
 
 
@@ -26,26 +26,10 @@ import java.io.IOException;
  *
  * @author Jin Kwon
  */
-public class ByteInputModule extends AbstractModule {
+public interface BitWritable {
 
 
-    private static class MockedByteInput implements ByteInput {
-
-
-        @Override
-        public int readUnsignedByte() throws IOException {
-
-            return (int) (System.currentTimeMillis() & 0xFF);
-        }
-
-
-    }
-
-
-    @Override
-    protected void configure() {
-        bind(ByteInput.class).to(MockedByteInput.class);
-    }
+    void write(BitOutput output) throws IOException;
 
 
 }

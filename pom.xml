@@ -18,7 +18,7 @@
       <dependency>
         <groupId>ch.qos.logback</groupId>
         <artifactId>logback-classic</artifactId>
-        <version>1.1.1</version>
+        <version>1.1.2</version>
       </dependency>
       <dependency>
         <groupId>com.google.inject</groupId>
@@ -28,7 +28,7 @@
       <dependency>
         <groupId>org.apache.commons</groupId>
         <artifactId>commons-lang3</artifactId>
-        <version>3.3.1</version>
+        <version>3.3.2</version>
       </dependency>
       <dependency>
         <groupId>org.mockito</groupId>
@@ -38,7 +38,7 @@
       <dependency>
         <groupId>org.slf4j</groupId>
         <artifactId>slf4j-api</artifactId>
-        <version>1.7.6</version>
+        <version>1.7.7</version>
       </dependency>
       <dependency>
         <groupId>org.testng</groupId>
@@ -169,7 +169,7 @@
         <configuration>
           <server>github</server>
           <message>creating site for ${project.version}</message>
-          <path>site/${project.version}</path>
+          <path>sites/${project.version}</path>
           <merge>true</merge>
         </configuration>
         <executions>
@@ -295,7 +295,7 @@
 
   <!-- More Project Information -->
   <name>${project.artifactId}</name>
-  <url>http://jinahya.github.io/bit-io/site/${project.version}</url>
+  <url>http://jinahya.github.io/bit-io/sites/${project.version}</url>
   <inceptionYear>2011</inceptionYear>
   <licenses>
     <license>

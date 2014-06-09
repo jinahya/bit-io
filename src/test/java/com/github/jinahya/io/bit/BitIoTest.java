@@ -29,6 +29,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.Assert;
+import static org.testng.Assert.assertEquals;
 import org.testng.annotations.Test;
 
 
@@ -40,7 +41,7 @@ public class BitIoTest {
 
 
     private static final Logger logger
-            = LoggerFactory.getLogger(BitIoTest.class);
+        = LoggerFactory.getLogger(BitIoTest.class);
 
 
     private static ThreadLocalRandom random() {
@@ -51,7 +52,7 @@ public class BitIoTest {
 
     private static void test(final BitWritable writable,
                              final BitReadable readable)
-            throws IOException {
+        throws IOException {
 
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
         final BitOutput output = new BitOutput((a) -> baos.write(a));
@@ -60,7 +61,7 @@ public class BitIoTest {
         output.align(1);
 
         final ByteArrayInputStream bais
-                = new ByteArrayInputStream(baos.toByteArray());
+            = new ByteArrayInputStream(baos.toByteArray());
         final BitInput input = new BitInput(() -> bais.read());
         readable.read(input);
     }
@@ -79,16 +80,16 @@ public class BitIoTest {
         final List<Boolean> actual = new ArrayList<>(size);
 
         test(
-                (w) -> {
-                    for (final boolean value : expected) {
-                        w.writeBoolean(value);
-                    }
-                },
-                (r) -> {
-                    for (int i = 0; i < size; i++) {
-                        actual.add(r.readBoolean());
-                    }
+            (w) -> {
+                for (final boolean value : expected) {
+                    w.writeBoolean(value);
                 }
+            },
+            (r) -> {
+                for (int i = 0; i < size; i++) {
+                    actual.add(r.readBoolean());
+                }
+            }
         );
 
         Assert.assertEquals(actual, expected);
@@ -110,16 +111,16 @@ public class BitIoTest {
         final List<Integer> actual = new ArrayList<>(size);
 
         test(
-                (w) -> {
-                    for (int i = 0; i < size; i++) {
-                        w.writeUnsignedInt(lengths.get(i), expected.get(i));
-                    }
-                },
-                (r) -> {
-                    for (int i = 0; i < size; i++) {
-                        actual.add(r.readUnsignedInt(lengths.get(i)));
-                    }
+            (w) -> {
+                for (int i = 0; i < size; i++) {
+                    w.writeUnsignedInt(lengths.get(i), expected.get(i));
                 }
+            },
+            (r) -> {
+                for (int i = 0; i < size; i++) {
+                    actual.add(r.readUnsignedInt(lengths.get(i)));
+                }
+            }
         );
 
         Assert.assertEquals(actual, expected);
@@ -140,19 +141,51 @@ public class BitIoTest {
         final List<Integer> actual = new ArrayList<>(size);
 
         test(
-                (w) -> {
-                    for (int i = 0; i < size; i++) {
-                        w.writeInt(lengths.get(i), expected.get(i));
-                    }
-                },
-                (r) -> {
-                    for (int i = 0; i < size; i++) {
-                        actual.add(r.readInt(lengths.get(i)));
-                    }
+            (w) -> {
+                for (int i = 0; i < size; i++) {
+                    w.writeInt(lengths.get(i), expected.get(i));
                 }
+            },
+            (r) -> {
+                for (int i = 0; i < size; i++) {
+                    actual.add(r.readInt(lengths.get(i)));
+                }
+            }
         );
 
         Assert.assertEquals(actual, expected);
+    }
+
+
+    @Test
+    public void variableLengthIntLE_llvm_example() throws IOException {
+
+        final int length = 3;
+        final int expected = 27;
+
+        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        final BitOutput bo = new BitOutput(new StreamOutput(baos));
+        bo.writeVariableLengthIntLE(length, 27);
+        bo.align(1);
+
+        {
+            final BitInput bi = new BitInput(new StreamInput(
+                new ByteArrayInputStream(baos.toByteArray())));
+            assertEquals(bi.readUnsignedByte(1), 1); // next
+            assertEquals(bi.readUnsignedByte(1), 0);
+            assertEquals(bi.readUnsignedByte(1), 1);
+            assertEquals(bi.readUnsignedByte(1), 1);
+            assertEquals(bi.readUnsignedByte(1), 0); // next
+            assertEquals(bi.readUnsignedByte(1), 0);
+            assertEquals(bi.readUnsignedByte(1), 1);
+            assertEquals(bi.readUnsignedByte(1), 1);
+        }
+
+        final BitInput bi = new BitInput(new StreamInput(
+            new ByteArrayInputStream(baos.toByteArray())));
+        final int actual = bi.readVariableLengthIntLE(length);
+
+        assertEquals(actual, expected);
     }
 
 

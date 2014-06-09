@@ -430,7 +430,7 @@ public class BitInput extends BitBase {
      */
     public void readBytes(final int scale, final int range,
                           final Supplier<ByteOutput> output)
-            throws IOException {
+        throws IOException {
 
         requireValidBytesScale(scale);
 
@@ -460,7 +460,7 @@ public class BitInput extends BitBase {
      */
     public void readBytes(final int scale, final int range,
                           final ByteOutput output)
-            throws IOException {
+        throws IOException {
 
         requireValidBytesScale(scale);
 
@@ -479,7 +479,7 @@ public class BitInput extends BitBase {
 
     public void readBytes(final int scale, final int range,
                           final Consumer<Byte> consumer)
-            throws IOException {
+        throws IOException {
 
         requireValidBytesScale(scale);
 
@@ -498,7 +498,7 @@ public class BitInput extends BitBase {
 
     public void readBytes(final int scale, final int range,
                           final ByteBuffer output)
-            throws IOException {
+        throws IOException {
 
         requireValidBytesScale(scale);
 
@@ -528,7 +528,7 @@ public class BitInput extends BitBase {
      */
     protected void readBytes(final int range, final byte[] value, int offset,
                              final int length)
-            throws IOException {
+        throws IOException {
 
         requireValidBytesRange(range);
 
@@ -543,8 +543,8 @@ public class BitInput extends BitBase {
         if (false && offset >= value.length) {
             // ? offset == value.length && length == 0
             throw new IllegalArgumentException(
-                    "offset(" + offset + ") >= value.length(" + value.length
-                    + ")");
+                "offset(" + offset + ") >= value.length(" + value.length
+                + ")");
         }
 
         if (length < 0) {
@@ -553,9 +553,9 @@ public class BitInput extends BitBase {
 
         if (offset + length > value.length) {
             throw new IllegalArgumentException(
-                    "offset(" + offset + ") + length(" + length + ") = "
-                    + (offset + length) + " > value.length(" + value.length
-                    + ")");
+                "offset(" + offset + ") + length(" + length + ") = "
+                + (offset + length) + " > value.length(" + value.length
+                + ")");
         }
 
         for (int i = 0; i < length; i++) {
@@ -583,7 +583,7 @@ public class BitInput extends BitBase {
      */
     public int readBytes(final int scale, final int range, final byte[] value,
                          int offset)
-            throws IOException {
+        throws IOException {
 
         final int length = readUnsignedShort(requireValidBytesScale(scale));
 
@@ -608,7 +608,7 @@ public class BitInput extends BitBase {
      * @see #readBytes(int, byte[], int, int)
      */
     public byte[] readBytes(final int scale, final int range)
-            throws IOException {
+        throws IOException {
 
         requireValidBytesScale(scale);
 
@@ -678,6 +678,24 @@ public class BitInput extends BitBase {
     }
 
 
+    public int readVariableLengthIntLE(final int length) throws IOException {
+
+        if (length < 1) {
+            throw new IllegalArgumentException("length(" + length + ") < 1");
+        }
+
+        int value = 0;
+
+        for (int next = 1, shift = 0; next == 1; shift += length) {
+            next = readUnsignedByte(1);
+            final int bits = readUnsignedInt(length);
+            value |= (bits << shift);
+        }
+
+        return value;
+    }
+
+
     /**
      * Aligns to given number of bytes.
      *
@@ -697,7 +715,7 @@ public class BitInput extends BitBase {
 
         if (length > Short.MAX_VALUE) {
             throw new IllegalArgumentException(
-                    "length(" + length + ") > " + Short.MAX_VALUE);
+                "length(" + length + ") > " + Short.MAX_VALUE);
         }
 
         int bits = 0;

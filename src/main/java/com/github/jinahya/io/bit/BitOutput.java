@@ -635,6 +635,13 @@ public class BitOutput extends BitBase {
     }
 
 
+    /**
+     *
+     * @param length
+     * @param value
+     *
+     * @throws IOException
+     */
     public void writeVariableLengthIntLE(final int length, int value)
         throws IOException {
 
@@ -651,6 +658,33 @@ public class BitOutput extends BitBase {
             }
             writeUnsignedByte(1, next);
             writeUnsignedInt(length, bits);
+        }
+    }
+
+
+    public void writeVariableLengthIntLEC(final int length, int value)
+        throws IOException {
+
+        if (length < 1) {
+            throw new IllegalArgumentException("length(" + length + ") < 1");
+        }
+
+        //final int base = (1 << length) - 1;
+        final int base = -1 >>> (32 - length);
+
+        for (int next = 1; next == 1;) {
+            final int bits = value & base;
+            value >>= length;
+            final int lmb = bits >> (length - 1);
+            if ((value == 0 && lmb == 0) || (value == -1 && lmb == 1)) {
+                next = 0;
+            }
+            writeUnsignedByte(1, next);
+            if (next == 0) {
+                writeInt(length, bits);
+            } else {
+                writeUnsignedInt(length, bits);
+            }
         }
     }
 

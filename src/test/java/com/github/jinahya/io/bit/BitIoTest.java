@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
+import static java.util.concurrent.ThreadLocalRandom.current;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.Assert;
@@ -158,34 +159,143 @@ public class BitIoTest {
 
 
     @Test
-    public void variableLengthIntLE_llvm_example() throws IOException {
+    public void variableLengthIntLE_3bit_27positive() throws IOException {
 
         final int length = 3;
-        final int expected = 27;
+        final int expected = +27;
 
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
         final BitOutput bo = new BitOutput(new StreamOutput(baos));
-        bo.writeVariableLengthIntLE(length, 27);
+        bo.writeVariableLengthIntLE(length, expected);
         bo.align(1);
 
-        {
-            final BitInput bi = new BitInput(new StreamInput(
-                new ByteArrayInputStream(baos.toByteArray())));
-            assertEquals(bi.readUnsignedByte(1), 1); // next
-            assertEquals(bi.readUnsignedByte(1), 0);
-            assertEquals(bi.readUnsignedByte(1), 1);
-            assertEquals(bi.readUnsignedByte(1), 1);
-            assertEquals(bi.readUnsignedByte(1), 0); // next
-            assertEquals(bi.readUnsignedByte(1), 0);
-            assertEquals(bi.readUnsignedByte(1), 1);
-            assertEquals(bi.readUnsignedByte(1), 1);
-        }
+        final byte[] bytes = baos.toByteArray();
+
+        final String binary = BitIoTests.toBinaryString(bytes, length + 1);
+        //logger.debug("{}", binary);
+        Assert.assertEquals(binary, "1011 0011");
+
+        final BitInput bi = new BitInput(new StreamInput(
+            new ByteArrayInputStream(bytes)));
+        final int actual = bi.readVariableLengthIntLE(length);
+
+        assertEquals(actual, expected);
+    }
+
+
+    @Test
+    public void variableLengthIntLE_3bit_28negative() throws IOException {
+
+        final int length = 3;
+        final int expected = -28;
+
+        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        final BitOutput bo = new BitOutput(new StreamOutput(baos));
+        bo.writeVariableLengthIntLE(length, expected);
+        bo.align(1);
+
+        final byte[] bytes = baos.toByteArray();
+
+        final String binary = BitIoTests.toBinaryString(bytes, length + 1);
+        logger.debug("{}", binary);
+
+        final BitInput bi = new BitInput(new StreamInput(
+            new ByteArrayInputStream(bytes)));
+        final int actual = bi.readVariableLengthIntLE(length);
+
+        assertEquals(actual, expected);
+    }
+
+
+    @Test(invocationCount = 128)
+    public void variableLengthIntLE_random() throws IOException {
+
+        final int length = current().nextInt(2, Integer.SIZE - 1);
+        final int expected = current().nextInt();
+
+        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        final BitOutput bo = new BitOutput(new StreamOutput(baos));
+        bo.writeVariableLengthIntLE(length, expected);
+        bo.align(1);
 
         final BitInput bi = new BitInput(new StreamInput(
             new ByteArrayInputStream(baos.toByteArray())));
         final int actual = bi.readVariableLengthIntLE(length);
+        bi.align(1);
 
         assertEquals(actual, expected);
+    }
+
+
+    @Test(invocationCount = 1)
+    public void variableLengthIntLEC_3bit_27positive() throws IOException {
+
+        final int length = 3;
+        final int expected = +27;
+
+        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        final BitOutput bo = new BitOutput(new StreamOutput(baos));
+        bo.writeVariableLengthIntLEC(length, expected);
+        bo.align(1);
+
+        final byte[] bytes = baos.toByteArray();
+        logger.debug("{}", BitIoTests.toBinaryString(bytes, length + 1));
+
+        final BitInput bi = new BitInput(new StreamInput(
+            new ByteArrayInputStream(bytes)));
+        final int actual = bi.readVariableLengthIntLEC(length);
+        bi.align(1);
+
+        assertEquals(actual, expected);
+    }
+
+
+    @Test(invocationCount = 1)
+    public void variableLengthIntLEC_3bit_28negative() throws IOException {
+
+        final int length = 3;
+        final int expected = -28;
+
+        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        final BitOutput bo = new BitOutput(new StreamOutput(baos));
+        bo.writeVariableLengthIntLEC(length, expected);
+        bo.align(1);
+
+        final byte[] bytes = baos.toByteArray();
+        logger.debug("{}", BitIoTests.toBinaryString(bytes, length + 1));
+
+        final BitInput bi = new BitInput(new StreamInput(
+            new ByteArrayInputStream(bytes)));
+        final int actual = bi.readVariableLengthIntLEC(length);
+        bi.align(1);
+
+        assertEquals(actual, expected);
+    }
+
+
+    @Test(enabled = true, invocationCount = 128)
+    public void variableLengthIntLEC_random() throws IOException {
+
+        final int length = 7; //current().nextInt(2, Integer.SIZE - 1);
+        final int expected = current().nextInt();
+
+        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        final BitOutput bo = new BitOutput(new StreamOutput(baos));
+        bo.writeVariableLengthIntLEC(length, expected);
+        bo.align(1);
+
+        final byte[] bytes = baos.toByteArray();
+
+        final BitInput bi = new BitInput(new StreamInput(
+            new ByteArrayInputStream(bytes)));
+        final int actual = bi.readVariableLengthIntLEC(length);
+        bi.align(1);
+
+        assertEquals(actual, expected);
+
+        logger.debug("length: {}, expected: {}, bytes.length: {}, chunks: {} ",
+                     length, expected, bytes.length,
+                     BitIoTests.toBinaryString(bytes, length + 1));
     }
 
 

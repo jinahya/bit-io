@@ -112,8 +112,8 @@ final class BitIoTests {
         Objects.requireNonNull(values, "null values");
 
         lengths.stream()
-                .map(BitIoTests::valueIntUnsigned)
-                .forEach(values::add);
+            .map(BitIoTests::valueIntUnsigned)
+            .forEach(values::add);
     }
 
 
@@ -187,8 +187,8 @@ final class BitIoTests {
         Objects.requireNonNull(values, "null values");
 
         lengths.stream()
-                .map(BitIoTests::valueInt)
-                .forEach(values::add);
+            .map(BitIoTests::valueInt)
+            .forEach(values::add);
     }
 
 
@@ -380,6 +380,30 @@ final class BitIoTests {
         final int count = random().nextInt(65536);
 
         return RandomStringUtils.randomAscii(count);
+    }
+
+
+    static String toBinaryString(final byte[] bytes, final int word) {
+
+        final StringBuilder builder = new StringBuilder();
+
+        for (byte b : bytes) {
+            final int k = builder.length();
+            for (int i = 0; i < Byte.SIZE; i++) {
+                builder.insert(k, b & 0x01);
+                b >>= 1;
+            }
+        }
+
+        if (word > 0) {
+            for (int i = builder.length() - 1; i > 0; i--) {
+                if (i % word == 0) {
+                    builder.insert(i, " ");
+                }
+            }
+        }
+
+        return builder.toString();
     }
 
 

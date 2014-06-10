@@ -678,6 +678,15 @@ public class BitInput extends BitBase {
     }
 
 
+    /**
+     * Reads a variable-length quantity.
+     *
+     * @param length number of bits for a chunk excluding the continuation bit.
+     *
+     * @return
+     *
+     * @throws IOException if an I/O error occurs.
+     */
     public int readVariableLengthIntLE(final int length) throws IOException {
 
         if (length < 1) {
@@ -690,6 +699,27 @@ public class BitInput extends BitBase {
             next = readUnsignedByte(1);
             final int bits = readUnsignedInt(length);
             value |= (bits << shift);
+        }
+
+        return value;
+    }
+
+
+    public int readVariableLengthIntLEC(final int length) throws IOException {
+
+        if (length < 1) {
+            throw new IllegalArgumentException("length(" + length + ") < 1");
+        }
+
+        int value = 0;
+
+        for (int next = 1, shift = 0; next == 1; shift += length) {
+            next = readUnsignedByte(1);
+            if (next == 0) {
+                value |= (readInt(length) << shift);
+            } else {
+                value |= (readUnsignedInt(length) << shift);
+            }
         }
 
         return value;

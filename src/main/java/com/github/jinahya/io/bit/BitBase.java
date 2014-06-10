@@ -42,12 +42,12 @@ class BitBase {
 
         if (scale < BYTES_SCALE_MIN) {
             throw new IllegalArgumentException(
-                    "scale(" + scale + ") <= " + BYTES_SCALE_MIN);
+                "scale(" + scale + ") <= " + BYTES_SCALE_MIN);
         }
 
         if (scale > BYTES_SCALE_MAX) {
             throw new IllegalArgumentException(
-                    "scale(" + scale + ") > " + BYTES_SCALE_MAX);
+                "scale(" + scale + ") > " + BYTES_SCALE_MAX);
         }
 
         return scale;
@@ -58,12 +58,12 @@ class BitBase {
 
         if (range < BYTES_RANGE_MIN) {
             throw new IllegalArgumentException(
-                    "range(" + range + ") < " + BYTES_RANGE_MIN);
+                "range(" + range + ") < " + BYTES_RANGE_MIN);
         }
 
         if (range > BYTES_RANGE_MAX) {
             throw new IllegalArgumentException(
-                    "range(" + range + ") > " + BYTES_RANGE_MAX);
+                "range(" + range + ") > " + BYTES_RANGE_MAX);
         }
 
         return range;

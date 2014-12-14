@@ -98,11 +98,6 @@
           <version>1.0-alpha27</version>
         </plugin>
         <plugin>
-          <groupId>com.github.github</groupId>
-          <artifactId>site-maven-plugin</artifactId>
-          <version>0.9</version>
-        </plugin>
-        <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-compiler-plugin</artifactId>
           <version>3.1</version>
@@ -166,6 +161,7 @@
       <plugin>
         <groupId>com.github.github</groupId>
         <artifactId>site-maven-plugin</artifactId>
+	<version>0.10</version>
         <configuration>
           <server>github</server>
           <message>creating site for ${project.version}</message>

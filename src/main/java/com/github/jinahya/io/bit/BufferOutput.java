@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Jin Kwon <onacit at gmail.com>.
+ * Copyright 2013 Jin Kwon.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,16 +23,17 @@ import java.nio.ByteBuffer;
 
 
 /**
- * A {@link ByteOutput} implementation writes bytes to an underlying
- * {@link ByteBuffer}.
+ * A {@link ByteOutput} implementation for {@link ByteBuffer}s.
+ *
+ * @author Jin Kwon
  */
-public class BufferOutput extends ByteOutput<ByteBuffer> {
+public class BufferOutput extends AbstractByteOutput<ByteBuffer> {
 
 
     /**
-     * Creates a new instance built on the top of the specified byte buffer.
+     * Creates a new instance with given {@code ByteBufer}.
      *
-     * @param target {@code inheritDoc}
+     * @param target the {@code ByteBuffer} to wrap.
      */
     public BufferOutput(final ByteBuffer target) {
 
@@ -41,18 +42,20 @@ public class BufferOutput extends ByteOutput<ByteBuffer> {
 
 
     /**
-     * {@inheritDoc}
-     * <p/>
-     * The {@code writeUnsignedByte(int)} method of {@code BufferWriter} class
-     * calls {@link ByteBuffer#put(byte)} on the underlying byte buffer with
-     * given {@code value}.
+     * {@inheritDoc} The {@code writeUnsignedByte(int)} method of
+     * {@code BufferOutput} class calls {@link ByteBuffer#put(byte)} on the
+     * underlying byte buffer with given {@code value}. Override this method if
+     * {@link #target} is intended to be lazily initialized and set.
      *
      * @param value {@inheritDoc }
      *
-     * @throws IllegalStateException {@inheritDoc}
+     * @throws IllegalStateException if {@link #target} is currently
+     * {@code null}.
      * @throws IOException {@inheritDoc }
      *
      * @see ByteBuffer#put(byte)
+     * @see #target
+     * @see #setTarget(java.lang.Object)
      */
     @Override
     public void writeUnsignedByte(final int value) throws IOException {
@@ -62,20 +65,6 @@ public class BufferOutput extends ByteOutput<ByteBuffer> {
         }
 
         target.put((byte) value); // BufferOverflowException, ReadOnlyBufferException
-    }
-
-
-    /**
-     * {@inheritDoc}
-     * <p/>
-     * The {@code close()} method of {@code BufferWriter} class does nothing.
-     *
-     * @throws IOException {@inheritDoc }
-     */
-    @Override
-    public void close() throws IOException {
-
-        // do nothing
     }
 
 

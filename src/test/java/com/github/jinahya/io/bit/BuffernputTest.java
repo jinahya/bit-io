@@ -18,28 +18,17 @@
 package com.github.jinahya.io.bit;
 
 
-import java.io.IOException;
+import java.nio.ByteBuffer;
+import org.testng.annotations.Guice;
 
 
 /**
- * An interface for suppling bytes.
  *
  * @author Jin Kwon
  */
-//@FunctionalInterface
-public interface ByteInput {
-
-
-    /**
-     * Reads the next unsigned 8-bit byte.
-     *
-     * @return the next unsigned 8-bit byte value between {@code 0} (inclusive)
-     * and {@code 256} (exclusive)
-     *
-     * @throws IOException if an I/O error occurs.
-     */
-    int readUnsignedByte() throws IOException;
-
+@Guice(modules = {BufferInputModule.class})
+public class BuffernputTest
+        extends AbstractByteInputTest<BufferInput, ByteBuffer> {
 
 }
 

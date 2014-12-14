@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Jin Kwon <onacit at gmail.com>.
+ * Copyright 2013 <a href="mailto:onacit@gmail.com">Jin Kwon</a>.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,32 +18,16 @@
 package com.github.jinahya.io.bit;
 
 
-import java.io.Closeable;
 import java.io.IOException;
 
 
 /**
+ * An interface for consuming bytes.
  *
- * @author Jin Kwon <onacit at gmail.com>
- * @param <T>
+ * @author <a href="mailto:onacit@gmail.com">Jin Kwon</a>
  */
-public abstract class ByteOutput<T> implements Closeable {
-
-
-    /**
-     * Creates a new instance built on top of the specified underlying byte
-     * target.
-     *
-     * @param target the underlying byte target to be assigned to the field
-     * {@link #target} for later use, or {@code null} if this instance is to be
-     * created without an underlying byte target.
-     */
-    public ByteOutput(final T target) {
-
-        super();
-
-        this.target = target;
-    }
+//@FunctionalInterface
+public interface ByteOutput {
 
 
     /**
@@ -52,52 +36,9 @@ public abstract class ByteOutput<T> implements Closeable {
      * @param value an unsigned 8-bit byte value between {@code 0} (inclusive)
      * and {@code 256} (exclusive).
      *
-     * @throws IllegalStateException if {@link #target} is currently
-     * {@code null}.
      * @throws IOException if an I/O error occurs.
      */
-    public abstract void writeUnsignedByte(final int value) throws IOException;
-
-
-    /**
-     * Closes this byte writer and releases any system resources associated with
-     * it.
-     *
-     * @throws IOException if an I/O error occurs.
-     */
-    @Override
-    public abstract void close() throws IOException;
-
-
-    /**
-     * Returns the current value of {@link #target}.
-     *
-     * @return the current value of {@link #target}.
-     */
-    public T getTarget() {
-
-        return target;
-    }
-
-
-    /**
-     * Replaces the value of {@link #target} with given.
-     *
-     * @param target new value for {@link #target}.
-     */
-    public void setTarget(final T target) {
-
-        this.target = target;
-    }
-
-
-    /**
-     * The underlying byte target.
-     *
-     * @see #getTarget()
-     * @see #setTarget(java.lang.Object)
-     */
-    protected T target;
+    void writeUnsignedByte(final int value) throws IOException;
 
 
 }

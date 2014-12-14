@@ -18,27 +18,34 @@
 package com.github.jinahya.io.bit;
 
 
+import com.google.inject.AbstractModule;
 import java.io.IOException;
 
 
 /**
- * An interface for suppling bytes.
  *
  * @author Jin Kwon
  */
-//@FunctionalInterface
-public interface ByteInput {
+public class ByteInputModule extends AbstractModule {
 
 
-    /**
-     * Reads the next unsigned 8-bit byte.
-     *
-     * @return the next unsigned 8-bit byte value between {@code 0} (inclusive)
-     * and {@code 256} (exclusive)
-     *
-     * @throws IOException if an I/O error occurs.
-     */
-    int readUnsignedByte() throws IOException;
+    private static class MockedByteInput implements ByteInput {
+
+
+        @Override
+        public int readUnsignedByte() throws IOException {
+
+            return (int) (System.currentTimeMillis() & 0xFF);
+        }
+
+
+    }
+
+
+    @Override
+    protected void configure() {
+        bind(ByteInput.class).to(MockedByteInput.class);
+    }
 
 
 }

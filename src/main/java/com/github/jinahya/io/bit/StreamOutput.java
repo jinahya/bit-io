@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Jin Kwon <onacit at gmail.com>.
+ * Copyright 2013 <a href="mailto:onacit@gmail.com">Jin Kwon</a>.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ import java.io.OutputStream;
 /**
  * A {@link ByteOutput} implementation for {@link OutputStream}s.
  */
-public class StreamOutput extends ByteOutput<OutputStream> {
+public class StreamOutput extends AbstractByteOutput<OutputStream> {
 
 
     /**
@@ -40,19 +40,20 @@ public class StreamOutput extends ByteOutput<OutputStream> {
 
 
     /**
-     * {@inheritDoc}
-     * <p/>
-     * The {@code writeUnsginedByte(int)} method of {@code StreamReader} class
-     * calls {@link OutputStream#write(int)} on {@link #target} with
-     * {@code value}. Override this method if {@link #target} is intended to be
-     * lazily initialized and set.
+     * {@inheritDoc} The {@code writeUnsginedByte(int)} method of
+     * {@code StreamReader} class calls {@link OutputStream#write(int)} on
+     * {@link #target} with {@code value}. Override this method if
+     * {@link #target} is intended to be lazily initialized and set.
      *
      * @param value {@inheritDoc }
      *
-     * @throws IllegalStateException {@inheritDoc}
+     * @throws IllegalStateException if {@link #target} is currently
+     * {@code null}.
      * @throws IOException {@inheritDoc}
      *
      * @see OutputStream#write(int)
+     * @see #target
+     * @see #setTarget(java.lang.Object)
      */
     @Override
     public void writeUnsignedByte(final int value) throws IOException {
@@ -62,28 +63,6 @@ public class StreamOutput extends ByteOutput<OutputStream> {
         }
 
         target.write(value);
-    }
-
-
-    /**
-     * {@inheritDoc}
-     * <p/>
-     * The {@code close} method of {@code StreamOutput} class calls, if
-     * {@link #target} is not {@code null}, {@link OutputStream#flush()} and
-     * {@link OutputStream#close()} in series on {@link #target}.
-     *
-     * @throws IOException {@inheritDoc }
-     *
-     * @see OutputStream#flush()
-     * @see OutputStream#close()
-     */
-    @Override
-    public void close() throws IOException {
-
-        if (target != null) {
-            target.flush();
-            target.close();
-        }
     }
 
 

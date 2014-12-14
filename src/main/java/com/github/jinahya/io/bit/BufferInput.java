@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Jin Kwon <onacit at gmail.com>.
+ * Copyright 2013 <a href="mailto:onacit@gmail.com">Jin Kwon</a>.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,14 +19,13 @@ package com.github.jinahya.io.bit;
 
 
 import java.io.IOException;
-import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 
 
 /**
  * A {@link ByteInput} implementation for {@link ByteBuffer}s.
  */
-public class BufferInput extends ByteInput<ByteBuffer> {
+public class BufferInput extends AbstractByteInput<ByteBuffer> {
 
 
     /**
@@ -41,10 +40,9 @@ public class BufferInput extends ByteInput<ByteBuffer> {
 
 
     /**
-     * {@inheritDoc}
-     * <p/>
-     * The {@code readUnsignedByte()} method of {@code ByteReader} class calls
-     * {@link ByteBuffer#get()} on {@link #source} and returns the result.
+     * {@inheritDoc} The {@code readUnsignedByte()} method of {@code ByteReader}
+     * class calls {@link ByteBuffer#get()} on {@link #source} and returns the
+     * result.
      *
      * @return {@inheritDoc }
      *
@@ -52,6 +50,9 @@ public class BufferInput extends ByteInput<ByteBuffer> {
      * @throws IOException {@inheritDoc}
      *
      * @see ByteBuffer#get()
+     * @see #source
+     * @see #getSource()
+     * @see #setSource(java.lang.Object)
      */
     @Override
     public int readUnsignedByte() throws IOException {
@@ -60,26 +61,7 @@ public class BufferInput extends ByteInput<ByteBuffer> {
             throw new IllegalStateException("#source is currently null");
         }
 
-        try {
-            return source.get() & 0xFF;
-        } catch (final BufferUnderflowException bue) {
-            return -1;
-        }
-
-    }
-
-
-    /**
-     * {@inheritDoc}
-     * <p/>
-     * The {@code close()} method of {@code BufferReader} class does nothing.
-     *
-     * @throws IOException {@inheritDoc}
-     */
-    @Override
-    public void close() throws IOException {
-
-        // empty
+        return source.get() & 0xFF;
     }
 
 

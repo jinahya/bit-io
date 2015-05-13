@@ -58,11 +58,7 @@ public class StreamOutput extends AbstractByteOutput<OutputStream> {
     @Override
     public void writeUnsignedByte(final int value) throws IOException {
 
-        if (target == null) {
-            throw new IllegalStateException("#target is currently null");
-        }
-
-        target.write(value);
+        requireNonNullTarget().write(value);
     }
 
 

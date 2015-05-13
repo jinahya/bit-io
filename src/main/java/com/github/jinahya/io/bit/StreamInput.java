@@ -55,16 +55,12 @@ public class StreamInput extends AbstractByteInput<InputStream> {
     @Override
     public int readUnsignedByte() throws IOException {
 
-        if (source == null) {
-            throw new IllegalStateException("#source is currently null");
-        }
-
-        final int read = source.read();
-        if (read == -1) {
+        final int value = requireNonNullSource().read();
+        if (value == -1) {
             throw new EOFException("eof");
         }
 
-        return read;
+        return value;
     }
 
 

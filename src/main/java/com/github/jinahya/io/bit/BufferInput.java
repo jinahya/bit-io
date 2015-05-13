@@ -57,11 +57,7 @@ public class BufferInput extends AbstractByteInput<ByteBuffer> {
     @Override
     public int readUnsignedByte() throws IOException {
 
-        if (source == null) {
-            throw new IllegalStateException("#source is currently null");
-        }
-
-        return source.get() & 0xFF;
+        return requireNonNullSource().get() & 0xFF;
     }
 
 

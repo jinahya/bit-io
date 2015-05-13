@@ -110,7 +110,7 @@ public class BitInputTest {
     @Test
     public void readFloat_() throws IOException {
 
-        input.readFloat();
+        input.readFloat32();
     }
 
 
@@ -163,7 +163,7 @@ public class BitInputTest {
     @Test
     public void readDouble_() throws IOException {
 
-        input.readDouble();
+        input.readDouble64();
     }
 
 

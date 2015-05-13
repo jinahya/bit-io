@@ -20,9 +20,6 @@ package com.github.jinahya.io.bit;
 
 import java.io.EOFException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.ByteBuffer;
-import java.nio.charset.Charset;
 
 
 /**
@@ -33,43 +30,41 @@ import java.nio.charset.Charset;
 public class BitInput extends BitBase {
 
 
-    /**
-     * Creates a new instance consuming bytes from given byte source.
-     *
-     * @param source the byte source.
-     *
-     * @return a new instance.
-     *
-     * @throws NullPointerException if {@code source} is {@code null}.
-     */
-    public static BitInput newInstance(final InputStream source) {
-
-        if (source == null) {
-            throw new NullPointerException("null source");
-        }
-
-        // @todo: lambda this
-        return new BitInput(new StreamInput(source));
-    }
-
-
-    /**
-     * Creates a new instance consuming bytes from specified byte source.
-     *
-     * @param source the byte source.
-     *
-     * @return a new instance.
-     */
-    public static BitInput newInstance(final ByteBuffer source) {
-
-        if (source == null) {
-            throw new NullPointerException("null source");
-        }
-
-        return new BitInput(new BufferInput(source));
-    }
-
-
+//    /**
+//     * Creates a new instance consuming bytes from given byte source.
+//     *
+//     * @param source the byte source.
+//     *
+//     * @return a new instance.
+//     *
+//     * @throws NullPointerException if {@code source} is {@code null}.
+//     */
+//    public static BitInput newInstance(final InputStream source) {
+//
+//        if (source == null) {
+//            throw new NullPointerException("null source");
+//        }
+//
+//        // @todo: lambda this
+//        return new BitInput(new StreamInput(source));
+//    }
+//
+//
+//    /**
+//     * Creates a new instance consuming bytes from specified byte source.
+//     *
+//     * @param source the byte source.
+//     *
+//     * @return a new instance.
+//     */
+//    public static BitInput newInstance(final ByteBuffer source) {
+//
+//        if (source == null) {
+//            throw new NullPointerException("null source");
+//        }
+//
+//        return new BitInput(new BufferInput(source));
+//    }
     /**
      * Creates a new instance built on top of the specified byte input.
      *
@@ -153,6 +148,7 @@ public class BitInput extends BitBase {
         }
 
         int value = 0x00;
+
         for (int i = 0; i < length; i++) {
             value <<= 1;
             value |= (flags[index++] ? 0x01 : 0x00);
@@ -229,10 +225,10 @@ public class BitInput extends BitBase {
             throw new IllegalArgumentException("length(" + length + ") > 16");
         }
 
+        int value = 0x00;
+
         final int quotient = length / 8;
         final int remainder = length % 8;
-
-        int value = 0x00;
 
         for (int i = 0; i < quotient; i++) {
             value <<= 8;
@@ -269,10 +265,10 @@ public class BitInput extends BitBase {
             throw new IllegalArgumentException("length(" + length + ") >= 32");
         }
 
+        int value = 0x00;
+
         final int quotient = length / 16;
         final int remainder = length % 16;
-
-        int value = 0x00;
 
         for (int i = 0; i < quotient; i++) {
             value <<= 16;
@@ -323,7 +319,7 @@ public class BitInput extends BitBase {
      *
      * @see Float#intBitsToFloat(int)
      */
-    public float readFloat() throws IOException {
+    public float readFloat32() throws IOException {
 
         return Float.intBitsToFloat(readInt(32));
     }
@@ -350,10 +346,10 @@ public class BitInput extends BitBase {
             throw new IllegalArgumentException("length(" + length + ") >= 64");
         }
 
+        long value = 0x00L;
+
         final int quotient = length / 31;
         final int remainder = length % 31;
-
-        long value = 0x00L;
 
         for (int i = 0; i < quotient; i++) {
             value <<= 31;
@@ -405,7 +401,7 @@ public class BitInput extends BitBase {
      *
      * @see Double#longBitsToDouble(long)
      */
-    public final double readDouble() throws IOException {
+    public final double readDouble64() throws IOException {
 
         return Double.longBitsToDouble(readLong(0x40));
     }
@@ -443,6 +439,28 @@ public class BitInput extends BitBase {
 //            output.get().writeUnsignedByte(readUnsignedByte(range));
 //        }
 //    }
+    protected void readBytesFully(final int length, final int range,
+                                  final ByteOutput output)
+        throws IOException {
+
+        requireValidBytesRange(range);
+
+        if (output == null) {
+            throw new NullPointerException("null output");
+        }
+
+        for (int i = 0; i < length; i++) {
+            output.writeUnsignedByte(readUnsignedByte(range));
+        }
+    }
+
+
+    protected int readBytesLength(final int scale) throws IOException {
+
+        return readUnsignedInt(requireValidBytesScale(scale));
+    }
+
+
     /**
      * Reads a sequence of bytes.
      *
@@ -452,10 +470,12 @@ public class BitInput extends BitBase {
      * and 8 (inclusive).
      * @param output
      *
+     * @return number of bytes written to {@code output}.
+     *
      * @throws IOException if an I/O error occurs.
      */
-    public void readBytes(final int scale, final int range,
-                          final ByteOutput output)
+    protected int readBytes(final int scale, final int range,
+                            final ByteOutput output)
         throws IOException {
 
         requireValidBytesScale(scale);
@@ -466,122 +486,8 @@ public class BitInput extends BitBase {
             throw new NullPointerException("null output");
         }
 
-        final int length = readUnsignedShort(scale);
-        for (int i = 0; i < length; i++) {
-            output.writeUnsignedByte(readUnsignedByte(range));
-        }
-    }
-
-
-//    public void readBytes(final int scale, final int range,
-//                          final Consumer<Byte> consumer)
-//        throws IOException {
-//
-//        requireValidBytesScale(scale);
-//
-//        requireValidBytesRange(range);
-//
-//        if (consumer == null) {
-//            throw new NullPointerException("null consumer");
-//        }
-//
-//        final int length = readUnsignedShort(scale);
-//        for (int i = 0; i < length; i++) {
-//            consumer.accept((byte) readUnsignedByte(range));
-//        }
-//    }
-    public void readBytes(final int scale, final int range,
-                          final ByteBuffer output)
-        throws IOException {
-
-        requireValidBytesScale(scale);
-
-        requireValidBytesRange(range);
-
-        if (output == null) {
-            throw new NullPointerException("null output");
-        }
-
-        final int length = readUnsignedShort(scale);
-        for (int i = 0; i < length; i++) {
-            output.put((byte) readUnsignedByte(range));
-        }
-    }
-
-
-    /**
-     * Reads a sequence of bytes.
-     *
-     * @param range the number of valid bits in each byte; between 0 (exclusive)
-     * and 8 (inclusive).
-     * @param value the array to which each byte are stored.
-     * @param offset starting offset in the array.
-     * @param length the number of bytes to read
-     *
-     * @throws IOException if an I/O error occurs.
-     */
-    protected void readBytes(final int range, final byte[] value, int offset,
-                             final int length)
-        throws IOException {
-
-        requireValidBytesRange(range);
-
-        if (value == null) {
-            throw new NullPointerException("value == null");
-        }
-
-        if (offset < 0) {
-            throw new IllegalArgumentException("offset(" + offset + ") < 0");
-        }
-
-        if (false && offset >= value.length) {
-            // ? offset == value.length && length == 0
-            throw new IllegalArgumentException(
-                "offset(" + offset + ") >= value.length(" + value.length
-                + ")");
-        }
-
-        if (length < 0) {
-            throw new IllegalArgumentException("length(" + length + ") < 0");
-        }
-
-        if (offset + length > value.length) {
-            throw new IllegalArgumentException(
-                "offset(" + offset + ") + length(" + length + ") = "
-                + (offset + length) + " > value.length(" + value.length
-                + ")");
-        }
-
-        for (int i = 0; i < length; i++) {
-            value[offset++] = (byte) readUnsignedByte(range);
-        }
-    }
-
-
-    /**
-     * Reads a sequence of bytes.
-     *
-     * @param scale the number of bits required for calculating the number of
-     * bytes to read; between 0 (exclusive) and 16 (inclusive).
-     * @param range the number of valid bits in each byte; between 0 (exclusive)
-     * and 8 (inclusive).
-     * @param value the array to which each byte are stored
-     * @param offset starting offset in the array
-     *
-     * @return the number of bytes read which is
-     * {@code readUnsignedShort(scale)}
-     *
-     * @throws IOException if an I/O error occurs.
-     *
-     * @see #readBytes(int, byte[], int, int)
-     */
-    public int readBytes(final int scale, final int range, final byte[] value,
-                         int offset)
-        throws IOException {
-
-        final int length = readUnsignedShort(requireValidBytesScale(scale));
-
-        readBytes(range, value, offset, length);
+        final int length = readBytesLength(scale);
+        readBytesFully(length, range, output);
 
         return length;
     }
@@ -606,9 +512,9 @@ public class BitInput extends BitBase {
 
         requireValidBytesScale(scale);
 
-        final byte[] value = new byte[readUnsignedShort(scale)];
+        final byte[] value = new byte[readBytesLength(scale)];
 
-        readBytes(range, value, 0, value.length);
+        readBytesFully(value.length, range, new ArrayOutput(value, 0));
 
         return value;
     }
@@ -667,89 +573,6 @@ public class BitInput extends BitBase {
     public String readUsAsciiString() throws IOException {
 
         return new String(readBytes(BYTES_SCALE_MAX, 7), "US-ASCII");
-    }
-
-
-    /**
-     * Reads a variable-length quantities.
-     *
-     * @param length the number of bits for each quantity excluding the
-     * continuation bit.
-     *
-     * @return a VLC decoded int value.
-     *
-     * @throws IOException if an I/O error occurs.
-     */
-    public int readVariableLengthIntLE(final int length) throws IOException {
-
-        if (length < 1) {
-            throw new IllegalArgumentException("length(" + length + ") < 1");
-        }
-
-        int value = 0;
-
-        for (int next = 1, shift = 0; next == 1; shift += length) {
-            next = readUnsignedByte(1);
-            final int bits = readUnsignedInt(length);
-            value |= (bits << shift);
-        }
-
-        return value;
-    }
-
-
-    public int readVariableLengthIntLEC(final int length) throws IOException {
-
-        if (length < 1) {
-            throw new IllegalArgumentException("length(" + length + ") < 1");
-        }
-
-        int value = 0;
-
-        for (int next = 1, shift = 0; next == 1; shift += length) {
-            next = readUnsignedByte(1);
-            if (next == 0) {
-                value |= (readInt(length) << shift);
-            } else {
-                value |= (readUnsignedInt(length) << shift);
-            }
-        }
-
-        return value;
-    }
-
-
-    public int readVariableLengthInt(final int length) throws IOException {
-
-        return -1;
-    }
-
-
-    /**
-     * Reads a variable-length quantities.
-     *
-     * @param length the number of bits for each quantity excluding the
-     * continuation bit.
-     *
-     * @return a VLC decoded int value.
-     *
-     * @throws IOException if an I/O error occurs.
-     */
-    public long readVariableLengthLongLE(final int length) throws IOException {
-
-        if (length < 1) {
-            throw new IllegalArgumentException("length(" + length + ") < 1");
-        }
-
-        long value = 0L;
-
-        for (int next = 1, shift = 0; next == 1; shift += length) {
-            next = readUnsignedByte(1);
-            final long bits = readUnsignedLong(length);
-            value |= (bits << shift);
-        }
-
-        return value;
     }
 
 

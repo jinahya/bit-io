@@ -45,10 +45,7 @@ public abstract class AbstractByteInput<T> implements ByteInput {
      * Returns the current value of {@link #source}.
      *
      * @return the current value of {@link #source}.
-     *
-     * @deprecated Use {@link #source}.
      */
-    @Deprecated
     public T getSource() {
 
         return source;
@@ -59,13 +56,20 @@ public abstract class AbstractByteInput<T> implements ByteInput {
      * Replaces the value of {@link #source} with given.
      *
      * @param source new value for {@link #source}.
-     *
-     * @deprecated Use {@link #source}.
      */
-    @Deprecated
     public void setSource(final T source) {
 
         this.source = source;
+    }
+
+
+    T requireNonNullSource() {
+
+        if (source == null) {
+            throw new IllegalStateException("#source is currently null");
+        }
+
+        return source;
     }
 
 

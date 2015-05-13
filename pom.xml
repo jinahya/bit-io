@@ -5,7 +5,7 @@
 
   <!-- The Basics -->
   <groupId>com.github.jinahya</groupId>
-  <artifactId>rfc-5849</artifactId>
+  <artifactId>bit-io</artifactId>
   <version>1.1.3-SNAPSHOT</version>
   <packaging>jar</packaging>
   <dependencyManagement />
@@ -186,7 +186,7 @@
               <target>
                 <taskdef name="retrotranslator" classname="net.sf.retrotranslator.transformer.RetrotranslatorTask" classpathref="maven.plugin.classpath" />
                 <mkdir dir="${project.build.outputDirectory.retrotranslated13}" />
-                <retrotranslator srcdir="${project.build.outputDirectory}" destdir="${project.build.outputDirectory.retrotranslated13}" embed="com.github.jinahya.bit-io.retrotranslated13" failonwarning="false" smart="true" stripannot="true" stripsign="true" syncvolatile="true" target="1.3" verbose="true" verify="false">
+                <retrotranslator srcdir="${project.build.outputDirectory}" destdir="${project.build.outputDirectory.retrotranslated13}" embed="com.github.jinahya.io.bit.retrotranslated13" failonwarning="false" smart="true" stripannot="true" stripsign="true" syncvolatile="true" target="1.3" verbose="true" verify="false">
                   <classpath>
                     <fileset dir="${basedir}/ext/retrotranslated13" includes="**/*.jar" />
                   </classpath>
@@ -204,7 +204,7 @@
               <target>
                 <taskdef name="retrotranslator" classname="net.sf.retrotranslator.transformer.RetrotranslatorTask" classpathref="maven.plugin.classpath" />
                 <mkdir dir="${project.build.outputDirectory.retrotranslated14}" />
-                <retrotranslator srcdir="${project.build.outputDirectory}" destdir="${project.build.outputDirectory.retrotranslated14}" embed="com.github.jinahya.bit-io.retrotranslated14" failonwarning="false" smart="true" stripannot="true" stripsign="true" syncvolatile="true" target="1.4" verbose="true" verify="false">
+                <retrotranslator srcdir="${project.build.outputDirectory}" destdir="${project.build.outputDirectory.retrotranslated14}" embed="com.github.jinahya.io.bit.retrotranslated14" failonwarning="false" smart="true" stripannot="true" stripsign="true" syncvolatile="true" target="1.4" verbose="true" verify="false">
                   <classpath>
                     <fileset dir="${basedir}/ext/retrotranslated14" includes="**/*.jar" />
                   </classpath>
@@ -267,7 +267,7 @@
             <id>check-signature-java16</id>
             <phase>process-classes</phase> <!-- default -->
             <goals>
-              <goal>check</goal>
+              <!--<goal>check</goal>-->
             </goals>
             <configuration>
               <signature>
@@ -281,13 +281,18 @@
             <id>check-signature-android-api-level-1</id>
             <phase>process-classes</phase> <!-- default -->
             <goals>
-              <goal>check</goal>
+              <!--<goal>check</goal>-->
             </goals>
             <configuration>
-              <signature>
+              <!--              <signature>
                 <groupId>net.sf.androidscents.signature</groupId>
                 <artifactId>android-api-level-1</artifactId>
                 <version>1.0_r2</version>
+              </signature>-->
+              <signature>
+                <groupId>net.sf.androidscents.signature</groupId>
+                <artifactId>android-api-level-9</artifactId>
+                <version>2.3.1_r2</version>
               </signature>
             </configuration>
           </execution>
@@ -346,8 +351,8 @@
 
   <!-- More Project Information -->
   <name>${project.artifactId}</name>
-  <description>an implementation of rfc-5849</description>
-  <url>http://jinahya.github.io/rfc-5849/sites/${project.version}</url>
+  <description>an implementation of bit-io</description>
+  <url>http://jinahya.github.io/bit-io/sites/${project.version}</url>
   <inceptionYear>2015</inceptionYear>
   <licenses>
     <license>
@@ -375,9 +380,9 @@
   <ciManagement />
   <mailingLists />
   <scm>
-    <connection>scm:git:git@github.com:jinahya/rfc-5849.git</connection>
-    <developerConnection>scm:git:git@github.com:jinahya/rfc-5849.git</developerConnection>
-    <url>https://github.com/jinahya/rfc-5849</url>
+    <connection>scm:git:git@github.com:jinahya/bit-io.git</connection>
+    <developerConnection>scm:git:git@github.com:jinahya/bit-io.git</developerConnection>
+    <url>https://github.com/jinahya/bit-io</url>
     <tag>HEAD</tag>
   </scm>
   <prerequisites />

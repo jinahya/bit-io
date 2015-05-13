@@ -69,6 +69,16 @@ public abstract class AbstractByteOutput<T> implements ByteOutput {
     }
 
 
+    T requireNonNullTarget() {
+
+        if (target == null) {
+            throw new IllegalStateException("#target is currently null");
+        }
+
+        return target;
+    }
+
+
     /**
      * The underlying byte target.
      *

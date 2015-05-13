@@ -38,9 +38,9 @@ public class BitInput extends BitBase {
     /**
      * Creates a new instance consuming bytes from given byte source.
      *
-     * @param source the byte source
+     * @param source the byte source.
      *
-     * @return a new instance
+     * @return a new instance.
      *
      * @throws NullPointerException if {@code source} is {@code null}.
      */
@@ -679,11 +679,12 @@ public class BitInput extends BitBase {
 
 
     /**
-     * Reads a variable-length quantity.
+     * Reads a variable-length quantities.
      *
-     * @param length number of bits for a chunk excluding the continuation bit.
+     * @param length the number of bits for each quantity excluding the
+     * continuation bit.
      *
-     * @return
+     * @return a VLC decoded int value.
      *
      * @throws IOException if an I/O error occurs.
      */
@@ -720,6 +721,39 @@ public class BitInput extends BitBase {
             } else {
                 value |= (readUnsignedInt(length) << shift);
             }
+        }
+
+        return value;
+    }
+
+    public int readVariableLengthInt(final int length) throws IOException {
+
+        return -1;
+    }
+
+
+    /**
+     * Reads a variable-length quantities.
+     *
+     * @param length the number of bits for each quantity excluding the
+     * continuation bit.
+     *
+     * @return a VLC decoded int value.
+     *
+     * @throws IOException if an I/O error occurs.
+     */
+    public long readVariableLengthLongLE(final int length) throws IOException {
+
+        if (length < 1) {
+            throw new IllegalArgumentException("length(" + length + ") < 1");
+        }
+
+        long value = 0L;
+
+        for (int next = 1, shift = 0; next == 1; shift += length) {
+            next = readUnsignedByte(1);
+            final long bits = readUnsignedLong(length);
+            value |= (bits << shift);
         }
 
         return value;

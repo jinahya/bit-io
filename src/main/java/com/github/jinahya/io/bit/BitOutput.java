@@ -635,12 +635,36 @@ public class BitOutput extends BitBase {
     }
 
 
+    public void writeVariableLengthIntBE(final int length, final int value)
+        throws IOException {
+
+        if (length <= 0) {
+            throw new IllegalArgumentException("length(" + length + ") < 0");
+        }
+
+        if (length >= Integer.SIZE) {
+            throw new IllegalArgumentException(
+                "length(" + length + ") >= " + Integer.SIZE);
+        }
+
+        final int bits = Integer.SIZE - Integer.numberOfLeadingZeros(value);
+        final int size = bits / length + (bits % length > 0 ? 1 : 0);
+
+        final int base = (1 << length) - 1; // [1(length-1)...1(0)]
+
+        for (int i = size - 1; i >= 0; i++) {
+        }
+    }
+
+
     /**
+     * Writes a variable-length quantities for given value.
      *
-     * @param length
-     * @param value
+     * @param length the number of bits for each chunked value excluding the
+     * continuation bit.
+     * @param value the value to write.
      *
-     * @throws IOException
+     * @throws IOException if an I/O error occurs.
      */
     public void writeVariableLengthIntLE(final int length, int value)
         throws IOException {
@@ -685,6 +709,35 @@ public class BitOutput extends BitBase {
             } else {
                 writeUnsignedInt(length, bits);
             }
+        }
+    }
+
+
+    /**
+     * Writes a variable-length quantities.
+     *
+     * @param length the number of bits for each quantity excluding the
+     * continuation bit.
+     * @param value the value to be VLC encoded.
+     *
+     * @throws IOException if an I/O error occurs.
+     */
+    public void writeVariableLengthLongLE(final int length, long value)
+        throws IOException {
+
+        if (length < 1) {
+            throw new IllegalArgumentException("length(" + length + ") < 1");
+        }
+
+        final long base = (1L << length) - 1L;
+
+        for (int next = 1; next == 1;) {
+            final long bits = value & base;
+            if ((value >>>= length) == 0L) {
+                next = 0;
+            }
+            writeUnsignedByte(1, next);
+            writeUnsignedLong(length, bits);
         }
     }
 

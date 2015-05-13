@@ -5,50 +5,39 @@
 
   <!-- The Basics -->
   <groupId>com.github.jinahya</groupId>
-  <artifactId>bit-io</artifactId>
+  <artifactId>rfc-5849</artifactId>
   <version>1.1.3-SNAPSHOT</version>
   <packaging>jar</packaging>
-  <parent>
-    <groupId>org.sonatype.oss</groupId>
-    <artifactId>oss-parent</artifactId>
-    <version>9</version>
-  </parent>
-  <dependencyManagement/>
+  <dependencyManagement />
   <dependencies>
     <dependency>
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>
-      <version>1.1.2</version>
+      <version>1.1.3</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>com.google.inject</groupId>
       <artifactId>guice</artifactId>
-      <version>4.0-beta5</version>
+      <version>4.0-beta4</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>commons-io</groupId>
+      <artifactId>commons-io</artifactId>
+      <version>2.4</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
-      <version>3.3.2</version>
+      <version>3.4</version>
       <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.mockito</groupId>
-      <artifactId>mockito-all</artifactId>
-      <version>1.10.8</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-api</artifactId>
-      <version>1.7.10</version>
-      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.testng</groupId>
       <artifactId>testng</artifactId>
-      <version>6.8.21</version>
+      <version>6.9.4</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
@@ -59,6 +48,8 @@
     <maven.compiler.target>1.6</maven.compiler.target>
     <maven.compiler.testSource>1.8</maven.compiler.testSource>
     <maven.compiler.testTarget>1.8</maven.compiler.testTarget>
+    <project.build.outputDirectory.retrotranslated13>${project.build.directory}/classes-retrotranslated13</project.build.outputDirectory.retrotranslated13>
+    <project.build.outputDirectory.retrotranslated14>${project.build.directory}/classes-retrotranslated14</project.build.outputDirectory.retrotranslated14>
   </properties>
 
   <!-- Build Settings -->
@@ -72,28 +63,33 @@
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-antrun-plugin</artifactId>
+          <version>1.8</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-checkstyle-plugin</artifactId>
-          <version>2.14</version>
+          <version>2.15</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-compiler-plugin</artifactId>
-          <version>3.2</version>
+          <version>3.3</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-gpg-plugin</artifactId>
-          <version>1.5</version>
+          <version>1.6</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-jar-plugin</artifactId>
-          <version>2.4</version>
+          <version>2.6</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-javadoc-plugin</artifactId>
-          <version>2.10.1</version>
+          <version>2.10.3</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -113,14 +109,17 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-release-plugin</artifactId>
-          <!--version>2.3.2</version-->
-          <!--version>2.4.2</version-->
-          <version>2.5</version>
+          <version>2.5.2</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-site-plugin</artifactId>
           <version>3.4</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-source-plugin</artifactId>
+          <version>2.4</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -130,22 +129,27 @@
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>animal-sniffer-maven-plugin</artifactId>
-          <version>1.11</version>
+          <version>1.14</version>
         </plugin>
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>cobertura-maven-plugin</artifactId>
-          <version>2.6</version>
+          <version>2.7</version>
         </plugin>
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>findbugs-maven-plugin</artifactId>
-          <version>3.0.0</version>
+          <version>3.0.1</version>
         </plugin>
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>versions-maven-plugin</artifactId>
           <version>2.1</version>
+        </plugin>
+        <plugin>
+          <groupId>org.sonatype.plugins</groupId>
+          <artifactId>nexus-staging-maven-plugin</artifactId>
+          <version>1.6.5</version>
         </plugin>
       </plugins>
     </pluginManagement>
@@ -153,7 +157,6 @@
       <plugin>
         <groupId>com.github.github</groupId>
         <artifactId>site-maven-plugin</artifactId>
-	<version>0.10</version>
         <configuration>
           <server>github</server>
           <message>creating site for ${project.version}</message>
@@ -163,11 +166,86 @@
         <executions>
           <execution>
             <goals>
-              <!--
-                    <goal>site</goal>
-              -->
+              <!--<goal>site</goal>-->
             </goals>
             <phase>site</phase>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>retrotranslated13</id>
+            <phase>process-classes</phase>
+            <goals>
+              <goal>run</goal>
+            </goals>
+            <configuration>
+              <target>
+                <taskdef name="retrotranslator" classname="net.sf.retrotranslator.transformer.RetrotranslatorTask" classpathref="maven.plugin.classpath" />
+                <mkdir dir="${project.build.outputDirectory.retrotranslated13}" />
+                <retrotranslator srcdir="${project.build.outputDirectory}" destdir="${project.build.outputDirectory.retrotranslated13}" embed="com.github.jinahya.bit-io.retrotranslated13" failonwarning="false" smart="true" stripannot="true" stripsign="true" syncvolatile="true" target="1.3" verbose="true" verify="false">
+                  <classpath>
+                    <fileset dir="${basedir}/ext/retrotranslated13" includes="**/*.jar" />
+                  </classpath>
+                </retrotranslator>
+              </target>
+            </configuration>
+          </execution>
+          <execution>
+            <id>retrotranslated14</id>
+            <phase>process-classes</phase>
+            <goals>
+              <goal>run</goal>
+            </goals>
+            <configuration>
+              <target>
+                <taskdef name="retrotranslator" classname="net.sf.retrotranslator.transformer.RetrotranslatorTask" classpathref="maven.plugin.classpath" />
+                <mkdir dir="${project.build.outputDirectory.retrotranslated14}" />
+                <retrotranslator srcdir="${project.build.outputDirectory}" destdir="${project.build.outputDirectory.retrotranslated14}" embed="com.github.jinahya.bit-io.retrotranslated14" failonwarning="false" smart="true" stripannot="true" stripsign="true" syncvolatile="true" target="1.4" verbose="true" verify="false">
+                  <classpath>
+                    <fileset dir="${basedir}/ext/retrotranslated14" includes="**/*.jar" />
+                  </classpath>
+                </retrotranslator>
+              </target>
+            </configuration>
+          </execution>
+        </executions>
+        <dependencies>
+          <dependency>
+            <groupId>net.sf.retrotranslator</groupId>
+            <artifactId>retrotranslator-transformer</artifactId>
+            <version>1.2.9</version>
+          </dependency>
+        </dependencies>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>retrotranslated13</id>
+            <phase>package</phase>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+            <configuration>
+              <classesDirectory>${project.build.outputDirectory.retrotranslated13}</classesDirectory>
+              <classifier>retrotranslated13</classifier>
+            </configuration>
+          </execution>
+          <execution>
+            <id>retrotranslated14</id>
+            <phase>package</phase>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+            <configuration>
+              <classesDirectory>${project.build.outputDirectory.retrotranslated14}</classesDirectory>
+              <classifier>retrotranslated14</classifier>
+            </configuration>
           </execution>
         </executions>
       </plugin>
@@ -178,6 +256,7 @@
           <tagNameFormat>@{project.version}</tagNameFormat>
           <pushChanges>false</pushChanges>
           <localCheckout>true</localCheckout>
+          <goals>install</goals>
         </configuration>
       </plugin>
       <plugin>
@@ -185,34 +264,30 @@
         <artifactId>animal-sniffer-maven-plugin</artifactId>
         <executions>
           <execution>
-            <id>check-signature-java15</id>
+            <id>check-signature-java16</id>
             <phase>process-classes</phase> <!-- default -->
             <goals>
-              <!--
               <goal>check</goal>
-              -->
             </goals>
             <configuration>
               <signature>
                 <groupId>org.codehaus.mojo.signature</groupId>
                 <artifactId>java16</artifactId>
-                <version>1.1</version>
+                <version>1.0</version>
               </signature>
             </configuration>
           </execution>
           <execution>
-            <id>check-signature-android-api-signature-10</id>
+            <id>check-signature-android-api-level-1</id>
             <phase>process-classes</phase> <!-- default -->
             <goals>
-              <!--
               <goal>check</goal>
-              -->
             </goals>
             <configuration>
               <signature>
-                <groupId>com.googlecode.jinahya</groupId>
-                <artifactId>android-api-signature-10</artifactId>
-                <version>1.0.2</version>
+                <groupId>net.sf.androidscents.signature</groupId>
+                <artifactId>android-api-level-1</artifactId>
+                <version>1.0_r2</version>
               </signature>
             </configuration>
           </execution>
@@ -242,7 +317,7 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-pmd-plugin</artifactId>
         <configuration>
-          <targetJdk>1.7</targetJdk>
+          <targetJdk>1.6</targetJdk>
         </configuration>
       </plugin>
       <plugin>
@@ -271,8 +346,9 @@
 
   <!-- More Project Information -->
   <name>${project.artifactId}</name>
-  <url>http://jinahya.github.io/bit-io/sites/${project.version}</url>
-  <inceptionYear>2011</inceptionYear>
+  <description>an implementation of rfc-5849</description>
+  <url>http://jinahya.github.io/rfc-5849/sites/${project.version}</url>
+  <inceptionYear>2015</inceptionYear>
   <licenses>
     <license>
       <name>Apache 2</name>
@@ -299,28 +375,50 @@
   <ciManagement />
   <mailingLists />
   <scm>
-    <connection>scm:git:git@github.com:jinahya/bit-io.git</connection>
-    <developerConnection>scm:git:git@github.com:jinahya/bit-io.git</developerConnection>
-    <url>https://github.com/jinahya/bit-io</url>
+    <connection>scm:git:git@github.com:jinahya/rfc-5849.git</connection>
+    <developerConnection>scm:git:git@github.com:jinahya/rfc-5849.git</developerConnection>
+    <url>https://github.com/jinahya/rfc-5849</url>
     <tag>HEAD</tag>
   </scm>
-  <prerequisites>
-    <maven>3.1.1</maven>
-  </prerequisites>
+  <prerequisites />
   <repositories />
   <pluginRepositories />
-  <distributionManagement />
+  <distributionManagement>
+    <snapshotRepository>
+      <id>ossrh</id>
+      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+    </snapshotRepository>
+    <!--repository>
+      <id>ossrh</id>
+      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+    </repository-->
+  </distributionManagement>
   <profiles>
     <profile>
-      <id>release-sign-artifacts</id>
-      <activation>
-        <property>
-          <name>performRelease</name>
-          <value>true</value>
-        </property>
-      </activation>
+      <id>ossrh</id>
       <build>
         <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-enforcer-plugin</artifactId>
+            <version>1.4</version>
+            <executions>
+              <execution>
+                <id>require-release-version</id>
+                <goals>
+                  <goal>enforce</goal>
+                </goals>
+                <configuration>
+                  <rules>
+                    <requireReleaseVersion>
+                      <message>No Snapshots Allowed!</message>
+                    </requireReleaseVersion>
+                  </rules>
+                  <fail>true</fail>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-gpg-plugin</artifactId>
@@ -333,6 +431,40 @@
                 </goals>
               </execution>
             </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>attach-javadocs</id>
+                <goals>
+                  <goal>jar</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-source-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>attach-sources</id>
+                <goals>
+                  <goal>jar-no-fork</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.sonatype.plugins</groupId>
+            <artifactId>nexus-staging-maven-plugin</artifactId>
+            <extensions>true</extensions>
+            <configuration>
+              <serverId>ossrh</serverId>
+              <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+              <autoReleaseAfterClose>true</autoReleaseAfterClose>
+            </configuration>
           </plugin>
         </plugins>
       </build>

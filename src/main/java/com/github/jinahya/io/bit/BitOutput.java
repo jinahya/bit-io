@@ -598,21 +598,19 @@ public class BitOutput extends BitBase {
     }
 
 
-    public void writeString(final String value, final Charset charset)
-        throws IOException {
-
-        if (value == null) {
-            throw new NullPointerException("null value");
-        }
-
-        if (charset == null) {
-            throw new NullPointerException("null charset");
-        }
-
-        writeBytes(BYTES_SCALE_MAX, BYTES_RANGE_MAX, value.getBytes(charset));
-    }
-
-
+//    public void writeString(final String value, final Charset charset)
+//        throws IOException {
+//
+//        if (value == null) {
+//            throw new NullPointerException("null value");
+//        }
+//
+//        if (charset == null) {
+//            throw new NullPointerException("null charset");
+//        }
+//
+//        writeBytes(BYTES_SCALE_MAX, BYTES_RANGE_MAX, value.getBytes(charset));
+//    }
     /**
      * Writes a {@code US-ASCII} encoded string value. This method writes the
      * decoded byte array with {@code scale} of {@code 16} and {@code range} of

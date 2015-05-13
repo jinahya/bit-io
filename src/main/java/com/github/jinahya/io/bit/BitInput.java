@@ -23,8 +23,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
-import java.util.function.Consumer;
-import java.util.function.Supplier;
 
 
 /**
@@ -413,40 +411,38 @@ public class BitInput extends BitBase {
     }
 
 
-    /**
-     *
-     * @param scale
-     * @param range
-     * @param output
-     *
-     * @throws IOException if an I/O error occurs.
-     *
-     * @see #BYTES_SCALE_MIN
-     * @see #BYTES_SCALE_MAX
-     * @see #BYTES_RANGE_MIN
-     * @see #BYTES_RANGE_MAX
-     * @see #requireValidBytesScale(int)
-     * @see #requireValidBytesRange(int)
-     */
-    public void readBytes(final int scale, final int range,
-                          final Supplier<ByteOutput> output)
-        throws IOException {
-
-        requireValidBytesScale(scale);
-
-        requireValidBytesRange(range);
-
-        if (output == null) {
-            throw new NullPointerException("null output");
-        }
-
-        final int length = readUnsignedShort(scale);
-        for (int i = 0; i < length; i++) {
-            output.get().writeUnsignedByte(readUnsignedByte(range));
-        }
-    }
-
-
+//    /**
+//     *
+//     * @param scale
+//     * @param range
+//     * @param output
+//     *
+//     * @throws IOException if an I/O error occurs.
+//     *
+//     * @see #BYTES_SCALE_MIN
+//     * @see #BYTES_SCALE_MAX
+//     * @see #BYTES_RANGE_MIN
+//     * @see #BYTES_RANGE_MAX
+//     * @see #requireValidBytesScale(int)
+//     * @see #requireValidBytesRange(int)
+//     */
+//    public void readBytes(final int scale, final int range,
+//                          final Supplier<ByteOutput> output)
+//        throws IOException {
+//
+//        requireValidBytesScale(scale);
+//
+//        requireValidBytesRange(range);
+//
+//        if (output == null) {
+//            throw new NullPointerException("null output");
+//        }
+//
+//        final int length = readUnsignedShort(scale);
+//        for (int i = 0; i < length; i++) {
+//            output.get().writeUnsignedByte(readUnsignedByte(range));
+//        }
+//    }
     /**
      * Reads a sequence of bytes.
      *
@@ -477,25 +473,23 @@ public class BitInput extends BitBase {
     }
 
 
-    public void readBytes(final int scale, final int range,
-                          final Consumer<Byte> consumer)
-        throws IOException {
-
-        requireValidBytesScale(scale);
-
-        requireValidBytesRange(range);
-
-        if (consumer == null) {
-            throw new NullPointerException("null consumer");
-        }
-
-        final int length = readUnsignedShort(scale);
-        for (int i = 0; i < length; i++) {
-            consumer.accept((byte) readUnsignedByte(range));
-        }
-    }
-
-
+//    public void readBytes(final int scale, final int range,
+//                          final Consumer<Byte> consumer)
+//        throws IOException {
+//
+//        requireValidBytesScale(scale);
+//
+//        requireValidBytesRange(range);
+//
+//        if (consumer == null) {
+//            throw new NullPointerException("null consumer");
+//        }
+//
+//        final int length = readUnsignedShort(scale);
+//        for (int i = 0; i < length; i++) {
+//            consumer.accept((byte) readUnsignedByte(range));
+//        }
+//    }
     public void readBytes(final int scale, final int range,
                           final ByteBuffer output)
         throws IOException {
@@ -648,16 +642,14 @@ public class BitInput extends BitBase {
     }
 
 
-    public String readString(final Charset charset) throws IOException {
-
-        if (charset == null) {
-            throw new NullPointerException("null charset");
-        }
-
-        return new String(readBytes(BYTES_SCALE_MAX, BYTES_RANGE_MAX), charset);
-    }
-
-
+//    public String readString(final Charset charset) throws IOException {
+//
+//        if (charset == null) {
+//            throw new NullPointerException("null charset");
+//        }
+//
+//        return new String(readBytes(BYTES_SCALE_MAX, BYTES_RANGE_MAX), charset);
+//    }
     /**
      * Reads a {@code US-ASCII} encoded string. This method reads a byte array
      * via {@link #readBytes(int, int)} with {@code scale} of {@code 16} and
@@ -725,6 +717,7 @@ public class BitInput extends BitBase {
 
         return value;
     }
+
 
     public int readVariableLengthInt(final int length) throws IOException {
 

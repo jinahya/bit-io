@@ -11,17 +11,17 @@ A small library for reading or writing none octet aligned values such as `1-bit 
 
 ## Usages
 ### Reading
-#### Preparing a `ByteInput`
+#### Preparing `ByteInput`
 Prepare an instance of `ByteInput` from various sources.
 ````java
-ArrayInput(byte[], int)
-BufferInput(ByteBuffer)
-StreamInput(InputStream)
-SupplierInput(Supplier<Byte>)
+new ArrayInput(byte[], offset)
+new BufferInput(java.nio.ByteBuffer);
+new StreamInput(java.io.InputStream);
+new SupplierInput(java.util.function.Supplier<Byte>)
 ````
 #### Creating `BitInput`
 ```java
-BitInput(ByteInput)
+new BitInput(ByteInput);
 ```
 #### Reading values.
 ```java
@@ -38,10 +38,10 @@ biiiiiil llllllll llllllll llllllll llllllll llllllll lllllldd
 #### Preparing `ByteOutput`
 Prepare an instance of `ByteOutput` from various targets.
 ```java
-ArrayOutput(byte[], int)
-BufferOutput(ByteBuffer)
-ConsumerOutput(Consumer<Byte>)
-StreamOutput(OutputStream)
+new ArrayOutput(byte[], offset)
+new BufferOutput(java.nio.ByteBuffer)
+new ConsumerOutput(java.util.function.Consumer<Byte>)
+new StreamOutput(java.io.OutputStream);
 ````
 #### Creating `BitInput`
 ```java

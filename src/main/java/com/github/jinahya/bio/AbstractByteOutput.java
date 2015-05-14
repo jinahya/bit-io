@@ -45,10 +45,7 @@ public abstract class AbstractByteOutput<T> implements ByteOutput {
      * Returns the current value of {@link #target}.
      *
      * @return the current value of {@link #target}.
-     *
-     * @deprecated Use {@link #target}.
      */
-    @Deprecated
     public T getTarget() {
 
         return target;
@@ -59,10 +56,7 @@ public abstract class AbstractByteOutput<T> implements ByteOutput {
      * Replaces the value of {@link #target} with given.
      *
      * @param target new value for {@link #target}.
-     *
-     * @deprecated Use {@link #target}.
      */
-    @Deprecated
     public void setTarget(final T target) {
 
         this.target = target;
@@ -70,17 +64,18 @@ public abstract class AbstractByteOutput<T> implements ByteOutput {
 
 
     /**
-     * Checks that the {@code target} is not {@code null}.
+     * Checks that the underlying byte target is currently valid to use.
      *
-     * @return the {@code target}.
+     * @return the underlying byte target.
      *
-     * @throws IllegalStateException if {@code target} is currently
-     * {@code null}.
+     * @throws IllegalStateException if the underlying byte target is currently
+     * invalid.
      */
-    protected T requireNonNullTarget() {
+    protected T requireValidTarget() {
 
         if (target == null) {
-            throw new IllegalStateException("#target is currently null");
+            throw new IllegalStateException(
+                "The underlying byte target is currently null");
         }
 
         return target;

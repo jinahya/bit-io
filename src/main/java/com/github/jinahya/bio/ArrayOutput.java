@@ -36,7 +36,37 @@ public class ArrayOutput extends AbstractByteOutput<byte[]> {
     }
 
 
+    @Override
+    protected byte[] requireValidTarget() {
+
+        final byte[] target = super.requireValidTarget();
+
+        if (target.length == 0) {
+            throw new IllegalStateException(
+                "The underlying byte target's length is 0");
+        }
+
+        return target;
+    }
+
+
     public int getOffset() {
+
+        return offset;
+    }
+
+
+    protected int requireValidOffset() {
+
+        if (offset < 0) {
+            throw new IllegalStateException("offset(" + offset + ") < 0");
+        }
+
+        if (offset >= requireValidTarget().length) {
+            throw new IllegalStateException(
+                "offset(" + offset + ") >= target.length("
+                + requireValidTarget().length + ")");
+        }
 
         return offset;
     }
@@ -57,7 +87,7 @@ public class ArrayOutput extends AbstractByteOutput<byte[]> {
     @Override
     public void writeUnsignedByte(final int value) throws IOException {
 
-        requireNonNullTarget()[offset + length++] = (byte) value;
+        requireValidTarget()[requireValidOffset() + length++] = (byte) value;
     }
 
 

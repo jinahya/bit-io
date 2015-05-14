@@ -36,7 +36,37 @@ public class ArrayInput extends AbstractByteInput<byte[]> {
     }
 
 
+    @Override
+    protected byte[] requireValidSource() {
+
+        final byte[] source = super.requireValidSource();
+
+        if (source.length == 0) {
+            throw new IllegalStateException(
+                "The underlying byte source's length is 0");
+        }
+
+        return source;
+    }
+
+
     public int getOffset() {
+
+        return offset;
+    }
+
+
+    protected int requireValidOffset() {
+
+        if (offset < 0) {
+            throw new IllegalStateException("offset(" + offset + ") < 0");
+        }
+
+        if (offset >= requireValidSource().length) {
+            throw new IllegalStateException(
+                "offset(" + offset + ") >= source.length("
+                + requireValidSource().length + ")");
+        }
 
         return offset;
     }
@@ -57,7 +87,7 @@ public class ArrayInput extends AbstractByteInput<byte[]> {
     @Override
     public int readUnsignedByte() throws IOException {
 
-        return requireNonNullSource()[offset + length++] & 0xFF;
+        return requireValidSource()[requireValidOffset() + length++] & 0xFF;
     }
 
 

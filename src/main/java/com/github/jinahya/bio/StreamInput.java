@@ -42,20 +42,22 @@ public class StreamInput extends AbstractByteInput<InputStream> {
 
     /**
      * {@inheritDoc} The {@code readUnsignedByte()} method of
-     * {@code StreamReader} class calls {@link InputStream#read()} on
-     * {@link #source} and returns the result. Override this method if
-     * {@link #source} is intended to be lazily initialized and set.
+     * {@code StreamReader} class calls {@link InputStream#read()} on the result
+     * of {@link #requireValidSource()} and returns the result.
      *
      * @return {@inheritDoc}
      *
-     * @throws IllegalStateException id {@link #source} is currently
-     * {@code null}.
+     * @throws IllegalStateException id the underling byte stream is invalid.
      * @throws IOException {@inheritDoc}
+     * @throws EOFException if the underlying stream reached to end of stream.
+     *
+     * @see #requireValidSource()
+     * @see InputStream#read()
      */
     @Override
     public int readUnsignedByte() throws IOException {
 
-        final int value = requireNonNullSource().read();
+        final int value = requireValidSource().read();
         if (value == -1) {
             throw new EOFException("eof");
         }

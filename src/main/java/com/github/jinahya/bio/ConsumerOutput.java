@@ -19,26 +19,26 @@ package com.github.jinahya.bio;
 
 
 import java.io.IOException;
-import java.util.function.IntSupplier;
+import java.util.function.Consumer;
 
 
 /**
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
-public class IntSupplierInput extends AbstractByteInput<IntSupplier> {
+public class ConsumerOutput extends AbstractByteOutput<Consumer<Byte>> {
 
 
-    public IntSupplierInput(final IntSupplier supplier) {
+    public ConsumerOutput(final Consumer<Byte> consumer) {
 
-        super(supplier);
+        super(consumer);
     }
 
 
     @Override
-    public int readUnsignedByte() throws IOException {
+    public void writeUnsignedByte(final int value) throws IOException {
 
-        return requireNonNullSource().getAsInt();
+        requireValidTarget().accept((byte) value);
     }
 
 

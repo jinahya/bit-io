@@ -41,26 +41,36 @@ public class BufferOutput extends AbstractByteOutput<ByteBuffer> {
     }
 
 
+    @Override
+    protected ByteBuffer requireValidTarget() {
+
+        final ByteBuffer target = super.requireValidTarget();
+
+        if (!target.hasRemaining()) {
+            throw new IllegalStateException(
+                "The underlying byte buffer has no remaining");
+        }
+
+        return target;
+    }
+
+
     /**
      * {@inheritDoc} The {@code writeUnsignedByte(int)} method of
-     * {@code BufferOutput} class calls {@link ByteBuffer#put(byte)} on the
-     * underlying byte buffer with given {@code value}. Override this method if
-     * {@link #target} is intended to be lazily initialized and set.
+     * {@code BufferOutput} class returns
+     * <pre>{@link #requireValidTarget()}.put((byte) value)</pre>.
      *
      * @param value {@inheritDoc }
      *
-     * @throws IllegalStateException if {@link #target} is currently
-     * {@code null}.
      * @throws IOException {@inheritDoc }
      *
+     * @see #requireValidTarget()
      * @see ByteBuffer#put(byte)
-     * @see #target
-     * @see #setTarget(java.lang.Object)
      */
     @Override
     public void writeUnsignedByte(final int value) throws IOException {
 
-        requireNonNullTarget().put((byte) value);
+        requireValidTarget().put((byte) value);
     }
 
 

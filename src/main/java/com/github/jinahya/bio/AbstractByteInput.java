@@ -64,17 +64,18 @@ public abstract class AbstractByteInput<T> implements ByteInput {
 
 
     /**
-     * Checks that the {@code source} is not {@code null}.
+     * Checks that the underlying byte source is currently valid to use.
      *
-     * @return the {@code source}.
+     * @return the underlying byte source.
      *
-     * @throws IllegalStateException if {@code source} is currently
-     * {@code null}.
+     * @throws IllegalStateException if the underlying byte source is currently
+     * invalid.
      */
-    protected T requireNonNullSource() {
+    protected T requireValidSource() {
 
         if (source == null) {
-            throw new IllegalStateException("#source is currently null");
+            throw new IllegalStateException(
+                "The underlying byte source is currently null");
         }
 
         return source;

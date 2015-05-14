@@ -30,41 +30,6 @@ import java.io.IOException;
 public class BitInput extends BitBase {
 
 
-//    /**
-//     * Creates a new instance consuming bytes from given byte source.
-//     *
-//     * @param source the byte source.
-//     *
-//     * @return a new instance.
-//     *
-//     * @throws NullPointerException if {@code source} is {@code null}.
-//     */
-//    public static BitInput newInstance(final InputStream source) {
-//
-//        if (source == null) {
-//            throw new NullPointerException("null source");
-//        }
-//
-//        // @todo: lambda this
-//        return new BitInput(new StreamInput(source));
-//    }
-//
-//
-//    /**
-//     * Creates a new instance consuming bytes from specified byte source.
-//     *
-//     * @param source the byte source.
-//     *
-//     * @return a new instance.
-//     */
-//    public static BitInput newInstance(final ByteBuffer source) {
-//
-//        if (source == null) {
-//            throw new NullPointerException("null source");
-//        }
-//
-//        return new BitInput(new BufferInput(source));
-//    }
     /**
      * Creates a new instance built on top of the specified byte input.
      *
@@ -407,38 +372,6 @@ public class BitInput extends BitBase {
     }
 
 
-//    /**
-//     *
-//     * @param scale
-//     * @param range
-//     * @param output
-//     *
-//     * @throws IOException if an I/O error occurs.
-//     *
-//     * @see #BYTES_SCALE_MIN
-//     * @see #BYTES_SCALE_MAX
-//     * @see #BYTES_RANGE_MIN
-//     * @see #BYTES_RANGE_MAX
-//     * @see #requireValidBytesScale(int)
-//     * @see #requireValidBytesRange(int)
-//     */
-//    public void readBytes(final int scale, final int range,
-//                          final Supplier<ByteOutput> output)
-//        throws IOException {
-//
-//        requireValidBytesScale(scale);
-//
-//        requireValidBytesRange(range);
-//
-//        if (output == null) {
-//            throw new NullPointerException("null output");
-//        }
-//
-//        final int length = readUnsignedShort(scale);
-//        for (int i = 0; i < length; i++) {
-//            output.get().writeUnsignedByte(readUnsignedByte(range));
-//        }
-//    }
     protected void readBytesFully(final int length, final int range,
                                   final ByteOutput output)
         throws IOException {
@@ -462,13 +395,13 @@ public class BitInput extends BitBase {
 
 
     /**
-     * Reads a sequence of bytes.
+     * Reads a sequence of bytes and writes to specified byte output.
      *
      * @param scale the number of bits required for calculating the number of
      * bytes to read; between 0 (exclusive) and 16 (inclusive).
      * @param range the number of valid bits in each byte; between 0 (exclusive)
      * and 8 (inclusive).
-     * @param output
+     * @param output the bytes output.
      *
      * @return number of bytes written to {@code output}.
      *
@@ -505,7 +438,7 @@ public class BitInput extends BitBase {
      *
      * @throws IOException if an I/O error occurs.
      *
-     * @see #readBytes(int, byte[], int, int)
+     * @see #readBytesFully(int, int, com.github.jinahya.bio.ByteOutput)
      */
     public byte[] readBytes(final int scale, final int range)
         throws IOException {
@@ -548,14 +481,6 @@ public class BitInput extends BitBase {
     }
 
 
-//    public String readString(final Charset charset) throws IOException {
-//
-//        if (charset == null) {
-//            throw new NullPointerException("null charset");
-//        }
-//
-//        return new String(readBytes(BYTES_SCALE_MAX, BYTES_RANGE_MAX), charset);
-//    }
     /**
      * Reads a {@code US-ASCII} encoded string. This method reads a byte array
      * via {@link #readBytes(int, int)} with {@code scale} of {@code 16} and

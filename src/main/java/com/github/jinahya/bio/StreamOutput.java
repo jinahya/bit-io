@@ -41,24 +41,20 @@ public class StreamOutput extends AbstractByteOutput<OutputStream> {
 
     /**
      * {@inheritDoc} The {@code writeUnsginedByte(int)} method of
-     * {@code StreamReader} class calls {@link OutputStream#write(int)} on
-     * {@link #target} with {@code value}. Override this method if
-     * {@link #target} is intended to be lazily initialized and set.
+     * {@code StreamReader} class calls {@link OutputStream#write(int)} on the
+     * result of {@link #requireValidTarget()} with given {@code value}.
      *
      * @param value {@inheritDoc }
      *
-     * @throws IllegalStateException if {@link #target} is currently
-     * {@code null}.
      * @throws IOException {@inheritDoc}
      *
+     * @see #requireValidTarget()
      * @see OutputStream#write(int)
-     * @see #target
-     * @see #setTarget(java.lang.Object)
      */
     @Override
     public void writeUnsignedByte(final int value) throws IOException {
 
-        requireNonNullTarget().write(value);
+        requireValidTarget().write(value);
     }
 
 

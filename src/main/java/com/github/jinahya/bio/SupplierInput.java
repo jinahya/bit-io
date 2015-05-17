@@ -38,7 +38,7 @@ public class SupplierInput extends AbstractByteInput<Supplier<Byte>> {
     @Override
     public int readUnsignedByte() throws IOException {
 
-        return requireValidSource().get() & 0xFF;
+        return source.get() & 0xFF;
     }
 
 

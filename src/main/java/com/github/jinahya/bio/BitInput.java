@@ -447,7 +447,8 @@ public class BitInput extends BitBase {
 
         final byte[] value = new byte[readBytesLength(scale)];
 
-        readBytesFully(value.length, range, new ArrayOutput(value, 0));
+        readBytesFully(value.length, range,
+                       new ArrayOutput(value, 0, value.length));
 
         return value;
     }

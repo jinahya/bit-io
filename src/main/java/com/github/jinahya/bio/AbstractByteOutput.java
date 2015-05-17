@@ -42,53 +42,9 @@ public abstract class AbstractByteOutput<T> implements ByteOutput {
 
 
     /**
-     * Returns the current value of {@link #target}.
-     *
-     * @return the current value of {@link #target}.
-     */
-    public T getTarget() {
-
-        return target;
-    }
-
-
-    /**
-     * Replaces the value of {@link #target} with given.
-     *
-     * @param target new value for {@link #target}.
-     */
-    public void setTarget(final T target) {
-
-        this.target = target;
-    }
-
-
-    /**
-     * Checks that the underlying byte target is currently valid to use.
-     *
-     * @return the underlying byte target.
-     *
-     * @throws IllegalStateException if the underlying byte target is currently
-     * invalid.
-     */
-    protected T requireValidTarget() {
-
-        if (target == null) {
-            throw new IllegalStateException(
-                "The underlying byte target is currently null");
-        }
-
-        return target;
-    }
-
-
-    /**
      * The underlying byte target.
-     *
-     * @see #getTarget()
-     * @see #setTarget(java.lang.Object)
      */
-    private T target;
+    protected T target;
 
 
 }

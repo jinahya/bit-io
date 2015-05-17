@@ -28,73 +28,29 @@ import java.io.IOException;
 public class ArrayInput extends AbstractByteInput<byte[]> {
 
 
-    public ArrayInput(final byte[] array, final int offset) {
+    public ArrayInput(final byte[] array, final int offset, final int length) {
 
         super(array);
 
         this.offset = offset;
-    }
-
-
-    @Override
-    protected byte[] requireValidSource() {
-
-        final byte[] source = super.requireValidSource();
-
-        if (source.length == 0) {
-            throw new IllegalStateException(
-                "The underlying byte source's length is 0");
-        }
-
-        return source;
-    }
-
-
-    public int getOffset() {
-
-        return offset;
-    }
-
-
-    protected int requireValidOffset() {
-
-        if (offset < 0) {
-            throw new IllegalStateException("offset(" + offset + ") < 0");
-        }
-
-        if (offset >= requireValidSource().length) {
-            throw new IllegalStateException(
-                "offset(" + offset + ") >= source.length("
-                + requireValidSource().length + ")");
-        }
-
-        return offset;
-    }
-
-
-    public void setOffset(final int offset) {
-
-        this.offset = offset;
-    }
-
-
-    public int getLength() {
-
-        return length;
+        this.length = length;
     }
 
 
     @Override
     public int readUnsignedByte() throws IOException {
 
-        return requireValidSource()[requireValidOffset() + length++] & 0xFF;
+        return source[offset + index] & 0xFF;
     }
 
 
-    private int offset;
+    protected int offset;
 
 
-    private int length = 0;
+    protected int length;
+
+
+    protected int index;
 
 
 }

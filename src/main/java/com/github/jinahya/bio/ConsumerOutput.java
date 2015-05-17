@@ -38,7 +38,7 @@ public class ConsumerOutput extends AbstractByteOutput<Consumer<Byte>> {
     @Override
     public void writeUnsignedByte(final int value) throws IOException {
 
-        requireValidTarget().accept((byte) value);
+        target.accept((byte) value);
     }
 
 

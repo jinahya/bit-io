@@ -19,25 +19,49 @@ package com.github.jinahya.bio;
 
 
 /**
- * A class for reading arbitrary length of bits.
+ * A base class.
  *
  * @author <a href="mailto:onacit@gmail.com">Jin Kwon</a>
  */
 class BitBase {
 
 
+    /**
+     * The minimum value for {@code scale} of bytes.
+     */
     protected static final int BYTES_SCALE_MIN = 0x01;
 
 
+    /**
+     * The maximum value for {@code scale} of bytes.
+     */
     protected static final int BYTES_SCALE_MAX = 0x10;
 
 
+    /**
+     * The minimum value for {@code range} of bytes.
+     */
     protected static final int BYTES_RANGE_MIN = 0x01;
 
 
+    /**
+     * The maximum value for {@code range} of bytes.
+     */
     protected static final int BYTES_RANGE_MAX = 0x08;
 
 
+    /**
+     * Checks that the specified value is valid.
+     *
+     * @param scale the value to check
+     *
+     * @return given value if it's valid.
+     *
+     * @throws IllegalArgumentException if given value is not valid.
+     *
+     * @see #BYTES_SCALE_MIN
+     * @see #BYTES_SCALE_MAX
+     */
     protected static int requireValidBytesScale(final int scale) {
 
         if (scale < BYTES_SCALE_MIN) {
@@ -54,6 +78,18 @@ class BitBase {
     }
 
 
+    /**
+     * Checks that the specified value is valid.
+     *
+     * @param range the value to check
+     *
+     * @return given value if it's valid.
+     *
+     * @throws IllegalArgumentException if given value is not valid.
+     *
+     * @see #BYTES_RANGE_MIN
+     * @see #BYTES_RANGE_MAX
+     */
     protected static int requireValidBytesRange(final int range) {
 
         if (range < BYTES_RANGE_MIN) {

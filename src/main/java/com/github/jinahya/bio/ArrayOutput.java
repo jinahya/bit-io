@@ -28,73 +28,29 @@ import java.io.IOException;
 public class ArrayOutput extends AbstractByteOutput<byte[]> {
 
 
-    public ArrayOutput(final byte[] array, final int offset) {
+    public ArrayOutput(final byte[] array, final int offset, final int length) {
 
         super(array);
 
         this.offset = offset;
-    }
-
-
-    @Override
-    protected byte[] requireValidTarget() {
-
-        final byte[] target = super.requireValidTarget();
-
-        if (target.length == 0) {
-            throw new IllegalStateException(
-                "The underlying byte target's length is 0");
-        }
-
-        return target;
-    }
-
-
-    public int getOffset() {
-
-        return offset;
-    }
-
-
-    protected int requireValidOffset() {
-
-        if (offset < 0) {
-            throw new IllegalStateException("offset(" + offset + ") < 0");
-        }
-
-        if (offset >= requireValidTarget().length) {
-            throw new IllegalStateException(
-                "offset(" + offset + ") >= target.length("
-                + requireValidTarget().length + ")");
-        }
-
-        return offset;
-    }
-
-
-    public void setOffset(final int offset) {
-
-        this.offset = offset;
-    }
-
-
-    public int getLength() {
-
-        return length;
+        this.length = length;
     }
 
 
     @Override
     public void writeUnsignedByte(final int value) throws IOException {
 
-        requireValidTarget()[requireValidOffset() + length++] = (byte) value;
+        target[offset + index++] = (byte) value;
     }
 
 
-    private int offset;
+    protected int offset;
 
 
-    private int length = 0;
+    protected int length;
+
+
+    protected int index;
 
 
 }

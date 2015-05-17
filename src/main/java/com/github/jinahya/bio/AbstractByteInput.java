@@ -42,53 +42,9 @@ public abstract class AbstractByteInput<T> implements ByteInput {
 
 
     /**
-     * Returns the current value of {@link #source}.
-     *
-     * @return the current value of {@link #source}.
-     */
-    public T getSource() {
-
-        return source;
-    }
-
-
-    /**
-     * Replaces the value of {@link #source} with given.
-     *
-     * @param source new value for {@link #source}.
-     */
-    public void setSource(final T source) {
-
-        this.source = source;
-    }
-
-
-    /**
-     * Checks that the underlying byte source is currently valid to use.
-     *
-     * @return the underlying byte source.
-     *
-     * @throws IllegalStateException if the underlying byte source is currently
-     * invalid.
-     */
-    protected T requireValidSource() {
-
-        if (source == null) {
-            throw new IllegalStateException(
-                "The underlying byte source is currently null");
-        }
-
-        return source;
-    }
-
-
-    /**
      * The underlying byte source.
-     *
-     * @see #getSource()
-     * @see #setSource(java.lang.Object)
      */
-    private T source;
+    protected T source;
 
 
 }

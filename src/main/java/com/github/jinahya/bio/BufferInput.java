@@ -39,36 +39,22 @@ public class BufferInput extends AbstractByteInput<ByteBuffer> {
     }
 
 
-    @Override
-    protected ByteBuffer requireValidSource() {
-
-        final ByteBuffer source = super.requireValidSource();
-
-        if (!source.hasRemaining()) {
-            throw new IllegalStateException(
-                "The underlying byte buffer has no remaining");
-        }
-
-        return source;
-    }
-
-
     /**
      * {@inheritDoc} The {@link #readUnsignedByte()} method of
      * {@code BufferInput} class returns
-     * <pre>{@link #requireValidSource()}.get() &amp; 0xFF</pre>.
+     * <pre>source.get() &amp; 0xFF</pre>.
      *
      * @return {@inheritDoc }
      *
      * @throws IOException {@inheritDoc }
      *
-     * @see #requireValidSource()
+     * @see #source
      * @see ByteBuffer#get()
      */
     @Override
     public int readUnsignedByte() throws IOException {
 
-        return requireValidSource().get() & 0xFF;
+        return source.get() & 0xFF;
     }
 
 

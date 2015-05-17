@@ -28,7 +28,7 @@ import org.testng.annotations.Test;
 
 /**
  *
- * @author Jin Kwon
+ * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
 public class ReadMeTest {
 
@@ -37,7 +37,7 @@ public class ReadMeTest {
      * logger.
      */
     private static final Logger logger
-            = LoggerFactory.getLogger(ReadMeTest.class);
+        = LoggerFactory.getLogger(ReadMeTest.class);
 
 
     @Test

@@ -484,7 +484,8 @@ public class BitOutput extends BitBase {
                               final byte[] value)
         throws IOException {
 
-        writeBytes(scale, value.length, range, new ArrayInput(value, 0));
+        writeBytes(scale, value.length, range,
+                   new ArrayInput(value, 0, value.length));
     }
 
 

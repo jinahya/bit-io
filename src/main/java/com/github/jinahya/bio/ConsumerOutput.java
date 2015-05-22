@@ -23,6 +23,7 @@ import java.util.function.Consumer;
 
 
 /**
+ * A {@link ByteOutput} implementation uses {@link Consumer}.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */

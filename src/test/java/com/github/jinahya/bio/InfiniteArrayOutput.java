@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 <a href="mailto:onacit@gmail.com">Jin Kwon</a>.
+ * Copyright 2015 Jin Kwon &lt;jinahya_at_gmail.com&gt;.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,22 +22,26 @@ import java.io.IOException;
 
 
 /**
- * An interface for consuming bytes.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
-public interface ByteOutput {
+public class InfiniteArrayOutput extends ArrayOutput {
 
 
-    /**
-     * Writes an unsigned 8-bit value.
-     *
-     * @param value an unsigned 8-bit value between {@code 0} (inclusive) and
-     * {@code 256} (exclusive).
-     *
-     * @throws IOException if an I/O error occurs.
-     */
-    void writeUnsignedByte(final int value) throws IOException;
+    public InfiniteArrayOutput() {
+
+        super(new byte[1], 0, 1);
+
+    }
+
+
+    @Override
+    public void writeUnsignedByte(int value) throws IOException {
+
+        index = 0;
+
+        super.writeUnsignedByte(value);
+    }
 
 
 }

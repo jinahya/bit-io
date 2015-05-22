@@ -22,12 +22,20 @@ import java.io.IOException;
 
 
 /**
+ * A {@link ByteOutput} implementation uses a byte array.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
 public class ArrayOutput extends AbstractByteOutput<byte[]> {
 
 
+    /**
+     * Creates a new instance.
+     *
+     * @param array the byte array.
+     * @param offset the offset in the array.
+     * @param length the maximum length from the offset.
+     */
     public ArrayOutput(final byte[] array, final int offset, final int length) {
 
         super(array);
@@ -37,6 +45,20 @@ public class ArrayOutput extends AbstractByteOutput<byte[]> {
     }
 
 
+    /**
+     * {@inheritDoc} The {@link #writeUnsignedByte(int)} method of
+     * {@code ArrayOutput} sets the given {@code value} on
+     * {@code target[offset + index++]}.
+     *
+     * @param value {@inheritDoc}
+     *
+     * @throws IOException {@inheritDoc}.
+     *
+     * @see #target
+     * @see #offset
+     * @see #length
+     * @see #index
+     */
     @Override
     public void writeUnsignedByte(final int value) throws IOException {
 
@@ -44,12 +66,21 @@ public class ArrayOutput extends AbstractByteOutput<byte[]> {
     }
 
 
+    /**
+     * The starting offset in the array.
+     */
     protected int offset;
 
 
+    /**
+     * The maximum length form the {@link #offset}.
+     */
     protected int length;
 
 
+    /**
+     * Index from the offset.
+     */
     protected int index;
 
 

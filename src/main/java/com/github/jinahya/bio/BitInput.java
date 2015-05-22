@@ -81,16 +81,12 @@ public class BitInput extends BitBase {
      *
      * @throws IllegalArgumentException if {@code length} is not valid.
      * @throws IOException if an I/O error occurs.
+     *
+     * @see #requireValidUnsignedByteLength(int)
      */
     protected int readUnsignedByte(final int length) throws IOException {
 
-        if (length <= 0) {
-            throw new IllegalArgumentException("length(" + length + ") <= 0");
-        }
-
-        if (length > 8) {
-            throw new IllegalArgumentException("length(" + length + ") > 8");
-        }
+        requireValidUnsignedByteLength(length);
 
         if (index == 8) {
             int octet = octet();
@@ -179,16 +175,12 @@ public class BitInput extends BitBase {
      *
      * @throws IllegalArgumentException if {@code length} is not valid.
      * @throws IOException if an I/O error occurs.
+     *
+     * @see #requireValidUnsignedShortLength(int)
      */
     protected int readUnsignedShort(final int length) throws IOException {
 
-        if (length <= 0) {
-            throw new IllegalArgumentException("length(" + length + ") <= 0");
-        }
-
-        if (length > 16) {
-            throw new IllegalArgumentException("length(" + length + ") > 16");
-        }
+        requireValidUnsignedShortLength(length);
 
         int value = 0x00;
 
@@ -219,16 +211,12 @@ public class BitInput extends BitBase {
      *
      * @throws IllegalArgumentException if {@code length} is not valid.
      * @throws IOException if an I/O error occurs
+     *
+     * @see #requireValidUnsignedIntLength(int)
      */
     public int readUnsignedInt(final int length) throws IOException {
 
-        if (length < 1) {
-            throw new IllegalArgumentException("length(" + length + ") < 1");
-        }
-
-        if (length >= 32) {
-            throw new IllegalArgumentException("length(" + length + ") >= 32");
-        }
+        requireValidUnsignedIntLength(length);
 
         int value = 0x00;
 
@@ -259,19 +247,17 @@ public class BitInput extends BitBase {
      *
      * @throws IllegalArgumentException if {@code length} is not valid.
      * @throws IOException if an I/O error occurs.
+     *
+     * @see #requireValidIntLength(int)
      */
     public int readInt(final int length) throws IOException {
 
-        if (length <= 1) {
-            throw new IllegalArgumentException("length(" + length + ") <= 1");
-        }
+        requireValidIntLength(length);
 
-        if (length > 32) {
-            throw new IllegalArgumentException("length(" + length + ") > 32");
-        }
+        final int unsigned = length - 1;
 
-        return ((readBoolean() ? -1 << (length - 1) : 0)
-                | readUnsignedInt(length - 1));
+        return (readUnsignedByte(1) == 1 ? -1 << unsigned : 0)
+               | readUnsignedInt(unsigned);
     }
 
 
@@ -286,7 +272,7 @@ public class BitInput extends BitBase {
      */
     public float readFloat32() throws IOException {
 
-        return Float.intBitsToFloat(readInt(32));
+        return Float.intBitsToFloat(readInt(0x20));
     }
 
 
@@ -300,16 +286,12 @@ public class BitInput extends BitBase {
      *
      * @throws IllegalArgumentException if {@code length} is not valid
      * @throws IOException if an I/O error occurs
+     *
+     * @see #requireValidUnsignedLongLength(int)
      */
     public long readUnsignedLong(final int length) throws IOException {
 
-        if (length < 1) {
-            throw new IllegalArgumentException("length(" + length + ") < 1");
-        }
-
-        if (length >= 64) {
-            throw new IllegalArgumentException("length(" + length + ") >= 64");
-        }
+        requireValidUnsignedLongLength(length);
 
         long value = 0x00L;
 
@@ -340,19 +322,17 @@ public class BitInput extends BitBase {
      *
      * @throws IllegalArgumentException if {@code length} is not valid
      * @throws IOException if an I/O error occurs.
+     *
+     * @see #requireValidLongLength(int)
      */
     public long readLong(final int length) throws IOException {
 
-        if (length <= 1) {
-            throw new IllegalArgumentException("length(" + length + ") <= 1");
-        }
+        requireValidLongLength(length);
 
-        if (length > 64) {
-            throw new IllegalArgumentException("length(" + length + ") > 64");
-        }
+        final int unsigned = length - 1;
 
-        return ((readBoolean() ? -1L << (length - 1) : 0L)
-                | readUnsignedLong(length - 1));
+        return (readBoolean() ? -1L << unsigned : 0L)
+               | readUnsignedLong(unsigned);
 
     }
 
@@ -375,6 +355,10 @@ public class BitInput extends BitBase {
     protected void readBytesFully(final int length, final int range,
                                   final ByteOutput output)
         throws IOException {
+
+        if (length < 0) {
+            throw new IllegalArgumentException("length(" + length + " < 0");
+        }
 
         requireValidBytesRange(range);
 

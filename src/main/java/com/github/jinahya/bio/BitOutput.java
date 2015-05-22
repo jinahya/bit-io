@@ -74,17 +74,13 @@ public class BitOutput extends BitBase {
      * @param value the value to write
      *
      * @throws IOException if an I/O error occurs.
+     *
+     * @see #requireValidUnsignedByteLength(int)
      */
     protected void writeUnsignedByte(final int length, int value)
         throws IOException {
 
-        if (length <= 0) {
-            throw new IllegalArgumentException("length(" + length + ") <= 0");
-        }
-
-        if (length > 8) {
-            throw new IllegalArgumentException("length(" + length + ") > 8");
-        }
+        requireValidUnsignedByteLength(length);
 
         if (index == 0 && length == 8) {
             // direct write
@@ -186,17 +182,13 @@ public class BitOutput extends BitBase {
      * @param value the value to write
      *
      * @throws IOException if an I/O error occurs
+     *
+     * @see #requireValidUnsignedShortLength(int)
      */
     protected void writeUnsignedShort(final int length, final int value)
         throws IOException {
 
-        if (length <= 0) {
-            throw new IllegalArgumentException("length(" + length + ") <= 0");
-        }
-
-        if (length > 16) {
-            throw new IllegalArgumentException("length(" + length + ") > 16");
-        }
+        requireValidUnsignedShortLength(length);
 
         final int quotient = length / 8;
         final int remainder = length % 8;
@@ -220,22 +212,13 @@ public class BitOutput extends BitBase {
      * @param value the value to write
      *
      * @throws IOException if an I/O error occurs.
+     *
+     * @see #requireValidUnsignedIntLength(int)
      */
     public void writeUnsignedInt(final int length, final int value)
         throws IOException {
 
-        if (length < 1) {
-            throw new IllegalArgumentException("length(" + length + ") < 1");
-        }
-
-        if (length >= 32) {
-            throw new IllegalArgumentException("length(" + length + ") >= 32");
-        }
-
-        if (false && (value >> length) != 0x00) {
-            throw new IllegalArgumentException(
-                "value(" + value + ") >> length(" + length + ") != 0x00");
-        }
+        requireValidUnsignedIntLength(length);
 
         final int quotient = length / 16;
         final int remainder = length % 16;
@@ -259,35 +242,22 @@ public class BitOutput extends BitBase {
      * @param value the value to write
      *
      * @throws IOException if an I/O error occurs.
+     *
+     * @see #requireValidIntLength(int)
      */
     public void writeInt(final int length, final int value) throws IOException {
 
-        if (length <= 1) {
-            throw new IllegalArgumentException("length(" + length + ") <= 1");
+        requireValidIntLength(length);
+
+        if (false) {
+            writeUnsignedByte(1, value >> 0x1F); // 31
+            writeUnsignedInt((length - 1), value);
+            return;
         }
 
-        if (length > 32) {
-            throw new IllegalArgumentException("length(" + length + ") > 32");
-        }
-
-        if (false && length != 32) {
-            if (value < 0) { // negative
-                if ((value >> (length - 1)) != -1) {
-                    throw new IllegalArgumentException(
-                        "value(" + value + ") >> (length(" + length
-                        + ") - 1) != -1");
-                }
-            } else { // positive
-                if ((value >> (length - 1)) != 0) {
-                    throw new IllegalArgumentException(
-                        "value(" + value + ") >> (length(" + length
-                        + ") - 1) != 0");
-                }
-            }
-        }
-
-        writeUnsignedByte(1, value >> (length - 1));
-        writeUnsignedInt((length - 1), value);
+        final int unsigned = length - 1;
+        writeUnsignedByte(1, value >> unsigned);
+        writeUnsignedInt(unsigned, value);
     }
 
 
@@ -330,22 +300,13 @@ public class BitOutput extends BitBase {
      * @param value the value to write.
      *
      * @throws IOException if an I/O error occurs.
+     *
+     * @see #requireValidUnsignedLongLength(int)
      */
     public void writeUnsignedLong(final int length, final long value)
         throws IOException {
 
-        if (length < 1) {
-            throw new IllegalArgumentException("length(" + length + ") < 1");
-        }
-
-        if (length >= 64) {
-            throw new IllegalArgumentException("length(" + length + ") >= 64");
-        }
-
-        if (false && (value >> length) != 0L) {
-            throw new IllegalArgumentException(
-                "(value(" + value + ") >> length(" + length + ")) != 0L");
-        }
+        requireValidUnsignedLongLength(length);
 
         final int quotient = length / 31;
         final int remainder = length % 31;
@@ -373,42 +334,17 @@ public class BitOutput extends BitBase {
     public void writeLong(final int length, final long value)
         throws IOException {
 
-        if (length <= 1) {
-            throw new IllegalArgumentException("length(" + length + ") <= 1");
+        requireValidLongLength(length);
+
+        if (false) {
+            writeUnsignedLong(1, value >> 0x3F); // 63
+            writeUnsignedLong(length - 1, value);
+            return;
         }
 
-        if (length > 64) {
-            throw new IllegalArgumentException("length(" + length + ") > 64");
-        }
-
-        if (false && length < 64) {
-            if (value < 0L) { // negative
-                if ((value >> (length - 1)) != -1L) {
-                    throw new IllegalArgumentException(
-                        "(value(" + value + ") >> (length(" + length
-                        + ") - 1)) != -1L");
-                }
-            } else { // positive
-                if ((value >> (length - 1)) != 0L) {
-                    throw new IllegalArgumentException(
-                        "(value(" + value + ") >> (length(" + length
-                        + ") - 1)) != 0L");
-                }
-            }
-        }
-
-//        final int quotient = length / 16;
-//        final int remainder = length % 16;
-//
-//        if (remainder > 0) {
-//            writeUnsignedShort(remainder, (int) (value >> (quotient * 16)));
-//        }
-//
-//        for (int i = quotient - 1; i >= 0; i--) {
-//            writeUnsignedShort(16, (int) (value >> (i * 16)));
-//        }
-        writeUnsignedByte(1, (int) (value >> (length - 1)));
-        writeUnsignedLong((length - 1), value);
+        final int unsigned = length - 1;
+        writeUnsignedByte(1, (int) (value >> unsigned));
+        writeUnsignedLong(unsigned, value);
     }
 
 
@@ -489,110 +425,6 @@ public class BitOutput extends BitBase {
     }
 
 
-//    /**
-//     * Writes a specified number of bytes in given array starting at given
-//     * offset.
-//     *
-//     * @param range the number of valid bits in each byte; between 0 (exclusive)
-//     * and 8 (inclusive).
-//     * @param value the array of bytes
-//     * @param offset the starting offset in the array.
-//     * @param length the number of bytes to write
-//     *
-//     * @throws IOException if an I/O error occurs.
-//     */
-//    void writeBytes(final int range, final byte[] value, int offset,
-//                    final int length)
-//        throws IOException {
-//
-//        requireValidBytesRange(range);
-//
-//        if (value == null) {
-//            throw new NullPointerException("null value");
-//        }
-//
-//        if (offset < 0) {
-//            throw new IllegalArgumentException("offset(" + offset + ") < 0");
-//        }
-//
-//        if (false && offset >= value.length) {
-//            throw new IllegalArgumentException(
-//                "offset(" + offset + ") >= value.length(" + value.length
-//                + ")");
-//        }
-//
-//        if (length < 0) {
-//            throw new IllegalArgumentException("length(" + length + ") < 0");
-//        }
-//
-//        if (offset + length > value.length) {
-//            throw new IllegalArgumentException(
-//                "offset(" + offset + ") + length(" + length + ") = "
-//                + (offset + length) + " > value.length(" + value.length
-//                + ")");
-//        }
-//
-//        for (int i = 0; i < length; i++) {
-//            writeUnsignedByte(range, value[offset++]);
-//        }
-//    }
-//
-//
-//    /**
-//     * Writes specified number of bytes in {@code value} starting from
-//     * {@code offset}.
-//     *
-//     * @param scale the number of bits required for length of the array; between
-//     * 0 exclusive and 16 inclusive.
-//     * @param range the number of lower valid bits in each byte; between 0
-//     * exclusive and 8 inclusive.
-//     * @param value the array of bytes to write.
-//     * @param offset the starting offset in byte array
-//     * @param length the number of bytes from {@code offset} to write
-//     *
-//     * @throws IllegalArgumentException if either {@code scale} or {@code range}
-//     * is not valid or {@code offset} is not valid, or {@code length} is not
-//     * valid.
-//     * @throws IOException if an I/O error occurs.
-//     */
-//    public void writeBytes(final int scale, final int range, final byte[] value,
-//                           int offset, final int length)
-//        throws IOException {
-//
-//        requireValidBytesScale(scale);
-//
-//        if (length < 0) {
-//            throw new IllegalArgumentException("length(" + length + ") < 0");
-//        }
-//
-//        if ((length >> scale) > 0) {
-//            throw new IllegalArgumentException(
-//                "length(" + length + ") >> scale(" + scale + ") = "
-//                + (length >> scale) + " > 0");
-//        }
-//
-//        writeUnsignedShort(scale, length);
-//
-//        writeBytes(range, value, offset, length);
-//    }
-//
-//
-//    /**
-//     * Writes an array of bytes.
-//     *
-//     * @param scale the number of bits for array length between 0 (exclusive)
-//     * and 16 (inclusive).
-//     * @param range the number of lower bits in each byte to write between 0
-//     * (exclusive) and 8 (inclusive).
-//     * @param value the array of bytes to write
-//     *
-//     * @throws IOException if an I/O error occurs.
-//     */
-//    public void writeBytes(final int scale, final int range, final byte[] value)
-//        throws IOException {
-//
-//        writeBytes(scale, range, value, 0, value.length);
-//    }
     /**
      * Writes a string value. This method writes the decoded byte array with
      * {@code scale} of {@code 16} and {@code range} of {@code 8}.

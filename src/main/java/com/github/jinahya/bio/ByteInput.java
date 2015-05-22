@@ -24,17 +24,16 @@ import java.io.IOException;
 /**
  * An interface for suppling bytes.
  *
- * @author Jin Kwon
+ * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
-//@FunctionalInterface
 public interface ByteInput {
 
 
     /**
-     * Reads the next unsigned 8-bit byte.
+     * Reads the next unsigned 8-bit value.
      *
-     * @return the next unsigned 8-bit byte value between {@code 0} (inclusive)
-     * and {@code 256} (exclusive)
+     * @return the next unsigned 8-bit value between {@code 0} (inclusive) and
+     * {@code 256} (exclusive)
      *
      * @throws IOException if an I/O error occurs.
      */

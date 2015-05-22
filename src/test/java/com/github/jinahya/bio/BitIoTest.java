@@ -35,7 +35,7 @@ import org.testng.annotations.Test;
 
 /**
  *
- * @author Jin Kwon
+ * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
 public class BitIoTest {
 

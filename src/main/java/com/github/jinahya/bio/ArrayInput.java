@@ -37,10 +37,23 @@ public class ArrayInput extends AbstractByteInput<byte[]> {
     }
 
 
+    /**
+     * {@inheritDoc} The {@link #readUnsignedByte()} of {@code ArrayInput} class
+     * returns
+     * <pre>source[offset + index++] &amp; 0xFF</pre>.
+     *
+     * @return {@inheritDoc}
+     *
+     * @throws IOException {@inheritDoc}.
+     *
+     * @see #source
+     * @see #offset
+     * @see #index
+     */
     @Override
     public int readUnsignedByte() throws IOException {
 
-        return source[offset + index] & 0xFF;
+        return source[offset + index++] & 0xFF;
     }
 
 

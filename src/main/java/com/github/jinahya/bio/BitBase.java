@@ -50,6 +50,98 @@ class BitBase {
     protected static final int BYTES_RANGE_MAX = 0x08;
 
 
+    protected static int requireValidUnsignedByteLength(final int length) {
+
+        if (length < 1) {
+            throw new IllegalArgumentException("length(" + length + ") < 1");
+        }
+
+        if (length > 8) {
+            throw new IllegalArgumentException("length(" + length + ") > 8");
+        }
+
+        return length;
+    }
+
+
+    protected static int requireValidUnsignedShortLength(final int length) {
+
+        if (length < 1) {
+            throw new IllegalArgumentException("length(" + length + ") < 1");
+        }
+
+        if (length > 16) {
+            throw new IllegalArgumentException("length(" + length + ") > 16");
+        }
+
+        return length;
+    }
+
+
+    protected static int requireValidUnsignedIntLength(final int length) {
+
+        if (length < 1) {
+            throw new IllegalArgumentException("length(" + length + ") < 1");
+        }
+
+        if (length >= 32) {
+            throw new IllegalArgumentException("length(" + length + ") >= 32");
+        }
+
+        return length;
+    }
+
+
+    protected static int requireValidIntLength(final int length) {
+
+        if (true) {
+            return requireValidUnsignedLongLength(length - 1) + 1;
+        }
+
+        if (length <= 1) {
+            throw new IllegalArgumentException("length(" + length + ") <= 1");
+        }
+
+        if (length > 32) {
+            throw new IllegalArgumentException("length(" + length + ") > 32");
+        }
+
+        return length;
+    }
+
+
+    protected static int requireValidUnsignedLongLength(final int length) {
+
+        if (length < 1) {
+            throw new IllegalArgumentException("length(" + length + ") < 1");
+        }
+
+        if (length >= 64) {
+            throw new IllegalArgumentException("length(" + length + ") >= 64");
+        }
+
+        return length;
+    }
+
+
+    protected static int requireValidLongLength(final int length) {
+
+        if (true) {
+            return requireValidUnsignedLongLength(length - 1) + 1;
+        }
+
+        if (length <= 1) {
+            throw new IllegalArgumentException("length(" + length + ") <= 1");
+        }
+
+        if (length > 64) {
+            throw new IllegalArgumentException("length(" + length + ") > 64");
+        }
+
+        return length;
+    }
+
+
     /**
      * Checks that the specified value is valid.
      *

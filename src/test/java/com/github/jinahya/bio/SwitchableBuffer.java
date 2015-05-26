@@ -19,28 +19,37 @@ package com.github.jinahya.bio;
 
 
 import java.io.IOException;
-import java.util.function.Consumer;
+import java.nio.ByteBuffer;
 
 
 /**
- * A {@link ByteOutput} implementation uses a {@link Consumer} instance.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
-public class ConsumerOutput extends AbstractByteOutput<Consumer<Byte>> {
+public class SwitchableBuffer implements ByteInput, ByteOutput {
 
 
-    public ConsumerOutput(final Consumer<Byte> consumer) {
+    public SwitchableBuffer(final ByteBuffer byteBuffer) {
 
-        super(consumer);
+        super();
+
+        this.byteBuffer = byteBuffer;
     }
 
 
     @Override
-    public void writeUnsignedByte(final int value) throws IOException {
-
-        target.accept((byte) value);
+    public int readUnsignedByte() throws IOException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
+
+    @Override
+    public void writeUnsignedByte(int value) throws IOException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+
+    private final ByteBuffer byteBuffer;
 
 
 }

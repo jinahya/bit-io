@@ -18,36 +18,15 @@
 package com.github.jinahya.bio;
 
 
-import java.io.EOFException;
 import java.io.IOException;
 
 
 /**
  * A class for reading arbitrary length of bits.
  *
- * @author <a href="mailto:onacit@gmail.com">Jin Kwon</a>
+ * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
-public class BitInput extends BitBase {
-
-
-    /**
-     * Creates a new instance built on top of the specified byte input.
-     *
-     * @param input the byte input on which this bit input is built.
-     *
-     * @throws NullPointerException if the specified {@code input} is
-     * {@code null}.
-     */
-    public BitInput(final ByteInput input) {
-
-        super();
-
-        if (input == null) {
-            throw new NullPointerException("null input");
-        }
-
-        this.input = input;
-    }
+public abstract class AbstractBitInput implements IBitInput, ByteInput {
 
 
     /**
@@ -58,16 +37,23 @@ public class BitInput extends BitBase {
      *
      * @throws IOException if an I/O error occurs.
      */
-    private int octet() throws IOException {
+//    private int octet() throws IOException {
+//
+//        final int value = input.readUnsignedByte();
+//        if (value == -1) {
+//            throw new EOFException("eof");
+//        }
+//
+//        count++;
+//
+//        return value;
+//    }
+    //protected abstract int octet() throws IOException;
+    protected int octet() throws IOException {
 
-        final int value = input.readUnsignedByte();
-        if (value == -1) {
-            throw new EOFException("eof");
-        }
+        ++count;
 
-        count++;
-
-        return value;
+        return readUnsignedByte();
     }
 
 
@@ -86,7 +72,7 @@ public class BitInput extends BitBase {
      */
     protected int readUnsignedByte(final int length) throws IOException {
 
-        requireValidUnsignedByteLength(length);
+        Bits.requireValidUnsignedByteLength(length);
 
         if (index == 8) {
             int octet = octet();
@@ -127,6 +113,7 @@ public class BitInput extends BitBase {
      *
      * @throws IOException if an I/O error occurs.
      */
+    @Override
     public boolean readBoolean() throws IOException {
 
         return readUnsignedByte(1) == 0x01;
@@ -148,7 +135,7 @@ public class BitInput extends BitBase {
      */
     protected int readUnsignedShort(final int length) throws IOException {
 
-        requireValidUnsignedShortLength(length);
+        Bits.requireValidUnsignedShortLength(length);
 
         int value = 0x00;
 
@@ -180,11 +167,12 @@ public class BitInput extends BitBase {
      * @throws IllegalArgumentException if {@code length} is not valid.
      * @throws IOException if an I/O error occurs
      *
-     * @see #requireValidUnsignedIntLength(int)
+     * @see Bits#requireValidUnsignedIntLength(int)
      */
+    @Override
     public int readUnsignedInt(final int length) throws IOException {
 
-        requireValidUnsignedIntLength(length);
+        Bits.requireValidUnsignedIntLength(length);
 
         int value = 0x00;
 
@@ -216,11 +204,12 @@ public class BitInput extends BitBase {
      * @throws IllegalArgumentException if {@code length} is not valid.
      * @throws IOException if an I/O error occurs.
      *
-     * @see #requireValidIntLength(int)
+     * @see Bits#requireValidIntLength(int)
      */
+    @Override
     public int readInt(final int length) throws IOException {
 
-        requireValidIntLength(length);
+        Bits.requireValidIntLength(length);
 
         final int unsigned = length - 1;
 
@@ -259,7 +248,7 @@ public class BitInput extends BitBase {
      */
     public long readUnsignedLong(final int length) throws IOException {
 
-        requireValidUnsignedLongLength(length);
+        Bits.requireValidUnsignedLongLength(length);
 
         long value = 0x00L;
 
@@ -295,13 +284,18 @@ public class BitInput extends BitBase {
      */
     public long readLong(final int length) throws IOException {
 
-        requireValidLongLength(length);
+        Bits.requireValidLongLength(length);
 
         final int unsigned = length - 1;
 
         return (readBoolean() ? -1L << unsigned : 0L)
                | readUnsignedLong(unsigned);
+    }
 
+
+    public long readLong32() throws IOException {
+
+        return readLong(64);
     }
 
 
@@ -314,6 +308,7 @@ public class BitInput extends BitBase {
      *
      * @see Double#longBitsToDouble(long)
      */
+    @Override
     public final double readDouble64() throws IOException {
 
         return Double.longBitsToDouble(readLong(0x40));
@@ -328,7 +323,7 @@ public class BitInput extends BitBase {
             throw new IllegalArgumentException("length(" + length + " < 0");
         }
 
-        requireValidBytesRange(range);
+        Bytes.requireValidBytesRange(range);
 
         if (output == null) {
             throw new NullPointerException("null output");
@@ -342,7 +337,7 @@ public class BitInput extends BitBase {
 
     protected int readBytesLength(final int scale) throws IOException {
 
-        return readUnsignedInt(requireValidBytesScale(scale));
+        return readUnsignedInt(Bytes.requireValidBytesScale(scale));
     }
 
 
@@ -363,9 +358,9 @@ public class BitInput extends BitBase {
                             final ByteOutput output)
         throws IOException {
 
-        requireValidBytesScale(scale);
+        Bytes.requireValidBytesScale(scale);
 
-        requireValidBytesRange(range);
+        Bytes.requireValidBytesRange(range);
 
         if (output == null) {
             throw new NullPointerException("null output");
@@ -395,7 +390,7 @@ public class BitInput extends BitBase {
     public byte[] readBytes(final int scale, final int range)
         throws IOException {
 
-        requireValidBytesScale(scale);
+        Bytes.requireValidBytesScale(scale);
 
         final byte[] value = new byte[readBytesLength(scale)];
 
@@ -429,7 +424,7 @@ public class BitInput extends BitBase {
             throw new NullPointerException("null charsetName");
         }
 
-        return new String(readBytes(BYTES_SCALE_MAX, BYTES_RANGE_MAX),
+        return new String(readBytes(Bytes.BYTES_SCALE_MAX, Bytes.BYTES_RANGE_MAX),
                           charsetName);
     }
 
@@ -450,7 +445,7 @@ public class BitInput extends BitBase {
      */
     public String readUsAsciiString() throws IOException {
 
-        return new String(readBytes(BYTES_SCALE_MAX, 7), "US-ASCII");
+        return new String(readBytes(Bytes.BYTES_SCALE_MAX, 7), "US-ASCII");
     }
 
 
@@ -510,16 +505,11 @@ public class BitInput extends BitBase {
      *
      * @return the number of bytes read so far.
      */
+    @Override
     public long getCount() {
 
         return count;
     }
-
-
-    /**
-     * The underlying byte input.
-     */
-    protected final ByteInput input;
 
 
     /**

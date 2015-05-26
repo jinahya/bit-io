@@ -22,46 +22,26 @@ import java.io.IOException;
 
 
 /**
- * A class for writing arbitrary length of bits.
+ * A abstract class implementing {@link IBitInput}.
  *
- * @author <a href="mailto:onacit@gmail.com">Jin Kwon</a>
+ * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
-public class BitOutput extends BitBase {
+public abstract class AbstractBitOutput implements IBitOutput, ByteOutput {
 
 
     /**
-     * Creates a new instance built on top of the specified byte input.
-     *
-     * @param output the byte input on which this bit output is built.
-     *
-     * @throws NullPointerException if the specified {@code output} is
-     * {@code null}.
-     */
-    public BitOutput(final ByteOutput output) {
-
-        super();
-
-        if (output == null) {
-            throw new NullPointerException("null output");
-        }
-
-        this.output = output;
-    }
-
-
-    /**
-     * Writes given unsigned byte value to {@code output} and increments
-     * {@code count}.
+     * Consumes given unsigned byte value.
      *
      * @param value the unsigned byte value
      *
      * @throws IOException if an I/O error occurs.
      */
-    private void octet(final int value) throws IOException {
+    //protected abstract void octet(final int value) throws IOException;
+    protected void octet(final int value) throws IOException {
 
-        output.writeUnsignedByte(value);
+        writeUnsignedByte(value);
 
-        count++;
+        ++count;
     }
 
 
@@ -80,10 +60,9 @@ public class BitOutput extends BitBase {
     protected void writeUnsignedByte(final int length, int value)
         throws IOException {
 
-        requireValidUnsignedByteLength(length);
+        Bits.requireValidUnsignedByteLength(length);
 
-        if (index == 0 && length == 8) {
-            // direct write
+        if (length == 8 && index == 0) {
             octet(value);
             return;
         }
@@ -188,7 +167,7 @@ public class BitOutput extends BitBase {
     protected void writeUnsignedShort(final int length, final int value)
         throws IOException {
 
-        requireValidUnsignedShortLength(length);
+        Bits.requireValidUnsignedShortLength(length);
 
         final int quotient = length / 8;
         final int remainder = length % 8;
@@ -218,7 +197,7 @@ public class BitOutput extends BitBase {
     public void writeUnsignedInt(final int length, final int value)
         throws IOException {
 
-        requireValidUnsignedIntLength(length);
+        Bits.requireValidUnsignedIntLength(length);
 
         final int quotient = length / 16;
         final int remainder = length % 16;
@@ -247,7 +226,7 @@ public class BitOutput extends BitBase {
      */
     public void writeInt(final int length, final int value) throws IOException {
 
-        requireValidIntLength(length);
+        Bits.requireValidIntLength(length);
 
         if (false) {
             writeUnsignedByte(1, value >> 0x1F); // 31
@@ -306,7 +285,7 @@ public class BitOutput extends BitBase {
     public void writeUnsignedLong(final int length, final long value)
         throws IOException {
 
-        requireValidUnsignedLongLength(length);
+        Bits.requireValidUnsignedLongLength(length);
 
         final int quotient = length / 31;
         final int remainder = length % 31;
@@ -334,7 +313,7 @@ public class BitOutput extends BitBase {
     public void writeLong(final int length, final long value)
         throws IOException {
 
-        requireValidLongLength(length);
+        Bits.requireValidLongLength(length);
 
         if (false) {
             writeUnsignedLong(1, value >> 0x3F); // 63
@@ -386,7 +365,7 @@ public class BitOutput extends BitBase {
             throw new IllegalArgumentException("length(" + length + ") < 0");
         }
 
-        requireValidBytesRange(range);
+        Bytes.requireValidBytesRange(range);
 
         if (input == null) {
             throw new NullPointerException("null input");
@@ -401,7 +380,7 @@ public class BitOutput extends BitBase {
     protected void writeBytesLength(final int scale, int length)
         throws IOException {
 
-        requireValidBytesScale(scale);
+        Bytes.requireValidBytesScale(scale);
 
         writeUnsignedInt(scale, length);
     }
@@ -416,8 +395,8 @@ public class BitOutput extends BitBase {
     }
 
 
-    protected void writeBytes(final int scale, final int range,
-                              final byte[] value)
+    @Override
+    public void writeBytes(final int scale, final int range, final byte[] value)
         throws IOException {
 
         writeBytes(scale, value.length, range,
@@ -438,6 +417,7 @@ public class BitOutput extends BitBase {
      *
      * @see #writeBytes(int, int, byte[])
      */
+    @Override
     public void writeString(final String value, final String charsetName)
         throws IOException {
 
@@ -449,7 +429,7 @@ public class BitOutput extends BitBase {
             throw new NullPointerException("null charsetName");
         }
 
-        writeBytes(BYTES_SCALE_MAX, BYTES_RANGE_MAX,
+        writeBytes(Bytes.BYTES_SCALE_MAX, Bytes.BYTES_RANGE_MAX,
                    value.getBytes(charsetName));
     }
 
@@ -466,13 +446,14 @@ public class BitOutput extends BitBase {
      *
      * @see #writeBytes(int, int, byte[])
      */
+    @Override
     public void writeUsAsciiString(final String value) throws IOException {
 
         if (value == null) {
             throw new NullPointerException("null value");
         }
 
-        writeBytes(BYTES_SCALE_MAX, 7, value.getBytes("US-ASCII"));
+        writeBytes(Bytes.BYTES_SCALE_MAX, 7, value.getBytes("US-ASCII"));
     }
 
 
@@ -487,6 +468,7 @@ public class BitOutput extends BitBase {
      * @throws IllegalArgumentException if {@code length} is not valid.
      * @throws IOException if an I/O error occurs.
      */
+    @Override
     public int align(final int length) throws IOException {
 
         if (length <= 0) {
@@ -536,12 +518,6 @@ public class BitOutput extends BitBase {
 
         return count;
     }
-
-
-    /**
-     * The underlying byte input.
-     */
-    protected final ByteOutput output;
 
 
     /**

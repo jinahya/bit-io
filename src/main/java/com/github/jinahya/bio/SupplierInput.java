@@ -23,6 +23,7 @@ import java.util.function.Supplier;
 
 
 /**
+ * A {@link ByteInput} implementation uses a {@link Supplier} instance.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */

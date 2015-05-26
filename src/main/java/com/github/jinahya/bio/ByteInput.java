@@ -30,10 +30,10 @@ public interface ByteInput {
 
 
     /**
-     * Reads the next unsigned 8-bit value.
+     * Supplies an unsigned 8-bit value.
      *
-     * @return the next unsigned 8-bit value between {@code 0} (inclusive) and
-     * {@code 256} (exclusive)
+     * @return an unsigned 8-bit value between {@code 0x00} (inclusive) and
+     * {@code 0xFF} (exclusive)
      *
      * @throws IOException if an I/O error occurs.
      */

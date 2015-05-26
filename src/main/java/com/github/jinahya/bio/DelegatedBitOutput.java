@@ -19,28 +19,31 @@ package com.github.jinahya.bio;
 
 
 import java.io.IOException;
-import java.util.function.Consumer;
 
 
 /**
- * A {@link ByteOutput} implementation uses a {@link Consumer} instance.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
-public class ConsumerOutput extends AbstractByteOutput<Consumer<Byte>> {
+public class DelegatedBitOutput extends AbstractBitOutput {
 
 
-    public ConsumerOutput(final Consumer<Byte> consumer) {
+    public DelegatedBitOutput(final ByteOutput delegate) {
 
-        super(consumer);
+        super();
+
+        this.delegate = delegate;
     }
 
 
     @Override
-    public void writeUnsignedByte(final int value) throws IOException {
+    public void writeUnsignedByte(int value) throws IOException {
 
-        target.accept((byte) value);
+        delegate.writeUnsignedByte(value);
     }
+
+
+    protected ByteOutput delegate;
 
 
 }

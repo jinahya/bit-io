@@ -19,28 +19,41 @@ package com.github.jinahya.bio;
 
 
 import java.io.IOException;
-import java.util.function.Consumer;
+import java.nio.ByteBuffer;
+import java.util.function.Supplier;
 
 
 /**
- * A {@link ByteOutput} implementation uses a {@link Consumer} instance.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
-public class ConsumerOutput extends AbstractByteOutput<Consumer<Byte>> {
+public class LazyBufferInput extends BufferInput {
 
 
-    public ConsumerOutput(final Consumer<Byte> consumer) {
+    public LazyBufferInput(final Supplier<ByteBuffer> supplier) {
 
-        super(consumer);
+        super(null);
+
+        if (supplier == null) {
+            throw new NullPointerException("null supplier");
+        }
+
+        this.supplier = supplier;
     }
 
 
     @Override
-    public void writeUnsignedByte(final int value) throws IOException {
+    public int readUnsignedByte() throws IOException {
 
-        target.accept((byte) value);
+        if (source == null) {
+            source = supplier.get();
+        }
+
+        return super.readUnsignedByte();
     }
+
+
+    private final Supplier<ByteBuffer> supplier;
 
 
 }

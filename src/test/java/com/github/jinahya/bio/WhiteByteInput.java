@@ -19,27 +19,20 @@ package com.github.jinahya.bio;
 
 
 import java.io.IOException;
-import java.util.function.Consumer;
+import java.util.concurrent.ThreadLocalRandom;
 
 
 /**
- * A {@link ByteOutput} implementation uses a {@link Consumer} instance.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
-public class ConsumerOutput extends AbstractByteOutput<Consumer<Byte>> {
-
-
-    public ConsumerOutput(final Consumer<Byte> consumer) {
-
-        super(consumer);
-    }
+public class WhiteByteInput implements ByteInput {
 
 
     @Override
-    public void writeUnsignedByte(final int value) throws IOException {
+    public int readUnsignedByte() throws IOException {
 
-        target.accept((byte) value);
+        return ThreadLocalRandom.current().nextInt(0xFF);
     }
 
 

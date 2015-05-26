@@ -30,10 +30,10 @@ public interface ByteOutput {
 
 
     /**
-     * Writes an unsigned 8-bit value.
+     * Consumes an unsigned 8-bit value.
      *
-     * @param value an unsigned 8-bit value between {@code 0} (inclusive) and
-     * {@code 256} (exclusive).
+     * @param value an unsigned 8-bit value between {@code 0x00} (inclusive) and
+     * {@code 0xFF} (exclusive).
      *
      * @throws IOException if an I/O error occurs.
      */

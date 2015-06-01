@@ -116,10 +116,6 @@ public interface BitInput {
     double readDouble64() throws IOException;
 
 
-    void readBytesFully(int length, int range, ByteOutput output)
-        throws IOException;
-
-
     /**
      * Reads a byte array.
      *

@@ -110,6 +110,12 @@ public class BitInputTest {
     }
 
 
+    @Test(invocationCount = 128)
+    public void readBytesFully() {
+
+    }
+
+
     /**
      * logger.
      */

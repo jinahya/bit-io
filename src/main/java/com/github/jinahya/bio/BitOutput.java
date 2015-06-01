@@ -144,10 +144,6 @@ public interface BitOutput {
     void writeDouble64Raw(double value) throws IOException;
 
 
-    void writeBytesFully(int length, int range, ByteInput input)
-        throws IOException;
-
-
     /**
      * Writes an array of bytes.
      *

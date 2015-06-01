@@ -310,9 +310,8 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
     }
 
 
-    @Override
-    public void readBytesFully(final int length, final int range,
-                               final ByteOutput output)
+    protected void readBytesFully(final int length, final int range,
+                                  final ByteOutput output)
         throws IOException {
 
         if (length < 0) {

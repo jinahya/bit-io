@@ -359,9 +359,8 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
     }
 
 
-    @Override
-    public void writeBytesFully(final int length, final int range,
-                                final ByteInput input)
+    protected void writeBytesFully(final int length, final int range,
+                                   final ByteInput input)
         throws IOException {
 
         if (length < 0) {
@@ -389,21 +388,17 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
     }
 
 
-    protected void writeBytes(final int scale, final int length,
-                              final int range, final ByteInput input)
-        throws IOException {
-
-        writeBytesLength(scale, length);
-        writeBytesFully(length, range, input);
-    }
-
-
     @Override
     public void writeBytes(final int scale, final int range, final byte[] value)
         throws IOException {
 
-        writeBytes(scale, value.length, range,
-                   new ArrayInput(value, 0, value.length));
+        if (value == null) {
+            throw new NullPointerException("null value");
+        }
+
+        writeBytesLength(scale, value.length);
+        writeBytesFully(value.length, range,
+                        new ArrayInput(value, 0, value.length));
     }
 
 

@@ -18,12 +18,20 @@
 package com.github.jinahya.bio;
 
 
+import static com.github.jinahya.bio.BioConstants.ALIGH_MAX;
+import static com.github.jinahya.bio.BioConstants.ALIGN_MIN;
+import static com.github.jinahya.bio.BioConstants.RANGE_MAX;
+import static com.github.jinahya.bio.BioConstants.RANGE_MIN;
+import static com.github.jinahya.bio.BioConstants.SCALE_MAX;
+import static com.github.jinahya.bio.BioConstants.SCALE_MIN;
+
+
 /**
  * A base class.
  *
  * @author <a href="mailto:onacit@gmail.com">Jin Kwon</a>
  */
-public final class Bits {
+public final class BioConstraints {
 
 
     protected static int requireValidUnsignedByteLength(final int length) {
@@ -115,6 +123,78 @@ public final class Bits {
         }
 
         return length;
+    }
+
+
+    protected static int requireValidAlighLength(final int length) {
+
+        if (length <= ALIGN_MIN) {
+            throw new IllegalArgumentException(
+                "length(" + length + ") <= " + ALIGN_MIN);
+        }
+
+        if (length > ALIGH_MAX) {
+            throw new IllegalArgumentException(
+                "length(" + length + ") > " + ALIGH_MAX);
+        }
+
+        return length;
+    }
+
+
+    /**
+     * Checks that the specified value is valid.
+     *
+     * @param scale the value to check
+     *
+     * @return given value if it's valid.
+     *
+     * @throws IllegalArgumentException if given value is not valid.
+     *
+     * @see #SCALE_MIN
+     * @see #SCALE_MAX
+     */
+    protected static int requireValidBytesScale(final int scale) {
+
+        if (scale < SCALE_MIN) {
+            throw new IllegalArgumentException(
+                "scale(" + scale + ") <= " + SCALE_MIN);
+        }
+
+        if (scale > SCALE_MAX) {
+            throw new IllegalArgumentException(
+                "scale(" + scale + ") > " + SCALE_MAX);
+        }
+
+        return scale;
+    }
+
+
+    /**
+     * Checks that the specified value is valid.
+     *
+     * @param range the value to check
+     *
+     * @return given value if it's valid.
+     *
+     * @throws IllegalArgumentException if given value is not valid.
+     *
+     * @see #RANGE_MIN
+     * @see #RANGE_MAX
+     */
+    protected static int requireValidBytesRange(final int range) {
+
+        if (range < RANGE_MIN) {
+            throw new IllegalArgumentException(
+                "range(" + range + ") < " + RANGE_MIN);
+        }
+
+        if (range > RANGE_MAX) {
+            throw new IllegalArgumentException(
+                "range(" + range + ") > " + RANGE_MAX);
+        }
+
+        return range;
     }
 
 

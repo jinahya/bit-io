@@ -18,6 +18,8 @@
 package com.github.jinahya.bio;
 
 
+//import static com.github.jinahya.bio.BioConstraints.requireValidBytesRange;
+//import static com.github.jinahya.bio.BioConstraints.requireValidBytesScale;
 import java.io.IOException;
 
 
@@ -60,7 +62,7 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
     protected void writeUnsignedByte(final int length, int value)
         throws IOException {
 
-        Bits.requireValidUnsignedByteLength(length);
+        BioConstraints.requireValidUnsignedByteLength(length);
 
         if (length == 8 && index == 0) {
             octet(value);
@@ -166,7 +168,7 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
     protected void writeUnsignedShort(final int length, final int value)
         throws IOException {
 
-        Bits.requireValidUnsignedShortLength(length);
+        BioConstraints.requireValidUnsignedShortLength(length);
 
         final int quotient = length / 8;
         final int remainder = length % 8;
@@ -196,7 +198,7 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
     public void writeUnsignedInt(final int length, final int value)
         throws IOException {
 
-        Bits.requireValidUnsignedIntLength(length);
+        BioConstraints.requireValidUnsignedIntLength(length);
 
         final int quotient = length / 16;
         final int remainder = length % 16;
@@ -225,7 +227,7 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
      */
     public void writeInt(final int length, final int value) throws IOException {
 
-        Bits.requireValidIntLength(length);
+        BioConstraints.requireValidIntLength(length);
 
         if (false) {
             writeUnsignedByte(1, value >> 0x1F); // 31
@@ -284,7 +286,7 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
     public void writeUnsignedLong(final int length, final long value)
         throws IOException {
 
-        Bits.requireValidUnsignedLongLength(length);
+        BioConstraints.requireValidUnsignedLongLength(length);
 
         final int quotient = length / 31;
         final int remainder = length % 31;
@@ -312,7 +314,7 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
     public void writeLong(final int length, final long value)
         throws IOException {
 
-        Bits.requireValidLongLength(length);
+        BioConstraints.requireValidLongLength(length);
 
         if (false) {
             writeUnsignedLong(1, value >> 0x3F); // 63
@@ -366,7 +368,7 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
             throw new IllegalArgumentException("length(" + length + ") < 0");
         }
 
-        Bytes.requireValidBytesRange(range);
+        BioConstraints.requireValidBytesRange(range);
 
         if (input == null) {
             throw new NullPointerException("null input");
@@ -381,7 +383,7 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
     protected void writeBytesLength(final int scale, int length)
         throws IOException {
 
-        Bytes.requireValidBytesScale(scale);
+        BioConstraints.requireValidBytesScale(scale);
 
         writeUnsignedInt(scale, length);
     }
@@ -430,7 +432,7 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
             throw new NullPointerException("null charsetName");
         }
 
-        writeBytes(Bytes.SCALE_MAX, Bytes.RANGE_MAX,
+        writeBytes(BioConstants.SCALE_MAX, BioConstants.RANGE_MAX,
                    value.getBytes(charsetName));
     }
 
@@ -454,7 +456,7 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
             throw new NullPointerException("null value");
         }
 
-        writeBytes(Bytes.SCALE_MAX, 7, value.getBytes("US-ASCII"));
+        writeBytes(BioConstants.SCALE_MAX, 7, value.getBytes("US-ASCII"));
     }
 
 

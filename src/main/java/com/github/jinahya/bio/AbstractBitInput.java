@@ -18,6 +18,9 @@
 package com.github.jinahya.bio;
 
 
+//import static com.github.jinahya.bio.BioConstraints.requireValidAlighLength;
+//import static com.github.jinahya.bio.BioConstraints.requireValidBytesRange;
+//import static com.github.jinahya.bio.BioConstraints.requireValidBytesScale;
 import java.io.IOException;
 
 
@@ -61,7 +64,7 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
      */
     protected int readUnsignedByte(final int length) throws IOException {
 
-        Bits.requireValidUnsignedByteLength(length);
+        BioConstraints.requireValidUnsignedByteLength(length);
 
         if (index == 8) {
             int octet = octet();
@@ -124,7 +127,7 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
      */
     protected int readUnsignedShort(final int length) throws IOException {
 
-        Bits.requireValidUnsignedShortLength(length);
+        BioConstraints.requireValidUnsignedShortLength(length);
 
         int value = 0x00;
 
@@ -161,7 +164,7 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
     @Override
     public int readUnsignedInt(final int length) throws IOException {
 
-        Bits.requireValidUnsignedIntLength(length);
+        BioConstraints.requireValidUnsignedIntLength(length);
 
         int value = 0x00;
 
@@ -198,7 +201,7 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
     @Override
     public int readInt(final int length) throws IOException {
 
-        Bits.requireValidIntLength(length);
+        BioConstraints.requireValidIntLength(length);
 
         final int unsigned = length - 1;
 
@@ -216,6 +219,7 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
      *
      * @see Float#intBitsToFloat(int)
      */
+    @Override
     public float readFloat32() throws IOException {
 
         return Float.intBitsToFloat(readInt(0x20));
@@ -235,9 +239,10 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
      *
      * @see #requireValidUnsignedLongLength(int)
      */
+    @Override
     public long readUnsignedLong(final int length) throws IOException {
 
-        Bits.requireValidUnsignedLongLength(length);
+        BioConstraints.requireValidUnsignedLongLength(length);
 
         long value = 0x00L;
 
@@ -271,9 +276,10 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
      *
      * @see #requireValidLongLength(int)
      */
+    @Override
     public long readLong(final int length) throws IOException {
 
-        Bits.requireValidLongLength(length);
+        BioConstraints.requireValidLongLength(length);
 
         final int unsigned = length - 1;
 
@@ -313,7 +319,7 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
             throw new IllegalArgumentException("length(" + length + " < 0");
         }
 
-        Bytes.requireValidBytesRange(range);
+        BioConstraints.requireValidBytesRange(range);
 
         if (output == null) {
             throw new NullPointerException("null output");
@@ -327,7 +333,7 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
 
     protected int readBytesLength(final int scale) throws IOException {
 
-        return readUnsignedInt(Bytes.requireValidBytesScale(scale));
+        return readUnsignedInt(BioConstraints.requireValidBytesScale(scale));
     }
 
 
@@ -348,9 +354,9 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
                             final ByteOutput output)
         throws IOException {
 
-        Bytes.requireValidBytesScale(scale);
+        BioConstraints.requireValidBytesScale(scale);
 
-        Bytes.requireValidBytesRange(range);
+        BioConstraints.requireValidBytesRange(range);
 
         if (output == null) {
             throw new NullPointerException("null output");
@@ -377,10 +383,11 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
      *
      * @see #readBytesFully(int, int, com.github.jinahya.bio.ByteOutput)
      */
+    @Override
     public byte[] readBytes(final int scale, final int range)
         throws IOException {
 
-        Bytes.requireValidBytesScale(scale);
+        BioConstraints.requireValidBytesScale(scale);
 
         final byte[] value = new byte[readBytesLength(scale)];
 
@@ -408,13 +415,15 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
      * @see #readBytes(int, int)
      * @see String#String(byte[], java.lang.String)
      */
+    @Override
     public String readString(final String charsetName) throws IOException {
 
         if (charsetName == null) {
             throw new NullPointerException("null charsetName");
         }
 
-        return new String(readBytes(Bytes.SCALE_MAX, Bytes.RANGE_MAX),
+        return new String(readBytes(BioConstants.SCALE_MAX,
+                                    BioConstants.RANGE_MAX),
                           charsetName);
     }
 
@@ -433,9 +442,10 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
      * @see #readBytes(int, int)
      * @see String#String(byte[], java.lang.String)
      */
+    @Override
     public String readUsAsciiString() throws IOException {
 
-        return new String(readBytes(Bytes.SCALE_MAX, 7), "US-ASCII");
+        return new String(readBytes(BioConstants.SCALE_MAX, 7), "US-ASCII");
     }
 
 
@@ -450,9 +460,10 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
      * @throws IllegalArgumentException if {@code length} is not valid.
      * @throws IOException if an I/O error occurs.
      */
+    @Override
     public int align(final int length) throws IOException {
 
-        Bytes.requireValidAlighLength(length);
+        BioConstraints.requireValidAlighLength(length);
 
         int bits = 0; // number of bits to be discarded
 

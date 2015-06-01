@@ -20,16 +20,14 @@ package com.github.jinahya.bio;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Collection;
-import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.stream.IntStream;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.testng.Assert;
 
 
 /**
  *
- * @author <a href="mailto:jinahya@gmail.com">Jin Kwon</a>
+ * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
 final class BitIoTests {
 
@@ -63,26 +61,6 @@ final class BitIoTests {
     }
 
 
-    static void lengthIntUnsigned(final int size,
-                                  final Collection<Integer> lengths) {
-
-        if (size < 0) {
-            throw new IllegalArgumentException("size(" + size + ") < 0");
-        }
-
-        if (lengths == null) {
-            throw new NullPointerException("null lengths");
-        }
-
-        final IntStream.Builder builder = IntStream.builder();
-        for (int i = 0; i < size; i++) {
-            builder.add(lengthIntUnsigned());
-        }
-
-        builder.build().forEach(lengths::add);
-    }
-
-
     private static int assertValueIntUnsigned(final int value,
                                               final int length) {
 
@@ -104,16 +82,9 @@ final class BitIoTests {
     }
 
 
-    static void valueIntUnsigned(final Collection<Integer> lengths,
-                                 final Collection<Integer> values) {
+    static int valueIntUnsigned() {
 
-        Objects.requireNonNull(lengths, "null lengths");
-
-        Objects.requireNonNull(values, "null values");
-
-        lengths.stream()
-            .map(BitIoTests::valueIntUnsigned)
-            .forEach(values::add);
+        return random().nextInt();
     }
 
 
@@ -134,22 +105,9 @@ final class BitIoTests {
     }
 
 
-    static void lengthInt(final int size, final Collection<Integer> lengths) {
+    static int lengthInt32() {
 
-        if (size < 0) {
-            throw new IllegalArgumentException("size(" + size + ") < 0");
-        }
-
-        if (lengths == null) {
-            throw new NullPointerException("null lengths");
-        }
-
-        final IntStream.Builder builder = IntStream.builder();
-        for (int i = 0; i < size; i++) {
-            builder.add(lengthInt());
-        }
-
-        builder.build().forEach(lengths::add);
+        return assertLengthInt(Integer.BYTES);
     }
 
 
@@ -179,31 +137,31 @@ final class BitIoTests {
     }
 
 
-    static void valueInt(final Collection<Integer> lengths,
-                         final Collection<Integer> values) {
+    static int valueInt() {
 
-        Objects.requireNonNull(lengths, "null lengths");
-
-        Objects.requireNonNull(values, "null values");
-
-        lengths.stream()
-            .map(BitIoTests::valueInt)
-            .forEach(values::add);
+        return random().nextInt();
     }
 
 
-    static int valueInt(final Collection<Integer> lengths) {
+    static float valueFloat32() {
 
-        final int length = lengthInt();
-        lengths.add(length);
+        float value = random().nextFloat() * Float.MAX_VALUE;
+        if (random().nextBoolean()) {
+            value = Float.MAX_VALUE;
+        }
+        if (random().nextBoolean()) {
+            value = 0 - value;
+        }
 
-        return valueInt(length);
+        return value;
+        //return (float) random().nextLong() / random().nextInt();
     }
 
 
-    static float valueFloat() {
+    static float valueFloat32Raw() {
 
-        return (float) random().nextLong() / (float) random().nextInt();
+        return valueFloat32();
+        //return (float) random().nextLong() / random().nextInt();
     }
 
 
@@ -245,6 +203,12 @@ final class BitIoTests {
     }
 
 
+    static long valueLongUnsigned() {
+
+        return random().nextLong();
+    }
+
+
     static long valueLongUnsigned(final Collection<Integer> lengths) {
 
         final int length = lengthLongUnsigned();
@@ -268,6 +232,12 @@ final class BitIoTests {
         final int length = random().nextInt(2, 65);
 
         return assertLengthLong(length);
+    }
+
+
+    static int lengthLong64() {
+
+        return assertLengthLong(Long.SIZE);
     }
 
 
@@ -297,18 +267,30 @@ final class BitIoTests {
     }
 
 
-    static long valueLong(final Collection<Integer> lengths) {
+    static long valueLong() {
 
-        final int length = lengthLong();
-        lengths.add(length);
-
-        return valueLong(lengths);
+        return random().nextLong();
     }
 
 
     static double valueDouble() {
 
-        return (double) random().nextLong() / (double) random().nextInt();
+        double value = random().nextDouble() * Double.MAX_VALUE;
+        if (random().nextBoolean()) {
+            value = Double.MAX_VALUE;
+        }
+        if (random().nextBoolean()) {
+            value = 0 - value;
+        }
+
+        return value;
+        //return (double) random().nextLong() / (double) random().nextInt();
+    }
+
+
+    static double valueDoubleRaw() {
+
+        return valueDouble();
     }
 
 

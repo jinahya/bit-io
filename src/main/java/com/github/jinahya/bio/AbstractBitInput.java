@@ -26,34 +26,23 @@ import java.io.IOException;
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
-public abstract class AbstractBitInput implements IBitInput, ByteInput {
+public abstract class AbstractBitInput implements BitInput, ByteInput {
 
 
     /**
-     * Reads an unsigned byte from {@code input} and increments the
+     * Reads an unsigned byte from {@link #readUnsignedByte()} and increments
      * {@code count}.
      *
      * @return an unsigned byte value.
      *
      * @throws IOException if an I/O error occurs.
      */
-//    private int octet() throws IOException {
-//
-//        final int value = input.readUnsignedByte();
-//        if (value == -1) {
-//            throw new EOFException("eof");
-//        }
-//
-//        count++;
-//
-//        return value;
-//    }
-    //protected abstract int octet() throws IOException;
     protected int octet() throws IOException {
 
+        final int octet = readUnsignedByte();
         ++count;
 
-        return readUnsignedByte();
+        return octet;
     }
 
 
@@ -315,8 +304,9 @@ public abstract class AbstractBitInput implements IBitInput, ByteInput {
     }
 
 
-    protected void readBytesFully(final int length, final int range,
-                                  final ByteOutput output)
+    @Override
+    public void readBytesFully(final int length, final int range,
+                               final ByteOutput output)
         throws IOException {
 
         if (length < 0) {
@@ -424,7 +414,7 @@ public abstract class AbstractBitInput implements IBitInput, ByteInput {
             throw new NullPointerException("null charsetName");
         }
 
-        return new String(readBytes(Bytes.BYTES_SCALE_MAX, Bytes.BYTES_RANGE_MAX),
+        return new String(readBytes(Bytes.SCALE_MAX, Bytes.RANGE_MAX),
                           charsetName);
     }
 
@@ -445,7 +435,7 @@ public abstract class AbstractBitInput implements IBitInput, ByteInput {
      */
     public String readUsAsciiString() throws IOException {
 
-        return new String(readBytes(Bytes.BYTES_SCALE_MAX, 7), "US-ASCII");
+        return new String(readBytes(Bytes.SCALE_MAX, 7), "US-ASCII");
     }
 
 
@@ -462,14 +452,7 @@ public abstract class AbstractBitInput implements IBitInput, ByteInput {
      */
     public int align(final int length) throws IOException {
 
-        if (length <= 0) {
-            throw new IllegalArgumentException("length(" + length + ") <= 0");
-        }
-
-        if (length > Short.MAX_VALUE) {
-            throw new IllegalArgumentException(
-                "length(" + length + ") > " + Short.MAX_VALUE);
-        }
+        Bytes.requireValidAlighLength(length);
 
         int bits = 0; // number of bits to be discarded
 
@@ -479,19 +462,19 @@ public abstract class AbstractBitInput implements IBitInput, ByteInput {
             readUnsignedByte(bits); // count increments
         }
 
-        long bytes = count % length;
+        int bytes = count % length;
 
         if (bytes == 0) {
             return bits;
         }
 
         if (bytes > 0) {
-            bytes = length - bytes;
+            bytes += (length - bytes);
         } else {
-            bytes = 0 - bytes;
+            bytes += (0 - bytes);
         }
 
-        for (; bytes > 0L; bytes--) {
+        for (; bytes > 0; bytes--) {
             readUnsignedByte(8);
             bits += 8;
         }
@@ -527,7 +510,7 @@ public abstract class AbstractBitInput implements IBitInput, ByteInput {
     /**
      * The number of bytes read so far.
      */
-    private long count = 0;
+    private int count = 0;
 
 
 }

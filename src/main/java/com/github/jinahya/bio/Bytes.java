@@ -26,28 +26,50 @@ package com.github.jinahya.bio;
 public final class Bytes {
 
 
+    protected static final int ALIGN_MIN = 0x0000;
+
+
+    protected static final int ALIGH_MAX = 0x0100;
+
+
     /**
      * The minimum value for {@code scale} of bytes.
      */
-    protected static final int BYTES_SCALE_MIN = 0x01;
+    protected static final int SCALE_MIN = 0x01;
 
 
     /**
      * The maximum value for {@code scale} of bytes.
      */
-    protected static final int BYTES_SCALE_MAX = 0x10;
+    protected static final int SCALE_MAX = 0x10;
 
 
     /**
      * The minimum value for {@code range} of bytes.
      */
-    protected static final int BYTES_RANGE_MIN = 0x01;
+    protected static final int RANGE_MIN = 0x01;
 
 
     /**
      * The maximum value for {@code range} of bytes.
      */
-    protected static final int BYTES_RANGE_MAX = 0x08;
+    protected static final int RANGE_MAX = 0x08;
+
+
+    protected static int requireValidAlighLength(final int length) {
+
+        if (length <= ALIGN_MIN) {
+            throw new IllegalArgumentException(
+                "length(" + length + ") <= " + ALIGN_MIN);
+        }
+
+        if (length > ALIGH_MAX) {
+            throw new IllegalArgumentException(
+                "length(" + length + ") > " + ALIGH_MAX);
+        }
+
+        return length;
+    }
 
 
     /**
@@ -59,19 +81,19 @@ public final class Bytes {
      *
      * @throws IllegalArgumentException if given value is not valid.
      *
-     * @see #BYTES_SCALE_MIN
-     * @see #BYTES_SCALE_MAX
+     * @see #SCALE_MIN
+     * @see #SCALE_MAX
      */
     protected static int requireValidBytesScale(final int scale) {
 
-        if (scale < BYTES_SCALE_MIN) {
+        if (scale < SCALE_MIN) {
             throw new IllegalArgumentException(
-                "scale(" + scale + ") <= " + BYTES_SCALE_MIN);
+                "scale(" + scale + ") <= " + SCALE_MIN);
         }
 
-        if (scale > BYTES_SCALE_MAX) {
+        if (scale > SCALE_MAX) {
             throw new IllegalArgumentException(
-                "scale(" + scale + ") > " + BYTES_SCALE_MAX);
+                "scale(" + scale + ") > " + SCALE_MAX);
         }
 
         return scale;
@@ -87,22 +109,28 @@ public final class Bytes {
      *
      * @throws IllegalArgumentException if given value is not valid.
      *
-     * @see #BYTES_RANGE_MIN
-     * @see #BYTES_RANGE_MAX
+     * @see #RANGE_MIN
+     * @see #RANGE_MAX
      */
     protected static int requireValidBytesRange(final int range) {
 
-        if (range < BYTES_RANGE_MIN) {
+        if (range < RANGE_MIN) {
             throw new IllegalArgumentException(
-                "range(" + range + ") < " + BYTES_RANGE_MIN);
+                "range(" + range + ") < " + RANGE_MIN);
         }
 
-        if (range > BYTES_RANGE_MAX) {
+        if (range > RANGE_MAX) {
             throw new IllegalArgumentException(
-                "range(" + range + ") > " + BYTES_RANGE_MAX);
+                "range(" + range + ") > " + RANGE_MAX);
         }
 
         return range;
+    }
+
+
+    private Bytes() {
+
+        super();
     }
 
 

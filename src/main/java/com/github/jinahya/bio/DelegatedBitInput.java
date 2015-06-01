@@ -28,6 +28,11 @@ import java.io.IOException;
 public class DelegatedBitInput extends AbstractBitInput {
 
 
+    /**
+     * Create a new instance with specified delegate.
+     *
+     * @param delegate the delegate
+     */
     public DelegatedBitInput(final ByteInput delegate) {
 
         super();
@@ -36,6 +41,16 @@ public class DelegatedBitInput extends AbstractBitInput {
     }
 
 
+    /**
+     * {@inheritDoc} The {@code readUnsignedByte()} method of
+     * {@code DelegatedBitInput} class returns the value of
+     * <pre>delegate.readUnsignedByte()</pre>. Override this method if
+     * {@link #delegate} is supposed to be lazily initialized.
+     *
+     * @return {@inheritDoc}
+     *
+     * @throws IOException {@inheritDoc}
+     */
     @Override
     public int readUnsignedByte() throws IOException {
 
@@ -43,6 +58,9 @@ public class DelegatedBitInput extends AbstractBitInput {
     }
 
 
+    /**
+     * The delegate on which {@link #readUnsignedByte()} is invoked.
+     */
     protected ByteInput delegate;
 
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Jin Kwon.
+ * Copyright 2015 Jin Kwon &lt;jinahya_at_gmail.com&gt;.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,21 +15,24 @@
  */
 
 
-package com.github.jinahya.bio.candidate;
+package com.github.jinahya.bio;
 
 
-import com.github.jinahya.bio.BitInput;
-import java.io.IOException;
+import com.google.inject.AbstractModule;
 
 
 /**
  *
- * @author Jin Kwon
+ * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
-public interface BitReadable {
+public class BlackBitOutputModule extends AbstractModule {
 
 
-    void read(BitInput input) throws IOException;
+    @Override
+    protected void configure() {
+
+        bind(BitOutput.class).to(BlackBitOutput.class);
+    }
 
 
 }

@@ -23,6 +23,7 @@ import java.nio.ByteBuffer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.Assert;
+import static org.testng.Assert.assertEquals;
 import org.testng.annotations.Test;
 
 
@@ -43,36 +44,28 @@ public class ReadMeTest {
     @Test
     public void read1_() throws IOException {
 
-        final ByteBuffer source = ByteBuffer.allocate(7);
-
-        final BitInput input = new BitInput(() -> source.get() & 0xFF);
+        final BitInput input = new WhiteBitInput();
 
         input.readBoolean();
         input.readUnsignedInt(6);
         input.readLong(47);
 
         final int discarded = input.align(1);
-        Assert.assertEquals(discarded, 2);
-
-        Assert.assertEquals(source.remaining(), 0);
+        assertEquals(discarded, 2);
     }
 
 
     @Test
     public void write1_() throws IOException {
 
-        final ByteBuffer target = ByteBuffer.allocate(8);
-
-        final BitOutput output = new BitOutput((a) -> target.put((byte) a));
+        final BitOutput output = new BlackBitOutput();
 
         output.writeBoolean(true);
         output.writeInt(7, -1);
         output.writeUnsignedLong(33, 1L);
 
         final int padded = output.align(4);
-        Assert.assertEquals(padded, 23);
-
-        Assert.assertEquals(target.remaining(), 0);
+        assertEquals(padded, 23);
     }
 
 

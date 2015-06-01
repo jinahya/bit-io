@@ -26,7 +26,7 @@ import java.io.IOException;
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
-public abstract class AbstractBitOutput implements IBitOutput, ByteOutput {
+public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
 
 
     /**
@@ -100,58 +100,57 @@ public abstract class AbstractBitOutput implements IBitOutput, ByteOutput {
      *
      * @throws IOException if an I/O error occurs
      */
+    @Override
     public void writeBoolean(final boolean value) throws IOException {
 
         writeUnsignedByte(1, value ? 0x01 : 0x00);
     }
 
 
-    /**
-     * Writes a boolean flag whether specified (subsequent) object is
-     * {@code null} or not. This method writes either {@code true} if
-     * {@code value} is {@code null} or {@code false} if {@code value} is not
-     * {@code null}.
-     *
-     * @param value the (subsequent) object to check
-     *
-     * @return the written value; either {@code true} if {@code value} is
-     * {@code null} or {@code false} if {@code value} is not {@code null}.
-     *
-     * @throws IOException if an I/O error occurs.
-     *
-     * @see #isNotNull(java.lang.Object)
-     */
-    protected boolean isNull(final Object value) throws IOException {
-
-        final boolean flag = value == null;
-
-        writeBoolean(flag);
-
-        return flag;
-    }
-
-
-    /**
-     * Writes a boolean flag whether specified (subsequent) object is
-     * {@code null} or not. The method writes either {@code true} if
-     * {@code value} is not {@code null} or {@code false} if {@code value} is
-     * {@code null}.
-     *
-     * @param value the (subsequent) object to check
-     *
-     * @return the written value; either {@code true} if {@code value} is not
-     * {@code null} or {@code false} if {@code value} is {@code null}.
-     *
-     * @throws IOException if an I/O error occurs.
-     *
-     * @see #isNull(java.lang.Object)
-     */
-    protected boolean isNotNull(final Object value) throws IOException {
-
-        return !isNull(value);
-    }
-
-
+//    /**
+//     * Writes a boolean flag whether specified (subsequent) object is
+//     * {@code null} or not. This method writes either {@code true} if
+//     * {@code value} is {@code null} or {@code false} if {@code value} is not
+//     * {@code null}.
+//     *
+//     * @param value the (subsequent) object to check
+//     *
+//     * @return the written value; either {@code true} if {@code value} is
+//     * {@code null} or {@code false} if {@code value} is not {@code null}.
+//     *
+//     * @throws IOException if an I/O error occurs.
+//     *
+//     * @see #isNotNull(java.lang.Object)
+//     */
+//    protected boolean isNull(final Object value) throws IOException {
+//
+//        final boolean flag = value == null;
+//
+//        writeBoolean(flag);
+//
+//        return flag;
+//    }
+//
+//
+//    /**
+//     * Writes a boolean flag whether specified (subsequent) object is
+//     * {@code null} or not. The method writes either {@code true} if
+//     * {@code value} is not {@code null} or {@code false} if {@code value} is
+//     * {@code null}.
+//     *
+//     * @param value the (subsequent) object to check
+//     *
+//     * @return the written value; either {@code true} if {@code value} is not
+//     * {@code null} or {@code false} if {@code value} is {@code null}.
+//     *
+//     * @throws IOException if an I/O error occurs.
+//     *
+//     * @see #isNull(java.lang.Object)
+//     */
+//    protected boolean isNotNull(final Object value) throws IOException {
+//
+//        return !isNull(value);
+//    }
     /**
      * Writes an unsigned short value. Only the lower specified number of bits
      * in given {@code value} are written.
@@ -351,14 +350,16 @@ public abstract class AbstractBitOutput implements IBitOutput, ByteOutput {
      *
      * @see Double#doubleToRawLongBits(double)
      */
+    @Override
     public void writeDouble64Raw(final double value) throws IOException {
 
         writeLong(64, Double.doubleToRawLongBits(value));
     }
 
 
-    protected void writeBytesFully(final int length, final int range,
-                                   final ByteInput input)
+    @Override
+    public void writeBytesFully(final int length, final int range,
+                                final ByteInput input)
         throws IOException {
 
         if (length < 0) {
@@ -429,7 +430,7 @@ public abstract class AbstractBitOutput implements IBitOutput, ByteOutput {
             throw new NullPointerException("null charsetName");
         }
 
-        writeBytes(Bytes.BYTES_SCALE_MAX, Bytes.BYTES_RANGE_MAX,
+        writeBytes(Bytes.SCALE_MAX, Bytes.RANGE_MAX,
                    value.getBytes(charsetName));
     }
 
@@ -453,7 +454,7 @@ public abstract class AbstractBitOutput implements IBitOutput, ByteOutput {
             throw new NullPointerException("null value");
         }
 
-        writeBytes(Bytes.BYTES_SCALE_MAX, 7, value.getBytes("US-ASCII"));
+        writeBytes(Bytes.SCALE_MAX, 7, value.getBytes("US-ASCII"));
     }
 
 

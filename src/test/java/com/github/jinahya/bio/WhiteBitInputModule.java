@@ -18,26 +18,22 @@
 package com.github.jinahya.bio;
 
 
-import com.google.inject.Provider;
-import javax.inject.Inject;
+import com.google.inject.AbstractModule;
 
 
 /**
  *
- * @author Jin Kwon
+ * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
-public class BitInputProvider implements Provider<BitInput> {
+public class WhiteBitInputModule extends AbstractModule {
 
 
     @Override
-    public BitInput get() {
+    protected void configure() {
 
-        //return new BitInput(new ByteInputMock());
-        return new BitInput(input);
+        bind(BitInput.class).to(WhiteBitInput.class);
     }
 
 
-    @Inject
-    private ByteInput input;
 }
 

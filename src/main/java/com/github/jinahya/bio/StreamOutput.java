@@ -44,7 +44,7 @@ public class StreamOutput extends AbstractByteOutput<OutputStream> {
      * {@code StreamReader} class calls {@link OutputStream#write(int)} on
      * {@link #target} with given {@code value}.
      *
-     * @param value {@inheritDoc }
+     * @param value {@inheritDoc}
      *
      * @throws IOException {@inheritDoc}
      *

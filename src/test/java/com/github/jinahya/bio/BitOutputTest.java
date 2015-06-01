@@ -19,13 +19,16 @@ package com.github.jinahya.bio;
 
 
 import static com.github.jinahya.bio.BitIoTests.lengthInt;
-import static com.github.jinahya.bio.BitIoTests.lengthInt32;
 import static com.github.jinahya.bio.BitIoTests.lengthIntUnsigned;
 import static com.github.jinahya.bio.BitIoTests.lengthLong;
-import static com.github.jinahya.bio.BitIoTests.lengthLong64;
 import static com.github.jinahya.bio.BitIoTests.lengthLongUnsigned;
+import static com.github.jinahya.bio.BitIoTests.valueFloat32;
+import static com.github.jinahya.bio.BitIoTests.valueFloat32Raw;
+import static com.github.jinahya.bio.BitIoTests.valueInt;
+import static com.github.jinahya.bio.BitIoTests.valueIntUnsigned;
+import static com.github.jinahya.bio.BitIoTests.valueLong;
+import static com.github.jinahya.bio.BitIoTests.valueLongUnsigned;
 import java.io.IOException;
-import java.util.concurrent.ThreadLocalRandom;
 import javax.inject.Inject;
 import org.slf4j.Logger;
 import static org.slf4j.LoggerFactory.getLogger;
@@ -37,87 +40,81 @@ import org.testng.annotations.Test;
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
-@Guice(modules = {WhiteBitInputModule.class})
-public class BitInputTest {
+@Guice(modules = {BlackBitOutputModule.class})
+public class BitOutputTest {
 
 
-    private static ThreadLocalRandom random() {
+    @Test(invocationCount = 128)
+    public void writeBoolean() throws IOException {
 
-        return ThreadLocalRandom.current();
+        output.writeBoolean(BitIoTests.valueBoolean());
     }
 
 
     @Test(invocationCount = 128)
-    public void readBoolean() throws IOException {
+    public void writeUnsignedInt() throws IOException {
 
-        input.readBoolean();
+        output.writeUnsignedInt(lengthIntUnsigned(), valueIntUnsigned());
     }
 
 
     @Test(invocationCount = 128)
-    public void readUnsignedInt() throws IOException {
+    public void writeInt() throws IOException {
 
-        input.readUnsignedInt(lengthIntUnsigned());
+        output.writeInt(lengthInt(), valueInt());
     }
 
 
     @Test(invocationCount = 128)
-    public void readInt() throws IOException {
+    public void writeFloat32() throws IOException {
 
-        input.readInt(lengthInt());
+        output.writeFloat32(valueFloat32());
     }
 
 
     @Test(invocationCount = 128)
-    public void readInt32() throws IOException {
+    public void writeFloat32Raw() throws IOException {
 
-        input.readInt(lengthInt32());
+        output.writeFloat32(valueFloat32Raw());
     }
 
 
     @Test(invocationCount = 128)
-    public void readFloat32() throws IOException {
+    public void writeUnsignedLong() throws IOException {
 
-        input.readFloat32();
+        output.writeUnsignedLong(lengthLongUnsigned(), valueLongUnsigned());
     }
 
 
     @Test(invocationCount = 128)
-    public void readUnsingedLong() throws IOException {
+    public void writeLong() throws IOException {
 
-        input.readUnsignedLong(lengthLongUnsigned());
+        output.writeLong(lengthLong(), valueLong());
     }
 
 
     @Test(invocationCount = 128)
-    public void readLong() throws IOException {
+    public void writeDouble64() throws IOException {
 
-        input.readLong(lengthLong());
+        output.writeDouble64(BitIoTests.valueDouble());
     }
 
 
     @Test(invocationCount = 128)
-    public void readLong64() throws IOException {
+    public void writeDouble64Raw() throws IOException {
 
-        input.readLong(lengthLong64());
-    }
-
-
-    @Test(invocationCount = 128)
-    public void readDouble() throws IOException {
-
-        input.readDouble64();
+        output.writeDouble64Raw(BitIoTests.valueDoubleRaw());
     }
 
 
     /**
      * logger.
      */
-    private transient final Logger logger = getLogger(BitInputTest.class);
+    private transient final Logger logger = getLogger(BitOutputTest.class);
 
 
     @Inject
-    private BitInput input;
+    private BitOutput output;
 
 
 }

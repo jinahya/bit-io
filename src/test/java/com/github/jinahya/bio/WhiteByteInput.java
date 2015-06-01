@@ -19,7 +19,6 @@ package com.github.jinahya.bio;
 
 
 import java.io.IOException;
-import java.util.concurrent.ThreadLocalRandom;
 
 
 /**
@@ -32,7 +31,7 @@ public class WhiteByteInput implements ByteInput {
     @Override
     public int readUnsignedByte() throws IOException {
 
-        return ThreadLocalRandom.current().nextInt(0xFF);
+        return (int) (Math.random() * 256);
     }
 
 

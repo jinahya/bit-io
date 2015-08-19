@@ -29,7 +29,7 @@ import org.testng.Assert;
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
-final class BitIoTests {
+final class BitIoRandoms {
 
 
     static ThreadLocalRandom random() {
@@ -389,7 +389,7 @@ final class BitIoTests {
     }
 
 
-    private BitIoTests() {
+    private BitIoRandoms() {
         super();
     }
 

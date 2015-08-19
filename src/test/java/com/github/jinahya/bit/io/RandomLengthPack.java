@@ -69,22 +69,22 @@ public class RandomLengthPack {
     }
 
 
-    final int lengthIntUnsigned = BitIoTests.lengthIntUnsigned();
+    final int lengthIntUnsigned = BitIoRandoms.lengthIntUnsigned();
 
 
-    final int lengthInt = BitIoTests.lengthInt();
+    final int lengthInt = BitIoRandoms.lengthInt();
 
 
-    final int lengthLongUnsigned = BitIoTests.lengthLongUnsigned();
+    final int lengthLongUnsigned = BitIoRandoms.lengthLongUnsigned();
 
 
-    final int lengthLong = BitIoTests.lengthLong();
+    final int lengthLong = BitIoRandoms.lengthLong();
 
 
-    final int scaleBytes = BitIoTests.scaleBytes();
+    final int scaleBytes = BitIoRandoms.scaleBytes();
 
 
-    final int rangeBytes = BitIoTests.rangeBytes();
+    final int rangeBytes = BitIoRandoms.rangeBytes();
 
 
 }

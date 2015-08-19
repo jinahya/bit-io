@@ -26,14 +26,15 @@ import java.io.IOException;
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
+//@FunctionalInterface
 public interface ByteInput {
 
 
     /**
      * Supplies an unsigned 8-bit value.
      *
-     * @return an unsigned 8-bit value between {@code 0x00} (inclusive) and
-     * {@code 0xFF} (exclusive)
+     * @return an unsigned 8-bit value between {@code 0} (inclusive) and
+     * {@code 256} (exclusive)
      *
      * @throws IOException if an I/O error occurs.
      */

@@ -25,6 +25,8 @@ import java.io.InputStream;
 
 /**
  * A {@link ByteInput} implementation for {@link InputStream}s.
+ *
+ * @see StreamOutput
  */
 public class StreamInput extends AbstractByteInput<InputStream> {
 
@@ -32,22 +34,21 @@ public class StreamInput extends AbstractByteInput<InputStream> {
     /**
      * Creates a new instance built on top of the specified input stream.
      *
-     * @param source {@inheritDoc}
+     * @param stream the stream
      */
-    public StreamInput(final InputStream source) {
+    public StreamInput(final InputStream stream) {
 
-        super(source);
+        super(stream);
     }
 
 
     /**
      * {@inheritDoc} The {@code readUnsignedByte()} method of
-     * {@code StreamReader} class calls {@link InputStream#read()} on
+     * {@code StreamInput} class calls {@link InputStream#read()} on
      * {@link #source} and returns if it is not an {@code end of stream}.
      *
      * @return {@inheritDoc}
      *
-     * @throws IllegalStateException id the underling byte stream is invalid.
      * @throws IOException {@inheritDoc}
      * @throws EOFException if the underlying stream reached to end of stream.
      *

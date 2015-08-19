@@ -18,11 +18,6 @@
 package com.github.jinahya.bit.io;
 
 
-import com.github.jinahya.bit.io.AbstractByteInput;
-
-
-
-
 /**
  *
  * @author Jin Kwon
@@ -30,7 +25,7 @@ import com.github.jinahya.bit.io.AbstractByteInput;
  * @param <U> byte source type parameter.
  */
 public abstract class AbstractByteInputTest<T extends AbstractByteInput<U>, U>
-        extends ByteInputTest<T> {
+    extends ByteInputTest<T> {
 
 }
 

@@ -33,18 +33,18 @@ public class BufferOutput extends AbstractByteOutput<ByteBuffer> {
     /**
      * Creates a new instance with given {@code ByteBufer}.
      *
-     * @param target the {@code ByteBuffer} to wrap.
+     * @param buffer the {@code ByteBuffer} to wrap.
      */
-    public BufferOutput(final ByteBuffer target) {
+    public BufferOutput(final ByteBuffer buffer) {
 
-        super(target);
+        super(buffer);
     }
 
 
     /**
      * {@inheritDoc} The {@code writeUnsignedByte(int)} method of
-     * {@code BufferOutput} class executes
-     * <pre>target.put((byte) value)</pre>.
+     * {@code BufferOutput} class calls {@link ByteBuffer#put(byte)} on
+     * {@link #target} with given {@code value}.
      *
      * @param value {@inheritDoc }
      *

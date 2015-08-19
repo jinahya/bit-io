@@ -18,13 +18,12 @@
 package com.github.jinahya.bit.io;
 
 
-import com.github.jinahya.bit.io.BitInput;
-import static com.github.jinahya.bit.io.BitIoTests.lengthInt;
-import static com.github.jinahya.bit.io.BitIoTests.lengthInt32;
-import static com.github.jinahya.bit.io.BitIoTests.lengthIntUnsigned;
-import static com.github.jinahya.bit.io.BitIoTests.lengthLong;
-import static com.github.jinahya.bit.io.BitIoTests.lengthLong64;
-import static com.github.jinahya.bit.io.BitIoTests.lengthLongUnsigned;
+import static com.github.jinahya.bit.io.BitIoRandoms.lengthInt;
+import static com.github.jinahya.bit.io.BitIoRandoms.lengthInt32;
+import static com.github.jinahya.bit.io.BitIoRandoms.lengthIntUnsigned;
+import static com.github.jinahya.bit.io.BitIoRandoms.lengthLong;
+import static com.github.jinahya.bit.io.BitIoRandoms.lengthLong64;
+import static com.github.jinahya.bit.io.BitIoRandoms.lengthLongUnsigned;
 import java.io.IOException;
 import java.util.concurrent.ThreadLocalRandom;
 import javax.inject.Inject;
@@ -76,13 +75,11 @@ public class BitInputTest {
     }
 
 
-    @Test(invocationCount = 128)
-    public void readFloat32() throws IOException {
-
-        input.readFloat32();
-    }
-
-
+//    @Test(invocationCount = 128)
+//    public void readFloat32() throws IOException {
+//
+//        input.readFloat32();
+//    }
     @Test(invocationCount = 128)
     public void readUnsingedLong() throws IOException {
 
@@ -104,13 +101,11 @@ public class BitInputTest {
     }
 
 
-    @Test(invocationCount = 128)
-    public void readDouble() throws IOException {
-
-        input.readDouble64();
-    }
-
-
+//    @Test(invocationCount = 128)
+//    public void readDouble() throws IOException {
+//
+//        input.readDouble64();
+//    }
     @Test(invocationCount = 128)
     public void readBytesFully() {
 

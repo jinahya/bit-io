@@ -30,8 +30,8 @@ public interface BitInput {
 
 
     /**
-     * Reads a 1-bit boolean value. Reads {@code true} for {@code 0b1},
-     * {@code false} for {@code 0b0}.
+     * Reads a 1-bit boolean value. This method reads {@code true} for
+     * {@code 0b1} and {@code false} for {@code 0b0}.
      *
      * @return {@code true} for {@code 0b1}, {@code false} for {@code 0b0}
      *
@@ -66,18 +66,16 @@ public interface BitInput {
     int readInt(int length) throws IOException;
 
 
-    /**
-     * Reads a 32-bit int value converting to {@link Float#intBitsToFloat(int)}.
-     *
-     * @return a float value.
-     *
-     * @throws IOException if an I/O error occurs
-     *
-     * @see Float#intBitsToFloat(int)
-     */
-    float readFloat32() throws IOException;
-
-
+//    /**
+//     * Reads a 32-bit int value converting to {@link Float#intBitsToFloat(int)}.
+//     *
+//     * @return a float value.
+//     *
+//     * @throws IOException if an I/O error occurs
+//     *
+//     * @see Float#intBitsToFloat(int)
+//     */
+//    float readFloat32() throws IOException;
     /**
      * Reads an unsigned long value.
      *
@@ -106,27 +104,26 @@ public interface BitInput {
     long readLong(int length) throws IOException;
 
 
-    /**
-     * Reads a 64-bit double value.
-     *
-     * @return a 64-bit double value
-     *
-     * @throws IOException if an I/O error occurs.
-     */
-    double readDouble64() throws IOException;
-
-
+//    /**
+//     * Reads a 64-bit double value.
+//     *
+//     * @return a 64-bit double value
+//     *
+//     * @throws IOException if an I/O error occurs.
+//     */
+//    double readDouble64() throws IOException;
     /**
      * Reads a byte array.
      *
-     * @param scale the length scale between {@value Bytes#BYTES_SCALE_MIN}
-     * (inclusive) and {@value Bytes#BYTES_SCALE_MAX} (inclusive).
-     * @param range the number of bits for each byte between
-     * {@value Bytes#BYTES_RANGE_MIN} (inclusive) and
-     * {@value Bytes#BYTES_RANGE_MAX} (inclusive).
+     * @param scale the length scale between {@code 0x01} (inclusive) and
+     * {@code 0x10} (inclusive).
+     * @param range the number of bits for each byte between {@value 0x01}
+     * (inclusive) and {@value 0x08} (inclusive).
      *
      * @return a byte array.
      *
+     * @throws IllegalArgumentException either {@code scale} or {@code range} is
+     * not valid.
      * @throws IOException if an I/O error occurs.
      */
     byte[] readBytes(int scale, int range) throws IOException;
@@ -134,9 +131,8 @@ public interface BitInput {
 
     /**
      * Reads a string. This method reads a byte array via
-     * {@link #readBytes(int, int)} with {@code scale} of
-     * {@value Bytes#BYTES_SCALE_MAX} and {@code range} of
-     * {@value Bytes#BYTES_RANGE_MAX} and returns the output string created by
+     * {@link #readBytes(int, int)} with {@code scale} of {@code 0x10} and
+     * {@code range} of {@code 0x08} and returns the output string created by
      * {@link String#String(byte[], java.lang.String)} with the byte array and
      * given {@code charsetName}.
      *
@@ -154,9 +150,8 @@ public interface BitInput {
 
     /**
      * Reads a {@code US-ASCII} encoded string. This method reads a byte array
-     * via {@link #readBytes(int, int)} with {@code scale} of
-     * {@value Bytes#BYTES_SCALE_MAX} and {@code range} of {@code 7} and returns
-     * the output string created by
+     * via {@link #readBytes(int, int)} with {@code scale} of {@code 0x10} and
+     * {@code range} of {@code 0x07} and returns the output string created by
      * {@link String#String(byte[], java.lang.String)} with the byte array and
      * {@code US-ASCII}.
      *
@@ -167,13 +162,13 @@ public interface BitInput {
      * @see #readBytes(int, int)
      * @see String#String(byte[], java.lang.String)
      */
-    String readUsAsciiString() throws IOException;
+    String readAscii() throws IOException;
 
 
     /**
      * Aligns to given number of bytes.
      *
-     * @param length the number of bytes to align; between 0 (exclusive) and
+     * @param length the number of bytes to align; between 1 (inclusive) and
      * {@value java.lang.Short#MAX_VALUE} (inclusive).
      *
      * @return the number of bits discarded for alignment
@@ -183,13 +178,11 @@ public interface BitInput {
     int align(int length) throws IOException;
 
 
-    /**
-     * Returns the number of bytes read from the underlying byte input so far.
-     *
-     * @return the number of bytes read so far.
-     */
-    long getCount();
-
-
+//    /**
+//     * Returns the number of bytes read from the underlying byte input so far.
+//     *
+//     * @return the number of bytes read so far.
+//     */
+//    long getCount();
 }
 

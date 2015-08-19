@@ -18,58 +18,30 @@
 package com.github.jinahya.bit.io;
 
 
-import java.io.EOFException;
 import java.io.IOException;
+import java.util.function.IntSupplier;
+import java.util.function.Supplier;
 
 
 /**
+ * A {@link ByteInput} implementation uses a {@link Supplier} instance.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
-public class ArrayInput extends AbstractByteInput<byte[]> {
+public class IntSupplierInput extends AbstractByteInput<IntSupplier> {
 
 
-    public ArrayInput(final byte[] array, final int offset, final int length) {
+    public IntSupplierInput(final IntSupplier supplier) {
 
-        super(array);
-
-        this.offset = offset;
-        this.length = length;
+        super(supplier);
     }
 
 
-    /**
-     * {@inheritDoc} The {@link #readUnsignedByte()} of {@code ArrayInput} class
-     * returns
-     * <pre>source[offset + index++] &amp; 0xFF</pre>.
-     *
-     * @return {@inheritDoc}
-     *
-     * @throws IOException {@inheritDoc}.
-     *
-     * @see #source
-     * @see #offset
-     * @see #length
-     * @see #index
-     */
     @Override
     public int readUnsignedByte() throws IOException {
 
-        if (index >= length) {
-            throw new IndexOutOfBoundsException();
-        }
-
-        return source[offset + index++] & 0xFF;
+        return source.getAsInt();
     }
-
-
-    protected int offset;
-
-
-    protected int length;
-
-
-    protected int index;
 
 
 }

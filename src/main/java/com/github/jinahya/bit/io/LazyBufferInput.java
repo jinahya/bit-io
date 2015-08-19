@@ -30,7 +30,7 @@ import java.util.function.Supplier;
 public class LazyBufferInput extends BufferInput {
 
 
-    public LazyBufferInput(final Supplier<ByteBuffer> supplier) {
+    public LazyBufferInput(final Supplier<? extends ByteBuffer> supplier) {
 
         super(null);
 
@@ -53,7 +53,7 @@ public class LazyBufferInput extends BufferInput {
     }
 
 
-    private final Supplier<ByteBuffer> supplier;
+    private final Supplier<? extends ByteBuffer> supplier;
 
 
 }

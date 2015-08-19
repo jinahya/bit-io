@@ -19,45 +19,29 @@ package com.github.jinahya.bit.io;
 
 
 import java.io.IOException;
+import java.util.function.Consumer;
+import java.util.function.IntConsumer;
 
 
 /**
+ * A {@link ByteOutput} implementation uses a {@link Consumer} instance.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
-public class DelegatedBitOutput extends AbstractBitOutput {
+public class IntConsumerOutput extends AbstractByteOutput<IntConsumer> {
 
 
-    public DelegatedBitOutput(final ByteOutput delegate) {
+    public IntConsumerOutput(final IntConsumer consumer) {
 
-        super();
-
-        this.delegate = delegate;
+        super(consumer);
     }
 
 
-    /**
-     * {@inheritDoc} The {code writeUnsignedByte(int)} method of
-     * {@code DelegatedBitOutput} class executes
-     * <pre>delegate.writeUnsignedByte(int)</pre> with specified {@code value}.
-     * Override this method if {@link #delegate} is supposed to be lazily
-     * initialized.
-     *
-     * @param value {@inheritDoc}
-     *
-     * @throws IOException {@inheritDoc}
-     */
     @Override
     public void writeUnsignedByte(final int value) throws IOException {
 
-        delegate.writeUnsignedByte(value);
+        target.accept(value);
     }
-
-
-    /**
-     * The delegate on which {@link #writeUnsignedByte(int)} is invoked.
-     */
-    protected ByteOutput delegate;
 
 
 }

@@ -18,9 +18,6 @@
 package com.github.jinahya.bit.io;
 
 
-//import static com.github.jinahya.bio.BioConstraints.requireValidAlighLength;
-//import static com.github.jinahya.bio.BioConstraints.requireValidBytesRange;
-//import static com.github.jinahya.bio.BioConstraints.requireValidBytesScale;
 import java.io.IOException;
 
 
@@ -64,7 +61,7 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
      */
     protected int readUnsignedByte(final int length) throws IOException {
 
-        BioConstraints.requireValidUnsignedByteLength(length);
+        BitIoConstraints.requireValidUnsignedByteLength(length);
 
         if (index == 8) {
             int octet = octet();
@@ -127,7 +124,7 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
      */
     protected int readUnsignedShort(final int length) throws IOException {
 
-        BioConstraints.requireValidUnsignedShortLength(length);
+        BitIoConstraints.requireValidUnsignedShortLength(length);
 
         int value = 0x00;
 
@@ -148,23 +145,10 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
     }
 
 
-    /**
-     * Reads an unsigned int value.
-     *
-     * @param length the number of bits for the value; between 1 (inclusive) and
-     * 32 (exclusive).
-     *
-     * @return the unsigned int value
-     *
-     * @throws IllegalArgumentException if {@code length} is not valid.
-     * @throws IOException if an I/O error occurs
-     *
-     * @see Bits#requireValidUnsignedIntLength(int)
-     */
     @Override
     public int readUnsignedInt(final int length) throws IOException {
 
-        BioConstraints.requireValidUnsignedIntLength(length);
+        BitIoConstraints.requireValidUnsignedIntLength(length);
 
         int value = 0x00;
 
@@ -185,23 +169,10 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
     }
 
 
-    /**
-     * Reads a signed int value.
-     *
-     * @param length the number of bits for the value; between 1 (exclusive) and
-     * 32 (inclusive).
-     *
-     * @return a signed int value.
-     *
-     * @throws IllegalArgumentException if {@code length} is not valid.
-     * @throws IOException if an I/O error occurs.
-     *
-     * @see Bits#requireValidIntLength(int)
-     */
     @Override
     public int readInt(final int length) throws IOException {
 
-        BioConstraints.requireValidIntLength(length);
+        BitIoConstraints.requireValidIntLength(length);
 
         final int unsigned = length - 1;
 
@@ -210,39 +181,24 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
     }
 
 
-    /**
-     * Reads a float value.
-     *
-     * @return a float value.
-     *
-     * @throws IOException if an I/O error occurs
-     *
-     * @see Float#intBitsToFloat(int)
-     */
-    @Override
-    public float readFloat32() throws IOException {
-
-        return Float.intBitsToFloat(readInt(0x20));
-    }
-
-
-    /**
-     * Reads an unsigned long value.
-     *
-     * @param length the number of bits for the value; between 1 (inclusive) and
-     * 64 (exclusive).
-     *
-     * @return an unsigned long value.
-     *
-     * @throws IllegalArgumentException if {@code length} is not valid
-     * @throws IOException if an I/O error occurs
-     *
-     * @see #requireValidUnsignedLongLength(int)
-     */
+//    /**
+//     * Reads a float value.
+//     *
+//     * @return a float value.
+//     *
+//     * @throws IOException if an I/O error occurs
+//     *
+//     * @see Float#intBitsToFloat(int)
+//     */
+//    @Override
+//    public float readFloat32() throws IOException {
+//
+//        return Float.intBitsToFloat(readInt(0x20));
+//    }
     @Override
     public long readUnsignedLong(final int length) throws IOException {
 
-        BioConstraints.requireValidUnsignedLongLength(length);
+        BitIoConstraints.requireValidUnsignedLongLength(length);
 
         long value = 0x00L;
 
@@ -263,23 +219,10 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
     }
 
 
-    /**
-     * Reads a signed long value.
-     *
-     * @param length the number of bits for the value; between 1 (exclusive) and
-     * 64 (inclusive).
-     *
-     * @return a signed long value
-     *
-     * @throws IllegalArgumentException if {@code length} is not valid
-     * @throws IOException if an I/O error occurs.
-     *
-     * @see #requireValidLongLength(int)
-     */
     @Override
     public long readLong(final int length) throws IOException {
 
-        BioConstraints.requireValidLongLength(length);
+        BitIoConstraints.requireValidLongLength(length);
 
         final int unsigned = length - 1;
 
@@ -288,132 +231,93 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
     }
 
 
-    public long readLong32() throws IOException {
-
-        return readLong(64);
-    }
-
-
-    /**
-     * Reads a double value.
-     *
-     * @return a double value
-     *
-     * @throws IOException if an I/O error occurs.
-     *
-     * @see Double#longBitsToDouble(long)
-     */
-    @Override
-    public final double readDouble64() throws IOException {
-
-        return Double.longBitsToDouble(readLong(0x40));
-    }
-
-
-    protected void readBytesFully(final int length, final int range,
-                                  final ByteOutput output)
-        throws IOException {
-
-        if (length < 0) {
-            throw new IllegalArgumentException("length(" + length + " < 0");
-        }
-
-        BioConstraints.requireValidBytesRange(range);
-
-        if (output == null) {
-            throw new NullPointerException("null output");
-        }
-
-        for (int i = 0; i < length; i++) {
-            output.writeUnsignedByte(readUnsignedByte(range));
-        }
-    }
-
-
-    protected int readBytesLength(final int scale) throws IOException {
-
-        return readUnsignedInt(BioConstraints.requireValidBytesScale(scale));
-    }
-
-
-    /**
-     * Reads a sequence of bytes and writes to specified byte output.
-     *
-     * @param scale the number of bits required for calculating the number of
-     * bytes to read; between 0 (exclusive) and 16 (inclusive).
-     * @param range the number of valid bits in each byte; between 0 (exclusive)
-     * and 8 (inclusive).
-     * @param output the bytes output.
-     *
-     * @return number of bytes written to {@code output}.
-     *
-     * @throws IOException if an I/O error occurs.
-     */
-    protected int readBytes(final int scale, final int range,
-                            final ByteOutput output)
-        throws IOException {
-
-        BioConstraints.requireValidBytesScale(scale);
-
-        BioConstraints.requireValidBytesRange(range);
-
-        if (output == null) {
-            throw new NullPointerException("null output");
-        }
-
-        final int length = readBytesLength(scale);
-        readBytesFully(length, range, output);
-
-        return length;
-    }
-
-
-    /**
-     * Reads an array of bytes.
-     *
-     * @param scale the number of bits for calculating the number of bytes to
-     * read; between 0 (exclusive) and 16 (inclusive).
-     * @param range the number of valid bits in each byte; between 0 (exclusive)
-     * and 8 (inclusive).
-     *
-     * @return an array of bytes.
-     *
-     * @throws IOException if an I/O error occurs.
-     *
-     * @see #readBytesFully(int, int, com.github.jinahya.bio.ByteOutput)
-     */
+//    public long readLong32() throws IOException {
+//
+//        return readLong(64);
+//    }
+//    /**
+//     * Reads a double value.
+//     *
+//     * @return a double value
+//     *
+//     * @throws IOException if an I/O error occurs.
+//     *
+//     * @see Double#longBitsToDouble(long)
+//     */
+//    @Override
+//    public final double readDouble64() throws IOException {
+//
+//        return Double.longBitsToDouble(readLong(0x40));
+//    }
+//    protected void readBytesFully(final int length, final int range,
+//                                  final ByteOutput output)
+//        throws IOException {
+//
+//        if (length < 0) {
+//            throw new IllegalArgumentException("length(" + length + " < 0");
+//        }
+//
+//        BitIoConstraints.requireValidBytesRange(range);
+//
+//        if (output == null) {
+//            throw new NullPointerException("null output");
+//        }
+//
+//        for (int i = 0; i < length; i++) {
+//            output.writeUnsignedByte(readUnsignedByte(range));
+//        }
+//    }
+//    protected int readBytesLength(final int scale) throws IOException {
+//
+//        return readUnsignedInt(BitIoConstraints.requireValidBytesScale(scale));
+//    }
+//    /**
+//     * Reads a sequence of bytes and writes to specified byte output.
+//     *
+//     * @param scale the number of bits required for calculating the number of
+//     * bytes to read; between 0 (exclusive) and 16 (inclusive).
+//     * @param range the number of valid bits in each byte; between 0 (exclusive)
+//     * and 8 (inclusive).
+//     * @param output the bytes output.
+//     *
+//     * @return number of bytes written to {@code output}.
+//     *
+//     * @throws IOException if an I/O error occurs.
+//     */
+//    protected int readBytes(final int scale, final int range,
+//                            final ByteOutput output)
+//        throws IOException {
+//
+//        BitIoConstraints.requireValidBytesScale(scale);
+//
+//        BitIoConstraints.requireValidBytesRange(range);
+//
+//        if (output == null) {
+//            throw new NullPointerException("null output");
+//        }
+//
+//        final int length = readBytesLength(scale);
+//        readBytesFully(length, range, output);
+//
+//        return length;
+//    }
     @Override
     public byte[] readBytes(final int scale, final int range)
         throws IOException {
 
-        BioConstraints.requireValidBytesScale(scale);
+        BitIoConstraints.requireValidBytesScale(scale);
+        BitIoConstraints.requireValidBytesRange(range);
 
-        final byte[] value = new byte[readBytesLength(scale)];
+        final byte[] value = new byte[readUnsignedInt(scale)];
 
-        readBytesFully(value.length, range,
-                       new ArrayOutput(value, 0, value.length));
+        for (int i = 0; i < value.length; i++) {
+            value[i] = (byte) readUnsignedByte(range);
+        }
 
         return value;
     }
 
 
-    /**
-     * Reads a string. This method reads a byte array via
-     * {@link #readBytes(int, int)} with {@code scale} of {@code 16} and
-     * {@code range} of {@code 8} and returns the output string created by
-     * {@link String#String(byte[], java.lang.String)} with the byte array and
-     * given {@code charsetName}.
-     *
-     * @param charsetName the character set name to encode output string.
-     *
-     * @return a string value.
-     *
-     * @throws NullPointerException if {@code charsetName} is {@code null}.
-     * @throws IOException if an I/O error occurs.
-     *
-     * @see #readBytes(int, int)
-     * @see String#String(byte[], java.lang.String)
-     */
     @Override
     public String readString(final String charsetName) throws IOException {
 
@@ -421,48 +325,24 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
             throw new NullPointerException("null charsetName");
         }
 
-        return new String(readBytes(BioConstants.SCALE_MAX,
-                                    BioConstants.RANGE_MAX),
+        return new String(readBytes(BitIoConstants.BYTES_SCALE_MAX,
+                                    BitIoConstants.BYTES_RANGE_MAX),
                           charsetName);
     }
 
 
-    /**
-     * Reads a {@code US-ASCII} encoded string. This method reads a byte array
-     * via {@link #readBytes(int, int)} with {@code scale} of {@code 16} and
-     * {@code range} of {@code 7} and returns the output string created by
-     * {@link String#String(byte[], java.lang.String)} with the byte array and
-     * {@code US-ASCII}.
-     *
-     * @return a {@code US-ASCII} encoded string.
-     *
-     * @throws IOException if an I/O error occurs.
-     *
-     * @see #readBytes(int, int)
-     * @see String#String(byte[], java.lang.String)
-     */
     @Override
-    public String readUsAsciiString() throws IOException {
+    public String readAscii() throws IOException {
 
-        return new String(readBytes(BioConstants.SCALE_MAX, 7), "US-ASCII");
+        return new String(readBytes(BitIoConstants.BYTES_SCALE_MAX, 7),
+                          "US-ASCII");
     }
 
 
-    /**
-     * Aligns to given number of bytes.
-     *
-     * @param length the number of bytes to align; between 0 (exclusive) and
-     * {@value java.lang.Short#MAX_VALUE} (inclusive).
-     *
-     * @return the number of bits discarded for alignment
-     *
-     * @throws IllegalArgumentException if {@code length} is not valid.
-     * @throws IOException if an I/O error occurs.
-     */
     @Override
     public int align(final int length) throws IOException {
 
-        BioConstraints.requireValidAlighLength(length);
+        BitIoConstraints.requireValidAlighLength(length);
 
         int bits = 0; // number of bits to be discarded
 
@@ -493,18 +373,16 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
     }
 
 
-    /**
-     * Returns the number of bytes read from the underlying byte input so far.
-     *
-     * @return the number of bytes read so far.
-     */
-    @Override
-    public long getCount() {
-
-        return count;
-    }
-
-
+//    /**
+//     * Returns the number of bytes read from the underlying byte input so far.
+//     *
+//     * @return the number of bytes read so far.
+//     */
+//    @Override
+//    public long getCount() {
+//
+//        return count;
+//    }
     /**
      * The array of bit flags.
      */

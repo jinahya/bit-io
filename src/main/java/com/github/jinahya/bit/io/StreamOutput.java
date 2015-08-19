@@ -31,17 +31,17 @@ public class StreamOutput extends AbstractByteOutput<OutputStream> {
     /**
      * Creates a new instance built on top of the specified output stream.
      *
-     * @param target {@inheritDoc}
+     * @param stream the stream
      */
-    public StreamOutput(final OutputStream target) {
+    public StreamOutput(final OutputStream stream) {
 
-        super(target);
+        super(stream);
     }
 
 
     /**
      * {@inheritDoc} The {@code writeUnsginedByte(int)} method of
-     * {@code StreamReader} class calls {@link OutputStream#write(int)} on
+     * {@code StreamOutput} class calls {@link OutputStream#write(int)} on
      * {@link #target} with given {@code value}.
      *
      * @param value {@inheritDoc}

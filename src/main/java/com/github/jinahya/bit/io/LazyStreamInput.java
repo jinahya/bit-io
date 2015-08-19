@@ -19,43 +19,45 @@ package com.github.jinahya.bit.io;
 
 
 import java.io.IOException;
-import java.nio.ByteBuffer;
+import java.io.InputStream;
+import java.util.function.Supplier;
 
 
 /**
- * A {@link ByteInput} implementation using {@link ByteBuffer}s.
+ * A {@link ByteInput} implementation for {@link InputStream}s.
  */
-public class BufferInput extends AbstractByteInput<ByteBuffer> {
+public class LazyStreamInput extends StreamInput {
 
 
     /**
-     * Creates a new instance built on top of the specified byte buffer.
+     * Creates a new instance built on top of the specified input stream.
      *
-     * @param buffer the byte buffer.
+     * @param supplier {@inheritDoc}
      */
-    public BufferInput(final ByteBuffer buffer) {
+    public LazyStreamInput(final Supplier<? extends InputStream> supplier) {
 
-        super(buffer);
+        super(null);
+
+        if (supplier == null) {
+            throw new NullPointerException("null supplier");
+        }
+
+        this.supplier = supplier;
     }
 
 
-    /**
-     * {@inheritDoc} The {@code readUnsignedByte()} method of
-     * {@code BufferInput} class returns
-     * <pre>source.get() &amp; 0xFF</pre>.
-     *
-     * @return {@inheritDoc }
-     *
-     * @throws IOException {@inheritDoc }
-     *
-     * @see #source
-     * @see ByteBuffer#get()
-     */
     @Override
     public int readUnsignedByte() throws IOException {
 
-        return source.get() & 0xFF;
+        if (source == null) {
+            source = supplier.get();
+        }
+
+        return super.readUnsignedByte();
     }
+
+
+    private final Supplier<? extends InputStream> supplier;
 
 
 }

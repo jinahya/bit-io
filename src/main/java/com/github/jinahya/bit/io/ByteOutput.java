@@ -26,18 +26,19 @@ import java.io.IOException;
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
+@FunctionalInterface
 public interface ByteOutput {
 
 
     /**
      * Consumes an unsigned 8-bit value.
      *
-     * @param value an unsigned 8-bit value between {@code 0x00} (inclusive) and
-     * {@code 0xFF} (exclusive).
+     * @param value an unsigned 8-bit value between {@code 0} (inclusive) and
+     * {@code 256} (exclusive).
      *
      * @throws IOException if an I/O error occurs.
      */
-    void writeUnsignedByte(final int value) throws IOException;
+    void writeUnsignedByte(int value) throws IOException;
 
 
 }

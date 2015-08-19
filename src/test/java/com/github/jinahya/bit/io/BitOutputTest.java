@@ -19,16 +19,16 @@ package com.github.jinahya.bit.io;
 
 
 import com.github.jinahya.bit.io.BitOutput;
-import static com.github.jinahya.bit.io.BitIoTests.lengthInt;
-import static com.github.jinahya.bit.io.BitIoTests.lengthIntUnsigned;
-import static com.github.jinahya.bit.io.BitIoTests.lengthLong;
-import static com.github.jinahya.bit.io.BitIoTests.lengthLongUnsigned;
-import static com.github.jinahya.bit.io.BitIoTests.valueFloat32;
-import static com.github.jinahya.bit.io.BitIoTests.valueFloat32Raw;
-import static com.github.jinahya.bit.io.BitIoTests.valueInt;
-import static com.github.jinahya.bit.io.BitIoTests.valueIntUnsigned;
-import static com.github.jinahya.bit.io.BitIoTests.valueLong;
-import static com.github.jinahya.bit.io.BitIoTests.valueLongUnsigned;
+import static com.github.jinahya.bit.io.BitIoRandoms.lengthInt;
+import static com.github.jinahya.bit.io.BitIoRandoms.lengthIntUnsigned;
+import static com.github.jinahya.bit.io.BitIoRandoms.lengthLong;
+import static com.github.jinahya.bit.io.BitIoRandoms.lengthLongUnsigned;
+import static com.github.jinahya.bit.io.BitIoRandoms.valueFloat32;
+import static com.github.jinahya.bit.io.BitIoRandoms.valueFloat32Raw;
+import static com.github.jinahya.bit.io.BitIoRandoms.valueInt;
+import static com.github.jinahya.bit.io.BitIoRandoms.valueIntUnsigned;
+import static com.github.jinahya.bit.io.BitIoRandoms.valueLong;
+import static com.github.jinahya.bit.io.BitIoRandoms.valueLongUnsigned;
 import java.io.IOException;
 import javax.inject.Inject;
 import org.slf4j.Logger;
@@ -48,7 +48,7 @@ public class BitOutputTest {
     @Test(invocationCount = 128)
     public void writeBoolean() throws IOException {
 
-        output.writeBoolean(BitIoTests.valueBoolean());
+        output.writeBoolean(BitIoRandoms.valueBoolean());
     }
 
 
@@ -66,20 +66,16 @@ public class BitOutputTest {
     }
 
 
-    @Test(invocationCount = 128)
-    public void writeFloat32() throws IOException {
-
-        output.writeFloat32(valueFloat32());
-    }
-
-
-    @Test(invocationCount = 128)
-    public void writeFloat32Raw() throws IOException {
-
-        output.writeFloat32(valueFloat32Raw());
-    }
-
-
+//    @Test(invocationCount = 128)
+//    public void writeFloat32() throws IOException {
+//
+//        output.writeFloat32(valueFloat32());
+//    }
+//    @Test(invocationCount = 128)
+//    public void writeFloat32Raw() throws IOException {
+//
+//        output.writeFloat32(valueFloat32Raw());
+//    }
     @Test(invocationCount = 128)
     public void writeUnsignedLong() throws IOException {
 
@@ -94,20 +90,16 @@ public class BitOutputTest {
     }
 
 
-    @Test(invocationCount = 128)
-    public void writeDouble64() throws IOException {
-
-        output.writeDouble64(BitIoTests.valueDouble());
-    }
-
-
-    @Test(invocationCount = 128)
-    public void writeDouble64Raw() throws IOException {
-
-        output.writeDouble64Raw(BitIoTests.valueDoubleRaw());
-    }
-
-
+//    @Test(invocationCount = 128)
+//    public void writeDouble64() throws IOException {
+//
+//        output.writeDouble64(BitIoTests.valueDouble());
+//    }
+//    @Test(invocationCount = 128)
+//    public void writeDouble64Raw() throws IOException {
+//
+//        output.writeDouble64Raw(BitIoTests.valueDoubleRaw());
+//    }
     /**
      * logger.
      */

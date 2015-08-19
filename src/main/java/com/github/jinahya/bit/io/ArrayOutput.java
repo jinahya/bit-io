@@ -47,8 +47,8 @@ public class ArrayOutput extends AbstractByteOutput<byte[]> {
 
     /**
      * {@inheritDoc} The {@link #writeUnsignedByte(int)} method of
-     * {@code ArrayOutput} sets the given {@code value} on
-     * {@code target[offset + index++]}.
+     * {@code ArrayOutput} executes
+     * <pre>target[offset + index++] = (byte) value</pre>.
      *
      * @param value {@inheritDoc}
      *
@@ -61,6 +61,10 @@ public class ArrayOutput extends AbstractByteOutput<byte[]> {
      */
     @Override
     public void writeUnsignedByte(final int value) throws IOException {
+
+        if (index >= length) {
+            throw new ArrayIndexOutOfBoundsException();
+        }
 
         target[offset + index++] = (byte) value;
     }

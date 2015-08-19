@@ -30,10 +30,10 @@ public interface BitOutput {
 
 
     /**
-     * Writes a 1-bit boolean value. {@code 0b1} for {@code true} and
-     * {@code 0b0} for {@code false}.
+     * Writes a 1-bit boolean value. This method writes {@code 0b1} for
+     * {@code true} and {@code 0b0} for {@code false}.
      *
-     * @param value the value to write
+     * @param value the value to write.
      *
      * @throws IOException if an I/O error occurs
      */
@@ -54,7 +54,7 @@ public interface BitOutput {
 
 
     /**
-     * Writes a signed int value. Only the number of specified bits in
+     * Writes a signed int value. Only the lower number of specified bits in
      * {@code value} are written.
      *
      * @param length the number of lower bits to write; between {@code 1}
@@ -66,38 +66,34 @@ public interface BitOutput {
     void writeInt(int length, int value) throws IOException;
 
 
+//    /**
+//     * Writes a 32-bit int value resulting from
+//     * {@link Float#floatToIntBits(float)} with specified value.
+//     *
+//     * @param value the value to write.
+//     *
+//     * @throws IOException if an I/O error occurs.
+//     *
+//     * @see Float#floatToIntBits(float)
+//     */
+//    void writeFloat32(float value) throws IOException;
+//    /**
+//     * Writes a 32-bit int value resulting from
+//     * {@link Float#floatToRawIntBits(float)} with specified value.
+//     *
+//     * @param value the value to write.
+//     *
+//     * @throws IOException if an I/O error occurs.
+//     *
+//     * @see Float#floatToRawIntBits(float)
+//     */
+//    void writeFloat32Raw(float value) throws IOException;
     /**
-     * Writes a 32-bit int value resulting from
-     * {@link Float#floatToIntBits(float)} with specified value.
-     *
-     * @param value the value to write.
-     *
-     * @throws IOException if an I/O error occurs.
-     *
-     * @see Float#floatToIntBits(float)
-     */
-    void writeFloat32(float value) throws IOException;
-
-
-    /**
-     * Writes a 32-bit int value resulting from
-     * {@link Float#floatToRawIntBits(float)} with specified value.
-     *
-     * @param value the value to write.
-     *
-     * @throws IOException if an I/O error occurs.
-     *
-     * @see Float#floatToRawIntBits(float)
-     */
-    void writeFloat32Raw(float value) throws IOException;
-
-
-    /**
-     * Writes an unsigned long value. Only the number of specified lower bits in
+     * Writes an unsigned long value. Only the lower {@code length} bits in
      * {@code value} are written.
      *
-     * @param length the number of lower bits to write; between 1 (inclusive)
-     * and 64 (exclusive).
+     * @param length the number of bits to write; between 1 (inclusive) and 64
+     * (exclusive).
      * @param value the value to write.
      *
      * @throws IOException if an I/O error occurs.
@@ -106,11 +102,11 @@ public interface BitOutput {
 
 
     /**
-     * Writes a signed long value. Only the number of specified lower bits in
+     * Writes a signed long value. Only the lower {@code length} bits in
      * {@code value} are written.
      *
-     * @param length the number of lower valid bits to write; between 1
-     * (exclusive) and 64 (inclusive).
+     * @param length the number of bits to write; between 1 (exclusive) and 64
+     * (inclusive).
      * @param value the value to write.
      *
      * @throws IOException if an I/O error occurs.
@@ -118,41 +114,35 @@ public interface BitOutput {
     void writeLong(int length, long value) throws IOException;
 
 
-    /**
-     * Writes a 64-bit long value resulting from
-     * {@link Double#doubleToLongBits(double)} with specified value.
-     *
-     * @param value the value to write
-     *
-     * @throws IOException if an I/O error occurs.
-     *
-     * @see Double#doubleToLongBits(double)
-     */
-    void writeDouble64(double value) throws IOException;
-
-
-    /**
-     * Writes a 64-bit long value resulting from
-     * {@link Double#doubleToRawLongBits(double)} with specified value.
-     *
-     * @param value the value to write
-     *
-     * @throws IOException if an I/O error occurs.
-     *
-     * @see Double#doubleToRawLongBits(double)
-     */
-    void writeDouble64Raw(double value) throws IOException;
-
-
+//    /**
+//     * Writes a 64-bit long value resulting from
+//     * {@link Double#doubleToLongBits(double)} with specified value.
+//     *
+//     * @param value the value to write
+//     *
+//     * @throws IOException if an I/O error occurs.
+//     *
+//     * @see Double#doubleToLongBits(double)
+//     */
+//    void writeDouble64(double value) throws IOException;
+//    /**
+//     * Writes a 64-bit long value resulting from
+//     * {@link Double#doubleToRawLongBits(double)} with specified value.
+//     *
+//     * @param value the value to write
+//     *
+//     * @throws IOException if an I/O error occurs.
+//     *
+//     * @see Double#doubleToRawLongBits(double)
+//     */
+//    void writeDouble64Raw(double value) throws IOException;
     /**
      * Writes an array of bytes.
      *
      * @param scale the number of bits to present the length of array between
-     * {@value Bytes#SCALE_MIN} (inclusive) and {@value Bytes#SCALE_MAX}
-     * (inclusive).
-     * @param range the number of lower bits valid in each byte in array;
-     * between {@value Bytes#RANGE_MIN} (inclusive) and {@value Bytes#RANGE_MAX}
-     * (inclusive).
+     * {@code 1} (inclusive) and {@code 16} (inclusive).
+     * @param range the number of bits valid in each byte in array; between
+     * {@code 1} (inclusive) and {@code 8} (inclusive).
      * @param value the array to write.
      *
      * @throws IOException if an I/O error occurs.
@@ -166,40 +156,43 @@ public interface BitOutput {
 
 
     /**
-     * Writes a string value. This method writes the decoded byte array via
-     * {@link #writeBytes(int, int, byte[])} with {@code scale} of
-     * {@value Bytes#SCALE_MAX} and {@code range} of {@value Bytes#RANGE_MAX}.
+     * Writes a string value. This method encodes given string with specified
+     * character set name and writes the output byte array using
+     * {@link #writeBytes(int, int, byte[])} with {@code scale} of {@code 16}
+     * and {@code range} of {@code 8}.
      *
      * @param value the string value to write.
      * @param charsetName the character set name to decode the string
      *
      * @throws IOException if an I/O error occurs.
      *
+     * @see String#getBytes(java.lang.String)
      * @see #writeBytes(int, int, byte[])
      */
     void writeString(String value, String charsetName) throws IOException;
 
 
     /**
-     * Writes a {@code US-ASCII} encoded string value. This method writes the
-     * decoded byte array via {@link #writeBytes(int, int, byte[])} with
-     * {@code scale} of {@value Bytes#SCALE_MAX} and {@code range} of {@code 7}.
+     * Writes a {@code US-ASCII} decoded string value. This method encodes given
+     * string with specified character set name and writes the resulting bytes
+     * using {@link #writeBytes(int, int, byte[])} with {@code scale} of
+     * {@code 16} and {@code range} of {@code 7}.
      *
      * @param value the string value to write.
      *
      * @throws IOException if an I/O error occurs.
      *
+     * @see String#getBytes(java.lang.String)
      * @see #writeBytes(int, int, byte[])
      */
-    void writeUsAsciiString(String value) throws IOException;
+    void writeAscii(String value) throws IOException;
 
 
     /**
      * Aligns to specified number of bytes.
      *
-     * @param length the number of bytes to align; between
-     * {@value Bytes#ALIGN_MIN} (exclusive) and {@value Bytes#ALIGH_MAX}
-     * (inclusive).
+     * @param length the number of bytes to align; between {@code 1} (inclusive)
+     * and {@value 65536} (inclusive).
      *
      * @return the number of bits padded for alignment
      *

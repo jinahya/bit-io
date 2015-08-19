@@ -18,8 +18,6 @@
 package com.github.jinahya.bit.io;
 
 
-//import static com.github.jinahya.bio.BioConstraints.requireValidBytesRange;
-//import static com.github.jinahya.bio.BioConstraints.requireValidBytesScale;
 import java.io.IOException;
 
 
@@ -38,12 +36,11 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
      *
      * @throws IOException if an I/O error occurs.
      */
-    //protected abstract void octet(final int value) throws IOException;
     protected void octet(final int value) throws IOException {
 
         writeUnsignedByte(value);
 
-        ++count;
+        count++;
     }
 
 
@@ -62,7 +59,7 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
     protected void writeUnsignedByte(final int length, int value)
         throws IOException {
 
-        BioConstraints.requireValidUnsignedByteLength(length);
+        BitIoConstraints.requireValidUnsignedByteLength(length);
 
         if (length == 8 && index == 0) {
             octet(value);
@@ -77,7 +74,7 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
         }
 
         for (int i = index + length - 1; i >= index; i--) {
-            flags[i] = (value & 0x01) == 0x01 ? true : false;
+            flags[i] = (value & 0x01) == 0x01;
             value >>= 1;
         }
         index += length;
@@ -95,7 +92,7 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
 
 
     /**
-     * Writes a 1-bit boolean value. {@code 0b1} for {@code true} and
+     * Writes a 1-bit boolean value. Writes {@code 0b1} for {@code true} and
      * {@code 0b0} for {@code false}.
      *
      * @param value the value to write
@@ -168,7 +165,7 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
     protected void writeUnsignedShort(final int length, final int value)
         throws IOException {
 
-        BioConstraints.requireValidUnsignedShortLength(length);
+        BitIoConstraints.requireValidUnsignedShortLength(length);
 
         final int quotient = length / 8;
         final int remainder = length % 8;
@@ -183,22 +180,11 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
     }
 
 
-    /**
-     * Writes an unsigned int value. Only the lower specified number of bits in
-     * {@code value} are written.
-     *
-     * @param length the number of lower bits to write; between {@code 1}
-     * inclusive and {@code 32} exclusive.
-     * @param value the value to write
-     *
-     * @throws IOException if an I/O error occurs.
-     *
-     * @see #requireValidUnsignedIntLength(int)
-     */
+    @Override
     public void writeUnsignedInt(final int length, final int value)
         throws IOException {
 
-        BioConstraints.requireValidUnsignedIntLength(length);
+        BitIoConstraints.requireValidUnsignedIntLength(length);
 
         final int quotient = length / 16;
         final int remainder = length % 16;
@@ -213,27 +199,10 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
     }
 
 
-    /**
-     * Writes a signed int value. Only the number of specified bits in
-     * {@code value} are written including the sign bit at {@code length}.
-     *
-     * @param length the number of lower bits in {@code value} to write; between
-     * {@code 1} exclusive and {@code 32} inclusive.
-     * @param value the value to write
-     *
-     * @throws IOException if an I/O error occurs.
-     *
-     * @see #requireValidIntLength(int)
-     */
+    @Override
     public void writeInt(final int length, final int value) throws IOException {
 
-        BioConstraints.requireValidIntLength(length);
-
-        if (false) {
-            writeUnsignedByte(1, value >> 0x1F); // 31
-            writeUnsignedInt((length - 1), value);
-            return;
-        }
+        BitIoConstraints.requireValidIntLength(length);
 
         final int unsigned = length - 1;
         writeUnsignedByte(1, value >> unsigned);
@@ -241,52 +210,37 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
     }
 
 
-    /**
-     * Writes a float value.
-     *
-     * @param value the value to write.
-     *
-     * @throws IOException if an I/O error occurs.
-     *
-     * @see Float#floatToIntBits(float)
-     */
-    public void writeFloat32(final float value) throws IOException {
-
-        writeInt(32, Float.floatToIntBits(value));
-    }
-
-
-    /**
-     * Writes a float value.
-     *
-     * @param value the value to write.
-     *
-     * @throws IOException if an I/O error occurs.
-     *
-     * @see Float#floatToRawIntBits(float)
-     */
-    public void writeFloat32Raw(final float value) throws IOException {
-
-        writeInt(32, Float.floatToRawIntBits(value));
-    }
-
-
-    /**
-     * Writes an unsigned long value. Only the number of specified bits in
-     * {@code value} are writtern.
-     *
-     * @param length the number of lower valid bits to write; between 1
-     * (inclusive) and 64 (exclusive).
-     * @param value the value to write.
-     *
-     * @throws IOException if an I/O error occurs.
-     *
-     * @see #requireValidUnsignedLongLength(int)
-     */
+//    /**
+//     * Writes a float value.
+//     *
+//     * @param value the value to write.
+//     *
+//     * @throws IOException if an I/O error occurs.
+//     *
+//     * @see Float#floatToIntBits(float)
+//     */
+//    public void writeFloat32(final float value) throws IOException {
+//
+//        writeInt(32, Float.floatToIntBits(value));
+//    }
+//    /**
+//     * Writes a float value.
+//     *
+//     * @param value the value to write.
+//     *
+//     * @throws IOException if an I/O error occurs.
+//     *
+//     * @see Float#floatToRawIntBits(float)
+//     */
+//    public void writeFloat32Raw(final float value) throws IOException {
+//
+//        writeInt(32, Float.floatToRawIntBits(value));
+//    }
+    @Override
     public void writeUnsignedLong(final int length, final long value)
         throws IOException {
 
-        BioConstraints.requireValidUnsignedLongLength(length);
+        BitIoConstraints.requireValidUnsignedLongLength(length);
 
         final int quotient = length / 31;
         final int remainder = length % 31;
@@ -301,26 +255,11 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
     }
 
 
-    /**
-     * Writes a signed long value. Only the number of specified bits in
-     * {@code value} are written including the sign bit at {@code length}.
-     *
-     * @param length the number of lower valid bits to write; between 1
-     * (exclusive) and 64 (inclusive).
-     * @param value the value to write.
-     *
-     * @throws IOException if an I/O error occurs.
-     */
+    @Override
     public void writeLong(final int length, final long value)
         throws IOException {
 
-        BioConstraints.requireValidLongLength(length);
-
-        if (false) {
-            writeUnsignedLong(1, value >> 0x3F); // 63
-            writeUnsignedLong(length - 1, value);
-            return;
-        }
+        BitIoConstraints.requireValidLongLength(length);
 
         final int unsigned = length - 1;
         writeUnsignedByte(1, (int) (value >> unsigned));
@@ -328,93 +267,92 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
     }
 
 
-    /**
-     * Writes a double value.
-     *
-     * @param value the value to write
-     *
-     * @throws IOException if an I/O error occurs.
-     *
-     * @see Double#doubleToLongBits(double)
-     */
-    public void writeDouble64(final double value) throws IOException {
-
-        writeLong(64, Double.doubleToLongBits(value));
-    }
-
-
-    /**
-     * Writes a double value.
-     *
-     * @param value the value to write
-     *
-     * @throws IOException if an I/O error occurs.
-     *
-     * @see Double#doubleToRawLongBits(double)
-     */
-    @Override
-    public void writeDouble64Raw(final double value) throws IOException {
-
-        writeLong(64, Double.doubleToRawLongBits(value));
-    }
-
-
-    protected void writeBytesFully(final int length, final int range,
-                                   final ByteInput input)
-        throws IOException {
-
-        if (length < 0) {
-            throw new IllegalArgumentException("length(" + length + ") < 0");
-        }
-
-        BioConstraints.requireValidBytesRange(range);
-
-        if (input == null) {
-            throw new NullPointerException("null input");
-        }
-
-        for (int i = 0; i < length; i++) {
-            writeUnsignedByte(range, input.readUnsignedByte());
-        }
-    }
-
-
-    protected void writeBytesLength(final int scale, int length)
-        throws IOException {
-
-        BioConstraints.requireValidBytesScale(scale);
-
-        writeUnsignedInt(scale, length);
-    }
-
-
+//    /**
+//     * Writes a double value.
+//     *
+//     * @param value the value to write
+//     *
+//     * @throws IOException if an I/O error occurs.
+//     *
+//     * @see Double#doubleToLongBits(double)
+//     */
+//    public void writeDouble64(final double value) throws IOException {
+//
+//        writeLong(64, Double.doubleToLongBits(value));
+//    }
+//    /**
+//     * Writes a double value.
+//     *
+//     * @param value the value to write
+//     *
+//     * @throws IOException if an I/O error occurs.
+//     *
+//     * @see Double#doubleToRawLongBits(double)
+//     */
+//    @Override
+//    public void writeDouble64Raw(final double value) throws IOException {
+//
+//        writeLong(64, Double.doubleToRawLongBits(value));
+//    }
+//    /**
+//     * Reads specified number of bytes from given input.
+//     *
+//     * @param length the number of bytes to read.
+//     * @param range the valid bit range in each bytes.
+//     * @param input the byte input
+//     *
+//     * @throws IOException if an I/O error occurs.
+//     */
+//    protected void writeBytesFully(final int length, final int range,
+//                                   final ByteInput input)
+//        throws IOException {
+//
+//        if (length < 0) {
+//            throw new IllegalArgumentException("length(" + length + ") < 0");
+//        }
+//
+//        BitIoConstraints.requireValidBytesRange(range);
+//
+//        if (input == null) {
+//            throw new NullPointerException("null input");
+//        }
+//
+//        for (int i = 0; i < length; i++) {
+//            writeUnsignedByte(range, input.readUnsignedByte());
+//        }
+//    }
+//    protected void writeBytesLength(final int scale, int length)
+//        throws IOException {
+//
+//        BitIoConstraints.requireValidBytesScale(scale);
+//
+//        writeUnsignedInt(scale, length);
+//    }
     @Override
     public void writeBytes(final int scale, final int range, final byte[] value)
         throws IOException {
 
+        BitIoConstraints.requireValidBytesScale(scale);
+
+        BitIoConstraints.requireValidBytesRange(range);
+
         if (value == null) {
             throw new NullPointerException("null value");
         }
+        if (value.length >> scale != 0) {
+            throw new IllegalArgumentException(
+                "value.length(" + value.length + ") >> scale(" + scale
+                + " != 0");
+        }
 
-        writeBytesLength(scale, value.length);
-        writeBytesFully(value.length, range,
-                        new ArrayInput(value, 0, value.length));
+        writeUnsignedInt(scale, value.length);
+
+        for (int i = 0; i < value.length; i++) {
+            writeUnsignedByte(range, value[i]);
+        }
     }
 
 
-    /**
-     * Writes a string value. This method writes the decoded byte array with
-     * {@code scale} of {@code 16} and {@code range} of {@code 8}.
-     *
-     * @param value the string value to write.
-     * @param charsetName the character set name to decode the string
-     *
-     * @throws NullPointerException if {@code value} or {@code charsetName} is
-     * {@code null}
-     * @throws IOException if an I/O error occurs.
-     *
-     * @see #writeBytes(int, int, byte[])
-     */
     @Override
     public void writeString(final String value, final String charsetName)
         throws IOException {
@@ -427,56 +365,27 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
             throw new NullPointerException("null charsetName");
         }
 
-        writeBytes(BioConstants.SCALE_MAX, BioConstants.RANGE_MAX,
-                   value.getBytes(charsetName));
+        writeBytes(BitIoConstants.BYTES_SCALE_MAX,
+                   BitIoConstants.BYTES_RANGE_MAX, value.getBytes(charsetName));
     }
 
 
-    /**
-     * Writes a {@code US-ASCII} encoded string value. This method writes the
-     * decoded byte array with {@code scale} of {@code 16} and {@code range} of
-     * {@code 7}.
-     *
-     * @param value the string value to write.
-     *
-     * @throws NullPointerException if {@code value} is {@code null}.
-     * @throws IOException if an I/O error occurs.
-     *
-     * @see #writeBytes(int, int, byte[])
-     */
     @Override
-    public void writeUsAsciiString(final String value) throws IOException {
+    public void writeAscii(final String value) throws IOException {
 
         if (value == null) {
             throw new NullPointerException("null value");
         }
 
-        writeBytes(BioConstants.SCALE_MAX, 7, value.getBytes("US-ASCII"));
+        writeBytes(BitIoConstants.BYTES_SCALE_MAX, 7,
+                   value.getBytes("US-ASCII"));
     }
 
 
-    /**
-     * Aligns to specified number of bytes.
-     *
-     * @param length the number of bytes to align; between 0 (exclusive) and
-     * {@value java.lang.Short#MAX_VALUE} (inclusive).
-     *
-     * @return the number of bits padded for alignment
-     *
-     * @throws IllegalArgumentException if {@code length} is not valid.
-     * @throws IOException if an I/O error occurs.
-     */
     @Override
     public int align(final int length) throws IOException {
 
-        if (length <= 0) {
-            throw new IllegalArgumentException("length(" + length + ") <= 0");
-        }
-
-        if (length > Short.MAX_VALUE) {
-            throw new IllegalArgumentException(
-                "length(" + length + ") > " + Short.MAX_VALUE);
-        }
+        BitIoConstraints.requireValidAlighLength(length);
 
         int bits = 0; // number of bits to be padded
 
@@ -507,17 +416,15 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
     }
 
 
-    /**
-     * Returns the number of bytes written to the underlying byte output so far.
-     *
-     * @return the number of bytes written so far.
-     */
-    public long getCount() {
-
-        return count;
-    }
-
-
+//    /**
+//     * Returns the number of bytes written to the underlying byte output so far.
+//     *
+//     * @return the number of bytes written so far.
+//     */
+//    public long getCount() {
+//
+//        return count;
+//    }
     /**
      * bit flags.
      */

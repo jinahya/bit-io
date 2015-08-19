@@ -23,40 +23,53 @@ package com.github.jinahya.bit.io;
  *
  * @author <a href="mailto:onacit@gmail.com">Jin Kwon</a>
  */
-public final class BioConstants {
+public final class BitIoConstants {
 
 
-    protected static final int ALIGN_MIN = 0x0000;
+    /**
+     * The minimum value for {@code length} in {@code align}.
+     */
+    protected static final int ALIGN_LENGTH_MIN = 0x00001;
 
 
-    protected static final int ALIGH_MAX = 0x0100;
+    /**
+     * The maximum value for {@code length} in {@code align}.
+     */
+    protected static final int ALIGN_LENGTH_MAX = 0x10000;
 
 
     /**
      * The minimum value for {@code scale} of bytes.
      */
-    protected static final int SCALE_MIN = 0x01;
+    protected static final int BYTES_SCALE_MIN = 0x01;
 
 
     /**
      * The maximum value for {@code scale} of bytes.
      */
-    protected static final int SCALE_MAX = 0x10;
+    protected static final int BYTES_SCALE_MAX = 0x10;
+
+
+    public static final int BYTES_LENGTH_MIN = 0x00;
+
+
+    public static final int BYTES_LENGTH_MAX
+        = (int) Math.pow(2, BYTES_SCALE_MAX);
 
 
     /**
      * The minimum value for {@code range} of bytes.
      */
-    protected static final int RANGE_MIN = 0x01;
+    protected static final int BYTES_RANGE_MIN = 0x01;
 
 
     /**
      * The maximum value for {@code range} of bytes.
      */
-    protected static final int RANGE_MAX = 0x08;
+    protected static final int BYTES_RANGE_MAX = 0x08;
 
 
-    private BioConstants() {
+    private BitIoConstants() {
 
         super();
     }

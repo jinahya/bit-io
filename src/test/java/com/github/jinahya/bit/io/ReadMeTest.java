@@ -21,10 +21,8 @@ package com.github.jinahya.bit.io;
 import com.github.jinahya.bit.io.BitInput;
 import com.github.jinahya.bit.io.BitOutput;
 import java.io.IOException;
-import java.nio.ByteBuffer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.testng.Assert;
 import static org.testng.Assert.assertEquals;
 import org.testng.annotations.Test;
 

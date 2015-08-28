@@ -18,29 +18,28 @@
 package com.github.jinahya.bit.io;
 
 
-import com.github.jinahya.bit.io.ArrayInput;
 import java.io.IOException;
 
 
 /**
+ * A byte input which always provides {@code 0}.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
-public class InfiniteArrayInput extends ArrayInput {
+public class WhiteByteInput implements ByteInput {
 
 
-    public InfiniteArrayInput() {
-
-        super(new byte[1], 0, 1);
-    }
-
-
+    /**
+     * Returns zero.
+     *
+     * @return zero.
+     *
+     * @throws IOException {@inheritDoc}
+     */
     @Override
     public int readUnsignedByte() throws IOException {
 
-        index = 0;
-
-        return super.readUnsignedByte();
+        return 0;
     }
 
 

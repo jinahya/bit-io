@@ -18,21 +18,28 @@
 package com.github.jinahya.bit.io;
 
 
-import com.github.jinahya.bit.io.ByteInput;
 import java.io.IOException;
 
 
 /**
+ * A byte output which consumes and does nothing.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
-public class WhiteByteInput implements ByteInput {
+public class BlackByteOutput implements ByteOutput {
 
 
+    /**
+     * Does nothing.
+     *
+     * @param value
+     *
+     * @throws IOException {@inheritDoc}
+     */
     @Override
-    public int readUnsignedByte() throws IOException {
+    public void writeUnsignedByte(final int value) throws IOException {
 
-        return (int) (Math.random() * 256);
+        // does nothing.
     }
 
 

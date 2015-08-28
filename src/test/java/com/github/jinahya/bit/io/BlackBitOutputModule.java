@@ -18,7 +18,6 @@
 package com.github.jinahya.bit.io;
 
 
-import com.github.jinahya.bit.io.BitOutput;
 import com.google.inject.AbstractModule;
 
 

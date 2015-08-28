@@ -18,7 +18,6 @@
 package com.github.jinahya.bit.io;
 
 
-import com.github.jinahya.bit.io.BufferInput;
 import java.nio.ByteBuffer;
 import org.testng.annotations.Guice;
 
@@ -29,7 +28,7 @@ import org.testng.annotations.Guice;
  */
 @Guice(modules = {BufferInputModule.class})
 public class BuffernputTest
-        extends AbstractByteInputTest<BufferInput, ByteBuffer> {
+    extends AbstractByteInputTest<BufferInput, ByteBuffer> {
 
 }
 

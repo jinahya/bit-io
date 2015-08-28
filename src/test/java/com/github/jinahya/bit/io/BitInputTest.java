@@ -18,14 +18,11 @@
 package com.github.jinahya.bit.io;
 
 
-import static com.github.jinahya.bit.io.BitIoRandoms.lengthInt;
-import static com.github.jinahya.bit.io.BitIoRandoms.lengthInt32;
-import static com.github.jinahya.bit.io.BitIoRandoms.lengthIntUnsigned;
-import static com.github.jinahya.bit.io.BitIoRandoms.lengthLong;
-import static com.github.jinahya.bit.io.BitIoRandoms.lengthLong64;
-import static com.github.jinahya.bit.io.BitIoRandoms.lengthLongUnsigned;
+import static com.github.jinahya.bit.io.BitIoRandoms.sizeInt;
+import static com.github.jinahya.bit.io.BitIoRandoms.sizeIntUnsigned;
+import static com.github.jinahya.bit.io.BitIoRandoms.sizeLong;
+import static com.github.jinahya.bit.io.BitIoRandoms.sizeLongUnsigned;
 import java.io.IOException;
-import java.util.concurrent.ThreadLocalRandom;
 import javax.inject.Inject;
 import org.slf4j.Logger;
 import static org.slf4j.LoggerFactory.getLogger;
@@ -41,71 +38,49 @@ import org.testng.annotations.Test;
 public class BitInputTest {
 
 
-    private static ThreadLocalRandom random() {
-
-        return ThreadLocalRandom.current();
-    }
-
-
     @Test(invocationCount = 128)
     public void readBoolean() throws IOException {
 
-        input.readBoolean();
+        final boolean value = input.readBoolean();
     }
 
 
     @Test(invocationCount = 128)
     public void readUnsignedInt() throws IOException {
 
-        input.readUnsignedInt(lengthIntUnsigned());
+        final int size = sizeIntUnsigned();
+
+        final int value = input.readUnsignedInt(size);
     }
 
 
     @Test(invocationCount = 128)
     public void readInt() throws IOException {
 
-        input.readInt(lengthInt());
+        final int size = sizeInt();
+
+        final int value = input.readInt(size);
     }
 
 
-    @Test(invocationCount = 128)
-    public void readInt32() throws IOException {
-
-        input.readInt(lengthInt32());
-    }
-
-
-//    @Test(invocationCount = 128)
-//    public void readFloat32() throws IOException {
-//
-//        input.readFloat32();
-//    }
     @Test(invocationCount = 128)
     public void readUnsingedLong() throws IOException {
 
-        input.readUnsignedLong(lengthLongUnsigned());
+        final int size = sizeLongUnsigned();
+
+        final long value = input.readUnsignedLong(size);
     }
 
 
     @Test(invocationCount = 128)
     public void readLong() throws IOException {
 
-        input.readLong(lengthLong());
+        final int size = sizeLong();
+
+        final long value = input.readLong(size);
     }
 
 
-    @Test(invocationCount = 128)
-    public void readLong64() throws IOException {
-
-        input.readLong(lengthLong64());
-    }
-
-
-//    @Test(invocationCount = 128)
-//    public void readDouble() throws IOException {
-//
-//        input.readDouble64();
-//    }
     @Test(invocationCount = 128)
     public void readBytesFully() {
 

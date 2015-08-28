@@ -18,7 +18,6 @@
 package com.github.jinahya.bit.io;
 
 
-import java.io.EOFException;
 import java.io.IOException;
 
 

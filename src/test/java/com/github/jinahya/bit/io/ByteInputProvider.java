@@ -18,13 +18,12 @@
 package com.github.jinahya.bit.io;
 
 
-import com.github.jinahya.bit.io.ByteInput;
 import com.google.inject.Provider;
 
 
 /**
  *
- * @author Jin Kwon
+ * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
 public class ByteInputProvider implements Provider<ByteInput> {
 

@@ -18,30 +18,21 @@
 package com.github.jinahya.bit.io;
 
 
-import com.github.jinahya.bit.io.ArrayOutput;
-import java.io.IOException;
-
-
 /**
+ * A bit output whose {@link #delegate} is an instance of
+ * {@link BlackByteOutput}.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
-public class InfiniteArrayOutput extends ArrayOutput {
+public class BlackBitOutput extends DelegatedBitOutput {
 
 
-    public InfiniteArrayOutput() {
+    /**
+     * Creates a new instance.
+     */
+    public BlackBitOutput() {
 
-        super(new byte[1], 0, 1);
-
-    }
-
-
-    @Override
-    public void writeUnsignedByte(int value) throws IOException {
-
-        index = 0;
-
-        super.writeUnsignedByte(value);
+        super(new BlackByteOutput());
     }
 
 

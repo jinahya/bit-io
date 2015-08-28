@@ -22,7 +22,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.concurrent.ThreadLocalRandom;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.testng.Assert;
 
 
 /**
@@ -44,253 +43,112 @@ final class BitIoRandoms {
     }
 
 
-    private static int assertLengthIntUnsigned(final int length) {
+    static int sizeIntUnsigned() {
 
-        assert length > 0;
-        assert length < 32;
+        final int size = random().nextInt(
+            BitIoConstants.UINT_SIZE_MIN, BitIoConstants.UINT_SIZE_MAX + 1);
 
-        return length;
+        return BitIoConstraints.requireValidUnsignedIntSize(size);
     }
 
 
-    static int lengthIntUnsigned() {
+    static int valueIntUnsigned(final int size) {
 
-        final int length = random().nextInt(1, 32);
+        BitIoConstraints.requireValidUnsignedIntSize(size);
 
-        return assertLengthIntUnsigned(length);
-    }
-
-
-    private static int assertValueIntUnsigned(final int value,
-                                              final int length) {
-
-        assertLengthIntUnsigned(length);
-
-        assert (value >> length) == 0;
+        final int value = random().nextInt() >>> (Integer.SIZE - size);
 
         return value;
-    }
-
-
-    static int valueIntUnsigned(final int length) {
-
-        assertLengthIntUnsigned(length);
-
-        final int value = random().nextInt() >>> (32 - length);
-
-        return assertValueIntUnsigned(value, length);
     }
 
 
     static int valueIntUnsigned() {
 
-        return random().nextInt();
+        return valueIntUnsigned(sizeIntUnsigned());
     }
 
 
-    private static int assertLengthInt(final int length) {
+    static int sizeInt() {
 
-        assert length > 1;
-        assert length <= 32;
+        final int size = random().nextInt(
+            BitIoConstants.INT_SIZE_MIN, BitIoConstants.INT_SIZE_MAX + 1);
 
-        return length;
+        return BitIoConstraints.requireValidIntSize(size);
     }
 
 
-    static int lengthInt() {
+    static int valueInt(final int size) {
 
-        final int length = random().nextInt(2, 33);
+        BitIoConstraints.requireValidIntSize(size);
 
-        return assertLengthInt(length);
-    }
-
-
-    static int lengthInt32() {
-
-        return assertLengthInt(Integer.BYTES);
-    }
-
-
-    private static int assertValueInt(final int value, final int length) {
-
-        assertLengthInt(length);
-
-        if (length < 32) {
-            if (value < 0L) {
-                Assert.assertTrue((value >> length) == ~0);
-            } else {
-                Assert.assertTrue((value >> length) == 0);
-            }
-        }
+        final int value = random().nextInt() >> (Integer.SIZE - size);
 
         return value;
-    }
-
-
-    static int valueInt(final int length) {
-
-        assertLengthInt(length);
-
-        final int value = random().nextInt() >> (32 - length); // length == 32 ?
-
-        return assertValueInt(value, length);
     }
 
 
     static int valueInt() {
 
-        return random().nextInt();
+        return valueInt(sizeInt());
     }
 
 
-    static float valueFloat32() {
+    static int sizeLongUnsigned() {
 
-        float value = random().nextFloat() * Float.MAX_VALUE;
-        if (random().nextBoolean()) {
-            value = Float.MAX_VALUE;
-        }
-        if (random().nextBoolean()) {
-            value = 0 - value;
-        }
+        final int size = random().nextInt(
+            BitIoConstants.ULONG_SIZE_MIN, BitIoConstants.ULONG_SIZE_MAX + 1);
+
+        return BitIoConstraints.requireValidUnsignedLongSize(size);
+    }
+
+
+    static long valueLongUnsigned(final int size) {
+
+        BitIoConstraints.requireValidUnsignedLongSize(size);
+
+        final long value = random().nextLong() >>> (Long.SIZE - size);
 
         return value;
-        //return (float) random().nextLong() / random().nextInt();
-    }
-
-
-    static float valueFloat32Raw() {
-
-        return valueFloat32();
-        //return (float) random().nextLong() / random().nextInt();
-    }
-
-
-    private static int assertLengthLongUnsigned(final int length) {
-
-        assert length >= 1;
-        assert length < 64;
-
-        return length;
-    }
-
-
-    static int lengthLongUnsigned() {
-
-        final int length = random().nextInt(1, 64);
-
-        return assertLengthLongUnsigned(length);
-    }
-
-
-    private static long assertValueLongUnsigned(final long value,
-                                                final int length) {
-
-        assertLengthLongUnsigned(length);
-
-        Assert.assertTrue((value >> length) == 0L);
-
-        return value;
-    }
-
-
-    static long valueLongUnsigned(final int length) {
-
-        assertLengthLongUnsigned(length);
-
-        final long value = random().nextLong() >>> (64 - length);
-
-        return assertValueLongUnsigned(value, length);
     }
 
 
     static long valueLongUnsigned() {
 
-        return random().nextLong();
+        return valueLongUnsigned(sizeLongUnsigned());
     }
 
 
     static long valueLongUnsigned(final Collection<Integer> lengths) {
 
-        final int length = lengthLongUnsigned();
+        final int length = sizeLongUnsigned();
         lengths.add(length);
 
         return valueLongUnsigned(length);
     }
 
 
-    static int assertLengthLong(final int length) {
+    static int sizeLong() {
 
-        assert length > 1;
-        assert length <= 64;
+        final int size = random().nextInt(
+            BitIoConstants.LONG_SIZE_MIN, BitIoConstants.LONG_SIZE_MAX + 1);
 
-        return length;
+        return BitIoConstraints.requireValidLongSize(size);
     }
 
 
-    static int lengthLong() {
+    static long valueLong(final int size) {
 
-        final int length = random().nextInt(2, 65);
+        BitIoConstraints.requireValidLongSize(size);
 
-        return assertLengthLong(length);
-    }
-
-
-    static int lengthLong64() {
-
-        return assertLengthLong(Long.SIZE);
-    }
-
-
-    private static long assertValueLong(final long value, final int length) {
-
-        assertLengthLong(length);
-
-        if (length < 64) {
-            if (value < 0L) {
-                Assert.assertTrue((value >> length) == ~0L);
-            } else {
-                Assert.assertTrue((value >> length) == 0L);
-            }
-        }
+        final long value = random().nextLong() >> (Long.SIZE - size);
 
         return value;
-    }
-
-
-    static long valueLong(final int length) {
-
-        assertLengthLong(length);
-
-        final long value = random().nextLong() >> (64 - length);
-
-        return assertValueLong(value, length);
     }
 
 
     static long valueLong() {
 
-        return random().nextLong();
-    }
-
-
-    static double valueDouble() {
-
-        double value = random().nextDouble() * Double.MAX_VALUE;
-        if (random().nextBoolean()) {
-            value = Double.MAX_VALUE;
-        }
-        if (random().nextBoolean()) {
-            value = 0 - value;
-        }
-
-        return value;
-        //return (double) random().nextLong() / (double) random().nextInt();
-    }
-
-
-    static double valueDoubleRaw() {
-
-        return valueDouble();
+        return valueLong(sizeLong());
     }
 
 
@@ -305,42 +163,36 @@ final class BitIoRandoms {
 
     static int scaleBytes() {
 
-        final int scale = random().nextInt(1, 17);
+        final int scale = random().nextInt(
+            BitIoConstants.SCALE_SIZE_MIN, BitIoConstants.SCALE_SIZE_MAX + 1);
 
-        return assertScaleBytes(scale);
-    }
-
-
-    private static int assertRangeBytes(final int range) {
-
-        assert range > 0 : "range(" + range + ") <= 0";
-        assert range <= 8 : " range(" + range + ") > 8";
-
-        return range;
+        return BitIoConstraints.requireValidBytesScale(scale);
     }
 
 
     static int rangeBytes() {
 
-        final int range = random().nextInt(1, 9);
+        final int range = random().nextInt(
+            BitIoConstants.RANGE_SIZE_MIN, BitIoConstants.RANGE_SIZE_MAX + 1);
 
-        return assertRangeBytes(range);
+        return BitIoConstraints.requireValidBytesRange(range);
     }
 
 
     static byte[] valueBytes(final int scale, final int range) {
 
-        assertScaleBytes(scale);
-        assertRangeBytes(range);
+        BitIoConstraints.requireValidBytesScale(scale);
+        BitIoConstraints.requireValidBytesRange(range);
 
-        final byte[] bytes = new byte[random().nextInt() >>> (32 - scale)];
-        random().nextBytes(bytes);
+        final byte[] value
+            = new byte[random().nextInt() >>> (Integer.SIZE - scale)];
+        random().nextBytes(value);
 
-        for (int i = 0; i < bytes.length; i++) {
-            bytes[i] = (byte) ((bytes[i] & 0xFF) >> (8 - range));
+        for (int i = 0; i < value.length; i++) {
+            value[i] = (byte) ((value[i] & 0xFF) >> (Byte.SIZE - range));
         }
 
-        return bytes;
+        return value;
     }
 
 

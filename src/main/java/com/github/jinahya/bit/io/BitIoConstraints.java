@@ -34,19 +34,19 @@ import static com.github.jinahya.bit.io.BitIoConstants.SCALE_SIZE_MIN;
 final class BitIoConstraints {
 
 
-    static int requireValidAlighBytes(final int align) {
+    static int requireValidAlighBytes(final int bytes) {
 
-        if (align < ALIGN_BYTES_MIN) {
+        if (bytes < ALIGN_BYTES_MIN) {
             throw new IllegalArgumentException(
-                "align(" + align + ") < " + ALIGN_BYTES_MIN);
+                "align(" + bytes + ") < " + ALIGN_BYTES_MIN);
         }
 
-        if (align > ALIGN_BYTES_MAX) {
+        if (bytes > ALIGN_BYTES_MAX) {
             throw new IllegalArgumentException(
-                "align(" + align + ") > " + ALIGN_BYTES_MAX);
+                "bytes(" + bytes + ") > " + ALIGN_BYTES_MAX);
         }
 
-        return align;
+        return bytes;
     }
 
 
@@ -91,7 +91,7 @@ final class BitIoConstraints {
 
         if (size > BitIoConstants.UINT_SIZE_MAX) {
             throw new IllegalArgumentException(
-                "size(" + size + ") >= " + BitIoConstants.UINT_SIZE_MAX);
+                "size(" + size + ") > " + BitIoConstants.UINT_SIZE_MAX);
         }
 
         return size;
@@ -102,7 +102,7 @@ final class BitIoConstraints {
 
         if (size < BitIoConstants.INT_SIZE_MIN) {
             throw new IllegalArgumentException(
-                "size(" + size + ") <= " + BitIoConstants.INT_SIZE_MIN);
+                "size(" + size + ") < " + BitIoConstants.INT_SIZE_MIN);
         }
 
         if (size > BitIoConstants.INT_SIZE_MAX) {
@@ -123,7 +123,7 @@ final class BitIoConstraints {
 
         if (size > BitIoConstants.ULONG_SIZE_MAX) {
             throw new IllegalArgumentException(
-                "size(" + size + ") >= " + BitIoConstants.ULONG_SIZE_MAX);
+                "size(" + size + ") > " + BitIoConstants.ULONG_SIZE_MAX);
         }
 
         return size;
@@ -134,7 +134,7 @@ final class BitIoConstraints {
 
         if (size < BitIoConstants.LONG_SIZE_MIN) {
             throw new IllegalArgumentException(
-                "size(" + size + ") <= " + BitIoConstants.LONG_SIZE_MIN);
+                "size(" + size + ") < " + BitIoConstants.LONG_SIZE_MIN);
         }
 
         if (size > BitIoConstants.LONG_SIZE_MAX) {
@@ -157,7 +157,7 @@ final class BitIoConstraints {
 
         if (scale < SCALE_SIZE_MIN) {
             throw new IllegalArgumentException(
-                "scale(" + scale + ") <= " + SCALE_SIZE_MIN);
+                "scale(" + scale + ") < " + SCALE_SIZE_MIN);
         }
 
         if (scale > SCALE_SIZE_MAX) {

@@ -18,17 +18,18 @@
 package com.github.jinahya.bit.io;
 
 
-import com.github.jinahya.bit.io.DelegatedBitInput;
-
-
-
 /**
+ * A bit output whose {@link #delegate} is an instance of
+ * {@link WhiteByteInput}.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
 public class WhiteBitInput extends DelegatedBitInput {
 
 
+    /**
+     * Creates a new instance.
+     */
     public WhiteBitInput() {
 
         super(new WhiteByteInput());

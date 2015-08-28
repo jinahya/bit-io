@@ -29,47 +29,30 @@ import java.io.IOException;
 public class ArrayInput extends AbstractByteInput<byte[]> {
 
 
-    public ArrayInput(final byte[] array, final int offset, final int length) {
+    public ArrayInput(final byte[] array, final int index, final int limit) {
 
         super(array);
 
-        this.offset = offset;
-        this.length = length;
+        this.index = index;
+        this.limit = limit;
     }
 
 
-    /**
-     * {@inheritDoc} The {@link #readUnsignedByte()} of {@code ArrayInput} class
-     * returns
-     * <pre>source[offset + index++] &amp; 0xFF</pre>.
-     *
-     * @return {@inheritDoc}
-     *
-     * @throws IOException {@inheritDoc}.
-     *
-     * @see #source
-     * @see #offset
-     * @see #length
-     * @see #index
-     */
     @Override
     public int readUnsignedByte() throws IOException {
 
-        if (index >= length) {
+        if (index >= limit) {
             throw new IndexOutOfBoundsException();
         }
 
-        return source[offset + index++] & 0xFF;
+        return source[index++] & 0xFF;
     }
 
 
-    protected int offset;
-
-
-    protected int length;
-
-
     protected int index;
+
+
+    protected int limit;
 
 
 }

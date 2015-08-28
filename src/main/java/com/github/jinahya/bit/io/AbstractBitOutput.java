@@ -22,7 +22,7 @@ import java.io.IOException;
 
 
 /**
- * A abstract class implementing {@link IBitInput}.
+ * A abstract class partially implementing {@link BitInput}.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
@@ -30,7 +30,7 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
 
 
     /**
-     * Consumes given unsigned byte value.
+     * Consumes given unsigned byte value while incrementing {@code count}.
      *
      * @param value the unsigned byte value
      *
@@ -45,39 +45,40 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
 
 
     /**
-     * Writes an unsigned byte value. Only the lower {@code length} bits in
-     * given {@code value} are written.
+     * Writes an unsigned byte value. Only the lower {@code size} bits in given
+     * {@code value} are written.
      *
-     * @param length the number of lower bits to write; between 0 (exclusive)
-     * and 8 (inclusive).
+     * @param size the number of lower bits to write; between
+     * {@value com.github.jinahya.bit.io.BitIoConstants#UBYTE_SIZE_MIN}
+     * (exclusive) and
+     * {@value com.github.jinahya.bit.io.BitIoConstants#UBYTE_SIZE_MAX}
+     * (inclusive).
      * @param value the value to write
      *
      * @throws IOException if an I/O error occurs.
-     *
-     * @see #requireValidUnsignedByteLength(int)
      */
-    protected void writeUnsignedByte(final int length, int value)
+    protected void writeUnsignedByte(final int size, int value)
         throws IOException {
 
-        BitIoConstraints.requireValidUnsignedByteLength(length);
+        BitIoConstraints.requireValidUnsignedByteSize(size);
 
-        if (length == 8 && index == 0) {
+        if (size == 8 && index == 0) {
             octet(value);
             return;
         }
 
-        final int required = length - (8 - index);
+        final int required = size - (8 - index);
         if (required > 0) {
-            writeUnsignedByte(length - required, value >> required);
+            writeUnsignedByte(size - required, value >> required);
             writeUnsignedByte(required, value);
             return;
         }
 
-        for (int i = index + length - 1; i >= index; i--) {
+        for (int i = index + size - 1; i >= index; i--) {
             flags[i] = (value & 0x01) == 0x01;
             value >>= 1;
         }
-        index += length;
+        index += size;
 
         if (index == 8) {
             int octet = 0x00;
@@ -92,83 +93,25 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
 
 
     /**
-     * Writes a 1-bit boolean value. Writes {@code 0b1} for {@code true} and
-     * {@code 0b0} for {@code false}.
+     * Writes an unsigned short value. Only the lower {@code length} bits in
+     * {@code value} are written.
      *
+     * @param size the number of lower bits to write; between
+     * {@value com.github.jinahya.bit.io.BitIoConstants#USHORT_SIZE_MIN}
+     * (inclusive) and
+     * {@value com.github.jinahya.bit.io.BitIoConstants#USHORT_SIZE_MAX}
+     * (inclusive).
      * @param value the value to write
      *
      * @throws IOException if an I/O error occurs
      */
-    @Override
-    public void writeBoolean(final boolean value) throws IOException {
-
-        writeUnsignedByte(1, value ? 0x01 : 0x00);
-    }
-
-
-//    /**
-//     * Writes a boolean flag whether specified (subsequent) object is
-//     * {@code null} or not. This method writes either {@code true} if
-//     * {@code value} is {@code null} or {@code false} if {@code value} is not
-//     * {@code null}.
-//     *
-//     * @param value the (subsequent) object to check
-//     *
-//     * @return the written value; either {@code true} if {@code value} is
-//     * {@code null} or {@code false} if {@code value} is not {@code null}.
-//     *
-//     * @throws IOException if an I/O error occurs.
-//     *
-//     * @see #isNotNull(java.lang.Object)
-//     */
-//    protected boolean isNull(final Object value) throws IOException {
-//
-//        final boolean flag = value == null;
-//
-//        writeBoolean(flag);
-//
-//        return flag;
-//    }
-//
-//
-//    /**
-//     * Writes a boolean flag whether specified (subsequent) object is
-//     * {@code null} or not. The method writes either {@code true} if
-//     * {@code value} is not {@code null} or {@code false} if {@code value} is
-//     * {@code null}.
-//     *
-//     * @param value the (subsequent) object to check
-//     *
-//     * @return the written value; either {@code true} if {@code value} is not
-//     * {@code null} or {@code false} if {@code value} is {@code null}.
-//     *
-//     * @throws IOException if an I/O error occurs.
-//     *
-//     * @see #isNull(java.lang.Object)
-//     */
-//    protected boolean isNotNull(final Object value) throws IOException {
-//
-//        return !isNull(value);
-//    }
-    /**
-     * Writes an unsigned short value. Only the lower specified number of bits
-     * in given {@code value} are written.
-     *
-     * @param length the number of lower bits to write; between {@code 0}
-     * exclusive and {@code 16} inclusive.
-     * @param value the value to write
-     *
-     * @throws IOException if an I/O error occurs
-     *
-     * @see #requireValidUnsignedShortLength(int)
-     */
-    protected void writeUnsignedShort(final int length, final int value)
+    protected void writeUnsignedShort(final int size, final int value)
         throws IOException {
 
-        BitIoConstraints.requireValidUnsignedShortLength(length);
+        BitIoConstraints.requireValidUnsignedShortSize(size);
 
-        final int quotient = length / 8;
-        final int remainder = length % 8;
+        final int quotient = size / 8;
+        final int remainder = size % 8;
 
         if (remainder > 0) {
             writeUnsignedByte(remainder, value >> (quotient * 8));
@@ -181,13 +124,20 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
 
 
     @Override
-    public void writeUnsignedInt(final int length, final int value)
+    public void writeBoolean(final boolean value) throws IOException {
+
+        writeUnsignedByte(1, value ? 0x01 : 0x00);
+    }
+
+
+    @Override
+    public void writeUnsignedInt(final int size, final int value)
         throws IOException {
 
-        BitIoConstraints.requireValidUnsignedIntLength(length);
+        BitIoConstraints.requireValidUnsignedIntSize(size);
 
-        final int quotient = length / 16;
-        final int remainder = length % 16;
+        final int quotient = size / 16;
+        final int remainder = size % 16;
 
         if (remainder > 0) {
             writeUnsignedShort(remainder, value >> (quotient * 16));
@@ -200,50 +150,24 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
 
 
     @Override
-    public void writeInt(final int length, final int value) throws IOException {
+    public void writeInt(final int size, final int value) throws IOException {
 
-        BitIoConstraints.requireValidIntLength(length);
+        BitIoConstraints.requireValidIntSize(size);
 
-        final int unsigned = length - 1;
-        writeUnsignedByte(1, value >> unsigned);
-        writeUnsignedInt(unsigned, value);
+        final int usize = size - 1;
+        writeUnsignedByte(1, value >> usize);
+        writeUnsignedInt(usize, value);
     }
 
 
-//    /**
-//     * Writes a float value.
-//     *
-//     * @param value the value to write.
-//     *
-//     * @throws IOException if an I/O error occurs.
-//     *
-//     * @see Float#floatToIntBits(float)
-//     */
-//    public void writeFloat32(final float value) throws IOException {
-//
-//        writeInt(32, Float.floatToIntBits(value));
-//    }
-//    /**
-//     * Writes a float value.
-//     *
-//     * @param value the value to write.
-//     *
-//     * @throws IOException if an I/O error occurs.
-//     *
-//     * @see Float#floatToRawIntBits(float)
-//     */
-//    public void writeFloat32Raw(final float value) throws IOException {
-//
-//        writeInt(32, Float.floatToRawIntBits(value));
-//    }
     @Override
-    public void writeUnsignedLong(final int length, final long value)
+    public void writeUnsignedLong(final int size, final long value)
         throws IOException {
 
-        BitIoConstraints.requireValidUnsignedLongLength(length);
+        BitIoConstraints.requireValidUnsignedLongSize(size);
 
-        final int quotient = length / 31;
-        final int remainder = length % 31;
+        final int quotient = size / 31;
+        final int remainder = size % 31;
 
         if (remainder > 0) {
             writeUnsignedInt(remainder, (int) (value >> (quotient * 31)));
@@ -256,78 +180,16 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
 
 
     @Override
-    public void writeLong(final int length, final long value)
-        throws IOException {
+    public void writeLong(final int size, final long value) throws IOException {
 
-        BitIoConstraints.requireValidLongLength(length);
+        BitIoConstraints.requireValidLongSize(size);
 
-        final int unsigned = length - 1;
+        final int unsigned = size - 1;
         writeUnsignedByte(1, (int) (value >> unsigned));
         writeUnsignedLong(unsigned, value);
     }
 
 
-//    /**
-//     * Writes a double value.
-//     *
-//     * @param value the value to write
-//     *
-//     * @throws IOException if an I/O error occurs.
-//     *
-//     * @see Double#doubleToLongBits(double)
-//     */
-//    public void writeDouble64(final double value) throws IOException {
-//
-//        writeLong(64, Double.doubleToLongBits(value));
-//    }
-//    /**
-//     * Writes a double value.
-//     *
-//     * @param value the value to write
-//     *
-//     * @throws IOException if an I/O error occurs.
-//     *
-//     * @see Double#doubleToRawLongBits(double)
-//     */
-//    @Override
-//    public void writeDouble64Raw(final double value) throws IOException {
-//
-//        writeLong(64, Double.doubleToRawLongBits(value));
-//    }
-//    /**
-//     * Reads specified number of bytes from given input.
-//     *
-//     * @param length the number of bytes to read.
-//     * @param range the valid bit range in each bytes.
-//     * @param input the byte input
-//     *
-//     * @throws IOException if an I/O error occurs.
-//     */
-//    protected void writeBytesFully(final int length, final int range,
-//                                   final ByteInput input)
-//        throws IOException {
-//
-//        if (length < 0) {
-//            throw new IllegalArgumentException("length(" + length + ") < 0");
-//        }
-//
-//        BitIoConstraints.requireValidBytesRange(range);
-//
-//        if (input == null) {
-//            throw new NullPointerException("null input");
-//        }
-//
-//        for (int i = 0; i < length; i++) {
-//            writeUnsignedByte(range, input.readUnsignedByte());
-//        }
-//    }
-//    protected void writeBytesLength(final int scale, int length)
-//        throws IOException {
-//
-//        BitIoConstraints.requireValidBytesScale(scale);
-//
-//        writeUnsignedInt(scale, length);
-//    }
     @Override
     public void writeBytes(final int scale, final int range, final byte[] value)
         throws IOException {
@@ -365,8 +227,10 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
             throw new NullPointerException("null charsetName");
         }
 
-        writeBytes(BitIoConstants.BYTES_SCALE_MAX,
-                   BitIoConstants.BYTES_RANGE_MAX, value.getBytes(charsetName));
+        final byte[] bytes = value.getBytes(charsetName);
+
+        writeBytes(BitIoConstants.SCALE_SIZE_MAX, BitIoConstants.RANGE_SIZE_MAX,
+                   bytes);
     }
 
 
@@ -377,15 +241,16 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
             throw new NullPointerException("null value");
         }
 
-        writeBytes(BitIoConstants.BYTES_SCALE_MAX, 7,
-                   value.getBytes("US-ASCII"));
+        final byte[] bytes = value.getBytes("US-ASCII");
+
+        writeBytes(BitIoConstants.SCALE_SIZE_MAX, 7, bytes);
     }
 
 
     @Override
-    public int align(final int length) throws IOException {
+    public int align(final int bytes) throws IOException {
 
-        BitIoConstraints.requireValidAlighLength(length);
+        BitIoConstraints.requireValidAlighBytes(bytes);
 
         int bits = 0; // number of bits to be padded
 
@@ -395,19 +260,19 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
             writeUnsignedByte(bits, 0x00); // count incremented
         }
 
-        long bytes = count % length;
+        long octets = count % bytes;
 
-        if (bytes == 0) {
+        if (octets == 0) {
             return bits;
         }
 
-        if (bytes > 0) {
-            bytes = length - bytes;
+        if (octets > 0) {
+            octets = bytes - octets;
         } else {
-            bytes = 0 - bytes;
+            octets = 0 - octets;
         }
 
-        for (; bytes > 0; bytes--) {
+        for (; octets > 0; octets--) {
             writeUnsignedByte(8, 0x00);
             bits += 8;
         }
@@ -416,15 +281,6 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
     }
 
 
-//    /**
-//     * Returns the number of bytes written to the underlying byte output so far.
-//     *
-//     * @return the number of bytes written so far.
-//     */
-//    public long getCount() {
-//
-//        return count;
-//    }
     /**
      * bit flags.
      */

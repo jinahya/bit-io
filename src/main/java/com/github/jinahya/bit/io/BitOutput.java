@@ -22,7 +22,7 @@ import java.io.IOException;
 
 
 /**
- * A class for writing arbitrary length of bits.
+ * An interface for writing arbitrary length of bits.
  *
  * @author <a href="mailto:onacit@gmail.com">Jin Kwon</a>
  */
@@ -44,113 +44,82 @@ public interface BitOutput {
      * Writes an unsigned int value. Only the lower specified number of bits in
      * {@code value} are written.
      *
-     * @param length the number of lower bits to write; between {@code 1}
-     * inclusive and {@code 32} exclusive.
+     * @param size the number of lower bits to write; between
+     * {@value com.github.jinahya.bit.io.BitIoConstants#UINT_SIZE_MIN}
+     * (inclusive) and
+     * {@value com.github.jinahya.bit.io.BitIoConstants#UINT_SIZE_MAX}
+     * (inclusive).
      * @param value the value to write
      *
      * @throws IOException if an I/O error occurs.
      */
-    void writeUnsignedInt(int length, int value) throws IOException;
+    void writeUnsignedInt(int size, int value) throws IOException;
 
 
     /**
      * Writes a signed int value. Only the lower number of specified bits in
      * {@code value} are written.
      *
-     * @param length the number of lower bits to write; between {@code 1}
-     * (exclusive) and {@code 32} (inclusive).
+     * @param size the number of lower bits to write; between
+     * {@value com.github.jinahya.bit.io.BitIoConstants#INT_SIZE_MIN}
+     * (inclusive) and
+     * {@value com.github.jinahya.bit.io.BitIoConstants#INT_SIZE_MAX}
+     * (inclusive).
      * @param value the value to write
      *
      * @throws IOException if an I/O error occurs.
      */
-    void writeInt(int length, int value) throws IOException;
+    void writeInt(int size, int value) throws IOException;
 
 
-//    /**
-//     * Writes a 32-bit int value resulting from
-//     * {@link Float#floatToIntBits(float)} with specified value.
-//     *
-//     * @param value the value to write.
-//     *
-//     * @throws IOException if an I/O error occurs.
-//     *
-//     * @see Float#floatToIntBits(float)
-//     */
-//    void writeFloat32(float value) throws IOException;
-//    /**
-//     * Writes a 32-bit int value resulting from
-//     * {@link Float#floatToRawIntBits(float)} with specified value.
-//     *
-//     * @param value the value to write.
-//     *
-//     * @throws IOException if an I/O error occurs.
-//     *
-//     * @see Float#floatToRawIntBits(float)
-//     */
-//    void writeFloat32Raw(float value) throws IOException;
     /**
-     * Writes an unsigned long value. Only the lower {@code length} bits in
+     * Writes an unsigned long value. Only the lower specified number of bits in
      * {@code value} are written.
      *
-     * @param length the number of bits to write; between 1 (inclusive) and 64
-     * (exclusive).
+     * @param size the number of bits to write; between
+     * {@value com.github.jinahya.bit.io.BitIoConstants#ULONG_SIZE_MIN}
+     * (inclusive) and
+     * {@value com.github.jinahya.bit.io.BitIoConstants#ULONG_SIZE_MAX}
+     * (inclusive}.
      * @param value the value to write.
      *
      * @throws IOException if an I/O error occurs.
      */
-    void writeUnsignedLong(int length, long value) throws IOException;
+    void writeUnsignedLong(int size, long value) throws IOException;
 
 
     /**
-     * Writes a signed long value. Only the lower {@code length} bits in
+     * Writes a signed long value. Only the lower {@code size} bits in
      * {@code value} are written.
      *
-     * @param length the number of bits to write; between 1 (exclusive) and 64
-     * (inclusive).
+     * @param size the number of bits to write; between
+     * {@value com.github.jinahya.bit.io.BitIoConstants#LONG_SIZE_MIN}
+     * (inclusive) and
+     * {@value com.github.jinahya.bit.io.BitIoConstants#LONG_SIZE_MAX}
+     * (inclusive). (inclusive).
      * @param value the value to write.
      *
      * @throws IOException if an I/O error occurs.
      */
-    void writeLong(int length, long value) throws IOException;
+    void writeLong(int size, long value) throws IOException;
 
 
-//    /**
-//     * Writes a 64-bit long value resulting from
-//     * {@link Double#doubleToLongBits(double)} with specified value.
-//     *
-//     * @param value the value to write
-//     *
-//     * @throws IOException if an I/O error occurs.
-//     *
-//     * @see Double#doubleToLongBits(double)
-//     */
-//    void writeDouble64(double value) throws IOException;
-//    /**
-//     * Writes a 64-bit long value resulting from
-//     * {@link Double#doubleToRawLongBits(double)} with specified value.
-//     *
-//     * @param value the value to write
-//     *
-//     * @throws IOException if an I/O error occurs.
-//     *
-//     * @see Double#doubleToRawLongBits(double)
-//     */
-//    void writeDouble64Raw(double value) throws IOException;
     /**
      * Writes an array of bytes.
      *
      * @param scale the number of bits to present the length of array between
-     * {@code 1} (inclusive) and {@code 16} (inclusive).
-     * @param range the number of bits valid in each byte in array; between
-     * {@code 1} (inclusive) and {@code 8} (inclusive).
+     * {@value com.github.jinahya.bit.io.BitIoConstants#SCALE_SIZE_MIN}
+     * (inclusive) and
+     * {@value com.github.jinahya.bit.io.BitIoConstants#SCALE_SIZE_MAX}
+     * (inclusive).
+     * @param range the number of valid bits in each byte; between
+     * {@value com.github.jinahya.bit.io.BitIoConstants#RANGE_SIZE_MIN}
+     * (inclusive) and
+     * {@value com.github.jinahya.bit.io.BitIoConstants#RANGE_SIZE_MAX}
+     * (inclusive).
      * @param value the array to write.
      *
      * @throws IOException if an I/O error occurs.
-     *
-     * @see Bytes#SCALE_MIN
-     * @see Bytes#SCALE_MAX
-     * @see Bytes#RANGE_MIN
-     * @see Bytes#RANGE_MAX
      */
     void writeBytes(int scale, int range, byte[] value) throws IOException;
 
@@ -158,8 +127,10 @@ public interface BitOutput {
     /**
      * Writes a string value. This method encodes given string with specified
      * character set name and writes the output byte array using
-     * {@link #writeBytes(int, int, byte[])} with {@code scale} of {@code 16}
-     * and {@code range} of {@code 8}.
+     * {@link #writeBytes(int, int, byte[])} with {@code scale} of
+     * {@value com.github.jinahya.bit.io.BitIoConstants#SCALE_SIZE_MAX} and
+     * {@code range} of
+     * {@value com.github.jinahya.bit.io.BitIoConstants#RANGE_SIZE_MAX}.
      *
      * @param value the string value to write.
      * @param charsetName the character set name to decode the string
@@ -174,9 +145,10 @@ public interface BitOutput {
 
     /**
      * Writes a {@code US-ASCII} decoded string value. This method encodes given
-     * string with specified character set name and writes the resulting bytes
-     * using {@link #writeBytes(int, int, byte[])} with {@code scale} of
-     * {@code 16} and {@code range} of {@code 7}.
+     * string with {@code US-ASCII} and writes the byte array using
+     * {@link #writeBytes(int, int, byte[])} with {@code scale} of
+     * {@value com.github.jinahya.bit.io.BitIoConstants#SCALE_SIZE_MAX} and
+     * {@code range} of {@code 7}.
      *
      * @param value the string value to write.
      *
@@ -191,14 +163,17 @@ public interface BitOutput {
     /**
      * Aligns to specified number of bytes.
      *
-     * @param length the number of bytes to align; between {@code 1} (inclusive)
-     * and {@value 65536} (inclusive).
+     * @param bytes the number of bytes to align; between
+     * {@value com.github.jinahya.bit.io.BitIoConstants#ALIGN_BYTES_MIN}
+     * (inclusive) and
+     * {@value com.github.jinahya.bit.io.BitIoConstants#ALIGN_BYTES_MAX}
+     * (inclusive).
      *
      * @return the number of bits padded for alignment
      *
      * @throws IOException if an I/O error occurs.
      */
-    int align(int length) throws IOException;
+    int align(int bytes) throws IOException;
 
 
 }

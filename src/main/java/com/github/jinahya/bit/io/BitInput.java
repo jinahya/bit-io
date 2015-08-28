@@ -43,87 +43,83 @@ public interface BitInput {
     /**
      * Reads an unsigned int value.
      *
-     * @param length the number of bits for the value; between 1 (inclusive) and
-     * 32 (exclusive).
+     * @param size the number of bits for the value; between
+     * {@value com.github.jinahya.bit.io.BitIoConstants#UINT_SIZE_MIN}
+     * (inclusive) and
+     * {@value com.github.jinahya.bit.io.BitIoConstants#UINT_SIZE_MAX}
+     * (inclusive).
      *
      * @return the unsigned int value
      *
      * @throws IOException if an I/O error occurs
      */
-    int readUnsignedInt(int length) throws IOException;
+    int readUnsignedInt(int size) throws IOException;
 
 
     /**
      * Reads a signed int value.
      *
-     * @param length the number of bits for the value; between 1 (exclusive) and
-     * 32 (inclusive).
+     * @param size the number of bits for the value; between
+     * {@value com.github.jinahya.bit.io.BitIoConstants#INT_SIZE_MIN}
+     * (inclusive) and
+     * {@value com.github.jinahya.bit.io.BitIoConstants#INT_SIZE_MAX}
+     * (inclusive).
      *
      * @return a signed int value.
      *
      * @throws IOException if an I/O error occurs.
      */
-    int readInt(int length) throws IOException;
+    int readInt(int size) throws IOException;
 
 
-//    /**
-//     * Reads a 32-bit int value converting to {@link Float#intBitsToFloat(int)}.
-//     *
-//     * @return a float value.
-//     *
-//     * @throws IOException if an I/O error occurs
-//     *
-//     * @see Float#intBitsToFloat(int)
-//     */
-//    float readFloat32() throws IOException;
     /**
      * Reads an unsigned long value.
      *
-     * @param length the number of bits for the value; between 1 (inclusive) and
-     * 64 (exclusive).
+     * @param size the number of bits for the value; between
+     * {@value com.github.jinahya.bit.io.BitIoConstants#ULONG_SIZE_MIN}
+     * (inclusive) and
+     * {@value com.github.jinahya.bit.io.BitIoConstants#ULONG_SIZE_MAX}
+     * (inclusive).
      *
      * @return an unsigned long value.
      *
-     * @throws IllegalArgumentException if {@code length} is not valid
      * @throws IOException if an I/O error occurs
      */
-    long readUnsignedLong(int length) throws IOException;
+    long readUnsignedLong(int size) throws IOException;
 
 
     /**
      * Reads a signed long value.
      *
-     * @param length the number of bits for the value; between 1 (exclusive) and
-     * 64 (inclusive).
+     * @param size the number of bits for the value; between
+     * {@value com.github.jinahya.bit.io.BitIoConstants#LONG_SIZE_MIN}
+     * (inclusive) and
+     * {@value com.github.jinahya.bit.io.BitIoConstants#LONG_SIZE_MAX}
+     * (inclusive).
      *
      * @return a signed long value
      *
-     * @throws IllegalArgumentException if {@code length} is not valid
      * @throws IOException if an I/O error occurs.
      */
-    long readLong(int length) throws IOException;
+    long readLong(int size) throws IOException;
 
 
-//    /**
-//     * Reads a 64-bit double value.
-//     *
-//     * @return a 64-bit double value
-//     *
-//     * @throws IOException if an I/O error occurs.
-//     */
-//    double readDouble64() throws IOException;
     /**
      * Reads a byte array.
      *
-     * @param scale the length scale between {@code 0x01} (inclusive) and
-     * {@code 0x10} (inclusive).
-     * @param range the number of bits for each byte between {@value 0x01}
-     * (inclusive) and {@value 0x08} (inclusive).
+     * @param scale the length scale between
+     * {@value com.github.jinahya.bit.io.BitIoConstants#SCALE_SIZE_MIN}
+     * (inclusive) and
+     * {@value com.github.jinahya.bit.io.BitIoConstants#SCALE_SIZE_MAX}
+     * (inclusive).
+     * @param range the number of bits for each byte between
+     * {@value com.github.jinahya.bit.io.BitIoConstants#RANGE_SIZE_MIN}
+     * (inclusive) and
+     * {@value com.github.jinahya.bit.io.BitIoConstants#RANGE_SIZE_MAX}
+     * (inclusive).
      *
      * @return a byte array.
      *
-     * @throws IllegalArgumentException either {@code scale} or {@code range} is
-     * not valid.
      * @throws IOException if an I/O error occurs.
      */
     byte[] readBytes(int scale, int range) throws IOException;
@@ -131,8 +127,11 @@ public interface BitInput {
 
     /**
      * Reads a string. This method reads a byte array via
-     * {@link #readBytes(int, int)} with {@code scale} of {@code 0x10} and
-     * {@code range} of {@code 0x08} and returns the output string created by
+     * {@link #readBytes(int, int)} with {@code scale} of
+     * {@value com.github.jinahya.bit.io.BitIoConstants#SCALE_SIZE_MAX} and
+     * {@code range} of
+     * {@value com.github.jinahya.bit.io.BitIoConstants#RANGE_SIZE_MAX} and
+     * returns the output string created via
      * {@link String#String(byte[], java.lang.String)} with the byte array and
      * given {@code charsetName}.
      *
@@ -150,7 +149,8 @@ public interface BitInput {
 
     /**
      * Reads a {@code US-ASCII} encoded string. This method reads a byte array
-     * via {@link #readBytes(int, int)} with {@code scale} of {@code 0x10} and
+     * via {@link #readBytes(int, int)} with {@code scale} of
+     * {@value com.github.jinahya.bit.io.BitIoConstants#SCALE_SIZE_MAX} and
      * {@code range} of {@code 0x07} and returns the output string created by
      * {@link String#String(byte[], java.lang.String)} with the byte array and
      * {@code US-ASCII}.
@@ -168,21 +168,18 @@ public interface BitInput {
     /**
      * Aligns to given number of bytes.
      *
-     * @param length the number of bytes to align; between 1 (inclusive) and
-     * {@value java.lang.Short#MAX_VALUE} (inclusive).
+     * @param bytes the number of bytes to align; between
+     * {@value com.github.jinahya.bit.io.BitIoConstants#ALIGN_BYTES_MIN}
+     * (inclusive) and
+     * {@value com.github.jinahya.bit.io.BitIoConstants#ALIGN_BYTES_MAX}
+     * (inclusive).
      *
      * @return the number of bits discarded for alignment
      *
      * @throws IOException if an I/O error occurs.
      */
-    int align(int length) throws IOException;
+    int align(int bytes) throws IOException;
 
 
-//    /**
-//     * Returns the number of bytes read from the underlying byte input so far.
-//     *
-//     * @return the number of bytes read so far.
-//     */
-//    long getCount();
 }
 

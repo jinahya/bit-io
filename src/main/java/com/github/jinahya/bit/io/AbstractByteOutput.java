@@ -19,9 +19,9 @@ package com.github.jinahya.bit.io;
 
 
 /**
- * An abstract class for implementing {@code ByteOutput}s.
+ * An abstract class for implementing {@code ByteOutput}.
  *
- * @author <a href="mailto:onacit@gmail.com">Jin Kwon</a>
+ * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  * @param <T> byte target type parameter
  */
 public abstract class AbstractByteOutput<T> implements ByteOutput {

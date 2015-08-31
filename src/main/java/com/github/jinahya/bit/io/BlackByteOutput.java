@@ -32,7 +32,7 @@ public class BlackByteOutput implements ByteOutput {
     /**
      * Does nothing.
      *
-     * @param value
+     * @param value {@inheritDoc}
      *
      * @throws IOException {@inheritDoc}
      */

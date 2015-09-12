@@ -6,7 +6,7 @@
   <!-- The Basics -->
   <groupId>com.github.jinahya</groupId>
   <artifactId>bit-io</artifactId>
-  <version>1.1.4</version>
+  <version>1.1.5</version>
   <packaging>jar</packaging>
   <dependencyManagement />
   <dependencies>
@@ -37,7 +37,7 @@
     <dependency>
       <groupId>org.testng</groupId>
       <artifactId>testng</artifactId>
-      <version>6.9.4</version>
+      <version>6.9.6</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
@@ -56,16 +56,6 @@
   <build>
     <pluginManagement>
       <plugins>
-        <plugin>
-          <groupId>com.github.github</groupId>
-          <artifactId>site-maven-plugin</artifactId>
-          <version>0.11</version>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-antrun-plugin</artifactId>
-          <version>1.8</version>
-        </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-checkstyle-plugin</artifactId>
@@ -157,6 +147,7 @@
       <plugin>
         <groupId>com.github.github</groupId>
         <artifactId>site-maven-plugin</artifactId>
+        <version>0.12</version>
         <configuration>
           <server>github</server>
           <message>creating site for ${project.version}</message>
@@ -175,6 +166,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-antrun-plugin</artifactId>
+        <version>1.8</version>
         <executions>
           <execution>
             <id>retrotranslated13</id>
@@ -383,7 +375,7 @@
     <connection>scm:git:git@github.com:jinahya/bit-io.git</connection>
     <developerConnection>scm:git:git@github.com:jinahya/bit-io.git</developerConnection>
     <url>https://github.com/jinahya/bit-io</url>
-    <tag>1.1.4</tag>
+    <tag>1.1.5</tag>
   </scm>
   <prerequisites />
   <repositories />

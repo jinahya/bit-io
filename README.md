@@ -8,7 +8,6 @@ A small library for reading or writing none octet aligned values such as `1-bit 
 |1.1.5|[site](http://jinahya.github.io/bit-io/sites/1.1.5/index.html)|[apidocs](http://jinahya.github.io/bit-io/sites/1.1.5/apidocs/index.html)||
 |1.1.4|[site](http://jinahya.github.io/bit-io/sites/1.1.4/index.html)|[apidocs](http://jinahya.github.io/bit-io/sites/1.1.4/apidocs/index.html)||
 |1.1.3|[site](http://jinahya.github.io/bit-io/sites/1.1.3/index.html)|[apidocs](http://jinahya.github.io/bit-io/sites/1.1.3/apidocs/index.html)||
-|1.1.3-SNAPSHOT|[site](http://jinahya.github.io/bit-io/site/1.1.3-SNAPSHOT/index.html)|[apidocs](http://jinahya.github.io/bit-io/site/1.1.3-SNAPSHOT/apidocs/index.html)||
 |1.1.2|[site](http://jinahya.github.io/bit-io/site/1.1.2/index.html)|[apidocs](http://jinahya.github.io/bit-io/site/1.1.2/apidocs/index.html)||
 |1.1|[site](http://jinahya.github.io/bit-io/site/1.1/index.html)|[apidocs](http://jinahya.github.io/bit-io/site/1.1/apidocs/index.html)||
 
@@ -17,14 +16,15 @@ A small library for reading or writing none octet aligned values such as `1-bit 
 #### Preparing `ByteInput`
 Prepare an instance of `ByteInput` from various sources.
 ````java
-new ArrayInput(byte[], offset)
+new ArrayInput(byte[], index, limit)
 new BufferInput(java.nio.ByteBuffer);
 new StreamInput(java.io.InputStream);
 new SupplierInput(java.util.function.Supplier<Byte>)
+new IntSupplierInput(java.util.function.IntSuppiler)
 ````
 #### Creating `BitInput`
 ```java
-new BitInput(ByteInput);
+new DelegatedBitInput(ByteInput);
 ```
 #### Reading values.
 ```java
@@ -41,14 +41,15 @@ biiiiiil llllllll llllllll llllllll llllllll llllllll lllllldd
 #### Preparing `ByteOutput`
 Prepare an instance of `ByteOutput` from various targets.
 ```java
-new ArrayOutput(byte[], offset)
+new ArrayOutput(byte[], index, limit)
 new BufferOutput(java.nio.ByteBuffer)
-new ConsumerOutput(java.util.function.Consumer<Byte>)
 new StreamOutput(java.io.OutputStream);
+new ConsumerOutput(java.util.function.Consumer<Byte>)
+new IntConsumerOutput(java.util.function.IntConsumer)
 ````
 #### Creating `BitInput`
 ```java
-BitOutput(ByteOutput)
+new DelegatedBitOutput(ByteOutput)
 ```
 #### Writing values.
 ```java

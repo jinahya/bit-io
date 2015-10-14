@@ -27,7 +27,7 @@ import org.testng.annotations.Guice;
  * @author Jin Kwon
  */
 @Guice(modules = {BufferInputModule.class})
-public class BuffernputTest
+public class BufferInputTest
     extends AbstractByteInputTest<BufferInput, ByteBuffer> {
 
 }

@@ -31,6 +31,13 @@ import java.util.function.Supplier;
 public class IntSupplierInput extends AbstractByteInput<IntSupplier> {
 
 
+    /**
+     * Creates a new instance with specified {@code supplier} which is mapped to
+     * {@link #source}.
+     *
+     * @param supplier the supplier instance; {@code null} if this value which
+     * is mapped by {@link #source} is supposed to be lazily instantiated.
+     */
     public IntSupplierInput(final IntSupplier supplier) {
 
         super(supplier);

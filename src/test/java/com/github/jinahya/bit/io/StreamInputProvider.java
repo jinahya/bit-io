@@ -18,7 +18,6 @@
 package com.github.jinahya.bit.io;
 
 
-import com.github.jinahya.bit.io.StreamInput;
 import com.google.inject.Provider;
 import java.io.IOException;
 import java.io.InputStream;

@@ -99,7 +99,7 @@ public class BitOutputTest {
 
 
     @Inject
-    private BitOutput output;
+    private transient BitOutput output;
 
 
 }

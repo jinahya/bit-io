@@ -44,8 +44,9 @@ public class DelegatedBitInput extends AbstractBitInput {
     /**
      * {@inheritDoc} The {@code readUnsignedByte()} method of
      * {@code DelegatedBitInput} class returns the value of
-     * <pre>delegate.readUnsignedByte()</pre>. Override this method if
-     * {@link #delegate} is supposed to be lazily initialized.
+     * <blockquote><pre>{@code delegate.readUnsignedByte()}</pre></blockquote>.
+     * Override this method if {@link #delegate} is supposed to be lazily
+     * initialized and set.
      *
      * @return {@inheritDoc}
      *

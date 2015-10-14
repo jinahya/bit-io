@@ -26,7 +26,7 @@ import java.io.IOException;
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
-@FunctionalInterface
+//@FunctionalInterface
 public interface ByteOutput {
 
 

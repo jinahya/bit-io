@@ -39,9 +39,9 @@ public class DelegatedBitOutput extends AbstractBitOutput {
     /**
      * {@inheritDoc} The {code writeUnsignedByte(int)} method of
      * {@code DelegatedBitOutput} class executes
-     * <pre>delegate.writeUnsignedByte(int)</pre> with specified {@code value}.
-     * Override this method if {@link #delegate} is supposed to be lazily
-     * initialized.
+     * <blockquote><pre>{@code delegate.writeUnsignedByte(int)}</pre></blockquote>
+     * with specified {@code value}. Override this method if {@link #delegate}
+     * is supposed to be lazily initialized and set.
      *
      * @param value {@inheritDoc}
      *

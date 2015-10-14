@@ -5,6 +5,7 @@ A small library for reading or writing none octet aligned values such as `1-bit 
 ## Versions
 |Version|Site|Apidocs|Notes|
 |-------|----|-------|-----|
+|1.1.6-SNAPSHOT|[site](http://jinahya.github.io/bit-io/sites/1.1.6-SNAPSHOT/index.html)|[apidocs](http://jinahya.github.io/bit-io/sites/1.1.6-SNAPSHOT/apidocs/index.html)||
 |1.1.5|[site](http://jinahya.github.io/bit-io/sites/1.1.5/index.html)|[apidocs](http://jinahya.github.io/bit-io/sites/1.1.5/apidocs/index.html)||
 |1.1.4|[site](http://jinahya.github.io/bit-io/sites/1.1.4/index.html)|[apidocs](http://jinahya.github.io/bit-io/sites/1.1.4/apidocs/index.html)||
 |1.1.3|[site](http://jinahya.github.io/bit-io/sites/1.1.3/index.html)|[apidocs](http://jinahya.github.io/bit-io/sites/1.1.3/apidocs/index.html)||

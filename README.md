@@ -1,5 +1,6 @@
 bit-io
 ======
+![Travis-CI](https://travis-ci.org/jinahya/bit-io.svg?branch=develop)
 [![GitHub version](https://badge.fury.io/gh/jinahya%2Fbit-io.svg)](https://badge.fury.io/gh/jinahya%2Fbit-io)
 ![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.jinahya/bit-io/badge.svg?style=plastic)
 

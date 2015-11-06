@@ -1,5 +1,7 @@
 bit-io
 ======
+![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.jinahya/bit-io/badge.svg?style=plastic)
+
 A small library for reading or writing none octet aligned values such as `1-bit boolean` or `17-bit unsigned int`. Available at [Maven Central Repository](http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22com.github.jinahya%22%20AND%20a%3A%22bit-io%22).
 
 ## Versions

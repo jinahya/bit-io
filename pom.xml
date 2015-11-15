@@ -270,17 +270,12 @@
             </configuration>
           </execution>
           <execution>
-            <id>check-signature-android-api-level-1</id>
+            <id>check-signature-android-api-level-9</id>
             <phase>process-classes</phase> <!-- default -->
             <goals>
               <!--<goal>check</goal>-->
             </goals>
             <configuration>
-              <!--              <signature>
-                <groupId>net.sf.androidscents.signature</groupId>
-                <artifactId>android-api-level-1</artifactId>
-                <version>1.0_r2</version>
-              </signature>-->
               <signature>
                 <groupId>net.sf.androidscents.signature</groupId>
                 <artifactId>android-api-level-9</artifactId>
@@ -343,7 +338,7 @@
 
   <!-- More Project Information -->
   <name>${project.artifactId}</name>
-  <description>an implementation of bit-io</description>
+  <description>library for reading/writing non-octet aligned values</description>
   <url>http://jinahya.github.io/bit-io/sites/${project.version}</url>
   <inceptionYear>2015</inceptionYear>
   <licenses>
@@ -377,7 +372,9 @@
     <url>https://github.com/jinahya/bit-io</url>
     <tag>HEAD</tag>
   </scm>
-  <prerequisites />
+  <prerequisites>
+    <maven>3.0.4</maven>
+  </prerequisites>
   <repositories />
   <pluginRepositories />
   <distributionManagement>

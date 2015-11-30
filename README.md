@@ -1,9 +1,9 @@
 bit-io
 ======
 ![Travis-CI](https://travis-ci.org/jinahya/bit-io.svg?branch=develop)
-[![GitHub version](https://badge.fury.io/gh/jinahya%2Fbit-io.svg)](https://badge.fury.io/gh/jinahya%2Fbit-io)
-![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.jinahya/bit-io/badge.svg?style=plastic)
-[![Dependency Status](https://www.versioneye.com/user/projects/563ccc514d415e001e00009b/badge.svg?style=flat)](https://www.versioneye.com/user/projects/563ccc514d415e001e00009b)
+[![Circle CI](https://circleci.com/gh/jinahya/bit-io/tree/develop.svg?style=svg)](https://circleci.com/gh/jinahya/bit-io/tree/develop)
+[![Maven Central](https://img.shields.io/maven-central/v/com.github.jinahya/bit-io.svg)](http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22bit-io%22)
+[![Dependency Status](https://www.versioneye.com/user/projects/563ccc514d415e001e00009b/badge.svg)](https://www.versioneye.com/user/projects/563ccc514d415e001e00009b)
 
 A small library for reading or writing none octet aligned values such as `1-bit boolean` or `17-bit unsigned int`. Available at [Maven Central Repository](http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22com.github.jinahya%22%20AND%20a%3A%22bit-io%22).
 

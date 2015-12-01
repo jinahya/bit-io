@@ -113,6 +113,21 @@
     </pluginManagement>
     <plugins>
       <plugin>
+        <groupId>com.qulice</groupId>
+        <artifactId>qulice-maven-plugin</artifactId>
+        <version>0.13.3</version>
+        <configuration>
+          <license>file:${basedir}/LICENSE</license>
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <!--<goal>check</goal>-->
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-antrun-plugin</artifactId>
         <version>1.8</version>

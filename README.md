@@ -4,7 +4,7 @@ bit-io
 [![Maven Central](https://img.shields.io/maven-central/v/com.github.jinahya/bit-io.svg)](http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22bit-io%22)
 [![Dependency Status](https://www.versioneye.com/user/projects/563ccc514d415e001e00009b/badge.svg)](https://www.versioneye.com/user/projects/563ccc514d415e001e00009b)
 
-A small library for reading or writing none octet aligned values such as `1-bit boolean` or `17-bit unsigned int`. Available at [Maven Central Repository](http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22com.github.jinahya%22%20AND%20a%3A%22bit-io%22).
+A small library for reading or writing none octet aligned values such as `1-bit boolean` or `17-bit unsigned int`.
 
 ## Versions
 |Version|Site|Apidocs|Notes|

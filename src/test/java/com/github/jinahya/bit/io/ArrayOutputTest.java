@@ -14,33 +14,28 @@
  * limitations under the License.
  */
 
-
 package com.github.jinahya.bit.io;
 
 
-import java.io.IOException;
-
-
 /**
- * A byte input which always provides {@code 0}.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
-final class WhiteByteInput implements ByteInput {
+public class ArrayOutputTest extends ByteOutputTest<ArrayOutput> {
 
 
-    /**
-     * Returns zero.
-     *
-     * @return zero.
-     *
-     * @throws IOException {@inheritDoc}
-     */
-    @Override
-    public int readUnsignedByte() throws IOException {
+    public ArrayOutputTest() {
 
-        return 0;
+        super(ArrayOutput.class);
     }
+
+
+    @Override
+    ArrayOutput instantiate(final int capacity) {
+
+        return new ArrayOutput(new byte[capacity], 0, capacity);
+    }
+
 
 }
 

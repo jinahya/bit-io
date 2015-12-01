@@ -24,7 +24,7 @@ import java.io.IOException;
 /**
  * An interface for writing arbitrary length of bits.
  *
- * @author <a href="mailto:onacit@gmail.com">Jin Kwon</a>
+ * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
 public interface BitOutput {
 

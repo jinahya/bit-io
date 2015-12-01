@@ -24,6 +24,8 @@ import java.nio.ByteBuffer;
 
 /**
  * A {@link ByteInput} implementation using {@link ByteBuffer}s.
+ *
+ * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
 public class BufferInput extends AbstractByteInput<ByteBuffer> {
 
@@ -31,7 +33,8 @@ public class BufferInput extends AbstractByteInput<ByteBuffer> {
     /**
      * Creates a new instance built on top of the specified byte buffer.
      *
-     * @param buffer the byte buffer.
+     * @param buffer the byte buffer or {@code null} if it's supposed to be
+     * lazily initialized and set.
      */
     public BufferInput(final ByteBuffer buffer) {
 

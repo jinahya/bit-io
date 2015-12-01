@@ -26,7 +26,7 @@ import java.io.IOException;
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
-public class BlackByteOutput implements ByteOutput {
+final class BlackByteOutput implements ByteOutput {
 
 
     /**
@@ -41,7 +41,6 @@ public class BlackByteOutput implements ByteOutput {
 
         // does nothing.
     }
-
 
 }
 

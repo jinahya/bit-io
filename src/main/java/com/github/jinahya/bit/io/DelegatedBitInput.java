@@ -22,6 +22,7 @@ import java.io.IOException;
 
 
 /**
+ * A type of {@code BitInput} read bytes from {@link #delegate}.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
@@ -31,7 +32,8 @@ public class DelegatedBitInput extends AbstractBitInput {
     /**
      * Create a new instance with specified delegate.
      *
-     * @param delegate the delegate
+     * @param delegate the delegate; may be {@code null} if it is intended to be
+     * lazily initialized and set.
      */
     public DelegatedBitInput(final ByteInput delegate) {
 
@@ -59,11 +61,22 @@ public class DelegatedBitInput extends AbstractBitInput {
     }
 
 
+    public ByteInput getDelegate() {
+
+        return delegate;
+    }
+
+
+    public void setDelegate(final ByteInput delegate) {
+
+        this.delegate = delegate;
+    }
+
+
     /**
      * The delegate on which {@link #readUnsignedByte()} is invoked.
      */
     protected ByteInput delegate;
-
 
 }
 

@@ -24,7 +24,7 @@ package com.github.jinahya.bit.io;
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
-public class WhiteBitInput extends DelegatedBitInput {
+final class WhiteBitInput extends DelegatedBitInput {
 
 
     /**
@@ -34,7 +34,6 @@ public class WhiteBitInput extends DelegatedBitInput {
 
         super(new WhiteByteInput());
     }
-
 
 }
 

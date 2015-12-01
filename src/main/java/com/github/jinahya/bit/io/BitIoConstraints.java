@@ -27,9 +27,9 @@ import static com.github.jinahya.bit.io.BitIoConstants.SCALE_SIZE_MIN;
 
 
 /**
- * A base class.
+ * A class for constraints.
  *
- * @author <a href="mailto:onacit@gmail.com">Jin Kwon</a>
+ * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
 final class BitIoConstraints {
 
@@ -195,7 +195,6 @@ final class BitIoConstraints {
 
         return range;
     }
-
 
 }
 

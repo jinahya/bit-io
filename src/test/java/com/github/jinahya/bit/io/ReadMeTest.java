@@ -18,13 +18,11 @@
 package com.github.jinahya.bit.io;
 
 
-import com.github.jinahya.bit.io.BitInput;
-import com.github.jinahya.bit.io.BitOutput;
 import java.io.IOException;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import static org.testng.Assert.assertEquals;
 import org.testng.annotations.Test;
+import static org.slf4j.LoggerFactory.getLogger;
+import static org.testng.Assert.assertEquals;
 
 
 /**
@@ -34,15 +32,11 @@ import org.testng.annotations.Test;
 public class ReadMeTest {
 
 
-    /**
-     * logger.
-     */
-    private static final Logger logger
-        = LoggerFactory.getLogger(ReadMeTest.class);
+    private static final Logger logger = getLogger(ReadMeTest.class);
 
 
     @Test
-    public void read1_() throws IOException {
+    public void read() throws IOException {
 
         final BitInput input = new WhiteBitInput();
 
@@ -56,7 +50,7 @@ public class ReadMeTest {
 
 
     @Test
-    public void write1_() throws IOException {
+    public void write() throws IOException {
 
         final BitOutput output = new BlackBitOutput();
 

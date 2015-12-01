@@ -20,11 +20,10 @@ package com.github.jinahya.bit.io;
 
 import java.io.IOException;
 import java.util.function.IntSupplier;
-import java.util.function.Supplier;
 
 
 /**
- * A {@link ByteInput} implementation uses a {@link Supplier} instance.
+ * A {@link ByteInput} implementation uses a {@link IntSupplier} instance.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
@@ -49,7 +48,6 @@ public class IntSupplierInput extends AbstractByteInput<IntSupplier> {
 
         return source.getAsInt();
     }
-
 
 }
 

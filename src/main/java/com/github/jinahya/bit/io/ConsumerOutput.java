@@ -30,6 +30,12 @@ import java.util.function.Consumer;
 public class ConsumerOutput extends AbstractByteOutput<Consumer<Byte>> {
 
 
+    /**
+     * Creates a new instance on the top of given consumer.
+     *
+     * @param consumer the consumer or {@code null} if it's supposed to be
+     * lazily initialized and set
+     */
     public ConsumerOutput(final Consumer<Byte> consumer) {
 
         super(consumer);

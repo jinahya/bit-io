@@ -25,7 +25,7 @@ import java.nio.ByteBuffer;
 /**
  * A {@link ByteOutput} implementation for {@link ByteBuffer}s.
  *
- * @author Jin Kwon
+ * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
 public class BufferOutput extends AbstractByteOutput<ByteBuffer> {
 
@@ -33,7 +33,8 @@ public class BufferOutput extends AbstractByteOutput<ByteBuffer> {
     /**
      * Creates a new instance with given {@code ByteBufer}.
      *
-     * @param buffer the {@code ByteBuffer} to wrap.
+     * @param buffer the {@code ByteBuffer} to wrap or {@code null} if it's
+     * supposed to be lazily initialized and set.
      */
     public BufferOutput(final ByteBuffer buffer) {
 

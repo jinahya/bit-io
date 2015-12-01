@@ -14,33 +14,32 @@
  * limitations under the License.
  */
 
-
 package com.github.jinahya.bit.io;
 
 
-import java.io.IOException;
+import static java.util.Objects.requireNonNull;
 
 
 /**
- * A byte input which always provides {@code 0}.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
-final class WhiteByteInput implements ByteInput {
+abstract class ByteOutputTest<T extends ByteOutput> {
 
 
-    /**
-     * Returns zero.
-     *
-     * @return zero.
-     *
-     * @throws IOException {@inheritDoc}
-     */
-    @Override
-    public int readUnsignedByte() throws IOException {
+    public ByteOutputTest(final Class<T> type) {
 
-        return 0;
+        super();
+
+        this.type = requireNonNull(type);
     }
+
+
+    abstract T instantiate(final int capacity);
+
+
+    protected final Class<T> type;
+
 
 }
 

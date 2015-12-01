@@ -24,7 +24,7 @@ package com.github.jinahya.bit.io;
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
-public class BlackBitOutput extends DelegatedBitOutput {
+final class BlackBitOutput extends DelegatedBitOutput {
 
 
     /**
@@ -34,7 +34,6 @@ public class BlackBitOutput extends DelegatedBitOutput {
 
         super(new BlackByteOutput());
     }
-
 
 }
 

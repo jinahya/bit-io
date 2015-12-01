@@ -19,12 +19,11 @@ package com.github.jinahya.bit.io;
 
 
 import java.io.IOException;
-import java.util.function.Consumer;
 import java.util.function.IntConsumer;
 
 
 /**
- * A {@link ByteOutput} implementation uses a {@link Consumer} instance.
+ * A {@link ByteOutput} implementation uses a {@link IntConsumer} instance.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
@@ -42,7 +41,6 @@ public class IntConsumerOutput extends AbstractByteOutput<IntConsumer> {
 
         target.accept(value);
     }
-
 
 }
 

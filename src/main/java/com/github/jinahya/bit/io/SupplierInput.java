@@ -42,6 +42,5 @@ public class SupplierInput extends AbstractByteInput<Supplier<Byte>> {
         return source.get() & 0xFF;
     }
 
-
 }
 

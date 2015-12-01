@@ -19,9 +19,9 @@ package com.github.jinahya.bit.io;
 
 
 /**
- * A base class.
+ * A class for constants.
  *
- * @author <a href="mailto:onacit@gmail.com">Jin Kwon</a>
+ * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
 final class BitIoConstants {
 
@@ -102,7 +102,6 @@ final class BitIoConstants {
 
         super();
     }
-
 
 }
 

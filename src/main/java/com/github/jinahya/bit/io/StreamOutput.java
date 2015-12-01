@@ -31,7 +31,8 @@ public class StreamOutput extends AbstractByteOutput<OutputStream> {
     /**
      * Creates a new instance built on top of the specified output stream.
      *
-     * @param stream the stream
+     * @param stream the output stream or {@code null} if it's supposed to be
+     * lazily initialized and set.
      */
     public StreamOutput(final OutputStream stream) {
 

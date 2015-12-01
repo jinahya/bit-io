@@ -34,7 +34,8 @@ public class StreamInput extends AbstractByteInput<InputStream> {
     /**
      * Creates a new instance built on top of the specified input stream.
      *
-     * @param stream the stream
+     * @param stream the stream or {@code null} if it's supposed to be lazily
+     * initialized and set
      */
     public StreamInput(final InputStream stream) {
 

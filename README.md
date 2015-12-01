@@ -1,7 +1,6 @@
 bit-io
 ======
 [![Build Status](https://travis-ci.org/jinahya/bit-io.svg?branch=develop)](https://travis-ci.org/jinahya/bit-io)
-[![Build status](https://ci.appveyor.com/api/projects/status/29o361tfobc7p2cw/branch/develop?svg=true)](https://ci.appveyor.com/project/jinahya/bit-io/branch/develop)
 [![Maven Central](https://img.shields.io/maven-central/v/com.github.jinahya/bit-io.svg)](http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22bit-io%22)
 [![Dependency Status](https://www.versioneye.com/user/projects/563ccc514d415e001e00009b/badge.svg)](https://www.versioneye.com/user/projects/563ccc514d415e001e00009b)
 

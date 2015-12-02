@@ -30,9 +30,9 @@ import java.util.function.Supplier;
 public class SupplierInput extends AbstractByteInput<Supplier<Byte>> {
 
 
-    public SupplierInput(final Supplier<Byte> supplier) {
+    public SupplierInput(final Supplier<Byte> source) {
 
-        super(supplier);
+        super(source);
     }
 
 
@@ -40,6 +40,14 @@ public class SupplierInput extends AbstractByteInput<Supplier<Byte>> {
     public int readUnsignedByte() throws IOException {
 
         return source.get() & 0xFF;
+    }
+
+
+    public SupplierInput source(final Supplier<Byte> source) {
+
+        setSource(source);
+
+        return this;
     }
 
 }

@@ -104,6 +104,12 @@ public interface BitOutput {
     void writeLong(int size, long value) throws IOException;
 
 
+    byte[] writeBytes(byte[] bytes, int offset, int length) throws IOException;
+
+
+    byte[] writeBytes(byte[] bytes, int offset) throws IOException;
+
+
     /**
      * Writes an array of bytes.
      *
@@ -174,7 +180,6 @@ public interface BitOutput {
      * @throws IOException if an I/O error occurs.
      */
     int align(int bytes) throws IOException;
-
 
 }
 

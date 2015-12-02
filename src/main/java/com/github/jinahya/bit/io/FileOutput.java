@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Jin Kwon.
+ * Copyright 2013 <a href="mailto:onacit@gmail.com">Jin Kwon</a>.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,50 +19,50 @@ package com.github.jinahya.bit.io;
 
 
 import java.io.IOException;
-import java.nio.ByteBuffer;
+import java.io.RandomAccessFile;
 
 
 /**
- * A {@link ByteOutput} implementation for {@link ByteBuffer}s.
+ * A {@link ByteOutput} implementation for {@link RandomAccessFile}s.
  *
- * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
+ * @see FileInput
  */
-public class BufferOutput extends AbstractByteOutput<ByteBuffer> {
+public class FileOutput extends AbstractByteOutput<RandomAccessFile> {
 
 
     /**
-     * Creates a new instance with given {@code ByteBufer}.
+     * Creates a new instance built on top of the specified output stream.
      *
-     * @param buffer the {@code ByteBuffer} to wrap or {@code null} if it's
-     * supposed to be lazily initialized and set.
+     * @param target the output file or {@code null} if it's supposed to be
+     * lazily initialized and set.
      */
-    public BufferOutput(final ByteBuffer buffer) {
+    public FileOutput(final RandomAccessFile target) {
 
-        super(buffer);
+        super(target);
     }
 
 
     /**
-     * {@inheritDoc} The {@code writeUnsignedByte(int)} method of
-     * {@code BufferOutput} class calls {@link ByteBuffer#put(byte)} on
+     * {@inheritDoc} The {@code writeUnsginedByte(int)} method of
+     * {@code StreamOutput} class calls {@link RandomAccessFile#write(int)} on
      * {@link #target} with given {@code value}. Override this method if
      * {@link #target} is supposed to be lazily initialized and set.
      *
-     * @param value {@inheritDoc }
+     * @param value {@inheritDoc}
      *
-     * @throws IOException {@inheritDoc }
+     * @throws IOException {@inheritDoc}
      *
      * @see #target
-     * @see ByteBuffer#put(byte)
+     * @see RandomAccessFile#writeByte(int)
      */
     @Override
     public void writeUnsignedByte(final int value) throws IOException {
 
-        target.put((byte) value);
+        target.write(value);
     }
 
 
-    public BufferOutput target(final ByteBuffer target) {
+    public FileOutput target(final RandomAccessFile target) {
 
         setTarget(target);
 

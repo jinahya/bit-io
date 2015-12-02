@@ -104,6 +104,12 @@ public interface BitInput {
     long readLong(int size) throws IOException;
 
 
+    byte[] readBytes(byte[] bytes, int offset, int length) throws IOException;
+
+
+    byte[] readBytes(byte[] bytes, int offset) throws IOException;
+
+
     /**
      * Reads a byte array.
      *
@@ -179,7 +185,6 @@ public interface BitInput {
      * @throws IOException if an I/O error occurs.
      */
     int align(int bytes) throws IOException;
-
 
 }
 

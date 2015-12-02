@@ -34,12 +34,12 @@ public class IntSupplierInput extends AbstractByteInput<IntSupplier> {
      * Creates a new instance with specified {@code supplier} which is mapped to
      * {@link #source}.
      *
-     * @param supplier the supplier instance; {@code null} if this value which
-     * is mapped by {@link #source} is supposed to be lazily instantiated.
+     * @param source the supplier instance or {@code null} if it's supposed to
+     * be lazily initialized and set
      */
-    public IntSupplierInput(final IntSupplier supplier) {
+    public IntSupplierInput(final IntSupplier source) {
 
-        super(supplier);
+        super(source);
     }
 
 
@@ -47,6 +47,14 @@ public class IntSupplierInput extends AbstractByteInput<IntSupplier> {
     public int readUnsignedByte() throws IOException {
 
         return source.getAsInt();
+    }
+
+
+    public IntSupplierInput source(final IntSupplier source) {
+
+        setSource(source);
+
+        return this;
     }
 
 }

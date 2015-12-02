@@ -17,6 +17,9 @@
 package com.github.jinahya.bit.io;
 
 
+import java.io.IOException;
+import static java.util.concurrent.ThreadLocalRandom.current;
+import org.testng.annotations.Test;
 import static java.util.Objects.requireNonNull;
 
 
@@ -35,11 +38,21 @@ abstract class ByteOutputTest<T extends ByteOutput> {
     }
 
 
-    abstract T instantiate(final int capacity);
+    abstract T instance(final int capacity);
+
+
+    @Test
+    public void writeUnsignedByte() throws IOException {
+
+        final int capacity = current().nextInt(1024);
+        final T output = instance(capacity);
+        for (int i = 0; i < capacity; i++) {
+            output.writeUnsignedByte(current().nextInt(256));
+        }
+    }
 
 
     protected final Class<T> type;
-
 
 }
 

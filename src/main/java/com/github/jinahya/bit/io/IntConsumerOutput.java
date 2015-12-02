@@ -30,9 +30,9 @@ import java.util.function.IntConsumer;
 public class IntConsumerOutput extends AbstractByteOutput<IntConsumer> {
 
 
-    public IntConsumerOutput(final IntConsumer consumer) {
+    public IntConsumerOutput(final IntConsumer target) {
 
-        super(consumer);
+        super(target);
     }
 
 
@@ -40,6 +40,14 @@ public class IntConsumerOutput extends AbstractByteOutput<IntConsumer> {
     public void writeUnsignedByte(final int value) throws IOException {
 
         target.accept(value);
+    }
+
+
+    public IntConsumerOutput target(final IntConsumer target) {
+
+        setTarget(target);
+
+        return this;
     }
 
 }

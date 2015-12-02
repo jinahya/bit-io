@@ -58,6 +58,5 @@ public abstract class AbstractByteInput<T> implements ByteInput {
      */
     protected T source;
 
-
 }
 

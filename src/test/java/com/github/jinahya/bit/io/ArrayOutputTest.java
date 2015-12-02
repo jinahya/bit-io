@@ -31,7 +31,7 @@ public class ArrayOutputTest extends ByteOutputTest<ArrayOutput> {
 
 
     @Override
-    ArrayOutput instantiate(final int capacity) {
+    ArrayOutput instance(final int capacity) {
 
         return new ArrayOutput(new byte[capacity], 0, capacity);
     }

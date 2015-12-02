@@ -208,6 +208,28 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
 
 
     @Override
+    public byte[] readBytes(final byte[] bytes, final int offset,
+                            final int length)
+        throws IOException {
+
+        final int limit = offset + length;
+        for (int i = offset; i < limit; i++) {
+            bytes[i] = (byte) readUnsignedByte(8);
+        }
+
+        return bytes;
+    }
+
+
+    @Override
+    public byte[] readBytes(final byte[] bytes, final int offset)
+        throws IOException {
+
+        return readBytes(bytes, offset, bytes.length - offset);
+    }
+
+
+    @Override
     public byte[] readBytes(final int scale, final int range)
         throws IOException {
 
@@ -297,7 +319,6 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
      * number of bytes read so far.
      */
     private int count = 0;
-
 
 }
 

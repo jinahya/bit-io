@@ -29,9 +29,9 @@ import java.io.IOException;
 public class ArrayOutput extends AbstractByteOutput<byte[]> {
 
 
-    public ArrayOutput(final byte[] array, final int index, final int limit) {
+    public ArrayOutput(final byte[] target, final int index, final int limit) {
 
-        super(array);
+        super(target);
 
         this.index = index;
         this.limit = limit;
@@ -49,11 +49,58 @@ public class ArrayOutput extends AbstractByteOutput<byte[]> {
     }
 
 
+    public ArrayOutput target(final byte[] target) {
+
+        setTarget(target);
+
+        return this;
+    }
+
+
+    public int getIndex() {
+
+        return index;
+    }
+
+
+    public void setIndex(int index) {
+
+        this.index = index;
+    }
+
+
+    public ArrayOutput index(final int index) {
+
+        setIndex(index);
+
+        return this;
+    }
+
+
+    public int getLimit() {
+
+        return limit;
+    }
+
+
+    public void setLimit(int limit) {
+
+        this.limit = limit;
+    }
+
+
+    public ArrayOutput limit(final int limit) {
+
+        setLimit(limit);
+
+        return this;
+    }
+
+
     protected int index;
 
 
     protected int limit;
-
 
 }
 

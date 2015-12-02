@@ -20,41 +20,42 @@ package com.github.jinahya.bit.io;
 
 import java.io.EOFException;
 import java.io.IOException;
-import java.io.InputStream;
+import java.io.RandomAccessFile;
 
 
 /**
- * A {@link ByteInput} implementation for {@link InputStream}s.
+ * A {@link ByteInput} implementation for {@link RandomAccessFile}s.
  *
- * @see StreamOutput
+ * @see FileOutput
  */
-public class StreamInput extends AbstractByteInput<InputStream> {
+public class FileInput extends AbstractByteInput<RandomAccessFile> {
 
 
     /**
      * Creates a new instance built on top of the specified input stream.
      *
-     * @param source the stream or {@code null} if it's supposed to be lazily
-     * initialized and set
+     * @param source the source file or {@code null} if it's supposed to be
+     * lazily initialized and set
      */
-    public StreamInput(final InputStream source) {
+    public FileInput(final RandomAccessFile source) {
 
         super(source);
     }
 
 
     /**
-     * {@inheritDoc} The {@code readUnsignedByte()} method of
-     * {@code StreamInput} class calls {@link InputStream#read()} on
-     * {@link #source} and returns if it is not an {@code end of stream}.
+     * {@inheritDoc} The {@code readUnsignedByte()} method of {@code FileInput}
+     * class calls {@link RandomAccessFile#read()} on {@link #source} and
+     * returns the result as an unsigned value. Override this method if
+     * {@link #source} is supposed to be lazily initialized and set.
      *
      * @return {@inheritDoc}
      *
      * @throws IOException {@inheritDoc}
-     * @throws EOFException if the underlying stream reached to end of stream.
+     * @throws EOFException if the underlying file reached to end
      *
      * @see #source
-     * @see InputStream#read()
+     * @see RandomAccessFile#read()
      */
     @Override
     public int readUnsignedByte() throws IOException {
@@ -68,7 +69,7 @@ public class StreamInput extends AbstractByteInput<InputStream> {
     }
 
 
-    public StreamInput source(final InputStream source) {
+    public FileInput source(final RandomAccessFile source) {
 
         setSource(source);
 

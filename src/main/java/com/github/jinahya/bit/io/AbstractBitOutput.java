@@ -191,6 +191,28 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
 
 
     @Override
+    public byte[] writeBytes(final byte[] bytes, final int offset,
+                             final int length)
+        throws IOException {
+
+        final int limit = offset + length;
+        for (int i = offset; i < limit; i++) {
+            writeUnsignedByte(8, bytes[i]);
+        }
+
+        return bytes;
+    }
+
+
+    @Override
+    public byte[] writeBytes(final byte[] bytes, final int offset)
+        throws IOException {
+
+        return writeBytes(bytes, offset, bytes.length - offset);
+    }
+
+
+    @Override
     public void writeBytes(final int scale, final int range, final byte[] value)
         throws IOException {
 
@@ -297,7 +319,6 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
      * number of bytes written so far.
      */
     private long count = 0;
-
 
 }
 

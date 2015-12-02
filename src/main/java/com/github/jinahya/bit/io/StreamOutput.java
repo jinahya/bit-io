@@ -31,19 +31,20 @@ public class StreamOutput extends AbstractByteOutput<OutputStream> {
     /**
      * Creates a new instance built on top of the specified output stream.
      *
-     * @param stream the output stream or {@code null} if it's supposed to be
+     * @param target the output stream or {@code null} if it's supposed to be
      * lazily initialized and set.
      */
-    public StreamOutput(final OutputStream stream) {
+    public StreamOutput(final OutputStream target) {
 
-        super(stream);
+        super(target);
     }
 
 
     /**
      * {@inheritDoc} The {@code writeUnsginedByte(int)} method of
      * {@code StreamOutput} class calls {@link OutputStream#write(int)} on
-     * {@link #target} with given {@code value}.
+     * {@link #target} with given {@code value}. Override this method if
+     * {@link #target} is supposed to be lazily initialized and set.
      *
      * @param value {@inheritDoc}
      *
@@ -58,6 +59,13 @@ public class StreamOutput extends AbstractByteOutput<OutputStream> {
         target.write(value);
     }
 
+
+    public StreamOutput target(final OutputStream target) {
+
+        setTarget(target);
+
+        return this;
+    }
 
 }
 

@@ -21,11 +21,12 @@ A small library for reading or writing none octet aligned values such as `1-bit 
 #### Preparing `ByteInput`
 Prepare an instance of `ByteInput` from various sources.
 ````java
-new ArrayInput(byte[], index, limit)
+new ArrayInput(byte[], index, limit);
 new BufferInput(java.nio.ByteBuffer);
+new FileInput(java.io.RandomAccessFile);
+new IntSupplierInput(java.util.function.IntSuppiler);
 new StreamInput(java.io.InputStream);
-new SupplierInput(java.util.function.Supplier<Byte>)
-new IntSupplierInput(java.util.function.IntSuppiler)
+new SupplierInput(java.util.function.Supplier<Byte>);
 ````
 #### Creating `BitInput`
 ```java
@@ -46,15 +47,16 @@ biiiiiil llllllll llllllll llllllll llllllll llllllll lllllldd
 #### Preparing `ByteOutput`
 Prepare an instance of `ByteOutput` from various targets.
 ```java
-new ArrayOutput(byte[], index, limit)
-new BufferOutput(java.nio.ByteBuffer)
+new ArrayOutput(byte[], index, limit);
+new BufferOutput(java.nio.ByteBuffer);
+new FileOutput(java.io.RandomAccessFile);
 new StreamOutput(java.io.OutputStream);
-new ConsumerOutput(java.util.function.Consumer<Byte>)
-new IntConsumerOutput(java.util.function.IntConsumer)
+new ConsumerOutput(java.util.function.Consumer<Byte>);
+new IntConsumerOutput(java.util.function.IntConsumer);
 ````
 #### Creating `BitInput`
 ```java
-new DelegatedBitOutput(ByteOutput)
+new DelegatedBitOutput(ByteOutput);
 ```
 #### Writing values.
 ```java

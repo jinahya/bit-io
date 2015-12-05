@@ -27,23 +27,41 @@ new IntSupplierInput(java.util.function.IntSuppiler);
 new StreamInput(java.io.InputStream);
 new SupplierInput(java.util.function.Supplier<Byte>);
 ````
-### Creating `BitInput`
-#### Using `DelegatedBitInput`
+Those constructors don't check arguments which means you can lazily instantiate and set them.
 ```java
-final ByteInput input = createByteInput();
-new DelegatedBitInput(input);
-
-new DelegatedBitInput(null) {
+new ArrayInput(null, -1, -1) {
     @Override
     public int readUnsignedByte() throws IOException {
-        if (delegate == null) {
-            final ByteBuffer buffer = createBuffer();
-            delegate = new BufferInput(buffer);
+        if (source == null) {
+            source = byte[16];
+            index = 0;
+            limit = source.length;
         }
         return super.readUnsignedByte();
     }
 };
-
+```
+### Creating `BitInput`
+#### Using `DelegatedBitInput`
+Construct with an already created a `ByteInput`.
+```java
+final ByteInput input = createByteInput();
+new DelegatedBitInput(input);
+```
+Or laziy instantiate one.
+```java
+new DelegatedBitInput(null) {
+    @Override
+    public int readUnsignedByte() throws IOException {
+        if (delegate == null) {
+            delegate = new BufferInput(createBuffer());
+        }
+        return super.readUnsignedByte();
+    }
+};
+```
+Note that `ByteBuffer` itself can lazily initialize and set its `source`.
+```java
 new DelegatedBitInput(null) {
     @Override
     public int readUnsignedByte() throws IOException {
@@ -63,7 +81,7 @@ new DelegatedBitInput(null) {
 };
 ```
 #### Using `BitInputFactory`
-You can also use `BitInputFactory#newInstance(...)`.
+You can create `BitInput`s using various `newInstance(...)` methods.
 ### Reading values.
 ```java
 final boolean b = input.readBoolean();    // 1-bit boolean        1    1

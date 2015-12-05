@@ -28,16 +28,16 @@ new StreamInput(java.io.InputStream);
 new SupplierInput(java.util.function.Supplier<Byte>);
 ````
 ### Creating `BitInput`
-#### `DelegatedBitInput`
+#### Using `DelegatedBitInput`
 ```java
-final ByteInput input = getSome();
-new DelegatedBitInput(byteInput);
+final ByteInput input = createByteInput();
+new DelegatedBitInput(input);
 
 new DelegatedBitInput(null) {
     @Override
     public int readUnsignedByte() throws IOException {
         if (delegate == null) {
-            final ByteBuffer buffer = ByteBuffer.allocate(0);
+            final ByteBuffer buffer = createBuffer();
             delegate = new BufferInput(buffer);
         }
         return super.readUnsignedByte();
@@ -52,7 +52,7 @@ new DelegatedBitInput(null) {
                 @Override
                 public int readUnsignedByte() throws IOException {
                     if (source == null) {
-                        source = ByteBuffer.allocate(0);
+                        source = createBuffer();
                     }
                     return super.readUnsignedByte();
                 }
@@ -61,27 +61,10 @@ new DelegatedBitInput(null) {
         return super.readUnsignedByte();
     }
 };
-
 ```
-#### `BitInputFactory`
-
-// create an instance of BitInput on the fly
-final ByteBuffer buffer = getSome();
-BitInputFactory.newInstance(() -> buffer.get() & 0xFF);
-
-// create an instance whose byte source is lazily instantiated
-BitFactory.newBitInput(() -> {
-    final InputStream stream = getSome(); // handle your own IOException
-    return () -> {
-        final int v = stream.read();
-        if (v == -1) {
-            throw new EOFException();
-        }
-        return v;
-    };
-});
-```
-#### Reading values.
+#### Using `BitInputFactory`
+You can also use `BitInputFactory#newInstance(...)`.
+### Reading values.
 ```java
 final boolean b = input.readBoolean();    // 1-bit boolean        1    1
 final int ui6 = input.readUnsignedInt(6); // 6-bit unsigned int   6    7
@@ -92,8 +75,8 @@ assert discarded == 2;
 
 biiiiiil llllllll llllllll llllllll llllllll llllllll lllllldd
 ```
-### Writing
-#### Preparing `ByteOutput`
+## Writing
+### Preparing `ByteOutput`
 Prepare an instance of `ByteOutput` from various targets.
 ```java
 new ArrayOutput(byte[], index, limit);
@@ -103,11 +86,10 @@ new StreamOutput(java.io.OutputStream);
 new ConsumerOutput(java.util.function.Consumer<Byte>);
 new IntConsumerOutput(java.util.function.IntConsumer);
 ````
-#### Creating `BitOutput`
-```java
-new DelegatedBitOutput(ByteOutput);
-```
-#### Writing values.
+### Creating `BitOutput`
+#### Using `DelegatedBitOutput`
+#### Using `BitOutputFactory#newInstance(...)`
+### Writing values.
 ```java
 final BitOutput output;
 

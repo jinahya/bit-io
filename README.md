@@ -48,7 +48,7 @@ Construct with an already created a `ByteInput`.
 final ByteInput input = createByteInput();
 new DelegatedBitInput(input);
 ```
-Or laziy instantiate one.
+Or laziy instantiate its `delegate` field.
 ```java
 new DelegatedBitInput(null) {
     @Override
@@ -60,7 +60,7 @@ new DelegatedBitInput(null) {
     }
 };
 ```
-Note that `ByteBuffer` itself can lazily initialize and set its `source`.
+Note that the `source` field of `AbstractByteInput` class, from which `BufferInput` extends, can lazily initialize and set.
 ```java
 new DelegatedBitInput(null) {
     @Override

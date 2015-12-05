@@ -16,8 +16,9 @@ A small library for reading or writing none octet aligned values such as `1-bit 
 |1.1.6|[site](http://jinahya.github.io/bit-io/sites/1.1.6/index.html)|[apidocs](http://jinahya.github.io/bit-io/sites/1.1.6/apidocs/index.html)||
 |1.1.5|[site](http://jinahya.github.io/bit-io/sites/1.1.5/index.html)|[apidocs](http://jinahya.github.io/bit-io/sites/1.1.5/apidocs/index.html)||
 
-## Reading
-### Preparing `ByteInput`
+## Usages
+### Reading
+#### Preparing `ByteInput`
 Prepare an instance of `ByteInput` from various sources.
 ````java
 new ArrayInput(byte[], index, limit);
@@ -27,7 +28,7 @@ new IntSupplierInput(java.util.function.IntSuppiler);
 new StreamInput(java.io.InputStream);
 new SupplierInput(java.util.function.Supplier<Byte>);
 ````
-### Creating `BitInput`
+#### Creating `BitInput`
 ```java
 new DelegatedBitInput(byteInput);
 final ByteBuffer buffer = getSome();
@@ -43,19 +44,19 @@ BitFactory.newBitInput(() -> {
     }
 });
 ```
-### Reading values.
+#### Reading values.
 ```java
 final boolean b = input.readBoolean();    // 1-bit boolean        1    1
 final int ui6 = input.readUnsignedInt(6); // 6-bit unsigned int   6    7
 final long sl47 = input.readLong(47);     // 47-bit signed long  47   54
 
-final int discarded = bitInput.align(1);     // aligns to 8-bit      2   56
+final int discarded = input.align(1);     // aligns to 8-bit      2   56
 assert discarded == 2;
 
 biiiiiil llllllll llllllll llllllll llllllll llllllll lllllldd
 ```
-## Writing
-### Preparing `ByteOutput`
+### Writing
+#### Preparing `ByteOutput`
 Prepare an instance of `ByteOutput` from various targets.
 ```java
 new ArrayOutput(byte[], index, limit);
@@ -65,11 +66,11 @@ new StreamOutput(java.io.OutputStream);
 new ConsumerOutput(java.util.function.Consumer<Byte>);
 new IntConsumerOutput(java.util.function.IntConsumer);
 ````
-### Creating `BitOutput`
+#### Creating `BitOutput`
 ```java
 new DelegatedBitOutput(ByteOutput);
 ```
-### Writing values.
+#### Writing values.
 ```java
 final BitOutput output;
 
@@ -77,7 +78,7 @@ output.writeBoolean(true);          // 1-bit boolean        1    1
 output.writeInt(7, -1);             // 7-bit signed int     7    8
 output.writeUnsignedLong(33, 1L);   // 33-bit signed long  33   41
 
-final int padded = bitOutput.align(4); // aligns to 32-bit    23   64
+final int padded = output.align(4); // aligns to 32-bit    23   64
 assert padded == 23;
 
 biiiiiii llllllll llllllll llllllll llllllll lppppppp pppppppp pppppppp

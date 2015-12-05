@@ -22,9 +22,9 @@ import java.util.LinkedList;
 import java.util.List;
 import static java.util.concurrent.ThreadLocalRandom.current;
 import org.slf4j.Logger;
-import org.testng.annotations.Test;
 import static org.slf4j.LoggerFactory.getLogger;
 import static org.testng.Assert.assertEquals;
+import org.testng.annotations.Test;
 
 
 /**
@@ -37,23 +37,20 @@ public class BitIoTest {
     @Test
     public void test1() throws IOException {
 
-        final BitType[] types = BitType.values();
+        final BitIoType[] types = BitIoType.values();
 
         final byte[] array = new byte[1048576];
 
         final int count = current().nextInt(128);
-        final List<Object> list = new LinkedList<>(); // (type, size, value)+
+        final List<Object> params = new LinkedList<>(); // type, param+, value
 
         final BitOutput output = new DelegatedBitOutput(
             new ArrayOutput(array, 0, array.length));
         for (int i = 0; i < count; i++) {
-            final BitType type = types[current().nextInt(types.length)];
-            final int size = type.length();
-            final Object value = type.value(size);
-            list.add(type);
-            list.add(size);
-            list.add(value);
-            type.write(size, output, value);
+            final BitIoType type = types[current().nextInt(types.length)];
+            params.add(type);
+            final Object value = type.write(params, output);
+            params.add(value);
         }
         final int padded = output.align(1);
         logger.debug("padded: {}", padded);
@@ -61,10 +58,9 @@ public class BitIoTest {
         final BitInput input = new DelegatedBitInput(
             new ArrayInput(array, 0, array.length));
         for (int i = 0; i < count; i++) {
-            final BitType type = (BitType) list.remove(0);
-            final int size = (int) list.remove(0);
-            final Object expected = list.remove(0);
-            final Object actual = type.read(size, input);
+            final BitIoType type = (BitIoType) params.remove(0);
+            final Object actual = type.read(params, input);
+            final Object expected = params.remove(0);
             assertEquals(actual, expected);
         }
         final int discarded = input.align(1);

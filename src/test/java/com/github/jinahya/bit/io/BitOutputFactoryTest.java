@@ -17,9 +17,9 @@
 package com.github.jinahya.bit.io;
 
 
-import java.io.IOException;
-import static java.util.Objects.requireNonNull;
-import static java.util.concurrent.ThreadLocalRandom.current;
+import java.nio.ByteBuffer;
+import java.util.function.Consumer;
+import java.util.function.IntConsumer;
 import org.testng.annotations.Test;
 
 
@@ -27,32 +27,33 @@ import org.testng.annotations.Test;
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
-abstract class ByteOutputTest<T extends ByteOutput> {
-
-
-    public ByteOutputTest(final Class<T> type) {
-
-        super();
-
-        this.type = requireNonNull(type);
-    }
-
-
-    abstract T instance(final int capacity);
+public class BitOutputFactoryTest {
 
 
     @Test
-    public void writeUnsignedByte() throws IOException {
+    public static void newInstanceByteBuffer() {
 
-        final int capacity = current().nextInt(1024);
-        final T output = instance(capacity);
-        for (int i = 0; i < capacity; i++) {
-            output.writeUnsignedByte(current().nextInt(256));
-        }
+        final ByteBuffer buffer = ByteBuffer.allocate(0);
+        BitOutputFactory.newInstance(v -> buffer.put((byte) v));
     }
 
 
-    protected final Class<T> type;
+    @Test
+    public static void newBitOutputForConsumer() {
+
+        final Consumer<Byte> consumer = v -> {
+        };
+        BitOutputFactory.newInstance(v -> consumer.accept((byte) v));
+    }
+
+
+    @Test
+    public static void newInstanceIntConsumer() {
+
+        final IntConsumer consumer = v -> {
+        };
+        BitOutputFactory.newInstance(v -> consumer.accept(v));
+    }
 
 }
 

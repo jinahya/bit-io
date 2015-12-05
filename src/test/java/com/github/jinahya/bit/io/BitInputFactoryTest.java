@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Jin Kwon.
+ * Copyright 2015 Jin Kwon &lt;jinahya_at_gmail.com&gt;.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,26 +14,31 @@
  * limitations under the License.
  */
 
-
 package com.github.jinahya.bit.io;
 
 
-import com.google.inject.AbstractModule;
+import org.testng.annotations.Test;
 
 
 /**
  *
- * @author Jin Kwon
+ * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
-public class ByteInputMockModule extends AbstractModule {
+public class BitInputFactoryTest {
 
 
-    @Override
-    protected void configure() {
+    @Test
+    public static void newInstanceWithByteInput() {
 
-        bind(ByteInput.class).to(ByteInputMock.class);
+        BitInputFactory.newInstance(new WhiteByteInput());
     }
 
+
+    @Test
+    public static void newInstanceWithSupplier() {
+
+        BitInputFactory.newInstance(() -> new WhiteByteInput());
+    }
 
 }
 

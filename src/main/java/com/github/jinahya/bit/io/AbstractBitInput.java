@@ -208,66 +208,126 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
 
 
     @Override
-    public byte[] readBytes(final byte[] bytes, final int offset,
-                            final int length)
+    public byte[] readBytes(final byte[] array, final int offset,
+                            final int length, final int range)
         throws IOException {
+
+        BitIoConstraints.requireValidBytesRange(range);
 
         final int limit = offset + length;
         for (int i = offset; i < limit; i++) {
-            bytes[i] = (byte) readUnsignedByte(8);
+            array[i] = (byte) readUnsignedByte(range);
         }
 
-        return bytes;
+        return array;
     }
 
 
     @Override
-    public byte[] readBytes(final byte[] bytes, final int offset)
+    public byte[] readBytes(final byte[] array, final int offset,
+                            final int range)
         throws IOException {
 
-        return readBytes(bytes, offset, bytes.length - offset);
+        return readBytes(array, offset, array.length - offset, range);
     }
 
 
     @Override
-    public byte[] readBytes(final int scale, final int range)
+    public byte[] readBytes(final byte[] array, final int range)
         throws IOException {
 
-        BitIoConstraints.requireValidBytesScale(scale);
-        BitIoConstraints.requireValidBytesRange(range);
+        return readBytes(array, 0, range);
+    }
 
-        final byte[] value = new byte[readUnsignedInt(scale)];
 
-        for (int i = 0; i < value.length; i++) {
-            value[i] = (byte) readUnsignedByte(range);
-        }
+    int readLenght(final int scale) throws IOException {
 
-        return value;
+        BitIoConstraints.requireValidLengthSize(scale);
+
+        return readUnsignedInt(scale);
     }
 
 
     @Override
-    public String readString(final String charsetName) throws IOException {
+    public byte[] readBytes(int scale, byte[] array, int offset, int range)
+        throws IOException {
 
-        if (charsetName == null) {
-            throw new NullPointerException("null charsetName");
-        }
+        BitIoConstraints.requireValidLengthSize(scale);
 
-        final byte[] bytes = readBytes(BitIoConstants.SCALE_SIZE_MAX,
-                                       BitIoConstants.RANGE_SIZE_MAX);
+        final int length = readUnsignedInt(scale);
+        return readBytes(array, offset, length, range);
+    }
+
+
+    @Override
+    public byte[] readBytes(final int scale, final byte[] array,
+                            final int range)
+        throws IOException {
+
+        return readBytes(scale, array, 0, range);
+    }
+
+
+//    @Deprecated
+//    @Override
+//    public byte[] readBytes(final int scale, final int range)
+//        throws IOException {
+//
+//        BitIoConstraints.requireValidBytesScale(scale);
+//        BitIoConstraints.requireValidBytesRange(range);
+//
+////        final byte[] value = new byte[readUnsignedInt(scale)];
+////
+////        for (int i = 0; i < value.length; i++) {
+////            value[i] = (byte) readUnsignedByte(range);
+////        }
+////
+////        return value;
+//        return readBytes(new byte[readUnsignedInt(scale)], range);
+//    }
+    @Override
+    public String readString(final int scale, final String charsetName)
+        throws IOException {
+
+        final byte[] bytes = readBytes(
+            new byte[readLenght(scale)], BitIoConstants.UBYTE_SIZE_MAX);
 
         return new String(bytes, charsetName);
     }
 
 
     @Override
-    public String readAscii() throws IOException {
+    public String readString(final String charsetName) throws IOException {
 
-        final byte[] bytes = readBytes(BitIoConstants.SCALE_SIZE_MAX, 7);
+        return readString(BitIoConstants.LENGTH_SIZE_MAX, charsetName);
+    }
+
+
+//    @Override
+//    public String readString(final String charsetName) throws IOException {
+//
+//        return readString(BitIoConstants.LENGTH_SIZE_MAX, charsetName);
+//    }
+    @Override
+    public String readAscii(final int scale) throws IOException {
+
+        final byte[] bytes = readBytes(new byte[readLenght(scale)], 7);
 
         return new String(bytes, "US-ASCII");
     }
 
+
+    @Override
+    public String readAscii() throws IOException {
+
+        return readAscii(BitIoConstants.LENGTH_SIZE_MAX);
+    }
+
+//    @Override
+//    public String readAscii() throws IOException {
+//
+//        return readAscii(BitIoConstants.LENGTH_SIZE_MAX);
+//    }
 
     @Override
     public int align(final int bytes) throws IOException {

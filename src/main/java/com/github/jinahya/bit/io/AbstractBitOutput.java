@@ -18,6 +18,7 @@
 package com.github.jinahya.bit.io;
 
 
+import java.io.DataOutput;
 import java.io.IOException;
 
 
@@ -27,6 +28,42 @@ import java.io.IOException;
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
 public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
+
+
+    public static BitOutput newInstance(final ByteOutput output) {
+
+        if (output == null) {
+            throw new NullPointerException("null output");
+        }
+
+        return new AbstractBitOutput() {
+
+            @Override
+            public void writeUnsignedByte(final int value) throws IOException {
+
+                output.writeUnsignedByte(value);
+            }
+
+        };
+    }
+
+
+    public static BitOutput newInstance(final DataOutput output) {
+
+        if (output == null) {
+            throw new NullPointerException("null output");
+        }
+
+        return new AbstractBitOutput() {
+
+            @Override
+            public void writeUnsignedByte(final int value) throws IOException {
+
+                output.writeByte(value);
+            }
+
+        };
+    }
 
 
     /**
@@ -191,49 +228,106 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
 
 
     @Override
-    public byte[] writeBytes(final byte[] bytes, final int offset,
-                             final int length)
+    public byte[] writeBytes(final byte[] array, final int offset,
+                             final int length, final int range)
         throws IOException {
+
+        // @todo: chcck arguments
+        BitIoConstraints.requireValidBytesRange(range);
 
         final int limit = offset + length;
         for (int i = offset; i < limit; i++) {
-            writeUnsignedByte(8, bytes[i]);
+            writeUnsignedByte(range, array[i]);
         }
 
-        return bytes;
+        return array;
     }
 
 
     @Override
-    public byte[] writeBytes(final byte[] bytes, final int offset)
+    public byte[] writeBytes(final byte[] array, final int offset,
+                             final int range)
         throws IOException {
 
-        return writeBytes(bytes, offset, bytes.length - offset);
+        return writeBytes(array, offset, array.length - offset, range);
     }
 
 
     @Override
-    public void writeBytes(final int scale, final int range, final byte[] value)
+    public byte[] writeBytes(final byte[] array, final int range)
         throws IOException {
 
-        BitIoConstraints.requireValidBytesScale(scale);
+        return writeBytes(array, 0, range);
+    }
 
-        BitIoConstraints.requireValidBytesRange(range);
 
-        if (value == null) {
-            throw new NullPointerException("null value");
+    void writeLength(final int scale, final int length) throws IOException {
+
+        BitIoConstraints.requireValidLengthSize(scale);
+
+        if (length < 0) {
+            throw new IllegalArgumentException("length(" + length + ") < 0");
         }
-        if (value.length >> scale != 0) {
+
+        if ((length >> scale) > 0) {
             throw new IllegalArgumentException(
-                "value.length(" + value.length + ") >> scale(" + scale
-                + " != 0");
+                "length(" + length + ") >> scale(" + scale + ") > 0");
         }
 
-        writeUnsignedInt(scale, value.length);
+        writeUnsignedInt(scale, length);
+    }
 
-        for (int i = 0; i < value.length; i++) {
-            writeUnsignedByte(range, value[i]);
-        }
+
+    @Override
+    public byte[] writeBytes(final int scale, final byte[] array,
+                             final int offset, final int range)
+        throws IOException {
+
+        writeUnsignedInt(scale, array.length - offset);
+        return writeBytes(array, offset, range);
+    }
+
+
+    @Override
+    public byte[] writeBytes(final int scale, final byte[] array,
+                             final int range)
+        throws IOException {
+
+        return writeBytes(scale, array, 0, range);
+    }
+
+
+//    @Override
+//    public void writeBytes(final int scale, final int range, final byte[] value)
+//        throws IOException {
+//
+//        BitIoConstraints.requireValidBytesScale(scale);
+//
+//        BitIoConstraints.requireValidBytesRange(range);
+//
+//        if (value == null) {
+//            throw new NullPointerException("null value");
+//        }
+//        if (value.length >> scale > 0) {
+//            throw new IllegalArgumentException(
+//                "value.length(" + value.length + ") >> scale(" + scale
+//                + ") > 0");
+//        }
+//
+//        writeUnsignedInt(scale, value.length);
+//
+//        for (int i = 0; i < value.length; i++) {
+//            writeUnsignedByte(range, value[i]);
+//        }
+//    }
+    @Override
+    public void writeString(final int scale, final String value,
+                            final String charsetName)
+        throws IOException {
+
+        final byte[] bytes = value.getBytes(charsetName);
+        writeLength(scale, bytes.length);
+        writeBytes(bytes, BitIoConstants.UBYTE_SIZE_MAX);
     }
 
 
@@ -241,31 +335,24 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
     public void writeString(final String value, final String charsetName)
         throws IOException {
 
-        if (value == null) {
-            throw new NullPointerException("null value");
-        }
+        writeString(BitIoConstants.LENGTH_SIZE_MAX, value, charsetName);
+    }
 
-        if (charsetName == null) {
-            throw new NullPointerException("null charsetName");
-        }
 
-        final byte[] bytes = value.getBytes(charsetName);
+    @Override
+    public void writeAscii(final int scale, final String value)
+        throws IOException {
 
-        writeBytes(BitIoConstants.SCALE_SIZE_MAX, BitIoConstants.RANGE_SIZE_MAX,
-                   bytes);
+        final byte[] bytes = value.getBytes("US-ASCII");
+        writeLength(scale, bytes.length);
+        writeBytes(bytes, 7);
     }
 
 
     @Override
     public void writeAscii(final String value) throws IOException {
 
-        if (value == null) {
-            throw new NullPointerException("null value");
-        }
-
-        final byte[] bytes = value.getBytes("US-ASCII");
-
-        writeBytes(BitIoConstants.SCALE_SIZE_MAX, 7, bytes);
+        writeAscii(BitIoConstants.LENGTH_SIZE_MAX, value);
     }
 
 

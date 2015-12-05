@@ -40,6 +40,5 @@ public interface ByteInput {
      */
     int readUnsignedByte() throws IOException;
 
-
 }
 

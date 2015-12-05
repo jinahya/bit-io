@@ -26,76 +26,64 @@ package com.github.jinahya.bit.io;
 final class BitIoConstants {
 
 
-    protected static final int UBYTE_SIZE_MIN = 0x01;
+    public static final int UBYTE_SIZE_MIN = 0x01;
 
 
-    protected static final int UBYTE_SIZE_MAX = 0x08;
+    public static final int UBYTE_SIZE_MAX = 0x08;
 
 
-    protected static final int USHORT_SIZE_MIN = 0x01;
+    public static final int USHORT_SIZE_MIN = 0x01;
 
 
-    protected static final int USHORT_SIZE_MAX = 0x10;
+    public static final int USHORT_SIZE_MAX = 0x10;
 
 
-    protected static final int UINT_SIZE_MIN = 0x01;
+    public static final int UINT_SIZE_MIN = 0x01;
 
 
-    protected static final int UINT_SIZE_MAX = 0x1F;
+    public static final int UINT_SIZE_MAX = 0x1F;
 
 
-    protected static final int INT_SIZE_MIN = 0x02;
+    public static final int INT_SIZE_MIN = 0x02;
 
 
-    protected static final int INT_SIZE_MAX = 0x20;
+    public static final int INT_SIZE_MAX = 0x20;
 
 
-    protected static final int ULONG_SIZE_MIN = 0x01;
+    public static final int ULONG_SIZE_MIN = 0x01;
 
 
-    protected static final int ULONG_SIZE_MAX = 0x3F;
+    public static final int ULONG_SIZE_MAX = 0x3F;
 
 
-    protected static final int LONG_SIZE_MIN = 0x02;
+    public static final int LONG_SIZE_MIN = 0x02;
 
 
-    protected static final int LONG_SIZE_MAX = 0x40;
+    public static final int LONG_SIZE_MAX = 0x40;
 
 
     /**
      * The minimum value for {@code scale} of bytes.
      */
-    protected static final int SCALE_SIZE_MIN = 0x01;
+    public static final int LENGTH_SIZE_MIN = 0x01;
 
 
     /**
      * The maximum value for {@code scale} of bytes.
      */
-    protected static final int SCALE_SIZE_MAX = 0x10;
-
-
-    /**
-     * The minimum value for {@code range} of bytes.
-     */
-    protected static final int RANGE_SIZE_MIN = 0x01;
-
-
-    /**
-     * The maximum value for {@code range} of bytes.
-     */
-    protected static final int RANGE_SIZE_MAX = 0x08;
+    public static final int LENGTH_SIZE_MAX = 0x10;
 
 
     /**
      * The minimum value for {@code length} in {@code align}.
      */
-    protected static final int ALIGN_BYTES_MIN = 0x00001;
+    public static final int ALIGN_BYTES_MIN = 0x00001;
 
 
     /**
      * The maximum value for {@code length} in {@code align}.
      */
-    protected static final int ALIGN_BYTES_MAX = 0x10000;
+    public static final int ALIGN_BYTES_MAX = 0x10000;
 
 
     private BitIoConstants() {

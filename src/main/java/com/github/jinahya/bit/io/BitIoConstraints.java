@@ -18,14 +18,6 @@
 package com.github.jinahya.bit.io;
 
 
-import static com.github.jinahya.bit.io.BitIoConstants.ALIGN_BYTES_MAX;
-import static com.github.jinahya.bit.io.BitIoConstants.ALIGN_BYTES_MIN;
-import static com.github.jinahya.bit.io.BitIoConstants.RANGE_SIZE_MAX;
-import static com.github.jinahya.bit.io.BitIoConstants.RANGE_SIZE_MIN;
-import static com.github.jinahya.bit.io.BitIoConstants.SCALE_SIZE_MAX;
-import static com.github.jinahya.bit.io.BitIoConstants.SCALE_SIZE_MIN;
-
-
 /**
  * A class for constraints.
  *
@@ -34,23 +26,23 @@ import static com.github.jinahya.bit.io.BitIoConstants.SCALE_SIZE_MIN;
 final class BitIoConstraints {
 
 
-    static int requireValidAlighBytes(final int bytes) {
+    public static int requireValidAlighBytes(final int bytes) {
 
-        if (bytes < ALIGN_BYTES_MIN) {
+        if (bytes < BitIoConstants.ALIGN_BYTES_MIN) {
             throw new IllegalArgumentException(
-                "align(" + bytes + ") < " + ALIGN_BYTES_MIN);
+                "bytes(" + bytes + ") < " + BitIoConstants.ALIGN_BYTES_MIN);
         }
 
-        if (bytes > ALIGN_BYTES_MAX) {
+        if (bytes > BitIoConstants.ALIGN_BYTES_MAX) {
             throw new IllegalArgumentException(
-                "bytes(" + bytes + ") > " + ALIGN_BYTES_MAX);
+                "bytes(" + bytes + ") > " + BitIoConstants.ALIGN_BYTES_MAX);
         }
 
         return bytes;
     }
 
 
-    static int requireValidUnsignedByteSize(final int size) {
+    public static int requireValidUnsignedByteSize(final int size) {
 
         if (size < BitIoConstants.UBYTE_SIZE_MIN) {
             throw new IllegalArgumentException(
@@ -66,7 +58,23 @@ final class BitIoConstraints {
     }
 
 
-    static int requireValidUnsignedShortSize(final int size) {
+    public static int requireValidUnsignedByteValue(final int value,
+                                                    final int size) {
+
+        if (value < 0) {
+            throw new IllegalArgumentException("value(" + value + ") < 0");
+        }
+
+        if ((value >> size) > 0) {
+            throw new IllegalArgumentException(
+                "(value(" + value + ") >> size(" + size + ")) > 0");
+        }
+
+        return value;
+    }
+
+
+    public static int requireValidUnsignedShortSize(final int size) {
 
         if (size < BitIoConstants.USHORT_SIZE_MIN) {
             throw new IllegalArgumentException(
@@ -82,7 +90,23 @@ final class BitIoConstraints {
     }
 
 
-    static int requireValidUnsignedIntSize(final int size) {
+    public static int requireValidUnsignedShortValue(final int value,
+                                                     final int size) {
+
+        if (value < 0) {
+            throw new IllegalArgumentException("value(" + value + ") < 0");
+        }
+
+        if ((value >> requireValidUnsignedShortSize(size)) > 0) {
+            throw new IllegalArgumentException(
+                "(value(" + value + ") >> size(" + size + ")) < 0");
+        }
+
+        return value;
+    }
+
+
+    public static int requireValidUnsignedIntSize(final int size) {
 
         if (size < BitIoConstants.UINT_SIZE_MIN) {
             throw new IllegalArgumentException(
@@ -98,7 +122,23 @@ final class BitIoConstraints {
     }
 
 
-    static int requireValidIntSize(final int size) {
+    public static int requireValidUnsignedIntValue(final int value,
+                                                   final int size) {
+
+        if (value < 0) {
+            throw new IllegalArgumentException("value(" + value + ") < 0");
+        }
+
+        if ((value >> requireValidUnsignedIntSize(size)) > 0) {
+            throw new IllegalArgumentException(
+                "(value(" + value + ") >> size(" + size + ")) > 0");
+        }
+
+        return value;
+    }
+
+
+    public static int requireValidIntSize(final int size) {
 
         if (size < BitIoConstants.INT_SIZE_MIN) {
             throw new IllegalArgumentException(
@@ -114,7 +154,29 @@ final class BitIoConstraints {
     }
 
 
-    static int requireValidUnsignedLongSize(final int size) {
+    public static int requireValidIntValue(final int value, final int size) {
+
+        requireValidIntSize(size);
+
+        if (size == BitIoConstants.INT_SIZE_MAX) {
+            return value;
+        }
+
+        if (value < 0) {
+            if ((value >> size) != -1) {
+                throw new IllegalArgumentException(
+                    "(value(" + value + " >> size(" + size + ")) != -1");
+            }
+        } else if ((value >> size) != 0) {
+            throw new IllegalArgumentException(
+                "(value(" + value + " >> size(" + size + ")) != 0");
+        }
+
+        return size;
+    }
+
+
+    public static int requireValidUnsignedLongSize(final int size) {
 
         if (size < BitIoConstants.ULONG_SIZE_MIN) {
             throw new IllegalArgumentException(
@@ -130,7 +192,23 @@ final class BitIoConstraints {
     }
 
 
-    static int requireValidLongSize(final int size) {
+    public static long requireValidUnsignedLongValue(final long value,
+                                                     final int size) {
+
+        if (value < 0L) {
+            throw new IllegalArgumentException("value(" + value + ") < 0L");
+        }
+
+        if ((value >> size) > 0) {
+            throw new IllegalArgumentException(
+                "(value(" + value + ") >> size(" + size + ")) > 0");
+        }
+
+        return value;
+    }
+
+
+    public static int requireValidLongSize(final int size) {
 
         if (size < BitIoConstants.LONG_SIZE_MIN) {
             throw new IllegalArgumentException(
@@ -146,26 +224,65 @@ final class BitIoConstraints {
     }
 
 
+    public static long requireValidLongValue(final long value, final int size) {
+
+        requireValidLongSize(size);
+
+        if (size == BitIoConstants.LONG_SIZE_MAX) {
+            return value;
+        }
+
+        if (value < 0) {
+            if ((value >> size) != -1L) {
+                throw new IllegalArgumentException(
+                    "(value(" + value + ") >> size(" + size + ")) != -1L");
+            }
+        } else if ((value >> size) != 0L) {
+            throw new IllegalArgumentException(
+                "(value(" + value + ") >> size(" + size + ")) != 0L");
+        }
+
+        return value;
+    }
+
+
     /**
      * Checks that the specified value is valid.
      *
-     * @param scale the value to check
+     * @param size the value to check
      *
      * @return given value if it's valid.
      */
-    static int requireValidBytesScale(final int scale) {
+    public static int requireValidLengthSize(final int size) {
 
-        if (scale < SCALE_SIZE_MIN) {
+        if (size < BitIoConstants.LENGTH_SIZE_MIN) {
             throw new IllegalArgumentException(
-                "scale(" + scale + ") < " + SCALE_SIZE_MIN);
+                "scale(" + size + ") < " + BitIoConstants.LENGTH_SIZE_MIN);
         }
 
-        if (scale > SCALE_SIZE_MAX) {
+        if (size > BitIoConstants.LENGTH_SIZE_MAX) {
             throw new IllegalArgumentException(
-                "scale(" + scale + ") > " + SCALE_SIZE_MAX);
+                "scale(" + size + ") > " + BitIoConstants.LENGTH_SIZE_MAX);
         }
 
-        return scale;
+        return size;
+    }
+
+
+    public static int requireValidLengthValue(final int value, final int size) {
+
+        if (value < 0) {
+            throw new IllegalArgumentException("value(" + value + ") < 0");
+        }
+
+        requireValidLengthSize(size);
+
+        if ((value >> size) > 0) {
+            throw new IllegalArgumentException(
+                "(value(" + value + ") >> size(" + size + ")) > 0");
+        }
+
+        return value;
     }
 
 
@@ -177,20 +294,17 @@ final class BitIoConstraints {
      * @return given value if it's valid.
      *
      * @throws IllegalArgumentException if given value is not valid.
-     *
-     * @see #RANGE_MIN
-     * @see #RANGE_MAX
      */
-    static int requireValidBytesRange(final int range) {
+    public static int requireValidBytesRange(final int range) {
 
-        if (range < RANGE_SIZE_MIN) {
+        if (range < BitIoConstants.UBYTE_SIZE_MIN) {
             throw new IllegalArgumentException(
-                "range(" + range + ") < " + RANGE_SIZE_MIN);
+                "range(" + range + ") < " + BitIoConstants.UBYTE_SIZE_MIN);
         }
 
-        if (range > RANGE_SIZE_MAX) {
+        if (range > BitIoConstants.UBYTE_SIZE_MAX) {
             throw new IllegalArgumentException(
-                "range(" + range + ") > " + RANGE_SIZE_MAX);
+                "range(" + range + ") > " + BitIoConstants.UBYTE_SIZE_MAX);
         }
 
         return range;

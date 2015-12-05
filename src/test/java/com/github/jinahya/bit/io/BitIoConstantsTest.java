@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Jin Kwon.
+ * Copyright 2015 Jin Kwon &lt;jinahya_at_gmail.com&gt;.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,26 +14,26 @@
  * limitations under the License.
  */
 
-
 package com.github.jinahya.bit.io;
 
 
-import com.google.inject.AbstractModule;
+import static org.testng.Assert.assertEquals;
+import org.testng.annotations.Test;
 
 
 /**
  *
- * @author Jin Kwon
+ * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
-public class ByteInputMockModule extends AbstractModule {
+public class BitIoConstantsTest {
 
 
-    @Override
-    protected void configure() {
+    @Test
+    public static void UBYTE_SIZE() {
 
-        bind(ByteInput.class).to(ByteInputMock.class);
+        assertEquals(BitIoConstants.UBYTE_SIZE_MIN, 1);
+        assertEquals(BitIoConstants.UBYTE_SIZE_MAX, Byte.SIZE);
     }
-
 
 }
 

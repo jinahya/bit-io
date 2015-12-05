@@ -46,11 +46,8 @@ public class MidiFileTest {
         assertEquals(input.readInt(Integer.SIZE), 0x4d546864);
         assertEquals(input.readInt(Integer.SIZE), 6);
         final int format = input.readUnsignedInt(16);
-        logger.debug("format: {}", format);
         final int tracks = input.readUnsignedInt(16);
-        logger.debug("tracks: {}", tracks);
         final int division = input.readInt(16);
-        logger.debug("division: {}", division);
 
         for (int i = 0; i < tracks; i++) {
             assertEquals(input.readInt(Integer.SIZE), 0x4d54726b);

@@ -104,43 +104,83 @@ public interface BitInput {
     long readLong(int size) throws IOException;
 
 
-    byte[] readBytes(byte[] bytes, int offset, int length) throws IOException;
-
-
-    byte[] readBytes(byte[] bytes, int offset) throws IOException;
-
-
     /**
-     * Reads a byte array.
+     * Reads specified number of bytes to given array starting from specified
+     * offset.
      *
-     * @param scale the length scale between
-     * {@value com.github.jinahya.bit.io.BitIoConstants#SCALE_SIZE_MIN}
-     * (inclusive) and
-     * {@value com.github.jinahya.bit.io.BitIoConstants#SCALE_SIZE_MAX}
-     * (inclusive).
-     * @param range the number of bits for each byte between
-     * {@value com.github.jinahya.bit.io.BitIoConstants#RANGE_SIZE_MIN}
-     * (inclusive) and
-     * {@value com.github.jinahya.bit.io.BitIoConstants#RANGE_SIZE_MAX}
-     * (inclusive).
+     * @param array the array
+     * @param offset the start offset
+     * @param length number of bytes to write
+     * @param range required bits in each byte
      *
-     * @return a byte array.
+     * @return given array
      *
      * @throws IOException if an I/O error occurs.
      */
-    byte[] readBytes(int scale, int range) throws IOException;
+    byte[] readBytes(byte[] array, int offset, int length, int range)
+        throws IOException;
+
+
+    byte[] readBytes(byte[] array, int offset, int range) throws IOException;
+
+
+    byte[] readBytes(byte[] array, int range) throws IOException;
 
 
     /**
+     * Reads variable number of bytes and set on given byte array starting at
+     * specified index.
+     *
+     * @param scale
+     * @param array
+     * @param offset
+     * @param range
+     *
+     * @return
+     *
+     * @throws IOException
+     */
+    byte[] readBytes(int scale, byte[] array, int offset, int range)
+        throws IOException;
+
+
+    byte[] readBytes(int scale, byte[] array, int range) throws IOException;
+
+
+//    /**
+//     * Reads a byte array.
+//     *
+//     * @param scale the length scale between
+//     * {@value com.github.jinahya.bit.io.BitIoConstants#LENGTH_SIZE_MIN}
+//     * (inclusive) and
+//     * {@value com.github.jinahya.bit.io.BitIoConstants#LENGTH_SIZE_MAX}
+//     * (inclusive).
+//     * @param range the number of bits for each byte between
+//     * {@value com.github.jinahya.bit.io.BitIoConstants#UBYTE_SIZE_MIN}
+//     * (inclusive) and
+//     * {@value com.github.jinahya.bit.io.BitIoConstants#UBYTE_SIZE_MAX}
+//     * (inclusive).
+//     *
+//     * @return a byte array.
+//     *
+//     * @throws IOException if an I/O error occurs.
+//     * @deprecated
+//     */
+//    @Deprecated
+//    byte[] readBytes(int scale, int range) throws IOException;
+    /**
      * Reads a string. This method reads a byte array via
      * {@link #readBytes(int, int)} with {@code scale} of
-     * {@value com.github.jinahya.bit.io.BitIoConstants#SCALE_SIZE_MAX} and
+     * {@value com.github.jinahya.bit.io.BitIoConstants#LENGTH_SIZE_MAX} and
      * {@code range} of
-     * {@value com.github.jinahya.bit.io.BitIoConstants#RANGE_SIZE_MAX} and
+     * {@value com.github.jinahya.bit.io.BitIoConstants#UBYTE_SIZE_MAX} and
      * returns the output string created via
      * {@link String#String(byte[], java.lang.String)} with the byte array and
      * given {@code charsetName}.
      *
+     * @param scale the length scale between
+     * {@value com.github.jinahya.bit.io.BitIoConstants#LENGTH_SIZE_MIN}
+     * (inclusive) and
      * @param charsetName the character set name to encode output string.
      *
      * @return a string value.
@@ -150,16 +190,25 @@ public interface BitInput {
      * @see #readBytes(int, int)
      * @see String#String(byte[], java.lang.String)
      */
+    String readString(int scale, String charsetName) throws IOException;
+
+
     String readString(String charsetName) throws IOException;
 
+//    String readString(String charsetName) throws IOException;
 
     /**
      * Reads a {@code US-ASCII} encoded string. This method reads a byte array
      * via {@link #readBytes(int, int)} with {@code scale} of
-     * {@value com.github.jinahya.bit.io.BitIoConstants#SCALE_SIZE_MAX} and
+     * {@value com.github.jinahya.bit.io.BitIoConstants#LENGTH_SIZE_MAX} and
      * {@code range} of {@code 0x07} and returns the output string created by
      * {@link String#String(byte[], java.lang.String)} with the byte array and
      * {@code US-ASCII}.
+     *
+     * @param scale the length scale between
+     * {@value com.github.jinahya.bit.io.BitIoConstants#LENGTH_SIZE_MIN}
+     * (inclusive) and
+     *
      *
      * @return a {@code US-ASCII} encoded string.
      *
@@ -168,8 +217,12 @@ public interface BitInput {
      * @see #readBytes(int, int)
      * @see String#String(byte[], java.lang.String)
      */
+    String readAscii(int scale) throws IOException;
+
+
     String readAscii() throws IOException;
 
+//    String readAscii() throws IOException;
 
     /**
      * Aligns to given number of bytes.

@@ -18,10 +18,9 @@
 package com.github.jinahya.bit.io;
 
 
-import static com.github.jinahya.bit.io.BitIoRandoms.sizeInt;
-import static com.github.jinahya.bit.io.BitIoRandoms.sizeIntUnsigned;
-import static com.github.jinahya.bit.io.BitIoRandoms.sizeLong;
-import static com.github.jinahya.bit.io.BitIoRandoms.sizeLongUnsigned;
+import static com.github.jinahya.bit.io.BitIoRandoms.randomIntSize;
+import static com.github.jinahya.bit.io.BitIoRandoms.randomUnsignedIntSize;
+import static com.github.jinahya.bit.io.BitIoRandoms.randomUnsignedLongSize;
 import java.io.IOException;
 import javax.inject.Inject;
 import org.slf4j.Logger;
@@ -48,7 +47,7 @@ public class BitInputTest {
     @Test(invocationCount = 128)
     public void readUnsignedInt() throws IOException {
 
-        final int size = sizeIntUnsigned();
+        final int size = randomUnsignedIntSize();
 
         final int value = input.readUnsignedInt(size);
     }
@@ -57,7 +56,7 @@ public class BitInputTest {
     @Test(invocationCount = 128)
     public void readInt() throws IOException {
 
-        final int size = sizeInt();
+        final int size = randomIntSize();
 
         final int value = input.readInt(size);
     }
@@ -66,7 +65,7 @@ public class BitInputTest {
     @Test(invocationCount = 128)
     public void readUnsingedLong() throws IOException {
 
-        final int size = sizeLongUnsigned();
+        final int size = randomUnsignedLongSize();
 
         final long value = input.readUnsignedLong(size);
     }
@@ -75,7 +74,7 @@ public class BitInputTest {
     @Test(invocationCount = 128)
     public void readLong() throws IOException {
 
-        final int size = sizeLong();
+        final int size = BitIoRandoms.randomLongSize();
 
         final long value = input.readLong(size);
     }
@@ -89,7 +88,6 @@ public class BitInputTest {
 
     @Inject
     private transient BitInput input;
-
 
 }
 

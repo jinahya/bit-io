@@ -18,10 +18,10 @@ package com.github.jinahya.bit.io;
 
 
 import java.io.IOException;
-import static java.util.concurrent.ThreadLocalRandom.current;
-import org.testng.annotations.Test;
 import static java.util.Objects.requireNonNull;
+import static java.util.concurrent.ThreadLocalRandom.current;
 import static org.testng.Assert.assertTrue;
+import org.testng.annotations.Test;
 
 
 /**

@@ -47,11 +47,8 @@ public class FlacFileTest {
         while (true) {
             // ------------------------------------------- METADATA_BLOCK_HEADER
             final boolean last = input.readBoolean();
-            logger.debug("last: {}", last);
             final int type = input.readUnsignedInt(7);
-            logger.debug("type: {}", type);
             int length = input.readUnsignedInt(24);
-            logger.debug("length: {}", length);
             // --------------------------------------------- METADATA_BLOCK_DATA
             switch (type) {
                 case 0: // METADATA_BLOCK_STREAMINFO
@@ -63,14 +60,14 @@ public class FlacFileTest {
                     input.readUnsignedInt(3);
                     input.readUnsignedInt(5);
                     input.readUnsignedLong(36);
-                    input.readBytes(new byte[16], 0);
+                    input.readBytes(new byte[16], 0, 16, 8);
                     break;
                 case 1: // METADATA_BLOCK_PADDING
-                    input.readBytes(new byte[length], 0);
+                    input.readBytes(new byte[length], 0, length, 8);
                     break;
                 case 2: // METADATA_BLOCK_APPLICATION
                     input.readInt(Integer.SIZE);
-                    input.readBytes(new byte[length - 4], 0);
+                    input.readBytes(new byte[length - 4], 0, length - 4, 8);
                     break;
                 case 3: // METADATA_BLOCK_SEEKTABLE
                     for (; length > 0; length -= 18) {
@@ -80,40 +77,49 @@ public class FlacFileTest {
                     }
                     break;
                 case 4: // METADATA_BLOCK_VORBIS_COMMENT
-                    input.readBytes(new byte[length], 0);
+                    input.readBytes(new byte[length], 0, length, 8);
                     break;
                 case 5: // METADATA_BLOCK_CUESHEET
-                    input.readBytes(new byte[128], 0);
+                    input.readBytes(new byte[128], 0, 128, 8);
                     input.readLong(Long.SIZE);
                     input.readBoolean();
                     input.readUnsignedInt(7);
-                    input.readBytes(new byte[258], 0);
+                    input.readBytes(new byte[258], 0, 258, 8);
                     input.readUnsignedInt(Byte.SIZE);
                     for (length -= 410; length > 0;) {
                         input.readLong(Long.SIZE);
                         input.readUnsignedInt(Byte.SIZE);
-                        input.readBytes(new byte[12], 0);
+                        input.readBytes(new byte[12], 0, 12, 8);
                         input.readBoolean();
                         input.readBoolean();
                         input.readUnsignedInt(6);
-                        input.readBytes(new byte[13], 0);
+                        input.readBytes(new byte[13], 0, 13, 8);
                         input.readUnsignedInt(Byte.SIZE);
                         for (length -= 36; length > 0; length -= 12) {
                             input.readLong(Long.SIZE);
                             input.readUnsignedInt(Byte.SIZE);
-                            input.readBytes(new byte[3], 0);
+                            input.readBytes(new byte[3], 0, 3, 8);
                         }
                     }
                     break;
                 case 6: // METADATA_BLOCK_PICTURE
                     input.readUnsignedInt(32);
-                    input.readBytes(new byte[input.readInt(32)], 0);
-                    input.readBytes(new byte[input.readInt(32)], 0);
+                     {
+                        final int l1 = input.readInt(32);
+                        input.readBytes(new byte[l1], 0, l1, 8);
+                    }
+                     {
+                        final int l2 = input.readInt(32);
+                        input.readBytes(new byte[length], 0, length, 8);
+                    }
                     input.readInt(Integer.SIZE);
                     input.readInt(Integer.SIZE);
                     input.readInt(Integer.SIZE);
                     input.readInt(Integer.SIZE);
-                    input.readBytes(new byte[input.readInt(32)], 0);
+                     {
+                        final int l3 = input.readInt(32);
+                        input.readBytes(new byte[length], 0, length, 8);
+                    }
                     break;
                 default:
                     logger.warn("unknown block type: {}", type);

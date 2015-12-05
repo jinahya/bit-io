@@ -127,19 +127,6 @@ public interface BitInput {
     byte[] readBytes(byte[] array, int range) throws IOException;
 
 
-    /**
-     * Reads variable number of bytes and set on given byte array starting at
-     * specified index.
-     *
-     * @param scale
-     * @param array
-     * @param offset
-     * @param range
-     *
-     * @return
-     *
-     * @throws IOException
-     */
     byte[] readBytes(int scale, byte[] array, int offset, int range)
         throws IOException;
 
@@ -169,14 +156,7 @@ public interface BitInput {
 //    @Deprecated
 //    byte[] readBytes(int scale, int range) throws IOException;
     /**
-     * Reads a string. This method reads a byte array via
-     * {@link #readBytes(int, int)} with {@code scale} of
-     * {@value com.github.jinahya.bit.io.BitIoConstants#LENGTH_SIZE_MAX} and
-     * {@code range} of
-     * {@value com.github.jinahya.bit.io.BitIoConstants#UBYTE_SIZE_MAX} and
-     * returns the output string created via
-     * {@link String#String(byte[], java.lang.String)} with the byte array and
-     * given {@code charsetName}.
+     * Reads a string.
      *
      * @param scale the length scale between
      * {@value com.github.jinahya.bit.io.BitIoConstants#LENGTH_SIZE_MIN}
@@ -187,7 +167,6 @@ public interface BitInput {
      *
      * @throws IOException if an I/O error occurs.
      *
-     * @see #readBytes(int, int)
      * @see String#String(byte[], java.lang.String)
      */
     String readString(int scale, String charsetName) throws IOException;
@@ -198,12 +177,7 @@ public interface BitInput {
 //    String readString(String charsetName) throws IOException;
 
     /**
-     * Reads a {@code US-ASCII} encoded string. This method reads a byte array
-     * via {@link #readBytes(int, int)} with {@code scale} of
-     * {@value com.github.jinahya.bit.io.BitIoConstants#LENGTH_SIZE_MAX} and
-     * {@code range} of {@code 0x07} and returns the output string created by
-     * {@link String#String(byte[], java.lang.String)} with the byte array and
-     * {@code US-ASCII}.
+     * Reads a {@code US-ASCII} encoded string.
      *
      * @param scale the length scale between
      * {@value com.github.jinahya.bit.io.BitIoConstants#LENGTH_SIZE_MIN}
@@ -214,7 +188,6 @@ public interface BitInput {
      *
      * @throws IOException if an I/O error occurs.
      *
-     * @see #readBytes(int, int)
      * @see String#String(byte[], java.lang.String)
      */
     String readAscii(int scale) throws IOException;

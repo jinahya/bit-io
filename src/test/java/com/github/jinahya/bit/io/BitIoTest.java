@@ -41,7 +41,7 @@ public class BitIoTest {
 
         final byte[] array = new byte[1048576];
 
-        final int count = current().nextInt(128);
+        final int count = current().nextInt(512, 1024);
         final List<Object> params = new LinkedList<>(); // type, param+, value
 
         final BitOutput output = new DelegatedBitOutput(
@@ -52,9 +52,7 @@ public class BitIoTest {
             final Object value = type.write(params, output);
             params.add(value);
         }
-        logger.debug("params.size: {}", params.size());
         final int padded = output.align(1);
-        logger.debug("padded: {}", padded);
 
         final BitInput input = new DelegatedBitInput(
             new ArrayInput(array, 0, array.length));
@@ -65,7 +63,6 @@ public class BitIoTest {
             assertEquals(actual, expected, "type: " + type);
         }
         final int discarded = input.align(1);
-        logger.debug("discarded: {}", discarded);
 
         assertEquals(discarded, padded);
     }

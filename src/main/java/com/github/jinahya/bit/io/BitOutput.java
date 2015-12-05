@@ -153,12 +153,7 @@ public interface BitOutput {
 //     */
 //    void writeBytes(int scale, int range, byte[] value) throws IOException;
     /**
-     * Writes a string value. This method encodes given string with specified
-     * character set name and writes the output byte array using
-     * {@link #writeBytes(int, int, byte[])} with {@code scale} of
-     * {@value com.github.jinahya.bit.io.BitIoConstants#LENGTH_SIZE_MAX} and
-     * {@code range} of
-     * {@value com.github.jinahya.bit.io.BitIoConstants#UBYTE_SIZE_MAX}.
+     * Writes a string value.
      *
      * @param value the string value to write.
      * @param charsetName the character set name to decode the string
@@ -166,7 +161,6 @@ public interface BitOutput {
      * @throws IOException if an I/O error occurs.
      *
      * @see String#getBytes(java.lang.String)
-     * @see #writeBytes(int, int, byte[])
      */
     void writeString(String value, String charsetName) throws IOException;
 
@@ -176,18 +170,13 @@ public interface BitOutput {
 
 
     /**
-     * Writes a {@code US-ASCII} decoded string value. This method encodes given
-     * string with {@code US-ASCII} and writes the byte array using
-     * {@link #writeBytes(int, int, byte[])} with {@code scale} of
-     * {@value com.github.jinahya.bit.io.BitIoConstants#LENGTH_SIZE_MAX} and
-     * {@code range} of {@code 7}.
+     * Writes a {@code US-ASCII} decoded string value.
      *
      * @param value the string value to write.
      *
      * @throws IOException if an I/O error occurs.
      *
      * @see String#getBytes(java.lang.String)
-     * @see #writeBytes(int, int, byte[])
      */
     void writeAscii(String value) throws IOException;
 

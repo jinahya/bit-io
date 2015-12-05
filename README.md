@@ -28,14 +28,20 @@ new StreamInput(java.io.InputStream);
 new SupplierInput(java.util.function.Supplier<Byte>);
 ````
 ### Creating `BitInput`
-#### `DelegatedBitInput`
 ```java
-new DelegatedBitInput(ByteInput);
-```
-#### `BitFactory`
-```
-final ByteBuffer buffer;
-BitFactory.newBitInput(() -> buffer.get() & 0xFF);
+new DelegatedBitInput(byteInput);
+final ByteBuffer buffer = getSome();
+BitInputFactory.newInstance(() -> buffer.get() & 0xFF);
+BitFactory.newBitInput(() -> {
+    final InputStream stream = getSome(); // handle your own IOException
+    return () -> {
+        final int v = stream.read();
+        if (v == -1) {
+            throw new EOFException();
+        }
+        return v;
+    }
+});
 ```
 ### Reading values.
 ```java

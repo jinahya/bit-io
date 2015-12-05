@@ -16,9 +16,8 @@ A small library for reading or writing none octet aligned values such as `1-bit 
 |1.1.6|[site](http://jinahya.github.io/bit-io/sites/1.1.6/index.html)|[apidocs](http://jinahya.github.io/bit-io/sites/1.1.6/apidocs/index.html)||
 |1.1.5|[site](http://jinahya.github.io/bit-io/sites/1.1.5/index.html)|[apidocs](http://jinahya.github.io/bit-io/sites/1.1.5/apidocs/index.html)||
 
-## Usages
-### Reading
-#### Preparing `ByteInput`
+## Reading
+### Preparing `ByteInput`
 Prepare an instance of `ByteInput` from various sources.
 ````java
 new ArrayInput(byte[], index, limit);
@@ -28,10 +27,43 @@ new IntSupplierInput(java.util.function.IntSuppiler);
 new StreamInput(java.io.InputStream);
 new SupplierInput(java.util.function.Supplier<Byte>);
 ````
-#### Creating `BitInput`
+### Creating `BitInput`
+#### `DelegatedBitInput`
 ```java
-// if you already created an instance of ByteInput
+final ByteInput input = getSome();
 new DelegatedBitInput(byteInput);
+
+new DelegatedBitInput(null) {
+    @Override
+    public int readUnsignedByte() throws IOException {
+        if (delegate == null) {
+            final ByteBuffer buffer = ByteBuffer.allocate(0);
+            delegate = new BufferInput(buffer);
+        }
+        return super.readUnsignedByte();
+    }
+};
+
+new DelegatedBitInput(null) {
+    @Override
+    public int readUnsignedByte() throws IOException {
+        if (delegate == null) {
+            delegate = new BufferInput(null) {
+                @Override
+                public int readUnsignedByte() throws IOException {
+                    if (source == null) {
+                        source = ByteBuffer.allocate(0);
+                    }
+                    return super.readUnsignedByte();
+                }
+            };
+        }
+        return super.readUnsignedByte();
+    }
+};
+
+```
+#### `BitInputFactory`
 
 // create an instance of BitInput on the fly
 final ByteBuffer buffer = getSome();

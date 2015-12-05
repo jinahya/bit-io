@@ -30,9 +30,14 @@ new SupplierInput(java.util.function.Supplier<Byte>);
 ````
 #### Creating `BitInput`
 ```java
+// if you already created an instance of ByteInput
 new DelegatedBitInput(byteInput);
+
+// create an instance of BitInput on the fly
 final ByteBuffer buffer = getSome();
 BitInputFactory.newInstance(() -> buffer.get() & 0xFF);
+
+// create an instance whose byte source is lazily instantiated
 BitFactory.newBitInput(() -> {
     final InputStream stream = getSome(); // handle your own IOException
     return () -> {
@@ -41,7 +46,7 @@ BitFactory.newBitInput(() -> {
             throw new EOFException();
         }
         return v;
-    }
+    };
 });
 ```
 #### Reading values.

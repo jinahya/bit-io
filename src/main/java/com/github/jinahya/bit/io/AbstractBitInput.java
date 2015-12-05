@@ -168,7 +168,8 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
 
         final int usize = size - 1;
 
-        return (readBoolean() ? -1 << usize : 0) | readUnsignedInt(usize);
+        return (readUnsignedInt(1) == 1 ? (-1 << usize) : 0)
+               | readUnsignedInt(usize);
     }
 
 

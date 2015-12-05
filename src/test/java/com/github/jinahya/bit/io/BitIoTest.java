@@ -52,6 +52,7 @@ public class BitIoTest {
             final Object value = type.write(params, output);
             params.add(value);
         }
+        logger.debug("params.size: {}", params.size());
         final int padded = output.align(1);
         logger.debug("padded: {}", padded);
 
@@ -61,7 +62,7 @@ public class BitIoTest {
             final BitIoType type = (BitIoType) params.remove(0);
             final Object actual = type.read(params, input);
             final Object expected = params.remove(0);
-            assertEquals(actual, expected);
+            assertEquals(actual, expected, "type: " + type);
         }
         final int discarded = input.align(1);
         logger.debug("discarded: {}", discarded);

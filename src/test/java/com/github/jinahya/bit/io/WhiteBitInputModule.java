@@ -34,6 +34,5 @@ public class WhiteBitInputModule extends AbstractModule {
         bind(BitInput.class).to(WhiteBitInput.class);
     }
 
-
 }
 

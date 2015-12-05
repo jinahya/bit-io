@@ -58,6 +58,5 @@ public abstract class AbstractByteOutput<T> implements ByteOutput {
      */
     protected T target;
 
-
 }
 

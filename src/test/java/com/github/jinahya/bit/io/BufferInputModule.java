@@ -34,6 +34,5 @@ public class BufferInputModule extends AbstractModule {
         bind(BufferInput.class).toProvider(BufferInputProvider.class);
     }
 
-
 }
 

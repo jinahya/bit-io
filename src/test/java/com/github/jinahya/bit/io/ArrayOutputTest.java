@@ -36,6 +36,5 @@ public class ArrayOutputTest extends ByteOutputTest<ArrayOutput> {
         return new ArrayOutput(new byte[capacity], 0, capacity);
     }
 
-
 }
 

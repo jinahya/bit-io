@@ -34,6 +34,5 @@ public class StreamInputModule extends AbstractModule {
         bind(StreamInput.class).toProvider(StreamInputProvider.class);
     }
 
-
 }
 

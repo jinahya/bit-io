@@ -34,6 +34,5 @@ public class BlackBitOutputModule extends AbstractModule {
         bind(BitOutput.class).to(BlackBitOutput.class);
     }
 
-
 }
 

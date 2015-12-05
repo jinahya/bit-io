@@ -62,6 +62,5 @@ public class ReadMeTest {
         assertEquals(padded, 23);
     }
 
-
 }
 

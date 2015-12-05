@@ -40,6 +40,5 @@ public class ByteOutputs {
         return (a) -> target.put((byte) a);
     }
 
-
 }
 

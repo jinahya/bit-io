@@ -20,8 +20,6 @@ package com.github.jinahya.bit.io;
 
 import java.nio.charset.StandardCharsets;
 import static java.util.concurrent.ThreadLocalRandom.current;
-import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 import java.util.function.IntConsumer;
 import java.util.function.IntSupplier;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -40,30 +38,12 @@ final class BitIoRandoms {
     }
 
 
-    static boolean randomBooleanValue(final Consumer<Boolean> consumer) {
-
-        final boolean value = randomBooleanValue();
-        consumer.accept(value);
-
-        return value;
-    }
-
-
     static int randomUnsignedIntSize() {
 
         final int size = current().nextInt(
             BitIoConstants.UINT_SIZE_MIN, BitIoConstants.UINT_SIZE_MAX + 1);
 
         return BitIoConstraints.requireValidUnsignedIntSize(size);
-    }
-
-
-    static int randomUnsignedIntSize(final IntConsumer consumer) {
-
-        final int size = randomUnsignedIntSize();
-        consumer.accept(size);
-
-        return size;
     }
 
 
@@ -96,24 +76,6 @@ final class BitIoRandoms {
     }
 
 
-    static int randomIntValue(final IntConsumer consumer) {
-
-        final int size = randomIntSize();
-        consumer.accept(size);
-
-        return BitIoRandoms.randomIntValue(size);
-    }
-
-
-    static void randomInt(final BiConsumer<Integer, Integer> consumer) {
-
-        final int size = randomIntSize();
-        final int value = randomIntValue(size);
-
-        consumer.accept(size, value);
-    }
-
-
     static int randomUnsignedLongSize() {
 
         final int size = current().nextInt(
@@ -133,23 +95,6 @@ final class BitIoRandoms {
     }
 
 
-    static long unsignedLongValue(final IntConsumer consumer) {
-
-        final int size = randomUnsignedLongSize();
-        consumer.accept(size);
-
-        return unsignedLongValue(size);
-    }
-
-
-    static void randomUnsignedLong(final BiConsumer<Integer, Long> consumer) {
-
-        final int size = randomUnsignedLongSize();
-        final long value = unsignedLongValue(size);
-        consumer.accept(size, value);
-    }
-
-
     static int randomLongSize() {
 
         final int size = current().nextInt(
@@ -166,23 +111,6 @@ final class BitIoRandoms {
         final long value = current().nextLong() >> (Long.SIZE - size);
 
         return BitIoConstraints.requireValidLongValue(value, size);
-    }
-
-
-    static long randomLongValue(final IntConsumer consumer) {
-
-        final int size = randomLongSize();
-        consumer.accept(size);
-
-        return randomLongValue(size);
-    }
-
-
-    static void randomLongValue(final BiConsumer<Integer, Long> consumer) {
-
-        final int size = randomLongSize();
-        final long value = randomLongValue(size);
-        consumer.accept(size, value);
     }
 
 

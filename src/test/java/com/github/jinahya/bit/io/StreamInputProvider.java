@@ -44,6 +44,5 @@ public class StreamInputProvider implements Provider<StreamInput> {
         });
     }
 
-
 }
 

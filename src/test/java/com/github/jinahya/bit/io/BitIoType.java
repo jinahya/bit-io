@@ -19,6 +19,8 @@ package com.github.jinahya.bit.io;
 
 import java.io.IOException;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -43,6 +45,7 @@ enum BitIoType {
 
             final boolean value = BitIoRandoms.randomBooleanValue();
             output.writeBoolean(value);
+
             return value;
         }
 
@@ -53,7 +56,9 @@ enum BitIoType {
         Object read(final List<Object> params, final BitInput input)
             throws IOException {
 
-            return input.readUnsignedInt((int) params.remove(0));
+            final int size = (int) params.remove(0);
+
+            return input.readUnsignedInt(size);
         }
 
 
@@ -65,6 +70,7 @@ enum BitIoType {
             final int value = BitIoRandoms.randomUnsignedIntValue(size);
             params.add(size);
             output.writeUnsignedInt(size, value);
+
             return value;
         }
 
@@ -75,7 +81,10 @@ enum BitIoType {
         Object read(final List<Object> params, final BitInput input)
             throws IOException {
 
-            return input.readInt((int) params.remove(0));
+            final int size = (int) params.remove(0);
+            final int value = input.readInt(size);
+
+            return value;
         }
 
 
@@ -87,6 +96,7 @@ enum BitIoType {
             final int value = BitIoRandoms.randomIntValue(size);
             params.add(size);
             output.writeInt(size, value);
+
             return value;
         }
 
@@ -111,6 +121,7 @@ enum BitIoType {
             final long value = BitIoRandoms.unsignedLongValue(size);
             params.add(size);
             output.writeUnsignedLong(size, value);
+
             return value;
         }
 
@@ -123,6 +134,7 @@ enum BitIoType {
 
             final int size = (int) params.remove(0);
             final long value = input.readLong(size);
+
             return value;
         }
 
@@ -130,14 +142,18 @@ enum BitIoType {
         @Override
         Object write(final List<Object> params, final BitOutput output)
             throws IOException {
+
             final int size = BitIoRandoms.randomLongSize();
             final long value = BitIoRandoms.randomLongValue(size);
             params.add(size);
             output.writeLong(size, value);
+
             return value;
         }
 
     };
+
+
     //    BYTES(0, 1024, s -> {
     //          final byte[] value = new byte[s];
     //          current().nextBytes(value);
@@ -178,6 +194,8 @@ enum BitIoType {
 //        }
 //
 //    };
+    private static final Logger logger
+        = LoggerFactory.getLogger(BitIoType.class);
 
 
     abstract Object read(List<Object> params, BitInput input)

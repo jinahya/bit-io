@@ -34,6 +34,5 @@ public class ByteInputMock implements ByteInput {
         return (int) (System.currentTimeMillis() & 0xFF);
     }
 
-
 }
 

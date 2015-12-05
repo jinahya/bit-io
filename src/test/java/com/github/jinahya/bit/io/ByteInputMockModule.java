@@ -34,6 +34,5 @@ public class ByteInputMockModule extends AbstractModule {
         bind(ByteInput.class).to(ByteInputMock.class);
     }
 
-
 }
 

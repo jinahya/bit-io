@@ -172,7 +172,7 @@ final class BitIoConstraints {
                 "(value(" + value + " >> size(" + size + ")) != 0");
         }
 
-        return size;
+        return value;
     }
 
 

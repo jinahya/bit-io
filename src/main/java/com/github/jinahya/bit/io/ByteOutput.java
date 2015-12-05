@@ -40,6 +40,5 @@ public interface ByteOutput {
      */
     void writeUnsignedByte(int value) throws IOException;
 
-
 }
 

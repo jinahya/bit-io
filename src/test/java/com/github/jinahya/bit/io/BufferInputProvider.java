@@ -35,6 +35,5 @@ public class BufferInputProvider implements Provider<BufferInput> {
         return new BufferInput(ByteBuffer.allocate(1024));
     }
 
-
 }
 

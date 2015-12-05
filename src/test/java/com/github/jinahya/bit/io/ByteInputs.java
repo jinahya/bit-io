@@ -85,6 +85,5 @@ public class ByteInputs {
         return () -> (int) (System.currentTimeMillis() & 0xFF);
     }
 
-
 }
 

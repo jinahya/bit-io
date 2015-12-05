@@ -34,6 +34,5 @@ public class ByteInputProvider implements Provider<ByteInput> {
         return new ByteInputMock();
     }
 
-
 }
 

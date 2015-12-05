@@ -95,15 +95,6 @@ biiiiiil llllllll llllllll llllllll llllllll llllllll lllllldd
 ```
 ## Writing
 ### Preparing `ByteOutput`
-Prepare an instance of `ByteOutput` from various targets.
-```java
-new ArrayOutput(byte[], index, limit);
-new BufferOutput(java.nio.ByteBuffer);
-new FileOutput(java.io.RandomAccessFile);
-new StreamOutput(java.io.OutputStream);
-new ConsumerOutput(java.util.function.Consumer<Byte>);
-new IntConsumerOutput(java.util.function.IntConsumer);
-````
 ### Creating `BitOutput`
 #### Using `DelegatedBitOutput`
 #### Using `BitOutputFactory#newInstance(...)`

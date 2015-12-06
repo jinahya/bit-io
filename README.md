@@ -97,7 +97,7 @@ biiiiiil llllllll llllllll llllllll llllllll llllllll lllllldd
 ### Preparing `ByteOutput`
 ### Creating `BitOutput`
 #### Using `DelegatedBitOutput`
-#### Using `BitOutputFactory#newInstance(...)`
+#### Using `BitOutputFactory`
 ### Writing values.
 ```java
 final BitOutput output;

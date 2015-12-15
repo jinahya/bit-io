@@ -19,6 +19,7 @@ package com.github.jinahya.bit.io;
 
 
 import java.io.IOException;
+import static java.util.concurrent.ThreadLocalRandom.current;
 import javax.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -74,6 +75,34 @@ public class BitInputTest {
         final int size = BitIoRandoms.randomLongSize();
 
         final long value = input.readLong(size);
+    }
+
+
+    @Test(invocationCount = 128)
+    public void readFixedBytes() throws IOException {
+
+        final byte[] array = new byte[current().nextInt(1024)];
+        final int offset = array.length == 0
+                           ? 0 : current().nextInt(array.length);
+        final int length = array.length == 0
+                           ? 0 : current().nextInt(array.length - offset);
+        final int byteSize = BitIoRandoms.randomByteSize();
+
+        input.readBytes(array, offset, length, byteSize);
+    }
+
+
+    @Test(invocationCount = 128)
+    public void readVariableBytes() throws IOException {
+
+        final byte[] array = new byte[current().nextInt(1024)];
+        final int offset = array.length == 0
+                           ? 0 : current().nextInt(array.length);
+        final int length = array.length == 0
+                           ? 0 : current().nextInt(array.length - offset);
+        final int byteSize = BitIoRandoms.randomByteSize();
+
+        input.readBytes(array, offset, length, byteSize);
     }
 
 

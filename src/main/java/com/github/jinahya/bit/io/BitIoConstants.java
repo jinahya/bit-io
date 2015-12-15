@@ -62,30 +62,6 @@ final class BitIoConstants {
     public static final int LONG_SIZE_MAX = 0x40;
 
 
-    /**
-     * The minimum value for {@code scale} of bytes.
-     */
-    public static final int LENGTH_SIZE_MIN = 0x01;
-
-
-    /**
-     * The maximum value for {@code scale} of bytes.
-     */
-    public static final int LENGTH_SIZE_MAX = 0x10;
-
-
-    /**
-     * The minimum value for {@code length} in {@code align}.
-     */
-    public static final int ALIGN_BYTES_MIN = 0x00001;
-
-
-    /**
-     * The maximum value for {@code length} in {@code align}.
-     */
-    public static final int ALIGN_BYTES_MAX = 0x10000;
-
-
     private BitIoConstants() {
 
         super();

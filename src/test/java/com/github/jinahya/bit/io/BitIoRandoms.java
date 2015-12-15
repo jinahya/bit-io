@@ -18,11 +18,7 @@
 package com.github.jinahya.bit.io;
 
 
-import java.nio.charset.StandardCharsets;
 import static java.util.concurrent.ThreadLocalRandom.current;
-import java.util.function.IntConsumer;
-import java.util.function.IntSupplier;
-import org.apache.commons.lang3.RandomStringUtils;
 
 
 /**
@@ -114,113 +110,12 @@ final class BitIoRandoms {
     }
 
 
-    static int randomLengthSize(Integer min, Integer max,
-                                final IntConsumer consumer) {
+    static int randomByteSize() {
 
-        if (min == null) {
-            min = BitIoConstants.LENGTH_SIZE_MIN;
-        }
-
-        if (max == null) {
-            max = BitIoConstants.LENGTH_SIZE_MAX;
-        }
-
-        final int size = current().nextInt(min, max + 1);
-        if (consumer != null) {
-            consumer.accept(size);
-        }
-
-        return size;
-    }
-
-
-    static int randomLengthValue(IntSupplier sizeSupplier,
-                                 final IntConsumer valueConsumer) {
-
-        if (sizeSupplier == null) {
-            sizeSupplier = () -> randomLengthSize(null, null, null);
-        }
-
-        final int size = sizeSupplier.getAsInt();
-        BitIoConstraints.requireValidLengthSize(size);
-
-        final int value = current().nextInt() >>> (Integer.SIZE - size);
-        if (valueConsumer != null) {
-            valueConsumer.accept(value);
-        }
-
-        return BitIoConstraints.requireValidLengthValue(value, size);
-    }
-
-
-    static int rangeBytes() {
-
-        final int range = current().nextInt(
+        final int size = current().nextInt(
             BitIoConstants.UBYTE_SIZE_MIN, BitIoConstants.UBYTE_SIZE_MAX + 1);
 
-        return BitIoConstraints.requireValidBytesRange(range);
-    }
-
-
-    static byte[] valueBytes(final int scale, final int range) {
-
-        BitIoConstraints.requireValidLengthSize(scale);
-        BitIoConstraints.requireValidBytesRange(range);
-
-        final byte[] value
-            = new byte[current().nextInt() >>> (Integer.SIZE - scale)];
-        current().nextBytes(value);
-
-        for (int i = 0; i < value.length; i++) {
-            value[i] = (byte) ((value[i] & 0xFF) >> (Byte.SIZE - range));
-        }
-
-        return value;
-    }
-
-
-    static String valueStringUtf8() {
-
-        String string;
-
-        do {
-            final int count = current().nextInt(32768); // = 65536 / 2
-            string = RandomStringUtils.random(count);
-        } while (string.getBytes(StandardCharsets.UTF_8).length >= 65536);
-
-        return string;
-    }
-
-
-    static String valueStringUsAscii() {
-
-        final int count = current().nextInt(65536);
-
-        return RandomStringUtils.randomAscii(count);
-    }
-
-
-    static String toBinaryString(final byte[] bytes, final int word) {
-
-        final StringBuilder builder = new StringBuilder();
-
-        for (byte b : bytes) {
-            final int k = builder.length();
-            for (int i = 0; i < Byte.SIZE; i++) {
-                builder.insert(k, b & 0x01);
-                b >>= 1;
-            }
-        }
-
-        if (word > 0) {
-            for (int i = builder.length() - 1; i > 0; i--) {
-                if (i % word == 0) {
-                    builder.insert(i, " ");
-                }
-            }
-        }
-
-        return builder.toString();
+        return BitIoConstraints.requireValidUnsignedByteSize(size);
     }
 
 

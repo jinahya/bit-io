@@ -34,6 +34,30 @@ import org.testng.annotations.Test;
 public class BitIoTest {
 
 
+    @Test(invocationCount = 1024)
+    public void test() throws IOException {
+
+        final BitIoType[] types = BitIoType.values();
+        final BitIoType type = types[current().nextInt(types.length)];
+
+        final byte[] array = new byte[1048576];
+        final List<Object> params = new LinkedList<>();
+
+        final BitOutput output = new DelegatedBitOutput(
+            new ArrayOutput(array, 0, array.length));
+        final Object expected = type.write(params, output);
+        final long padded = output.align(1);
+
+        final BitInput input = new DelegatedBitInput(
+            new ArrayInput(array, 0, array.length));
+        final Object actual = type.read(params, input);
+        assertEquals(actual, expected, "type: " + type);
+        final long discarded = input.align(1);
+
+        assertEquals(discarded, padded);
+    }
+
+
     @Test
     public void test1() throws IOException {
 
@@ -52,7 +76,7 @@ public class BitIoTest {
             final Object value = type.write(params, output);
             params.add(value);
         }
-        final int padded = output.align(1);
+        final long padded = output.align(1);
 
         final BitInput input = new DelegatedBitInput(
             new ArrayInput(array, 0, array.length));
@@ -62,7 +86,7 @@ public class BitIoTest {
             final Object expected = params.remove(0);
             assertEquals(actual, expected, "type: " + type);
         }
-        final int discarded = input.align(1);
+        final long discarded = input.align(1);
 
         assertEquals(discarded, padded);
     }

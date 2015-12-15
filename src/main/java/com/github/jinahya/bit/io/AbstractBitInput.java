@@ -22,7 +22,7 @@ import java.io.IOException;
 
 
 /**
- * A abstract class partially implementing {@link BitInput}.
+ * An abstract class partially implementing {@link BitInput}.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
@@ -209,152 +209,55 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
 
 
     @Override
-    public byte[] readBytes(final byte[] array, final int offset,
-                            final int length, final int range)
+    public void readBytes(final byte[] array, final int offset,
+                          final int length, final int byteSize)
         throws IOException {
 
-        BitIoConstraints.requireValidBytesRange(range);
+        BitIoConstraints.requireValidArrayOffsetLength(array, offset, length);
+        BitIoConstraints.requireValidUnsignedByteSize(byteSize);
 
         final int limit = offset + length;
         for (int i = offset; i < limit; i++) {
-            array[i] = (byte) readUnsignedByte(range);
+            array[i] = (byte) readUnsignedByte(byteSize);
+        }
+    }
+
+
+    @Override
+    public void readBytes(final int lengthSize, final int byteSize)
+        throws IOException {
+
+        BitIoConstraints.requireValidUnsignedByteSize(byteSize);
+
+        final byte[] value = new byte[readUnsignedInt(lengthSize)];
+
+        for (int i = 0; i < value.length; i++) {
+            value[i] = (byte) readUnsignedByte(byteSize);
+        }
+    }
+
+
+    @Override
+    public long align(final int bytes) throws IOException {
+
+        if (bytes <= 0) {
+            throw new IllegalArgumentException("bytes(" + bytes + ") <= 0");
         }
 
-        return array;
-    }
+        long bits = 0; // number of bits to be discarded
 
-
-    @Override
-    public byte[] readBytes(final byte[] array, final int offset,
-                            final int range)
-        throws IOException {
-
-        return readBytes(array, offset, array.length - offset, range);
-    }
-
-
-    @Override
-    public byte[] readBytes(final byte[] array, final int range)
-        throws IOException {
-
-        return readBytes(array, 0, range);
-    }
-
-
-    int readLenght(final int scale) throws IOException {
-
-        BitIoConstraints.requireValidLengthSize(scale);
-
-        return readUnsignedInt(scale);
-    }
-
-
-    @Override
-    public byte[] readBytes(int scale, byte[] array, int offset, int range)
-        throws IOException {
-
-        BitIoConstraints.requireValidLengthSize(scale);
-
-        final int length = readUnsignedInt(scale);
-        return readBytes(array, offset, length, range);
-    }
-
-
-    @Override
-    public byte[] readBytes(final int scale, final byte[] array,
-                            final int range)
-        throws IOException {
-
-        return readBytes(scale, array, 0, range);
-    }
-
-
-//    @Deprecated
-//    @Override
-//    public byte[] readBytes(final int scale, final int range)
-//        throws IOException {
-//
-//        BitIoConstraints.requireValidBytesScale(scale);
-//        BitIoConstraints.requireValidBytesRange(range);
-//
-////        final byte[] value = new byte[readUnsignedInt(scale)];
-////
-////        for (int i = 0; i < value.length; i++) {
-////            value[i] = (byte) readUnsignedByte(range);
-////        }
-////
-////        return value;
-//        return readBytes(new byte[readUnsignedInt(scale)], range);
-//    }
-    @Override
-    public String readString(final int scale, final String charsetName)
-        throws IOException {
-
-        final byte[] bytes = readBytes(
-            new byte[readLenght(scale)], BitIoConstants.UBYTE_SIZE_MAX);
-
-        return new String(bytes, charsetName);
-    }
-
-
-    @Override
-    public String readString(final String charsetName) throws IOException {
-
-        return readString(BitIoConstants.LENGTH_SIZE_MAX, charsetName);
-    }
-
-
-//    @Override
-//    public String readString(final String charsetName) throws IOException {
-//
-//        return readString(BitIoConstants.LENGTH_SIZE_MAX, charsetName);
-//    }
-    @Override
-    public String readAscii(final int scale) throws IOException {
-
-        final byte[] bytes = readBytes(new byte[readLenght(scale)], 7);
-
-        return new String(bytes, "US-ASCII");
-    }
-
-
-    @Override
-    public String readAscii() throws IOException {
-
-        return readAscii(BitIoConstants.LENGTH_SIZE_MAX);
-    }
-
-//    @Override
-//    public String readAscii() throws IOException {
-//
-//        return readAscii(BitIoConstants.LENGTH_SIZE_MAX);
-//    }
-
-    @Override
-    public int align(final int bytes) throws IOException {
-
-        BitIoConstraints.requireValidAlighBytes(bytes);
-
-        int bits = 0; // number of bits to be discarded
-
-        // discard remained bits in current byte.
+        // discard remained bits in current octet.
         if (index < 8) {
             bits += (8 - index);
-            readUnsignedByte(bits); // count increments
+            readUnsignedByte((int) bits); // count increments
         }
 
-        int octets = count % bytes;
-
-        if (octets == 0) {
+        final int remainder = (count > 0 ? count : ~count + 1) % bytes;
+        if (remainder == 0) {
             return bits;
         }
 
-        if (octets > 0) {
-            octets += (bytes - octets);
-        } else {
-            octets += (0 - octets);
-        }
-
+        long octets = bytes - remainder;
         for (; octets > 0; octets--) {
             readUnsignedByte(8);
             bits += 8;

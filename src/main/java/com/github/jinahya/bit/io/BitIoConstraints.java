@@ -18,6 +18,9 @@
 package com.github.jinahya.bit.io;
 
 
+import java.lang.reflect.Array;
+
+
 /**
  * A class for constraints.
  *
@@ -26,22 +29,20 @@ package com.github.jinahya.bit.io;
 final class BitIoConstraints {
 
 
-    public static int requireValidAlighBytes(final int bytes) {
-
-        if (bytes < BitIoConstants.ALIGN_BYTES_MIN) {
-            throw new IllegalArgumentException(
-                "bytes(" + bytes + ") < " + BitIoConstants.ALIGN_BYTES_MIN);
-        }
-
-        if (bytes > BitIoConstants.ALIGN_BYTES_MAX) {
-            throw new IllegalArgumentException(
-                "bytes(" + bytes + ") > " + BitIoConstants.ALIGN_BYTES_MAX);
-        }
-
-        return bytes;
-    }
-
-
+//    public static int requireValidAlighBytes(final int bytes) {
+//
+//        if (bytes < BitIoConstants.ALIGN_BYTES_MIN) {
+//            throw new IllegalArgumentException(
+//                "bytes(" + bytes + ") < " + BitIoConstants.ALIGN_BYTES_MIN);
+//        }
+//
+//        if (bytes > BitIoConstants.ALIGN_BYTES_MAX) {
+//            throw new IllegalArgumentException(
+//                "bytes(" + bytes + ") > " + BitIoConstants.ALIGN_BYTES_MAX);
+//        }
+//
+//        return bytes;
+//    }
     public static int requireValidUnsignedByteSize(final int size) {
 
         if (size < BitIoConstants.UBYTE_SIZE_MIN) {
@@ -246,68 +247,73 @@ final class BitIoConstraints {
     }
 
 
-    /**
-     * Checks that the specified value is valid.
-     *
-     * @param size the value to check
-     *
-     * @return given value if it's valid.
-     */
-    public static int requireValidLengthSize(final int size) {
+//    public static void requireValid(final byte[] array, final int offset,
+//                                    final int length) {
+//
+//        if (array == null) {
+//            throw new NullPointerException("null array");
+//        }
+//
+//        if (offset < 0) {
+//            throw new IndexOutOfBoundsException("offset(" + offset + ") < 0");
+//        }
+//
+//        if (length < 0) {
+//            throw new IndexOutOfBoundsException("length(" + length + ") < 0");
+//        }
+//
+//        if (offset + length > array.length) {
+//            throw new IndexOutOfBoundsException(
+//                "(offset(" + offset + ") + length(" + length
+//                + ")) > array.length(" + array.length + ")");
+//        }
+//    }
+//
+//
+//    public static <T> void requireValid(final T[] array, final int offset,
+//                                        final int length) {
+//
+//        if (array == null) {
+//            throw new NullPointerException("null array");
+//        }
+//
+//        if (offset < 0) {
+//            throw new IndexOutOfBoundsException("offset(" + offset + ") < 0");
+//        }
+//
+//        if (length < 0) {
+//            throw new IndexOutOfBoundsException("length(" + length + ") < 0");
+//        }
+//
+//        if (offset + length > array.length) {
+//            throw new IndexOutOfBoundsException(
+//                "(offset(" + offset + ") + length(" + length
+//                + ")) > array.length(" + array.length + ")");
+//        }
+//    }
+    public static void requireValidArrayOffsetLength(final Object array,
+                                                     final int offset,
+                                                     final int length) {
 
-        if (size < BitIoConstants.LENGTH_SIZE_MIN) {
-            throw new IllegalArgumentException(
-                "scale(" + size + ") < " + BitIoConstants.LENGTH_SIZE_MIN);
+        if (array == null) {
+            throw new NullPointerException("null array");
         }
 
-        if (size > BitIoConstants.LENGTH_SIZE_MAX) {
-            throw new IllegalArgumentException(
-                "scale(" + size + ") > " + BitIoConstants.LENGTH_SIZE_MAX);
+        if (offset < 0) {
+            throw new IndexOutOfBoundsException("offset(" + offset + ") < 0");
         }
 
-        return size;
-    }
-
-
-    public static int requireValidLengthValue(final int value, final int size) {
-
-        if (value < 0) {
-            throw new IllegalArgumentException("value(" + value + ") < 0");
+        if (length < 0) {
+            throw new IndexOutOfBoundsException("length(" + length + ") < 0");
         }
 
-        requireValidLengthSize(size);
+        final int arrayLength = Array.getLength(array);
 
-        if ((value >> size) > 0) {
-            throw new IllegalArgumentException(
-                "(value(" + value + ") >> size(" + size + ")) > 0");
+        if (offset + length > arrayLength) {
+            throw new IndexOutOfBoundsException(
+                "(offset(" + offset + ") + length(" + length
+                + ")) > array.length(" + arrayLength + ")");
         }
-
-        return value;
-    }
-
-
-    /**
-     * Checks that the specified value is valid.
-     *
-     * @param range the value to check
-     *
-     * @return given value if it's valid.
-     *
-     * @throws IllegalArgumentException if given value is not valid.
-     */
-    public static int requireValidBytesRange(final int range) {
-
-        if (range < BitIoConstants.UBYTE_SIZE_MIN) {
-            throw new IllegalArgumentException(
-                "range(" + range + ") < " + BitIoConstants.UBYTE_SIZE_MIN);
-        }
-
-        if (range > BitIoConstants.UBYTE_SIZE_MAX) {
-            throw new IllegalArgumentException(
-                "range(" + range + ") > " + BitIoConstants.UBYTE_SIZE_MAX);
-        }
-
-        return range;
     }
 
 }

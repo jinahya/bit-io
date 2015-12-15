@@ -19,6 +19,7 @@ package com.github.jinahya.bit.io;
 
 import java.io.IOException;
 import java.util.List;
+import static java.util.concurrent.ThreadLocalRandom.current;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -151,31 +152,65 @@ enum BitIoType {
             return value;
         }
 
+    },
+    FBYTES() {
+
+        @Override
+        Object read(final List<Object> params, final BitInput input)
+            throws IOException {
+
+            final byte[] array = new byte[(int) params.remove(0)];
+            final int byteSize = (int) params.remove(0);
+
+            input.readBytes(array, 0, array.length, byteSize);
+
+            return array;
+        }
+
+
+        @Override
+        Object write(final List<Object> params, final BitOutput output)
+            throws IOException {
+
+            final byte[] array = new byte[current().nextInt(1024)];
+            final int byteSize = current().nextInt(1, 9);
+            params.add(array.length);
+            params.add(byteSize);
+            output.writeBytes(array, 0, array.length, byteSize);
+
+            return array;
+        }
+
+    },
+    VBYTES() {
+
+        @Override
+        Object read(final List<Object> params, final BitInput input)
+            throws IOException {
+
+            final byte[] array = new byte[(int) params.remove(0)];
+            final int byteSize = (int) params.remove(0);
+
+            input.readBytes(array, 0, array.length, byteSize);
+
+            return array;
+        }
+
+
+        @Override
+        Object write(final List<Object> params, final BitOutput output)
+            throws IOException {
+
+            final byte[] array = new byte[current().nextInt(1024)];
+            final int byteSize = current().nextInt(1, 9);
+            params.add(array.length);
+            params.add(byteSize);
+            output.writeBytes(array, 0, array.length, byteSize);
+
+            return array;
+        }
+
     };
-
-
-    //    BYTES(0, 1024, s -> {
-    //          final byte[] value = new byte[s];
-    //          current().nextBytes(value);
-    //          return value;
-    //      }) {
-    //
-    //        @Override
-    //        Object read(final int size, final BitInput input) throws IOException {
-    //            return input.readBytes(BitIoConstants.SCALE_SIZE_MAX,
-    //                                   BitIoConstants.RANGE_SIZE_MAX);
-    //        }
-    //
-    //
-    //        @Override
-    //        void write(final int size, final BitOutput output, final Object value)
-    //            throws IOException {
-    //
-    //            output.writeBytes(BitIoConstants.SCALE_SIZE_MAX,
-    //                              BitIoConstants.RANGE_SIZE_MAX, (byte[]) value);
-    //        }
-    //
-    //    },
 //    ASCII() {
 //
 //        @Override
@@ -194,6 +229,8 @@ enum BitIoType {
 //        }
 //
 //    };
+
+
     private static final Logger logger
         = LoggerFactory.getLogger(BitIoType.class);
 

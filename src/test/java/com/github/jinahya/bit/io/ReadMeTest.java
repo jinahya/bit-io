@@ -44,8 +44,8 @@ public class ReadMeTest {
         input.readUnsignedInt(6);
         input.readLong(47);
 
-        final int discarded = input.align(1);
-        assertEquals(discarded, 2);
+        final long discarded = input.align(1);
+        assertEquals(discarded, 2L);
     }
 
 
@@ -58,8 +58,8 @@ public class ReadMeTest {
         output.writeInt(7, -1);
         output.writeUnsignedLong(33, 1L);
 
-        final int padded = output.align(4);
-        assertEquals(padded, 23);
+        final long padded = output.align(4);
+        assertEquals(padded, 23L);
     }
 
 }

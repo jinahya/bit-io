@@ -105,112 +105,41 @@ public interface BitInput {
 
 
     /**
-     * Reads specified number of bytes to given array starting from specified
-     * offset.
+     * Reads specified number of bytes and set on given array starting from
+     * specified offset.
      *
      * @param array the array
-     * @param offset the start offset
-     * @param length number of bytes to write
-     * @param range required bits in each byte
-     *
-     * @return given array
+     * @param offset the start offset of array
+     * @param length number of bytes to read
+     * @param byteSize valid number of bits in each byte
      *
      * @throws IOException if an I/O error occurs.
      */
-    byte[] readBytes(byte[] array, int offset, int length, int range)
+    void readBytes(byte[] array, int offset, int length, int byteSize)
         throws IOException;
 
 
-    byte[] readBytes(byte[] array, int offset, int range) throws IOException;
-
-
-    byte[] readBytes(byte[] array, int range) throws IOException;
-
-
-    byte[] readBytes(int scale, byte[] array, int offset, int range)
-        throws IOException;
-
-
-    byte[] readBytes(int scale, byte[] array, int range) throws IOException;
-
-
-//    /**
-//     * Reads a byte array.
-//     *
-//     * @param scale the length scale between
-//     * {@value com.github.jinahya.bit.io.BitIoConstants#LENGTH_SIZE_MIN}
-//     * (inclusive) and
-//     * {@value com.github.jinahya.bit.io.BitIoConstants#LENGTH_SIZE_MAX}
-//     * (inclusive).
-//     * @param range the number of bits for each byte between
-//     * {@value com.github.jinahya.bit.io.BitIoConstants#UBYTE_SIZE_MIN}
-//     * (inclusive) and
-//     * {@value com.github.jinahya.bit.io.BitIoConstants#UBYTE_SIZE_MAX}
-//     * (inclusive).
-//     *
-//     * @return a byte array.
-//     *
-//     * @throws IOException if an I/O error occurs.
-//     * @deprecated
-//     */
-//    @Deprecated
-//    byte[] readBytes(int scale, int range) throws IOException;
     /**
-     * Reads a string.
+     * Reads a variable length of bytes.
      *
-     * @param scale the length scale between
-     * {@value com.github.jinahya.bit.io.BitIoConstants#LENGTH_SIZE_MIN}
-     * (inclusive) and
-     * @param charsetName the character set name to encode output string.
-     *
-     * @return a string value.
+     * @param lengthSize number of bits for length;
+     * @param byteSize the number of bits for each byte.
      *
      * @throws IOException if an I/O error occurs.
-     *
-     * @see String#String(byte[], java.lang.String)
      */
-    String readString(int scale, String charsetName) throws IOException;
+    void readBytes(int lengthSize, int byteSize) throws IOException;
 
-
-    String readString(String charsetName) throws IOException;
-
-//    String readString(String charsetName) throws IOException;
-
-    /**
-     * Reads a {@code US-ASCII} encoded string.
-     *
-     * @param scale the length scale between
-     * {@value com.github.jinahya.bit.io.BitIoConstants#LENGTH_SIZE_MIN}
-     * (inclusive) and
-     *
-     *
-     * @return a {@code US-ASCII} encoded string.
-     *
-     * @throws IOException if an I/O error occurs.
-     *
-     * @see String#String(byte[], java.lang.String)
-     */
-    String readAscii(int scale) throws IOException;
-
-
-    String readAscii() throws IOException;
-
-//    String readAscii() throws IOException;
 
     /**
      * Aligns to given number of bytes.
      *
-     * @param bytes the number of bytes to align; between
-     * {@value com.github.jinahya.bit.io.BitIoConstants#ALIGN_BYTES_MIN}
-     * (inclusive) and
-     * {@value com.github.jinahya.bit.io.BitIoConstants#ALIGN_BYTES_MAX}
-     * (inclusive).
+     * @param bytes the number of bytes to align; must be positive.
      *
      * @return the number of bits discarded for alignment
      *
      * @throws IOException if an I/O error occurs.
      */
-    int align(int bytes) throws IOException;
+    long align(int bytes) throws IOException;
 
 }
 

@@ -105,99 +105,47 @@ public interface BitOutput {
 
 
     /**
-     * Writes a specified number of bytes in given array starting from specified
-     * offset.
+     * Writes a specified number of bytes from given array starting from
+     * specified offset.
      *
      * @param array the array
      * @param offset the start offset
      * @param length number of bytes to write.
-     * @param range required bits in each byte
-     *
-     * @return given array
+     * @param byteSize the number of bits for each byte between
+     * {@value com.github.jinahya.bit.io.BitIoConstants#UBYTE_SIZE_MIN}
+     * (inclusive) and
+     * {@value com.github.jinahya.bit.io.BitIoConstants#UBYTE_SIZE_MAX}
+     * (inclusive).
      *
      * @throws IOException if an I/O error occurs.
      */
-    byte[] writeBytes(byte[] array, int offset, int length, int range)
-        throws IOException;
-
-
-    byte[] writeBytes(byte[] array, int offset, int range) throws IOException;
-
-
-    byte[] writeBytes(byte[] array, int range) throws IOException;
-
-
-    byte[] writeBytes(int scale, byte[] array, int offset, int range)
-        throws IOException;
-
-
-    byte[] writeBytes(int scale, byte[] array, int range) throws IOException;
-
-
-//    /**
-//     * Writes an array of bytes.
-//     *
-//     * @param scale the number of bits to present the length of array between
-//     * {@value com.github.jinahya.bit.io.BitIoConstants#LENGTH_SIZE_MIN}
-//     * (inclusive) and
-//     * {@value com.github.jinahya.bit.io.BitIoConstants#LENGTH_SIZE_MAX}
-//     * (inclusive).
-//     * @param range the number of valid bits in each byte; between
-//     * {@value com.github.jinahya.bit.io.BitIoConstants#UBYTE_SIZE_MIN}
-//     * (inclusive) and
-//     * {@value com.github.jinahya.bit.io.BitIoConstants#UBYTE_SIZE_MAX}
-//     * (inclusive).
-//     * @param value the array to write.
-//     *
-//     * @throws IOException if an I/O error occurs.
-//     */
-//    void writeBytes(int scale, int range, byte[] value) throws IOException;
-    /**
-     * Writes a string value.
-     *
-     * @param value the string value to write.
-     * @param charsetName the character set name to decode the string
-     *
-     * @throws IOException if an I/O error occurs.
-     *
-     * @see String#getBytes(java.lang.String)
-     */
-    void writeString(String value, String charsetName) throws IOException;
-
-
-    void writeString(int scale, String value, String charsetName)
+    void writeBytes(byte[] array, int offset, int length, int byteSize)
         throws IOException;
 
 
     /**
-     * Writes a {@code US-ASCII} decoded string value.
+     * Writes an array of bytes.
      *
-     * @param value the string value to write.
+     * @param lengthSize the number of bits for length;
+     * @param byteSize the number of valid bits in each byte
+     * @param value the array to write.
      *
      * @throws IOException if an I/O error occurs.
-     *
-     * @see String#getBytes(java.lang.String)
      */
-    void writeAscii(String value) throws IOException;
-
-
-    void writeAscii(int scale, String value) throws IOException;
+    void writeBytes(int lengthSize, int byteSize, byte[] value)
+        throws IOException;
 
 
     /**
      * Aligns to specified number of bytes.
      *
-     * @param bytes the number of bytes to align; between
-     * {@value com.github.jinahya.bit.io.BitIoConstants#ALIGN_BYTES_MIN}
-     * (inclusive) and
-     * {@value com.github.jinahya.bit.io.BitIoConstants#ALIGN_BYTES_MAX}
-     * (inclusive).
+     * @param bytes the number of bytes to align; must be positive.
      *
      * @return the number of bits padded for alignment
      *
      * @throws IOException if an I/O error occurs.
      */
-    int align(int bytes) throws IOException;
+    long align(int bytes) throws IOException;
 
 }
 

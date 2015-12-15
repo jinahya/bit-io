@@ -8,6 +8,7 @@
     <groupId>com.github.jinahya</groupId>
     <artifactId>jinahya-parent</artifactId>
     <version>0.6</version>
+    <!--<version>0.7-SNAPSHOT</version>-->
   </parent>
 
   <groupId>com.github.jinahya</groupId>
@@ -347,4 +348,18 @@
       </plugin>
     </plugins>
   </reporting>
+
+  <profiles>
+    <profile>
+      <id>umlgraph</id>
+      <properties>
+        <additionalparam>
+          -hide java.* -visibility
+          -collapsible -horizontal
+          -inferdep -inferdepinpackage -inferrel
+          -outputencoding UTF-8
+        </additionalparam>
+      </properties>
+    </profile>
+  </profiles>
 </project>

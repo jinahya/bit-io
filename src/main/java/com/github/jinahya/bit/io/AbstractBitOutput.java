@@ -18,52 +18,15 @@
 package com.github.jinahya.bit.io;
 
 
-import java.io.DataOutput;
 import java.io.IOException;
 
 
 /**
- * A abstract class partially implementing {@link BitInput}.
+ * An abstract class partially implementing {@link BitInput}.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
 public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
-
-
-    public static BitOutput newInstance(final ByteOutput output) {
-
-        if (output == null) {
-            throw new NullPointerException("null output");
-        }
-
-        return new AbstractBitOutput() {
-
-            @Override
-            public void writeUnsignedByte(final int value) throws IOException {
-
-                output.writeUnsignedByte(value);
-            }
-
-        };
-    }
-
-
-    public static BitOutput newInstance(final DataOutput output) {
-
-        if (output == null) {
-            throw new NullPointerException("null output");
-        }
-
-        return new AbstractBitOutput() {
-
-            @Override
-            public void writeUnsignedByte(final int value) throws IOException {
-
-                output.writeByte(value);
-            }
-
-        };
-    }
 
 
     /**
@@ -228,159 +191,66 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
 
 
     @Override
-    public byte[] writeBytes(final byte[] array, final int offset,
-                             final int length, final int range)
+    public void writeBytes(final byte[] array, final int offset,
+                           final int length, final int byteSize)
         throws IOException {
 
-        // @todo: chcck arguments
-        BitIoConstraints.requireValidBytesRange(range);
+        BitIoConstraints.requireValidArrayOffsetLength(array, offset, length);
+        BitIoConstraints.requireValidUnsignedByteSize(byteSize);
 
         final int limit = offset + length;
         for (int i = offset; i < limit; i++) {
-            writeUnsignedByte(range, array[i]);
+            writeUnsignedByte(byteSize, array[i]);
         }
-
-        return array;
     }
 
 
     @Override
-    public byte[] writeBytes(final byte[] array, final int offset,
-                             final int range)
+    public void writeBytes(final int lengthSize, final int byteSize,
+                           final byte[] value)
         throws IOException {
 
-        return writeBytes(array, offset, array.length - offset, range);
-    }
+        BitIoConstraints.requireValidUnsignedIntSize(lengthSize);
+        BitIoConstraints.requireValidUnsignedByteSize(byteSize);
 
-
-    @Override
-    public byte[] writeBytes(final byte[] array, final int range)
-        throws IOException {
-
-        return writeBytes(array, 0, range);
-    }
-
-
-    void writeLength(final int scale, final int length) throws IOException {
-
-        BitIoConstraints.requireValidLengthSize(scale);
-
-        if (length < 0) {
-            throw new IllegalArgumentException("length(" + length + ") < 0");
+        if (value == null) {
+            throw new NullPointerException("null value");
         }
-
-        if ((length >> scale) > 0) {
+        if ((value.length >> lengthSize) > 0) {
             throw new IllegalArgumentException(
-                "length(" + length + ") >> scale(" + scale + ") > 0");
+                "(value.elngth(" + value.length + ") >> byteSize(" + lengthSize
+                + ")) > 0");
         }
 
-        writeUnsignedInt(scale, length);
+        writeUnsignedInt(lengthSize, value.length);
+
+        for (int i = 0; i < value.length; i++) {
+            writeUnsignedByte(byteSize, value[i]);
+        }
     }
 
 
     @Override
-    public byte[] writeBytes(final int scale, final byte[] array,
-                             final int offset, final int range)
-        throws IOException {
+    public long align(final int bytes) throws IOException {
 
-        writeUnsignedInt(scale, array.length - offset);
-        return writeBytes(array, offset, range);
-    }
+        if (bytes <= 0) {
+            throw new IllegalArgumentException("bytes(" + bytes + ") <= 0");
+        }
 
+        long bits = 0; // number of bits to be padded
 
-    @Override
-    public byte[] writeBytes(final int scale, final byte[] array,
-                             final int range)
-        throws IOException {
-
-        return writeBytes(scale, array, 0, range);
-    }
-
-
-//    @Override
-//    public void writeBytes(final int scale, final int range, final byte[] value)
-//        throws IOException {
-//
-//        BitIoConstraints.requireValidBytesScale(scale);
-//
-//        BitIoConstraints.requireValidBytesRange(range);
-//
-//        if (value == null) {
-//            throw new NullPointerException("null value");
-//        }
-//        if (value.length >> scale > 0) {
-//            throw new IllegalArgumentException(
-//                "value.length(" + value.length + ") >> scale(" + scale
-//                + ") > 0");
-//        }
-//
-//        writeUnsignedInt(scale, value.length);
-//
-//        for (int i = 0; i < value.length; i++) {
-//            writeUnsignedByte(range, value[i]);
-//        }
-//    }
-    @Override
-    public void writeString(final int scale, final String value,
-                            final String charsetName)
-        throws IOException {
-
-        final byte[] bytes = value.getBytes(charsetName);
-        writeLength(scale, bytes.length);
-        writeBytes(bytes, BitIoConstants.UBYTE_SIZE_MAX);
-    }
-
-
-    @Override
-    public void writeString(final String value, final String charsetName)
-        throws IOException {
-
-        writeString(BitIoConstants.LENGTH_SIZE_MAX, value, charsetName);
-    }
-
-
-    @Override
-    public void writeAscii(final int scale, final String value)
-        throws IOException {
-
-        final byte[] bytes = value.getBytes("US-ASCII");
-        writeLength(scale, bytes.length);
-        writeBytes(bytes, 7);
-    }
-
-
-    @Override
-    public void writeAscii(final String value) throws IOException {
-
-        writeAscii(BitIoConstants.LENGTH_SIZE_MAX, value);
-    }
-
-
-    @Override
-    public int align(final int bytes) throws IOException {
-
-        BitIoConstraints.requireValidAlighBytes(bytes);
-
-        int bits = 0; // number of bits to be padded
-
-        // pad remained bits into current byte
+        // pad remained bits into current octet
         if (index > 0) {
             bits += (8 - index);
-            writeUnsignedByte(bits, 0x00); // count incremented
+            writeUnsignedByte((int) bits, 0x00); // count incremented
         }
 
-        long octets = count % bytes;
-
-        if (octets == 0) {
+        final int remainder = (count > 0 ? count : ~count + 1) % bytes;
+        if (remainder == 0) {
             return bits;
         }
 
-        if (octets > 0) {
-            octets = bytes - octets;
-        } else {
-            octets = 0 - octets;
-        }
-
+        long octets = bytes - remainder;
         for (; octets > 0; octets--) {
             writeUnsignedByte(8, 0x00);
             bits += 8;
@@ -405,7 +275,7 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
     /**
      * number of bytes written so far.
      */
-    private long count = 0;
+    private int count = 0;
 
 }
 

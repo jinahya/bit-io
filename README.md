@@ -84,12 +84,12 @@ biiiiiil llllllll llllllll llllllll llllllll llllllll lllllldd
 ```java
 final BitOutput output;
 
-output.writeBoolean(false);          // 1-bit boolean        1    1
-output.writeInt(9, -72);             // 7-bit signed int     9   10
-output.writeBoolean(true);           // 1-bit boolean        1   11
-output.writeUnsignedLong(33, 99L);   // 33-bit signed long  33   44
+output.writeBoolean(false);          // 1-bit boolean          1    1
+output.writeInt(9, -72);             // 7-bit signed int       9   10
+output.writeBoolean(true);           // 1-bit boolean          1   11
+output.writeUnsignedLong(33, 99L);   // 33-bit unsigned long  33   44
 
-final long padded = output.align(4); // aligns to 32-bit    20   64
+final long padded = output.align(4); // aligns to 32-bit      20   64
 assert padded == 20L;
 
 biiiiiii iiblllll llllllll llllllll llllllll llllpppp pppppppp pppppppp

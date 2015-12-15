@@ -41,11 +41,22 @@ public abstract class AbstractByteInput<T> implements ByteInput {
     }
 
 
+    public T getSource() {
+
+        return source;
+    }
+
+
+    public void setSource(final T source) {
+
+        this.source = source;
+    }
+
+
     /**
      * The underlying byte source.
      */
     protected T source;
-
 
 }
 

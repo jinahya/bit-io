@@ -20,20 +20,26 @@ package com.github.jinahya.bit.io;
 
 import java.io.IOException;
 import java.util.function.IntSupplier;
-import java.util.function.Supplier;
 
 
 /**
- * A {@link ByteInput} implementation uses a {@link Supplier} instance.
+ * A {@link ByteInput} implementation uses a {@link IntSupplier} instance.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
 public class IntSupplierInput extends AbstractByteInput<IntSupplier> {
 
 
-    public IntSupplierInput(final IntSupplier supplier) {
+    /**
+     * Creates a new instance with specified {@code supplier} which is mapped to
+     * {@link #source}.
+     *
+     * @param source the supplier instance or {@code null} if it's supposed to
+     * be lazily initialized and set
+     */
+    public IntSupplierInput(final IntSupplier source) {
 
-        super(supplier);
+        super(source);
     }
 
 
@@ -43,6 +49,13 @@ public class IntSupplierInput extends AbstractByteInput<IntSupplier> {
         return source.getAsInt();
     }
 
+
+    public IntSupplierInput source(final IntSupplier source) {
+
+        setSource(source);
+
+        return this;
+    }
 
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Jin Kwon.
+ * Copyright 2015 Jin Kwon &lt;jinahya_at_gmail.com&gt;.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,17 +18,29 @@
 package com.github.jinahya.bit.io;
 
 
-import java.nio.ByteBuffer;
-import org.testng.annotations.Guice;
+import java.io.IOException;
 
 
 /**
+ * A byte input which always provides {@code 0}.
  *
- * @author Jin Kwon
+ * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
-@Guice(modules = {BufferInputModule.class})
-public class BuffernputTest
-    extends AbstractByteInputTest<BufferInput, ByteBuffer> {
+final class WhiteByteInput implements ByteInput {
+
+
+    /**
+     * Returns zero.
+     *
+     * @return zero.
+     *
+     * @throws IOException {@inheritDoc}
+     */
+    @Override
+    public int readUnsignedByte() throws IOException {
+
+        return 0;
+    }
 
 }
 

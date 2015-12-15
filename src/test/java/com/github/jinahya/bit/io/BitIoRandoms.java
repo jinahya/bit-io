@@ -18,10 +18,7 @@
 package com.github.jinahya.bit.io;
 
 
-import java.nio.charset.StandardCharsets;
-import java.util.Collection;
-import java.util.concurrent.ThreadLocalRandom;
-import org.apache.commons.lang3.RandomStringUtils;
+import static java.util.concurrent.ThreadLocalRandom.current;
 
 
 /**
@@ -31,220 +28,100 @@ import org.apache.commons.lang3.RandomStringUtils;
 final class BitIoRandoms {
 
 
-    static ThreadLocalRandom random() {
+    static boolean randomBooleanValue() {
 
-        return ThreadLocalRandom.current();
+        return current().nextBoolean();
     }
 
 
-    static boolean valueBoolean() {
+    static int randomUnsignedIntSize() {
 
-        return random().nextBoolean();
-    }
-
-
-    static int sizeIntUnsigned() {
-
-        final int size = random().nextInt(
+        final int size = current().nextInt(
             BitIoConstants.UINT_SIZE_MIN, BitIoConstants.UINT_SIZE_MAX + 1);
 
         return BitIoConstraints.requireValidUnsignedIntSize(size);
     }
 
 
-    static int valueIntUnsigned(final int size) {
+    static int randomUnsignedIntValue(final int size) {
 
         BitIoConstraints.requireValidUnsignedIntSize(size);
 
-        final int value = random().nextInt() >>> (Integer.SIZE - size);
+        final int value = current().nextInt() >>> (Integer.SIZE - size);
 
-        return value;
+        return BitIoConstraints.requireValidUnsignedIntValue(value, size);
     }
 
 
-    static int valueIntUnsigned() {
+    static int randomIntSize() {
 
-        return valueIntUnsigned(sizeIntUnsigned());
-    }
-
-
-    static int sizeInt() {
-
-        final int size = random().nextInt(
+        final int size = current().nextInt(
             BitIoConstants.INT_SIZE_MIN, BitIoConstants.INT_SIZE_MAX + 1);
 
         return BitIoConstraints.requireValidIntSize(size);
     }
 
 
-    static int valueInt(final int size) {
+    static int randomIntValue(final int size) {
 
         BitIoConstraints.requireValidIntSize(size);
 
-        final int value = random().nextInt() >> (Integer.SIZE - size);
+        final int value = current().nextInt() >> (Integer.SIZE - size);
 
-        return value;
+        return BitIoConstraints.requireValidIntValue(value, size);
     }
 
 
-    static int valueInt() {
+    static int randomUnsignedLongSize() {
 
-        return valueInt(sizeInt());
-    }
-
-
-    static int sizeLongUnsigned() {
-
-        final int size = random().nextInt(
+        final int size = current().nextInt(
             BitIoConstants.ULONG_SIZE_MIN, BitIoConstants.ULONG_SIZE_MAX + 1);
 
         return BitIoConstraints.requireValidUnsignedLongSize(size);
     }
 
 
-    static long valueLongUnsigned(final int size) {
+    static long unsignedLongValue(final int size) {
 
         BitIoConstraints.requireValidUnsignedLongSize(size);
 
-        final long value = random().nextLong() >>> (Long.SIZE - size);
+        final long value = current().nextLong() >>> (Long.SIZE - size);
 
-        return value;
+        return BitIoConstraints.requireValidUnsignedLongValue(value, size);
     }
 
 
-    static long valueLongUnsigned() {
+    static int randomLongSize() {
 
-        return valueLongUnsigned(sizeLongUnsigned());
-    }
-
-
-    static long valueLongUnsigned(final Collection<Integer> lengths) {
-
-        final int length = sizeLongUnsigned();
-        lengths.add(length);
-
-        return valueLongUnsigned(length);
-    }
-
-
-    static int sizeLong() {
-
-        final int size = random().nextInt(
+        final int size = current().nextInt(
             BitIoConstants.LONG_SIZE_MIN, BitIoConstants.LONG_SIZE_MAX + 1);
 
         return BitIoConstraints.requireValidLongSize(size);
     }
 
 
-    static long valueLong(final int size) {
+    static long randomLongValue(final int size) {
 
         BitIoConstraints.requireValidLongSize(size);
 
-        final long value = random().nextLong() >> (Long.SIZE - size);
+        final long value = current().nextLong() >> (Long.SIZE - size);
 
-        return value;
+        return BitIoConstraints.requireValidLongValue(value, size);
     }
 
 
-    static long valueLong() {
+    static int randomByteSize() {
 
-        return valueLong(sizeLong());
-    }
+        final int size = current().nextInt(
+            BitIoConstants.UBYTE_SIZE_MIN, BitIoConstants.UBYTE_SIZE_MAX + 1);
 
-
-    private static int assertScaleBytes(final int scale) {
-
-        assert scale > 0 : "scale(" + scale + ") <= 0";
-        assert scale <= 16 : "scale(" + scale + ") > 16";
-
-        return scale;
-    }
-
-
-    static int scaleBytes() {
-
-        final int scale = random().nextInt(
-            BitIoConstants.SCALE_SIZE_MIN, BitIoConstants.SCALE_SIZE_MAX + 1);
-
-        return BitIoConstraints.requireValidBytesScale(scale);
-    }
-
-
-    static int rangeBytes() {
-
-        final int range = random().nextInt(
-            BitIoConstants.RANGE_SIZE_MIN, BitIoConstants.RANGE_SIZE_MAX + 1);
-
-        return BitIoConstraints.requireValidBytesRange(range);
-    }
-
-
-    static byte[] valueBytes(final int scale, final int range) {
-
-        BitIoConstraints.requireValidBytesScale(scale);
-        BitIoConstraints.requireValidBytesRange(range);
-
-        final byte[] value
-            = new byte[random().nextInt() >>> (Integer.SIZE - scale)];
-        random().nextBytes(value);
-
-        for (int i = 0; i < value.length; i++) {
-            value[i] = (byte) ((value[i] & 0xFF) >> (Byte.SIZE - range));
-        }
-
-        return value;
-    }
-
-
-    static String valueStringUtf8() {
-
-        String string;
-
-        do {
-            final int count = random().nextInt(32768); // = 65536 / 2
-            string = RandomStringUtils.random(count);
-        } while (string.getBytes(StandardCharsets.UTF_8).length >= 65536);
-
-        return string;
-    }
-
-
-    static String valueStringUsAscii() {
-
-        final int count = random().nextInt(65536);
-
-        return RandomStringUtils.randomAscii(count);
-    }
-
-
-    static String toBinaryString(final byte[] bytes, final int word) {
-
-        final StringBuilder builder = new StringBuilder();
-
-        for (byte b : bytes) {
-            final int k = builder.length();
-            for (int i = 0; i < Byte.SIZE; i++) {
-                builder.insert(k, b & 0x01);
-                b >>= 1;
-            }
-        }
-
-        if (word > 0) {
-            for (int i = builder.length() - 1; i > 0; i--) {
-                if (i % word == 0) {
-                    builder.insert(i, " ");
-                }
-            }
-        }
-
-        return builder.toString();
+        return BitIoConstraints.requireValidUnsignedByteSize(size);
     }
 
 
     private BitIoRandoms() {
         super();
     }
-
 
 }
 

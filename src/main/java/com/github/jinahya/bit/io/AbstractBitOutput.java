@@ -22,7 +22,7 @@ import java.io.IOException;
 
 
 /**
- * A abstract class partially implementing {@link BitInput}.
+ * An abstract class partially implementing {@link BitInput}.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
@@ -191,87 +191,66 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
 
 
     @Override
-    public void writeBytes(final int scale, final int range, final byte[] value)
+    public void writeBytes(final byte[] array, final int offset,
+                           final int length, final int byteSize)
         throws IOException {
 
-        BitIoConstraints.requireValidBytesScale(scale);
+        BitIoConstraints.requireValidArrayOffsetLength(array, offset, length);
+        BitIoConstraints.requireValidUnsignedByteSize(byteSize);
 
-        BitIoConstraints.requireValidBytesRange(range);
+        final int limit = offset + length;
+        for (int i = offset; i < limit; i++) {
+            writeUnsignedByte(byteSize, array[i]);
+        }
+    }
+
+
+    @Override
+    public void writeBytes(final int lengthSize, final int byteSize,
+                           final byte[] value)
+        throws IOException {
+
+        BitIoConstraints.requireValidUnsignedIntSize(lengthSize);
+        BitIoConstraints.requireValidUnsignedByteSize(byteSize);
 
         if (value == null) {
             throw new NullPointerException("null value");
         }
-        if (value.length >> scale != 0) {
+        if ((value.length >> lengthSize) > 0) {
             throw new IllegalArgumentException(
-                "value.length(" + value.length + ") >> scale(" + scale
-                + " != 0");
+                "(value.elngth(" + value.length + ") >> byteSize(" + lengthSize
+                + ")) > 0");
         }
 
-        writeUnsignedInt(scale, value.length);
+        writeUnsignedInt(lengthSize, value.length);
 
         for (int i = 0; i < value.length; i++) {
-            writeUnsignedByte(range, value[i]);
+            writeUnsignedByte(byteSize, value[i]);
         }
     }
 
 
     @Override
-    public void writeString(final String value, final String charsetName)
-        throws IOException {
+    public long align(final int bytes) throws IOException {
 
-        if (value == null) {
-            throw new NullPointerException("null value");
+        if (bytes <= 0) {
+            throw new IllegalArgumentException("bytes(" + bytes + ") <= 0");
         }
 
-        if (charsetName == null) {
-            throw new NullPointerException("null charsetName");
-        }
+        long bits = 0; // number of bits to be padded
 
-        final byte[] bytes = value.getBytes(charsetName);
-
-        writeBytes(BitIoConstants.SCALE_SIZE_MAX, BitIoConstants.RANGE_SIZE_MAX,
-                   bytes);
-    }
-
-
-    @Override
-    public void writeAscii(final String value) throws IOException {
-
-        if (value == null) {
-            throw new NullPointerException("null value");
-        }
-
-        final byte[] bytes = value.getBytes("US-ASCII");
-
-        writeBytes(BitIoConstants.SCALE_SIZE_MAX, 7, bytes);
-    }
-
-
-    @Override
-    public int align(final int bytes) throws IOException {
-
-        BitIoConstraints.requireValidAlighBytes(bytes);
-
-        int bits = 0; // number of bits to be padded
-
-        // pad remained bits into current byte
+        // pad remained bits into current octet
         if (index > 0) {
             bits += (8 - index);
-            writeUnsignedByte(bits, 0x00); // count incremented
+            writeUnsignedByte((int) bits, 0x00); // count incremented
         }
 
-        long octets = count % bytes;
-
-        if (octets == 0) {
+        final int remainder = (count > 0 ? count : ~count + 1) % bytes;
+        if (remainder == 0) {
             return bits;
         }
 
-        if (octets > 0) {
-            octets = bytes - octets;
-        } else {
-            octets = 0 - octets;
-        }
-
+        long octets = bytes - remainder;
         for (; octets > 0; octets--) {
             writeUnsignedByte(8, 0x00);
             bits += 8;
@@ -296,8 +275,7 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
     /**
      * number of bytes written so far.
      */
-    private long count = 0;
-
+    private int count = 0;
 
 }
 

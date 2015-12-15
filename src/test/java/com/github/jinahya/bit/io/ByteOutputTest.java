@@ -14,27 +14,45 @@
  * limitations under the License.
  */
 
-
 package com.github.jinahya.bit.io;
 
 
+import java.io.IOException;
+import static java.util.Objects.requireNonNull;
+import static java.util.concurrent.ThreadLocalRandom.current;
+import org.testng.annotations.Test;
+
+
 /**
- * A bit output whose {@link #delegate} is an instance of
- * {@link WhiteByteInput}.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
-public class WhiteBitInput extends DelegatedBitInput {
+abstract class ByteOutputTest<T extends ByteOutput> {
 
 
-    /**
-     * Creates a new instance.
-     */
-    public WhiteBitInput() {
+    public ByteOutputTest(final Class<T> type) {
 
-        super(new WhiteByteInput());
+        super();
+
+        this.type = requireNonNull(type);
     }
 
+
+    abstract T instance(final int capacity);
+
+
+    @Test
+    public void writeUnsignedByte() throws IOException {
+
+        final int capacity = current().nextInt(1024);
+        final T output = instance(capacity);
+        for (int i = 0; i < capacity; i++) {
+            output.writeUnsignedByte(current().nextInt(256));
+        }
+    }
+
+
+    protected final Class<T> type;
 
 }
 

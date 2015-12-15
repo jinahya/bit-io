@@ -18,7 +18,6 @@
 package com.github.jinahya.bit.io;
 
 
-import com.github.jinahya.bit.io.BufferInput;
 import com.google.inject.AbstractModule;
 
 
@@ -34,7 +33,6 @@ public class BufferInputModule extends AbstractModule {
 
         bind(BufferInput.class).toProvider(BufferInputProvider.class);
     }
-
 
 }
 

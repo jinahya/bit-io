@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Jin Kwon.
+ * Copyright 2015 Jin Kwon &lt;jinahya_at_gmail.com&gt;.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,22 +14,27 @@
  * limitations under the License.
  */
 
-
 package com.github.jinahya.bit.io;
-
-
-import com.github.jinahya.bit.io.StreamInput;
-import java.io.InputStream;
-import org.testng.annotations.Guice;
 
 
 /**
  *
- * @author Jin Kwon
+ * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
-@Guice(modules = {StreamInputModule.class})
-public class StreamInputTest
-    extends AbstractByteInputTest<StreamInput, InputStream> {
+public class ArrayOutputTest extends ByteOutputTest<ArrayOutput> {
+
+
+    public ArrayOutputTest() {
+
+        super(ArrayOutput.class);
+    }
+
+
+    @Override
+    ArrayOutput instance(final int capacity) {
+
+        return new ArrayOutput(new byte[capacity], 0, capacity);
+    }
 
 }
 

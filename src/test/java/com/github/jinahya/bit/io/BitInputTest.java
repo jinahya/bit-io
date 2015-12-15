@@ -18,14 +18,11 @@
 package com.github.jinahya.bit.io;
 
 
-import static com.github.jinahya.bit.io.BitIoRandoms.sizeInt;
-import static com.github.jinahya.bit.io.BitIoRandoms.sizeIntUnsigned;
-import static com.github.jinahya.bit.io.BitIoRandoms.sizeLong;
-import static com.github.jinahya.bit.io.BitIoRandoms.sizeLongUnsigned;
 import java.io.IOException;
+import static java.util.concurrent.ThreadLocalRandom.current;
 import javax.inject.Inject;
 import org.slf4j.Logger;
-import static org.slf4j.LoggerFactory.getLogger;
+import org.slf4j.LoggerFactory;
 import org.testng.annotations.Guice;
 import org.testng.annotations.Test;
 
@@ -48,7 +45,7 @@ public class BitInputTest {
     @Test(invocationCount = 128)
     public void readUnsignedInt() throws IOException {
 
-        final int size = sizeIntUnsigned();
+        final int size = BitIoRandoms.randomUnsignedIntSize();
 
         final int value = input.readUnsignedInt(size);
     }
@@ -57,7 +54,7 @@ public class BitInputTest {
     @Test(invocationCount = 128)
     public void readInt() throws IOException {
 
-        final int size = sizeInt();
+        final int size = BitIoRandoms.randomIntSize();
 
         final int value = input.readInt(size);
     }
@@ -66,7 +63,7 @@ public class BitInputTest {
     @Test(invocationCount = 128)
     public void readUnsingedLong() throws IOException {
 
-        final int size = sizeLongUnsigned();
+        final int size = BitIoRandoms.randomUnsignedLongSize();
 
         final long value = input.readUnsignedLong(size);
     }
@@ -75,27 +72,49 @@ public class BitInputTest {
     @Test(invocationCount = 128)
     public void readLong() throws IOException {
 
-        final int size = sizeLong();
+        final int size = BitIoRandoms.randomLongSize();
 
         final long value = input.readLong(size);
     }
 
 
     @Test(invocationCount = 128)
-    public void readBytesFully() {
+    public void readFixedBytes() throws IOException {
 
+        final byte[] array = new byte[current().nextInt(1024)];
+        final int offset = array.length == 0
+                           ? 0 : current().nextInt(array.length);
+        final int length = array.length == 0
+                           ? 0 : current().nextInt(array.length - offset);
+        final int byteSize = BitIoRandoms.randomByteSize();
+
+        input.readBytes(array, offset, length, byteSize);
+    }
+
+
+    @Test(invocationCount = 128)
+    public void readVariableBytes() throws IOException {
+
+        final byte[] array = new byte[current().nextInt(1024)];
+        final int offset = array.length == 0
+                           ? 0 : current().nextInt(array.length);
+        final int length = array.length == 0
+                           ? 0 : current().nextInt(array.length - offset);
+        final int byteSize = BitIoRandoms.randomByteSize();
+
+        input.readBytes(array, offset, length, byteSize);
     }
 
 
     /**
      * logger.
      */
-    private transient final Logger logger = getLogger(BitInputTest.class);
+    private transient final Logger logger
+        = LoggerFactory.getLogger(BitInputTest.class);
 
 
     @Inject
-    private BitInput input;
-
+    private transient BitInput input;
 
 }
 

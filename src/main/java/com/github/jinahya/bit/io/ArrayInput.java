@@ -28,9 +28,9 @@ import java.io.IOException;
 public class ArrayInput extends AbstractByteInput<byte[]> {
 
 
-    public ArrayInput(final byte[] array, final int index, final int limit) {
+    public ArrayInput(final byte[] source, final int index, final int limit) {
 
-        super(array);
+        super(source);
 
         this.index = index;
         this.limit = limit;
@@ -48,11 +48,58 @@ public class ArrayInput extends AbstractByteInput<byte[]> {
     }
 
 
+    public ArrayInput source(final byte[] target) {
+
+        setSource(target);
+
+        return this;
+    }
+
+
+    public int getIndex() {
+
+        return index;
+    }
+
+
+    public void setIndex(int index) {
+
+        this.index = index;
+    }
+
+
+    public ArrayInput index(final int index) {
+
+        setIndex(index);
+
+        return this;
+    }
+
+
+    public int getLimit() {
+
+        return limit;
+    }
+
+
+    public void setLimit(int limit) {
+
+        this.limit = limit;
+    }
+
+
+    public ArrayInput limit(final int limit) {
+
+        setLimit(limit);
+
+        return this;
+    }
+
+
     protected int index;
 
 
     protected int limit;
-
 
 }
 

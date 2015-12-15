@@ -26,7 +26,7 @@ import java.io.IOException;
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
-@FunctionalInterface
+//@FunctionalInterface
 public interface ByteOutput {
 
 
@@ -39,7 +39,6 @@ public interface ByteOutput {
      * @throws IOException if an I/O error occurs.
      */
     void writeUnsignedByte(int value) throws IOException;
-
 
 }
 

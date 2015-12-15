@@ -41,11 +41,22 @@ public abstract class AbstractByteOutput<T> implements ByteOutput {
     }
 
 
+    public T getTarget() {
+
+        return target;
+    }
+
+
+    public void setTarget(final T target) {
+
+        this.target = target;
+    }
+
+
     /**
      * The underlying byte target.
      */
     protected T target;
-
 
 }
 

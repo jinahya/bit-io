@@ -105,81 +105,41 @@ public interface BitInput {
 
 
     /**
-     * Reads a byte array.
+     * Reads specified number of bytes and set on given array starting from
+     * specified offset.
      *
-     * @param scale the length scale between
-     * {@value com.github.jinahya.bit.io.BitIoConstants#SCALE_SIZE_MIN}
-     * (inclusive) and
-     * {@value com.github.jinahya.bit.io.BitIoConstants#SCALE_SIZE_MAX}
-     * (inclusive).
-     * @param range the number of bits for each byte between
-     * {@value com.github.jinahya.bit.io.BitIoConstants#RANGE_SIZE_MIN}
-     * (inclusive) and
-     * {@value com.github.jinahya.bit.io.BitIoConstants#RANGE_SIZE_MAX}
-     * (inclusive).
-     *
-     * @return a byte array.
+     * @param array the array
+     * @param offset the start offset of array
+     * @param length number of bytes to read
+     * @param byteSize valid number of bits in each byte
      *
      * @throws IOException if an I/O error occurs.
      */
-    byte[] readBytes(int scale, int range) throws IOException;
+    void readBytes(byte[] array, int offset, int length, int byteSize)
+        throws IOException;
 
 
     /**
-     * Reads a string. This method reads a byte array via
-     * {@link #readBytes(int, int)} with {@code scale} of
-     * {@value com.github.jinahya.bit.io.BitIoConstants#SCALE_SIZE_MAX} and
-     * {@code range} of
-     * {@value com.github.jinahya.bit.io.BitIoConstants#RANGE_SIZE_MAX} and
-     * returns the output string created via
-     * {@link String#String(byte[], java.lang.String)} with the byte array and
-     * given {@code charsetName}.
+     * Reads a variable length of bytes.
      *
-     * @param charsetName the character set name to encode output string.
-     *
-     * @return a string value.
+     * @param lengthSize number of bits for length;
+     * @param byteSize the number of bits for each byte.
      *
      * @throws IOException if an I/O error occurs.
-     *
-     * @see #readBytes(int, int)
-     * @see String#String(byte[], java.lang.String)
      */
-    String readString(String charsetName) throws IOException;
-
-
-    /**
-     * Reads a {@code US-ASCII} encoded string. This method reads a byte array
-     * via {@link #readBytes(int, int)} with {@code scale} of
-     * {@value com.github.jinahya.bit.io.BitIoConstants#SCALE_SIZE_MAX} and
-     * {@code range} of {@code 0x07} and returns the output string created by
-     * {@link String#String(byte[], java.lang.String)} with the byte array and
-     * {@code US-ASCII}.
-     *
-     * @return a {@code US-ASCII} encoded string.
-     *
-     * @throws IOException if an I/O error occurs.
-     *
-     * @see #readBytes(int, int)
-     * @see String#String(byte[], java.lang.String)
-     */
-    String readAscii() throws IOException;
+    void readBytes(int lengthSize, int byteSize) throws IOException;
 
 
     /**
      * Aligns to given number of bytes.
      *
-     * @param bytes the number of bytes to align; between
-     * {@value com.github.jinahya.bit.io.BitIoConstants#ALIGN_BYTES_MIN}
-     * (inclusive) and
-     * {@value com.github.jinahya.bit.io.BitIoConstants#ALIGN_BYTES_MAX}
-     * (inclusive).
+     * @param bytes the number of bytes to align; must be positive.
      *
      * @return the number of bits discarded for alignment
      *
      * @throws IOException if an I/O error occurs.
      */
-    int align(int bytes) throws IOException;
-
+    long align(int bytes) throws IOException;
 
 }
 

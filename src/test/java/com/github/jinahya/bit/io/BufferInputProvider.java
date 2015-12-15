@@ -18,7 +18,6 @@
 package com.github.jinahya.bit.io;
 
 
-import com.github.jinahya.bit.io.BufferInput;
 import com.google.inject.Provider;
 import java.nio.ByteBuffer;
 
@@ -35,7 +34,6 @@ public class BufferInputProvider implements Provider<BufferInput> {
 
         return new BufferInput(ByteBuffer.allocate(1024));
     }
-
 
 }
 

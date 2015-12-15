@@ -18,7 +18,6 @@
 package com.github.jinahya.bit.io;
 
 
-import com.github.jinahya.bit.io.ByteInput;
 import java.io.EOFException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
@@ -85,7 +84,6 @@ public class ByteInputs {
 
         return () -> (int) (System.currentTimeMillis() & 0xFF);
     }
-
 
 }
 

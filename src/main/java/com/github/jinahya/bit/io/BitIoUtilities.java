@@ -18,51 +18,34 @@
 package com.github.jinahya.bit.io;
 
 
+import java.util.function.Supplier;
+
+
 /**
- * A class for constants.
+ * A class for constraints.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
-final class BitIoConstants {
+final class BitIoUtilities {
 
 
-    public static final int UBYTE_SIZE_MIN = 0x01;
+    public static <T, U extends Throwable> T get(final Supplier<T> supplier,
+                                                 final Class<U> throwable)
+        throws U {
+
+        try {
+            return supplier.get();
+        } catch (final RuntimeException re) {
+            final Throwable cause = re.getCause();
+            if (throwable.isInstance(cause)) {
+                throw throwable.cast(cause);
+            }
+            throw re;
+        }
+    }
 
 
-    public static final int UBYTE_SIZE_MAX = 0x08;
-
-
-    public static final int USHORT_SIZE_MIN = 0x01;
-
-
-    public static final int USHORT_SIZE_MAX = 0x10;
-
-
-    public static final int UINT_SIZE_MIN = 0x01;
-
-
-    public static final int UINT_SIZE_MAX = 0x1F;
-
-
-    public static final int INT_SIZE_MIN = 0x02;
-
-
-    public static final int INT_SIZE_MAX = 0x20;
-
-
-    public static final int ULONG_SIZE_MIN = 0x01;
-
-
-    public static final int ULONG_SIZE_MAX = 0x3F;
-
-
-    public static final int LONG_SIZE_MIN = 0x02;
-
-
-    public static final int LONG_SIZE_MAX = 0x40;
-
-
-    private BitIoConstants() {
+    private BitIoUtilities() {
 
         super();
     }

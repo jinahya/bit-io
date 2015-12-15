@@ -18,7 +18,6 @@
 package com.github.jinahya.bit.io;
 
 
-import com.github.jinahya.bit.io.ByteOutput;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
 
@@ -40,7 +39,6 @@ public class ByteOutputs {
 
         return (a) -> target.put((byte) a);
     }
-
 
 }
 

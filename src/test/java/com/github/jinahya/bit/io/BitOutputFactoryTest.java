@@ -14,40 +14,45 @@
  * limitations under the License.
  */
 
-
 package com.github.jinahya.bit.io;
 
 
-import java.io.IOException;
-import java.util.function.Supplier;
+import java.nio.ByteBuffer;
+import java.util.function.Consumer;
+import java.util.function.IntConsumer;
+import org.testng.annotations.Test;
 
 
 /**
- * A {@link ByteInput} implementation uses a {@link Supplier} instance.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
-public class SupplierInput extends AbstractByteInput<Supplier<Byte>> {
+public class BitOutputFactoryTest {
 
 
-    public SupplierInput(final Supplier<Byte> source) {
+    @Test
+    public static void newInstanceByteBuffer() {
 
-        super(source);
+        final ByteBuffer buffer = ByteBuffer.allocate(0);
+        BitOutputFactory.newInstance(v -> buffer.put((byte) v));
     }
 
 
-    @Override
-    public int readUnsignedByte() throws IOException {
+    @Test
+    public static void newBitOutputForConsumer() {
 
-        return source.get() & 0xFF;
+        final Consumer<Byte> consumer = v -> {
+        };
+        BitOutputFactory.newInstance(v -> consumer.accept((byte) v));
     }
 
 
-    public SupplierInput source(final Supplier<Byte> source) {
+    @Test
+    public static void newInstanceIntConsumer() {
 
-        setSource(source);
-
-        return this;
+        final IntConsumer consumer = v -> {
+        };
+        BitOutputFactory.newInstance(v -> consumer.accept(v));
     }
 
 }

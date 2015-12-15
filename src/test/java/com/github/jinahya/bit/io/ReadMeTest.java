@@ -18,11 +18,9 @@
 package com.github.jinahya.bit.io;
 
 
-import com.github.jinahya.bit.io.BitInput;
-import com.github.jinahya.bit.io.BitOutput;
 import java.io.IOException;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import static org.slf4j.LoggerFactory.getLogger;
 import static org.testng.Assert.assertEquals;
 import org.testng.annotations.Test;
 
@@ -34,15 +32,11 @@ import org.testng.annotations.Test;
 public class ReadMeTest {
 
 
-    /**
-     * logger.
-     */
-    private static final Logger logger
-        = LoggerFactory.getLogger(ReadMeTest.class);
+    private static final Logger logger = getLogger(ReadMeTest.class);
 
 
     @Test
-    public void read1_() throws IOException {
+    public void read() throws IOException {
 
         final BitInput input = new WhiteBitInput();
 
@@ -50,13 +44,13 @@ public class ReadMeTest {
         input.readUnsignedInt(6);
         input.readLong(47);
 
-        final int discarded = input.align(1);
-        assertEquals(discarded, 2);
+        final long discarded = input.align(1);
+        assertEquals(discarded, 2L);
     }
 
 
     @Test
-    public void write1_() throws IOException {
+    public void write() throws IOException {
 
         final BitOutput output = new BlackBitOutput();
 
@@ -64,10 +58,9 @@ public class ReadMeTest {
         output.writeInt(7, -1);
         output.writeUnsignedLong(33, 1L);
 
-        final int padded = output.align(4);
-        assertEquals(padded, 23);
+        final long padded = output.align(4);
+        assertEquals(padded, 23L);
     }
-
 
 }
 

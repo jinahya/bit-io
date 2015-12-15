@@ -14,34 +14,26 @@
  * limitations under the License.
  */
 
-
 package com.github.jinahya.bit.io;
 
 
-import java.io.IOException;
+import static org.testng.Assert.assertEquals;
+import org.testng.annotations.Test;
 
 
 /**
- * A byte input which always provides {@code 0}.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
-public class WhiteByteInput implements ByteInput {
+public class BitIoConstantsTest {
 
 
-    /**
-     * Returns zero.
-     *
-     * @return zero.
-     *
-     * @throws IOException {@inheritDoc}
-     */
-    @Override
-    public int readUnsignedByte() throws IOException {
+    @Test
+    public static void UBYTE_SIZE() {
 
-        return 0;
+        assertEquals(BitIoConstants.UBYTE_SIZE_MIN, 1);
+        assertEquals(BitIoConstants.UBYTE_SIZE_MAX, Byte.SIZE);
     }
-
 
 }
 

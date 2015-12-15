@@ -22,6 +22,7 @@ import java.io.IOException;
 
 
 /**
+ * A type of {@code BitOutput} writes output bytes on {@link #delegate}.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
@@ -37,11 +38,11 @@ public class DelegatedBitOutput extends AbstractBitOutput {
 
 
     /**
-     * {@inheritDoc} The {code writeUnsignedByte(int)} method of
+     * {@inheritDoc} The {@code writeUnsignedByte(int)} method of
      * {@code DelegatedBitOutput} class executes
-     * <pre>delegate.writeUnsignedByte(int)</pre> with specified {@code value}.
-     * Override this method if {@link #delegate} is supposed to be lazily
-     * initialized.
+     * <blockquote><pre>{@code delegate.writeUnsignedByte(int)}</pre></blockquote>
+     * with specified {@code value}. Override this method if {@link #delegate}
+     * is supposed to be lazily initialized and set.
      *
      * @param value {@inheritDoc}
      *
@@ -58,7 +59,6 @@ public class DelegatedBitOutput extends AbstractBitOutput {
      * The delegate on which {@link #writeUnsignedByte(int)} is invoked.
      */
     protected ByteOutput delegate;
-
 
 }
 

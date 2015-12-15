@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Jin Kwon.
+ * Copyright 2015 Jin Kwon &lt;jinahya_at_gmail.com&gt;.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,13 +19,21 @@ package com.github.jinahya.bit.io;
 
 
 /**
+ * A bit output whose {@link #delegate} is an instance of
+ * {@link BlackByteOutput}.
  *
- * @author Jin Kwon
- * @param <T> byte input type parameter.
- * @param <U> byte source type parameter.
+ * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
-public abstract class AbstractByteInputTest<T extends AbstractByteInput<U>, U>
-    extends ByteInputTest<T> {
+final class BlackBitOutput extends DelegatedBitOutput {
+
+
+    /**
+     * Creates a new instance.
+     */
+    public BlackBitOutput() {
+
+        super(new BlackByteOutput());
+    }
 
 }
 

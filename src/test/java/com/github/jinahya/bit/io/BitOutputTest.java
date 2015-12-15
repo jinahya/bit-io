@@ -18,19 +18,10 @@
 package com.github.jinahya.bit.io;
 
 
-import static com.github.jinahya.bit.io.BitIoRandoms.sizeInt;
-import static com.github.jinahya.bit.io.BitIoRandoms.sizeIntUnsigned;
-import static com.github.jinahya.bit.io.BitIoRandoms.sizeLong;
-import static com.github.jinahya.bit.io.BitIoRandoms.sizeLongUnsigned;
-import static com.github.jinahya.bit.io.BitIoRandoms.valueBoolean;
-import static com.github.jinahya.bit.io.BitIoRandoms.valueInt;
-import static com.github.jinahya.bit.io.BitIoRandoms.valueIntUnsigned;
-import static com.github.jinahya.bit.io.BitIoRandoms.valueLong;
-import static com.github.jinahya.bit.io.BitIoRandoms.valueLongUnsigned;
 import java.io.IOException;
 import javax.inject.Inject;
 import org.slf4j.Logger;
-import static org.slf4j.LoggerFactory.getLogger;
+import org.slf4j.LoggerFactory;
 import org.testng.annotations.Guice;
 import org.testng.annotations.Test;
 
@@ -46,7 +37,7 @@ public class BitOutputTest {
     @Test(invocationCount = 128)
     public void writeBoolean() throws IOException {
 
-        final boolean value = valueBoolean();
+        final boolean value = BitIoRandoms.randomBooleanValue();
 
         output.writeBoolean(value);
     }
@@ -55,8 +46,8 @@ public class BitOutputTest {
     @Test(invocationCount = 128)
     public void writeUnsignedInt() throws IOException {
 
-        final int size = sizeIntUnsigned();
-        final int value = valueIntUnsigned(size);
+        final int size = BitIoRandoms.randomUnsignedIntSize();
+        final int value = BitIoRandoms.randomUnsignedIntValue(size);
 
         output.writeUnsignedInt(size, value);
     }
@@ -65,8 +56,8 @@ public class BitOutputTest {
     @Test(invocationCount = 128)
     public void writeInt() throws IOException {
 
-        final int size = sizeInt();
-        final int value = valueInt(size);
+        final int size = BitIoRandoms.randomIntSize();
+        final int value = BitIoRandoms.randomIntValue(size);
 
         output.writeInt(size, value);
     }
@@ -75,8 +66,8 @@ public class BitOutputTest {
     @Test(invocationCount = 128)
     public void writeUnsignedLong() throws IOException {
 
-        final int size = sizeLongUnsigned();
-        final long value = valueLongUnsigned(size);
+        final int size = BitIoRandoms.randomUnsignedLongSize();
+        final long value = BitIoRandoms.unsignedLongValue(size);
 
         output.writeUnsignedLong(size, value);
     }
@@ -85,8 +76,8 @@ public class BitOutputTest {
     @Test(invocationCount = 128)
     public void writeLong() throws IOException {
 
-        final int size = sizeLong();
-        final long value = valueLong(size);
+        final int size = BitIoRandoms.randomLongSize();
+        final long value = BitIoRandoms.randomLongValue(size);
 
         output.writeLong(size, value);
     }
@@ -95,12 +86,12 @@ public class BitOutputTest {
     /**
      * logger.
      */
-    private transient final Logger logger = getLogger(BitOutputTest.class);
+    private transient final Logger logger
+        = LoggerFactory.getLogger(BitOutputTest.class);
 
 
     @Inject
-    private BitOutput output;
-
+    private transient BitOutput output;
 
 }
 

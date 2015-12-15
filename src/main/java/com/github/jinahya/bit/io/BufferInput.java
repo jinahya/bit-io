@@ -24,6 +24,8 @@ import java.nio.ByteBuffer;
 
 /**
  * A {@link ByteInput} implementation using {@link ByteBuffer}s.
+ *
+ * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
 public class BufferInput extends AbstractByteInput<ByteBuffer> {
 
@@ -31,18 +33,20 @@ public class BufferInput extends AbstractByteInput<ByteBuffer> {
     /**
      * Creates a new instance built on top of the specified byte buffer.
      *
-     * @param buffer the byte buffer.
+     * @param source the byte buffer or {@code null} if it's supposed to be
+     * lazily initialized and set.
      */
-    public BufferInput(final ByteBuffer buffer) {
+    public BufferInput(final ByteBuffer source) {
 
-        super(buffer);
+        super(source);
     }
 
 
     /**
      * {@inheritDoc} The {@code readUnsignedByte()} method of
      * {@code BufferInput} class returns
-     * <pre>source.get() &amp; 0xFF</pre>.
+     * <pre>source.get() &amp; 0xFF</pre>. Override this method if
+     * {@link #source} is supposed to be lazily initialized and set.
      *
      * @return {@inheritDoc }
      *
@@ -57,6 +61,13 @@ public class BufferInput extends AbstractByteInput<ByteBuffer> {
         return source.get() & 0xFF;
     }
 
+
+    public BufferInput source(final ByteBuffer source) {
+
+        setSource(source);
+
+        return this;
+    }
 
 }
 

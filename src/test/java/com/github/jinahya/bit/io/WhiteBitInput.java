@@ -20,21 +20,20 @@ package com.github.jinahya.bit.io;
 
 /**
  * A bit output whose {@link #delegate} is an instance of
- * {@link BlackByteOutput}.
+ * {@link WhiteByteInput}.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
-public class BlackBitOutput extends DelegatedBitOutput {
+final class WhiteBitInput extends DelegatedBitInput {
 
 
     /**
      * Creates a new instance.
      */
-    public BlackBitOutput() {
+    public WhiteBitInput() {
 
-        super(new BlackByteOutput());
+        super(new WhiteByteInput());
     }
-
 
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Jin Kwon.
+ * Copyright 2015 Jin Kwon &lt;jinahya_at_gmail.com&gt;.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,42 +14,47 @@
  * limitations under the License.
  */
 
-
 package com.github.jinahya.bit.io;
 
 
-import com.github.jinahya.bit.io.ByteInput;
 import java.io.IOException;
-import javax.inject.Inject;
-import org.testng.Assert;
+import static java.util.Objects.requireNonNull;
+import static java.util.concurrent.ThreadLocalRandom.current;
+import static org.testng.Assert.assertTrue;
 import org.testng.annotations.Test;
 
 
 /**
  *
- * @author Jin Kwon
- * @param <T> byte input type parameter
+ * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
-public abstract class ByteInputTest<T extends ByteInput> {
+abstract class ByteInputTest<T extends ByteInput> {
 
 
-    @Test
-    public void readUnsignedByte_() throws IOException {
+    public ByteInputTest(final Class<T> type) {
 
-        final int actual = input.readUnsignedByte();
+        super();
 
-        if (actual == -1) {
-            return;
-        }
-
-        Assert.assertTrue(actual >= 0);
-        Assert.assertTrue(actual < 256);
+        this.type = requireNonNull(type);
     }
 
 
-    @Inject
-    protected T input;
+    abstract T instance(final int capacity);
 
+
+    @Test
+    public void writeUnsignedByte() throws IOException {
+
+        final int capacity = current().nextInt(1024);
+        final T output = instance(capacity);
+        for (int i = 0; i < capacity; i++) {
+            final int value = output.readUnsignedByte();
+            assertTrue(value >= 0x00 && value <= 0xFF);
+        }
+    }
+
+
+    protected final Class<T> type;
 
 }
 

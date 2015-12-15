@@ -72,7 +72,8 @@ final long sl47 = input.readLong(47);       // 47-bit signed long  47   54
 
 final long discarded = input.align(1);      // aligns to 8-bit      2   56
 assert discarded == 2L;
-
+```
+```
 -      - ------- --------- -------- -------- -------- ------
 biiiiiil llllllll llllllll llllllll llllllll llllllll lllllldd
  ------                                                     --
@@ -93,7 +94,8 @@ output.writeUnsignedLong(33, 99L);   // 33-bit unsigned long  33   44
 
 final long padded = output.align(4); // aligns to 32-bit      20   64
 assert padded == 20L;
-
+```
+```
 -          -                                     ---- -------- --------
 biiiiiii iiblllll llllllll llllllll llllllll llllpppp pppppppp pppppppp
 01101110 00100000 00000000 00000000 00000110 00110000 00000000 00000000

@@ -316,5 +316,11 @@ final class BitIoConstraints {
         }
     }
 
+
+    public BitIoConstraints() {
+
+        super();
+    }
+
 }
 

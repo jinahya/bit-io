@@ -20,6 +20,7 @@ package com.github.jinahya.bit.io;
 
 import java.io.DataOutput;
 import java.io.IOException;
+import java.util.function.ObjIntConsumer;
 import java.util.function.Supplier;
 
 
@@ -31,10 +32,10 @@ import java.util.function.Supplier;
 public class BitOutputFactory {
 
 
-    public static BitOutput newInstance(final ByteOutput output) {
+    public static BitOutput newInstance(final ByteOutput target) {
 
-        if (output == null) {
-            throw new NullPointerException("null output");
+        if (target == null) {
+            throw new NullPointerException("null target");
         }
 
         return new AbstractBitOutput() {
@@ -42,7 +43,7 @@ public class BitOutputFactory {
             @Override
             public void writeUnsignedByte(final int value) throws IOException {
 
-                output.writeUnsignedByte(value);
+                target.writeUnsignedByte(value);
             }
 
         };
@@ -61,7 +62,7 @@ public class BitOutputFactory {
             public void writeUnsignedByte(final int value) throws IOException {
 
                 if (output == null) {
-                    output = supplier.get();
+                    output = BitIoUtilities.get(supplier, IOException.class);
                 }
 
                 output.writeUnsignedByte(value);
@@ -74,10 +75,15 @@ public class BitOutputFactory {
     }
 
 
-    public static BitOutput newInstance(final DataOutput output) {
+    public static <T> BitOutput newInstance(
+        final Supplier<T> targetSupplier, final ObjIntConsumer<T> valueWriter) {
 
-        if (output == null) {
-            throw new NullPointerException("null output");
+        if (targetSupplier == null) {
+            throw new NullPointerException("null targetSupplier");
+        }
+
+        if (valueWriter == null) {
+            throw new NullPointerException("null valueWriter");
         }
 
         return new AbstractBitOutput() {
@@ -85,7 +91,41 @@ public class BitOutputFactory {
             @Override
             public void writeUnsignedByte(final int value) throws IOException {
 
-                output.writeByte(value);
+                if (target == null) {
+                    target = BitIoUtilities.get(
+                        targetSupplier, IOException.class);
+                }
+
+                try {
+                    valueWriter.accept(target, value);
+                } catch (final RuntimeException re) {
+                    final Throwable cause = re.getCause();
+                    if (cause instanceof IOException) {
+                        throw (IOException) cause;
+                    }
+                    throw re;
+                }
+            }
+
+
+            private T target;
+
+        };
+    }
+
+
+    public static BitOutput newInstance(final DataOutput target) {
+
+        if (target == null) {
+            throw new NullPointerException("null target");
+        }
+
+        return new AbstractBitOutput() {
+
+            @Override
+            public void writeUnsignedByte(final int value) throws IOException {
+
+                target.writeByte(value);
             }
 
         };

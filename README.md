@@ -84,15 +84,16 @@ biiiiiil llllllll llllllll llllllll llllllll llllllll lllllldd
 ```java
 final BitOutput output;
 
-output.writeBoolean(true);           // 1-bit boolean        1    1
-output.writeInt(7, -72);             // 7-bit signed int     7    8
-output.writeUnsignedLong(33, 99L);   // 33-bit signed long  33   41
+output.writeBoolean(false);          // 1-bit boolean        1    1
+output.writeInt(9, -72);             // 7-bit signed int     9   10
+output.writeBoolean(true);           // 1-bit boolean        1   11
+output.writeUnsignedLong(33, 99L);   // 33-bit signed long  33   44
 
-final long padded = output.align(4); // aligns to 32-bit    23   64
-assert padded == 23L;
+final long padded = output.align(4); // aligns to 32-bit    20   64
+assert padded == 20L;
 
-biiiiiii llllllll llllllll llllllll llllllll lppppppp pppppppp pppppppp
-10111000 00000000 00000000 00000000 00110001 10000000 00000000 00000000
+biiiiiii iiblllll llllllll llllllll llllllll llllpppp pppppppp pppppppp
+01101110 00100000 00000000 00000000 00000110 00110000 00000000 00000000
 ```
 ----
 [![Domate via Paypal](https://img.shields.io/badge/donate-paypal-blue.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_cart&business=A954LDFBW4B9N&lc=KR&item_name=GitHub&amount=5%2e00&currency_code=USD&button_subtype=products&add=1&bn=PP%2dShopCartBF%3adonate%2dpaypal%2dblue%2epng%3aNonHosted)

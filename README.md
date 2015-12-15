@@ -64,11 +64,13 @@ new DelegatedBitInput(null) {
 You can create `BitInput`s using various `newInstance(...)` methods.
 ### Reading values.
 ```java
-final boolean b = input.readBoolean();    // 1-bit boolean        1    1
-final int ui6 = input.readUnsignedInt(6); // 6-bit unsigned int   6    7
-final long sl47 = input.readLong(47);     // 47-bit signed long  47   54
+final BitInput input;
 
-final long discarded = input.align(1);    // aligns to 8-bit      2   56
+final boolean b = input.readBoolean();      // 1-bit boolean        1    1
+final int   ui6 = input.readUnsignedInt(6); // 6-bit unsigned int   6    7
+final long sl47 = input.readLong(47);       // 47-bit signed long  47   54
+
+final long discarded = input.align(1);      // aligns to 8-bit      2   56
 assert discarded == 2L;
 
 biiiiiil llllllll llllllll llllllll llllllll llllllll lllllldd
@@ -83,13 +85,14 @@ biiiiiil llllllll llllllll llllllll llllllll llllllll lllllldd
 final BitOutput output;
 
 output.writeBoolean(true);           // 1-bit boolean        1    1
-output.writeInt(7, -1);              // 7-bit signed int     7    8
-output.writeUnsignedLong(33, 1L);    // 33-bit signed long  33   41
+output.writeInt(7, -72);             // 7-bit signed int     7    8
+output.writeUnsignedLong(33, 99L);   // 33-bit signed long  33   41
 
 final long padded = output.align(4); // aligns to 32-bit    23   64
 assert padded == 23L;
 
 biiiiiii llllllll llllllll llllllll llllllll lppppppp pppppppp pppppppp
+10111000 00000000 00000000 00000000 00110001 10000000 00000000 00000000
 ```
 ----
 [![Domate via Paypal](https://img.shields.io/badge/donate-paypal-blue.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_cart&business=A954LDFBW4B9N&lc=KR&item_name=GitHub&amount=5%2e00&currency_code=USD&button_subtype=products&add=1&bn=PP%2dShopCartBF%3adonate%2dpaypal%2dblue%2epng%3aNonHosted)

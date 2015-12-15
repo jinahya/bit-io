@@ -16,6 +16,15 @@ A small library for reading or writing none octet aligned values such as `1-bit 
 |1.2.0|[site](http://jinahya.github.io/bit-io/sites/1.2.0/index.html)|[apidocs](http://jinahya.github.io/bit-io/sites/1.2.0/apidocs/index.html)||
 |1.1.5|[site](http://jinahya.github.io/bit-io/sites/1.1.5/index.html)|[apidocs](http://jinahya.github.io/bit-io/sites/1.1.5/apidocs/index.html)||
 
+## Specifications
+|Value type   |Minimum size|Maximum size|Notes|
+|-------------|------------|------------|-----|
+|boolean      |1           |1           ||
+|unsigned int |1           |31          ||
+|int          |2           |32          ||
+|unsigned long|1           |63          ||
+|long         |2           |64          ||
+
 ## Reading
 ### Preparing `ByteInput`
 Prepare an instance of `ByteInput` from various sources.

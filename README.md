@@ -60,26 +60,6 @@ new DelegatedBitInput(null) {
     }
 };
 ```
-Note that the `source` field of `AbstractByteInput` class, from which `BufferInput` extends, can lazily initialize and set.
-```java
-new DelegatedBitInput(null) {
-    @Override
-    public int readUnsignedByte() throws IOException {
-        if (delegate == null) {
-            delegate = new BufferInput(null) {
-                @Override
-                public int readUnsignedByte() throws IOException {
-                    if (source == null) {
-                        source = createBuffer();
-                    }
-                    return super.readUnsignedByte();
-                }
-            };
-        }
-        return super.readUnsignedByte();
-    }
-};
-```
 #### Using `BitInputFactory`
 You can create `BitInput`s using various `newInstance(...)` methods.
 ### Reading values.

@@ -12,9 +12,8 @@ A small library for reading or writing none octet aligned values such as `1-bit 
 ## Versions
 |Version|Site|Apidocs|Notes|
 |-------|----|-------|-----|
-|1.2.1-SNAPSHOT|[site](http://jinahya.github.io/bit-io/sites/1.2.1-SNAPSHOT/index.html)|[apidocs](http://jinahya.github.io/bit-io/sites/1.2.1-SNAPSHOT/apidocs/index.html)||
-|1.2.0|[site](http://jinahya.github.io/bit-io/sites/1.2.0/index.html)|[apidocs](http://jinahya.github.io/bit-io/sites/1.2.0/apidocs/index.html)||
-|1.1.5|[site](http://jinahya.github.io/bit-io/sites/1.1.5/index.html)|[apidocs](http://jinahya.github.io/bit-io/sites/1.1.5/apidocs/index.html)||
+|1.3.1-SNAPSHOT|[site](http://jinahya.github.io/bit-io/sites/1.3.1-SNAPSHOT/index.html)|[apidocs](http://jinahya.github.io/bit-io/sites/1.3.1-SNAPSHOT/apidocs/index.html)||
+|1.3.0-SNAPSHOT|[site](http://jinahya.github.io/bit-io/sites/1.3.0-SNAPSHOT/index.html)|[apidocs](http://jinahya.github.io/bit-io/sites/1.3.0-SNAPSHOT/apidocs/index.html)||
 
 ## Specifications
 |Value type   |Minimum size|Maximum size|Notes|
@@ -51,13 +50,13 @@ new ArrayInput(null, -1, -1) {
 };
 ```
 ### Creating `BitInput`
-#### Using `DelegatedBitInput`
+#### Using `DefaultBitInput`
 Construct with an already created a `ByteInput`.
 ```java
 final ByteInput input = createByteInput();
-new DelegatedBitInput(input);
+new DefalutBitInput(input);
 ```
-Or laziy instantiate its `delegate` field.
+Or lazliy instantiate its `delegate` value.
 ```java
 new DelegatedBitInput(null) {
     @Override
@@ -82,15 +81,14 @@ final long sl47 = input.readLong(47);       // 47-bit signed long  47   54
 final long discarded = input.align(1);      // aligns to 8-bit      2   56
 assert discarded == 2L;
 ```
+Bits are serialized as following sequence.
 ```
--      - ------- --------- -------- -------- -------- ------
 biiiiiil llllllll llllllll llllllll llllllll llllllll lllllldd
- ------                                                     --
 ```
 ## Writing
 ### Preparing `ByteOutput`
 ### Creating `BitOutput`
-#### Using `DelegatedBitOutput`
+#### Using `DefalutBitOutput`
 #### Using `BitOutputFactory`
 ### Writing values.
 ```java
@@ -104,11 +102,10 @@ output.writeUnsignedLong(33, 99L);   // 33-bit unsigned long  33   44
 final long padded = output.align(4); // aligns to 32-bit      20   64
 assert padded == 20L;
 ```
+Bits are serialized as following sequence.
 ```
--          -                                     ---- -------- --------
 biiiiiii iiblllll llllllll llllllll llllllll llllpppp pppppppp pppppppp
 01101110 00100000 00000000 00000000 00000110 00110000 00000000 00000000
- ------- -- ----- -------- -------- -------- ----
 ```
 ----
 [![Domate via Paypal](https://img.shields.io/badge/donate-paypal-blue.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_cart&business=A954LDFBW4B9N&lc=KR&item_name=GitHub&amount=5%2e00&currency_code=USD&button_subtype=products&add=1&bn=PP%2dShopCartBF%3adonate%2dpaypal%2dblue%2epng%3aNonHosted)

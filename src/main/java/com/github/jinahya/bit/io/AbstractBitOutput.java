@@ -19,6 +19,8 @@ package com.github.jinahya.bit.io;
 
 
 import java.io.IOException;
+import java.util.List;
+import java.util.function.BiConsumer;
 
 
 /**
@@ -184,48 +186,126 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
 
         BitIoConstraints.requireValidLongSize(size);
 
-        final int unsigned = size - 1;
-        writeUnsignedByte(1, (int) (value >> unsigned));
-        writeUnsignedLong(unsigned, value);
+        final int usize = size - 1;
+        writeUnsignedByte(1, (int) (value >> usize));
+        writeUnsignedLong(usize, value);
+    }
+
+
+    @Override
+    public <T> void writeObject(final T value,
+                                final BiConsumer<BitOutput, T> writer)
+        throws IOException {
+
+        if (writer == null) {
+            throw new NullPointerException("null writer");
+        }
+
+        try {
+            writer.accept(this, value);
+        } catch (final RuntimeException re) {
+            final Throwable cause = re.getCause();
+            if (cause instanceof IOException) {
+                throw (IOException) cause;
+            }
+            throw re;
+        }
+    }
+
+
+    @Override
+    public <T> void writeArray(final int scale, final T[] array,
+                               final BiConsumer<BitOutput, T> writer)
+        throws IOException {
+
+        BitIoConstraints.requireValidUnsignedIntSize(scale);
+
+        if (array == null) {
+            throw new NullPointerException("null array");
+        }
+
+        if ((array.length >> scale) > 0) {
+            throw new IllegalArgumentException(
+                "(arraylength(" + array.length + ") >> scale(" + scale
+                + ")(" + (array.length >> scale) + ")) > 0");
+        }
+
+        if (writer == null) {
+            throw new NullPointerException("null writer");
+        }
+
+        writeUnsignedInt(scale, array.length);
+
+        for (final T value : array) {
+            writeObject(value, writer);
+        }
+    }
+
+
+    @Override
+    public <T> void writeList(final int scale, final List<T> list,
+                              final BiConsumer<BitOutput, T> writer)
+        throws IOException {
+
+        BitIoConstraints.requireValidUnsignedIntSize(scale);
+
+        if (list == null) {
+            throw new NullPointerException("null list");
+        }
+
+        if ((list.size() >> scale) > 0) {
+            throw new IllegalArgumentException(
+                "(arraylength(" + list.size() + ") >> scale(" + scale
+                + ")(" + (list.size() >> scale) + ")) > 0");
+        }
+
+        if (writer == null) {
+            throw new NullPointerException("null writer");
+        }
+
+        writeUnsignedInt(scale, list.size());
+
+        for (final T value : list) {
+            writeObject(value, writer);
+        }
     }
 
 
     @Override
     public void writeBytes(final byte[] array, final int offset,
-                           final int length, final int byteSize)
+                           final int length, final int range)
         throws IOException {
 
         BitIoConstraints.requireValidArrayOffsetLength(array, offset, length);
-        BitIoConstraints.requireValidUnsignedByteSize(byteSize);
+        BitIoConstraints.requireValidUnsignedByteSize(range);
 
         final int limit = offset + length;
         for (int i = offset; i < limit; i++) {
-            writeUnsignedByte(byteSize, array[i]);
+            writeUnsignedByte(range, array[i]);
         }
     }
 
 
     @Override
-    public void writeBytes(final int lengthSize, final int byteSize,
-                           final byte[] value)
+    public void writeBytes(final int scale, final int range, final byte[] value)
         throws IOException {
 
-        BitIoConstraints.requireValidUnsignedIntSize(lengthSize);
-        BitIoConstraints.requireValidUnsignedByteSize(byteSize);
+        BitIoConstraints.requireValidUnsignedIntSize(scale);
+        BitIoConstraints.requireValidUnsignedByteSize(range);
 
         if (value == null) {
             throw new NullPointerException("null value");
         }
-        if ((value.length >> lengthSize) > 0) {
+        if ((value.length >> scale) > 0) {
             throw new IllegalArgumentException(
-                "(value.elngth(" + value.length + ") >> byteSize(" + lengthSize
-                + ")) > 0");
+                "(value.elngth(" + value.length + ") >> scale(" + scale
+                + ")(" + (value.length >> scale) + ")) > 0");
         }
 
-        writeUnsignedInt(lengthSize, value.length);
+        writeUnsignedInt(scale, value.length);
 
         for (int i = 0; i < value.length; i++) {
-            writeUnsignedByte(byteSize, value[i]);
+            writeUnsignedByte(range, value[i]);
         }
     }
 
@@ -245,12 +325,8 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
             writeUnsignedByte((int) bits, 0x00); // count incremented
         }
 
-        final int remainder = (count > 0 ? count : ~count + 1) % bytes;
-        if (remainder == 0) {
-            return bits;
-        }
-
-        long octets = bytes - remainder;
+        final long remainder = count % bytes;
+        long octets = (remainder > 0 ? bytes : 0) - remainder;
         for (; octets > 0; octets--) {
             writeUnsignedByte(8, 0x00);
             bits += 8;
@@ -275,7 +351,7 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
     /**
      * number of bytes written so far.
      */
-    private int count = 0;
+    private long count = 0;
 
 }
 

@@ -61,13 +61,5 @@ public class BufferOutput extends AbstractByteOutput<ByteBuffer> {
         target.put((byte) value);
     }
 
-
-    public BufferOutput target(final ByteBuffer target) {
-
-        setTarget(target);
-
-        return this;
-    }
-
 }
 

@@ -19,6 +19,8 @@ package com.github.jinahya.bit.io;
 
 
 import java.io.IOException;
+import java.util.List;
+import java.util.function.BiConsumer;
 
 
 /**
@@ -104,6 +106,19 @@ public interface BitOutput {
     void writeLong(int size, long value) throws IOException;
 
 
+    <T> void writeObject(T value, BiConsumer<BitOutput, T> writer)
+        throws IOException;
+
+
+    <T> void writeArray(int scale, T[] value, BiConsumer<BitOutput, T> writer)
+        throws IOException;
+
+
+    <T> void writeList(int scale, List<T> value,
+                       BiConsumer<BitOutput, T> writer)
+        throws IOException;
+
+
     /**
      * Writes a specified number of bytes from given array starting from
      * specified offset.
@@ -111,7 +126,7 @@ public interface BitOutput {
      * @param array the array
      * @param offset the start offset
      * @param length number of bytes to write.
-     * @param byteSize the number of bits for each byte between
+     * @param range the number of valid lower bits in each byte between
      * {@value com.github.jinahya.bit.io.BitIoConstants#UBYTE_SIZE_MIN}
      * (inclusive) and
      * {@value com.github.jinahya.bit.io.BitIoConstants#UBYTE_SIZE_MAX}
@@ -119,21 +134,20 @@ public interface BitOutput {
      *
      * @throws IOException if an I/O error occurs.
      */
-    void writeBytes(byte[] array, int offset, int length, int byteSize)
+    void writeBytes(byte[] array, int offset, int length, int range)
         throws IOException;
 
 
     /**
      * Writes an array of bytes.
      *
-     * @param lengthSize the number of bits for length;
-     * @param byteSize the number of valid bits in each byte
+     * @param scale the number of bits for length;
+     * @param range the number of valid bits in each byte
      * @param value the array to write.
      *
      * @throws IOException if an I/O error occurs.
      */
-    void writeBytes(int lengthSize, int byteSize, byte[] value)
-        throws IOException;
+    void writeBytes(int scale, int range, byte[] value) throws IOException;
 
 
     /**

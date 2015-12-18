@@ -14,33 +14,27 @@
  * limitations under the License.
  */
 
-
 package com.github.jinahya.bit.io;
 
 
 import java.io.IOException;
-import java.util.function.Supplier;
 
 
 /**
- * A {@link ByteInput} implementation uses a {@link Supplier} instance.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
-public class SupplierInput extends AbstractByteInput<Supplier<Byte>> {
+public interface BitReadable {
 
 
-    public SupplierInput(final Supplier<Byte> source) {
-
-        super(source);
-    }
-
-
-    @Override
-    public int readUnsignedByte() throws IOException {
-
-        return source.get() & 0xFF;
-    }
+    /**
+     * Reads values from specified bit input.
+     *
+     * @param input the bit input
+     *
+     * @throws IOException if an I/O error occurs.
+     */
+    void read(BitInput input) throws IOException;
 
 }
 

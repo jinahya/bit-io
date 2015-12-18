@@ -22,6 +22,7 @@ import java.util.List;
 import static java.util.concurrent.ThreadLocalRandom.current;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import static org.testng.Assert.assertTrue;
 
 
 /**
@@ -159,10 +160,12 @@ enum BitIoType {
         Object read(final List<Object> params, final BitInput input)
             throws IOException {
 
-            final byte[] array = new byte[(int) params.remove(0)];
-            final int byteSize = (int) params.remove(0);
+            final int length = (int) params.remove(0);
+            final int range = (int) params.remove(0);
 
-            input.readBytes(array, 0, array.length, byteSize);
+            final byte[] array = new byte[length];
+
+            input.readBytes(array, 0, array.length, range);
 
             return array;
         }
@@ -172,11 +175,19 @@ enum BitIoType {
         Object write(final List<Object> params, final BitOutput output)
             throws IOException {
 
-            final byte[] array = new byte[current().nextInt(1024)];
-            final int byteSize = current().nextInt(1, 9);
-            params.add(array.length);
-            params.add(byteSize);
-            output.writeBytes(array, 0, array.length, byteSize);
+            final int length = current().nextInt(1024);
+            final int range = BitIoRandoms.randomUnsignedByteSize();
+
+            final byte[] array = new byte[length];
+            current().nextBytes(array);
+            for (int i = 0; i < array.length; i++) {
+                array[i] = (byte) ((array[i] & 0xFF) >> (Byte.SIZE - range));
+            }
+
+            params.add(length);
+            params.add(range);
+
+            output.writeBytes(array, 0, array.length, range);
 
             return array;
         }
@@ -188,12 +199,16 @@ enum BitIoType {
         Object read(final List<Object> params, final BitInput input)
             throws IOException {
 
-            final byte[] array = new byte[(int) params.remove(0)];
-            final int byteSize = (int) params.remove(0);
+            final int scale = (int) params.remove(0);
+            final int range = (int) params.remove(0);
+            //logger.debug("vbytes.r.scale: {}", scale);
+            //logger.debug("vbytes.r.range: {}", range);
 
-            input.readBytes(array, 0, array.length, byteSize);
+            final byte[] value = input.readBytes(scale, range);
+            //logger.debug("vbytes.read.value.length: {}", value.length);
+            //logger.debug("vbytes.r.value: {}", value);
 
-            return array;
+            return value;
         }
 
 
@@ -201,13 +216,26 @@ enum BitIoType {
         Object write(final List<Object> params, final BitOutput output)
             throws IOException {
 
-            final byte[] array = new byte[current().nextInt(1024)];
-            final int byteSize = current().nextInt(1, 9);
-            params.add(array.length);
-            params.add(byteSize);
-            output.writeBytes(array, 0, array.length, byteSize);
+            final int scale = BitIoRandoms.randomUnsignedIntSize(17);
+            final int range = BitIoRandoms.randomUnsignedByteSize();
+            //logger.debug("vbytes.w.scale: {}", scale);
+            //logger.debug("vbytes.w.range: {}", range);
 
-            return array;
+            final int length = BitIoRandoms.randomUnsignedIntValue(scale);
+            final byte[] value = new byte[length];
+            assertTrue((value.length >> scale) == 0);
+            current().nextBytes(value);
+            //logger.debug("vbytes.w.value.length: {}", value.length);
+            for (int i = 0; i < value.length; i++) {
+                value[i] = (byte) ((value[i] & 0xFF) >> (Byte.SIZE - range));
+            }
+            //logger.debug("vbytes.w.value: {}", value);
+
+            params.add(scale);
+            params.add(range);
+            output.writeBytes(scale, range, value);
+
+            return value;
         }
 
     };

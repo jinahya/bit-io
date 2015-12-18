@@ -67,13 +67,5 @@ public class StreamInput extends AbstractByteInput<InputStream> {
         return value;
     }
 
-
-    public StreamInput source(final InputStream source) {
-
-        setSource(source);
-
-        return this;
-    }
-
 }
 

@@ -19,10 +19,29 @@ package com.github.jinahya.bit.io;
 
 
 import java.io.IOException;
+import static java.lang.Integer.toBinaryString;
+import static java.util.stream.Collectors.joining;
+import static java.util.stream.IntStream.range;
+import static org.apache.commons.lang3.StringUtils.leftPad;
 import org.slf4j.Logger;
 import static org.slf4j.LoggerFactory.getLogger;
 import static org.testng.Assert.assertEquals;
 import org.testng.annotations.Test;
+import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.joining;
 
 
 /**
@@ -52,14 +71,22 @@ public class ReadMeTest {
     @Test
     public void write() throws IOException {
 
-        final BitOutput output = new BlackBitOutput();
+        final byte[] array = new byte[8];
+        final BitOutput output = new DefaultBitOutput(
+            new ArrayOutput(array, 0, array.length));
 
+        output.writeBoolean(false);
+        output.writeInt(9, -72);
         output.writeBoolean(true);
-        output.writeInt(7, -1);
-        output.writeUnsignedLong(33, 1L);
+        output.writeUnsignedLong(33, 99L);
 
         final long padded = output.align(4);
-        assertEquals(padded, 23L);
+        assertEquals(padded, 20L);
+
+        final String w = range(0, array.length)
+            .mapToObj(v -> leftPad(toBinaryString(array[v] & 0xFF), 8, '0'))
+            .collect(joining(" "));
+        logger.info("w: {}", w);
     }
 
 }

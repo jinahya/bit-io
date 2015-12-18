@@ -86,7 +86,7 @@ public class BitInputTest {
                            ? 0 : current().nextInt(array.length);
         final int length = array.length == 0
                            ? 0 : current().nextInt(array.length - offset);
-        final int byteSize = BitIoRandoms.randomByteSize();
+        final int byteSize = BitIoRandoms.randomUnsignedByteSize();
 
         input.readBytes(array, offset, length, byteSize);
     }
@@ -100,7 +100,7 @@ public class BitInputTest {
                            ? 0 : current().nextInt(array.length);
         final int length = array.length == 0
                            ? 0 : current().nextInt(array.length - offset);
-        final int byteSize = BitIoRandoms.randomByteSize();
+        final int byteSize = BitIoRandoms.randomUnsignedByteSize();
 
         input.readBytes(array, offset, length, byteSize);
     }

@@ -19,7 +19,7 @@ package com.github.jinahya.bit.io.flac;
 
 import com.github.jinahya.bit.io.BitInput;
 import com.github.jinahya.bit.io.ByteInput;
-import com.github.jinahya.bit.io.DelegatedBitInput;
+import com.github.jinahya.bit.io.DefaultBitInput;
 import com.github.jinahya.bit.io.StreamInput;
 import java.io.IOException;
 import java.io.InputStream;
@@ -135,7 +135,7 @@ public class FlacFileTest {
 
     static void parse(final ByteInput byteInput) throws IOException {
 
-        parse((BitInput) new DelegatedBitInput(byteInput));
+        parse((BitInput) new DefaultBitInput(byteInput));
     }
 
 

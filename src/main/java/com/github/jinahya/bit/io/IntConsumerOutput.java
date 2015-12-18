@@ -42,13 +42,5 @@ public class IntConsumerOutput extends AbstractByteOutput<IntConsumer> {
         target.accept(value);
     }
 
-
-    public IntConsumerOutput target(final IntConsumer target) {
-
-        setTarget(target);
-
-        return this;
-    }
-
 }
 

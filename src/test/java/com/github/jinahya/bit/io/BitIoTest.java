@@ -34,7 +34,41 @@ import org.testng.annotations.Test;
 public class BitIoTest {
 
 
+    private static void test(final BitIoType type) throws IOException {
+
+        final byte[] array = new byte[1048576];
+        final List<Object> params = new LinkedList<>();
+
+        final BitOutput output = new DefaultBitOutput(
+            new ArrayOutput(array, 0, array.length));
+        final Object expected = type.write(params, output);
+        final long padded = output.align(1);
+
+        final BitInput input = new DefaultBitInput(
+            new ArrayInput(array, 0, array.length));
+        final Object actual = type.read(params, input);
+        final long discarded = input.align(1);
+
+        assertEquals(discarded, padded);
+        assertEquals(actual, expected, "type: " + type);
+    }
+
+
     @Test(invocationCount = 1024)
+    public void fbytes() throws IOException {
+
+        test(BitIoType.FBYTES);
+    }
+
+
+    @Test(invocationCount = 1024)
+    public void vbytes() throws IOException {
+
+        test(BitIoType.VBYTES);
+    }
+
+
+    @Test(enabled = false, invocationCount = 1024)
     public void test() throws IOException {
 
         final BitIoType[] types = BitIoType.values();
@@ -43,12 +77,12 @@ public class BitIoTest {
         final byte[] array = new byte[1048576];
         final List<Object> params = new LinkedList<>();
 
-        final BitOutput output = new DelegatedBitOutput(
+        final BitOutput output = new DefaultBitOutput(
             new ArrayOutput(array, 0, array.length));
         final Object expected = type.write(params, output);
         final long padded = output.align(1);
 
-        final BitInput input = new DelegatedBitInput(
+        final BitInput input = new DefaultBitInput(
             new ArrayInput(array, 0, array.length));
         final Object actual = type.read(params, input);
         assertEquals(actual, expected, "type: " + type);
@@ -58,7 +92,7 @@ public class BitIoTest {
     }
 
 
-    @Test
+    @Test(enabled = false)
     public void test1() throws IOException {
 
         final BitIoType[] types = BitIoType.values();
@@ -68,7 +102,7 @@ public class BitIoTest {
         final int count = current().nextInt(512, 1024);
         final List<Object> params = new LinkedList<>(); // type, param+, value
 
-        final BitOutput output = new DelegatedBitOutput(
+        final BitOutput output = new DefaultBitOutput(
             new ArrayOutput(array, 0, array.length));
         for (int i = 0; i < count; i++) {
             final BitIoType type = types[current().nextInt(types.length)];
@@ -78,7 +112,7 @@ public class BitIoTest {
         }
         final long padded = output.align(1);
 
-        final BitInput input = new DelegatedBitInput(
+        final BitInput input = new DefaultBitInput(
             new ArrayInput(array, 0, array.length));
         for (int i = 0; i < count; i++) {
             final BitIoType type = (BitIoType) params.remove(0);

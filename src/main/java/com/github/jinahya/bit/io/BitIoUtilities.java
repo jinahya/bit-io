@@ -18,7 +18,9 @@
 package com.github.jinahya.bit.io;
 
 
+import java.util.function.Function;
 import java.util.function.Supplier;
+import java.util.function.UnaryOperator;
 
 
 /**
@@ -29,12 +31,45 @@ import java.util.function.Supplier;
 final class BitIoUtilities {
 
 
-    public static <T, U extends Throwable> T get(final Supplier<T> supplier,
-                                                 final Class<U> throwable)
+    public static <T, U extends Throwable> T get(
+        final Supplier<? extends T> supplier, final Class<U> throwable)
         throws U {
 
         try {
             return supplier.get();
+        } catch (final RuntimeException re) {
+            final Throwable cause = re.getCause();
+            if (throwable.isInstance(cause)) {
+                throw throwable.cast(cause);
+            }
+            throw re;
+        }
+    }
+
+
+    public static <T, R, U extends Throwable> R apply(
+        final Function<? super T, ? extends R> function, final T t,
+        final Class<U> throwable)
+        throws U {
+
+        try {
+            return function.apply(t);
+        } catch (final RuntimeException re) {
+            final Throwable cause = re.getCause();
+            if (throwable.isInstance(cause)) {
+                throw throwable.cast(cause);
+            }
+            throw re;
+        }
+    }
+
+
+    public static <T, U extends Throwable> T apply(
+        final UnaryOperator<T> operator, final T t, final Class<U> throwable)
+        throws U {
+
+        try {
+            return operator.apply(t);
         } catch (final RuntimeException re) {
             final Throwable cause = re.getCause();
             if (throwable.isInstance(cause)) {

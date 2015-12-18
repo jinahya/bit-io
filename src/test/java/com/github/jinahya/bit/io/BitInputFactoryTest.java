@@ -17,7 +17,10 @@
 package com.github.jinahya.bit.io;
 
 
-import org.testng.annotations.Test;
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.channels.ReadableByteChannel;
+import org.mockito.Mockito;
 
 
 /**
@@ -27,17 +30,50 @@ import org.testng.annotations.Test;
 public class BitInputFactoryTest {
 
 
-    @Test
-    public static void newInstanceWithByteInput() {
+    public static void newInstanceWithSupplierToIntFunction() {
 
-        BitInputFactory.newInstance(new WhiteByteInput());
+        final ReadableByteChannel source
+            = Mockito.mock(ReadableByteChannel.class);
+
+        final BitInput input = BitInputFactory.<ByteBuffer>newInstance(
+            () -> (ByteBuffer) ByteBuffer.allocate(10).position(10),
+            b -> {
+                if (!b.hasRemaining()) {
+                    b.flip();
+                    try {
+                        source.read(b);
+                    } catch (final IOException ioe) {
+                        throw new RuntimeException(ioe);
+                    }
+                }
+                return b.get() & 0xFF;
+            });
+
     }
 
 
-    @Test
-    public static void newInstanceWithSupplier() {
+    public static void newInstanceWithUnaryOperatorToIntFunction() {
 
-        BitInputFactory.newInstance(() -> new WhiteByteInput());
+        final ReadableByteChannel source
+            = Mockito.mock(ReadableByteChannel.class);
+
+        final BitInput input = BitInputFactory.<ByteBuffer>newInstance(
+            b -> {
+                if (b == null) {
+                    return (ByteBuffer) ByteBuffer.allocate(10).position(10);
+                }
+                if (!b.hasRemaining()) {
+                    b.flip();
+                    try {
+                        source.read(b);
+                    } catch (final IOException ioe) {
+                        throw new RuntimeException(ioe);
+                    }
+                }
+                return b;
+            },
+            b -> b.get() & 0xFF
+        );
     }
 
 }

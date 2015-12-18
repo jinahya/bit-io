@@ -25,11 +25,21 @@ import java.io.IOException;
  * A type of {@code BitOutput} writes output bytes on {@link #delegate}.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
+ * @param <T> byte output type parameter
+ *
+ * @see BitOutputFactory#newInstance(com.github.jinahya.bit.io.ByteOutput)
+ * @see BitOutputFactory#newInstance(java.util.function.Supplier)
  */
-public class DelegatedBitOutput extends AbstractBitOutput {
+public class DefaultBitOutput<T extends ByteOutput> extends AbstractBitOutput {
 
 
-    public DelegatedBitOutput(final ByteOutput delegate) {
+    /**
+     * Creates new instance with specified byte output.
+     *
+     * @param delegate the byte output, or {@code null} if if is supposed to
+     * lazily initialized and set.
+     */
+    public DefaultBitOutput(final T delegate) {
 
         super();
 
@@ -55,10 +65,22 @@ public class DelegatedBitOutput extends AbstractBitOutput {
     }
 
 
+    public T getDelegate() {
+
+        return delegate;
+    }
+
+
+    public void setDelegate(final T delegate) {
+
+        this.delegate = delegate;
+    }
+
+
     /**
      * The delegate on which {@link #writeUnsignedByte(int)} is invoked.
      */
-    protected ByteOutput delegate;
+    protected T delegate;
 
 }
 

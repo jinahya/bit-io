@@ -41,12 +41,22 @@ public abstract class AbstractByteOutput<T> implements ByteOutput {
     }
 
 
+    /**
+     * Returns current value of {@link #target}.
+     *
+     * @return current value of {@link #target}.
+     */
     public T getTarget() {
 
         return target;
     }
 
 
+    /**
+     * Replaces {@link #target} with specified value.
+     *
+     * @param target new value
+     */
     public void setTarget(final T target) {
 
         this.target = target;

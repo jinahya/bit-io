@@ -49,13 +49,5 @@ public class IntSupplierInput extends AbstractByteInput<IntSupplier> {
         return source.getAsInt();
     }
 
-
-    public IntSupplierInput source(final IntSupplier source) {
-
-        setSource(source);
-
-        return this;
-    }
-
 }
 

@@ -34,12 +34,36 @@ final class BitIoRandoms {
     }
 
 
-    static int randomUnsignedIntSize() {
+    static int randomUnsignedByteSize() {
 
         final int size = current().nextInt(
-            BitIoConstants.UINT_SIZE_MIN, BitIoConstants.UINT_SIZE_MAX + 1);
+            BitIoConstants.UBYTE_SIZE_MIN, BitIoConstants.UBYTE_SIZE_MAX + 1);
+
+        return BitIoConstraints.requireValidUnsignedByteSize(size);
+    }
+
+
+    static int randomUnsignedShortSize() {
+
+        final int size = current().nextInt(
+            BitIoConstants.USHORT_SIZE_MIN, BitIoConstants.USHORT_SIZE_MAX + 1);
+
+        return BitIoConstraints.requireValidUnsignedShortSize(size);
+    }
+
+
+    static int randomUnsignedIntSize(final int max) {
+
+        final int size = current().nextInt(
+            BitIoConstants.UINT_SIZE_MIN, max + 1);
 
         return BitIoConstraints.requireValidUnsignedIntSize(size);
+    }
+
+
+    static int randomUnsignedIntSize() {
+
+        return randomUnsignedIntSize(BitIoConstants.UINT_SIZE_MAX);
     }
 
 
@@ -107,15 +131,6 @@ final class BitIoRandoms {
         final long value = current().nextLong() >> (Long.SIZE - size);
 
         return BitIoConstraints.requireValidLongValue(value, size);
-    }
-
-
-    static int randomByteSize() {
-
-        final int size = current().nextInt(
-            BitIoConstants.UBYTE_SIZE_MIN, BitIoConstants.UBYTE_SIZE_MAX + 1);
-
-        return BitIoConstraints.requireValidUnsignedByteSize(size);
     }
 
 

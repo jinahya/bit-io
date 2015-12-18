@@ -14,33 +14,27 @@
  * limitations under the License.
  */
 
-
 package com.github.jinahya.bit.io;
 
 
 import java.io.IOException;
-import java.util.function.Supplier;
 
 
 /**
- * A {@link ByteInput} implementation uses a {@link Supplier} instance.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
-public class SupplierInput extends AbstractByteInput<Supplier<Byte>> {
+public interface BitWritable {
 
 
-    public SupplierInput(final Supplier<Byte> source) {
-
-        super(source);
-    }
-
-
-    @Override
-    public int readUnsignedByte() throws IOException {
-
-        return source.get() & 0xFF;
-    }
+    /**
+     * Writes values to specified bit output.
+     *
+     * @param output the bit output
+     *
+     * @throws IOException if an I/O error occurs.
+     */
+    void write(BitOutput output) throws IOException;
 
 }
 

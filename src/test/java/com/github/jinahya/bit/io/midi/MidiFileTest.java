@@ -19,7 +19,7 @@ package com.github.jinahya.bit.io.midi;
 
 import com.github.jinahya.bit.io.BitInput;
 import com.github.jinahya.bit.io.ByteInput;
-import com.github.jinahya.bit.io.DelegatedBitInput;
+import com.github.jinahya.bit.io.DefaultBitInput;
 import com.github.jinahya.bit.io.StreamInput;
 import java.io.IOException;
 import java.io.InputStream;
@@ -41,7 +41,7 @@ public class MidiFileTest {
 
     static void parse(final ByteInput byteInput) throws IOException {
 
-        final BitInput input = new DelegatedBitInput(byteInput);
+        final BitInput input = new DefaultBitInput(byteInput);
 
         assertEquals(input.readInt(Integer.SIZE), 0x4d546864);
         assertEquals(input.readInt(Integer.SIZE), 6);

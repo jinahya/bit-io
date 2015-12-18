@@ -19,6 +19,8 @@ package com.github.jinahya.bit.io;
 
 
 import java.io.IOException;
+import java.util.List;
+import java.util.function.Function;
 
 
 /**
@@ -104,6 +106,17 @@ public interface BitInput {
     long readLong(int size) throws IOException;
 
 
+    <T> T readObject(Function<BitInput, T> reader) throws IOException;
+
+
+    <T> T[] readArray(int scale, Function<BitInput, T> reader)
+        throws IOException;
+
+
+    <T> List<T> readList(int scale, Function<BitInput, T> reader)
+        throws IOException;
+
+
     /**
      * Reads specified number of bytes and set on given array starting from
      * specified offset.
@@ -111,23 +124,25 @@ public interface BitInput {
      * @param array the array
      * @param offset the start offset of array
      * @param length number of bytes to read
-     * @param byteSize valid number of bits in each byte
+     * @param range valid number of lower bits in each byte
      *
      * @throws IOException if an I/O error occurs.
      */
-    void readBytes(byte[] array, int offset, int length, int byteSize)
+    void readBytes(byte[] array, int offset, int length, int range)
         throws IOException;
 
 
     /**
      * Reads a variable length of bytes.
      *
-     * @param lengthSize number of bits for length;
-     * @param byteSize the number of bits for each byte.
+     * @param scale number of bits for length;
+     * @param range valid number of lower bits in each byte.
+     *
+     * @return an array of bytes.
      *
      * @throws IOException if an I/O error occurs.
      */
-    void readBytes(int lengthSize, int byteSize) throws IOException;
+    byte[] readBytes(int scale, int range) throws IOException;
 
 
     /**

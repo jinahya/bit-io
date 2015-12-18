@@ -24,6 +24,8 @@ import java.io.OutputStream;
 
 /**
  * A {@link ByteOutput} implementation for {@link OutputStream}s.
+ *
+ * @see StreamInput
  */
 public class StreamOutput extends AbstractByteOutput<OutputStream> {
 
@@ -57,14 +59,6 @@ public class StreamOutput extends AbstractByteOutput<OutputStream> {
     public void writeUnsignedByte(final int value) throws IOException {
 
         target.write(value);
-    }
-
-
-    public StreamOutput target(final OutputStream target) {
-
-        setTarget(target);
-
-        return this;
     }
 
 }

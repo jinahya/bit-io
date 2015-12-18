@@ -24,7 +24,7 @@ package com.github.jinahya.bit.io;
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
-final class WhiteBitInput extends DelegatedBitInput {
+final class WhiteBitInput extends DefaultBitInput {
 
 
     /**

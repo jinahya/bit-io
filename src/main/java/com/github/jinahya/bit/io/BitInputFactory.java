@@ -18,10 +18,10 @@
 package com.github.jinahya.bit.io;
 
 
-import java.io.DataInput;
 import java.io.IOException;
 import java.util.function.Supplier;
 import java.util.function.ToIntFunction;
+import java.util.function.UnaryOperator;
 
 
 /**
@@ -32,10 +32,10 @@ import java.util.function.ToIntFunction;
 public class BitInputFactory {
 
 
-    public static BitInput newInstance(final ByteInput source) {
+    public static <T extends ByteInput> BitInput newInstance(final T input) {
 
-        if (source == null) {
-            throw new NullPointerException("null source");
+        if (input == null) {
+            throw new NullPointerException("null input");
         }
 
         return new AbstractBitInput() {
@@ -43,14 +43,18 @@ public class BitInputFactory {
             @Override
             public int readUnsignedByte() throws IOException {
 
-                return source.readUnsignedByte();
+                return input.readUnsignedByte();
             }
+
+
+            private T input;
 
         };
     }
 
 
-    public static BitInput newInstance(final Supplier<ByteInput> supplier) {
+    public static <T extends ByteInput> BitInput newInstance(
+        final Supplier<? extends T> supplier) {
 
         if (supplier == null) {
             throw new NullPointerException("null supplier");
@@ -61,29 +65,55 @@ public class BitInputFactory {
             @Override
             public int readUnsignedByte() throws IOException {
 
-                if (source == null) {
-                    source = BitIoUtilities.get(supplier, IOException.class);
+                if (input == null) {
+                    input = BitIoUtilities.get(supplier, IOException.class);
                 }
 
-                return source.readUnsignedByte();
+                return input.readUnsignedByte();
             }
 
 
-            private ByteInput source;
+            private T input;
+
+        };
+    }
+
+
+    public static <T extends ByteInput> BitInput newInstance(
+        final UnaryOperator<T> supplier) {
+
+        if (supplier == null) {
+            throw new NullPointerException("null supplier");
+        }
+
+        return new AbstractBitInput() {
+
+            @Override
+            public int readUnsignedByte() throws IOException {
+
+                input = BitIoUtilities.apply(
+                    supplier, input, IOException.class);
+
+                return input.readUnsignedByte();
+            }
+
+
+            private T input;
 
         };
     }
 
 
     public static <T> BitInput newInstance(
-        final Supplier<T> sourceSupplier, final ToIntFunction<T> byteReader) {
+        final Supplier<T> sourceSupplier,
+        final ToIntFunction<? super T> octetSupplier) {
 
         if (sourceSupplier == null) {
             throw new NullPointerException("null sourceSupplier");
         }
 
-        if (byteReader == null) {
-            throw new NullPointerException("null byteReader");
+        if (octetSupplier == null) {
+            throw new NullPointerException("null octetSupplier");
         }
 
         return new AbstractBitInput() {
@@ -97,7 +127,7 @@ public class BitInputFactory {
                 }
 
                 try {
-                    return byteReader.applyAsInt(source);
+                    return octetSupplier.applyAsInt(source);
                 } catch (final RuntimeException re) {
                     final Throwable cause = re.getCause();
                     if (cause instanceof IOException) {
@@ -114,10 +144,16 @@ public class BitInputFactory {
     }
 
 
-    public static BitInput newInstance(final DataInput source) {
+    public static <T> BitInput newInstance(
+        final UnaryOperator<T> sourceSupplier,
+        final ToIntFunction<? super T> octetSupplier) {
 
-        if (source == null) {
-            throw new NullPointerException("null source");
+        if (sourceSupplier == null) {
+            throw new NullPointerException("null sourceSupplier");
+        }
+
+        if (octetSupplier == null) {
+            throw new NullPointerException("null octetSupplier");
         }
 
         return new AbstractBitInput() {
@@ -125,8 +161,22 @@ public class BitInputFactory {
             @Override
             public int readUnsignedByte() throws IOException {
 
-                return source.readUnsignedByte();
+                source = BitIoUtilities.apply(
+                    sourceSupplier, source, IOException.class);
+
+                try {
+                    return octetSupplier.applyAsInt(source);
+                } catch (final RuntimeException re) {
+                    final Throwable cause = re.getCause();
+                    if (cause instanceof IOException) {
+                        throw (IOException) cause;
+                    }
+                    throw re;
+                }
             }
+
+
+            private T source;
 
         };
     }

@@ -68,13 +68,5 @@ public class FileInput extends AbstractByteInput<RandomAccessFile> {
         return value;
     }
 
-
-    public FileInput source(final RandomAccessFile source) {
-
-        setSource(source);
-
-        return this;
-    }
-
 }
 

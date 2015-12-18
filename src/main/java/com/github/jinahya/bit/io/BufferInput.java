@@ -61,13 +61,5 @@ public class BufferInput extends AbstractByteInput<ByteBuffer> {
         return source.get() & 0xFF;
     }
 
-
-    public BufferInput source(final ByteBuffer source) {
-
-        setSource(source);
-
-        return this;
-    }
-
 }
 

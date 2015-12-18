@@ -32,7 +32,7 @@ public class DelegatedBitInputTest {
     @Test
     public void lazyDelegate() {
 
-        final BitInput input = new DelegatedBitInput(null) {
+        final BitInput input = new DefaultBitInput(null) {
 
             @Override
             public int readUnsignedByte() throws IOException {
@@ -52,7 +52,7 @@ public class DelegatedBitInputTest {
     @Test
     public void lazyDelegateLasySource() {
 
-        final BitInput input = new DelegatedBitInput(null) {
+        final BitInput input = new DefaultBitInput(null) {
 
             @Override
             public int readUnsignedByte() throws IOException {

@@ -19,6 +19,9 @@ package com.github.jinahya.bit.io;
 
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Function;
 
 
 /**
@@ -30,8 +33,8 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
 
 
     /**
-     * Returns the value returned from {@link #readUnsignedByte()} while
-     * incrementing the {@code count} by one.
+     * Returns the value of {@link #readUnsignedByte()} while incrementing the
+     * {@code count} by one.
      *
      * @return an unsigned byte value.
      *
@@ -168,8 +171,7 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
 
         final int usize = size - 1;
 
-        return (readUnsignedInt(1) == 1 ? (-1 << usize) : 0)
-               | readUnsignedInt(usize);
+        return (readBoolean() ? (-1 << usize) : 0) | readUnsignedInt(usize);
     }
 
 
@@ -204,36 +206,105 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
 
         final int usize = size - 1;
 
-        return (readBoolean() ? -1L << usize : 0L) | readUnsignedLong(usize);
+        return (readBoolean() ? (-1L << usize) : 0L) | readUnsignedLong(usize);
+    }
+
+
+    @Override
+    public <T> T readObject(final Function<BitInput, T> reader)
+        throws IOException {
+
+        if (reader == null) {
+            throw new NullPointerException("null reader");
+        }
+
+        try {
+            return reader.apply(this);
+        } catch (final RuntimeException re) {
+            final Throwable cause = re.getCause();
+            if (cause instanceof IOException) {
+                throw (IOException) cause;
+            }
+            throw re;
+        }
+    }
+
+
+    @Override
+    public <T> T[] readArray(final int scale,
+                             final Function<BitInput, T> reader)
+        throws IOException {
+
+        BitIoConstraints.requireValidUnsignedIntSize(scale);
+
+        if (reader == null) {
+            throw new NullPointerException("null reader");
+        }
+
+        @SuppressWarnings("unchecked")
+        final T[] array = (T[]) new Object[readUnsignedInt(scale)];
+
+        for (int i = 0; i < array.length; i++) {
+            array[i] = readObject(reader);
+        }
+
+        return array;
+    }
+
+
+    @Override
+    public <T> List<T> readList(final int scale,
+                                final Function<BitInput, T> reader)
+        throws IOException {
+
+        BitIoConstraints.requireValidUnsignedIntSize(scale);
+
+        if (reader == null) {
+            throw new NullPointerException("null reader");
+        }
+
+        final int size = readUnsignedInt(scale);
+
+        final List<T> value = new ArrayList<T>(size);
+
+        for (int i = 0; i < size; i++) {
+            value.add(readObject(reader));
+        }
+
+        return value;
     }
 
 
     @Override
     public void readBytes(final byte[] array, final int offset,
-                          final int length, final int byteSize)
+                          final int length, final int range)
         throws IOException {
 
         BitIoConstraints.requireValidArrayOffsetLength(array, offset, length);
-        BitIoConstraints.requireValidUnsignedByteSize(byteSize);
+        BitIoConstraints.requireValidUnsignedByteSize(range);
 
         final int limit = offset + length;
         for (int i = offset; i < limit; i++) {
-            array[i] = (byte) readUnsignedByte(byteSize);
+            array[i] = (byte) readUnsignedByte(range);
         }
     }
 
 
     @Override
-    public void readBytes(final int lengthSize, final int byteSize)
+    public byte[] readBytes(final int scale, final int range)
         throws IOException {
 
-        BitIoConstraints.requireValidUnsignedByteSize(byteSize);
+        BitIoConstraints.requireValidUnsignedIntSize(scale);
+        BitIoConstraints.requireValidUnsignedByteSize(range);
 
-        final byte[] value = new byte[readUnsignedInt(lengthSize)];
+        final int length = readUnsignedInt(scale);
+        final byte[] value = new byte[length];
 
         for (int i = 0; i < value.length; i++) {
-            value[i] = (byte) readUnsignedByte(byteSize);
+            value[i] = (byte) readUnsignedByte(range);
         }
+
+        return value;
     }
 
 
@@ -252,12 +323,14 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
             readUnsignedByte((int) bits); // count increments
         }
 
-        final int remainder = (count > 0 ? count : ~count + 1) % bytes;
-        if (remainder == 0) {
-            return bits;
-        }
-
-        long octets = bytes - remainder;
+//        final long remainder = (count > 0L ? count : ~count + 1L) % bytes;
+//        if (remainder == 0) {
+//            return bits;
+//        }
+//
+//        long octets = bytes - remainder;
+        final long remainder = count % bytes;
+        long octets = (remainder > 0 ? bytes : 0) - remainder;
         for (; octets > 0; octets--) {
             readUnsignedByte(8);
             bits += 8;
@@ -282,7 +355,7 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
     /**
      * number of bytes read so far.
      */
-    private int count = 0;
+    private long count = 0;
 
 }
 

@@ -61,13 +61,5 @@ public class FileOutput extends AbstractByteOutput<RandomAccessFile> {
         target.write(value);
     }
 
-
-    public FileOutput target(final RandomAccessFile target) {
-
-        setTarget(target);
-
-        return this;
-    }
-
 }
 

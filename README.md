@@ -93,7 +93,7 @@ new DefalutBitInput(input);
 ```
 Or lazliy instantiate its `delegate` value.
 ```java
-new DelegatedBitInput(null) {
+new DefaultBitInput(null) {
     @Override
     public int readUnsignedByte() throws IOException {
         if (delegate == null) {

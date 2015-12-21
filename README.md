@@ -70,11 +70,17 @@ new SupplierInput(java.util.function.Supplier<Byte>);
 ````
 Those constructors don't check arguments which means you can lazily instantiate and set them.
 ```java
+final OutputStream output = openFile();
 new ArrayInput(null, -1, -1) {
     @Override
     public int readUnsignedByte() throws IOException {
         if (source == null) {
             source = byte[16];
+            index = 0;
+            limit = source.length;
+        }
+        if (index == limit) {
+            output.write(source);
             index = 0;
             limit = source.length;
         }
@@ -103,6 +109,27 @@ new DelegatedBitInput(null) {
 ```
 #### Using `BitInputFactory`
 You can create `BitInput`s using various `newInstance(...)` methods.
+```
+final BitInput input = BitInputFactory.newInstance(
+    () -> (ByteBuffer) ByteBuffer.allocate(10).position(10),
+    b -> {
+        if (!b.hasRemaining()) {
+            b.clear();
+            int read;
+            try {
+                while ((read = source.read(b)) == 0) {
+                }
+            } catch (final IOException ioe) {
+                throw new UncheckedIOException(ioe);
+            }
+            if (read == -1) {
+                throw new UncheckedIOException(new EOFException());
+            }
+            b.flip();
+        }
+        return b.get() & 0xFF;
+    });
+```
 ### Reading values.
 ```java
 final BitInput input;

@@ -16,16 +16,46 @@ A small library for reading or writing none octet aligned values such as `1-bit 
 |1.3.0-SNAPSHOT|[site](http://jinahya.github.io/bit-io/sites/1.3.0-SNAPSHOT/index.html)|[apidocs](http://jinahya.github.io/bit-io/sites/1.3.0-SNAPSHOT/apidocs/index.html)||
 
 ## Specifications
+### Primitives
 |Value type   |Minimum size|Maximum size|Notes|
 |-------------|------------|------------|-----|
-|boolean      |1           |1           ||
-|unsigned int |1           |31          ||
-|int          |2           |32          ||
-|unsigned long|1           |63          ||
-|long         |2           |64          ||
-|float        |32          |32          ||
-|double       |64          |64          ||
+|boolean      |1           |1           |`readBoolean`, `writeBoolean`|
+|unsigned int |1           |31          |`readUnsignedInt(int)`, `writeUnsignedInt(int, int)`|
+|int          |2           |32          |`readInt(size)`, `writeInt(int)`|
+|unsigned long|1           |63          |`readUnsignedLong(size)`, `writeUnsigendLong(int, long)`|
+|long         |2           |64          |`readLong(size)`, `writeLong(size)`|
+|float        |32          |32          |`readFloat()`, `writeFloat(flaot)`|
+|double       |64          |64          |`readDouble()`, `writeDouble(double)`|
+### an Object
+You can read/write custom objects using `readObject(Function<BitInput, T>)` and `writeObject(T, BiConsumer(BitOutput, T))` respectively.
+```java
+Person person = null;
 
+person = input.readObject((input) -> {
+    if (!input.readBoolean()) {
+        return null; // optional; nullability
+    }
+    final Person value = new Person();
+    try {
+        value.setAge(input.readUnsignedInt(7));
+    } catch (final IOException ioe) {
+        throw new RuntimeException(ioe);
+    }
+    return person;
+});
+
+output.writeObject(person, (output, value) -> {
+    if (value == null) {
+        writeBoolean(false); // optional; nullability
+        return;
+    }
+    try {
+        output.writeUnsignedInt(7, value.getAge());
+    } catch (final IOException ioe) {
+        throw new RuntimeException(ioe);
+    }
+});
+```
 ## Reading
 ### Preparing `ByteInput`
 Prepare an instance of `ByteInput` from various sources.

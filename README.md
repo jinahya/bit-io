@@ -23,6 +23,8 @@ A small library for reading or writing none octet aligned values such as `1-bit 
 |int          |2           |32          ||
 |unsigned long|1           |63          ||
 |long         |2           |64          ||
+|float        |32          |32          ||
+|double       |64          |64          ||
 
 ## Reading
 ### Preparing `ByteInput`

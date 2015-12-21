@@ -26,32 +26,6 @@ A small library for reading or writing non octet aligned values such as `1-bit b
 |float        |32          |32          |`readFloat()`, `writeFloat(flaot)`|
 |double       |64          |64          |`readDouble()`, `writeDouble(double)`|
 ### Objects
-You can read/write custom objects using `readObject(Function<BitInput, ? extends T>)` and `writeObject(T, BiConsumer(BitOutput, ? super T))` respectively.
-```java
-Person person = null;
-person = input.readObject((input) -> {
-    try {
-        if (!input.readBoolean()) { // optional; 1-bit null flag
-            return null;
-        }
-        final Person value = new Person();
-        value.setAge(input.readUnsignedInt(7));
-        return value;
-    } catch (final IOException ioe) {
-        throw new UncheckedIOException(ioe);
-    }
-});
-output.writeObject(person, (output, value) -> {
-    try {
-        writeBoolean(value != null); // optional; 1-bit null flag
-        if (value != null) {
-            output.writeUnsignedInt(7, value.getAge());
-        }
-    } catch (final IOException ioe) {
-        throw new UncheckedIOException(ioe);
-    }
-});
-```
 ## Reading
 ### Preparing `ByteInput`
 Prepare an instance of `ByteInput` from various sources.

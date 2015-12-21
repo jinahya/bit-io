@@ -61,13 +61,11 @@ public class BitIoTest {
     }
 
 
-    @Test(invocationCount = 1024)
-    public void vbytes() throws IOException {
-
-        test(BitIoType.VBYTES);
-    }
-
-
+//    @Test(invocationCount = 1024)
+//    public void vbytes() throws IOException {
+//
+//        test(BitIoType.VBYTES);
+//    }
     @Test(enabled = false, invocationCount = 1024)
     public void test() throws IOException {
 

@@ -59,6 +59,7 @@ final class BitIoConstraints {
     }
 
 
+    @Deprecated
     public static int requireValidUnsignedByteValue(final int value,
                                                     final int size) {
 
@@ -91,6 +92,7 @@ final class BitIoConstraints {
     }
 
 
+    @Deprecated
     public static int requireValidUnsignedShortValue(final int value,
                                                      final int size) {
 

@@ -26,13 +26,13 @@ import org.testng.annotations.Test;
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
-public class DelegatedBitInputTest {
+public class DefaultBitInputTest {
 
 
     @Test
     public void lazyDelegate() {
 
-        final BitInput input = new DefaultBitInput(null) {
+        final BitInput input = new DefaultBitInput<BufferInput>(null) {
 
             @Override
             public int readUnsignedByte() throws IOException {

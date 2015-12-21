@@ -42,9 +42,9 @@ public abstract class AbstractByteOutput<T> implements ByteOutput {
 
 
     /**
-     * Returns current value of {@link #target}.
+     * Returns the current value of {@link #target}.
      *
-     * @return current value of {@link #target}.
+     * @return the current value of {@link #target}.
      */
     public T getTarget() {
 
@@ -53,9 +53,9 @@ public abstract class AbstractByteOutput<T> implements ByteOutput {
 
 
     /**
-     * Replaces {@link #target} with specified value.
+     * Replaces the value of {@link #target} with given.
      *
-     * @param target new value
+     * @param target new value for {@link #target}.
      */
     public void setTarget(final T target) {
 

@@ -44,9 +44,10 @@ public class BufferInput extends AbstractByteInput<ByteBuffer> {
 
     /**
      * {@inheritDoc} The {@code readUnsignedByte()} method of
-     * {@code BufferInput} class returns
-     * <pre>source.get() &amp; 0xFF</pre>. Override this method if
-     * {@link #source} is supposed to be lazily initialized and set.
+     * {@code BufferInput} class returns the value of following code.
+     * <blockquote><pre>source.get() &amp; 0xFF</pre></blockquote> Override this
+     * method if {@link #source source} is supposed to be lazily initialized and
+     * set.
      *
      * @return {@inheritDoc }
      *

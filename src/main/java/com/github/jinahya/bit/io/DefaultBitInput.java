@@ -22,7 +22,7 @@ import java.io.IOException;
 
 
 /**
- * A type of {@code BitInput} read bytes from {@link #delegate}.
+ * A default implementation read bytes from {@link #delegate}.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  * @param <T> byte input type parameter
@@ -49,7 +49,7 @@ public class DefaultBitInput<T extends ByteInput> extends AbstractBitInput {
 
     /**
      * {@inheritDoc} The {@code readUnsignedByte()} method of
-     * {@code DelegatedBitInput} class returns the value of
+     * {@code DefaultBitInput} class returns the value of
      * <blockquote><pre>{@code delegate.readUnsignedByte()}</pre></blockquote>.
      * Override this method if {@link #delegate} is supposed to be lazily
      * initialized and set.
@@ -65,12 +65,22 @@ public class DefaultBitInput<T extends ByteInput> extends AbstractBitInput {
     }
 
 
+    /**
+     * returns the current value of {@link #delegate}.
+     *
+     * @return current value of {@link #delegate}
+     */
     public T getDelegate() {
 
         return delegate;
     }
 
 
+    /**
+     * Replaces the value of {@link #delegate} with given.
+     *
+     * @param delegate new value of {@link #delegate}.
+     */
     public void setDelegate(final T delegate) {
 
         this.delegate = delegate;

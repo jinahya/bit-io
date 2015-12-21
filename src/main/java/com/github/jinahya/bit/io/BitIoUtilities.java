@@ -18,6 +18,8 @@
 package com.github.jinahya.bit.io;
 
 
+import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
@@ -31,6 +33,25 @@ import java.util.function.UnaryOperator;
 final class BitIoUtilities {
 
 
+    public static <T, U extends Throwable> T get(
+        final Supplier<? extends T> supplier)
+        throws IOException {
+
+        try {
+            return supplier.get();
+        } catch (final UncheckedIOException uioe) {
+            throw uioe.getCause();
+        } catch (final RuntimeException re) {
+            final Throwable cause = re.getCause();
+            if (cause instanceof IOException) {
+                throw (IOException) cause;
+            }
+            throw re;
+        }
+    }
+
+
+    @Deprecated
     public static <T, U extends Throwable> T get(
         final Supplier<? extends T> supplier, final Class<U> throwable)
         throws U {
@@ -47,6 +68,7 @@ final class BitIoUtilities {
     }
 
 
+    @Deprecated
     public static <T, R, U extends Throwable> R apply(
         final Function<? super T, ? extends R> function, final T t,
         final Class<U> throwable)
@@ -64,6 +86,25 @@ final class BitIoUtilities {
     }
 
 
+    public static <T, U extends Throwable> T apply(
+        final UnaryOperator<T> operator, final T t)
+        throws IOException {
+
+        try {
+            return operator.apply(t);
+        } catch (final UncheckedIOException uioe) {
+            throw uioe.getCause();
+        } catch (final RuntimeException re) {
+            final Throwable cause = re.getCause();
+            if (cause instanceof IOException) {
+                throw (IOException) cause;
+            }
+            throw re;
+        }
+    }
+
+
+    @Deprecated
     public static <T, U extends Throwable> T apply(
         final UnaryOperator<T> operator, final T t, final Class<U> throwable)
         throws U {

@@ -17,10 +17,13 @@
 package com.github.jinahya.bit.io;
 
 
+import java.io.EOFException;
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.ReadableByteChannel;
 import org.mockito.Mockito;
+import org.testng.annotations.Test;
 
 
 /**
@@ -30,21 +33,28 @@ import org.mockito.Mockito;
 public class BitInputFactoryTest {
 
 
+    @Test
     public static void newInstanceWithSupplierToIntFunction() {
 
         final ReadableByteChannel source
             = Mockito.mock(ReadableByteChannel.class);
 
-        final BitInput input = BitInputFactory.<ByteBuffer>newInstance(
+        final BitInput input = BitInputFactory.newInstance(
             () -> (ByteBuffer) ByteBuffer.allocate(10).position(10),
             b -> {
                 if (!b.hasRemaining()) {
-                    b.flip();
+                    b.clear(); // position->zero; limit->capacity;
+                    int read;
                     try {
-                        source.read(b);
+                        while ((read = source.read(b)) == 0) {
+                        }
                     } catch (final IOException ioe) {
-                        throw new RuntimeException(ioe);
+                        throw new UncheckedIOException(ioe);
                     }
+                    if (read == -1) {
+                        throw new UncheckedIOException(new EOFException());
+                    }
+                    b.flip();
                 }
                 return b.get() & 0xFF;
             });
@@ -52,6 +62,7 @@ public class BitInputFactoryTest {
     }
 
 
+    @Test
     public static void newInstanceWithUnaryOperatorToIntFunction() {
 
         final ReadableByteChannel source
@@ -63,12 +74,18 @@ public class BitInputFactoryTest {
                     return (ByteBuffer) ByteBuffer.allocate(10).position(10);
                 }
                 if (!b.hasRemaining()) {
-                    b.flip();
+                    b.clear(); // position->zero; limit->capacity;
+                    int read;
                     try {
-                        source.read(b);
+                        while ((read = source.read(b)) == 0) {
+                        }
                     } catch (final IOException ioe) {
-                        throw new RuntimeException(ioe);
+                        throw new UncheckedIOException(ioe);
                     }
+                    if (read == -1) {
+                        throw new UncheckedIOException(new EOFException());
+                    }
+                    b.flip();
                 }
                 return b;
             },

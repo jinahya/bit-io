@@ -19,6 +19,7 @@ package com.github.jinahya.bit.io;
 
 
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.util.function.Supplier;
 import java.util.function.ToIntFunction;
 import java.util.function.UnaryOperator;
@@ -32,6 +33,15 @@ import java.util.function.UnaryOperator;
 public class BitInputFactory {
 
 
+    /**
+     * Creates new {@code BitInput} instance to which specified byte input
+     * supplies bytes.
+     *
+     * @param <T> byte input type parameter
+     * @param input byte input
+     *
+     * @return a new {@code BitInput} instance.
+     */
     public static <T extends ByteInput> BitInput newInstance(final T input) {
 
         if (input == null) {
@@ -66,7 +76,7 @@ public class BitInputFactory {
             public int readUnsignedByte() throws IOException {
 
                 if (input == null) {
-                    input = BitIoUtilities.get(supplier, IOException.class);
+                    input = BitIoUtilities.get(supplier);
                 }
 
                 return input.readUnsignedByte();
@@ -80,10 +90,10 @@ public class BitInputFactory {
 
 
     public static <T extends ByteInput> BitInput newInstance(
-        final UnaryOperator<T> supplier) {
+        final UnaryOperator<T> operator) {
 
-        if (supplier == null) {
-            throw new NullPointerException("null supplier");
+        if (operator == null) {
+            throw new NullPointerException("null operator");
         }
 
         return new AbstractBitInput() {
@@ -91,8 +101,7 @@ public class BitInputFactory {
             @Override
             public int readUnsignedByte() throws IOException {
 
-                input = BitIoUtilities.apply(
-                    supplier, input, IOException.class);
+                input = BitIoUtilities.apply(operator, input);
 
                 return input.readUnsignedByte();
             }
@@ -105,7 +114,7 @@ public class BitInputFactory {
 
 
     public static <T> BitInput newInstance(
-        final Supplier<T> sourceSupplier,
+        final Supplier<? extends T> sourceSupplier,
         final ToIntFunction<? super T> octetSupplier) {
 
         if (sourceSupplier == null) {
@@ -122,12 +131,13 @@ public class BitInputFactory {
             public int readUnsignedByte() throws IOException {
 
                 if (source == null) {
-                    source = BitIoUtilities.get(
-                        sourceSupplier, IOException.class);
+                    source = BitIoUtilities.get(sourceSupplier);
                 }
 
                 try {
                     return octetSupplier.applyAsInt(source);
+                } catch (final UncheckedIOException uioe) {
+                    throw uioe.getCause();
                 } catch (final RuntimeException re) {
                     final Throwable cause = re.getCause();
                     if (cause instanceof IOException) {
@@ -145,11 +155,11 @@ public class BitInputFactory {
 
 
     public static <T> BitInput newInstance(
-        final UnaryOperator<T> sourceSupplier,
+        final UnaryOperator<T> sourceOperator,
         final ToIntFunction<? super T> octetSupplier) {
 
-        if (sourceSupplier == null) {
-            throw new NullPointerException("null sourceSupplier");
+        if (sourceOperator == null) {
+            throw new NullPointerException("null sourceOperator");
         }
 
         if (octetSupplier == null) {
@@ -161,11 +171,12 @@ public class BitInputFactory {
             @Override
             public int readUnsignedByte() throws IOException {
 
-                source = BitIoUtilities.apply(
-                    sourceSupplier, source, IOException.class);
+                source = BitIoUtilities.apply(sourceOperator, source);
 
                 try {
                     return octetSupplier.applyAsInt(source);
+                } catch (final UncheckedIOException uioe) {
+                    throw uioe.getCause();
                 } catch (final RuntimeException re) {
                     final Throwable cause = re.getCause();
                     if (cause instanceof IOException) {

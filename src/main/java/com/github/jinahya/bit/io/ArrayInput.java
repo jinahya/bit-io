@@ -96,9 +96,15 @@ public class ArrayInput extends AbstractByteInput<byte[]> {
     }
 
 
+    /**
+     * The index in the {@link #source} to read.
+     */
     protected int index;
 
 
+    /**
+     * The position in the {@link #source} which {@link #index} can't exceed.
+     */
     protected int limit;
 
 }

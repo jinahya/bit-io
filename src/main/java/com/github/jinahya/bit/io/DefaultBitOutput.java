@@ -22,7 +22,7 @@ import java.io.IOException;
 
 
 /**
- * A type of {@code BitOutput} writes output bytes on {@link #delegate}.
+ * A default implementation writes bytes to {@link #delegate}.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  * @param <T> byte output type parameter
@@ -49,7 +49,7 @@ public class DefaultBitOutput<T extends ByteOutput> extends AbstractBitOutput {
 
     /**
      * {@inheritDoc} The {@code writeUnsignedByte(int)} method of
-     * {@code DelegatedBitOutput} class executes
+     * {@code DefaultBitOutput} class executes
      * <blockquote><pre>{@code delegate.writeUnsignedByte(int)}</pre></blockquote>
      * with specified {@code value}. Override this method if {@link #delegate}
      * is supposed to be lazily initialized and set.
@@ -65,12 +65,22 @@ public class DefaultBitOutput<T extends ByteOutput> extends AbstractBitOutput {
     }
 
 
+    /**
+     * returns the current value of {@link #delegate}.
+     *
+     * @return current value of {@link #delegate}
+     */
     public T getDelegate() {
 
         return delegate;
     }
 
 
+    /**
+     * Replaces the value of {@link #delegate} with given.
+     *
+     * @param delegate new value of {@link #delegate}.
+     */
     public void setDelegate(final T delegate) {
 
         this.delegate = delegate;

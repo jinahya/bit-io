@@ -44,7 +44,7 @@ public class FileOutput extends AbstractByteOutput<RandomAccessFile> {
 
     /**
      * {@inheritDoc} The {@code writeUnsginedByte(int)} method of
-     * {@code StreamOutput} class calls {@link RandomAccessFile#write(int)} on
+     * {@code FileOutput} class calls {@link RandomAccessFile#write(int)} on
      * {@link #target} with given {@code value}. Override this method if
      * {@link #target} is supposed to be lazily initialized and set.
      *

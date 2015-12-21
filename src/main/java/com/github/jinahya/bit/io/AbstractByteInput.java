@@ -41,12 +41,22 @@ public abstract class AbstractByteInput<T> implements ByteInput {
     }
 
 
+    /**
+     * Returns the current value of {@link #source}.
+     *
+     * @return the current value of {@link #source}
+     */
     public T getSource() {
 
         return source;
     }
 
 
+    /**
+     * Replaces the current value of {@link #source} with given.
+     *
+     * @param source new value for {@link #source}
+     */
     public void setSource(final T source) {
 
         this.source = source;

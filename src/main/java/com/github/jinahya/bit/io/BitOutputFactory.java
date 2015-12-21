@@ -32,6 +32,15 @@ import java.util.function.UnaryOperator;
 public class BitOutputFactory {
 
 
+    /**
+     * Creates new {@code BitOutput} instance from which specified byte output
+     * consumes bytes.
+     *
+     * @param <T> byte output type parameter
+     * @param output byte output
+     *
+     * @return a new {@code BitOutput} instance.
+     */
     public static <T extends ByteOutput> BitOutput newInstance(final T output) {
 
         if (output == null) {
@@ -66,7 +75,7 @@ public class BitOutputFactory {
             public void writeUnsignedByte(final int value) throws IOException {
 
                 if (output == null) {
-                    output = BitIoUtilities.get(supplier, IOException.class);
+                    output = BitIoUtilities.get(supplier);
                 }
 
                 output.writeUnsignedByte(value);
@@ -80,10 +89,10 @@ public class BitOutputFactory {
 
 
     public static <T extends ByteOutput> BitOutput newInstance(
-        final UnaryOperator<T> supplier) {
+        final UnaryOperator<T> operator) {
 
-        if (supplier == null) {
-            throw new NullPointerException("null supplier");
+        if (operator == null) {
+            throw new NullPointerException("null operator");
         }
 
         return new AbstractBitOutput() {
@@ -91,8 +100,7 @@ public class BitOutputFactory {
             @Override
             public void writeUnsignedByte(final int value) throws IOException {
 
-                output = BitIoUtilities.apply(
-                    supplier, output, IOException.class);
+                output = BitIoUtilities.apply(operator, output);
 
                 output.writeUnsignedByte(value);
             }
@@ -105,15 +113,15 @@ public class BitOutputFactory {
 
 
     public static <T> BitOutput newInstance(
-        final Supplier<T> targetSupplier,
-        final ObjIntConsumer<T> octetConsumer) {
+        final Supplier<? extends T> targetSupplier,
+        final ObjIntConsumer<? super T> octetConsumer) {
 
         if (targetSupplier == null) {
             throw new NullPointerException("null targetSupplier");
         }
 
         if (octetConsumer == null) {
-            throw new NullPointerException("null octetconsumer");
+            throw new NullPointerException("null octetConsumer");
         }
 
         return new AbstractBitOutput() {
@@ -122,8 +130,7 @@ public class BitOutputFactory {
             public void writeUnsignedByte(final int value) throws IOException {
 
                 if (target == null) {
-                    target = BitIoUtilities.get(
-                        targetSupplier, IOException.class);
+                    target = BitIoUtilities.get(targetSupplier);
                 }
 
                 try {
@@ -145,11 +152,11 @@ public class BitOutputFactory {
 
 
     public static <T> BitOutput newInstance(
-        final UnaryOperator<T> targetSupplier,
+        final UnaryOperator<T> targetOperator,
         final ObjIntConsumer<? super T> octetConsumer) {
 
-        if (targetSupplier == null) {
-            throw new NullPointerException("null targetSupplier");
+        if (targetOperator == null) {
+            throw new NullPointerException("null targetOperator");
         }
 
         if (octetConsumer == null) {
@@ -161,8 +168,7 @@ public class BitOutputFactory {
             @Override
             public void writeUnsignedByte(final int value) throws IOException {
 
-                target = BitIoUtilities.apply(
-                    targetSupplier, target, IOException.class);
+                target = BitIoUtilities.apply(targetOperator, target);
 
                 try {
                     octetConsumer.accept(target, value);

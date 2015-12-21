@@ -62,7 +62,7 @@ public class FileInput extends AbstractByteInput<RandomAccessFile> {
 
         final int value = source.read();
         if (value == -1) {
-            throw new EOFException("eof");
+            throw new EOFException("source(" + source + ").read() returned -1");
         }
 
         return value;

@@ -97,9 +97,15 @@ public class ArrayOutput extends AbstractByteOutput<byte[]> {
     }
 
 
+    /**
+     * The index in the {@link #source} to write.
+     */
     protected int index;
 
 
+    /**
+     * The position in the {@link #source} which {@link #index} can't exceed.
+     */
     protected int limit;
 
 }

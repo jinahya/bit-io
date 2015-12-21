@@ -192,53 +192,53 @@ enum BitIoType {
             return array;
         }
 
-    },
-    VBYTES() {
-
-        @Override
-        Object read(final List<Object> params, final BitInput input)
-            throws IOException {
-
-            final int scale = (int) params.remove(0);
-            final int range = (int) params.remove(0);
-            //logger.debug("vbytes.r.scale: {}", scale);
-            //logger.debug("vbytes.r.range: {}", range);
-
-            final byte[] value = input.readBytes(scale, range);
-            //logger.debug("vbytes.read.value.length: {}", value.length);
-            //logger.debug("vbytes.r.value: {}", value);
-
-            return value;
-        }
-
-
-        @Override
-        Object write(final List<Object> params, final BitOutput output)
-            throws IOException {
-
-            final int scale = BitIoRandoms.randomUnsignedIntSize(17);
-            final int range = BitIoRandoms.randomUnsignedByteSize();
-            //logger.debug("vbytes.w.scale: {}", scale);
-            //logger.debug("vbytes.w.range: {}", range);
-
-            final int length = BitIoRandoms.randomUnsignedIntValue(scale);
-            final byte[] value = new byte[length];
-            assertTrue((value.length >> scale) == 0);
-            current().nextBytes(value);
-            //logger.debug("vbytes.w.value.length: {}", value.length);
-            for (int i = 0; i < value.length; i++) {
-                value[i] = (byte) ((value[i] & 0xFF) >> (Byte.SIZE - range));
-            }
-            //logger.debug("vbytes.w.value: {}", value);
-
-            params.add(scale);
-            params.add(range);
-            output.writeBytes(scale, range, value);
-
-            return value;
-        }
-
-    };
+    };//,
+//    VBYTES() {
+//
+//        @Override
+//        Object read(final List<Object> params, final BitInput input)
+//            throws IOException {
+//
+//            final int scale = (int) params.remove(0);
+//            final int range = (int) params.remove(0);
+//            //logger.debug("vbytes.r.scale: {}", scale);
+//            //logger.debug("vbytes.r.range: {}", range);
+//
+//            final byte[] value = input.readBytes(scale, range);
+//            //logger.debug("vbytes.read.value.length: {}", value.length);
+//            //logger.debug("vbytes.r.value: {}", value);
+//
+//            return value;
+//        }
+//
+//
+//        @Override
+//        Object write(final List<Object> params, final BitOutput output)
+//            throws IOException {
+//
+//            final int scale = BitIoRandoms.randomUnsignedIntSize(17);
+//            final int range = BitIoRandoms.randomUnsignedByteSize();
+//            //logger.debug("vbytes.w.scale: {}", scale);
+//            //logger.debug("vbytes.w.range: {}", range);
+//
+//            final int length = BitIoRandoms.randomUnsignedIntValue(scale);
+//            final byte[] value = new byte[length];
+//            assertTrue((value.length >> scale) == 0);
+//            current().nextBytes(value);
+//            //logger.debug("vbytes.w.value.length: {}", value.length);
+//            for (int i = 0; i < value.length; i++) {
+//                value[i] = (byte) ((value[i] & 0xFF) >> (Byte.SIZE - range));
+//            }
+//            //logger.debug("vbytes.w.value: {}", value);
+//
+//            params.add(scale);
+//            params.add(range);
+//            output.writeBytes(scale, range, value);
+//
+//            return value;
+//        }
+//
+//    };
 //    ASCII() {
 //
 //        @Override

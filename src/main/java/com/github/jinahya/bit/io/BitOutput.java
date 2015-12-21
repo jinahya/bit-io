@@ -106,19 +106,48 @@ public interface BitOutput {
     void writeLong(int size, long value) throws IOException;
 
 
-    <T> void writeObject(T value, BiConsumer<BitOutput, T> writer)
+    /**
+     * Writes given {@code float} value as a 32-bit signed int using
+     * {@link Float#floatToRawIntBits(float)}.
+     *
+     * @param value the value to write.
+     *
+     * @throws IOException if an I/O error occurs.
+     */
+    void writeFloat(final float value) throws IOException;
+
+
+    /**
+     * Writes given {@code double} value as a 64-bit signed long using
+     * {@link Double#doubleToRawLongBits(double)}.
+     *
+     * @param value the value to write
+     *
+     * @throws IOException if an I/O error occurs.
+     */
+    void writeDouble(final double value) throws IOException;
+
+
+    /**
+     * Writes an object value.
+     *
+     * @param <T> value type parameter.
+     * @param value the value to write
+     * @param writer the consumer actually writes the value.
+     *
+     * @throws IOException if an I/O error occurs.
+     */
+    <T> void writeObject(T value, BiConsumer<BitOutput, ? super T> writer)
         throws IOException;
 
 
-    <T> void writeArray(int scale, T[] value, BiConsumer<BitOutput, T> writer)
-        throws IOException;
-
-
-    <T> void writeList(int scale, List<T> value,
-                       BiConsumer<BitOutput, T> writer)
-        throws IOException;
-
-
+//    <T> void writeArray(int scale, T[] value, BiConsumer<BitOutput, T> writer)
+//        throws IOException;
+//
+//
+//    <T> void writeList(int scale, List<T> value,
+//                       BiConsumer<BitOutput, T> writer)
+//        throws IOException;
     /**
      * Writes a specified number of bytes from given array starting from
      * specified offset.
@@ -126,7 +155,7 @@ public interface BitOutput {
      * @param array the array
      * @param offset the start offset
      * @param length number of bytes to write.
-     * @param range the number of valid lower bits in each byte between
+     * @param size the number of valid lower bits in each byte between
      * {@value com.github.jinahya.bit.io.BitIoConstants#UBYTE_SIZE_MIN}
      * (inclusive) and
      * {@value com.github.jinahya.bit.io.BitIoConstants#UBYTE_SIZE_MAX}
@@ -134,22 +163,20 @@ public interface BitOutput {
      *
      * @throws IOException if an I/O error occurs.
      */
-    void writeBytes(byte[] array, int offset, int length, int range)
+    void writeBytes(byte[] array, int offset, int length, int size)
         throws IOException;
 
 
-    /**
-     * Writes an array of bytes.
-     *
-     * @param scale the number of bits for length;
-     * @param range the number of valid bits in each byte
-     * @param value the array to write.
-     *
-     * @throws IOException if an I/O error occurs.
-     */
-    void writeBytes(int scale, int range, byte[] value) throws IOException;
-
-
+//    /**
+//     * Writes an array of bytes.
+//     *
+//     * @param scale the number of bits for length;
+//     * @param range the number of valid bits in each byte
+//     * @param value the array to write.
+//     *
+//     * @throws IOException if an I/O error occurs.
+//     */
+//    void writeBytes(int scale, int range, byte[] value) throws IOException;
     /**
      * Aligns to specified number of bytes.
      *

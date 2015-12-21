@@ -30,16 +30,16 @@ You can read/write custom objects using `readObject(Function<BitInput, ? extends
 ```java
 Person person = null;
 person = input.readObject((input) -> {
-    if (!input.readBoolean()) {
-        return null; // optional; 1-bit null flag
-    }
-    final Person value = new Person();
     try {
+        if (!input.readBoolean()) { // optional; 1-bit null flag
+            return null;
+        }
+        final Person value = new Person();
         value.setAge(input.readUnsignedInt(7));
+        return value;
     } catch (final IOException ioe) {
         throw new UncheckedIOException(ioe);
     }
-    return value;
 });
 output.writeObject(person, (output, value) -> {
     try {

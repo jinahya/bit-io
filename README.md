@@ -42,13 +42,11 @@ person = input.readObject((input) -> {
     return value;
 });
 output.writeObject(person, (output, value) -> {
-    if (value == null) {
-        writeBoolean(false); // optional; 1-bit null flag
-        return;
-    }
     try {
-        writeBoolean(true);
-        output.writeUnsignedInt(7, value.getAge());
+        writeBoolean(value != null); // optional; 1-bit null flag
+        if (value != null) {
+            output.writeUnsignedInt(7, value.getAge());
+        }
     } catch (final IOException ioe) {
         throw new UncheckedIOException(ioe);
     }

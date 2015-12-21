@@ -30,7 +30,6 @@ A small library for reading or writing none octet aligned values such as `1-bit 
 You can read/write custom objects using `readObject(Function<BitInput, ? extends T>)` and `writeObject(T, BiConsumer(BitOutput, ? super T))` respectively.
 ```java
 Person person = null;
-
 person = input.readObject((input) -> {
     if (!input.readBoolean()) {
         return null; // optional; 1-bit null flag
@@ -43,7 +42,6 @@ person = input.readObject((input) -> {
     }
     return value;
 });
-
 output.writeObject(person, (output, value) -> {
     if (value == null) {
         writeBoolean(false); // optional; 1-bit null flag
@@ -71,7 +69,7 @@ new SupplierInput(java.util.function.Supplier<Byte>);
 Those constructors don't check arguments which means you can lazily instantiate and set them.
 ```java
 final OutputStream output = openFile();
-new ArrayInput(null, -1, -1) {
+final ByteInput input = new ArrayInput(null, -1, -1) {
     @Override
     public int readUnsignedByte() throws IOException {
         if (source == null) {

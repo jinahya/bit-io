@@ -32,6 +32,7 @@ Prepare an instance of `ByteInput` from various sources.
 ````java
 new ArrayInput(byte[], index, limit);
 new BufferInput(java.nio.ByteBuffer);
+new DataInput(java.io.DataInput);
 new FileInput(java.io.RandomAccessFile);
 new IntSupplierInput(java.util.function.IntSuppiler);
 new StreamInput(java.io.InputStream);

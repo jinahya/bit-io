@@ -39,7 +39,8 @@ person = input.readObject((input) -> {
     try {
         value.setAge(input.readUnsignedInt(7));
     } catch (final IOException ioe) {
-        throw new RuntimeException(ioe);
+        ~~throw new RuntimeException(ioe);~~
+        throw new UncheckedIOException(ioe);
     }
     return value;
 });

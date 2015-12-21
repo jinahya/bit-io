@@ -33,7 +33,7 @@ Person person = null;
 
 person = input.readObject((input) -> {
     if (!input.readBoolean()) {
-        return null; // optional; nullability
+        return null; // optional; 1-bit null flag
     }
     final Person value = new Person();
     try {
@@ -46,7 +46,7 @@ person = input.readObject((input) -> {
 
 output.writeObject(person, (output, value) -> {
     if (value == null) {
-        writeBoolean(false); // optional; nullability
+        writeBoolean(false); // optional; 1-bit null flag
         return;
     }
     try {

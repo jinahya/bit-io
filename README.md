@@ -107,7 +107,7 @@ new DelegatedBitInput(null) {
 ```
 #### Using `BitInputFactory`
 You can create `BitInput`s using various `newInstance(...)` methods.
-```
+```java
 final BitInput input = BitInputFactory.newInstance(
     () -> (ByteBuffer) ByteBuffer.allocate(10).position(10),
     b -> {

@@ -47,6 +47,7 @@ output.writeObject(person, (output, value) -> {
         return;
     }
     try {
+        writeBoolean(true);
         output.writeUnsignedInt(7, value.getAge());
     } catch (final IOException ioe) {
         throw new UncheckedIOException(ioe);

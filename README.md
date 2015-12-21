@@ -41,7 +41,7 @@ person = input.readObject((input) -> {
     } catch (final IOException ioe) {
         throw new RuntimeException(ioe);
     }
-    return person;
+    return value;
 });
 
 output.writeObject(person, (output, value) -> {

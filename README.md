@@ -27,7 +27,7 @@ A small library for reading or writing none octet aligned values such as `1-bit 
 |float        |32          |32          |`readFloat()`, `writeFloat(flaot)`|
 |double       |64          |64          |`readDouble()`, `writeDouble(double)`|
 ### an Object
-You can read/write custom objects using `readObject(Function<BitInput, T>)` and `writeObject(T, BiConsumer(BitOutput, T))` respectively.
+You can read/write custom objects using `readObject(Function<BitInput, ? extends T>)` and `writeObject(T, BiConsumer(BitOutput, ? super T))` respectively.
 ```java
 Person person = null;
 

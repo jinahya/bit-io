@@ -37,10 +37,51 @@ Floating-point numbers are just serialized/deserialized via `#xxxToRawYYYBits` a
 |float        |32          |32          |`readFloat()`, `writeFloat(float)`|
 |double       |64          |64          |`readDouble()`, `writeDouble(double)`|
 ### Objects
-#### Java 8+
-There are two methods for reading/writing cumtom object with lambda expressions using `readObject(Function)` and `writeObject(T, BiConsumer)` respectively. 
+#### Implementing `BitDecodable`/`BitEncodable`
 ```java
-final Person v = input.readObject(
+public class Person implements BitDecodable, BitEncodable {
+
+    @Override
+    public void decode(final BitInput input) throws IOException {
+        setAge(input.readUnsignedInt(age));
+        setMerried(input.readBoolean());
+    }
+
+    @Override
+    public void encode(final BitOutput output) throws IOException {
+        output.writeUnsignedInt(7, getAge());
+        output.writeBoolean(isMerried());
+    }
+}
+```
+#### Using a custom `BitDecoder`/`BitEncoder`.
+There are two methods for reading/writing cumtom object using `BitDecoder`/`BitEncoder`.
+```java
+public class PersonDecoder implements BitDecoder<Person> {
+    @Override
+    public Person decode(final BitInput input) throws IOException {
+        return input.readBoolean() // optional 1-bit null flag
+               ? (new Person()
+                  .age(input.readUnsignedInt(7))
+                  .merried(input.readBoolean()))
+               : null;
+    }
+}
+
+public class PersonEncoder implements BitEncoder<Person> {
+    @Override
+    public void encode(final Person value, final BitOutput output)
+        throws IOException {
+        output.writeBoolean(value != null); // optional 1-bit null flag
+        if (value != null) {
+            output.writeUnsignedInt(7, value.getAge());
+            output.writeBoolean(value.isMerried());
+        }
+    }
+}
+
+input.readObject(new PersonDecoder());
+input.readObject(
     i -> {
         try {
             return new Person().age(i.readUnsignedInt(7));
@@ -49,8 +90,9 @@ final Person v = input.readObject(
         }
     });
 
+output.writeObject(Person.newRandomInstance(), new PersonEncoder());
 output.writeObject(
-    new Person().age(0),
+    Person.newRandomInstance(),
     (o, v) -> {
         try {
             o.writeUnsignedInt(7, v.getAge());

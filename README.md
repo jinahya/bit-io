@@ -43,7 +43,7 @@ public class Person implements BitDecodable, BitEncodable {
 
     @Override
     public void decode(final BitInput input) throws IOException {
-        setAge(input.readUnsignedInt(age));
+        setAge(input.readUnsignedInt(7));
         setMerried(input.readBoolean());
     }
 

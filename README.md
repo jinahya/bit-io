@@ -34,7 +34,7 @@ Floating-point numbers are just serialized/deserialized via `#xxxToRawYYYBits` a
 
 |Value type   |Minimum size|Maximum size|Notes|
 |-------------|------------|------------|-----|
-|float        |32          |32          |`readFloat()`, `writeFloat(flaot)`|
+|float        |32          |32          |`readFloat()`, `writeFloat(float)`|
 |double       |64          |64          |`readDouble()`, `writeDouble(double)`|
 ### Objects
 #### Java 8+

@@ -49,7 +49,7 @@ final Person v = input.readObject(i -> {
 });
 
 output.writeObject(
-    new Person().name("name").age(0),
+    new Person().age(0),
     (o, v) -> {
         try {
             o.writeUnsignedInt(7, v.getAge());

@@ -16,16 +16,46 @@ A small library for reading or writing non octet aligned values such as `1-bit b
 
 ## Specifications
 ### Primitives
+#### Boolean
+Boolean values are read/written only 1 bit.
 |Value type   |Minimum size|Maximum size|Notes|
 |-------------|------------|------------|-----|
 |boolean      |1           |1           |`readBoolean`, `writeBoolean`|
+#### Integers
+|Value type   |Minimum size|Maximum size|Notes|
+|-------------|------------|------------|-----|
 |unsigned int |1           |31          |`readUnsignedInt(int)`, `writeUnsignedInt(int, int)`|
 |int          |2           |32          |`readInt(size)`, `writeInt(int)`|
 |unsigned long|1           |63          |`readUnsignedLong(size)`, `writeUnsigendLong(int, long)`|
 |long         |2           |64          |`readLong(size)`, `writeLong(size)`|
+#### Floating-point numbers
+Floating-point numbers are just serialized/deserialized via `#xxxToRawYYYBits` and `#xxxBitsToYYY`.
+|Value type   |Minimum size|Maximum size|Notes|
+|-------------|------------|------------|-----|
 |float        |32          |32          |`readFloat()`, `writeFloat(flaot)`|
 |double       |64          |64          |`readDouble()`, `writeDouble(double)`|
 ### Objects
+#### Java 8+
+There are two methods for reading/writing cumtom object with lambda expressions using `readObject(Function)` and `writeObject(T, BiConsumer)` respectively. 
+```java
+final Person v = input.readObject(i -> {
+    try {
+        return new Person().age(i.readUnsignedInt(7));
+    } catch (final IOException ioe) {
+        throw new UncheckedIOException(ioe);
+    }
+});
+
+output.writeObject(
+    new Person().name("name").age(0),
+    (o, v) -> {
+        try {
+            o.writeUnsignedInt(7, v.getAge());
+        } catch (final IOException ioe) {
+            throw new UncheckedIOException(ioe);
+        }
+});
+```
 ## Reading
 ### Preparing `ByteInput`
 Prepare an instance of `ByteInput` from various sources.

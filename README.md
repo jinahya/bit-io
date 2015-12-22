@@ -31,6 +31,7 @@ Boolean values are read/written only 1 bit.
 |long         |2           |64          |`readLong(size)`, `writeLong(size)`|
 #### Floating-point numbers
 Floating-point numbers are just serialized/deserialized via `#xxxToRawYYYBits` and `#xxxBitsToYYY`.
+
 |Value type   |Minimum size|Maximum size|Notes|
 |-------------|------------|------------|-----|
 |float        |32          |32          |`readFloat()`, `writeFloat(flaot)`|

@@ -18,6 +18,7 @@ A small library for reading or writing non octet aligned values such as `1-bit b
 ### Primitives
 #### Boolean
 Boolean values are read/written only 1 bit.
+
 |Value type   |Minimum size|Maximum size|Notes|
 |-------------|------------|------------|-----|
 |boolean      |1           |1           |`readBoolean`, `writeBoolean`|

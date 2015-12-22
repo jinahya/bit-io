@@ -40,13 +40,14 @@ Floating-point numbers are just serialized/deserialized via `#xxxToRawYYYBits` a
 #### Java 8+
 There are two methods for reading/writing cumtom object with lambda expressions using `readObject(Function)` and `writeObject(T, BiConsumer)` respectively. 
 ```java
-final Person v = input.readObject(i -> {
-    try {
-        return new Person().age(i.readUnsignedInt(7));
-    } catch (final IOException ioe) {
-        throw new UncheckedIOException(ioe);
-    }
-});
+final Person v = input.readObject(
+    i -> {
+        try {
+            return new Person().age(i.readUnsignedInt(7));
+        } catch (final IOException ioe) {
+            throw new UncheckedIOException(ioe);
+        }
+    });
 
 output.writeObject(
     new Person().age(0),

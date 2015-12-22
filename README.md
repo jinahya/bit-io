@@ -16,26 +16,13 @@ A small library for reading or writing non octet aligned values such as `1-bit b
 
 ## Specifications
 ### Primitives
-#### Boolean
-Boolean values are read/written only 1 bit.
-
 |Value type   |Minimum size|Maximum size|Notes|
 |-------------|------------|------------|-----|
 |boolean      |1           |1           |`readBoolean`, `writeBoolean`|
-#### Integers
-|Value type   |Minimum size|Maximum size|Notes|
-|-------------|------------|------------|-----|
 |unsigned int |1           |31          |`readUnsignedInt(int)`, `writeUnsignedInt(int, int)`|
 |int          |2           |32          |`readInt(size)`, `writeInt(int)`|
 |unsigned long|1           |63          |`readUnsignedLong(size)`, `writeUnsigendLong(int, long)`|
 |long         |2           |64          |`readLong(size)`, `writeLong(size)`|
-#### Floating-point numbers
-Floating-point numbers are just serialized/deserialized via `#xxxToRawYYYBits` and `#xxxBitsToYYY`.
-
-|Value type   |Minimum size|Maximum size|Notes|
-|-------------|------------|------------|-----|
-|float        |32          |32          |`readFloat()`, `writeFloat(float)`|
-|double       |64          |64          |`readDouble()`, `writeDouble(double)`|
 ### Objects
 #### Implementing `BitDecodable`/`BitEncodable`
 ```java
@@ -55,16 +42,13 @@ public class Person implements BitDecodable, BitEncodable {
 }
 ```
 #### Using a custom `BitDecoder`/`BitEncoder`.
-There are two methods for reading/writing cumtom object using `BitDecoder`/`BitEncoder`.
 ```java
 public class PersonDecoder implements BitDecoder<Person> {
     @Override
     public Person decode(final BitInput input) throws IOException {
-        return input.readBoolean() // optional 1-bit null flag
-               ? (new Person()
-                  .age(input.readUnsignedInt(7))
-                  .merried(input.readBoolean()))
-               : null;
+        return new Person()
+            .age(input.readUnsignedInt(7))
+            .merried(input.readBoolean());
     }
 }
 
@@ -72,33 +56,31 @@ public class PersonEncoder implements BitEncoder<Person> {
     @Override
     public void encode(final Person value, final BitOutput output)
         throws IOException {
-        output.writeBoolean(value != null); // optional 1-bit null flag
-        if (value != null) {
-            output.writeUnsignedInt(7, value.getAge());
-            output.writeBoolean(value.isMerried());
-        }
+        output.writeUnsignedInt(7, value.getAge());
+        output.writeBoolean(value.isMerried());
     }
 }
-
-input.readObject(new PersonDecoder());
-input.readObject(
-    i -> {
-        try {
-            return new Person().age(i.readUnsignedInt(7));
-        } catch (final IOException ioe) {
-            throw new UncheckedIOException(ioe);
-        }
-    });
-
-output.writeObject(Person.newRandomInstance(), new PersonEncoder());
-output.writeObject(
-    Person.newRandomInstance(),
-    (o, v) -> {
-        try {
-            o.writeUnsignedInt(7, v.getAge());
-        } catch (final IOException ioe) {
-            throw new UncheckedIOException(ioe);
-        }
+```
+Now you can use `readObject` and `writeObject`.
+```java
+Person person = input.readObject(new PersonDecoder());
+output.writeObject(person, new PersonEncoder());
+```
+There are special methods for reading/writing nullable objects which each spends 1 more bit for null flag.
+```java
+Person person = input.readNullable(new PersonDecoder());
+output.writeNullable(person, new PersonEncoder());
+```
+You can also use lambda expressions.
+```java
+final Person person = input.readObject(i -> {
+    return new Person()
+        .age(i.readUnsignedInt(7))
+        .merried(i.readBoolean());
+});
+output.writeObject(Person.newRandomInstance(), (o, v) -> {
+    o.writeUnsignedInt(7, v.getAge());
+    o.writeBoolean(v.isMerried());
 });
 ```
 ## Reading

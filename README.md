@@ -25,63 +25,80 @@ A small library for reading or writing non octet aligned values such as `1-bit b
 |long         |2           |64          |`readLong(size)`, `writeLong(size)`|
 ### Objects
 #### Implementing `BitDecodable`/`BitEncodable`
+You can directly read/write values from/to `BitInput`/`BitOutput` by making your class implementing those interfaces.
 ```java
 public class Person implements BitDecodable, BitEncodable {
 
     @Override
     public void decode(final BitInput input) throws IOException {
         setAge(input.readUnsignedInt(7));
-        setMerried(input.readBoolean());
+        setMarried(input.readBoolean());
     }
 
     @Override
     public void encode(final BitOutput output) throws IOException {
         output.writeUnsignedInt(7, getAge());
-        output.writeBoolean(isMerried());
+        output.writeBoolean(isMarried());
     }
 }
 ```
-#### Using a custom `BitDecoder`/`BitEncoder`.
+It's, now, too obvious you can use like this.
+```java
+Person person = getPersion();
+person.read(getBitInput());
+person.write(getBitOutput());
+```
+#### Using `BitDecoder`/`BitEncoder`.
+If modifying classes (implementing interfaces) is not applicable, you can make specialized clases for decoding/encoding already existing classes.
 ```java
 public class PersonDecoder implements BitDecoder<Person> {
     @Override
     public Person decode(final BitInput input) throws IOException {
-        return new Person()
-            .age(input.readUnsignedInt(7))
-            .merried(input.readBoolean());
+        if (!readBoolean() {
+            return null;
+        }
+        return new Person().age(input.readUnsignedInt(7)).married(input.readBoolean());
     }
 }
 
 public class PersonEncoder implements BitEncoder<Person> {
     @Override
-    public void encode(final Person value, final BitOutput output)
-        throws IOException {
-        output.writeUnsignedInt(7, value.getAge());
-        output.writeBoolean(value.isMerried());
+    public void encode(final Person value, final BitOutput output) throws IOException {
+        output.writeBoolean(value != null);
+        if (value != null) {
+            output.writeUnsignedInt(7, value.getAge());
+            output.writeBoolean(value.isMarried());
+        }
     }
 }
 ```
-Now you can use `readObject` and `writeObject`.
+There is an abstract class for implementing these two interfaces easily.
 ```java
-Person person = input.readObject(new PersonDecoder());
-output.writeObject(person, new PersonEncoder());
+public class PersonCodec extends AbstractBitCodec<Person> {
+
+    public PersonCodec(final boolean nullable) {
+        super(nullable);
+    }
+
+    @Override
+    protected Person decodeValue(final BitInput input) throws IOException {
+        // no need to check nullability
+        return new Person().age(input.readUnsignedInt(7)).married(input.readBoolean());
+    }
+
+    @Override
+    protected void encodeValue(final BitOutput output, final Person value) throws IOException {
+        // no need to check nullability
+        output.writeUnsignedInt(7, value.getAge());
+        output.writeBoolean(value.isMarried());
+    }
+}
 ```
-There are special methods for reading/writing nullable objects which each spends 1 more bit for null flag.
+Again, you can use the codec like this.
 ```java
-Person person = input.readNullable(new PersonDecoder());
-output.writeNullable(person, new PersonEncoder());
-```
-You can also use lambda expressions.
-```java
-final Person person = input.readObject(i -> {
-    return new Person()
-        .age(i.readUnsignedInt(7))
-        .merried(i.readBoolean());
-});
-output.writeObject(Person.newRandomInstance(), (o, v) -> {
-    o.writeUnsignedInt(7, v.getAge());
-    o.writeBoolean(v.isMerried());
-});
+final PersionCodec codec = new PersonCodec(true);
+Person person = codec.decode(getBitInput());
+codec.encode(getBitOutput(), person);
 ```
 ## Reading
 ### Preparing `ByteInput`
@@ -97,7 +114,7 @@ new SupplierInput(java.util.function.Supplier<Byte>);
 ````
 Those constructors don't check arguments which means you can lazily instantiate and set them.
 ```java
-final OutputStream output = openFileForReading();
+final OutputStream output = openFile();
 
 final ByteInput input = new ArrayInput(null, -1, -1) {
     @Override
@@ -120,11 +137,11 @@ final ByteInput input = new ArrayInput(null, -1, -1) {
 #### Using `DefaultBitInput`
 Construct with an already created a `ByteInput`.
 ```java
-final ByteInput byteInput = createByteInput();
+final ByteInput delegate = createByteInput();
 
-final BitInput bitInput = new DefalutBitInput(byteInput);
+final BitInput input = new DefalutBitInput(delegate);
 ```
-Or lazliy instantiate its `delegate` value.
+Or lazliy instantiate its `delegate` field.
 ```java
 new DefaultBitInput(null) {
     @Override
@@ -139,6 +156,8 @@ new DefaultBitInput(null) {
 #### Using `BitInputFactory`
 You can create `BitInput`s using various `newInstance(...)` methods.
 ```java
+final RedableByteChannel source = openChannel();
+
 final BitInput input = BitInputFactory.newInstance(
     () -> (ByteBuffer) ByteBuffer.allocate(10).position(10),
     b -> {

@@ -78,7 +78,7 @@ new SupplierInput(java.util.function.Supplier<Byte>);
 ````
 Those constructors don't check arguments which means you can lazily instantiate and set them.
 ```java
-final OutputStream output = openFileForReading();
+final OutputStream output = openFile();
 
 final ByteInput input = new ArrayInput(null, -1, -1) {
     @Override
@@ -101,11 +101,11 @@ final ByteInput input = new ArrayInput(null, -1, -1) {
 #### Using `DefaultBitInput`
 Construct with an already created a `ByteInput`.
 ```java
-final ByteInput byteInput = createByteInput();
+final ByteInput delegate = createByteInput();
 
-final BitInput bitInput = new DefalutBitInput(byteInput);
+final BitInput input = new DefalutBitInput(delegate);
 ```
-Or lazliy instantiate its `delegate` value.
+Or lazliy instantiate its `delegate` field.
 ```java
 new DefaultBitInput(null) {
     @Override
@@ -120,6 +120,8 @@ new DefaultBitInput(null) {
 #### Using `BitInputFactory`
 You can create `BitInput`s using various `newInstance(...)` methods.
 ```java
+final RedableByteChannel source = openChannel();
+
 final BitInput input = BitInputFactory.newInstance(
     () -> (ByteBuffer) ByteBuffer.allocate(10).position(10),
     b -> {

@@ -48,6 +48,13 @@ public class ArrayInput extends AbstractByteInput<byte[]> {
     }
 
 
+    /**
+     * Replaces the value of {@link #source} with given and returns this.
+     *
+     * @param target new value of {@link #source}.
+     *
+     * @return this instance.
+     */
     public ArrayInput source(final byte[] target) {
 
         setSource(target);

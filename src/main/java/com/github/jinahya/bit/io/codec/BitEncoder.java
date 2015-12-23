@@ -14,36 +14,32 @@
  * limitations under the License.
  */
 
-package com.github.jinahya.bit.io;
+package com.github.jinahya.bit.io.codec;
+
+
+import com.github.jinahya.bit.io.BitOutput;
+import com.github.jinahya.bit.io.BitOutput;
+import java.io.IOException;
 
 
 /**
+ * An interface for encoding values.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
+ * @param <T> value type parameter
  */
-public class BitOutputFactoryTest {
+public interface BitEncoder<T> {
 
-//    @Test
-//    public static void newInstanceByteBuffer() {
-//
-//        final ByteBuffer buffer = ByteBuffer.allocate(0);
-//        BitOutputFactory.newInstance(v -> buffer.put((byte) v));
-//    }
-//
-//
-//    @Test
-//    public static void newBitOutputForConsumer() {
-//
-//        final Consumer<Byte> consumer = v -> {
-//        };
-//        BitOutputFactory.newInstance(v -> consumer.accept((byte) v));
-//    }
-//    @Test
-//    public static void newInstanceIntConsumer() {
-//
-//        final IntConsumer consumer = v -> {
-//        };
-//        BitOutputFactory.newInstance(v -> consumer.accept(v));
-//    }
+
+    /**
+     * Encodes given value to specified output.
+     *
+     * @param value the value to encode
+     * @param output the output
+     *
+     * @throws IOException if an I/O error occurs.
+     */
+    void encode(BitOutput output, T value) throws IOException;
+
 }
 

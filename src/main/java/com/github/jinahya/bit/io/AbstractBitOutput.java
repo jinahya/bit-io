@@ -18,9 +18,8 @@
 package com.github.jinahya.bit.io;
 
 
+import com.github.jinahya.bit.io.codec.BitEncoder;
 import java.io.IOException;
-import java.io.UncheckedIOException;
-import java.util.function.BiConsumer;
 
 
 /**
@@ -112,11 +111,12 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
 
         BitIoConstraints.requireValidUnsignedShortSize(size);
 
-        final int quotient = size / 8;
-        final int remainder = size % 8;
+        final int quotient = size / BitIoConstants.UBYTE_SIZE_MAX;
+        final int remainder = size % BitIoConstants.UBYTE_SIZE_MAX;
 
         if (remainder > 0) {
-            writeUnsignedByte(remainder, value >> (quotient * 8));
+            writeUnsignedByte(
+                remainder, value >> (quotient * BitIoConstants.UBYTE_SIZE_MAX));
         }
 
         for (int i = quotient - 1; i >= 0; i--) {
@@ -138,11 +138,13 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
 
         BitIoConstraints.requireValidUnsignedIntSize(size);
 
-        final int quotient = size / 16;
-        final int remainder = size % 16;
+        final int quotient = size / BitIoConstants.USHORT_SIZE_MAX;
+        final int remainder = size % BitIoConstants.USHORT_SIZE_MAX;
 
         if (remainder > 0) {
-            writeUnsignedShort(remainder, value >> (quotient * 16));
+            writeUnsignedShort(
+                remainder,
+                value >> (quotient * BitIoConstants.USHORT_SIZE_MAX));
         }
 
         for (int i = quotient - 1; i >= 0; i--) {
@@ -168,11 +170,13 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
 
         BitIoConstraints.requireValidUnsignedLongSize(size);
 
-        final int quotient = size / 31;
-        final int remainder = size % 31;
+        final int quotient = size / BitIoConstants.UINT_SIZE_MAX;
+        final int remainder = size % BitIoConstants.UINT_SIZE_MAX;
 
         if (remainder > 0) {
-            writeUnsignedInt(remainder, (int) (value >> (quotient * 31)));
+            writeUnsignedInt(
+                remainder,
+                (int) (value >> (quotient * BitIoConstants.UINT_SIZE_MAX)));
         }
 
         for (int i = quotient - 1; i >= 0; i--) {
@@ -192,44 +196,86 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
     }
 
 
-    @Override
-    public void writeFloat(final float value) throws IOException {
-
-        writeInt(32, Float.floatToRawIntBits(value));
-    }
-
-
-    @Override
-    public void writeDouble(final double value) throws IOException {
-
-        writeLong(64, Double.doubleToRawLongBits(value));
-
-    }
-
-
+//    @Override
+//    public void writeFloat(final float value) throws IOException {
+//
+//        writeInt(32, Float.floatToRawIntBits(value));
+//    }
+//
+//
+//    @Override
+//    public void writeDouble(final double value) throws IOException {
+//
+//        writeLong(64, Double.doubleToRawLongBits(value));
+//    }
+//    @Override
+//    public <T extends BitWritable> void writeObject(final T value)
+//        throws IOException {
+//
+//        if (value == null) {
+//            throw new NullPointerException("null value");
+//        }
+//
+//        value.write(this);
+//    }
+//
+//
     @Override
     public <T> void writeObject(final T value,
-                                final BiConsumer<BitOutput, ? super T> writer)
+                                final BitEncoder<? super T> encoder)
         throws IOException {
 
-        if (writer == null) {
-            throw new NullPointerException("null writer");
+        if (value == null) {
+            throw new NullPointerException("null value");
         }
 
-        try {
-            writer.accept(this, value);
-        } catch (final UncheckedIOException uioe) {
-            throw uioe.getCause();
-        } catch (final RuntimeException re) {
-            final Throwable cause = re.getCause();
-            if (cause instanceof IOException) {
-                throw (IOException) cause;
-            }
-            throw re;
+        if (encoder == null) {
+            throw new NullPointerException("null encoder");
         }
+
+        encoder.encode(this, value);
     }
 
 
+//    @Override
+//    public <T> void writeNullable(final T value,
+//                                  final BitEncoder<? super T> encoder)
+//        throws IOException {
+//
+//        if (encoder == null) {
+//            throw new NullPointerException("null encoder");
+//        }
+//
+//        writeBoolean(value != null);
+//
+//        if (value != null) {
+//            writeObject(value, encoder);
+//        }
+//    }
+//    @Override
+//    public <T> void writeObject(final T value,
+//                                final BiConsumer<BitOutput, ? super T> encoder)
+//        throws IOException {
+//
+////        if (value == null) {
+////            throw new NullPointerException("null value");
+////        }
+//        if (encoder == null) {
+//            throw new NullPointerException("null encoder");
+//        }
+//
+//        try {
+//            encoder.accept(this, value);
+//        } catch (final UncheckedIOException uioe) {
+//            throw uioe.getCause();
+//        } catch (final RuntimeException re) {
+//            final Throwable cause = re.getCause();
+//            if (cause instanceof IOException) {
+//                throw (IOException) cause;
+//            }
+//            throw re;
+//        }
+//    }
 //    @Override
 //    public <T> void writeArray(final int scale, final T[] array,
 //                               final BiConsumer<BitOutput, T> writer)
@@ -286,21 +332,19 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
 //            writeObject(value, writer);
 //        }
 //    }
-    @Override
-    public void writeBytes(final byte[] array, final int offset,
-                           final int length, final int size)
-        throws IOException {
-
-        BitIoConstraints.requireValidArrayOffsetLength(array, offset, length);
-        BitIoConstraints.requireValidUnsignedByteSize(size);
-
-        final int limit = offset + length;
-        for (int i = offset; i < limit; i++) {
-            writeUnsignedByte(size, array[i]);
-        }
-    }
-
-
+//    @Override
+//    public void writeBytes(final byte[] array, final int offset,
+//                           final int length, final int size)
+//        throws IOException {
+//
+//        BitIoConstraints.requireValidArrayOffsetLength(array, offset, length);
+//        BitIoConstraints.requireValidUnsignedByteSize(size);
+//
+//        final int limit = offset + length;
+//        for (int i = offset; i < limit; i++) {
+//            writeUnsignedByte(size, array[i]);
+//        }
+//    }
 //    @Override
 //    public void writeBytes(final int scale, final int range, final byte[] value)
 //        throws IOException {

@@ -32,6 +32,8 @@ public abstract class AbstractByteOutput<T> implements ByteOutput {
      *
      * @param target the underlying byte target or {@code null} if it is
      * intended to be lazily initialized and set.
+     *
+     * @see #target
      */
     public AbstractByteOutput(final T target) {
 

@@ -14,36 +14,33 @@
  * limitations under the License.
  */
 
-package com.github.jinahya.bit.io;
+package com.github.jinahya.bit.io.codec;
+
+
+import com.github.jinahya.bit.io.BitInput;
+import com.github.jinahya.bit.io.BitInput;
+import java.io.IOException;
 
 
 /**
+ * An interface for decoding values.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
+ * @param <T> value type parameter
  */
-public class BitOutputFactoryTest {
+public interface BitDecoder<T> {
 
-//    @Test
-//    public static void newInstanceByteBuffer() {
-//
-//        final ByteBuffer buffer = ByteBuffer.allocate(0);
-//        BitOutputFactory.newInstance(v -> buffer.put((byte) v));
-//    }
-//
-//
-//    @Test
-//    public static void newBitOutputForConsumer() {
-//
-//        final Consumer<Byte> consumer = v -> {
-//        };
-//        BitOutputFactory.newInstance(v -> consumer.accept((byte) v));
-//    }
-//    @Test
-//    public static void newInstanceIntConsumer() {
-//
-//        final IntConsumer consumer = v -> {
-//        };
-//        BitOutputFactory.newInstance(v -> consumer.accept(v));
-//    }
+
+    /**
+     * Decodes value from specified input.
+     *
+     * @param input the input
+     *
+     * @return a decoded value
+     *
+     * @throws IOException if an I/O error occurs.
+     */
+    T decode(BitInput input) throws IOException;
+
 }
 

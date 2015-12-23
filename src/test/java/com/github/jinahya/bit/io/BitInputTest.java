@@ -19,7 +19,7 @@ package com.github.jinahya.bit.io;
 
 
 import java.io.IOException;
-import static java.util.concurrent.ThreadLocalRandom.current;
+import java.io.UncheckedIOException;
 import javax.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -78,31 +78,41 @@ public class BitInputTest {
     }
 
 
-    @Test(invocationCount = 128)
-    public void readFixedBytes() throws IOException {
+//    @Test(invocationCount = 128)
+//    public void readFixedBytes() throws IOException {
+//
+//        final byte[] array = new byte[current().nextInt(1024)];
+//        final int offset = array.length == 0
+//                           ? 0 : current().nextInt(array.length);
+//        final int length = array.length == 0
+//                           ? 0 : current().nextInt(array.length - offset);
+//        final int byteSize = BitIoRandoms.randomUnsignedByteSize();
+//
+//        input.readBytes(array, offset, length, byteSize);
+//    }
+//    @Test(invocationCount = 128)
+//    public void readVariableBytes() throws IOException {
+//
+//        final byte[] array = new byte[current().nextInt(1024)];
+//        final int offset = array.length == 0
+//                           ? 0 : current().nextInt(array.length);
+//        final int length = array.length == 0
+//                           ? 0 : current().nextInt(array.length - offset);
+//        final int byteSize = BitIoRandoms.randomUnsignedByteSize();
+//
+//        input.readBytes(array, offset, length, byteSize);
+//    }
+    @Test
+    public void readObject() throws IOException {
 
-        final byte[] array = new byte[current().nextInt(1024)];
-        final int offset = array.length == 0
-                           ? 0 : current().nextInt(array.length);
-        final int length = array.length == 0
-                           ? 0 : current().nextInt(array.length - offset);
-        final int byteSize = BitIoRandoms.randomUnsignedByteSize();
-
-        input.readBytes(array, offset, length, byteSize);
-    }
-
-
-    @Test(invocationCount = 128)
-    public void readVariableBytes() throws IOException {
-
-        final byte[] array = new byte[current().nextInt(1024)];
-        final int offset = array.length == 0
-                           ? 0 : current().nextInt(array.length);
-        final int length = array.length == 0
-                           ? 0 : current().nextInt(array.length - offset);
-        final int byteSize = BitIoRandoms.randomUnsignedByteSize();
-
-        input.readBytes(array, offset, length, byteSize);
+        final Person v = input.readObject(
+            i -> {
+                try {
+                    return new Person().age(i.readUnsignedInt(7));
+                } catch (final IOException ioe) {
+                    throw new UncheckedIOException(ioe);
+                }
+            });
     }
 
 

@@ -18,8 +18,8 @@
 package com.github.jinahya.bit.io;
 
 
+import com.github.jinahya.bit.io.codec.BitDecoder;
 import java.io.IOException;
-import java.util.function.Function;
 
 
 /**
@@ -105,73 +105,88 @@ public interface BitInput {
     long readLong(int size) throws IOException;
 
 
+//    /**
+//     * Reads a {@code float} value as a 32-bit signed int using
+//     * {@link Float#intBitsToFloat(int)}.
+//     *
+//     * @return a {@code float} value
+//     *
+//     * @throws IOException if an I/O error occurs.
+//     */
+//    float readFloat() throws IOException;
+//
+//
+//    /**
+//     * Reads a {@code double} value as a 64-bit signed long using
+//     * {@link Double#longBitsToDouble(long)}.
+//     *
+//     * @return a {@code double} value
+//     *
+//     * @throws IOException if an I/O error occurs.
+//     */
+//    double readDouble() throws IOException;
     /**
-     * Reads a {@code float} value as a 32-bit signed int using
-     * {@link Float#intBitsToFloat(int)}.
+     * Reads an object value using specified decoder.
      *
-     * @return a {@code float} value
+     * @param <T> object type parameter
+     * @param decoder the decoder
+     *
+     * @return an object value
      *
      * @throws IOException if an I/O error occurs.
      */
-    float readFloat() throws IOException;
+    <T> T readObject(BitDecoder<? extends T> decoder) throws IOException;
 
 
-    /**
-     * Reads a {@code double} value as a 64-bit signed long using
-     * {@link Double#longBitsToDouble(long)}.
-     *
-     * @return a {@code double} value
-     *
-     * @throws IOException if an I/O error occurs.
-     */
-    double readDouble() throws IOException;
-
-
-    /**
-     * Reads an object value using specified function.
-     *
-     * @param <T> value type parameter.
-     * @param reader the function actually reads the value.
-     *
-     * @return the object value.
-     *
-     * @throws IOException if an I/O error occurs.
-     */
-    <T> T readObject(Function<BitInput, ? extends T> reader) throws IOException;
-
-
+//    <T> T readNullable(BitDecoder<T> decoder) throws IOException;
+//    /**
+//     * Reads an object value by applying specified function.
+//     *
+//     * @param <T> value type parameter.
+//     * @param encoder the function actually reads the value.
+//     *
+//     * @return the object value.
+//     *
+//     * @throws IOException if an I/O error occurs.
+//     */
+//    <T> T readObject(Function<BitInput, ? extends T> encoder)
+//        throws IOException;
 //    <T> T[] readArray(int scale, Function<BitInput, T> reader)
 //        throws IOException;
 //
 //
 //    <T> List<T> readList(int scale, Function<BitInput, T> reader)
 //        throws IOException;
-    /**
-     * Reads specified number of bytes and set on given array starting from
-     * specified offset.
-     *
-     * @param array the array
-     * @param offset the start offset of array
-     * @param length number of bytes to read
-     * @param size number of valid lower bits in each byte
-     *
-     * @throws IOException if an I/O error occurs.
-     */
-    void readBytes(byte[] array, int offset, int length, int size)
-        throws IOException;
-
-
+//    /**
+//     * Reads specified number of bytes and set on given array starting from
+//     * specified offset.
+//     *
+//     * @param array the array
+//     * @param offset the start offset of array
+//     * @param length number of bytes to read
+//     * @param size number of valid lower bits in each byte
+//     *
+//     * @throws IOException if an I/O error occurs.
+//     */
+//    void readBytes(byte[] array, int offset, int length, int size)
+//        throws IOException;
+//
+//
+//    void readBytes(byte[] array, int offset, int size) throws IOException;
+//
+//
+//    void readBytes(byte[] array, int size) throws IOException;
 //    /**
 //     * Reads a variable length of bytes.
 //     *
 //     * @param scale number of bits for length;
-//     * @param range valid number of lower bits in each byte.
+//     * @param size valid number of lower bits in each byte.
 //     *
 //     * @return an array of bytes.
 //     *
 //     * @throws IOException if an I/O error occurs.
 //     */
-//    byte[] readBytes(int scale, int range) throws IOException;
+//    byte[] readBytes(int scale, int size) throws IOException;
     /**
      * Aligns to given number of bytes.
      *

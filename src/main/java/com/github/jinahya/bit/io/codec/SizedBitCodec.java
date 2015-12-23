@@ -14,27 +14,31 @@
  * limitations under the License.
  */
 
-package com.github.jinahya.bit.io;
-
-
-import java.io.IOException;
+package com.github.jinahya.bit.io.codec;
 
 
 /**
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
+ * @param <T>
  */
-public interface BitWritable {
+abstract class SizedBitCodec<T> extends AbstractBitCodec<T> {
 
 
-    /**
-     * Writes values to specified bit output.
-     *
-     * @param output the bit output
-     *
-     * @throws IOException if an I/O error occurs.
-     */
-    void write(BitOutput output) throws IOException;
+    public SizedBitCodec(final boolean nullable, final boolean unsigned,
+                         final int size) {
+
+        super(nullable);
+
+        this.unsigned = unsigned;
+        this.size = size;
+    }
+
+
+    protected final boolean unsigned;
+
+
+    protected final int size;
 
 }
 

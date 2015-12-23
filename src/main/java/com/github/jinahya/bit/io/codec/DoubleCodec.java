@@ -14,36 +14,40 @@
  * limitations under the License.
  */
 
-package com.github.jinahya.bit.io;
+package com.github.jinahya.bit.io.codec;
+
+
+import com.github.jinahya.bit.io.BitInput;
+import com.github.jinahya.bit.io.BitOutput;
+import java.io.IOException;
 
 
 /**
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
-public class BitOutputFactoryTest {
+public class DoubleCodec extends AbstractBitCodec<Double> {
 
-//    @Test
-//    public static void newInstanceByteBuffer() {
-//
-//        final ByteBuffer buffer = ByteBuffer.allocate(0);
-//        BitOutputFactory.newInstance(v -> buffer.put((byte) v));
-//    }
-//
-//
-//    @Test
-//    public static void newBitOutputForConsumer() {
-//
-//        final Consumer<Byte> consumer = v -> {
-//        };
-//        BitOutputFactory.newInstance(v -> consumer.accept((byte) v));
-//    }
-//    @Test
-//    public static void newInstanceIntConsumer() {
-//
-//        final IntConsumer consumer = v -> {
-//        };
-//        BitOutputFactory.newInstance(v -> consumer.accept(v));
-//    }
+
+    public DoubleCodec(final boolean nullable) {
+
+        super(nullable);
+    }
+
+
+    @Override
+    protected Double decodeValue(final BitInput input) throws IOException {
+
+        return Double.longBitsToDouble(input.readLong(64));
+    }
+
+
+    @Override
+    protected void encodeValue(final BitOutput output, final Double value)
+        throws IOException {
+
+        output.writeLong(64, Double.doubleToRawLongBits(value));
+    }
+
 }
 

@@ -21,17 +21,19 @@ package com.github.jinahya.bit.io;
 /**
  * An abstract class for implementing {@code ByteInput}.
  *
+ * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  * @param <T> byte source type parameter
  */
 public abstract class AbstractByteInput<T> implements ByteInput {
 
 
     /**
-     * Creates a new instance built on top of the specified underlying byte
-     * source.
+     * Creates a new instance wrapping specified byte source.
      *
-     * @param source the underlying byte source, or {@code null} if it is
+     * @param source the underlying byte source or {@code null} if it is
      * intended to be lazily initialized and set.
+     *
+     * @see #source
      */
     public AbstractByteInput(final T source) {
 

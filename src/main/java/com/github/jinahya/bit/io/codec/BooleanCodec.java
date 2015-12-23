@@ -14,36 +14,40 @@
  * limitations under the License.
  */
 
-package com.github.jinahya.bit.io;
+package com.github.jinahya.bit.io.codec;
+
+
+import com.github.jinahya.bit.io.BitInput;
+import com.github.jinahya.bit.io.BitOutput;
+import java.io.IOException;
 
 
 /**
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
-public class BitOutputFactoryTest {
+public class BooleanCodec extends AbstractBitCodec<Boolean> {
 
-//    @Test
-//    public static void newInstanceByteBuffer() {
-//
-//        final ByteBuffer buffer = ByteBuffer.allocate(0);
-//        BitOutputFactory.newInstance(v -> buffer.put((byte) v));
-//    }
-//
-//
-//    @Test
-//    public static void newBitOutputForConsumer() {
-//
-//        final Consumer<Byte> consumer = v -> {
-//        };
-//        BitOutputFactory.newInstance(v -> consumer.accept((byte) v));
-//    }
-//    @Test
-//    public static void newInstanceIntConsumer() {
-//
-//        final IntConsumer consumer = v -> {
-//        };
-//        BitOutputFactory.newInstance(v -> consumer.accept(v));
-//    }
+
+    public BooleanCodec(final boolean nullable) {
+
+        super(nullable);
+    }
+
+
+    @Override
+    protected Boolean decodeValue(final BitInput input) throws IOException {
+
+        return input.readBoolean();
+    }
+
+
+    @Override
+    protected void encodeValue(final BitOutput output, final Boolean value)
+        throws IOException {
+
+        output.writeBoolean(value);
+    }
+
 }
 

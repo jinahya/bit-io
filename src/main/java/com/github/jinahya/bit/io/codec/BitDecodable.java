@@ -14,36 +14,29 @@
  * limitations under the License.
  */
 
-package com.github.jinahya.bit.io;
+package com.github.jinahya.bit.io.codec;
+
+
+import com.github.jinahya.bit.io.BitInput;
+import com.github.jinahya.bit.io.BitInput;
+import java.io.IOException;
 
 
 /**
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
-public class BitOutputFactoryTest {
+public interface BitDecodable {
 
-//    @Test
-//    public static void newInstanceByteBuffer() {
-//
-//        final ByteBuffer buffer = ByteBuffer.allocate(0);
-//        BitOutputFactory.newInstance(v -> buffer.put((byte) v));
-//    }
-//
-//
-//    @Test
-//    public static void newBitOutputForConsumer() {
-//
-//        final Consumer<Byte> consumer = v -> {
-//        };
-//        BitOutputFactory.newInstance(v -> consumer.accept((byte) v));
-//    }
-//    @Test
-//    public static void newInstanceIntConsumer() {
-//
-//        final IntConsumer consumer = v -> {
-//        };
-//        BitOutputFactory.newInstance(v -> consumer.accept(v));
-//    }
+
+    /**
+     * Decodes values from specified input.
+     *
+     * @param input the input
+     *
+     * @throws IOException if an I/O error occurs.
+     */
+    void decode(BitInput input) throws IOException;
+
 }
 

@@ -26,23 +26,9 @@ import java.lang.reflect.Array;
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
-final class BitIoConstraints {
+public final class BitIoConstraints {
 
 
-//    public static int requireValidAlighBytes(final int bytes) {
-//
-//        if (bytes < BitIoConstants.ALIGN_BYTES_MIN) {
-//            throw new IllegalArgumentException(
-//                "bytes(" + bytes + ") < " + BitIoConstants.ALIGN_BYTES_MIN);
-//        }
-//
-//        if (bytes > BitIoConstants.ALIGN_BYTES_MAX) {
-//            throw new IllegalArgumentException(
-//                "bytes(" + bytes + ") > " + BitIoConstants.ALIGN_BYTES_MAX);
-//        }
-//
-//        return bytes;
-//    }
     public static int requireValidUnsignedByteSize(final int size) {
 
         if (size < BitIoConstants.UBYTE_SIZE_MIN) {

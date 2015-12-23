@@ -17,33 +17,28 @@
 package com.github.jinahya.bit.io;
 
 
+import com.github.jinahya.bit.io.codec.BitEncoder;
+import java.io.IOException;
+
+
 /**
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
-public class BitOutputFactoryTest {
+public class PersonEncoder implements BitEncoder<Person> {
 
-//    @Test
-//    public static void newInstanceByteBuffer() {
-//
-//        final ByteBuffer buffer = ByteBuffer.allocate(0);
-//        BitOutputFactory.newInstance(v -> buffer.put((byte) v));
-//    }
-//
-//
-//    @Test
-//    public static void newBitOutputForConsumer() {
-//
-//        final Consumer<Byte> consumer = v -> {
-//        };
-//        BitOutputFactory.newInstance(v -> consumer.accept((byte) v));
-//    }
-//    @Test
-//    public static void newInstanceIntConsumer() {
-//
-//        final IntConsumer consumer = v -> {
-//        };
-//        BitOutputFactory.newInstance(v -> consumer.accept(v));
-//    }
+
+    @Override
+    public void encode(final BitOutput output, final Person value)
+        throws IOException {
+
+        output.writeBoolean(value != null);
+
+        if (value != null) {
+            output.writeUnsignedInt(7, value.getAge());
+            output.writeBoolean(value.isMerried());
+        }
+    }
+
 }
 

@@ -14,27 +14,16 @@
  * limitations under the License.
  */
 
-package com.github.jinahya.bit.io;
-
-
-import java.io.IOException;
+package com.github.jinahya.bit.io.codec;
 
 
 /**
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
+ *
+ * @param <T> type parameter
  */
-public interface BitReadable {
-
-
-    /**
-     * Reads values from specified bit input.
-     *
-     * @param input the bit input
-     *
-     * @throws IOException if an I/O error occurs.
-     */
-    void read(BitInput input) throws IOException;
+public interface BitCodec<T> extends BitDecoder<T>, BitEncoder<T> {
 
 }
 

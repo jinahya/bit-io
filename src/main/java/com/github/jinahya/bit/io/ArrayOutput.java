@@ -38,6 +38,19 @@ public class ArrayOutput extends AbstractByteOutput<byte[]> {
     }
 
 
+    /**
+     * {@inheritDoc} The {@code writeUnsignedByte(int)} method of
+     * {@code ArrayOutput} class executes following statement.
+     * <blockquote><pre>target[index++] = (byte) value</pre></blockquote>
+     * Override this method if either {@link #target}, {@link #index}, or
+     * {@link #limit} needs to be configured.
+     *
+     * @param value {@inheritDoc}
+     *
+     * @throws IOException {@inheritDoc}
+     * @throws ArrayIndexOutOfBoundsException if {@link #index} is equals to or
+     * greater than {@link #limit}.
+     */
     @Override
     public void writeUnsignedByte(final int value) throws IOException {
 
@@ -63,7 +76,7 @@ public class ArrayOutput extends AbstractByteOutput<byte[]> {
     }
 
 
-    public void setIndex(int index) {
+    public void setIndex(final int index) {
 
         this.index = index;
     }
@@ -83,7 +96,7 @@ public class ArrayOutput extends AbstractByteOutput<byte[]> {
     }
 
 
-    public void setLimit(int limit) {
+    public void setLimit(final int limit) {
 
         this.limit = limit;
     }

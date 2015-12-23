@@ -19,10 +19,8 @@ package com.github.jinahya.bit.io;
 
 import java.io.IOException;
 import java.util.List;
-import static java.util.concurrent.ThreadLocalRandom.current;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import static org.testng.Assert.assertTrue;
 
 
 /**
@@ -153,46 +151,46 @@ enum BitIoType {
             return value;
         }
 
-    },
-    FBYTES() {
-
-        @Override
-        Object read(final List<Object> params, final BitInput input)
-            throws IOException {
-
-            final int length = (int) params.remove(0);
-            final int range = (int) params.remove(0);
-
-            final byte[] array = new byte[length];
-
-            input.readBytes(array, 0, array.length, range);
-
-            return array;
-        }
-
-
-        @Override
-        Object write(final List<Object> params, final BitOutput output)
-            throws IOException {
-
-            final int length = current().nextInt(1024);
-            final int range = BitIoRandoms.randomUnsignedByteSize();
-
-            final byte[] array = new byte[length];
-            current().nextBytes(array);
-            for (int i = 0; i < array.length; i++) {
-                array[i] = (byte) ((array[i] & 0xFF) >> (Byte.SIZE - range));
-            }
-
-            params.add(length);
-            params.add(range);
-
-            output.writeBytes(array, 0, array.length, range);
-
-            return array;
-        }
-
     };//,
+//    FBYTES() {
+//
+//        @Override
+//        Object read(final List<Object> params, final BitInput input)
+//            throws IOException {
+//
+//            final int length = (int) params.remove(0);
+//            final int range = (int) params.remove(0);
+//
+//            final byte[] array = new byte[length];
+//
+//            input.readBytes(array, 0, array.length, range);
+//
+//            return array;
+//        }
+//
+//
+//        @Override
+//        Object write(final List<Object> params, final BitOutput output)
+//            throws IOException {
+//
+//            final int length = current().nextInt(1024);
+//            final int range = BitIoRandoms.randomUnsignedByteSize();
+//
+//            final byte[] array = new byte[length];
+//            current().nextBytes(array);
+//            for (int i = 0; i < array.length; i++) {
+//                array[i] = (byte) ((array[i] & 0xFF) >> (Byte.SIZE - range));
+//            }
+//
+//            params.add(length);
+//            params.add(range);
+//
+//            output.writeBytes(array, 0, array.length, range);
+//
+//            return array;
+//        }
+//
+//    };//,
 //    VBYTES() {
 //
 //        @Override

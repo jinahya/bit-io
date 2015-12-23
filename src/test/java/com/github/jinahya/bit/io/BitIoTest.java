@@ -39,12 +39,12 @@ public class BitIoTest {
         final byte[] array = new byte[1048576];
         final List<Object> params = new LinkedList<>();
 
-        final BitOutput output = new DefaultBitOutput(
+        final BitOutput output = new DefaultBitOutput<>(
             new ArrayOutput(array, 0, array.length));
         final Object expected = type.write(params, output);
         final long padded = output.align(1);
 
-        final BitInput input = new DefaultBitInput(
+        final BitInput input = new DefaultBitInput<>(
             new ArrayInput(array, 0, array.length));
         final Object actual = type.read(params, input);
         final long discarded = input.align(1);
@@ -54,13 +54,11 @@ public class BitIoTest {
     }
 
 
-    @Test(invocationCount = 1024)
-    public void fbytes() throws IOException {
-
-        test(BitIoType.FBYTES);
-    }
-
-
+//    @Test(invocationCount = 1024)
+//    public void fbytes() throws IOException {
+//
+//        test(BitIoType.FBYTES);
+//    }
 //    @Test(invocationCount = 1024)
 //    public void vbytes() throws IOException {
 //

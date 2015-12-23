@@ -14,36 +14,40 @@
  * limitations under the License.
  */
 
-package com.github.jinahya.bit.io;
+package com.github.jinahya.bit.io.codec;
+
+
+import com.github.jinahya.bit.io.BitInput;
+import com.github.jinahya.bit.io.BitOutput;
+import java.io.IOException;
 
 
 /**
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
-public class BitOutputFactoryTest {
+public class FloatCodec extends AbstractBitCodec<Float> {
 
-//    @Test
-//    public static void newInstanceByteBuffer() {
-//
-//        final ByteBuffer buffer = ByteBuffer.allocate(0);
-//        BitOutputFactory.newInstance(v -> buffer.put((byte) v));
-//    }
-//
-//
-//    @Test
-//    public static void newBitOutputForConsumer() {
-//
-//        final Consumer<Byte> consumer = v -> {
-//        };
-//        BitOutputFactory.newInstance(v -> consumer.accept((byte) v));
-//    }
-//    @Test
-//    public static void newInstanceIntConsumer() {
-//
-//        final IntConsumer consumer = v -> {
-//        };
-//        BitOutputFactory.newInstance(v -> consumer.accept(v));
-//    }
+
+    public FloatCodec(final boolean nullable) {
+
+        super(nullable);
+    }
+
+
+    @Override
+    protected Float decodeValue(final BitInput input) throws IOException {
+
+        return Float.intBitsToFloat(input.readInt(32));
+    }
+
+
+    @Override
+    protected void encodeValue(final BitOutput output, final Float value)
+        throws IOException {
+
+        output.writeInt(32, Float.floatToRawIntBits(value));
+    }
+
 }
 

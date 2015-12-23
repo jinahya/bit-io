@@ -203,7 +203,7 @@
             <configuration>
               <ignores>
                 <ignore>java.io.UncheckedIOException</ignore>
-                <ignore>java.util.function.BiConsumer</ignore>
+                <!--<ignore>java.util.function.BiConsumer</ignore>-->
                 <ignore>java.util.function.Consumer</ignore>
                 <ignore>java.util.function.Function</ignore>
                 <ignore>java.util.function.IntConsumer</ignore>
@@ -229,7 +229,7 @@
             <configuration>
               <ignores>
                 <ignore>java.io.UncheckedIOException</ignore>
-                <ignore>java.util.function.BiConsumer</ignore>
+                <!--<ignore>java.util.function.BiConsumer</ignore>-->
                 <ignore>java.util.function.Consumer</ignore>
                 <ignore>java.util.function.Function</ignore>
                 <ignore>java.util.function.IntConsumer</ignore>
@@ -322,15 +322,31 @@
 
   <profiles>
     <profile>
-      <id>umlgraph</id>
-      <properties>
-        <additionalparam>
-          -hide java.* -visibility
-          -collapsible -horizontal
-          -inferdep -inferdepinpackage -inferrel
-          -outputencoding UTF-8
-        </additionalparam>
-      </properties>
+      <id>graphviz</id>
+      <build>
+        <pluginManagement>
+          <plugins>
+            <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-javadoc-plugin</artifactId>
+              <configuration>
+                <additionalparam>
+                  -hide java.* -visibility
+                  -collapsible -horizontal
+                  -inferdep -inferdepinpackage -inferrel
+                  -outputencoding UTF-8
+                </additionalparam>
+                <doclet>org.umlgraph.doclet.UmlGraphDoc</doclet>
+                <docletArtifact>
+                  <groupId>org.umlgraph</groupId>
+                  <artifactId>umlgraph</artifactId>
+                  <version>5.6.6</version>
+                </docletArtifact>
+              </configuration>
+            </plugin>
+          </plugins>
+        </pluginManagement>
+      </build>
     </profile>
   </profiles>
 </project>

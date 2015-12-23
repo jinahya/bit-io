@@ -25,23 +25,31 @@ A small library for reading or writing non octet aligned values such as `1-bit b
 |long         |2           |64          |`readLong(size)`, `writeLong(size)`|
 ### Objects
 #### Implementing `BitDecodable`/`BitEncodable`
+You can directly read/write values from/to `BitInput`/`BitOutput` by making your class implementing those interfaces.
 ```java
 public class Person implements BitDecodable, BitEncodable {
 
     @Override
     public void decode(final BitInput input) throws IOException {
         setAge(input.readUnsignedInt(7));
-        setMerried(input.readBoolean());
+        setMarried(input.readBoolean());
     }
 
     @Override
     public void encode(final BitOutput output) throws IOException {
         output.writeUnsignedInt(7, getAge());
-        output.writeBoolean(isMerried());
+        output.writeBoolean(isMarried());
     }
 }
 ```
+It's, now, too obvious you can use like this.
+```java
+Person person = getPersion();
+person.read(getBitInput());
+person.write(getBitOutput());
+```
 #### Using `BitDecoder`/`BitEncoder`.
+If modifying classes (implementing interfaces) is not applicable, you can make specialized clases for decoding/encoding already existing classes.
 ```java
 public class PersonDecoder implements BitDecoder<Person> {
     @Override
@@ -49,7 +57,7 @@ public class PersonDecoder implements BitDecoder<Person> {
         if (!readBoolean() {
             return null;
         }
-        return new Person().age(input.readUnsignedInt(7)).merried(input.readBoolean());
+        return new Person().age(input.readUnsignedInt(7)).married(input.readBoolean());
     }
 }
 
@@ -59,10 +67,38 @@ public class PersonEncoder implements BitEncoder<Person> {
         output.writeBoolean(value != null);
         if (value != null) {
             output.writeUnsignedInt(7, value.getAge());
-            output.writeBoolean(value.isMerried());
+            output.writeBoolean(value.isMarried());
         }
     }
 }
+```
+There is an abstract class for implementing these two interfaces easily.
+```java
+public class PersonCodec extends AbstractBitCodec<Person> {
+
+    public PersonCodec(final boolean nullable) {
+        super(nullable);
+    }
+
+    @Override
+    protected Person decodeValue(final BitInput input) throws IOException {
+        // no need to check nullability
+        return new Person().age(input.readUnsignedInt(7)).married(input.readBoolean());
+    }
+
+    @Override
+    protected void encodeValue(final BitOutput output, final Person value) throws IOException {
+        // no need to check nullability
+        output.writeUnsignedInt(7, value.getAge());
+        output.writeBoolean(value.isMarried());
+    }
+}
+```
+Again, you can use the codec like this.
+```java
+final PersionCodec codec = new PersonCodec(true);
+Person person = codec.decode(getBitInput());
+codec.encode(getBitOutput(), person);
 ```
 ## Reading
 ### Preparing `ByteInput`

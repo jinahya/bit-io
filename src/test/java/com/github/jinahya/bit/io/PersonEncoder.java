@@ -36,7 +36,7 @@ public class PersonEncoder implements BitEncoder<Person> {
 
         if (value != null) {
             output.writeUnsignedInt(7, value.getAge());
-            output.writeBoolean(value.isMerried());
+            output.writeBoolean(value.isMarried());
         }
     }
 

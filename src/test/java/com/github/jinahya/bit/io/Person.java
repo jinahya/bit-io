@@ -35,7 +35,7 @@ public class Person implements BitDecodable, BitEncodable {
         final Person instance = new Person();
 
         instance.age = current().nextInt(128);
-        instance.merried = current().nextBoolean();
+        instance.married = current().nextBoolean();
 
         return instance;
     }
@@ -56,7 +56,7 @@ public class Person implements BitDecodable, BitEncodable {
         if (this.age != other.age) {
             return false;
         }
-        if (this.merried != other.merried) {
+        if (this.married != other.married) {
             return false;
         }
         return true;
@@ -67,7 +67,7 @@ public class Person implements BitDecodable, BitEncodable {
     public int hashCode() {
         int hash = 3;
         hash = 17 * hash + this.age;
-        hash = 17 * hash + (this.merried ? 1 : 0);
+        hash = 17 * hash + (this.married ? 1 : 0);
         return hash;
     }
 
@@ -84,7 +84,7 @@ public class Person implements BitDecodable, BitEncodable {
     public void encode(final BitOutput output) throws IOException {
 
         output.writeUnsignedInt(7, getAge());
-        output.writeBoolean(isMerried());
+        output.writeBoolean(isMarried());
     }
 
 
@@ -108,21 +108,21 @@ public class Person implements BitDecodable, BitEncodable {
     }
 
 
-    public boolean isMerried() {
+    public boolean isMarried() {
 
-        return merried;
+        return married;
     }
 
 
-    public void setMerried(final boolean merried) {
+    public void setMerried(final boolean married) {
 
-        this.merried = merried;
+        this.married = married;
     }
 
 
-    public Person merried(final boolean merried) {
+    public Person married(final boolean married) {
 
-        setMerried(merried);
+        setMerried(married);
 
         return this;
     }
@@ -131,7 +131,7 @@ public class Person implements BitDecodable, BitEncodable {
     private int age;
 
 
-    private boolean merried;
+    private boolean married;
 
 }
 

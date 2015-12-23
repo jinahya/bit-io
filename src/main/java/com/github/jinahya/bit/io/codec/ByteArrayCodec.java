@@ -18,7 +18,6 @@ package com.github.jinahya.bit.io.codec;
 
 
 import com.github.jinahya.bit.io.BitInput;
-import com.github.jinahya.bit.io.BitIoConstraints;
 import com.github.jinahya.bit.io.BitOutput;
 import java.io.IOException;
 
@@ -27,36 +26,37 @@ import java.io.IOException;
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
-public class LongCodec extends SizedBitCodec<Long> {
+public class ByteArrayCodec extends ScaledBitCodec<byte[], Byte> {
 
 
-    public LongCodec(final boolean nullable, final boolean unsigned,
-                     final int size) {
+    public ByteArrayCodec(final boolean nullable, final int scale,
+                          final boolean unsigned, final int size) {
 
-        super(nullable, unsigned,
-              BitIoConstraints.requireValidLongSize(unsigned, 6, size));
+        super(nullable, scale, new ByteCodec(false, unsigned, size));
     }
 
 
     @Override
-    protected Long decodeValue(final BitInput input) throws IOException {
+    protected byte[] decodeValue(final BitInput input) throws IOException {
 
-        if (unsigned) {
-            return input.readUnsignedLong(size);
-        } else {
-            return input.readLong(size);
+        final byte[] value = new byte[readLength(input)];
+
+        for (int i = 0; i < value.length; i++) {
+            value[i] = codec.decode(input);
         }
+
+        return value;
     }
 
 
     @Override
-    protected void encodeValue(final BitOutput output, final Long value)
+    protected void encodeValue(final BitOutput output, final byte[] value)
         throws IOException {
 
-        if (unsigned) {
-            output.writeUnsignedLong(size, value);
-        } else {
-            output.writeLong(size, value);
+        writeLength(output, value.length);
+
+        for (final byte b : value) {
+            codec.encode(output, b);
         }
     }
 

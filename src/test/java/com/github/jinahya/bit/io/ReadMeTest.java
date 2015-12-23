@@ -58,7 +58,7 @@ public class ReadMeTest {
 
         final byte[] array = new byte[8];
         final BitOutput output = new DefaultBitOutput(
-            new ArrayOutput(array, 0, array.length));
+            new ArrayOutput(array, array.length, 0));
 
         output.writeBoolean(false);
         output.writeInt(9, -72);

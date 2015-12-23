@@ -18,7 +18,6 @@
 package com.github.jinahya.bit.io;
 
 
-import com.github.jinahya.bit.io.codec.BitEncoder;
 import java.io.IOException;
 
 
@@ -128,19 +127,18 @@ public interface BitOutput {
 //    <T extends BitWritable> void writeObject(T value) throws IOException;
 //
 //
-    /**
-     * Writes an object value using specified encoder.
-     *
-     * @param <T> object type parameter
-     * @param value the value to encode
-     * @param encoder the encoder.
-     *
-     * @throws IOException if an I/O error occurs.
-     */
-    <T> void writeObject(T value, BitEncoder<? super T> encoder)
-        throws IOException;
-
-
+//    <T extends BitEncodable> void encodeObject(T value) throws IOException;
+//    /**
+//     * Writes an object value using specified encoder.
+//     *
+//     * @param <T> object type parameter
+//     * @param value the value to encode
+//     * @param encoder the encoder.
+//     *
+//     * @throws IOException if an I/O error occurs.
+//     */
+//    <T> void writeObject(T value, BitEncoder<? super T> encoder)
+//        throws IOException;
 //    <T> void writeNullable(T value, BitEncoder<? super T> encoder)
 //        throws IOException;
 //    /**

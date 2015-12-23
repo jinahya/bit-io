@@ -20,7 +20,7 @@ package com.github.jinahya.bit.io.codec;
 /**
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
- * @param <T>
+ * @param <T> value type parameter
  */
 abstract class SizedBitCodec<T> extends AbstractBitCodec<T> {
 

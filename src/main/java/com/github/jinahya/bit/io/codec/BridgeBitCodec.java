@@ -20,62 +20,59 @@ package com.github.jinahya.bit.io.codec;
 import com.github.jinahya.bit.io.BitInput;
 import com.github.jinahya.bit.io.BitOutput;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.OutputStream;
-import java.io.Serializable;
 
 
 /**
+ * An abstract class for implementing {@code BitCodec}.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  * @param <T> value type parameter
+ * @param <U> adapting value type parameter
  */
-public class SerializableCodec<T extends Serializable>
-    extends AbstractBitCodec<T> {
+public abstract class BridgeBitCodec<T, U> extends AbstractBitCodec<T> {
 
 
-    public SerializableCodec(final boolean nullable) {
+    /**
+     * Creates a new instance.
+     *
+     * @param nullable a flag for nullability
+     * @param codec a codec that this codec adapts
+     */
+    public BridgeBitCodec(final boolean nullable,
+                          final BitCodec<U> codec) {
 
         super(nullable);
+
+        if (codec == null) {
+            throw new NullPointerException("null codec");
+        }
+
+        this.codec = codec;
     }
 
 
     @Override
-    @SuppressWarnings("unchecked")
     protected T decodeValue(final BitInput input) throws IOException {
 
-        try {
-            return (T) new ObjectInputStream(new InputStream() {
-
-                @Override
-                public int read() throws IOException {
-
-                    return input.readUnsignedInt(8);
-                }
-
-            }).readObject();
-        } catch (final ClassNotFoundException cnfe) {
-            throw new RuntimeException(cnfe);
-        }
+        return convertFrom(codec.decode(input));
     }
+
+
+    protected abstract T convertFrom(U u);
 
 
     @Override
     protected void encodeValue(final BitOutput output, final T value)
         throws IOException {
 
-        new ObjectOutputStream(new OutputStream() {
-
-            @Override
-            public void write(final int b) throws IOException {
-
-                output.writeUnsignedInt(8, b);
-            }
-
-        }).writeObject(value);
+        codec.encode(output, convertTo(value));
     }
+
+
+    protected abstract U convertTo(T t);
+
+
+    private final BitCodec<U> codec;
 
 }
 

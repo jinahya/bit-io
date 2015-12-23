@@ -22,7 +22,7 @@ import java.io.IOException;
 
 
 /**
- * An interface for encoding values.
+ * An interface for encoding custom objects.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  * @param <T> value type parameter

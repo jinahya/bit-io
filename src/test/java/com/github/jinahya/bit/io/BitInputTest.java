@@ -19,7 +19,6 @@ package com.github.jinahya.bit.io;
 
 
 import java.io.IOException;
-import java.io.UncheckedIOException;
 import javax.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -102,20 +101,18 @@ public class BitInputTest {
 //
 //        input.readBytes(array, offset, length, byteSize);
 //    }
-    @Test
-    public void readObject() throws IOException {
-
-        final Person v = input.readObject(
-            i -> {
-                try {
-                    return new Person().age(i.readUnsignedInt(7));
-                } catch (final IOException ioe) {
-                    throw new UncheckedIOException(ioe);
-                }
-            });
-    }
-
-
+//    @Test
+//    public void readObject() throws IOException {
+//
+//        final Person v = input.readObject(
+//            i -> {
+//                try {
+//                    return new Person().age(i.readUnsignedInt(7));
+//                } catch (final IOException ioe) {
+//                    throw new UncheckedIOException(ioe);
+//                }
+//            });
+//    }
     /**
      * logger.
      */

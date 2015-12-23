@@ -18,30 +18,131 @@
 package com.github.jinahya.bit.io;
 
 
+import java.io.EOFException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.RandomAccessFile;
 
 
 /**
+ * A {@code ByteInput} implementation uses a byte array.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
 public class ArrayInput extends AbstractByteInput<byte[]> {
 
 
-    public ArrayInput(final byte[] source, final int index, final int limit) {
+    public static ArrayInput newInstance(final InputStream stream,
+                                         final int length) {
 
-        super(source);
+        if (stream == null) {
+            throw new NullPointerException("null stream");
+        }
 
-        this.index = index;
-        this.limit = limit;
+        if (length <= 0) {
+            throw new IllegalArgumentException("length(" + length + ") <= 0");
+        }
+
+        return new ArrayInput(null, -1, -1) {
+
+            @Override
+            public int readUnsignedByte() throws IOException {
+
+                if (source == null) {
+                    source = new byte[length];
+                    limit = source.length;
+                    index = limit;
+                }
+
+                if (index == limit) {
+                    final int read = stream.read(source);
+                    if (read == -1) {
+                        throw new EOFException();
+                    }
+                    limit = read;
+                    index = 0;
+                }
+
+                return super.readUnsignedByte();
+            }
+
+        };
     }
 
 
+    public static ArrayInput newInstance(final RandomAccessFile file,
+                                         final int length) {
+
+        if (file == null) {
+            throw new NullPointerException("null file");
+        }
+
+        if (length <= 0) {
+            throw new IllegalArgumentException("length(" + length + ") <= 0");
+        }
+
+        return new ArrayInput(null, -1, -1) {
+
+            @Override
+            public int readUnsignedByte() throws IOException {
+
+                if (source == null) {
+                    source = new byte[length];
+                    limit = source.length;
+                    index = limit;
+                }
+
+                if (index == limit) {
+                    final int read = file.read(source);
+                    if (read == -1) {
+                        throw new EOFException();
+                    }
+                    limit = read;
+                    index = 0;
+                }
+
+                return super.readUnsignedByte();
+            }
+
+        };
+    }
+
+
+    /**
+     * Creates a new instance with given parameters.
+     *
+     * @param source a byte array
+     * @param limit the array index that {@code index} can't exceed
+     * @param index array index to read
+     */
+    public ArrayInput(final byte[] source, final int limit, final int index) {
+
+        super(source);
+
+        this.limit = limit;
+        this.index = index;
+    }
+
+
+    /**
+     * {@inheritDoc} The {@code readUnsignedByte} method of {@code ArrayInput}
+     * class return the value of following code.
+     * <blockquote><pre>source[index++] &amp; 0xFF</pre></blockquote> Override
+     * this method if any of {@link #source}, {@link #index}, or {@link #limit}
+     * needs to be initialized or adjusted.
+     *
+     * @return {@inheritDoc}
+     *
+     * @throws IOException {@inheritDoc}
+     * @throws IndexOutOfBoundsException if {@link #index} is greater than or
+     * equals to {@link #limit}.
+     */
     @Override
     public int readUnsignedByte() throws IOException {
 
         if (index >= limit) {
-            throw new IndexOutOfBoundsException();
+            throw new IndexOutOfBoundsException(
+                "index(" + index + ") >= limit(" + limit + ")");
         }
 
         return source[index++] & 0xFF;
@@ -58,26 +159,6 @@ public class ArrayInput extends AbstractByteInput<byte[]> {
     public ArrayInput source(final byte[] target) {
 
         setSource(target);
-
-        return this;
-    }
-
-
-    public int getIndex() {
-
-        return index;
-    }
-
-
-    public void setIndex(int index) {
-
-        this.index = index;
-    }
-
-
-    public ArrayInput index(final int index) {
-
-        setIndex(index);
 
         return this;
     }
@@ -103,16 +184,36 @@ public class ArrayInput extends AbstractByteInput<byte[]> {
     }
 
 
+    public int getIndex() {
+
+        return index;
+    }
+
+
+    public void setIndex(int index) {
+
+        this.index = index;
+    }
+
+
+    public ArrayInput index(final int index) {
+
+        setIndex(index);
+
+        return this;
+    }
+
+
+    /**
+     * The index of the {@link #source} which {@link #index} can't exceed.
+     */
+    protected int limit;
+
+
     /**
      * The index in the {@link #source} to read.
      */
     protected int index;
-
-
-    /**
-     * The position in the {@link #source} which {@link #index} can't exceed.
-     */
-    protected int limit;
 
 }
 

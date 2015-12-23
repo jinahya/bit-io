@@ -37,7 +37,7 @@ public class PersonDecoder implements BitDecoder<Person> {
 
         return new Person()
             .age(input.readUnsignedInt(7))
-            .merried(input.readBoolean());
+            .married(input.readBoolean());
     }
 
 }

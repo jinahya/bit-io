@@ -17,69 +17,52 @@
 package com.github.jinahya.bit.io.codec;
 
 
-import com.github.jinahya.bit.io.BitInput;
-import com.github.jinahya.bit.io.BitIoConstraints;
-import com.github.jinahya.bit.io.BitOutput;
-import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 
 
 /**
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
-public class StringCodec extends AbstractBitCodec<String> {
+public class StringCodec extends BridgeBitCodec<String, byte[]> {
 
 
     public StringCodec(final boolean nullable, final int scale,
                        final String charsetName, final int size) {
 
-        super(nullable);
+        super(nullable, new ByteArrayCodec(false, scale, false, size));
 
         if (charsetName == null) {
             throw new NullPointerException("null charsetName");
         }
 
-        this.scale = BitIoConstraints.requireValidUnsignedIntSize(scale);
         this.charsetName = charsetName;
-        this.size = BitIoConstraints.requireValidUnsignedByteSize(size);
     }
 
 
     @Override
-    protected String decodeValue(final BitInput input) throws IOException {
+    protected String convertFrom(final byte[] u) {
 
-        final int length = input.readUnsignedInt(scale);
-
-        final byte[] bytes = new byte[length];
-        for (int i = 0; i < bytes.length; i++) {
-            bytes[i] = (byte) input.readUnsignedInt(size);
+        try {
+            return new String(u, charsetName);
+        } catch (final UnsupportedEncodingException uee) {
+            throw new RuntimeException(uee);
         }
-
-        return new String(bytes, charsetName);
     }
 
 
     @Override
-    protected void encodeValue(final BitOutput output, final String value)
-        throws IOException {
+    protected byte[] convertTo(final String t) {
 
-        final byte[] bytes = value.getBytes(charsetName);
-
-        output.writeUnsignedInt(scale, bytes.length);
-
-        for (final byte b : bytes) {
-            output.writeUnsignedInt(size, b & 0xFF);
+        try {
+            return t.getBytes(charsetName);
+        } catch (final UnsupportedEncodingException uee) {
+            throw new RuntimeException(uee);
         }
     }
 
 
-    private final int scale;
-
-
-    private final String charsetName;
-
-
-    private final int size;
+    protected final String charsetName;
 
 }
 

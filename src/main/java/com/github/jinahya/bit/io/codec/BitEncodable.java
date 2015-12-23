@@ -22,6 +22,7 @@ import java.io.IOException;
 
 
 /**
+ * An interface for enabling objects to be directly encoded.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */

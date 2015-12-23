@@ -21,26 +21,12 @@ package com.github.jinahya.bit.io.codec;
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
-public class DoubleCodec extends BridgeBitCodec<Double, Long> {
+public class AsciiCodec extends StringCodec {
 
 
-    public DoubleCodec(final boolean nullable) {
+    public AsciiCodec(final boolean nullable, final int scale) {
 
-        super(nullable, new LongCodec(false, false, 64));
-    }
-
-
-    @Override
-    protected Double convertFrom(final Long u) {
-
-        return Double.longBitsToDouble(u);
-    }
-
-
-    @Override
-    protected Long convertTo(final Double t) {
-
-        return Double.doubleToRawLongBits(t);
+        super(nullable, scale, "US-ASCII", 7);
     }
 
 }

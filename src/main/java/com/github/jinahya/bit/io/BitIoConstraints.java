@@ -29,7 +29,7 @@ import java.lang.reflect.Array;
 public final class BitIoConstraints {
 
 
-    public static int requireValidUnsignedByteSize(final int size) {
+    static int requireValidUnsignedByteSize(final int size) {
 
         if (size < BitIoConstants.UBYTE_SIZE_MIN) {
             throw new IllegalArgumentException(
@@ -45,23 +45,26 @@ public final class BitIoConstraints {
     }
 
 
-    @Deprecated
-    static int requireValidUnsignedByteValue(final int value, final int size) {
+    static int requireValidUnsignedByteValue(final int size, final int value) {
+
+        requireValidUnsignedByteSize(size);
 
         if (value < 0) {
             throw new IllegalArgumentException("value(" + value + ") < 0");
         }
 
-        if ((value >> size) > 0) {
+        final int shifted = value >> size;
+        if (shifted > 0) {
             throw new IllegalArgumentException(
-                "(value(" + value + ") >> size(" + size + ")) > 0");
+                shifted + "(" + value + " >> " + size + ") > 0");
         }
 
         return value;
     }
 
 
-    public static int requireValidUnsignedShortSize(final int size) {
+    // ---------------------------------------------------------- unsigned short
+    static int requireValidUnsignedShortSize(final int size) {
 
         if (size < BitIoConstants.USHORT_SIZE_MIN) {
             throw new IllegalArgumentException(
@@ -77,22 +80,25 @@ public final class BitIoConstraints {
     }
 
 
-    @Deprecated
-    static int requireValidUnsignedShortValue(final int value, final int size) {
+    static int requireValidUnsignedShortValue(final int size, final int value) {
+
+        requireValidUnsignedShortSize(size);
 
         if (value < 0) {
             throw new IllegalArgumentException("value(" + value + ") < 0");
         }
 
-        if ((value >> requireValidUnsignedShortSize(size)) > 0) {
+        final int shifted = value >> size;
+        if (shifted > 0) {
             throw new IllegalArgumentException(
-                "(value(" + value + ") >> size(" + size + ")) < 0");
+                shifted + "(" + value + " >> " + size + ") < 0");
         }
 
         return value;
     }
 
 
+    // ------------------------------------------------------------ unsigned int
     public static int requireValidUnsignedIntSize(final int size) {
 
         if (size < BitIoConstants.UINT_SIZE_MIN) {
@@ -109,21 +115,26 @@ public final class BitIoConstraints {
     }
 
 
-    static int requireValidUnsignedIntValue(final int value, final int size) {
+    public static int requireValidUnsignedIntValue(final int size,
+                                                   final int value) {
+
+        requireValidUnsignedIntSize(size);
 
         if (value < 0) {
             throw new IllegalArgumentException("value(" + value + ") < 0");
         }
 
-        if ((value >> requireValidUnsignedIntSize(size)) > 0) {
+        final int shifted = value >> size;
+        if (shifted > 0) {
             throw new IllegalArgumentException(
-                "(value(" + value + ") >> size(" + size + ")) > 0");
+                shifted + "(" + value + " >> " + size + ") > 0");
         }
 
         return value;
     }
 
 
+    // --------------------------------------------------------------------- int
     public static int requireValidIntSize(final int size) {
 
         if (size < BitIoConstants.INT_SIZE_MIN) {
@@ -140,7 +151,7 @@ public final class BitIoConstraints {
     }
 
 
-    static int requireValidIntValue(final int value, final int size) {
+    static int requireValidIntValue(final int size, final int value) {
 
         requireValidIntSize(size);
 
@@ -148,20 +159,22 @@ public final class BitIoConstraints {
             return value;
         }
 
+        final int shifted = value >> size;
         if (value < 0) {
-            if ((value >> size) != -1) {
+            if (shifted != -1) {
                 throw new IllegalArgumentException(
-                    "(value(" + value + " >> size(" + size + ")) != -1");
+                    shifted + "(" + value + " >> " + size + ") != -1");
             }
-        } else if ((value >> size) != 0) {
+        } else if (shifted != 0) {
             throw new IllegalArgumentException(
-                "(value(" + value + " >> size(" + size + ")) != 0");
+                shifted + "(" + value + " >> " + size + ") != 0");
         }
 
         return value;
     }
 
 
+    // ----------------------------------------------------------- unsigned long
     public static int requireValidUnsignedLongSize(final int size) {
 
         if (size < BitIoConstants.ULONG_SIZE_MIN) {
@@ -178,22 +191,26 @@ public final class BitIoConstraints {
     }
 
 
-    static long requireValidUnsignedLongValue(final long value,
-                                              final int size) {
+    public static long requireValidUnsignedLongValue(final int size,
+                                                     final long value) {
+
+        requireValidUnsignedLongSize(size);
 
         if (value < 0L) {
             throw new IllegalArgumentException("value(" + value + ") < 0L");
         }
 
-        if ((value >> size) > 0) {
+        final long shifted = value >> size;
+        if (shifted > 0L) {
             throw new IllegalArgumentException(
-                "(value(" + value + ") >> size(" + size + ")) > 0");
+                shifted + "(" + value + " >> " + size + ") > 0");
         }
 
         return value;
     }
 
 
+    // -------------------------------------------------------------------- long
     static int requireValidLongSize(final int size) {
 
         if (size < BitIoConstants.LONG_SIZE_MIN) {
@@ -210,7 +227,7 @@ public final class BitIoConstraints {
     }
 
 
-    static long requireValidLongValue(final long value, final int size) {
+    static long requireValidLongValue(final int size, final long value) {
 
         requireValidLongSize(size);
 
@@ -218,25 +235,32 @@ public final class BitIoConstraints {
             return value;
         }
 
+        final long shifted = value >> size;
         if (value < 0) {
-            if ((value >> size) != -1L) {
+            if (shifted != -1L) {
                 throw new IllegalArgumentException(
-                    "(value(" + value + ") >> size(" + size + ")) != -1L");
+                    shifted + "(" + value + " >> " + size + ") != -1");
             }
-        } else if ((value >> size) != 0L) {
+        } else if (shifted != 0L) {
             throw new IllegalArgumentException(
-                "(value(" + value + ") >> size(" + size + ")) != 0L");
+                shifted + "(" + value + " >> " + size + ") != 0");
         }
 
         return value;
     }
 
 
+    // ----------------------------------------------------- array/offset/length
     static void requireValidArrayOffsetLength(
         final Object array, final int offset, final int length) {
 
         if (array == null) {
             throw new NullPointerException("null array");
+        }
+
+        if (!array.getClass().isArray()) {
+            throw new IllegalArgumentException(
+                "array(" + array + ") is not an array");
         }
 
         if (offset < 0) {
@@ -249,11 +273,80 @@ public final class BitIoConstraints {
 
         final int arrayLength = Array.getLength(array);
 
-        if (offset + length > arrayLength) {
+        final int limit = offset + length;
+        if (limit > arrayLength) {
             throw new IndexOutOfBoundsException(
-                "(offset(" + offset + ") + length(" + length
-                + ")) > array.length(" + arrayLength + ")");
+                limit + "(" + offset + " + " + length + ") > array.length("
+                + arrayLength + ")");
         }
+    }
+
+
+    // -------------------------------------------------------------- scale/size
+    static int requireValidSize(final boolean unsigned, final int exponent,
+                                final int size) {
+
+        if (exponent <= 0) {
+            throw new IllegalArgumentException(
+                "exponent(" + exponent + ") <= 0");
+        }
+
+        if (exponent >= 31) {
+            throw new IllegalArgumentException(
+                "exponent(" + exponent + ") >= 31");
+        }
+
+        final int min = unsigned ? 1 : 2;
+        final int max = ((int) Math.pow(2, exponent)) - (unsigned ? 1 : 0);
+
+        if (size < min) {
+            throw new IllegalArgumentException(
+                "size(" + size + ") < min(" + min + ")");
+        }
+
+        if (size > max) {
+            throw new IllegalArgumentException(
+                "size(" + size + ") > max(" + max + ")");
+        }
+
+        return size;
+    }
+
+
+    public static int requireValidIntSize(final boolean unsigned,
+                                          final int exponent, final int size) {
+
+        if (exponent > 5) {
+            throw new IllegalArgumentException(
+                "exponent(" + exponent + ") > 5");
+        }
+
+        return requireValidSize(unsigned, exponent, size);
+    }
+
+
+    public static int requireValidLongSize(final boolean unsigned,
+                                           final int exponent, final int size) {
+
+        if (exponent > 6) {
+            throw new IllegalArgumentException(
+                "exponent(" + exponent + ") > 6");
+        }
+
+        return requireValidSize(unsigned, exponent, size);
+    }
+
+
+    // ------------------------------------------------------------ scale/length
+    public static int requireValidScale(final int scale) {
+
+        return requireValidUnsignedIntSize(scale);
+    }
+
+
+    public static int requireValidLength(final int scale, final int length) {
+
+        return requireValidUnsignedIntValue(requireValidScale(scale), length);
     }
 
 

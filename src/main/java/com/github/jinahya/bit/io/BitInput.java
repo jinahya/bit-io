@@ -18,7 +18,6 @@
 package com.github.jinahya.bit.io;
 
 
-import com.github.jinahya.bit.io.codec.BitDecoder;
 import java.io.IOException;
 
 
@@ -125,19 +124,18 @@ public interface BitInput {
 //     * @throws IOException if an I/O error occurs.
 //     */
 //    double readDouble() throws IOException;
-    /**
-     * Reads an object value using specified decoder.
-     *
-     * @param <T> object type parameter
-     * @param decoder the decoder
-     *
-     * @return an object value
-     *
-     * @throws IOException if an I/O error occurs.
-     */
-    <T> T readObject(BitDecoder<? extends T> decoder) throws IOException;
-
-
+//    <T extends BitDecodable> void decodeObject(T value) throws IOException;
+//    /**
+//     * Reads an object value using specified decoder.
+//     *
+//     * @param <T> object type parameter
+//     * @param decoder the decoder
+//     *
+//     * @return an object value
+//     *
+//     * @throws IOException if an I/O error occurs.
+//     */
+//    <T> T readObject(BitDecoder<? extends T> decoder) throws IOException;
 //    <T> T readNullable(BitDecoder<T> decoder) throws IOException;
 //    /**
 //     * Reads an object value by applying specified function.

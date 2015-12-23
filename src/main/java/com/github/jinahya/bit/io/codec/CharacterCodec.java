@@ -21,26 +21,26 @@ package com.github.jinahya.bit.io.codec;
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
-public class DoubleCodec extends BridgeBitCodec<Double, Long> {
+public class CharacterCodec extends BridgeBitCodec<Character, Integer> {
 
 
-    public DoubleCodec(final boolean nullable) {
+    public CharacterCodec(final boolean nullable) {
 
-        super(nullable, new LongCodec(false, false, 64));
+        super(nullable, new IntegerCodec(false, true, 16));
     }
 
 
     @Override
-    protected Double convertFrom(final Long u) {
+    protected Character convertFrom(final Integer u) {
 
-        return Double.longBitsToDouble(u);
+        return (char) u.intValue();
     }
 
 
     @Override
-    protected Long convertTo(final Double t) {
+    protected Integer convertTo(final Character t) {
 
-        return Double.doubleToRawLongBits(t);
+        return (int) t;
     }
 
 }

@@ -14,33 +14,43 @@
  * limitations under the License.
  */
 
-package com.github.jinahya.bit.io.codec;
+package com.github.jinahya.bit.io;
+
+
+import com.github.jinahya.bit.io.codec.AbstractBitCodec;
+import java.io.IOException;
 
 
 /**
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
-public class DoubleCodec extends BridgeBitCodec<Double, Long> {
+public class PersonCodec extends AbstractBitCodec<Person> {
 
 
-    public DoubleCodec(final boolean nullable) {
+    public PersonCodec(final boolean nullable) {
 
-        super(nullable, new LongCodec(false, false, 64));
+        super(nullable);
     }
 
 
     @Override
-    protected Double convertFrom(final Long u) {
+    protected Person decodeValue(final BitInput input) throws IOException {
 
-        return Double.longBitsToDouble(u);
+        // no need to check nullability
+        return new Person()
+            .age(input.readUnsignedInt(7))
+            .married(input.readBoolean());
     }
 
 
     @Override
-    protected Long convertTo(final Double t) {
+    protected void encodeValue(final BitOutput otuput, final Person value)
+        throws IOException {
 
-        return Double.doubleToRawLongBits(t);
+        // no need to check nullability
+        otuput.writeUnsignedInt(7, value.getAge());
+        otuput.writeBoolean(value.isMarried());
     }
 
 }

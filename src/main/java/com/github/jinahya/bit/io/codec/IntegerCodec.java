@@ -18,6 +18,7 @@ package com.github.jinahya.bit.io.codec;
 
 
 import com.github.jinahya.bit.io.BitInput;
+import com.github.jinahya.bit.io.BitIoConstraints;
 import com.github.jinahya.bit.io.BitOutput;
 import java.io.IOException;
 
@@ -32,7 +33,8 @@ public class IntegerCodec extends SizedBitCodec<Integer> {
     public IntegerCodec(final boolean nullable, final boolean unsigned,
                         final int size) {
 
-        super(nullable, unsigned, size);
+        super(nullable, unsigned,
+              BitIoConstraints.requireValidIntSize(unsigned, 5, size));
     }
 
 

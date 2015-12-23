@@ -26,16 +26,16 @@ package com.github.jinahya.bit.io;
 public final class BitIoConstants {
 
 
-    public static final int UBYTE_SIZE_MIN = 0x01;
+    static final int UBYTE_SIZE_MIN = 0x01;
 
 
-    public static final int UBYTE_SIZE_MAX = 0x08;
+    static final int UBYTE_SIZE_MAX = 0x08;
 
 
-    public static final int USHORT_SIZE_MIN = 0x01;
+    static final int USHORT_SIZE_MIN = 0x01;
 
 
-    public static final int USHORT_SIZE_MAX = 0x10;
+    static final int USHORT_SIZE_MAX = 0x10;
 
 
     public static final int UINT_SIZE_MIN = 0x01;

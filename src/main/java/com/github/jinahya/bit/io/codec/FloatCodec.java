@@ -17,36 +17,30 @@
 package com.github.jinahya.bit.io.codec;
 
 
-import com.github.jinahya.bit.io.BitInput;
-import com.github.jinahya.bit.io.BitOutput;
-import java.io.IOException;
-
-
 /**
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
-public class FloatCodec extends AbstractBitCodec<Float> {
+public class FloatCodec extends BridgeBitCodec<Float, Integer> {
 
 
     public FloatCodec(final boolean nullable) {
 
-        super(nullable);
+        super(nullable, new IntegerCodec(false, false, 32));
     }
 
 
     @Override
-    protected Float decodeValue(final BitInput input) throws IOException {
+    protected Float convertFrom(final Integer u) {
 
-        return Float.intBitsToFloat(input.readInt(32));
+        return Float.intBitsToFloat(u);
     }
 
 
     @Override
-    protected void encodeValue(final BitOutput output, final Float value)
-        throws IOException {
+    protected Integer convertTo(final Float t) {
 
-        output.writeInt(32, Float.floatToRawIntBits(value));
+        return Float.floatToRawIntBits(t);
     }
 
 }

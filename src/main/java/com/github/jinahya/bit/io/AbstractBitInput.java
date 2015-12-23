@@ -18,7 +18,6 @@
 package com.github.jinahya.bit.io;
 
 
-import com.github.jinahya.bit.io.codec.BitDecoder;
 import java.io.IOException;
 
 
@@ -234,18 +233,28 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
 //    }
 //
 //
-    @Override
-    public <T> T readObject(final BitDecoder<? extends T> decoder)
-        throws IOException {
-
-        if (decoder == null) {
-            throw new NullPointerException("null decoder");
-        }
-
-        return decoder.decode(this);
-    }
-
-
+//    @Override
+//    public <T extends BitDecodable> void decodeObject(final T value)
+//        throws IOException {
+//
+//        if (value == null) {
+//            throw new NullPointerException("null value");
+//        }
+//
+//        value.decode(this);
+//    }
+//
+//
+//    @Override
+//    public <T> T readObject(final BitDecoder<? extends T> decoder)
+//        throws IOException {
+//
+//        if (decoder == null) {
+//            throw new NullPointerException("null decoder");
+//        }
+//
+//        return decoder.decode(this);
+//    }
 //    @Override
 //    public <T> T readNullable(final BitDecoder<T> decoder) throws IOException {
 //

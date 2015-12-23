@@ -23,13 +23,19 @@ import java.io.IOException;
 
 
 /**
+ * An abstract class for implementing {@code BitCodec}.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
- * @param <T>
+ * @param <T> value type parameter
  */
 public abstract class AbstractBitCodec<T> implements BitCodec<T> {
 
 
+    /**
+     * Creates a new instance.
+     *
+     * @param nullable a flag for nullability of the value.
+     */
     public AbstractBitCodec(final boolean nullable) {
 
         super();
@@ -38,25 +44,69 @@ public abstract class AbstractBitCodec<T> implements BitCodec<T> {
     }
 
 
+    /**
+     * {@inheritDoc} This method optionally decodes additional 1-bit boolean
+     * flag by the value of {@code nullable} and, if real value need to be
+     * decoded, invokes {@link #decodeValue(com.github.jinahya.bit.io.BitInput)}
+     * with given {@code input}.
+     *
+     * @param input {@inheritDoc}
+     *
+     * @return {@inheritDoc}
+     *
+     * @throws IOException {@inheritDoc}
+     */
     @Override
     public T decode(final BitInput input) throws IOException {
 
-        if (nullable) {
-            if (!input.readBoolean()) {
-                return null;
-            }
+        if (input == null) {
+            throw new NullPointerException("null input");
+        }
+
+        if (nullable && !input.readBoolean()) {
+            return null;
         }
 
         return decodeValue(input);
     }
 
 
+    /**
+     * Decodes value from given input. This method supposed to return a non-null
+     * value.
+     *
+     * @param input the input
+     *
+     * @return decoded value; should not be {@code null}.
+     *
+     * @throws IOException if an I/O error occurs.
+     */
     protected abstract T decodeValue(final BitInput input) throws IOException;
 
 
+    /**
+     * {@inheritDoc} This method optionally encodes additional 1-bit boolean
+     * flag by the value of {@code nullable} and, if the value should be
+     * encoded, invokes
+     * {@link #encodeValue(com.github.jinahya.bit.io.BitOutput, java.lang.Object)}
+     * with given input and value.
+     *
+     * @param output {@inheritDoc}
+     * @param value {@inheritDoc}
+     *
+     * @throws IOException {@inheritDoc}
+     */
     @Override
     public void encode(final BitOutput output, final T value)
         throws IOException {
+
+        if (output == null) {
+            throw new NullPointerException("null output");
+        }
+
+        if (!nullable && value == null) {
+            throw new NullPointerException("null value");
+        }
 
         if (nullable) {
             output.writeBoolean(value != null);
@@ -68,8 +118,23 @@ public abstract class AbstractBitCodec<T> implements BitCodec<T> {
     }
 
 
-    protected abstract void encodeValue(BitOutput otuput, T value)
+    /**
+     * Encodes specified value to given output. If this method is invoked the
+     * value is always not {@code null}.
+     *
+     * @param output the output
+     * @param value the value to encode; never {@code null}
+     *
+     * @throws IOException if an I/O error occurs.
+     */
+    protected abstract void encodeValue(BitOutput output, T value)
         throws IOException;
+
+
+    public boolean isNullable() {
+
+        return nullable;
+    }
 
 
     private final boolean nullable;

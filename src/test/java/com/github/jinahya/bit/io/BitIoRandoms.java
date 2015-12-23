@@ -25,15 +25,17 @@ import static java.util.concurrent.ThreadLocalRandom.current;
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
-final class BitIoRandoms {
+public final class BitIoRandoms {
 
 
-    static boolean randomBooleanValue() {
+    // ----------------------------------------------------------------- boolean
+    public static boolean randomBooleanValue() {
 
         return current().nextBoolean();
     }
 
 
+    // ----------------------------------------------------------- unsigned byte
     static int randomUnsignedByteSize() {
 
         final int size = current().nextInt(
@@ -43,6 +45,7 @@ final class BitIoRandoms {
     }
 
 
+    // ---------------------------------------------------------- unsigned short
     static int randomUnsignedShortSize() {
 
         final int size = current().nextInt(
@@ -52,32 +55,28 @@ final class BitIoRandoms {
     }
 
 
-    static int randomUnsignedIntSize(final int max) {
+    // ------------------------------------------------------------ unsigned int
+    public static int randomUnsignedIntSize() {
 
         final int size = current().nextInt(
-            BitIoConstants.UINT_SIZE_MIN, max + 1);
+            BitIoConstants.UINT_SIZE_MIN, BitIoConstants.UINT_SIZE_MAX + 1);
 
         return BitIoConstraints.requireValidUnsignedIntSize(size);
     }
 
 
-    static int randomUnsignedIntSize() {
-
-        return randomUnsignedIntSize(BitIoConstants.UINT_SIZE_MAX);
-    }
-
-
-    static int randomUnsignedIntValue(final int size) {
+    public static int randomUnsignedIntValue(final int size) {
 
         BitIoConstraints.requireValidUnsignedIntSize(size);
 
         final int value = current().nextInt() >>> (Integer.SIZE - size);
 
-        return BitIoConstraints.requireValidUnsignedIntValue(value, size);
+        return BitIoConstraints.requireValidUnsignedIntValue(size, value);
     }
 
 
-    static int randomIntSize() {
+    // --------------------------------------------------------------------- int
+    public static int randomIntSize() {
 
         final int size = current().nextInt(
             BitIoConstants.INT_SIZE_MIN, BitIoConstants.INT_SIZE_MAX + 1);
@@ -86,17 +85,18 @@ final class BitIoRandoms {
     }
 
 
-    static int randomIntValue(final int size) {
+    public static int randomIntValue(final int size) {
 
         BitIoConstraints.requireValidIntSize(size);
 
         final int value = current().nextInt() >> (Integer.SIZE - size);
 
-        return BitIoConstraints.requireValidIntValue(value, size);
+        return BitIoConstraints.requireValidIntValue(size, value);
     }
 
 
-    static int randomUnsignedLongSize() {
+    // ----------------------------------------------------------- unsigned long
+    public static int randomUnsignedLongSize() {
 
         final int size = current().nextInt(
             BitIoConstants.ULONG_SIZE_MIN, BitIoConstants.ULONG_SIZE_MAX + 1);
@@ -105,17 +105,18 @@ final class BitIoRandoms {
     }
 
 
-    static long unsignedLongValue(final int size) {
+    public static long unsignedLongValue(final int size) {
 
         BitIoConstraints.requireValidUnsignedLongSize(size);
 
         final long value = current().nextLong() >>> (Long.SIZE - size);
 
-        return BitIoConstraints.requireValidUnsignedLongValue(value, size);
+        return BitIoConstraints.requireValidUnsignedLongValue(size, value);
     }
 
 
-    static int randomLongSize() {
+    // -------------------------------------------------------------------- long
+    public static int randomLongSize() {
 
         final int size = current().nextInt(
             BitIoConstants.LONG_SIZE_MIN, BitIoConstants.LONG_SIZE_MAX + 1);
@@ -124,13 +125,13 @@ final class BitIoRandoms {
     }
 
 
-    static long randomLongValue(final int size) {
+    public static long randomLongValue(final int size) {
 
         BitIoConstraints.requireValidLongSize(size);
 
         final long value = current().nextLong() >> (Long.SIZE - size);
 
-        return BitIoConstraints.requireValidLongValue(value, size);
+        return BitIoConstraints.requireValidLongValue(size, value);
     }
 
 

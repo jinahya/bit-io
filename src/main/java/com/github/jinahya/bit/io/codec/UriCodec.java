@@ -17,9 +17,6 @@
 package com.github.jinahya.bit.io.codec;
 
 
-import com.github.jinahya.bit.io.BitInput;
-import com.github.jinahya.bit.io.BitOutput;
-import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -28,22 +25,20 @@ import java.net.URISyntaxException;
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
-public class UriCodec extends AbstractBitCodec<URI> {
+public class UriCodec extends BridgeBitCodec<URI, String> {
 
 
     public UriCodec(final boolean nullable, final int scale) {
 
-        super(nullable);
-
-        codec = new StringCodec(nullable, scale, "US-ASCII", 7);
+        super(nullable, new AsciiCodec(false, scale));
     }
 
 
     @Override
-    protected URI decodeValue(final BitInput input) throws IOException {
+    protected URI convertFrom(final String u) {
 
         try {
-            return new URI(codec.decodeValue(input));
+            return new URI(u);
         } catch (final URISyntaxException urise) {
             throw new RuntimeException(urise);
         }
@@ -51,14 +46,27 @@ public class UriCodec extends AbstractBitCodec<URI> {
 
 
     @Override
-    protected void encodeValue(final BitOutput output, final URI value)
-        throws IOException {
+    protected String convertTo(final URI t) {
 
-        codec.encodeValue(output, value.toASCIIString());
+        return t.toASCIIString();
     }
 
-
-    private final StringCodec codec;
-
+//    @Override
+//    protected URI decodeValue(final BitInput input) throws IOException {
+//
+//        try {
+//            return new URI(codec.decodeValue(input));
+//        } catch (final URISyntaxException urise) {
+//            throw new RuntimeException(urise);
+//        }
+//    }
+//
+//
+//    @Override
+//    protected void encodeValue(final BitOutput output, final URI value)
+//        throws IOException {
+//
+//        codec.encodeValue(output, value.toASCIIString());
+//    }
 }
 

@@ -40,12 +40,12 @@ public class BitIoTest {
         final List<Object> params = new LinkedList<>();
 
         final BitOutput output = new DefaultBitOutput<>(
-            new ArrayOutput(array, 0, array.length));
+            new ArrayOutput(array, array.length, 0));
         final Object expected = type.write(params, output);
         final long padded = output.align(1);
 
         final BitInput input = new DefaultBitInput<>(
-            new ArrayInput(array, 0, array.length));
+            new ArrayInput(array, array.length, 0));
         final Object actual = type.read(params, input);
         final long discarded = input.align(1);
 
@@ -74,12 +74,12 @@ public class BitIoTest {
         final List<Object> params = new LinkedList<>();
 
         final BitOutput output = new DefaultBitOutput(
-            new ArrayOutput(array, 0, array.length));
+            new ArrayOutput(array, array.length, 0));
         final Object expected = type.write(params, output);
         final long padded = output.align(1);
 
         final BitInput input = new DefaultBitInput(
-            new ArrayInput(array, 0, array.length));
+            new ArrayInput(array, array.length, 0));
         final Object actual = type.read(params, input);
         assertEquals(actual, expected, "type: " + type);
         final long discarded = input.align(1);
@@ -99,7 +99,7 @@ public class BitIoTest {
         final List<Object> params = new LinkedList<>(); // type, param+, value
 
         final BitOutput output = new DefaultBitOutput(
-            new ArrayOutput(array, 0, array.length));
+            new ArrayOutput(array, array.length, 0));
         for (int i = 0; i < count; i++) {
             final BitIoType type = types[current().nextInt(types.length)];
             params.add(type);
@@ -109,7 +109,7 @@ public class BitIoTest {
         final long padded = output.align(1);
 
         final BitInput input = new DefaultBitInput(
-            new ArrayInput(array, 0, array.length));
+            new ArrayInput(array, array.length, 0));
         for (int i = 0; i < count; i++) {
             final BitIoType type = (BitIoType) params.remove(0);
             final Object actual = type.read(params, input);

@@ -17,47 +17,36 @@
 package com.github.jinahya.bit.io.codec;
 
 
-import com.github.jinahya.bit.io.BitInput;
 import com.github.jinahya.bit.io.BitIoConstraints;
-import com.github.jinahya.bit.io.BitOutput;
-import java.io.IOException;
 
 
 /**
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
-public class LongCodec extends SizedBitCodec<Long> {
+public class ByteCodec extends BridgeBitCodec<Byte, Integer> {
 
 
-    public LongCodec(final boolean nullable, final boolean unsigned,
+    public ByteCodec(final boolean nullable, final boolean unsigned,
                      final int size) {
 
-        super(nullable, unsigned,
-              BitIoConstraints.requireValidLongSize(unsigned, 6, size));
+        super(nullable, new IntegerCodec(
+              false, unsigned,
+              BitIoConstraints.requireValidIntSize(unsigned, 3, size)));
     }
 
 
     @Override
-    protected Long decodeValue(final BitInput input) throws IOException {
+    protected Byte convertFrom(final Integer u) {
 
-        if (unsigned) {
-            return input.readUnsignedLong(size);
-        } else {
-            return input.readLong(size);
-        }
+        return u.byteValue();
     }
 
 
     @Override
-    protected void encodeValue(final BitOutput output, final Long value)
-        throws IOException {
+    protected Integer convertTo(final Byte t) {
 
-        if (unsigned) {
-            output.writeUnsignedLong(size, value);
-        } else {
-            output.writeLong(size, value);
-        }
+        return t.intValue();
     }
 
 }

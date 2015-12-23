@@ -18,16 +18,62 @@
 package com.github.jinahya.bit.io;
 
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.nio.channels.ReadableByteChannel;
 
 
 /**
- * A {@link ByteInput} implementation using {@link ByteBuffer}s.
+ * A {@link ByteInput} implementation uses a {@link ByteBuffer} as
+ * {@link #source}.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
 public class BufferInput extends AbstractByteInput<ByteBuffer> {
+
+
+    public static BufferInput newInstance(final ReadableByteChannel channel,
+                                          final int capacity,
+                                          final boolean direct) {
+
+        if (channel == null) {
+            throw new NullPointerException("null channel");
+        }
+
+        if (capacity <= 0) {
+            throw new IllegalArgumentException(
+                "capacity(" + capacity + ") <= 0");
+        }
+
+        return new BufferInput(null) {
+
+            @Override
+            public int readUnsignedByte() throws IOException {
+
+                if (source == null) {
+                    source = direct
+                             ? ByteBuffer.allocateDirect(capacity)
+                             : ByteBuffer.allocate(capacity);
+                    source.position(source.limit());
+                }
+
+                if (!source.hasRemaining()) {
+                    source.clear(); // position -> zero; limit -> capacity;
+                    do {
+                        final int read = channel.read(source);
+                        if (read == -1) {
+                            throw new EOFException();
+                        }
+                    } while (source.position() == 0);
+                    source.flip(); // limit -> position; position -> zero;
+                }
+
+                return super.readUnsignedByte();
+            }
+
+        };
+    }
 
 
     /**
@@ -46,8 +92,8 @@ public class BufferInput extends AbstractByteInput<ByteBuffer> {
      * {@inheritDoc} The {@code readUnsignedByte()} method of
      * {@code BufferInput} class returns the value of following code.
      * <blockquote><pre>source.get() &amp; 0xFF</pre></blockquote> Override this
-     * method if {@link #source source} is supposed to be lazily initialized and
-     * set.
+     * method if {@link #source source} is supposed to be lazily initialized or
+     * adjusted.
      *
      * @return {@inheritDoc }
      *

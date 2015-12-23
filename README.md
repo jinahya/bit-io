@@ -46,42 +46,23 @@ public class Person implements BitDecodable, BitEncodable {
 public class PersonDecoder implements BitDecoder<Person> {
     @Override
     public Person decode(final BitInput input) throws IOException {
-        return new Person()
-            .age(input.readUnsignedInt(7))
-            .merried(input.readBoolean());
+        if (!readBoolean() {
+            return null;
+        }
+        return new Person().age(input.readUnsignedInt(7)).merried(input.readBoolean());
     }
 }
 
 public class PersonEncoder implements BitEncoder<Person> {
     @Override
-    public void encode(final Person value, final BitOutput output)
-        throws IOException {
-        output.writeUnsignedInt(7, value.getAge());
-        output.writeBoolean(value.isMerried());
+    public void encode(final Person value, final BitOutput output) throws IOException {
+        output.writeBoolean(value != null);
+        if (value != null) {
+            output.writeUnsignedInt(7, value.getAge());
+            output.writeBoolean(value.isMerried());
+        }
     }
 }
-```
-Now you can use `readObject` and `writeObject`.
-```java
-Person person = input.readObject(new PersonDecoder());
-output.writeObject(person, new PersonEncoder());
-```
-There are special methods for reading/writing nullable objects which each spends 1 more bit for null flag.
-```java
-Person person = input.readNullable(new PersonDecoder());
-output.writeNullable(person, new PersonEncoder());
-```
-You can also use lambda expressions.
-```java
-final Person person = input.readObject(i -> {
-    return new Person()
-        .age(i.readUnsignedInt(7))
-        .merried(i.readBoolean());
-});
-output.writeObject(Person.newRandomInstance(), (o, v) -> {
-    o.writeUnsignedInt(7, v.getAge());
-    o.writeBoolean(v.isMerried());
-});
 ```
 ## Reading
 ### Preparing `ByteInput`

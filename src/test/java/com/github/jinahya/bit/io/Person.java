@@ -17,8 +17,8 @@
 package com.github.jinahya.bit.io;
 
 
-import com.github.jinahya.bit.io.codec.BitEncodable;
 import com.github.jinahya.bit.io.codec.BitDecodable;
+import com.github.jinahya.bit.io.codec.BitEncodable;
 import java.io.IOException;
 import static java.util.concurrent.ThreadLocalRandom.current;
 

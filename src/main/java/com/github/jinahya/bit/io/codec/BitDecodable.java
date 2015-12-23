@@ -18,7 +18,6 @@ package com.github.jinahya.bit.io.codec;
 
 
 import com.github.jinahya.bit.io.BitInput;
-import com.github.jinahya.bit.io.BitInput;
 import java.io.IOException;
 
 

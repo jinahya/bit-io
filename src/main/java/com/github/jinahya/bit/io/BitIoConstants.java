@@ -32,20 +32,12 @@ public final class BitIoConstants {
     public static final int UBYTE_SIZE_MAX = 0x08;
 
 
-//    public static final int BYTE_SIZE_MIN = 0x02;
-//
-//
-//    public static final int BYTE_SIZE_MAX = 0x08;
     public static final int USHORT_SIZE_MIN = 0x01;
 
 
     public static final int USHORT_SIZE_MAX = 0x10;
 
 
-//    public static final int SHORT_SIZE_MIN = 0x02;
-//
-//
-//    public static final int SHORT_SIZE_MAX = 0x10;
     public static final int UINT_SIZE_MIN = 0x01;
 
 

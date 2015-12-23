@@ -46,8 +46,7 @@ public final class BitIoConstraints {
 
 
     @Deprecated
-    public static int requireValidUnsignedByteValue(final int value,
-                                                    final int size) {
+    static int requireValidUnsignedByteValue(final int value, final int size) {
 
         if (value < 0) {
             throw new IllegalArgumentException("value(" + value + ") < 0");
@@ -79,8 +78,7 @@ public final class BitIoConstraints {
 
 
     @Deprecated
-    public static int requireValidUnsignedShortValue(final int value,
-                                                     final int size) {
+    static int requireValidUnsignedShortValue(final int value, final int size) {
 
         if (value < 0) {
             throw new IllegalArgumentException("value(" + value + ") < 0");
@@ -111,8 +109,7 @@ public final class BitIoConstraints {
     }
 
 
-    public static int requireValidUnsignedIntValue(final int value,
-                                                   final int size) {
+    static int requireValidUnsignedIntValue(final int value, final int size) {
 
         if (value < 0) {
             throw new IllegalArgumentException("value(" + value + ") < 0");
@@ -143,7 +140,7 @@ public final class BitIoConstraints {
     }
 
 
-    public static int requireValidIntValue(final int value, final int size) {
+    static int requireValidIntValue(final int value, final int size) {
 
         requireValidIntSize(size);
 
@@ -181,8 +178,8 @@ public final class BitIoConstraints {
     }
 
 
-    public static long requireValidUnsignedLongValue(final long value,
-                                                     final int size) {
+    static long requireValidUnsignedLongValue(final long value,
+                                              final int size) {
 
         if (value < 0L) {
             throw new IllegalArgumentException("value(" + value + ") < 0L");
@@ -197,7 +194,7 @@ public final class BitIoConstraints {
     }
 
 
-    public static int requireValidLongSize(final int size) {
+    static int requireValidLongSize(final int size) {
 
         if (size < BitIoConstants.LONG_SIZE_MIN) {
             throw new IllegalArgumentException(
@@ -213,7 +210,7 @@ public final class BitIoConstraints {
     }
 
 
-    public static long requireValidLongValue(final long value, final int size) {
+    static long requireValidLongValue(final long value, final int size) {
 
         requireValidLongSize(size);
 
@@ -235,53 +232,8 @@ public final class BitIoConstraints {
     }
 
 
-//    public static void requireValid(final byte[] array, final int offset,
-//                                    final int length) {
-//
-//        if (array == null) {
-//            throw new NullPointerException("null array");
-//        }
-//
-//        if (offset < 0) {
-//            throw new IndexOutOfBoundsException("offset(" + offset + ") < 0");
-//        }
-//
-//        if (length < 0) {
-//            throw new IndexOutOfBoundsException("length(" + length + ") < 0");
-//        }
-//
-//        if (offset + length > array.length) {
-//            throw new IndexOutOfBoundsException(
-//                "(offset(" + offset + ") + length(" + length
-//                + ")) > array.length(" + array.length + ")");
-//        }
-//    }
-//
-//
-//    public static <T> void requireValid(final T[] array, final int offset,
-//                                        final int length) {
-//
-//        if (array == null) {
-//            throw new NullPointerException("null array");
-//        }
-//
-//        if (offset < 0) {
-//            throw new IndexOutOfBoundsException("offset(" + offset + ") < 0");
-//        }
-//
-//        if (length < 0) {
-//            throw new IndexOutOfBoundsException("length(" + length + ") < 0");
-//        }
-//
-//        if (offset + length > array.length) {
-//            throw new IndexOutOfBoundsException(
-//                "(offset(" + offset + ") + length(" + length
-//                + ")) > array.length(" + array.length + ")");
-//        }
-//    }
-    public static void requireValidArrayOffsetLength(final Object array,
-                                                     final int offset,
-                                                     final int length) {
+    static void requireValidArrayOffsetLength(
+        final Object array, final int offset, final int length) {
 
         if (array == null) {
             throw new NullPointerException("null array");

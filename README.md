@@ -41,7 +41,7 @@ public class Person implements BitDecodable, BitEncodable {
     }
 }
 ```
-#### Using a custom `BitDecoder`/`BitEncoder`.
+#### Using custom `BitDecoder`s/`BitEncoder`s.
 ```java
 public class PersonDecoder implements BitDecoder<Person> {
     @Override

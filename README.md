@@ -23,13 +23,13 @@ A library for reading/writing non octet aligned values such as `1-bit boolean` o
 |`boolean`|1        |1        |`readBoolean()`, `writeBoolean()`|
 ### numeric
 #### integral
-|Type            |Size(min)|Size(max)|Notes|
-|----------------|---------|---------|-----|
-|`byte`          |2        |8        |`readByte(boolean, int)`, `readByte(boolean, int, byte)`|
-|`short`         |2        |16       |`readShort(boolean, int)`, `writeShort(boolean, int, short)`|
-|`int`           |2        |32       |`readInt(boolean, int)`, `writeInt(boolean, int, int)`|
-|`long`          |2        |64       |`readLong(boolean, int)`, `writeLong(boolean, int, long)`|
-|`char`          |1        |16       |`readChar(int)`, `writeChar(int, char)`|
+|Type   |Size(min)|Size(max)|Notes|
+|-------|---------|---------|-----|
+|`byte` |2        |8        |`readByte(boolean, int)`, `readByte(boolean, int, byte)`|
+|`short`|2        |16       |`readShort(boolean, int)`, `writeShort(boolean, int, short)`|
+|`int`  |2        |32       |`readInt(boolean, int)`, `writeInt(boolean, int, int)`|
+|`long` |2        |64       |`readLong(boolean, int)`, `writeLong(boolean, int, long)`|
+|`char` |1        |16       |`readChar(int)`, `writeChar(int, char)`|
 #### floating-point
 |Type    |Size(min)|Size(max)|Notes|
 |--------|---------|---------|-----|
@@ -43,13 +43,13 @@ public class Person implements BitReadable, BitWritable {
 
     @Override
     public void read(final BitInput input) throws IOException {
-        setAge(input.readUnsignedInt(7));
+        setAge(input.readInt(true, 7));
         setMarried(input.readBoolean());
     }
 
     @Override
     public void write(final BitOutput output) throws IOException {
-        output.writeUnsignedInt(7, getAge());
+        output.writeInt(true, 7, getAge());
         output.writeBoolean(isMarried());
     }
 }
@@ -71,7 +71,7 @@ public class PersonDecoder implements BitDecoder<Person> {
         if (!readBoolean() {
             return null;
         }
-        return new Person().age(input.readUnsignedInt(7)).married(input.readBoolean());
+        return new Person().age(input.readInt(true, 7)).married(input.readBoolean());
     }
 }
 public class PersonEncoder implements BitEncoder<Person> {
@@ -79,7 +79,7 @@ public class PersonEncoder implements BitEncoder<Person> {
     public void encode(final Person value, final BitOutput output) throws IOException {
         output.writeBoolean(value != null);
         if (value != null) {
-            output.writeUnsignedInt(7, value.getAge());
+            output.writeInt(true, 7, value.getAge());
             output.writeBoolean(value.isMarried());
         }
     }
@@ -96,13 +96,13 @@ public class PersonCodec extends NullableCodec<Person> {
     @Override
     protected Person decodeValue(final BitInput input) throws IOException {
         // no need to check nullability
-        return new Person().age(input.readUnsignedInt(7)).married(input.readBoolean());
+        return new Person().age(input.readInt(true, 7)).married(input.readBoolean());
     }
 
     @Override
     protected void encodeValue(final BitOutput output, final Person value) throws IOException {
         // no need to check nullability
-        output.writeUnsignedInt(7, value.getAge());
+        output.writeInt(true, 7, value.getAge());
         output.writeBoolean(value.isMarried());
     }
 }
@@ -117,7 +117,7 @@ codec.encode(output, person);
 ### Preparing ~~`ByteInput`~~`OctetInput`
 Prepare an instance of `OctetInput` from various sources.
 ````java
-new ArrayInput(byte[], index, limit);
+new ArrayInput(byte[], int, int);
 new BufferInput(java.nio.ByteBuffer);
 new DataInput(java.io.DataInput);
 new IntSupplierInput(java.util.function.IntSuppiler);

@@ -19,24 +19,26 @@ A library for reading/writing non octet aligned values such as `1-bit boolean` o
 ### Primitives
 ### boolean
 |Value type|Minimum size|Maximum size|Notes|
-|----------|------------|------------|-----|
+|---------:|------------|------------|-----|
 |`boolean` |1           |1           |`readBoolean`, `writeBoolean`|
 ### numeric
 #### integral
-|Value type     |Minimum size|Maximum size|Notes|
-|--------------:|------------|------------|-----|
-|`byte`         |            |            |use `unsigned int` or `int` with `size` of `8` or lower |
-|`short`        |            |            |use `unsigend int` or `int` with `size` of `16` or lower|
-|`unsigned int` |1           |31          |`readUnsignedInt(int)`, `writeUnsignedInt(int, int)`|
-|`int`          |2           |32          |`readInt(size)`, `writeInt(int)`|
-|`unsigned long`|1           |63          |`readUnsignedLong(size)`, `writeUnsigendLong(int, long)`|
-|`long`         |2           |64          |`readLong(size)`, `writeLong(size)`|
-|`char`         |            |            |use `unsigend int` with `size` of `16` or lower|
+|Value type      |Minimum size|Maximum size|Notes|
+|---------------:|------------|------------|-----|
+|`unsigned byte` |1           |7           |`readUnsignedByte(byte)`, `writeUnsignedByte(int, byte)`|
+|`byte`          |2           |8           |`readByte(int)`, `readByte(int, byte)`|
+|`unsigned short`|1           |15          |`readUnsignedShort(int)`, `writeUnsignedShort(int, short)`|
+|`short`         |2           |16          |`readShort(int)`, `writeShort(int, short)`|
+|`unsigned int`  |1           |31          |`readUnsignedInt(int)`, `writeUnsignedInt(int, int)`|
+|`int`           |2           |32          |`readInt(size)`, `writeInt(int)`|
+|`unsigned long` |1           |63          |`readUnsignedLong(size)`, `writeUnsigendLong(int, long)`|
+|`long`          |2           |64          |`readLong(size)`, `writeLong(size)`|
+|`char`          |1           |16          |`readChar(int)`, `writeChar(int, char)`|
 #### floating-point
 |Value type|Minimum size|Maximum size|Notes|
-|----------|------------|------------|-----|
-|`float`   |            |            |see [`floatToRawIntBits`](http://docs.oracle.com/javase/8/docs/api/java/lang/Float.html#floatToRawIntBits-float-) and [`intBitsToFloat`](http://docs.oracle.com/javase/8/docs/api/java/lang/Float.html#intBitsToFloat-int-)|
-|`double`  |            |            |see [`doubleToRawLongBits`](http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html#doubleToRawLongBits-double-) and [`longBitsToDouble`](http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html#longBitsToDouble-long-)|
+|---------:|------------|------------|-----|
+|`float`   |(32)        |(32)        |`readFloat()`, `writeFloat(float)`|
+|`double`  |(64)        |(64)        |`readDouble()`, `writeDouble(double)`|
 ### References
 #### Implementing `BitDecodable`/`BitEncodable`
 You can directly read/write values from/to `BitInput`/`BitOutput` by making your class implementing those interfaces.

@@ -227,4 +227,4 @@ biiiiiii iiblllll llllllll llllllll llllllll llllpppp pppppppp pppppppp
 01101110 00100000 00000000 00000000 00000110 00110000 00000000 00000000
 ```
 ----
-[![Domate via Paypal](https://img.shields.io/badge/donate-paypal-blue.svg)(https://www.paypal.com/cgi-bin/webscr?cmd=_cart&business=A954LDFBW4B9N&lc=KR&item_name=GitHub&amount=5%2e00&currency_code=USD&button_subtype=products&add=1&bn=PP%2dShopCartBF%3adonate%2dpaypal%2dblue%2epng%3aNonHosted)
+[![Domate via Paypal](https://img.shields.io/badge/donate-paypal-blue.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_cart&business=A954LDFBW4B9N&lc=KR&item_name=GitHub&amount=5%2e00&currency_code=USD&button_subtype=products&add=1&bn=PP%2dShopCartBF%3adonate%2dpaypal%2dblue%2epng%3aNonHosted)

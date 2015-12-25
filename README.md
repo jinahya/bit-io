@@ -154,7 +154,7 @@ final OctetInput input = new ArrayInput(null, -1, -1) {
 ```
 ### Creating `BitInput`
 #### Using `DefaultBitInput`
-Construct with an already created a `ByteInput`.
+Construct with an already created a `OctetInput`.
 ```java
 final OctetInput delegate = createOctetInput();
 final BitInput input = new DefalutBitInput(delegate);

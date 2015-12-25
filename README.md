@@ -24,7 +24,7 @@ A library for reading/writing non octet aligned values such as `1-bit boolean` o
 |int          |2           |32          |`readInt(size)`, `writeInt(int)`|
 |unsigned long|1           |63          |`readUnsignedLong(size)`, `writeUnsigendLong(int, long)`|
 |long         |2           |64          |`readLong(size)`, `writeLong(size)`|
-### Objects
+### References
 #### Implementing `BitDecodable`/`BitEncodable`
 You can directly read/write values from/to `BitInput`/`BitOutput` by making your class implementing those interfaces.
 ```java
@@ -49,8 +49,10 @@ Person person = getPersion();
 person.read(getBitInput());
 person.write(getBitOutput());
 ```
-#### Using `BitDecoder`/`BitEncoder`.
-If modifying classes (implementing interfaces) is not applicable, you can make specialized clases for decoding/encoding already existing classes.
+#### ~~Using `BitDecoder`/`BitEncoder`~~
+**This feature is moved to [bit-codec](https://github.com/jinahya/bit-codec).**
+
+If modifying already existing classes (e.g. implementing additional interfaces) is not applicable, you can make specialized classes for decoding/encoding instance of those classes.
 ```java
 public class PersonDecoder implements BitDecoder<Person> {
     @Override
@@ -61,7 +63,6 @@ public class PersonDecoder implements BitDecoder<Person> {
         return new Person().age(input.readUnsignedInt(7)).married(input.readBoolean());
     }
 }
-
 public class PersonEncoder implements BitEncoder<Person> {
     @Override
     public void encode(final Person value, final BitOutput output) throws IOException {
@@ -97,9 +98,9 @@ public class PersonCodec extends AbstractBitCodec<Person> {
 ```
 Again, you can use the codec like this.
 ```java
-final PersionCodec codec = new PersonCodec(true);
-Person person = codec.decode(getBitInput());
-codec.encode(getBitOutput(), person);
+final PersonCodec codec = new PersonCodec(true);
+Person person = codec.decode(input));
+codec.encode(output, person);
 ```
 ## Reading
 ### Preparing `ByteInput`

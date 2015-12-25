@@ -57,8 +57,8 @@ public class Person implements BitReadable, BitWritable {
 It's, now, too obvious you can use like this.
 ```java
 Person person = getPersion();
-person.read(getBitInput());
-person.write(getBitOutput());
+person.read(input);
+person.write(output);
 ```
 #### Using ~~`BitDecoder`~~/~~`BitEncoder`~~
 **This feature is moved to [bit-codec](https://github.com/jinahya/bit-codec).**

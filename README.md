@@ -115,20 +115,22 @@ new SupplierInput(java.util.function.Supplier<Byte>);
 ````
 Those constructors don't check arguments which means you can lazily instantiate and set them.
 ```java
-final OutputStream output = openFile();
-
+final InputStream output = openFile();
 final ByteInput input = new ArrayInput(null, -1, -1) {
     @Override
     public int readUnsignedByte() throws IOException {
         if (source == null) {
             source = byte[16];
-            index = 0;
             limit = source.length;
+            index = limit;
         }
         if (index == limit) {
-            output.write(source);
+            final int read = stream.read(source);
+            if (read == -1) {
+                throw new EOFException();
+            }
+            limit = read;
             index = 0;
-            limit = source.length;
         }
         return super.readUnsignedByte();
     }
@@ -139,7 +141,6 @@ final ByteInput input = new ArrayInput(null, -1, -1) {
 Construct with an already created a `ByteInput`.
 ```java
 final ByteInput delegate = createByteInput();
-
 final BitInput input = new DefalutBitInput(delegate);
 ```
 Or lazliy instantiate its `delegate` field.
@@ -148,7 +149,7 @@ new DefaultBitInput(null) {
     @Override
     public int readUnsignedByte() throws IOException {
         if (delegate == null) {
-            delegate = new StreamInput(openFileForReading());
+            delegate = new StreamInput(openFile());
         }
         return super.readUnsignedByte();
     }
@@ -157,23 +158,18 @@ new DefaultBitInput(null) {
 #### Using `BitInputFactory`
 You can create `BitInput`s using various `newInstance(...)` methods.
 ```java
-final RedableByteChannel source = openChannel();
-
+final RedableByteChannel channel = openChannel();
 final BitInput input = BitInputFactory.newInstance(
     () -> (ByteBuffer) ByteBuffer.allocate(10).position(10),
     b -> {
         if (!b.hasRemaining()) {
             b.clear();
-            int read;
-            try {
-                while ((read = source.read(b)) == 0) {
+            do {
+                final int read = channel.read(b);
+                if (read == -1) {
+                    throw new EOFException();
                 }
-            } catch (final IOException ioe) {
-                throw new UncheckedIOException(ioe);
-            }
-            if (read == -1) {
-                throw new UncheckedIOException(new EOFException());
-            }
+            } while (b.position() == 0);
             b.flip();
         }
         return b.get() & 0xFF;

@@ -40,19 +40,19 @@ A library for reading/writing non octet aligned values such as `1-bit boolean` o
 |`float` |(32)     |(32)     |`readFloat()`, `writeFloat(float)`|
 |`double`|(64)     |(64)     |`readDouble()`, `writeDouble(double)`|
 ### References
-#### Implementing `BitDecodable`/`BitEncodable`
+#### Implementing `BitReadable`/`BitWritable`
 You can directly read/write values from/to `BitInput`/`BitOutput` by making your class implementing those interfaces.
 ```java
-public class Person implements BitDecodable, BitEncodable {
+public class Person implements BitReadable, BitWritable {
 
     @Override
-    public void decode(final BitInput input) throws IOException {
+    public void read(final BitInput input) throws IOException {
         setAge(input.readUnsignedInt(7));
         setMarried(input.readBoolean());
     }
 
     @Override
-    public void encode(final BitOutput output) throws IOException {
+    public void write(final BitOutput output) throws IOException {
         output.writeUnsignedInt(7, getAge());
         output.writeBoolean(isMarried());
     }
@@ -91,7 +91,7 @@ public class PersonEncoder implements BitEncoder<Person> {
 ```
 There is an abstract class for implementing these two interfaces easily.
 ```java
-public class PersonCodec extends AbstractBitCodec<Person> {
+public class PersonCodec extends NullableCodec<Person> {
 
     public PersonCodec(final boolean nullable) {
         super(nullable);
@@ -119,7 +119,7 @@ codec.encode(output, person);
 ```
 ## Reading
 ### Preparing ~~`ByteInput`~~`OctetInput`
-Prepare an instance of `ByteInput` from various sources.
+Prepare an instance of `OctetInput` from various sources.
 ````java
 new ArrayInput(byte[], index, limit);
 new BufferInput(java.nio.ByteBuffer);
@@ -132,9 +132,9 @@ new SupplierInput(java.util.function.Supplier<Byte>);
 Those constructors don't check arguments which means you can lazily instantiate and set them.
 ```java
 final InputStream output = openFile();
-final ByteInput input = new ArrayInput(null, -1, -1) {
+final OctetInput input = new ArrayInput(null, -1, -1) {
     @Override
-    public int readUnsignedByte() throws IOException {
+    public int readOctet() throws IOException {
         if (source == null) {
             source = byte[16];
             limit = source.length;
@@ -148,7 +148,7 @@ final ByteInput input = new ArrayInput(null, -1, -1) {
             limit = read;
             index = 0;
         }
-        return super.readUnsignedByte();
+        return super.readOctet();
     }
 };
 ```
@@ -156,18 +156,18 @@ final ByteInput input = new ArrayInput(null, -1, -1) {
 #### Using `DefaultBitInput`
 Construct with an already created a `ByteInput`.
 ```java
-final ByteInput delegate = createByteInput();
+final OctetInput delegate = createOctetInput();
 final BitInput input = new DefalutBitInput(delegate);
 ```
 Or lazliy instantiate its `delegate` field.
 ```java
-new DefaultBitInput(null) {
+new DefaultBitInput<InputStream>(null) {
     @Override
-    public int readUnsignedByte() throws IOException {
+    public int readOctet() throws IOException {
         if (delegate == null) {
             delegate = new StreamInput(openFile());
         }
-        return super.readUnsignedByte();
+        return super.readOctet();
     }
 };
 ```
@@ -206,7 +206,7 @@ assert discarded == 2L;
 biiiiiil llllllll llllllll llllllll llllllll llllllll lllllldd
 ```
 ## Writing
-### Preparing `ByteOutput`
+### Preparing ~~`ByteOutput`~~`OctetOutput`
 ### Creating `BitOutput`
 #### Using `DefalutBitOutput`
 #### Using `BitOutputFactory`

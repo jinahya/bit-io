@@ -25,14 +25,10 @@ A library for reading/writing non octet aligned values such as `1-bit boolean` o
 #### integral
 |Type            |Size(min)|Size(max)|Notes|
 |----------------|---------|---------|-----|
-|`unsigned byte` |1        |7        |`readUnsignedByte(byte)`, `writeUnsignedByte(int, byte)`|
-|`byte`          |2        |8        |`readByte(int)`, `readByte(int, byte)`|
-|`unsigned short`|1        |15       |`readUnsignedShort(int)`, `writeUnsignedShort(int, short)`|
-|`short`         |2        |16       |`readShort(int)`, `writeShort(int, short)`|
-|`unsigned int`  |1        |31       |`readUnsignedInt(int)`, `writeUnsignedInt(int, int)`|
-|`int`           |2        |32       |`readInt(int)`, `writeInt(int)`|
-|`unsigned long` |1        |63       |`readUnsignedLong(int)`, `writeUnsigendLong(int, long)`|
-|`long`          |2        |64       |`readLong(int)`, `writeLong(int, long)`|
+|`byte`          |2        |8        |`readByte(boolean, int)`, `readByte(boolean, int, byte)`|
+|`short`         |2        |16       |`readShort(boolean, int)`, `writeShort(boolean, int, short)`|
+|`int`           |2        |32       |`readInt(boolean, int)`, `writeInt(boolean, int, int)`|
+|`long`          |2        |64       |`readLong(boolean, int)`, `writeLong(boolean, int, long)`|
 |`char`          |1        |16       |`readChar(int)`, `writeChar(int, char)`|
 #### floating-point
 |Type    |Size(min)|Size(max)|Notes|
@@ -195,11 +191,11 @@ final BitInput input = BitInputFactory.newInstance(
 ```java
 final BitInput input;
 
-final boolean b = input.readBoolean();      // 1-bit boolean        1    1
-final int   ui6 = input.readUnsignedInt(6); // 6-bit unsigned int   6    7
-final long sl47 = input.readLong(47);       // 47-bit signed long  47   54
+final boolean b = input.readBoolean();        // 1-bit boolean        1    1
+final int ui6 = input.readInt(true, 6);       // 6-bit unsigned int   6    7
+final long sl47 = input.readLong(false, 47);  // 47-bit signed long  47   54
 
-final long discarded = input.align(1);      // aligns to 8-bit      2   56
+final long discarded = input.align(1);        // aligns to 8-bit      2   56
 assert discarded == 2L;
 ```
 ```
@@ -214,12 +210,12 @@ biiiiiil llllllll llllllll llllllll llllllll llllllll lllllldd
 ```java
 final BitOutput output;
 
-output.writeBoolean(false);          // 1-bit boolean          1    1
-output.writeInt(9, -72);             // 7-bit signed int       9   10
-output.writeBoolean(true);           // 1-bit boolean          1   11
-output.writeUnsignedLong(33, 99L);   // 33-bit unsigned long  33   44
+output.writeBoolean(false);           // 1-bit boolean          1    1
+output.writeInt(false, 9, -72);       // 7-bit signed int       9   10
+output.writeBoolean(true);            // 1-bit boolean          1   11
+output.writeLong(true, 33, 99L);      // 33-bit unsigned long  33   44
 
-final long padded = output.align(4); // aligns to 32-bit      20   64
+final long padded = output.align(4);  // aligns to 32-bit      20   64
 assert padded == 20L;
 ```
 ```

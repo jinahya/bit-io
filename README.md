@@ -18,27 +18,27 @@ A library for reading/writing non octet aligned values such as `1-bit boolean` o
 ## Specifications
 ### Primitives
 ### boolean
-|Value type|Minimum size|Maximum size|Notes|
-|---------:|------------|------------|-----|
-|`boolean` |1           |1           |`readBoolean`, `writeBoolean`|
+|Type     |Size(min)|Size(max)|Notes|
+|---------|---------|---------|-----|
+|`boolean`|1        |1        |`readBoolean()`, `writeBoolean()`|
 ### numeric
 #### integral
-|Value type      |Minimum size|Maximum size|Notes|
-|---------------:|------------|------------|-----|
-|`unsigned byte` |1           |7           |`readUnsignedByte(byte)`, `writeUnsignedByte(int, byte)`|
-|`byte`          |2           |8           |`readByte(int)`, `readByte(int, byte)`|
-|`unsigned short`|1           |15          |`readUnsignedShort(int)`, `writeUnsignedShort(int, short)`|
-|`short`         |2           |16          |`readShort(int)`, `writeShort(int, short)`|
-|`unsigned int`  |1           |31          |`readUnsignedInt(int)`, `writeUnsignedInt(int, int)`|
-|`int`           |2           |32          |`readInt(size)`, `writeInt(int)`|
-|`unsigned long` |1           |63          |`readUnsignedLong(size)`, `writeUnsigendLong(int, long)`|
-|`long`          |2           |64          |`readLong(size)`, `writeLong(size)`|
-|`char`          |1           |16          |`readChar(int)`, `writeChar(int, char)`|
+|Type            |Size(min)|Size(max)|Notes|
+|----------------|---------|---------|-----|
+|`unsigned byte` |1        |7        |`readUnsignedByte(byte)`, `writeUnsignedByte(int, byte)`|
+|`byte`          |2        |8        |`readByte(int)`, `readByte(int, byte)`|
+|`unsigned short`|1        |15       |`readUnsignedShort(int)`, `writeUnsignedShort(int, short)`|
+|`short`         |2        |16       |`readShort(int)`, `writeShort(int, short)`|
+|`unsigned int`  |1        |31       |`readUnsignedInt(int)`, `writeUnsignedInt(int, int)`|
+|`int`           |2        |32       |`readInt(int)`, `writeInt(int)`|
+|`unsigned long` |1        |63       |`readUnsignedLong(int)`, `writeUnsigendLong(int, long)`|
+|`long`          |2        |64       |`readLong(int)`, `writeLong(int, long)`|
+|`char`          |1        |16       |`readChar(int)`, `writeChar(int, char)`|
 #### floating-point
-|Value type|Minimum size|Maximum size|Notes|
-|---------:|------------|------------|-----|
-|`float`   |(32)        |(32)        |`readFloat()`, `writeFloat(float)`|
-|`double`  |(64)        |(64)        |`readDouble()`, `writeDouble(double)`|
+|Type    |Size(min)|Size(max)|Notes|
+|--------|---------|---------|-----|
+|`float` |(32)     |(32)     |`readFloat()`, `writeFloat(float)`|
+|`double`|(64)     |(64)     |`readDouble()`, `writeDouble(double)`|
 ### References
 #### Implementing `BitDecodable`/`BitEncodable`
 You can directly read/write values from/to `BitInput`/`BitOutput` by making your class implementing those interfaces.
@@ -64,7 +64,7 @@ Person person = getPersion();
 person.read(getBitInput());
 person.write(getBitOutput());
 ```
-#### ~~Using `BitDecoder`/`BitEncoder`~~
+#### Using ~~`BitDecoder`~~/~~`BitEncoder`~~
 **This feature is moved to [bit-codec](https://github.com/jinahya/bit-codec).**
 
 If modifying already existing classes (e.g. implementing additional interfaces) is not applicable, you can make specialized classes for decoding/encoding instance of those classes.
@@ -118,7 +118,7 @@ Person person = codec.decode(input));
 codec.encode(output, person);
 ```
 ## Reading
-### Preparing `ByteInput`
+### Preparing ~~`ByteInput`~~`OctetInput`
 Prepare an instance of `ByteInput` from various sources.
 ````java
 new ArrayInput(byte[], index, limit);
@@ -227,4 +227,4 @@ biiiiiii iiblllll llllllll llllllll llllllll llllpppp pppppppp pppppppp
 01101110 00100000 00000000 00000000 00000110 00110000 00000000 00000000
 ```
 ----
-[![Domate via Paypal](https://img.shields.io/badge/donate-paypal-blue.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_cart&business=A954LDFBW4B9N&lc=KR&item_name=GitHub&amount=5%2e00&currency_code=USD&button_subtype=products&add=1&bn=PP%2dShopCartBF%3adonate%2dpaypal%2dblue%2epng%3aNonHosted)
+[![Domate via Paypal](https://img.shields.io/badge/donate-paypal-blue.svg)(https://www.paypal.com/cgi-bin/webscr?cmd=_cart&business=A954LDFBW4B9N&lc=KR&item_name=GitHub&amount=5%2e00&currency_code=USD&button_subtype=products&add=1&bn=PP%2dShopCartBF%3adonate%2dpaypal%2dblue%2epng%3aNonHosted)

@@ -61,7 +61,7 @@ person.read(input);
 person.write(output);
 ```
 #### Using ~~`BitDecoder`~~/~~`BitEncoder`~~
-**This feature is moved to [bit-codec](https://github.com/jinahya/bit-codec).**
+**This feature has been moved to [bit-codec](https://github.com/jinahya/bit-codec).**
 
 If modifying already existing classes (e.g. implementing additional interfaces) is not applicable, you can make specialized classes for decoding/encoding instance of those classes.
 ```java

@@ -18,6 +18,7 @@
 package com.github.jinahya.bit.io;
 
 
+import com.github.jinahya.bit.io.octet.ByteInput;
 import java.io.IOException;
 
 
@@ -48,20 +49,19 @@ public class DefaultBitInput<T extends ByteInput> extends AbstractBitInput {
 
 
     /**
-     * {@inheritDoc} The {@code readUnsignedByte()} method of
-     * {@code DefaultBitInput} class returns the value of
-     * <blockquote><pre>{@code delegate.readUnsignedByte()}</pre></blockquote>.
-     * Override this method if {@link #delegate} is supposed to be lazily
-     * initialized and set.
+     * {@inheritDoc} The {@code read()} method of {@code DefaultBitInput} class
+     * invokes {@link ByteInput#read()} on {@link #delegate} and returns the
+     * result. Override this method if {@link #delegate} is supposed to be
+     * lazily initialized and set.
      *
      * @return {@inheritDoc}
      *
      * @throws IOException {@inheritDoc}
      */
     @Override
-    public int readUnsignedByte() throws IOException {
+    public int read() throws IOException {
 
-        return delegate.readUnsignedByte();
+        return delegate.read();
     }
 
 
@@ -88,7 +88,7 @@ public class DefaultBitInput<T extends ByteInput> extends AbstractBitInput {
 
 
     /**
-     * The delegate on which {@link #readUnsignedByte()} is invoked.
+     * The delegate on which {@link #read()} is invoked.
      */
     protected T delegate;
 

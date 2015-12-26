@@ -19,6 +19,7 @@ package com.github.jinahya.bit.io;
 
 
 import com.google.inject.AbstractModule;
+import static java.util.concurrent.ThreadLocalRandom.current;
 
 
 /**
@@ -31,7 +32,9 @@ public class WhiteBitInputModule extends AbstractModule {
     @Override
     protected void configure() {
 
-        bind(BitInput.class).to(WhiteBitInput.class);
+        bind(BitInput.class).toInstance(new DefaultBitInput<>(() -> {
+            return current().nextInt(256);
+        }));
     }
 
 }

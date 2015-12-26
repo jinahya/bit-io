@@ -18,6 +18,7 @@
 package com.github.jinahya.bit.io;
 
 
+import com.github.jinahya.bit.io.octet.ByteInput;
 import java.io.IOException;
 
 
@@ -29,7 +30,7 @@ public class ByteInputMock implements ByteInput {
 
 
     @Override
-    public int readUnsignedByte() throws IOException {
+    public int read() throws IOException {
 
         return (int) (System.currentTimeMillis() & 0xFF);
     }

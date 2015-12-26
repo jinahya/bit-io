@@ -19,9 +19,10 @@ package com.github.jinahya.bit.io;
 
 
 import java.io.IOException;
+import static java.util.concurrent.ThreadLocalRandom.current;
 import javax.inject.Inject;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import static org.slf4j.LoggerFactory.getLogger;
 import org.testng.annotations.Guice;
 import org.testng.annotations.Test;
 
@@ -37,69 +38,70 @@ public class BitOutputTest {
     @Test(invocationCount = 128)
     public void writeBoolean() throws IOException {
 
-        final boolean value = BitIoRandoms.randomBooleanValue();
+        final boolean value = current().nextBoolean();
 
         output.writeBoolean(value);
     }
 
 
     @Test(invocationCount = 128)
-    public void writeUnsignedInt() throws IOException {
+    public void writeByte() throws IOException {
 
-        final int size = BitIoRandoms.randomUnsignedIntSize();
-        final int value = BitIoRandoms.randomUnsignedIntValue(size);
+        final boolean unsigned = current().nextBoolean();
+        final int size = BitIoRandoms.size(unsigned, 3);
+        final byte value = (byte) BitIoRandoms.value(unsigned, 3, size);
 
-        output.writeUnsignedInt(size, value);
+        output.writeByte(unsigned, size, value);
+    }
+
+
+    @Test(invocationCount = 128)
+    public void writeShort() throws IOException {
+
+        final boolean unsigned = current().nextBoolean();
+        final int size = BitIoRandoms.size(unsigned, 4);
+        final short value = (short) BitIoRandoms.value(unsigned, 4, size);
+
+        output.writeShort(unsigned, size, value);
     }
 
 
     @Test(invocationCount = 128)
     public void writeInt() throws IOException {
 
-        final int size = BitIoRandoms.randomIntSize();
-        final int value = BitIoRandoms.randomIntValue(size);
+        final boolean unsigned = current().nextBoolean();
+        final int size = BitIoRandoms.size(unsigned, 5);
+        final int value = (int) BitIoRandoms.value(unsigned, 5, size);
 
-        output.writeInt(size, value);
-    }
-
-
-    @Test(invocationCount = 128)
-    public void writeUnsignedLong() throws IOException {
-
-        final int size = BitIoRandoms.randomUnsignedLongSize();
-        final long value = BitIoRandoms.unsignedLongValue(size);
-
-        output.writeUnsignedLong(size, value);
+        output.writeInt(unsigned, size, value);
     }
 
 
     @Test(invocationCount = 128)
     public void writeLong() throws IOException {
 
-        final int size = BitIoRandoms.randomLongSize();
-        final long value = BitIoRandoms.randomLongValue(size);
+        final boolean unsigned = current().nextBoolean();
+        final int size = BitIoRandoms.size(unsigned, 6);
+        final long value = BitIoRandoms.value(unsigned, 6, size);
 
-        output.writeLong(size, value);
+        output.writeLong(unsigned, size, value);
     }
 
 
-//    @Test
-//    public void writeObject() throws IOException {
-//
-//        output.writeObject(
-//            Person.newRandomInstance(),
-//            (o, v) -> {
-//                o.writeUnsignedInt(7, v.getAge());
-//                o.writeBoolean(v.isMarried());
-//            }
-//        );
-//    }
+    @Test(invocationCount = 128)
+    public void writeChar() throws IOException {
+
+        final int size = BitIoRandoms.size(true, 4);
+        final char value = (char) BitIoRandoms.value(true, 4, size);
+
+        output.writeChar(size, value);
+    }
+
+
     /**
      * logger.
      */
-    private transient final Logger logger
-        = LoggerFactory.getLogger(BitOutputTest.class
-        );
+    private transient final Logger logger = getLogger(getClass());
 
 
     @Inject

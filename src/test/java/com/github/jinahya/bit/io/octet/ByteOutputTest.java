@@ -14,14 +14,12 @@
  * limitations under the License.
  */
 
-package com.github.jinahya.bit.io;
+package com.github.jinahya.bit.io.octet;
 
 
-import com.github.jinahya.bit.io.octet.ByteInput;
 import java.io.IOException;
 import static java.util.Objects.requireNonNull;
 import static java.util.concurrent.ThreadLocalRandom.current;
-import static org.testng.Assert.assertTrue;
 import org.testng.annotations.Test;
 
 
@@ -29,10 +27,10 @@ import org.testng.annotations.Test;
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
-abstract class ByteInputTest<T extends ByteInput> {
+abstract class ByteOutputTest<T extends ByteOutput> {
 
 
-    public ByteInputTest(final Class<T> type) {
+    public ByteOutputTest(final Class<T> type) {
 
         super();
 
@@ -49,8 +47,7 @@ abstract class ByteInputTest<T extends ByteInput> {
         final int capacity = current().nextInt(1024);
         final T output = instance(capacity);
         for (int i = 0; i < capacity; i++) {
-            final int value = output.read();
-            assertTrue(value >= 0x00 && value <= 0xFF);
+            output.write(current().nextInt(256));
         }
     }
 

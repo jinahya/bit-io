@@ -18,6 +18,8 @@
 package com.github.jinahya.bit.io;
 
 
+import com.github.jinahya.bit.io.octet.ArrayInput;
+import com.github.jinahya.bit.io.octet.ArrayOutput;
 import java.io.IOException;
 import static java.lang.Integer.toBinaryString;
 import static java.util.stream.Collectors.joining;
@@ -42,11 +44,13 @@ public class ReadMeTest {
     @Test
     public void read() throws IOException {
 
-        final BitInput input = new WhiteBitInput();
+        final byte[] array = new byte[8];
+        final BitInput input = new DefaultBitInput<>(
+            new ArrayInput(array, array.length, 0));
 
         input.readBoolean();
-        input.readUnsignedInt(6);
-        input.readLong(47);
+        input.readInt(true, 6);
+        input.readLong(false, 47);
 
         final long discarded = input.align(1);
         assertEquals(discarded, 2L);
@@ -57,13 +61,13 @@ public class ReadMeTest {
     public void write() throws IOException {
 
         final byte[] array = new byte[8];
-        final BitOutput output = new DefaultBitOutput(
+        final BitOutput output = new DefaultBitOutput<>(
             new ArrayOutput(array, array.length, 0));
 
         output.writeBoolean(false);
-        output.writeInt(9, -72);
+        output.writeInt(false, 9, -72);
         output.writeBoolean(true);
-        output.writeUnsignedLong(33, 99L);
+        output.writeLong(true, 33, 99L);
 
         final long padded = output.align(4);
         assertEquals(padded, 20L);

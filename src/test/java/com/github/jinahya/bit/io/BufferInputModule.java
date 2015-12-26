@@ -18,6 +18,7 @@
 package com.github.jinahya.bit.io;
 
 
+import com.github.jinahya.bit.io.octet.BufferInput;
 import com.google.inject.AbstractModule;
 
 

@@ -18,6 +18,7 @@
 package com.github.jinahya.bit.io;
 
 
+import com.github.jinahya.bit.io.octet.ByteOutput;
 import java.io.IOException;
 import java.util.function.ObjIntConsumer;
 import java.util.function.Supplier;
@@ -50,9 +51,9 @@ public class BitOutputFactory {
         return new AbstractBitOutput() {
 
             @Override
-            public void writeUnsignedByte(final int value) throws IOException {
+            public void write(final int value) throws IOException {
 
-                output.writeUnsignedByte(value);
+                output.write(value);
             }
 
 
@@ -72,13 +73,13 @@ public class BitOutputFactory {
         return new AbstractBitOutput() {
 
             @Override
-            public void writeUnsignedByte(final int value) throws IOException {
+            public void write(final int value) throws IOException {
 
                 if (output == null) {
                     output = BitIoUtilities.get(supplier);
                 }
 
-                output.writeUnsignedByte(value);
+                output.write(value);
             }
 
 
@@ -98,11 +99,11 @@ public class BitOutputFactory {
         return new AbstractBitOutput() {
 
             @Override
-            public void writeUnsignedByte(final int value) throws IOException {
+            public void write(final int value) throws IOException {
 
                 output = BitIoUtilities.apply(operator, output);
 
-                output.writeUnsignedByte(value);
+                output.write(value);
             }
 
 
@@ -127,7 +128,7 @@ public class BitOutputFactory {
         return new AbstractBitOutput() {
 
             @Override
-            public void writeUnsignedByte(final int value) throws IOException {
+            public void write(final int value) throws IOException {
 
                 if (target == null) {
                     target = BitIoUtilities.get(targetSupplier);
@@ -166,7 +167,7 @@ public class BitOutputFactory {
         return new AbstractBitOutput() {
 
             @Override
-            public void writeUnsignedByte(final int value) throws IOException {
+            public void write(final int value) throws IOException {
 
                 target = BitIoUtilities.apply(targetOperator, target);
 

@@ -18,6 +18,7 @@
 package com.github.jinahya.bit.io;
 
 
+import com.github.jinahya.bit.io.octet.ByteOutput;
 import java.io.IOException;
 
 
@@ -48,20 +49,19 @@ public class DefaultBitOutput<T extends ByteOutput> extends AbstractBitOutput {
 
 
     /**
-     * {@inheritDoc} The {@code writeUnsignedByte(int)} method of
-     * {@code DefaultBitOutput} class executes
-     * <blockquote><pre>{@code delegate.writeUnsignedByte(int)}</pre></blockquote>
-     * with specified {@code value}. Override this method if {@link #delegate}
-     * is supposed to be lazily initialized and set.
+     * {@inheritDoc} The {@code write(int)} method of {@code DefaultBitOutput}
+     * class invokes {@link ByteOutput#write(int)} with given value. Override
+     * this method if {@link #delegate} is supposed to be lazily initialized and
+     * set.
      *
      * @param value {@inheritDoc}
      *
      * @throws IOException {@inheritDoc}
      */
     @Override
-    public void writeUnsignedByte(final int value) throws IOException {
+    public void write(final int value) throws IOException {
 
-        delegate.writeUnsignedByte(value);
+        delegate.write(value);
     }
 
 
@@ -88,7 +88,7 @@ public class DefaultBitOutput<T extends ByteOutput> extends AbstractBitOutput {
 
 
     /**
-     * The delegate on which {@link #writeUnsignedByte(int)} is invoked.
+     * The delegate on which {@link #write(int)} is invoked.
      */
     protected T delegate;
 

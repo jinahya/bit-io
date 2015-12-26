@@ -18,6 +18,7 @@
 package com.github.jinahya.bit.io;
 
 
+import com.github.jinahya.bit.io.octet.ByteInput;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.util.function.Supplier;
@@ -51,9 +52,9 @@ public class BitInputFactory {
         return new AbstractBitInput() {
 
             @Override
-            public int readUnsignedByte() throws IOException {
+            public int read() throws IOException {
 
-                return input.readUnsignedByte();
+                return input.read();
             }
 
 
@@ -73,13 +74,13 @@ public class BitInputFactory {
         return new AbstractBitInput() {
 
             @Override
-            public int readUnsignedByte() throws IOException {
+            public int read() throws IOException {
 
                 if (input == null) {
                     input = BitIoUtilities.get(supplier);
                 }
 
-                return input.readUnsignedByte();
+                return input.read();
             }
 
 
@@ -99,11 +100,11 @@ public class BitInputFactory {
         return new AbstractBitInput() {
 
             @Override
-            public int readUnsignedByte() throws IOException {
+            public int read() throws IOException {
 
                 input = BitIoUtilities.apply(operator, input);
 
-                return input.readUnsignedByte();
+                return input.read();
             }
 
 
@@ -128,7 +129,7 @@ public class BitInputFactory {
         return new AbstractBitInput() {
 
             @Override
-            public int readUnsignedByte() throws IOException {
+            public int read() throws IOException {
 
                 if (source == null) {
                     source = BitIoUtilities.get(sourceSupplier);
@@ -169,7 +170,7 @@ public class BitInputFactory {
         return new AbstractBitInput() {
 
             @Override
-            public int readUnsignedByte() throws IOException {
+            public int read() throws IOException {
 
                 source = BitIoUtilities.apply(sourceOperator, source);
 

@@ -30,8 +30,8 @@ public interface BitOutput {
 
 
     /**
-     * Writes a 1-bit boolean value. This method writes {@code 0b1} for
-     * {@code true} and {@code 0b0} for {@code false}.
+     * Writes a 1-bit boolean value. This method writes {@code 1} for
+     * {@code true} and {@code 0} for {@code false}.
      *
      * @param value the value to write.
      *
@@ -41,157 +41,83 @@ public interface BitOutput {
 
 
     /**
-     * Writes an unsigned int value. Only the lower specified number of bits in
-     * {@code value} are written.
+     * Writes a {@code byte} value.
      *
-     * @param size the number of lower bits to write; between
-     * {@value com.github.jinahya.bit.io.BitIoConstants#UINT_SIZE_MIN}
-     * (inclusive) and
-     * {@value com.github.jinahya.bit.io.BitIoConstants#UINT_SIZE_MAX}
-     * (inclusive).
+     * @param unsigned a flag indicating unsigned value.
+     * @param size the number of bits for value.
      * @param value the value to write
      *
      * @throws IOException if an I/O error occurs.
      */
-    void writeUnsignedInt(int size, int value) throws IOException;
+    void writeByte(boolean unsigned, int size, byte value) throws IOException;
+
+
+    void writeShort(boolean unsigned, int size, short value) throws IOException;
+
+
+    void writeChar(int size, char value) throws IOException;
+
+
+    void writeInt(boolean unsigned, int size, int value) throws IOException;
+
+
+    void writeLong(boolean unsigned, int size, long value) throws IOException;
+
+
+    void writeFloat(float value) throws IOException;
+
+
+    void writeDouble(double value) throws IOException;
 
 
     /**
-     * Writes a signed int value. Only the lower number of specified bits in
-     * {@code value} are written.
+     * Writes given object reference value.
      *
-     * @param size the number of lower bits to write; between
-     * {@value com.github.jinahya.bit.io.BitIoConstants#INT_SIZE_MIN}
-     * (inclusive) and
-     * {@value com.github.jinahya.bit.io.BitIoConstants#INT_SIZE_MAX}
-     * (inclusive).
+     * @param <T> value type parameter
+     * @param value the value to write.
+     *
+     * @throws IOException if an I/O error occurs.
+     */
+    <T extends BitWritable> void writeObject(T value) throws IOException;
+
+
+    /**
+     * Writes given object reference value which is possibly {@code null}. This
+     * method writes preceding 1-bit boolean flag which representing the
+     * nullability of the value and invokes
+     * {@link #writeObject(com.github.jinahya.bit.io.BitWritable)} with
+     * specified value if it is not {@code null}.
+     *
+     * @param <T> value type parameter
      * @param value the value to write
      *
      * @throws IOException if an I/O error occurs.
      */
-    void writeInt(int size, int value) throws IOException;
+    <T extends BitWritable> void writeNullable(T value) throws IOException;
 
 
     /**
-     * Writes an unsigned long value. Only the lower specified number of bits in
-     * {@code value} are written.
+     * Returns the number of bytes written so far.
      *
-     * @param size the number of bits to write; between
-     * {@value com.github.jinahya.bit.io.BitIoConstants#ULONG_SIZE_MIN}
-     * (inclusive) and
-     * {@value com.github.jinahya.bit.io.BitIoConstants#ULONG_SIZE_MAX}
-     * (inclusive}.
-     * @param value the value to write.
-     *
-     * @throws IOException if an I/O error occurs.
+     * @return number of byte written so far.
      */
-    void writeUnsignedLong(int size, long value) throws IOException;
+    long getCount();
 
 
     /**
-     * Writes a signed long value. Only the lower {@code size} bits in
-     * {@code value} are written.
+     * Returns the bit index to write in current octet.
      *
-     * @param size the number of bits to write; between
-     * {@value com.github.jinahya.bit.io.BitIoConstants#LONG_SIZE_MIN}
-     * (inclusive) and
-     * {@value com.github.jinahya.bit.io.BitIoConstants#LONG_SIZE_MAX}
-     * (inclusive). (inclusive).
-     * @param value the value to write.
-     *
-     * @throws IOException if an I/O error occurs.
+     * @return bit index to write in current octet.
      */
-    void writeLong(int size, long value) throws IOException;
+    int getIndex();
 
 
-//    /**
-//     * Writes given {@code float} value as a 32-bit signed int using
-//     * {@link Float#floatToRawIntBits(float)}.
-//     *
-//     * @param value the value to write.
-//     *
-//     * @throws IOException if an I/O error occurs.
-//     */
-//    void writeFloat(final float value) throws IOException;
-//
-//
-//    /**
-//     * Writes given {@code double} value as a 64-bit signed long using
-//     * {@link Double#doubleToRawLongBits(double)}.
-//     *
-//     * @param value the value to write
-//     *
-//     * @throws IOException if an I/O error occurs.
-//     */
-//    void writeDouble(final double value) throws IOException;
-//    <T extends BitWritable> void writeObject(T value) throws IOException;
-//
-//
-//    <T extends BitEncodable> void encodeObject(T value) throws IOException;
-//    /**
-//     * Writes an object value using specified encoder.
-//     *
-//     * @param <T> object type parameter
-//     * @param value the value to encode
-//     * @param encoder the encoder.
-//     *
-//     * @throws IOException if an I/O error occurs.
-//     */
-//    <T> void writeObject(T value, BitEncoder<? super T> encoder)
-//        throws IOException;
-//    <T> void writeNullable(T value, BitEncoder<? super T> encoder)
-//        throws IOException;
-//    /**
-//     * Writes an object value.
-//     *
-//     * @param <T> value type parameter.
-//     * @param value the value to write
-//     * @param writer the consumer actually writes the value.
-//     *
-//     * @throws IOException if an I/O error occurs.
-//     */
-//    <T> void writeObject(T value, BiConsumer<BitOutput, ? super T> writer)
-//        throws IOException;
-//    <T> void writeArray(int scale, T[] value, BiConsumer<BitOutput, T> writer)
-//        throws IOException;
-//
-//
-//    <T> void writeList(int scale, List<T> value,
-//                       BiConsumer<BitOutput, T> writer)
-//        throws IOException;
-//    /**
-//     * Writes a specified number of bytes from given array starting from
-//     * specified offset.
-//     *
-//     * @param array the array
-//     * @param offset the start offset
-//     * @param length number of bytes to write.
-//     * @param size the number of valid lower bits in each byte between
-//     * {@value com.github.jinahya.bit.io.BitIoConstants#UBYTE_SIZE_MIN}
-//     * (inclusive) and
-//     * {@value com.github.jinahya.bit.io.BitIoConstants#UBYTE_SIZE_MAX}
-//     * (inclusive).
-//     *
-//     * @throws IOException if an I/O error occurs.
-//     */
-//    void writeBytes(byte[] array, int offset, int length, int size)
-//        throws IOException;
-//    /**
-//     * Writes an array of bytes.
-//     *
-//     * @param scale the number of bits for length;
-//     * @param range the number of valid bits in each byte
-//     * @param value the array to write.
-//     *
-//     * @throws IOException if an I/O error occurs.
-//     */
-//    void writeBytes(int scale, int range, byte[] value) throws IOException;
     /**
      * Aligns to specified number of bytes.
      *
      * @param bytes the number of bytes to align; must be positive.
      *
-     * @return the number of bits padded for alignment
+     * @return the number of bits padded while aligning
      *
      * @throws IOException if an I/O error occurs.
      */

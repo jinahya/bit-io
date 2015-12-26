@@ -29,10 +29,10 @@ public class BitIoConstantsTest {
 
 
     @Test
-    public static void UBYTE_SIZE() {
+    public static void BYTE_SIZE() {
 
-        assertEquals(BitIoConstants.UBYTE_SIZE_MIN, 1);
-        assertEquals(BitIoConstants.UBYTE_SIZE_MAX, Byte.SIZE);
+        assertEquals(BitIoConstants.BYTE_SIZE_MIN, 2);
+        assertEquals(BitIoConstants.BYTE_SIZE_MAX, Byte.SIZE);
     }
 
 }

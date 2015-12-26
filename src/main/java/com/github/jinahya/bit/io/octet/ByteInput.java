@@ -15,26 +15,30 @@
  */
 
 
-package com.github.jinahya.bit.io;
+package com.github.jinahya.bit.io.octet;
 
 
-import com.github.jinahya.bit.io.octet.BufferInput;
-import com.google.inject.Provider;
-import java.nio.ByteBuffer;
+import java.io.IOException;
 
 
 /**
+ * An interface for suppling bytes.
  *
- * @author Jin Kwon
+ * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
-public class BufferInputProvider implements Provider<BufferInput> {
+//@FunctionalInterface
+public interface ByteInput {
 
 
-    @Override
-    public BufferInput get() {
-
-        return new BufferInput(ByteBuffer.allocate(1024));
-    }
+    /**
+     * Supplies an unsigned 8-bit value.
+     *
+     * @return an unsigned 8-bit value between {@code 0} (inclusive) and
+     * {@code 256} (exclusive)
+     *
+     * @throws IOException if an I/O error occurs.
+     */
+    int read() throws IOException;
 
 }
 

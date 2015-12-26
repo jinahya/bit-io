@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Jin Kwon.
+ * Copyright 2015 Jin Kwon &lt;jinahya_at_gmail.com&gt;.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,26 +14,40 @@
  * limitations under the License.
  */
 
+package com.github.jinahya.bit.io.octet;
 
-package com.github.jinahya.bit.io;
 
-
-import com.github.jinahya.bit.io.octet.ByteInput;
-import com.google.inject.Provider;
+import java.io.IOException;
+import java.nio.channels.ReadableByteChannel;
 
 
 /**
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
+ * @deprecated
  */
-public class ByteInputProvider implements Provider<ByteInput> {
+@Deprecated
+public class ChannelInput extends AbstractByteInput<ReadableByteChannel> {
+
+
+    public ChannelInput(final ReadableByteChannel source) {
+
+        super(source);
+    }
 
 
     @Override
-    public ByteInput get() {
+    public int read() throws IOException {
 
-        return new ByteInputMock();
+        if (input == null) {
+            input = BufferInput.newInstance(source, 1, false);
+        }
+
+        return input.read();
     }
+
+
+    private ByteInput input;
 
 }
 

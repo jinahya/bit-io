@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Jin Kwon.
+ * Copyright 2015 Jin Kwon &lt;jinahya_at_gmail.com&gt;.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,26 +14,23 @@
  * limitations under the License.
  */
 
+package com.github.jinahya.bit.io.octet;
 
-package com.github.jinahya.bit.io;
-
-
-import com.github.jinahya.bit.io.octet.BufferInput;
-import com.google.inject.Provider;
-import java.nio.ByteBuffer;
 
 
 /**
  *
- * @author Jin Kwon
+ * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
-public class BufferInputProvider implements Provider<BufferInput> {
+public class ArrayOutputModule extends ByteOutputModule<ArrayOutput> {
 
 
     @Override
-    public BufferInput get() {
+    protected ArrayOutput instance() {
 
-        return new BufferInput(ByteBuffer.allocate(1024));
+        final byte[] target = new byte[1048576];
+
+        return new ArrayOutput(target, target.length, 0);
     }
 
 }

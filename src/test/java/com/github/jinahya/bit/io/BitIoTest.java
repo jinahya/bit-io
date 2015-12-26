@@ -17,10 +17,11 @@
 package com.github.jinahya.bit.io;
 
 
+import com.github.jinahya.bit.io.octet.ArrayInput;
+import com.github.jinahya.bit.io.octet.ArrayOutput;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
-import static java.util.concurrent.ThreadLocalRandom.current;
 import org.slf4j.Logger;
 import static org.slf4j.LoggerFactory.getLogger;
 import static org.testng.Assert.assertEquals;
@@ -36,7 +37,7 @@ public class BitIoTest {
 
     private static void test(final BitIoType type) throws IOException {
 
-        final byte[] array = new byte[1048576];
+        final byte[] array = new byte[8];
         final List<Object> params = new LinkedList<>();
 
         final BitOutput output = new DefaultBitOutput<>(
@@ -54,71 +55,45 @@ public class BitIoTest {
     }
 
 
-//    @Test(invocationCount = 1024)
-//    public void fbytes() throws IOException {
-//
-//        test(BitIoType.FBYTES);
-//    }
-//    @Test(invocationCount = 1024)
-//    public void vbytes() throws IOException {
-//
-//        test(BitIoType.VBYTES);
-//    }
-    @Test(enabled = false, invocationCount = 1024)
-    public void test() throws IOException {
+    @Test(enabled = true, invocationCount = 1024)
+    public void _boolean() throws IOException {
 
-        final BitIoType[] types = BitIoType.values();
-        final BitIoType type = types[current().nextInt(types.length)];
-
-        final byte[] array = new byte[1048576];
-        final List<Object> params = new LinkedList<>();
-
-        final BitOutput output = new DefaultBitOutput(
-            new ArrayOutput(array, array.length, 0));
-        final Object expected = type.write(params, output);
-        final long padded = output.align(1);
-
-        final BitInput input = new DefaultBitInput(
-            new ArrayInput(array, array.length, 0));
-        final Object actual = type.read(params, input);
-        assertEquals(actual, expected, "type: " + type);
-        final long discarded = input.align(1);
-
-        assertEquals(discarded, padded);
+        test(BitIoType.BOOLEAN);
     }
 
 
-    @Test(enabled = false)
-    public void test1() throws IOException {
+    @Test(enabled = true, invocationCount = 1024)
+    public void _byte() throws IOException {
 
-        final BitIoType[] types = BitIoType.values();
+        test(BitIoType.BYTE);
+    }
 
-        final byte[] array = new byte[1048576];
 
-        final int count = current().nextInt(512, 1024);
-        final List<Object> params = new LinkedList<>(); // type, param+, value
+    @Test(enabled = true, invocationCount = 1024)
+    public void _short() throws IOException {
 
-        final BitOutput output = new DefaultBitOutput(
-            new ArrayOutput(array, array.length, 0));
-        for (int i = 0; i < count; i++) {
-            final BitIoType type = types[current().nextInt(types.length)];
-            params.add(type);
-            final Object value = type.write(params, output);
-            params.add(value);
-        }
-        final long padded = output.align(1);
+        test(BitIoType.SHORT);
+    }
 
-        final BitInput input = new DefaultBitInput(
-            new ArrayInput(array, array.length, 0));
-        for (int i = 0; i < count; i++) {
-            final BitIoType type = (BitIoType) params.remove(0);
-            final Object actual = type.read(params, input);
-            final Object expected = params.remove(0);
-            assertEquals(actual, expected, "type: " + type);
-        }
-        final long discarded = input.align(1);
 
-        assertEquals(discarded, padded);
+    @Test(enabled = true, invocationCount = 1024)
+    public void _int() throws IOException {
+
+        test(BitIoType.INT);
+    }
+
+
+    @Test(enabled = true, invocationCount = 1024)
+    public void _long() throws IOException {
+
+        test(BitIoType.LONG);
+    }
+
+
+    @Test(enabled = true, invocationCount = 1024)
+    public void _char() throws IOException {
+
+        test(BitIoType.CHAR);
     }
 
 

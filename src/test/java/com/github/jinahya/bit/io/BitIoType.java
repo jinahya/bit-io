@@ -19,6 +19,7 @@ package com.github.jinahya.bit.io;
 
 import java.io.IOException;
 import java.util.List;
+import static java.util.concurrent.ThreadLocalRandom.current;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,7 +36,9 @@ enum BitIoType {
         Object read(final List<Object> params, final BitInput input)
             throws IOException {
 
-            return input.readBoolean();
+            final boolean value = input.readBoolean();
+
+            return value;
         }
 
 
@@ -43,22 +46,24 @@ enum BitIoType {
         Object write(final List<Object> params, final BitOutput output)
             throws IOException {
 
-            final boolean value = BitIoRandoms.randomBooleanValue();
+            final boolean value = current().nextBoolean();
             output.writeBoolean(value);
 
             return value;
         }
 
     },
-    UINT() {
+    BYTE() {
 
         @Override
         Object read(final List<Object> params, final BitInput input)
             throws IOException {
 
+            final boolean unsigned = (boolean) params.remove(0);
             final int size = (int) params.remove(0);
+            final byte value = input.readByte(unsigned, size);
 
-            return input.readUnsignedInt(size);
+            return value;
         }
 
 
@@ -66,10 +71,42 @@ enum BitIoType {
         Object write(final List<Object> params, final BitOutput output)
             throws IOException {
 
-            final int size = BitIoRandoms.randomUnsignedIntSize();
-            final int value = BitIoRandoms.randomUnsignedIntValue(size);
+            final boolean unsigned = current().nextBoolean();
+            final int size = BitIoRandoms.size(unsigned, 3);
+            final byte value = (byte) BitIoRandoms.value(unsigned, 3, size);
+            params.add(unsigned);
             params.add(size);
-            output.writeUnsignedInt(size, value);
+            output.writeByte(unsigned, size, value);
+
+            return value;
+        }
+
+    },
+    SHORT() {
+
+        @Override
+        Object read(final List<Object> params, final BitInput input)
+            throws IOException {
+
+            final boolean unsigned = (boolean) params.remove(0);
+            final int size = (int) params.remove(0);
+            final short value = input.readShort(unsigned, size);
+
+            return value;
+        }
+
+
+        @Override
+        Object write(final List<Object> params, final BitOutput output)
+            throws IOException {
+
+            final boolean u = current().nextBoolean();
+            final int e = 4;
+            final int size = BitIoRandoms.size(u, e);
+            final short value = (short) BitIoRandoms.value(u, e, size);
+            params.add(u);
+            params.add(size);
+            output.writeShort(u, size, value);
 
             return value;
         }
@@ -81,8 +118,9 @@ enum BitIoType {
         Object read(final List<Object> params, final BitInput input)
             throws IOException {
 
+            final boolean unsigned = (boolean) params.remove(0);
             final int size = (int) params.remove(0);
-            final int value = input.readInt(size);
+            final int value = input.readInt(unsigned, size);
 
             return value;
         }
@@ -92,35 +130,12 @@ enum BitIoType {
         Object write(final List<Object> params, final BitOutput output)
             throws IOException {
 
-            final int size = BitIoRandoms.randomIntSize();
-            final int value = BitIoRandoms.randomIntValue(size);
+            final boolean unsigned = current().nextBoolean();
+            final int size = BitIoRandoms.size(unsigned, 5);
+            final int value = (int) BitIoRandoms.value(unsigned, 5, size);
+            params.add(unsigned);
             params.add(size);
-            output.writeInt(size, value);
-
-            return value;
-        }
-
-    },
-    ULONG() {
-
-        @Override
-        Object read(final List<Object> params, final BitInput input)
-            throws IOException {
-
-            final int size = (int) params.remove(0);
-
-            return input.readUnsignedLong(size);
-        }
-
-
-        @Override
-        Object write(final List<Object> params, final BitOutput output)
-            throws IOException {
-
-            final int size = BitIoRandoms.randomUnsignedLongSize();
-            final long value = BitIoRandoms.unsignedLongValue(size);
-            params.add(size);
-            output.writeUnsignedLong(size, value);
+            output.writeInt(unsigned, size, value);
 
             return value;
         }
@@ -132,8 +147,9 @@ enum BitIoType {
         Object read(final List<Object> params, final BitInput input)
             throws IOException {
 
+            final boolean unsigned = (boolean) params.remove(0);
             final int size = (int) params.remove(0);
-            final long value = input.readLong(size);
+            final long value = input.readLong(unsigned, size);
 
             return value;
         }
@@ -143,118 +159,45 @@ enum BitIoType {
         Object write(final List<Object> params, final BitOutput output)
             throws IOException {
 
-            final int size = BitIoRandoms.randomLongSize();
-            final long value = BitIoRandoms.randomLongValue(size);
+            final boolean unsigned = current().nextBoolean();
+            final int size = BitIoRandoms.size(unsigned, 6);
+            final long value = BitIoRandoms.value(unsigned, 6, size);
+            params.add(unsigned);
             params.add(size);
-            output.writeLong(size, value);
+            output.writeLong(unsigned, size, value);
 
             return value;
         }
 
-    };//,
-//    FBYTES() {
-//
-//        @Override
-//        Object read(final List<Object> params, final BitInput input)
-//            throws IOException {
-//
-//            final int length = (int) params.remove(0);
-//            final int range = (int) params.remove(0);
-//
-//            final byte[] array = new byte[length];
-//
-//            input.readBytes(array, 0, array.length, range);
-//
-//            return array;
-//        }
-//
-//
-//        @Override
-//        Object write(final List<Object> params, final BitOutput output)
-//            throws IOException {
-//
-//            final int length = current().nextInt(1024);
-//            final int range = BitIoRandoms.randomUnsignedByteSize();
-//
-//            final byte[] array = new byte[length];
-//            current().nextBytes(array);
-//            for (int i = 0; i < array.length; i++) {
-//                array[i] = (byte) ((array[i] & 0xFF) >> (Byte.SIZE - range));
-//            }
-//
-//            params.add(length);
-//            params.add(range);
-//
-//            output.writeBytes(array, 0, array.length, range);
-//
-//            return array;
-//        }
-//
-//    };//,
-//    VBYTES() {
-//
-//        @Override
-//        Object read(final List<Object> params, final BitInput input)
-//            throws IOException {
-//
-//            final int scale = (int) params.remove(0);
-//            final int range = (int) params.remove(0);
-//            //logger.debug("vbytes.r.scale: {}", scale);
-//            //logger.debug("vbytes.r.range: {}", range);
-//
-//            final byte[] value = input.readBytes(scale, range);
-//            //logger.debug("vbytes.read.value.length: {}", value.length);
-//            //logger.debug("vbytes.r.value: {}", value);
-//
-//            return value;
-//        }
-//
-//
-//        @Override
-//        Object write(final List<Object> params, final BitOutput output)
-//            throws IOException {
-//
-//            final int scale = BitIoRandoms.randomUnsignedIntSize(17);
-//            final int range = BitIoRandoms.randomUnsignedByteSize();
-//            //logger.debug("vbytes.w.scale: {}", scale);
-//            //logger.debug("vbytes.w.range: {}", range);
-//
-//            final int length = BitIoRandoms.randomUnsignedIntValue(scale);
-//            final byte[] value = new byte[length];
-//            assertTrue((value.length >> scale) == 0);
-//            current().nextBytes(value);
-//            //logger.debug("vbytes.w.value.length: {}", value.length);
-//            for (int i = 0; i < value.length; i++) {
-//                value[i] = (byte) ((value[i] & 0xFF) >> (Byte.SIZE - range));
-//            }
-//            //logger.debug("vbytes.w.value: {}", value);
-//
-//            params.add(scale);
-//            params.add(range);
-//            output.writeBytes(scale, range, value);
-//
-//            return value;
-//        }
-//
-//    };
-//    ASCII() {
-//
-//        @Override
-//        Object read(final int size, final BitInput input) throws IOException {
-//            return input.readAscii();
-//        }
-//
-//
-//        @Override
-//        void write(final List<Object> params, final BitOutput output)
-//            throws IOException {
-//
-//            final int s = BitIoRandoms.lengthSize()
-//
-//            output.writeAscii((String) value);
-//        }
-//
-//    };
+    },
+    CHAR() {
+
+        @Override
+        Object read(final List<Object> params, final BitInput input)
+            throws IOException {
+
+            final int size = (int) params.remove(0);
+            final char value = input.readChar(size);
+
+            return value;
+        }
+
+
+        @Override
+        Object write(final List<Object> params, final BitOutput output)
+            throws IOException {
+
+            final boolean u = true;
+            final int e = 4;
+            final int size = BitIoRandoms.size(u, e);
+            final char value = (char) BitIoRandoms.value(u, e, size);
+            params.add(size);
+            output.writeChar(size, value);
+
+            return value;
+        }
+
+    };
 
 
     private static final Logger logger

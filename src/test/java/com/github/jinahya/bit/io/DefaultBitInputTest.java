@@ -17,6 +17,7 @@
 package com.github.jinahya.bit.io;
 
 
+import com.github.jinahya.bit.io.octet.BufferInput;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import org.testng.annotations.Test;
@@ -35,14 +36,14 @@ public class DefaultBitInputTest {
         final BitInput input = new DefaultBitInput<BufferInput>(null) {
 
             @Override
-            public int readUnsignedByte() throws IOException {
+            public int read() throws IOException {
 
                 if (delegate == null) {
                     final ByteBuffer buffer = ByteBuffer.allocate(0);
                     delegate = new BufferInput(buffer);
                 }
 
-                return super.readUnsignedByte();
+                return super.read();
             }
 
         };
@@ -55,23 +56,23 @@ public class DefaultBitInputTest {
         final BitInput input = new DefaultBitInput(null) {
 
             @Override
-            public int readUnsignedByte() throws IOException {
+            public int read() throws IOException {
 
                 if (delegate == null) {
                     delegate = new BufferInput(null) {
 
                         @Override
-                        public int readUnsignedByte() throws IOException {
+                        public int read() throws IOException {
                             if (source == null) {
                                 source = ByteBuffer.allocate(0);
                             }
-                            return super.readUnsignedByte();
+                            return super.read();
                         }
 
                     };
                 }
 
-                return super.readUnsignedByte();
+                return super.read();
             }
 
         };

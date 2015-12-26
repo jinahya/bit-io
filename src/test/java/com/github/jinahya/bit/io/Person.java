@@ -17,8 +17,6 @@
 package com.github.jinahya.bit.io;
 
 
-import com.github.jinahya.bit.io.codec.BitDecodable;
-import com.github.jinahya.bit.io.codec.BitEncodable;
 import java.io.IOException;
 import static java.util.concurrent.ThreadLocalRandom.current;
 
@@ -27,7 +25,7 @@ import static java.util.concurrent.ThreadLocalRandom.current;
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
-public class Person implements BitDecodable, BitEncodable {
+public class Person implements BitReadable, BitWritable {
 
 
     public static Person newRandomInstance() {
@@ -73,17 +71,17 @@ public class Person implements BitDecodable, BitEncodable {
 
 
     @Override
-    public void decode(final BitInput input) throws IOException {
+    public void read(final BitInput input) throws IOException {
 
-        setAge(input.readUnsignedInt(7));
+        setAge(input.readInt(true, 7));
         setMerried(input.readBoolean());
     }
 
 
     @Override
-    public void encode(final BitOutput output) throws IOException {
+    public void write(final BitOutput output) throws IOException {
 
-        output.writeUnsignedInt(7, getAge());
+        output.writeInt(true, 7, getAge());
         output.writeBoolean(isMarried());
     }
 

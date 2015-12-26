@@ -18,6 +18,7 @@
 package com.github.jinahya.bit.io;
 
 
+import com.github.jinahya.bit.io.octet.ByteInput;
 import java.io.IOException;
 
 
@@ -30,8 +31,8 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
 
 
     /**
-     * Returns the value of {@link #readUnsignedByte()} while incrementing the
-     * {@code count} by one.
+     * Returns the value of {@link #read()} while incrementing the {@code count}
+     * by one.
      *
      * @return an unsigned byte value.
      *
@@ -39,7 +40,7 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
      */
     protected int octet() throws IOException {
 
-        final int octet = readUnsignedByte();
+        final int octet = read() & 0xFF;
         ++count;
 
         return octet;
@@ -47,21 +48,21 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
 
 
     /**
-     * Reads an unsigned byte value.
+     * Reads an unsigned int value whose size is equals to or less than
+     * {@value BitIoConstants#U8_SIZE_MAX}.
      *
      * @param size the number of bits for the value; between
-     * {@value com.github.jinahya.bit.io.BitIoConstants#UBYTE_SIZE_MIN}
-     * (inclusive) and
-     * {@value com.github.jinahya.bit.io.BitIoConstants#UBYTE_SIZE_MAX}
+     * {@value com.github.jinahya.bit.io.BitIoConstants#U8_SIZE_MIN} (inclusive)
+     * and {@value com.github.jinahya.bit.io.BitIoConstants#U8_SIZE_MAX}
      * (inclusive).
      *
      * @return an unsigned byte value.
      *
      * @throws IOException if an I/O error occurs.
      */
-    protected int readUnsignedByte(final int size) throws IOException {
+    protected int readUnsigned8(final int size) throws IOException {
 
-        BitIoConstraints.requireValidUnsignedByteSize(size);
+        BitIoConstraints.requireValidUnsigned8Size(size);
 
         if (index == 8) {
             int octet = octet();
@@ -79,8 +80,8 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
         final int required = size - available;
 
         if (required > 0) {
-            return (readUnsignedByte(available) << required)
-                   | readUnsignedByte(required);
+            return (readUnsigned8(available) << required)
+                   | readUnsigned8(required);
         }
 
         int value = 0x00;
@@ -94,43 +95,93 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
     }
 
 
-    @Override
-    public boolean readBoolean() throws IOException {
-
-        return readUnsignedByte(1) == 0x01;
-    }
-
-
     /**
-     * Reads an unsigned short value.
+     * Reads an unsigned int value whose size is equals to or less than
+     * {@value BitIoConstants#U16_SIZE_MAX}.
      *
      * @param size the number of bits for the value; between
-     * {@value com.github.jinahya.bit.io.BitIoConstants#USHORT_SIZE_MIN}
+     * {@value com.github.jinahya.bit.io.BitIoConstants#U16_SIZE_MIN}
      * (inclusive) and
-     * {@value com.github.jinahya.bit.io.BitIoConstants#USHORT_SIZE_MAX}
+     * {@value com.github.jinahya.bit.io.BitIoConstants#U16_SIZE_MAX}
      * (inclusive).
      *
      * @return an unsigned short value.
      *
      * @throws IOException if an I/O error occurs.
      */
-    protected int readUnsignedShort(final int size) throws IOException {
+    protected int readUnsigned16(final int size) throws IOException {
 
-        BitIoConstraints.requireValidUnsignedShortSize(size);
+        BitIoConstraints.requireValidUnsigned16Size(size);
 
         int value = 0x00;
 
-        final int quotient = size / BitIoConstants.UBYTE_SIZE_MAX;
-        final int remainder = size % BitIoConstants.UBYTE_SIZE_MAX;
+        final int quotient = size / 8;
+        final int remainder = size % 8;
 
         for (int i = 0; i < quotient; i++) {
-            value <<= BitIoConstants.UBYTE_SIZE_MAX;
-            value |= readUnsignedByte(BitIoConstants.UBYTE_SIZE_MAX);
+            value <<= 8;
+            value |= readUnsigned8(8);
         }
 
         if (remainder > 0) {
             value <<= remainder;
-            value |= readUnsignedByte(remainder);
+            value |= readUnsigned8(remainder);
+        }
+
+        return value;
+    }
+
+
+    // ----------------------------------------------------------------- boolean
+    @Override
+    public boolean readBoolean() throws IOException {
+
+        return readInt(true, 1) == 1;
+    }
+
+
+    @Override
+    public byte readByte(final boolean unsigned, final int size)
+        throws IOException {
+
+        BitIoConstraints.requireValidSize(unsigned, 3, size);
+
+        return (byte) readInt(unsigned, size);
+    }
+
+
+    @Override
+    public short readShort(final boolean unsigned, final int size)
+        throws IOException {
+
+        BitIoConstraints.requireValidSize(unsigned, 4, size);
+
+        return (short) readInt(unsigned, size);
+    }
+
+
+    @Override
+    public int readInt(final boolean unsigned, final int size)
+        throws IOException {
+
+        BitIoConstraints.requireValidSize(unsigned, 5, size);
+
+        if (!unsigned) {
+            final int usize = size - 1;
+            return ((0 - readInt(true, 1)) << usize) | readInt(true, usize);
+        }
+
+        int value = 0x00;
+
+        final int quotient = size / 16;
+        final int remainder = size % 16;
+        for (int i = 0; i < quotient; i++) {
+            value <<= 16;
+            value |= readUnsigned16(16);
+        }
+        if (remainder > 0) {
+            value <<= remainder;
+            value |= readUnsigned16(remainder);
         }
 
         return value;
@@ -138,243 +189,104 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
 
 
     @Override
-    public int readUnsignedInt(final int size) throws IOException {
+    public long readLong(final boolean unsigned, final int size)
+        throws IOException {
 
-        BitIoConstraints.requireValidUnsignedIntSize(size);
+        BitIoConstraints.requireValidSize(unsigned, 6, size);
 
-        int value = 0x00;
-
-        final int quotient = size / BitIoConstants.USHORT_SIZE_MAX;
-        final int remainder = size % BitIoConstants.USHORT_SIZE_MAX;
-
-        for (int i = 0; i < quotient; i++) {
-            value <<= BitIoConstants.USHORT_SIZE_MAX;
-            value |= readUnsignedShort(BitIoConstants.USHORT_SIZE_MAX);
+        if (!unsigned) {
+            final int usize = size - 1;
+            return ((0L - readLong(true, 1)) << usize) | readLong(true, usize);
         }
-
-        if (remainder > 0) {
-            value <<= remainder;
-            value |= readUnsignedShort(remainder);
-        }
-
-        return value;
-    }
-
-
-    @Override
-    public int readInt(final int size) throws IOException {
-
-        BitIoConstraints.requireValidIntSize(size);
-
-        final int usize = size - 1;
-
-        return (readBoolean() ? (-1 << usize) : 0) | readUnsignedInt(usize);
-    }
-
-
-    @Override
-    public long readUnsignedLong(final int size) throws IOException {
-
-        BitIoConstraints.requireValidUnsignedLongSize(size);
 
         long value = 0x00L;
 
-        final int quotient = size / BitIoConstants.UINT_SIZE_MAX;
-        final int remainder = size % BitIoConstants.UINT_SIZE_MAX;
-
+        final int quotient = size / 31;
+        final int remainder = size % 31;
         for (int i = 0; i < quotient; i++) {
-            value <<= BitIoConstants.UINT_SIZE_MAX;
-            value |= readUnsignedInt(BitIoConstants.UINT_SIZE_MAX);
+            value <<= 31;
+            value |= readInt(true, 31);
         }
-
         if (remainder > 0) {
             value <<= remainder;
-            value |= readUnsignedInt(remainder);
+            value |= readInt(true, remainder);
         }
 
         return value;
     }
 
 
+    // -------------------------------------------------------------------- char
     @Override
-    public long readLong(final int size) throws IOException {
+    public char readChar(int size) throws IOException {
 
-        BitIoConstraints.requireValidLongSize(size);
+        BitIoConstraints.requireValidSize(true, 4, size);
 
-        final int usize = size - 1;
-
-        return (readBoolean() ? (-1L << usize) : 0L) | readUnsignedLong(usize);
+        return (char) readInt(true, size);
     }
 
 
+//    @Deprecated
 //    @Override
-//    public float readFloat() throws IOException {
+//    public char readChar() throws IOException {
 //
-//        return Float.intBitsToFloat(readInt(32));
+//        return readChar(BitIoConstants.CHAR_SIZE_MAX);
 //    }
-//
-//
-//    @Override
-//    public double readDouble() throws IOException {
-//
-//        return Double.longBitsToDouble(readLong(64));
-//    }
-//    @Override
-//    public <T extends BitReadable> T readObject(final T value)
-//        throws IOException {
-//
-//        if (value == null) {
-//            throw new NullPointerException("null value");
-//        }
-//
-//        value.read(this);
-//
-//        return value;
-//    }
-//
-//
-//    @Override
-//    public <T extends BitDecodable> void decodeObject(final T value)
-//        throws IOException {
-//
-//        if (value == null) {
-//            throw new NullPointerException("null value");
-//        }
-//
-//        value.decode(this);
-//    }
-//
-//
-//    @Override
-//    public <T> T readObject(final BitDecoder<? extends T> decoder)
-//        throws IOException {
-//
-//        if (decoder == null) {
-//            throw new NullPointerException("null decoder");
-//        }
-//
-//        return decoder.decode(this);
-//    }
-//    @Override
-//    public <T> T readNullable(final BitDecoder<T> decoder) throws IOException {
-//
-//        if (decoder == null) {
-//            throw new NullPointerException("null decoder");
-//        }
-//
-//        if (!readBoolean()) {
-//            return null;
-//        }
-//
-//        return readObject(decoder);
-//    }
-//    @Override
-//    public <T> T readObject(final Function<BitInput, ? extends T> decoder)
-//        throws IOException {
-//
-//        if (decoder == null) {
-//            throw new NullPointerException("null decoder");
-//        }
-//
-//        try {
-//            return decoder.apply(this);
-//        } catch (final UncheckedIOException uioe) {
-//            throw uioe.getCause();
-//        } catch (final RuntimeException re) {
-//            final Throwable cause = re.getCause();
-//            if (cause instanceof IOException) {
-//                throw (IOException) cause;
-//            }
-//            throw re;
-//        }
-//    }
-//    @Override
-//    public <T> T[] readArray(final int scale,
-//                             final Function<BitInput, T> reader)
-//        throws IOException {
-//
-//        BitIoConstraints.requireValidUnsignedIntSize(scale);
-//
-//        if (reader == null) {
-//            throw new NullPointerException("null reader");
-//        }
-//
-//        @SuppressWarnings("unchecked")
-//        final T[] array = (T[]) new Object[readUnsignedInt(scale)];
-//
-//        for (int i = 0; i < array.length; i++) {
-//            array[i] = readObject(reader);
-//        }
-//
-//        return array;
-//    }
-//    @Override
-//    public <T> List<T> readList(final int scale,
-//                                final Function<BitInput, T> reader)
-//        throws IOException {
-//
-//        BitIoConstraints.requireValidUnsignedIntSize(scale);
-//
-//        if (reader == null) {
-//            throw new NullPointerException("null reader");
-//        }
-//
-//        final int size = readUnsignedInt(scale);
-//
-//        final List<T> value = new ArrayList<T>(size);
-//
-//        for (int i = 0; i < size; i++) {
-//            value.add(readObject(reader));
-//        }
-//
-//        return value;
-//    }
-//    @Override
-//    public void readBytes(final byte[] array, final int offset,
-//                          final int length, final int size)
-//        throws IOException {
-//
-//        BitIoConstraints.requireValidArrayOffsetLength(array, offset, length);
-//        BitIoConstraints.requireValidUnsignedByteSize(size);
-//
-//        final int limit = offset + length;
-//        for (int i = offset; i < limit; i++) {
-//            array[i] = (byte) readUnsignedByte(size);
-//        }
-//    }
-//
-//
-//    @Override
-//    public void readBytes(final byte[] array, final int offset,
-//                          final int size)
-//        throws IOException {
-//
-//        readBytes(array, offset, array.length - offset, size);
-//    }
-//
-//
-//    @Override
-//    public void readBytes(final byte[] array, final int size)
-//        throws IOException {
-//
-//        readBytes(array, 0, size);
-//    }
-//    @Override
-//    public byte[] readBytes(final int scale, final int size)
-//        throws IOException {
-//
-//        BitIoConstraints.requireValidUnsignedIntSize(scale);
-//        BitIoConstraints.requireValidUnsignedByteSize(size);
-//
-//        final int length = readUnsignedInt(scale);
-//        final byte[] value = new byte[length];
-//
-//        for (int i = 0; i < value.length; i++) {
-//            value[i] = (byte) readUnsignedByte(size);
-//        }
-//
-//        return value;
-//    }
+    // ------------------------------------------------------------------- float
+    @Override
+    public float readFloat() throws IOException {
+
+        return Float.intBitsToFloat(readInt(false, 32));
+    }
+
+
+    // ------------------------------------------------------------------ double
+    @Override
+    public double readDouble() throws IOException {
+
+        return Double.longBitsToDouble(readLong(false, 64));
+    }
+
+
+    @Override
+    public <T extends BitReadable> T readObject(final Class<T> type)
+        throws IOException {
+
+        if (type == null) {
+            throw new NullPointerException("null type");
+        }
+
+        final T value;
+        try {
+            value = type.newInstance();
+        } catch (final InstantiationException ie) {
+            throw new RuntimeException(ie);
+        } catch (final IllegalAccessException iae) {
+            throw new RuntimeException(iae);
+        }
+
+        value.read(this);
+
+        return value;
+    }
+
+
+    @Override
+    public <T extends BitReadable> T readNullable(final Class<T> type)
+        throws IOException {
+
+        if (type == null) {
+            throw new NullPointerException("null type");
+        }
+
+        if (!readBoolean()) {
+            return null;
+        }
+
+        return readObject(type);
+    }
+
+
     @Override
     public long align(final int bytes) throws IOException {
 
@@ -387,17 +299,31 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
         // discard remained bits in current octet.
         if (index < 8) {
             bits += (8 - index);
-            readUnsignedByte((int) bits); // count increments
+            readUnsigned8((int) bits); // count increments
         }
 
         final long remainder = count % bytes;
         long octets = (remainder > 0 ? bytes : 0) - remainder;
         for (; octets > 0; octets--) {
-            readUnsignedByte(8);
+            readUnsigned8(8);
             bits += 8;
         }
 
         return bits;
+    }
+
+
+    @Override
+    public long getCount() {
+
+        return count;
+    }
+
+
+    @Override
+    public int getIndex() {
+
+        return index;
     }
 
 
@@ -416,7 +342,7 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
     /**
      * number of bytes read so far.
      */
-    private long count = 0;
+    private long count = 0L;
 
 }
 

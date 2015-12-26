@@ -17,7 +17,6 @@
 package com.github.jinahya.bit.io.octet;
 
 
-
 /**
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;

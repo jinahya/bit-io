@@ -20,6 +20,7 @@ package com.github.jinahya.bit.io;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.nio.channels.WritableByteChannel;
 
 
 /**
@@ -28,6 +29,75 @@ import java.nio.ByteBuffer;
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
 public class BufferOutput extends AbstractByteOutput<ByteBuffer> {
+
+
+    /**
+     * Ensures specified byte buffer has remaining for writing. This method, if
+     * the buffer has no remaining, writes the buffer to specified channel until
+     * at least one byte is written.
+     *
+     * @param buffer the byte buffer
+     * @param channel a channel for draining buffer.
+     *
+     * @return given buffer.
+     *
+     * @throws IOException if an I/O error occurs.
+     */
+    public static ByteBuffer ensureRemaining(final ByteBuffer buffer,
+                                             final WritableByteChannel channel)
+        throws IOException {
+
+        if (buffer == null) {
+            throw new NullPointerException("null buffer");
+        }
+
+        if (channel == null) {
+            throw new NullPointerException("null channel");
+        }
+
+        if (!buffer.hasRemaining()) {
+            buffer.flip(); // limit -> position; position -> zero;
+            do {
+                channel.write(buffer);
+            } while (buffer.position() == 0);
+            buffer.compact(); // position -> n+1; limit -> capacity
+        }
+
+        return buffer;
+    }
+
+
+    public static BufferOutput newInstance(final WritableByteChannel channel,
+                                           final int capacity,
+                                           final boolean direct) {
+
+        if (channel == null) {
+            throw new NullPointerException("null channel");
+        }
+
+        if (capacity <= 0) {
+            throw new IllegalArgumentException(
+                "capacity(" + capacity + ") <= 0");
+        }
+
+        return new BufferOutput(null) {
+
+            @Override
+            public void write(final int value) throws IOException {
+
+                if (target == null) {
+                    target = direct
+                             ? ByteBuffer.allocateDirect(capacity)
+                             : ByteBuffer.allocate(capacity);
+                }
+
+                super.write(value);
+
+                ensureRemaining(target, channel);
+            }
+
+        };
+    }
 
 
     /**
@@ -43,30 +113,19 @@ public class BufferOutput extends AbstractByteOutput<ByteBuffer> {
 
 
     /**
-     * {@inheritDoc} The {@code writeUnsignedByte(int)} method of
-     * {@code BufferOutput} class calls {@link ByteBuffer#put(byte)} on
-     * {@link #target} with given {@code value}. Override this method if
-     * {@link #target} is supposed to be lazily initialized and set.
+     * {@inheritDoc} The {@code write(int)} method of {@code BufferOutput} class
+     * invokes {@link ByteBuffer#put(byte)} on {@link #getTarget()} with given
+     * {@code value}. Override this method if {@link #target} is supposed to be
+     * lazily initialized or adjusted.
      *
      * @param value {@inheritDoc }
      *
      * @throws IOException {@inheritDoc }
-     *
-     * @see #target
-     * @see ByteBuffer#put(byte)
      */
     @Override
-    public void writeUnsignedByte(final int value) throws IOException {
+    public void write(final int value) throws IOException {
 
-        target.put((byte) value);
-    }
-
-
-    public BufferOutput target(final ByteBuffer target) {
-
-        setTarget(target);
-
-        return this;
+        getTarget().put((byte) value);
     }
 
 }

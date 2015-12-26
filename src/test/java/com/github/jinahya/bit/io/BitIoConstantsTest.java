@@ -17,23 +17,11 @@
 package com.github.jinahya.bit.io;
 
 
-import static org.testng.Assert.assertEquals;
-import org.testng.annotations.Test;
-
-
 /**
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
 public class BitIoConstantsTest {
-
-
-    @Test
-    public static void UBYTE_SIZE() {
-
-        assertEquals(BitIoConstants.UBYTE_SIZE_MIN, 1);
-        assertEquals(BitIoConstants.UBYTE_SIZE_MAX, Byte.SIZE);
-    }
 
 }
 

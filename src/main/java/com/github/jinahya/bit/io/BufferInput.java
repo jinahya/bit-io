@@ -18,16 +18,92 @@
 package com.github.jinahya.bit.io;
 
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.nio.channels.ReadableByteChannel;
 
 
 /**
- * A {@link ByteInput} implementation using {@link ByteBuffer}s.
+ * A {@link ByteInput} implementation uses a {@link ByteBuffer} as
+ * {@link #source}.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
 public class BufferInput extends AbstractByteInput<ByteBuffer> {
+
+
+    /**
+     * Ensures specified byte buffer has remaining for reading. This method, if
+     * the buffer has no remaining, reads the buffer from specified channel
+     * until at least one byte is read.
+     *
+     * @param buffer the byte buffer
+     * @param channel a channel for filling buffer.
+     *
+     * @return given buffer.
+     *
+     * @throws IOException if an I/O error occurs.
+     */
+    public static ByteBuffer ensureRemaining(final ByteBuffer buffer,
+                                             final ReadableByteChannel channel)
+        throws IOException {
+
+        if (buffer == null) {
+            throw new NullPointerException("null buffer");
+        }
+
+        if (channel == null) {
+            throw new NullPointerException("null channel");
+        }
+
+        if (!buffer.hasRemaining()) {
+            buffer.clear(); // position -> zero; limit -> capacity;
+            do {
+                final int read = channel.read(buffer);
+                if (read == -1) {
+                    throw new EOFException();
+                }
+            } while (buffer.position() == 0);
+            buffer.flip(); // limit -> position; position -> zero;
+        }
+
+        return buffer;
+    }
+
+
+    public static BufferInput newInstance(final ReadableByteChannel channel,
+                                          final int capacity,
+                                          final boolean direct) {
+
+        if (channel == null) {
+            throw new NullPointerException("null channel");
+        }
+
+        if (capacity <= 0) {
+            throw new IllegalArgumentException(
+                "capacity(" + capacity + ") <= 0");
+        }
+
+        return new BufferInput(null) {
+
+            @Override
+            public int read() throws IOException {
+
+                if (source == null) {
+                    source = direct
+                             ? ByteBuffer.allocateDirect(capacity)
+                             : ByteBuffer.allocate(capacity);
+                    source.position(source.limit());
+                }
+
+                ensureRemaining(source, channel);
+
+                return super.read();
+            }
+
+        };
+    }
 
 
     /**
@@ -43,30 +119,19 @@ public class BufferInput extends AbstractByteInput<ByteBuffer> {
 
 
     /**
-     * {@inheritDoc} The {@code readUnsignedByte()} method of
-     * {@code BufferInput} class returns
-     * <pre>source.get() &amp; 0xFF</pre>. Override this method if
-     * {@link #source} is supposed to be lazily initialized and set.
+     * {@inheritDoc} The {@code read()} method of {@code BufferInput} invokes
+     * {@link ByteBuffer#get()} on {@link #getSource()} and return the result as
+     * an unsigned int. Override this method if {@link #source} is supposed to
+     * be lazily initialized or adjusted.
      *
      * @return {@inheritDoc }
      *
      * @throws IOException {@inheritDoc }
-     *
-     * @see #source
-     * @see ByteBuffer#get()
      */
     @Override
-    public int readUnsignedByte() throws IOException {
+    public int read() throws IOException {
 
-        return source.get() & 0xFF;
-    }
-
-
-    public BufferInput source(final ByteBuffer source) {
-
-        setSource(source);
-
-        return this;
+        return getSource().get() & 0xFF;
     }
 
 }

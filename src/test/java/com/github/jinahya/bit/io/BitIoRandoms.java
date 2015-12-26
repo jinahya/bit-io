@@ -25,97 +25,28 @@ import static java.util.concurrent.ThreadLocalRandom.current;
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
-final class BitIoRandoms {
+public final class BitIoRandoms {
 
 
-    static boolean randomBooleanValue() {
+    public static int size(final boolean unsigned, final int exponent) {
 
-        return current().nextBoolean();
-    }
-
-
-    static int randomUnsignedIntSize() {
-
+        final int delta = unsigned ? 0 : 1;
         final int size = current().nextInt(
-            BitIoConstants.UINT_SIZE_MIN, BitIoConstants.UINT_SIZE_MAX + 1);
+            1 + delta, (int) Math.pow(2, exponent) + delta);
 
-        return BitIoConstraints.requireValidUnsignedIntSize(size);
+        return BitIoConstraints.requireValidSize(unsigned, exponent, size);
     }
 
 
-    static int randomUnsignedIntValue(final int size) {
+    public static long value(final boolean unsigned, final int exponent,
+                             final int size) {
 
-        BitIoConstraints.requireValidUnsignedIntSize(size);
+        BitIoConstraints.requireValidSize(unsigned, exponent, size);
 
-        final int value = current().nextInt() >>> (Integer.SIZE - size);
+        final long value = current().nextLong();
+        final int shift = Long.SIZE - size;
 
-        return BitIoConstraints.requireValidUnsignedIntValue(value, size);
-    }
-
-
-    static int randomIntSize() {
-
-        final int size = current().nextInt(
-            BitIoConstants.INT_SIZE_MIN, BitIoConstants.INT_SIZE_MAX + 1);
-
-        return BitIoConstraints.requireValidIntSize(size);
-    }
-
-
-    static int randomIntValue(final int size) {
-
-        BitIoConstraints.requireValidIntSize(size);
-
-        final int value = current().nextInt() >> (Integer.SIZE - size);
-
-        return BitIoConstraints.requireValidIntValue(value, size);
-    }
-
-
-    static int randomUnsignedLongSize() {
-
-        final int size = current().nextInt(
-            BitIoConstants.ULONG_SIZE_MIN, BitIoConstants.ULONG_SIZE_MAX + 1);
-
-        return BitIoConstraints.requireValidUnsignedLongSize(size);
-    }
-
-
-    static long unsignedLongValue(final int size) {
-
-        BitIoConstraints.requireValidUnsignedLongSize(size);
-
-        final long value = current().nextLong() >>> (Long.SIZE - size);
-
-        return BitIoConstraints.requireValidUnsignedLongValue(value, size);
-    }
-
-
-    static int randomLongSize() {
-
-        final int size = current().nextInt(
-            BitIoConstants.LONG_SIZE_MIN, BitIoConstants.LONG_SIZE_MAX + 1);
-
-        return BitIoConstraints.requireValidLongSize(size);
-    }
-
-
-    static long randomLongValue(final int size) {
-
-        BitIoConstraints.requireValidLongSize(size);
-
-        final long value = current().nextLong() >> (Long.SIZE - size);
-
-        return BitIoConstraints.requireValidLongValue(value, size);
-    }
-
-
-    static int randomByteSize() {
-
-        final int size = current().nextInt(
-            BitIoConstants.UBYTE_SIZE_MIN, BitIoConstants.UBYTE_SIZE_MAX + 1);
-
-        return BitIoConstraints.requireValidUnsignedByteSize(size);
+        return unsigned ? value >>> shift : value >> shift;
     }
 
 

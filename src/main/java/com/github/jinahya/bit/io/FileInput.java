@@ -44,36 +44,25 @@ public class FileInput extends AbstractByteInput<RandomAccessFile> {
 
 
     /**
-     * {@inheritDoc} The {@code readUnsignedByte()} method of {@code FileInput}
-     * class calls {@link RandomAccessFile#read()} on {@link #source} and
-     * returns the result as an unsigned value. Override this method if
+     * {@inheritDoc} The {@code read()} method of {@code FileInput} class
+     * invokes {@link RandomAccessFile#read()} on {@link #source} and returns
+     * the result if it is not {@code -1}. Override this method if
      * {@link #source} is supposed to be lazily initialized and set.
      *
      * @return {@inheritDoc}
      *
      * @throws IOException {@inheritDoc}
      * @throws EOFException if the underlying file reached to end
-     *
-     * @see #source
-     * @see RandomAccessFile#read()
      */
     @Override
-    public int readUnsignedByte() throws IOException {
+    public int read() throws IOException {
 
         final int value = source.read();
         if (value == -1) {
-            throw new EOFException("eof");
+            throw new EOFException();
         }
 
         return value;
-    }
-
-
-    public FileInput source(final RandomAccessFile source) {
-
-        setSource(source);
-
-        return this;
     }
 
 }

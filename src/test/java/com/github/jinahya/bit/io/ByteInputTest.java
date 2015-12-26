@@ -48,7 +48,7 @@ abstract class ByteInputTest<T extends ByteInput> {
         final int capacity = current().nextInt(1024);
         final T output = instance(capacity);
         for (int i = 0; i < capacity; i++) {
-            final int value = output.readUnsignedByte();
+            final int value = output.read();
             assertTrue(value >= 0x00 && value <= 0xFF);
         }
     }

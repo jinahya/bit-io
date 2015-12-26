@@ -26,42 +26,6 @@ package com.github.jinahya.bit.io;
 final class BitIoConstants {
 
 
-    public static final int UBYTE_SIZE_MIN = 0x01;
-
-
-    public static final int UBYTE_SIZE_MAX = 0x08;
-
-
-    public static final int USHORT_SIZE_MIN = 0x01;
-
-
-    public static final int USHORT_SIZE_MAX = 0x10;
-
-
-    public static final int UINT_SIZE_MIN = 0x01;
-
-
-    public static final int UINT_SIZE_MAX = 0x1F;
-
-
-    public static final int INT_SIZE_MIN = 0x02;
-
-
-    public static final int INT_SIZE_MAX = 0x20;
-
-
-    public static final int ULONG_SIZE_MIN = 0x01;
-
-
-    public static final int ULONG_SIZE_MAX = 0x3F;
-
-
-    public static final int LONG_SIZE_MIN = 0x02;
-
-
-    public static final int LONG_SIZE_MAX = 0x40;
-
-
     private BitIoConstants() {
 
         super();

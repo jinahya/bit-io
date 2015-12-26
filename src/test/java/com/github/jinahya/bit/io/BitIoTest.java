@@ -17,82 +17,168 @@
 package com.github.jinahya.bit.io;
 
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
-import java.util.LinkedList;
-import java.util.List;
-import static java.util.concurrent.ThreadLocalRandom.current;
+import java.io.RandomAccessFile;
+import java.nio.ByteBuffer;
+import java.nio.file.Files;
+import java.util.function.Consumer;
 import org.slf4j.Logger;
 import static org.slf4j.LoggerFactory.getLogger;
 import static org.testng.Assert.assertEquals;
-import org.testng.annotations.Test;
 
 
 /**
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
-public class BitIoTest {
+public final class BitIoTest {
 
 
-    @Test(invocationCount = 1024)
-    public void test() throws IOException {
+    private static final Logger logger = getLogger(BitIoTest.class);
 
-        final BitIoType[] types = BitIoType.values();
-        final BitIoType type = types[current().nextInt(types.length)];
+
+    public static void array(final Consumer<BitOutput> writer,
+                             final Consumer<BitInput> reader)
+        throws IOException {
+
+        if (writer == null) {
+            throw new NullPointerException("null writer");
+        }
+
+        if (reader == null) {
+            throw new NullPointerException("null reader");
+        }
 
         final byte[] array = new byte[1048576];
-        final List<Object> params = new LinkedList<>();
 
-        final BitOutput output = new DelegatedBitOutput(
-            new ArrayOutput(array, 0, array.length));
-        final Object expected = type.write(params, output);
+        final DefaultBitOutput<ArrayOutput> output
+            = new DefaultBitOutput<>(new ArrayOutput(array, array.length, 0));
+        writer.accept(output);
         final long padded = output.align(1);
 
-        final BitInput input = new DelegatedBitInput(
-            new ArrayInput(array, 0, array.length));
-        final Object actual = type.read(params, input);
-        assertEquals(actual, expected, "type: " + type);
+        final BitInput input = new DefaultBitInput<>(
+            new ArrayInput(array, output.getDelegate().getIndex(), 0));
+        reader.accept(input);
+        final long discarded = input.align(1);
+
+        assertEquals(discarded, padded, "discarded != padded");
+    }
+
+
+    public static void buffer(final Consumer<BitOutput> writer,
+                              final Consumer<BitInput> reader)
+        throws IOException {
+
+        if (writer == null) {
+            throw new NullPointerException("null writer");
+        }
+
+        if (reader == null) {
+            throw new NullPointerException("null reader");
+        }
+
+        final ByteBuffer buffer = ByteBuffer.allocate(1048576);
+
+        final BitOutput output
+            = new DefaultBitOutput<>(new BufferOutput(buffer));
+        writer.accept(output);
+        final long padded = output.align(1);
+
+        buffer.flip();
+
+        final BitInput input = new DefaultBitInput<>(new BufferInput(buffer));
+        reader.accept(input);
         final long discarded = input.align(1);
 
         assertEquals(discarded, padded);
     }
 
 
-    @Test
-    public void test1() throws IOException {
+    public static void file(final Consumer<BitOutput> writer,
+                            final Consumer<BitInput> reader)
+        throws IOException {
 
-        final BitIoType[] types = BitIoType.values();
-
-        final byte[] array = new byte[1048576];
-
-        final int count = current().nextInt(512, 1024);
-        final List<Object> params = new LinkedList<>(); // type, param+, value
-
-        final BitOutput output = new DelegatedBitOutput(
-            new ArrayOutput(array, 0, array.length));
-        for (int i = 0; i < count; i++) {
-            final BitIoType type = types[current().nextInt(types.length)];
-            params.add(type);
-            final Object value = type.write(params, output);
-            params.add(value);
+        if (writer == null) {
+            throw new NullPointerException("null writer");
         }
+
+        if (reader == null) {
+            throw new NullPointerException("null reader");
+        }
+
+        final File file = Files.createTempFile(null, null).toFile();
+        file.deleteOnExit();
+
+        final RandomAccessFile target = new RandomAccessFile(file, "rwd");
+        final BitOutput output = new DefaultBitOutput<>(new FileOutput(target));
+        writer.accept(output);
+        final long padded = output.align(1);
+        target.close();
+
+        final RandomAccessFile source = new RandomAccessFile(file, "r");
+        final BitInput input = new DefaultBitInput<>(new FileInput(source));
+        reader.accept(input);
+        final long discarded = input.align(1);
+        source.close();
+
+        assertEquals(discarded, padded);
+    }
+
+
+    public static void stream(final Consumer<BitOutput> writer,
+                              final Consumer<BitInput> reader)
+        throws IOException {
+
+        if (writer == null) {
+            throw new NullPointerException("null writer");
+        }
+
+        if (reader == null) {
+            throw new NullPointerException("null reader");
+        }
+
+        final ByteArrayOutputStream target = new ByteArrayOutputStream(1048576);
+        final BitOutput output
+            = new DefaultBitOutput<>(new StreamOutput(target));
+        writer.accept(output);
         final long padded = output.align(1);
 
-        final BitInput input = new DelegatedBitInput(
-            new ArrayInput(array, 0, array.length));
-        for (int i = 0; i < count; i++) {
-            final BitIoType type = (BitIoType) params.remove(0);
-            final Object actual = type.read(params, input);
-            final Object expected = params.remove(0);
-            assertEquals(actual, expected, "type: " + type);
-        }
+        final ByteArrayInputStream source
+            = new ByteArrayInputStream(target.toByteArray());
+        final BitInput input = new DefaultBitInput<>(new StreamInput(source));
+        reader.accept(input);
         final long discarded = input.align(1);
 
         assertEquals(discarded, padded);
     }
 
 
-    private transient final Logger logger = getLogger(getClass());
+    public static void all(final Consumer<BitOutput> writer,
+                           final Consumer<BitInput> reader)
+        throws IOException {
+
+        if (writer == null) {
+            throw new NullPointerException("null writer");
+        }
+
+        if (reader == null) {
+            throw new NullPointerException("null reader");
+        }
+
+        array(writer, reader);
+        buffer(writer, reader);
+        file(writer, reader);
+        stream(writer, reader);
+    }
+
+
+    private BitIoTest() {
+
+        super();
+    }
 
 }
 

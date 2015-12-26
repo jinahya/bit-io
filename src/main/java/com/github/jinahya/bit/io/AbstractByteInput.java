@@ -21,16 +21,16 @@ package com.github.jinahya.bit.io;
 /**
  * An abstract class for implementing {@code ByteInput}.
  *
+ * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  * @param <T> byte source type parameter
  */
 public abstract class AbstractByteInput<T> implements ByteInput {
 
 
     /**
-     * Creates a new instance built on top of the specified underlying byte
-     * source.
+     * Creates a new instance wrapping specified byte source.
      *
-     * @param source the underlying byte source, or {@code null} if it is
+     * @param source the underlying byte source or {@code null} if it is
      * intended to be lazily initialized and set.
      */
     public AbstractByteInput(final T source) {
@@ -41,12 +41,22 @@ public abstract class AbstractByteInput<T> implements ByteInput {
     }
 
 
+    /**
+     * Returns the current value of {@link #source}.
+     *
+     * @return the current value of {@link #source}
+     */
     public T getSource() {
 
         return source;
     }
 
 
+    /**
+     * Replaces the current value of {@link #source} with given.
+     *
+     * @param source new value for {@link #source}
+     */
     public void setSource(final T source) {
 
         this.source = source;

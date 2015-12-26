@@ -38,7 +38,7 @@ public interface ByteOutput {
      *
      * @throws IOException if an I/O error occurs.
      */
-    void writeUnsignedByte(int value) throws IOException;
+    void write(int value) throws IOException;
 
 }
 

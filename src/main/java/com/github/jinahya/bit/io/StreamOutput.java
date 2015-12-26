@@ -24,6 +24,8 @@ import java.io.OutputStream;
 
 /**
  * A {@link ByteOutput} implementation for {@link OutputStream}s.
+ *
+ * @see StreamInput
  */
 public class StreamOutput extends AbstractByteOutput<OutputStream> {
 
@@ -42,7 +44,7 @@ public class StreamOutput extends AbstractByteOutput<OutputStream> {
 
     /**
      * {@inheritDoc} The {@code writeUnsginedByte(int)} method of
-     * {@code StreamOutput} class calls {@link OutputStream#write(int)} on
+     * {@code StreamOutput} class invokes {@link OutputStream#write(int)} on
      * {@link #target} with given {@code value}. Override this method if
      * {@link #target} is supposed to be lazily initialized and set.
      *
@@ -54,17 +56,9 @@ public class StreamOutput extends AbstractByteOutput<OutputStream> {
      * @see OutputStream#write(int)
      */
     @Override
-    public void writeUnsignedByte(final int value) throws IOException {
+    public void write(final int value) throws IOException {
 
         target.write(value);
-    }
-
-
-    public StreamOutput target(final OutputStream target) {
-
-        setTarget(target);
-
-        return this;
     }
 
 }

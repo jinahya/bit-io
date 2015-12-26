@@ -43,30 +43,19 @@ public class FileOutput extends AbstractByteOutput<RandomAccessFile> {
 
 
     /**
-     * {@inheritDoc} The {@code writeUnsginedByte(int)} method of
-     * {@code StreamOutput} class calls {@link RandomAccessFile#write(int)} on
-     * {@link #target} with given {@code value}. Override this method if
-     * {@link #target} is supposed to be lazily initialized and set.
+     * {@inheritDoc} The {@code write(int)} method of {@code FileOutput} class
+     * invokes {@link RandomAccessFile#write(int)} on {@link #target} with given
+     * {@code value}. Override this method if {@link #target} is supposed to be
+     * lazily initialized and set.
      *
      * @param value {@inheritDoc}
      *
      * @throws IOException {@inheritDoc}
-     *
-     * @see #target
-     * @see RandomAccessFile#writeByte(int)
      */
     @Override
-    public void writeUnsignedByte(final int value) throws IOException {
+    public void write(final int value) throws IOException {
 
         target.write(value);
-    }
-
-
-    public FileOutput target(final RandomAccessFile target) {
-
-        setTarget(target);
-
-        return this;
     }
 
 }

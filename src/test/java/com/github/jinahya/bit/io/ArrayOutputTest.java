@@ -17,6 +17,7 @@
 package com.github.jinahya.bit.io;
 
 
+
 /**
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
@@ -33,7 +34,7 @@ public class ArrayOutputTest extends ByteOutputTest<ArrayOutput> {
     @Override
     ArrayOutput instance(final int capacity) {
 
-        return new ArrayOutput(new byte[capacity], 0, capacity);
+        return new ArrayOutput(new byte[capacity], capacity, 0);
     }
 
 }

@@ -35,7 +35,7 @@ public class FileInputTest {
         final ByteInput byteInput = new FileInput(null) {
 
             @Override
-            public int readUnsignedByte() throws IOException {
+            public int read() throws IOException {
                 if (source == null) {
                     source = new RandomAccessFile(
                         "com/github/jinahya/bit/io/FileInputTest.class", "r");
@@ -47,7 +47,7 @@ public class FileInputTest {
                         }
                     }));
                 }
-                return super.readUnsignedByte();
+                return super.read();
             }
 
         };

@@ -47,7 +47,7 @@ abstract class ByteOutputTest<T extends ByteOutput> {
         final int capacity = current().nextInt(1024);
         final T output = instance(capacity);
         for (int i = 0; i < capacity; i++) {
-            output.writeUnsignedByte(current().nextInt(256));
+            output.write(current().nextInt(256));
         }
     }
 

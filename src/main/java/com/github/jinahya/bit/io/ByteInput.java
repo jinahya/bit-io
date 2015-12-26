@@ -38,7 +38,7 @@ public interface ByteInput {
      *
      * @throws IOException if an I/O error occurs.
      */
-    int readUnsignedByte() throws IOException;
+    int read() throws IOException;
 
 }
 

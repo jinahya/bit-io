@@ -44,9 +44,9 @@ public class StreamInput extends AbstractByteInput<InputStream> {
 
 
     /**
-     * {@inheritDoc} The {@code readUnsignedByte()} method of
-     * {@code StreamInput} class calls {@link InputStream#read()} on
-     * {@link #source} and returns if it is not an {@code end of stream}.
+     * {@inheritDoc} The {@code read()} method of {@code StreamInput} class
+     * invokes {@link InputStream#read()} on {@link #source} and returns the
+     * result if it is not an {@code end of stream}.
      *
      * @return {@inheritDoc}
      *
@@ -57,7 +57,7 @@ public class StreamInput extends AbstractByteInput<InputStream> {
      * @see InputStream#read()
      */
     @Override
-    public int readUnsignedByte() throws IOException {
+    public int read() throws IOException {
 
         final int value = source.read();
         if (value == -1) {
@@ -65,14 +65,6 @@ public class StreamInput extends AbstractByteInput<InputStream> {
         }
 
         return value;
-    }
-
-
-    public StreamInput source(final InputStream source) {
-
-        setSource(source);
-
-        return this;
     }
 
 }

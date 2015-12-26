@@ -18,6 +18,7 @@
 package com.github.jinahya.bit.io;
 
 
+import com.github.jinahya.bit.io.codec.BitEncoder;
 import java.io.IOException;
 
 
@@ -30,8 +31,8 @@ public interface BitOutput {
 
 
     /**
-     * Writes a 1-bit boolean value. This method writes {@code 0b1} for
-     * {@code true} and {@code 0b0} for {@code false}.
+     * Writes a 1-bit boolean value. This method writes {@code 1} for
+     * {@code true} and {@code 0} for {@code false}.
      *
      * @param value the value to write.
      *
@@ -41,99 +42,88 @@ public interface BitOutput {
 
 
     /**
-     * Writes an unsigned int value. Only the lower specified number of bits in
-     * {@code value} are written.
+     * Writes a {@code byte} value.
      *
-     * @param size the number of lower bits to write; between
-     * {@value com.github.jinahya.bit.io.BitIoConstants#UINT_SIZE_MIN}
-     * (inclusive) and
-     * {@value com.github.jinahya.bit.io.BitIoConstants#UINT_SIZE_MAX}
-     * (inclusive).
+     * @param unsigned a flag indicating unsigned value.
+     * @param size the number of bits for value.
      * @param value the value to write
      *
      * @throws IOException if an I/O error occurs.
      */
-    void writeUnsignedInt(int size, int value) throws IOException;
+    void writeByte(boolean unsigned, int size, byte value) throws IOException;
+
+
+    void writeShort(boolean unsigned, int size, short value) throws IOException;
+
+
+    void writeInt(boolean unsigned, int size, int value) throws IOException;
+
+
+    void writeLong(boolean unsigned, int size, long value) throws IOException;
 
 
     /**
-     * Writes a signed int value. Only the lower number of specified bits in
-     * {@code value} are written.
+     * Writes a char value.
      *
-     * @param size the number of lower bits to write; between
-     * {@value com.github.jinahya.bit.io.BitIoConstants#INT_SIZE_MIN}
-     * (inclusive) and
-     * {@value com.github.jinahya.bit.io.BitIoConstants#INT_SIZE_MAX}
-     * (inclusive).
+     * @param size the number of bits for value; between {@code 1} (inclusive)
+     * and {@code 16} (inclusive)
      * @param value the value to write
      *
      * @throws IOException if an I/O error occurs.
      */
-    void writeInt(int size, int value) throws IOException;
+    void writeChar(int size, char value) throws IOException;
+
+
+    void writeFloat(float value) throws IOException;
+
+
+    void writeDouble(double value) throws IOException;
 
 
     /**
-     * Writes an unsigned long value. Only the lower specified number of bits in
-     * {@code value} are written.
+     * Writes an object reference value. This method, if {@code nullable} is
+     * {@code true}, writes a preceding 1-bit boolean value for nullability and
+     * writes specified value if it is not {@code null}.
      *
-     * @param size the number of bits to write; between
-     * {@value com.github.jinahya.bit.io.BitIoConstants#ULONG_SIZE_MIN}
-     * (inclusive) and
-     * {@value com.github.jinahya.bit.io.BitIoConstants#ULONG_SIZE_MAX}
-     * (inclusive}.
+     * @param <T> value type parameter
+     * @param nullable a flag for nullability
      * @param value the value to write.
      *
      * @throws IOException if an I/O error occurs.
+     * @throws NullPointerException if {@code nullable} is {@code flase} and
+     * {@code value} is {@code null}.
      */
-    void writeUnsignedLong(int size, long value) throws IOException;
-
-
-    /**
-     * Writes a signed long value. Only the lower {@code size} bits in
-     * {@code value} are written.
-     *
-     * @param size the number of bits to write; between
-     * {@value com.github.jinahya.bit.io.BitIoConstants#LONG_SIZE_MIN}
-     * (inclusive) and
-     * {@value com.github.jinahya.bit.io.BitIoConstants#LONG_SIZE_MAX}
-     * (inclusive). (inclusive).
-     * @param value the value to write.
-     *
-     * @throws IOException if an I/O error occurs.
-     */
-    void writeLong(int size, long value) throws IOException;
-
-
-    /**
-     * Writes a specified number of bytes from given array starting from
-     * specified offset.
-     *
-     * @param array the array
-     * @param offset the start offset
-     * @param length number of bytes to write.
-     * @param byteSize the number of bits for each byte between
-     * {@value com.github.jinahya.bit.io.BitIoConstants#UBYTE_SIZE_MIN}
-     * (inclusive) and
-     * {@value com.github.jinahya.bit.io.BitIoConstants#UBYTE_SIZE_MAX}
-     * (inclusive).
-     *
-     * @throws IOException if an I/O error occurs.
-     */
-    void writeBytes(byte[] array, int offset, int length, int byteSize)
+    <T extends BitWritable> void writeObject(boolean nullable, T value)
         throws IOException;
 
 
     /**
-     * Writes an array of bytes.
+     * Encodes an object reference value using specified encoder.
      *
-     * @param lengthSize the number of bits for length;
-     * @param byteSize the number of valid bits in each byte
-     * @param value the array to write.
+     * @param <T> value type parameter
+     * @param encoder the encoder
+     * @param value the value to encode
      *
      * @throws IOException if an I/O error occurs.
      */
-    void writeBytes(int lengthSize, int byteSize, byte[] value)
+    <T> void encodeObject(BitEncoder<? super T> encoder, T value)
         throws IOException;
+
+
+    /**
+     * Returns the number of bytes written so far.
+     *
+     * @return number of byte written so far.
+     */
+    long getCount();
+
+
+    /**
+     * Returns the bit index to write in current octet.
+     *
+     * @return bit index to write in current octet.
+     */
+    int getIndex();
 
 
     /**
@@ -141,7 +131,7 @@ public interface BitOutput {
      *
      * @param bytes the number of bytes to align; must be positive.
      *
-     * @return the number of bits padded for alignment
+     * @return the number of bits padded while aligning
      *
      * @throws IOException if an I/O error occurs.
      */

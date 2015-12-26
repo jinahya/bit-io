@@ -18,6 +18,7 @@
 package com.github.jinahya.bit.io;
 
 
+import com.github.jinahya.bit.io.codec.BitDecoder;
 import java.io.IOException;
 
 
@@ -30,104 +31,91 @@ public interface BitInput {
 
 
     /**
-     * Reads a 1-bit boolean value. This method reads {@code true} for
-     * {@code 0b1} and {@code false} for {@code 0b0}.
+     * Reads a 1-bit boolean value. This method read a 1-bit unsigned int and
+     * return {@code true} for {@code 1} and {@code false} for {@code 0}.
      *
-     * @return {@code true} for {@code 0b1}, {@code false} for {@code 0b0}
+     * @return {@code true} for {@code 1}, {@code false} for {@code 0}
      *
      * @throws IOException if an I/O error occurs.
      */
     boolean readBoolean() throws IOException;
 
 
-    /**
-     * Reads an unsigned int value.
-     *
-     * @param size the number of bits for the value; between
-     * {@value com.github.jinahya.bit.io.BitIoConstants#UINT_SIZE_MIN}
-     * (inclusive) and
-     * {@value com.github.jinahya.bit.io.BitIoConstants#UINT_SIZE_MAX}
-     * (inclusive).
-     *
-     * @return the unsigned int value
-     *
-     * @throws IOException if an I/O error occurs
-     */
-    int readUnsignedInt(int size) throws IOException;
+    byte readByte(boolean unsigned, int size) throws IOException;
+
+
+    short readShort(boolean unsigned, int size) throws IOException;
+
+
+    int readInt(boolean unsigned, int size) throws IOException;
+
+
+    long readLong(boolean unsigned, int size) throws IOException;
 
 
     /**
-     * Reads a signed int value.
+     * Reads a char value.
      *
-     * @param size the number of bits for the value; between
-     * {@value com.github.jinahya.bit.io.BitIoConstants#INT_SIZE_MIN}
-     * (inclusive) and
-     * {@value com.github.jinahya.bit.io.BitIoConstants#INT_SIZE_MAX}
-     * (inclusive).
+     * @param size the number of bits for value; between {@code 1} (inclusive)
+     * and {@code 16} (inclusive)
      *
-     * @return a signed int value.
+     * @return a char value
      *
      * @throws IOException if an I/O error occurs.
      */
-    int readInt(int size) throws IOException;
+    char readChar(int size) throws IOException;
+
+
+    float readFloat() throws IOException;
+
+
+    double readDouble() throws IOException;
 
 
     /**
-     * Reads an unsigned long value.
+     * Reads an object reference value which is possibly {@code null}. This
+     * method reads preceding 1-bit boolean flag and, if it is {@code true},
+     * reads an instance of specified type.
      *
-     * @param size the number of bits for the value; between
-     * {@value com.github.jinahya.bit.io.BitIoConstants#ULONG_SIZE_MIN}
-     * (inclusive) and
-     * {@value com.github.jinahya.bit.io.BitIoConstants#ULONG_SIZE_MAX}
-     * (inclusive).
+     * @param <T> value type parameter
+     * @param nullable flat for nullability
+     * @param type value type.
      *
-     * @return an unsigned long value.
-     *
-     * @throws IOException if an I/O error occurs
-     */
-    long readUnsignedLong(int size) throws IOException;
-
-
-    /**
-     * Reads a signed long value.
-     *
-     * @param size the number of bits for the value; between
-     * {@value com.github.jinahya.bit.io.BitIoConstants#LONG_SIZE_MIN}
-     * (inclusive) and
-     * {@value com.github.jinahya.bit.io.BitIoConstants#LONG_SIZE_MAX}
-     * (inclusive).
-     *
-     * @return a signed long value
+     * @return an object reference value; may be {@code null}.
      *
      * @throws IOException if an I/O error occurs.
      */
-    long readLong(int size) throws IOException;
-
-
-    /**
-     * Reads specified number of bytes and set on given array starting from
-     * specified offset.
-     *
-     * @param array the array
-     * @param offset the start offset of array
-     * @param length number of bytes to read
-     * @param byteSize valid number of bits in each byte
-     *
-     * @throws IOException if an I/O error occurs.
-     */
-    void readBytes(byte[] array, int offset, int length, int byteSize)
+    <T extends BitReadable> T readObject(boolean nullable, Class<T> type)
         throws IOException;
 
 
     /**
-     * Reads a variable length of bytes.
+     * Decodes an object reference value using specified decoder.
      *
-     * @param lengthSize number of bits for length;
-     * @param byteSize the number of bits for each byte.
+     * @param <T> value type parameter
+     * @param decoder the decoder
+     *
+     * @return decoded value.
      *
      * @throws IOException if an I/O error occurs.
      */
-    void readBytes(int lengthSize, int byteSize) throws IOException;
+    <T> T decodeObject(BitDecoder<? extends T> decoder) throws IOException;
+
+
+    /**
+     * Returns the number of bytes read so far.
+     *
+     * @return number of byte read so far.
+     */
+    long getCount();
+
+
+    /**
+     * Returns the bit index to read in current octet.
+     *
+     * @return bit index to read in current octet.
+     */
+    int getIndex();
 
 
     /**
@@ -135,7 +123,7 @@ public interface BitInput {
      *
      * @param bytes the number of bytes to align; must be positive.
      *
-     * @return the number of bits discarded for alignment
+     * @return the number of bits discarded while aligning
      *
      * @throws IOException if an I/O error occurs.
      */

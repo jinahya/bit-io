@@ -31,7 +31,9 @@ public class BlackBitOutputModule extends AbstractModule {
     @Override
     protected void configure() {
 
-        bind(BitOutput.class).to(BlackBitOutput.class);
+        bind(BitOutput.class).toInstance(new DefaultBitOutput<>(v -> {
+            // empty
+        }));
     }
 
 }

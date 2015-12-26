@@ -17,9 +17,13 @@
 package com.github.jinahya.bit.io;
 
 
+import java.io.EOFException;
+import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.nio.ByteBuffer;
-import java.util.function.Consumer;
-import java.util.function.IntConsumer;
+import java.nio.channels.ReadableByteChannel;
+import java.nio.channels.WritableByteChannel;
+import org.mockito.Mockito;
 import org.testng.annotations.Test;
 
 
@@ -31,28 +35,69 @@ public class BitOutputFactoryTest {
 
 
     @Test
-    public static void newInstanceByteBuffer() {
+    public static void newInstanceWithByteOutput() {
 
-        final ByteBuffer buffer = ByteBuffer.allocate(0);
-        BitOutputFactory.newInstance(v -> buffer.put((byte) v));
+        BitOutputFactory.newInstance((v) -> {
+        });
     }
 
 
     @Test
-    public static void newBitOutputForConsumer() {
+    public static void newInstanceWithSupplierObjIntConsumer() {
 
-        final Consumer<Byte> consumer = v -> {
-        };
-        BitOutputFactory.newInstance(v -> consumer.accept((byte) v));
+        final WritableByteChannel source
+            = Mockito.mock(WritableByteChannel.class);
+
+        final BitOutput input = BitOutputFactory.newInstance(
+            () -> ByteBuffer.allocate(10),
+            (b, v) -> {
+                if (!b.hasRemaining()) {
+                    b.clear(); // position->zero; limit->capacity;
+                    do {
+                        try {
+                            source.write(b);
+                        } catch (final IOException ioe) {
+                            throw new RuntimeException(ioe);
+                        }
+                    } while (b.position() == 0);
+                    b.compact();
+                    b.put((byte) v);
+                }
+            }
+        );
+
     }
 
 
     @Test
-    public static void newInstanceIntConsumer() {
+    public static void newInstanceWithUnaryOperatorToIntFunction() {
 
-        final IntConsumer consumer = v -> {
-        };
-        BitOutputFactory.newInstance(v -> consumer.accept(v));
+        final ReadableByteChannel source
+            = Mockito.mock(ReadableByteChannel.class);
+
+        final BitInput input = BitInputFactory.<ByteBuffer>newInstance(
+            b -> {
+                if (b == null) {
+                    return (ByteBuffer) ByteBuffer.allocate(10).position(10);
+                }
+                if (!b.hasRemaining()) {
+                    b.clear(); // position->zero; limit->capacity;
+                    int read;
+                    try {
+                        while ((read = source.read(b)) == 0) {
+                        }
+                    } catch (final IOException ioe) {
+                        throw new UncheckedIOException(ioe);
+                    }
+                    if (read == -1) {
+                        throw new UncheckedIOException(new EOFException());
+                    }
+                    b.flip();
+                }
+                return b;
+            },
+            b -> b.get() & 0xFF
+        );
     }
 
 }

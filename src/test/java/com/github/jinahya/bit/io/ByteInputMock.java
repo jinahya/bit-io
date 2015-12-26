@@ -29,7 +29,7 @@ public class ByteInputMock implements ByteInput {
 
 
     @Override
-    public int readUnsignedByte() throws IOException {
+    public int read() throws IOException {
 
         return (int) (System.currentTimeMillis() & 0xFF);
     }

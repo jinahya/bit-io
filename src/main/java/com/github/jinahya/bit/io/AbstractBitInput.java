@@ -18,6 +18,7 @@
 package com.github.jinahya.bit.io;
 
 
+import com.github.jinahya.bit.io.codec.BitDecoder;
 import java.io.IOException;
 
 
@@ -30,8 +31,8 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
 
 
     /**
-     * Returns the value returned from {@link #readUnsignedByte()} while
-     * incrementing the {@code count} by one.
+     * Returns the value of {@link #read()} while incrementing the {@code count}
+     * by one.
      *
      * @return an unsigned byte value.
      *
@@ -39,7 +40,7 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
      */
     protected int octet() throws IOException {
 
-        final int octet = readUnsignedByte();
+        final int octet = read() & 0xFF;
         ++count;
 
         return octet;
@@ -47,21 +48,18 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
 
 
     /**
-     * Reads an unsigned byte value.
+     * Reads an unsigned 8-bit int value.
      *
-     * @param size the number of bits for the value; between
-     * {@value com.github.jinahya.bit.io.BitIoConstants#UBYTE_SIZE_MIN}
-     * (inclusive) and
-     * {@value com.github.jinahya.bit.io.BitIoConstants#UBYTE_SIZE_MAX}
-     * (inclusive).
+     * @param size the number of bits for the value; between {@code 1}
+     * (inclusive) and {@code 8} (inclusive).
      *
      * @return an unsigned byte value.
      *
      * @throws IOException if an I/O error occurs.
      */
-    protected int readUnsignedByte(final int size) throws IOException {
+    protected int read8(final int size) throws IOException {
 
-        BitIoConstraints.requireValidUnsignedByteSize(size);
+        BitIoConstraints.requireValid8Size(size);
 
         if (index == 8) {
             int octet = octet();
@@ -79,8 +77,7 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
         final int required = size - available;
 
         if (required > 0) {
-            return (readUnsignedByte(available) << required)
-                   | readUnsignedByte(required);
+            return (read8(available) << required) | read8(required);
         }
 
         int value = 0x00;
@@ -94,29 +91,19 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
     }
 
 
-    @Override
-    public boolean readBoolean() throws IOException {
-
-        return readUnsignedByte(1) == 0x01;
-    }
-
-
     /**
-     * Reads an unsigned short value.
+     * Reads an unsigned 16-bit int value.
      *
-     * @param size the number of bits for the value; between
-     * {@value com.github.jinahya.bit.io.BitIoConstants#USHORT_SIZE_MIN}
-     * (inclusive) and
-     * {@value com.github.jinahya.bit.io.BitIoConstants#USHORT_SIZE_MAX}
-     * (inclusive).
+     * @param size the number of bits for the value; between {@code 1}
+     * (inclusive) and {@code 16} (inclusive).
      *
      * @return an unsigned short value.
      *
      * @throws IOException if an I/O error occurs.
      */
-    protected int readUnsignedShort(final int size) throws IOException {
+    protected int read16(final int size) throws IOException {
 
-        BitIoConstraints.requireValidUnsignedShortSize(size);
+        BitIoConstraints.requireValid16Size(size);
 
         int value = 0x00;
 
@@ -125,12 +112,12 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
 
         for (int i = 0; i < quotient; i++) {
             value <<= 8;
-            value |= readUnsignedByte(8);
+            value |= read8(8);
         }
 
         if (remainder > 0) {
             value <<= remainder;
-            value |= readUnsignedByte(remainder);
+            value |= read8(remainder);
         }
 
         return value;
@@ -138,23 +125,54 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
 
 
     @Override
-    public int readUnsignedInt(final int size) throws IOException {
+    public boolean readBoolean() throws IOException {
 
-        BitIoConstraints.requireValidUnsignedIntSize(size);
+        return readInt(true, 1) == 1;
+    }
+
+
+    @Override
+    public byte readByte(final boolean unsigned, final int size)
+        throws IOException {
+
+        BitIoConstraints.requireValidSize(unsigned, 3, size);
+
+        return (byte) readInt(unsigned, size);
+    }
+
+
+    @Override
+    public short readShort(final boolean unsigned, final int size)
+        throws IOException {
+
+        BitIoConstraints.requireValidSize(unsigned, 4, size);
+
+        return (short) readInt(unsigned, size);
+    }
+
+
+    @Override
+    public int readInt(final boolean unsigned, final int size)
+        throws IOException {
+
+        BitIoConstraints.requireValidSize(unsigned, 5, size);
+
+        if (!unsigned) {
+            final int usize = size - 1;
+            return ((0 - readInt(true, 1)) << usize) | readInt(true, usize);
+        }
 
         int value = 0x00;
 
         final int quotient = size / 16;
         final int remainder = size % 16;
-
         for (int i = 0; i < quotient; i++) {
             value <<= 16;
-            value |= readUnsignedShort(16);
+            value |= read16(16);
         }
-
         if (remainder > 0) {
             value <<= remainder;
-            value |= readUnsignedShort(remainder);
+            value |= read16(remainder);
         }
 
         return value;
@@ -162,35 +180,27 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
 
 
     @Override
-    public int readInt(final int size) throws IOException {
+    public long readLong(final boolean unsigned, final int size)
+        throws IOException {
 
-        BitIoConstraints.requireValidIntSize(size);
+        BitIoConstraints.requireValidSize(unsigned, 6, size);
 
-        final int usize = size - 1;
-
-        return (readUnsignedInt(1) == 1 ? (-1 << usize) : 0)
-               | readUnsignedInt(usize);
-    }
-
-
-    @Override
-    public long readUnsignedLong(final int size) throws IOException {
-
-        BitIoConstraints.requireValidUnsignedLongSize(size);
+        if (!unsigned) {
+            final int usize = size - 1;
+            return ((0L - readLong(true, 1)) << usize) | readLong(true, usize);
+        }
 
         long value = 0x00L;
 
         final int quotient = size / 31;
         final int remainder = size % 31;
-
         for (int i = 0; i < quotient; i++) {
             value <<= 31;
-            value |= readUnsignedInt(31);
+            value |= readInt(true, 31);
         }
-
         if (remainder > 0) {
             value <<= remainder;
-            value |= readUnsignedInt(remainder);
+            value |= readInt(true, remainder);
         }
 
         return value;
@@ -198,42 +208,65 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
 
 
     @Override
-    public long readLong(final int size) throws IOException {
+    public char readChar(int size) throws IOException {
 
-        BitIoConstraints.requireValidLongSize(size);
+        BitIoConstraints.requireValidSize(true, 4, size);
 
-        final int usize = size - 1;
-
-        return (readBoolean() ? -1L << usize : 0L) | readUnsignedLong(usize);
+        return (char) readInt(true, size);
     }
 
 
     @Override
-    public void readBytes(final byte[] array, final int offset,
-                          final int length, final int byteSize)
-        throws IOException {
+    public float readFloat() throws IOException {
 
-        BitIoConstraints.requireValidArrayOffsetLength(array, offset, length);
-        BitIoConstraints.requireValidUnsignedByteSize(byteSize);
-
-        final int limit = offset + length;
-        for (int i = offset; i < limit; i++) {
-            array[i] = (byte) readUnsignedByte(byteSize);
-        }
+        return Float.intBitsToFloat(readInt(false, 32));
     }
 
 
     @Override
-    public void readBytes(final int lengthSize, final int byteSize)
+    public double readDouble() throws IOException {
+
+        return Double.longBitsToDouble(readLong(false, 64));
+    }
+
+
+    @Override
+    public <T extends BitReadable> T readObject(final boolean nullable,
+                                                final Class<T> type)
         throws IOException {
 
-        BitIoConstraints.requireValidUnsignedByteSize(byteSize);
-
-        final byte[] value = new byte[readUnsignedInt(lengthSize)];
-
-        for (int i = 0; i < value.length; i++) {
-            value[i] = (byte) readUnsignedByte(byteSize);
+        if (type == null) {
+            throw new NullPointerException("null type");
         }
+
+        if (nullable && !readBoolean()) {
+            return null;
+        }
+
+        final T value;
+        try {
+            value = type.newInstance();
+        } catch (final InstantiationException ie) {
+            throw new RuntimeException(ie);
+        } catch (final IllegalAccessException iae) {
+            throw new RuntimeException(iae);
+        }
+
+        value.read(this);
+
+        return value;
+    }
+
+
+    @Override
+    public <T> T decodeObject(final BitDecoder<? extends T> decoder)
+        throws IOException {
+
+        if (decoder == null) {
+            throw new NullPointerException("null decoder");
+        }
+
+        return decoder.decode(this);
     }
 
 
@@ -249,21 +282,31 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
         // discard remained bits in current octet.
         if (index < 8) {
             bits += (8 - index);
-            readUnsignedByte((int) bits); // count increments
+            read8((int) bits); // count increments
         }
 
-        final int remainder = (count > 0 ? count : ~count + 1) % bytes;
-        if (remainder == 0) {
-            return bits;
-        }
-
-        long octets = bytes - remainder;
+        final long remainder = count % bytes;
+        long octets = (remainder > 0 ? bytes : 0) - remainder;
         for (; octets > 0; octets--) {
-            readUnsignedByte(8);
+            read8(8);
             bits += 8;
         }
 
         return bits;
+    }
+
+
+    @Override
+    public long getCount() {
+
+        return count;
+    }
+
+
+    @Override
+    public int getIndex() {
+
+        return index;
     }
 
 
@@ -282,7 +325,7 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
     /**
      * number of bytes read so far.
      */
-    private int count = 0;
+    private long count = 0L;
 
 }
 

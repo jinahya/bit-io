@@ -18,20 +18,21 @@ A library for reading/writing non octet aligned values such as `1-bit boolean` o
 ## Specifications
 ### Primitives
 ### boolean
-|Type     |Size(min)|Size(max)|Notes|
+|type     |size(min)|size(max)|notes|
 |---------|---------|---------|-----|
 |`boolean`|1        |1        |`readBoolean()`, `writeBoolean()`|
 ### numeric
 #### integral
-|Type   |Size(min)|Size(max)|Notes|
-|-------|---------|---------|-----|
-|`byte` |2        |8        |`readByte(boolean, int)`, `readByte(boolean, int, byte)`|
-|`short`|2        |16       |`readShort(boolean, int)`, `writeShort(boolean, int, short)`|
-|`int`  |2        |32       |`readInt(boolean, int)`, `writeInt(boolean, int, int)`|
-|`long` |2        |64       |`readLong(boolean, int)`, `writeLong(boolean, int, long)`|
-|`char` |1        |16       |`readChar(int)`, `writeChar(int, char)`|
+
+|type   |e |size(min)|size(max)|notes|
+|-------|--|---------|---------|-----|
+|`byte` |3 |1/2      |7/8      |`readByte(boolean, int)`, `readByte(boolean, int, byte)`|
+|`short`|4 |1/2      |15/16    |`readShort(boolean, int)`, `writeShort(boolean, int, short)`|
+|`int`  |5 |1/2      |31/32    |`readInt(boolean, int)`, `writeInt(boolean, int, int)`|
+|`long` |6 |1/2      |63/64    |`readLong(boolean, int)`, `writeLong(boolean, int, long)`|
+|`char` |  |1        |16       |`readChar(int)`, `writeChar(int, char)`|
 #### floating-point
-|Type    |Size(min)|Size(max)|Notes|
+|type    |size(min)|size(max)|notes|
 |--------|---------|---------|-----|
 |`float` |(32)     |(32)     |`readFloat()`, `writeFloat(float)`|
 |`double`|(64)     |(64)     |`readDouble()`, `writeDouble(double)`|

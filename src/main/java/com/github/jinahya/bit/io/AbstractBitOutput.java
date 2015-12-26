@@ -58,10 +58,9 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
      *
      * @throws IOException if an I/O error occurs.
      */
-    protected void writeUnsigned8(final int size, int value)
-        throws IOException {
+    protected void write8(final int size, int value) throws IOException {
 
-        BitIoConstraints.requireValidUnsigned8Size(size);
+        BitIoConstraints.requireValid8Size(size);
 
         if (size == 8 && index == 0) {
             octet(value);
@@ -70,8 +69,8 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
 
         final int required = size - (8 - index);
         if (required > 0) {
-            writeUnsigned8(size - required, value >> required);
-            writeUnsigned8(required, value);
+            write8(size - required, value >> required);
+            write8(required, value);
             return;
         }
 
@@ -107,20 +106,19 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
      *
      * @throws IOException if an I/O error occurs
      */
-    protected void writeUnsigned16(final int size, final int value)
-        throws IOException {
+    protected void write16(final int size, final int value) throws IOException {
 
-        BitIoConstraints.requireValidUnsigned16Size(size);
+        BitIoConstraints.requireValid16Size(size);
 
         final int quotient = size / 8;
         final int remainder = size % 8;
 
         if (remainder > 0) {
-            writeUnsigned8(remainder, value >> (quotient * 8));
+            write8(remainder, value >> (quotient * 8));
         }
 
         for (int i = quotient - 1; i >= 0; i--) {
-            writeUnsigned8(8, value >> (8 * i));
+            write8(8, value >> (8 * i));
         }
     }
 
@@ -172,10 +170,10 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
         final int quotient = size / 16;
         final int remainder = size % 16;
         if (remainder > 0) {
-            writeUnsigned16(remainder, value >> (quotient * 16));
+            write16(remainder, value >> (quotient * 16));
         }
         for (int i = quotient - 1; i >= 0; i--) {
-            writeUnsigned16(16, value >> (16 * i));
+            write16(16, value >> (16 * i));
         }
     }
 
@@ -265,13 +263,13 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
         // pad remained bits into current octet
         if (index > 0) {
             bits += (8 - index);
-            writeUnsigned8((int) bits, 0x00); // count incremented
+            write8((int) bits, 0x00); // count incremented
         }
 
         final long remainder = count % bytes;
         long octets = (remainder > 0 ? bytes : 0) - remainder;
         for (; octets > 0; octets--) {
-            writeUnsigned8(8, 0x00);
+            write8(8, 0x00);
             bits += 8;
         }
 

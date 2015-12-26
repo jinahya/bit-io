@@ -60,9 +60,9 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
      *
      * @throws IOException if an I/O error occurs.
      */
-    protected int readUnsigned8(final int size) throws IOException {
+    protected int read8(final int size) throws IOException {
 
-        BitIoConstraints.requireValidUnsigned8Size(size);
+        BitIoConstraints.requireValid8Size(size);
 
         if (index == 8) {
             int octet = octet();
@@ -80,8 +80,8 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
         final int required = size - available;
 
         if (required > 0) {
-            return (readUnsigned8(available) << required)
-                   | readUnsigned8(required);
+            return (read8(available) << required)
+                   | read8(required);
         }
 
         int value = 0x00;
@@ -109,9 +109,9 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
      *
      * @throws IOException if an I/O error occurs.
      */
-    protected int readUnsigned16(final int size) throws IOException {
+    protected int read16(final int size) throws IOException {
 
-        BitIoConstraints.requireValidUnsigned16Size(size);
+        BitIoConstraints.requireValid16Size(size);
 
         int value = 0x00;
 
@@ -120,12 +120,12 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
 
         for (int i = 0; i < quotient; i++) {
             value <<= 8;
-            value |= readUnsigned8(8);
+            value |= read8(8);
         }
 
         if (remainder > 0) {
             value <<= remainder;
-            value |= readUnsigned8(remainder);
+            value |= read8(remainder);
         }
 
         return value;
@@ -177,11 +177,11 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
         final int remainder = size % 16;
         for (int i = 0; i < quotient; i++) {
             value <<= 16;
-            value |= readUnsigned16(16);
+            value |= read16(16);
         }
         if (remainder > 0) {
             value <<= remainder;
-            value |= readUnsigned16(remainder);
+            value |= read16(remainder);
         }
 
         return value;
@@ -299,13 +299,13 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
         // discard remained bits in current octet.
         if (index < 8) {
             bits += (8 - index);
-            readUnsigned8((int) bits); // count increments
+            read8((int) bits); // count increments
         }
 
         final long remainder = count % bytes;
         long octets = (remainder > 0 ? bytes : 0) - remainder;
         for (; octets > 0; octets--) {
-            readUnsigned8(8);
+            read8(8);
             bits += 8;
         }
 

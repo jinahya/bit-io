@@ -145,7 +145,7 @@ Prepare an instance of `ByteInput` from various sources.
 new ArrayInput(byte[], int, int);
 new BufferInput(java.nio.ByteBuffer);
 new DataInput(java.io.DataInput);
-new RandomAccessInput(java.io.RandomAccessFile);
+new FileInput(java.io.RandomAccessFile);
 new StreamInput(java.io.InputStream);
 ````
 Those constructors don't check arguments which means you can lazily instantiate and set them.

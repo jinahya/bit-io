@@ -110,12 +110,12 @@ public class PersonCodec extends NullableCodec<Person> {
     
     @Override
     public Person decode(final BitInput input) throws IOException {
-        return super.decode(input); // nullable handled here
+        return super.decode(input);
     }
     
     @Override
     public void encode(final BitOutput output, final Person value) throws IOException {
-        super.encode(output, value); // nullable handled here
+        super.encode(output, value);
     }
 
     @Override

@@ -54,63 +54,88 @@ public class Person implements BitReadable, BitWritable {
     }
 }
 ```
-It's, now, too obvious you can use like this.
+It's, now, too obvious you can do this.
 ```java
-Person person = getPersion();
+final Person person = new Person().age(31).married(true);
 person.read(input);
 person.write(output);
 ```
-#### Using ~~`BitDecoder`~~/~~`BitEncoder`~~
-**This feature has been moved to [bit-codec](https://github.com/jinahya/bit-codec).**
-
-If modifying already existing classes (e.g. implementing additional interfaces) is not applicable, you can make specialized classes for decoding/encoding instance of those classes.
+#### Using `BitDecoder`/`BitEncoder`
+If modifying existing classes (e.g. implementing additional interfaces) is not applicable, you can make some sort of specialized classes for decoding/encoding.
 ```java
-public class PersonDecoder implements BitDecoder<Person> {
-    @Override
-    public Person decode(final BitInput input) throws IOException {
-        if (!readBoolean() {
-            return null;
-        }
-        return new Person().age(input.readInt(true, 7)).married(input.readBoolean());
-    }
-}
-public class PersonEncoder implements BitEncoder<Person> {
-    @Override
-    public void encode(final Person value, final BitOutput output) throws IOException {
-        output.writeBoolean(value != null);
-        if (value != null) {
-            output.writeInt(true, 7, value.getAge());
-            output.writeBoolean(value.isMarried());
-        }
-    }
-}
-```
-There is an abstract class for implementing these two interfaces easily.
-```java
-public class PersonCodec extends NullableCodec<Person> {
+public class PersonDecoder extends NullableDecoder<Person> {
 
-    public PersonCodec(final boolean nullable) {
+    public PersonDecoder(final boolean nullable) {
         super(nullable);
     }
 
     @Override
-    protected Person decodeValue(final BitInput input) throws IOException {
-        // no need to check nullability
-        return new Person().age(input.readInt(true, 7)).married(input.readBoolean());
+    public Person decode(final BitInput input) throws IOException {
+        return super.decode(input);
     }
 
     @Override
-    protected void encodeValue(final BitOutput output, final Person value) throws IOException {
-        // no need to check nullability
+    public Person decodeValue(final BitInput input) throws IOException {
+        return new Person().age(input.readInt(true, 7)).married(input.readBoolean());
+    }
+}
+
+public class PersonEncoder extends NullableEncoder<Person> {
+
+    public PersonEncoder(final boolean nullable) {
+        super(nullable);
+    }
+
+    @Override
+    public void encode(final BitOutput output, final Person value) throws IOException {
+        super.encode(output, value);
+    }
+
+    @Override
+    public void encodeValue(final BitOutput output, final Person person) throws IOException {
         output.writeInt(true, 7, value.getAge());
         output.writeBoolean(value.isMarried());
     }
 }
 ```
+There is an abstract class for implementing these two interfaces easily (including the nullable feature).
+```java
+public class PersonCodec extends NullableCodec<Person> {
+
+    public PersonCodec(final boolean nullable) {
+        super(nullable);
+        decoder = new PersonDecoder(false);
+        encoder = new PersonEncoder(false);
+    }
+    
+    @Override
+    public Person decode(final BitInput input) throws IOException {
+        return super.decode(input);
+    }
+    
+    @Override
+    public void encode(final BitOutput output, final Person value) throws IOException {
+        super.encode(output, value);
+    }
+
+    @Override
+    protected Person decodeValue(final BitInput input) throws IOException {
+        return decoder.decode(input);
+    }
+
+    @Override
+    protected void encodeValue(final BitOutput output, final Person value) throws IOException {
+        encoder.encode(output, value);
+    }
+
+    private final BitDecoder<Person> decoder;
+    private final BitEncoder<Person> encoder;
+}
+```
 Again, you can use the codec like this.
 ```java
 final PersonCodec codec = new PersonCodec(true);
-Person person = codec.decode(input));
+final Person person = codec.decode(input));
 codec.encode(output, person);
 ```
 ## Reading

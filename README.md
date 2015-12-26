@@ -35,10 +35,10 @@ The size(min) is `1 + (unsigned ? 0 : 1)` and the size(max) is `(int) Math.pow(2
 #### floating-point
 `float`s and `double`s are handled as `int`s and `long`s, respectively, using `xxxToRawYYYBits` and `yyyBitsToXXX`.
 
-|type    |size(m)|size(M)|notes|
-|--------|-------|-------|-----|
-|`float` |(32)   |(32)   |`readFloat()`, `writeFloat(float)`|
-|`double`|(64)   |(64)   |`readDouble()`, `writeDouble(double)`|
+|type    |size(min)|size(max)|notes|
+|--------|---------|---------|-----|
+|`float` |(32)     |(32)     |`readFloat()`, `writeFloat(float)`|
+|`double`|(64)     |(64)     |`readDouble()`, `writeDouble(double)`|
 ### References
 #### Implementing `BitReadable`/`BitWritable`
 You can directly read/write values from/to `BitInput`/`BitOutput` by making your class implementing those interfaces.

@@ -18,27 +18,27 @@ A library for reading/writing non octet aligned values such as `1-bit boolean` o
 ## Specifications
 ### Primitives
 ### boolean
-|type     |size(m)|size(M)|notes|
-|---------|-------|-------|-----|
-|`boolean`|1      |1      |`boolean readBoolean()`, `writeBoolean(boolean)`|
+|type     |size(min)|size(max)|notes|
+|---------|---------|---------|-----|
+|`boolean`|1        |1        |`readBoolean()`, `writeBoolean(boolean)`|
 ### numeric
 #### integral
-The minimum size is `1 + (unsigned ? 0 : 1)` and the maximum size is `Math.pow(2, e) - (unsigned ? 1 : 0)`.
+The size(min) is `1 + (unsigned ? 0 : 1)` and the size(max) is `(int) Math.pow(2, e) - (unsigned ? 1 : 0)`.
 
-|type   |e  |size(m)|size(M)|notes
-|-------|---|-------|-------|-----
-|`byte` |3  |1/2    |7/8    |`byte readByte(unsigned, size)`, `readByte(unsigned, size, byte)`|
-|`short`|4  |1/2    |15/16  |`short readShort(unsigned, size)`, `writeShort(unsigned, size, short)`|
-|`int`  |5  |1/2    |31/32  |`int readInt(unsigned, size)`, `writeInt(unsigned, size, int)`|
-|`long` |6  |1/2    |63/64  |`long readLong(unsigned, size)`, `writeLong(unsigned, size, long)`|
-|`char` |   |1      |16     |`char readChar(int)`, `writeChar(int, char)`|
+|type   |e  |size(min)|size(max)|notes
+|-------|---|---------|---------|-----
+|`byte` |3  |1/2      |7/8      |`readByte(unsigned, size)`, `readByte(unsigned, size, byte)`|
+|`short`|4  |1/2      |15/16    |`readShort(unsigned, size)`, `writeShort(unsigned, size, short)`|
+|`int`  |5  |1/2      |31/32    |`readInt(unsigned, size)`, `writeInt(unsigned, size, int)`|
+|`long` |6  |1/2      |63/64    |`readLong(unsigned, size)`, `writeLong(unsigned, size, long)`|
+|`char` |   |1        |16       |`readChar(size)`, `writeChar(size, char)`|
 #### floating-point
-`float`s and `double`s are handled as correspoinding integral types(`int`, and `long`) using `xxxToRawYYYBits` and `yyyBitsToXXX`.
+`float`s and `double`s are handled as `int`s and `long`s, respectively, using `xxxToRawYYYBits` and `yyyBitsToXXX`.
 
 |type    |size(m)|size(M)|notes|
 |--------|-------|-------|-----|
-|`float` |(32)   |(32)   |`float readFloat()`, `writeFloat(float)`|
-|`double`|(64)   |(64)   |`double readDouble()`, `writeDouble(double)`|
+|`float` |(32)   |(32)   |`readFloat()`, `writeFloat(float)`|
+|`double`|(64)   |(64)   |`readDouble()`, `writeDouble(double)`|
 ### References
 #### Implementing `BitReadable`/`BitWritable`
 You can directly read/write values from/to `BitInput`/`BitOutput` by making your class implementing those interfaces.

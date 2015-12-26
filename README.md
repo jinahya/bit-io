@@ -63,26 +63,38 @@ person.write(output);
 #### Using `BitDecoder`/`BitEncoder`
 If modifying already existing classes (e.g. implementing additional interfaces) is not applicable, you can make specialized classes for decoding/encoding instance of those classes.
 ```java
-public class PersonDecoder implements BitDecoder<Person> {
+public class PersonDecoder extends NullableDecoder<Person> {
+
+    public PersonDecoder(final boolean nullable) {
+        super(nullable);
+    }
 
     @Override
     public Person decode(final BitInput input) throws IOException {
-        if (!readBoolean() {
-            return null;
-        }
+        return super.decode(input);
+    }
+
+    @Override
+    public Person decodeValue(final BitInput input) throws IOException {
         return new Person().age(input.readInt(true, 7)).married(input.readBoolean());
     }
 }
 
-public class PersonEncoder implements BitEncoder<Person> {
+public class PersonEncoder extends NullableEncoder<Person> {
+
+    public PersonEncoder(final boolean nullable) {
+        super(nullable);
+    }
 
     @Override
     public void encode(final BitOutput output, final Person value) throws IOException {
-        output.writeBoolean(value != null);
-        if (value != null) {
-            output.writeInt(true, 7, value.getAge());
-            output.writeBoolean(value.isMarried());
-        }
+        super.encode(output, value);
+    }
+
+    @Override
+    public void encodeValue(final BitOutput output, final Person person) throws IOException {
+        output.writeInt(true, 7, value.getAge());
+        output.writeBoolean(value.isMarried());
     }
 }
 ```
@@ -92,6 +104,8 @@ public class PersonCodec extends NullableCodec<Person> {
 
     public PersonCodec(final boolean nullable) {
         super(nullable);
+        decoder = new PersonDecoder(false);
+        encoder = new PersonEncoder(false);
     }
     
     @Override
@@ -106,16 +120,16 @@ public class PersonCodec extends NullableCodec<Person> {
 
     @Override
     protected Person decodeValue(final BitInput input) throws IOException {
-        // no need to check nullability
-        return new Person().age(input.readInt(true, 7)).married(input.readBoolean());
+        return decoder.decode(input);
     }
 
     @Override
     protected void encodeValue(final BitOutput output, final Person value) throws IOException {
-        // no need to check nullability
-        output.writeInt(true, 7, value.getAge());
-        output.writeBoolean(value.isMarried());
+        encoder.encode(output, value);
     }
+
+    private final BitDecoder<Person> decoder;
+    private final BitEncoder<Person> encoder;
 }
 ```
 Again, you can use the codec like this.

@@ -1,12 +1,13 @@
 bit-io
 ======
+[![GitHub license](https://img.shields.io/github/license/jinahya/bit-io.svg)](http://www.apache.org/licenses/LICENSE-2.0)
 [![Dependency Status](https://www.versioneye.com/user/projects/563ccc514d415e001e00009b/badge.svg)](https://www.versioneye.com/user/projects/563ccc514d415e001e00009b)
 [![Build Status](https://travis-ci.org/jinahya/bit-io.svg?branch=develop)](https://travis-ci.org/jinahya/bit-io)
 [![Maven Central](https://img.shields.io/maven-central/v/com.github.jinahya/bit-io.svg)](http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22bit-io%22)
 [![Codacy Badge](https://api.codacy.com/project/badge/grade/53ae4f92af8246a48cbe8ecf0c04a002)](https://www.codacy.com/app/jinahya/bit-io)
 [![Domate via Paypal](https://img.shields.io/badge/donate-paypal-blue.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_cart&business=A954LDFBW4B9N&lc=KR&item_name=GitHub&amount=5%2e00&currency_code=USD&button_subtype=products&add=1&bn=PP%2dShopCartBF%3adonate%2dpaypal%2dblue%2epng%3aNonHosted)
 
-A small library for reading or writing non octet aligned values such as `1-bit boolean` or `17-bit unsigned int`.
+A library for reading/writing non octet aligned values such as `1-bit boolean` or `17-bit unsigned int`.
 
 ## Versions
 |Version|Site|Apidocs|Notes|
@@ -16,28 +17,39 @@ A small library for reading or writing non octet aligned values such as `1-bit b
 
 ## Specifications
 ### Primitives
-|Value type   |Minimum size|Maximum size|Notes|
-|-------------|------------|------------|-----|
-|boolean      |1           |1           |`readBoolean`, `writeBoolean`|
-|unsigned int |1           |31          |`readUnsignedInt(int)`, `writeUnsignedInt(int, int)`|
-|int          |2           |32          |`readInt(size)`, `writeInt(int)`|
-|unsigned long|1           |63          |`readUnsignedLong(size)`, `writeUnsigendLong(int, long)`|
-|long         |2           |64          |`readLong(size)`, `writeLong(size)`|
-### Objects
-#### Implementing `BitDecodable`/`BitEncodable`
+### boolean
+|Type     |Size(min)|Size(max)|Notes|
+|---------|---------|---------|-----|
+|`boolean`|1        |1        |`readBoolean()`, `writeBoolean()`|
+### numeric
+#### integral
+|Type   |Size(min)|Size(max)|Notes|
+|-------|---------|---------|-----|
+|`byte` |2        |8        |`readByte(boolean, int)`, `readByte(boolean, int, byte)`|
+|`short`|2        |16       |`readShort(boolean, int)`, `writeShort(boolean, int, short)`|
+|`int`  |2        |32       |`readInt(boolean, int)`, `writeInt(boolean, int, int)`|
+|`long` |2        |64       |`readLong(boolean, int)`, `writeLong(boolean, int, long)`|
+|`char` |1        |16       |`readChar(int)`, `writeChar(int, char)`|
+#### floating-point
+|Type    |Size(min)|Size(max)|Notes|
+|--------|---------|---------|-----|
+|`float` |(32)     |(32)     |`readFloat()`, `writeFloat(float)`|
+|`double`|(64)     |(64)     |`readDouble()`, `writeDouble(double)`|
+### References
+#### Implementing `BitReadable`/`BitWritable`
 You can directly read/write values from/to `BitInput`/`BitOutput` by making your class implementing those interfaces.
 ```java
-public class Person implements BitDecodable, BitEncodable {
+public class Person implements BitReadable, BitWritable {
 
     @Override
-    public void decode(final BitInput input) throws IOException {
-        setAge(input.readUnsignedInt(7));
+    public void read(final BitInput input) throws IOException {
+        setAge(input.readInt(true, 7));
         setMarried(input.readBoolean());
     }
 
     @Override
-    public void encode(final BitOutput output) throws IOException {
-        output.writeUnsignedInt(7, getAge());
+    public void write(final BitOutput output) throws IOException {
+        output.writeInt(true, 7, getAge());
         output.writeBoolean(isMarried());
     }
 }
@@ -45,11 +57,13 @@ public class Person implements BitDecodable, BitEncodable {
 It's, now, too obvious you can use like this.
 ```java
 Person person = getPersion();
-person.read(getBitInput());
-person.write(getBitOutput());
+person.read(input);
+person.write(output);
 ```
-#### Using `BitDecoder`/`BitEncoder`.
-If modifying classes (implementing interfaces) is not applicable, you can make specialized clases for decoding/encoding already existing classes.
+#### Using ~~`BitDecoder`~~/~~`BitEncoder`~~
+**This feature has been moved to [bit-codec](https://github.com/jinahya/bit-codec).**
+
+If modifying already existing classes (e.g. implementing additional interfaces) is not applicable, you can make specialized classes for decoding/encoding instance of those classes.
 ```java
 public class PersonDecoder implements BitDecoder<Person> {
     @Override
@@ -57,16 +71,15 @@ public class PersonDecoder implements BitDecoder<Person> {
         if (!readBoolean() {
             return null;
         }
-        return new Person().age(input.readUnsignedInt(7)).married(input.readBoolean());
+        return new Person().age(input.readInt(true, 7)).married(input.readBoolean());
     }
 }
-
 public class PersonEncoder implements BitEncoder<Person> {
     @Override
     public void encode(final Person value, final BitOutput output) throws IOException {
         output.writeBoolean(value != null);
         if (value != null) {
-            output.writeUnsignedInt(7, value.getAge());
+            output.writeInt(true, 7, value.getAge());
             output.writeBoolean(value.isMarried());
         }
     }
@@ -74,7 +87,7 @@ public class PersonEncoder implements BitEncoder<Person> {
 ```
 There is an abstract class for implementing these two interfaces easily.
 ```java
-public class PersonCodec extends AbstractBitCodec<Person> {
+public class PersonCodec extends NullableCodec<Person> {
 
     public PersonCodec(final boolean nullable) {
         super(nullable);
@@ -83,53 +96,55 @@ public class PersonCodec extends AbstractBitCodec<Person> {
     @Override
     protected Person decodeValue(final BitInput input) throws IOException {
         // no need to check nullability
-        return new Person().age(input.readUnsignedInt(7)).married(input.readBoolean());
+        return new Person().age(input.readInt(true, 7)).married(input.readBoolean());
     }
 
     @Override
     protected void encodeValue(final BitOutput output, final Person value) throws IOException {
         // no need to check nullability
-        output.writeUnsignedInt(7, value.getAge());
+        output.writeInt(true, 7, value.getAge());
         output.writeBoolean(value.isMarried());
     }
 }
 ```
 Again, you can use the codec like this.
 ```java
-final PersionCodec codec = new PersonCodec(true);
-Person person = codec.decode(getBitInput());
-codec.encode(getBitOutput(), person);
+final PersonCodec codec = new PersonCodec(true);
+Person person = codec.decode(input));
+codec.encode(output, person);
 ```
 ## Reading
 ### Preparing `ByteInput`
 Prepare an instance of `ByteInput` from various sources.
 ````java
-new ArrayInput(byte[], index, limit);
+new ArrayInput(byte[], int, int);
 new BufferInput(java.nio.ByteBuffer);
 new DataInput(java.io.DataInput);
-new FileInput(java.io.RandomAccessFile);
 new IntSupplierInput(java.util.function.IntSuppiler);
+new RandomAccessInput(java.io.RandomAccessFile);
 new StreamInput(java.io.InputStream);
 new SupplierInput(java.util.function.Supplier<Byte>);
 ````
 Those constructors don't check arguments which means you can lazily instantiate and set them.
 ```java
-final OutputStream output = openFile();
-
+final InputStream output = openFile();
 final ByteInput input = new ArrayInput(null, -1, -1) {
     @Override
-    public int readUnsignedByte() throws IOException {
+    public int read() throws IOException {
         if (source == null) {
             source = byte[16];
-            index = 0;
             limit = source.length;
+            index = limit;
         }
         if (index == limit) {
-            output.write(source);
+            final int read = stream.read(source);
+            if (read == -1) {
+                throw new EOFException();
+            }
+            limit = read;
             index = 0;
-            limit = source.length;
         }
-        return super.readUnsignedByte();
+        return super.read();
     }
 };
 ```
@@ -138,41 +153,35 @@ final ByteInput input = new ArrayInput(null, -1, -1) {
 Construct with an already created a `ByteInput`.
 ```java
 final ByteInput delegate = createByteInput();
-
 final BitInput input = new DefalutBitInput(delegate);
 ```
 Or lazliy instantiate its `delegate` field.
 ```java
-new DefaultBitInput(null) {
+new DefaultBitInput<InputStream>(null) {
     @Override
-    public int readUnsignedByte() throws IOException {
+    public int read() throws IOException {
         if (delegate == null) {
-            delegate = new StreamInput(openFileForReading());
+            delegate = new StreamInput(openFile());
         }
-        return super.readUnsignedByte();
+        return super.read();
     }
 };
 ```
 #### Using `BitInputFactory`
 You can create `BitInput`s using various `newInstance(...)` methods.
 ```java
-final RedableByteChannel source = openChannel();
-
+final RedableByteChannel channel = openChannel();
 final BitInput input = BitInputFactory.newInstance(
     () -> (ByteBuffer) ByteBuffer.allocate(10).position(10),
     b -> {
         if (!b.hasRemaining()) {
             b.clear();
-            int read;
-            try {
-                while ((read = source.read(b)) == 0) {
+            do {
+                final int read = channel.read(b);
+                if (read == -1) {
+                    throw new EOFException();
                 }
-            } catch (final IOException ioe) {
-                throw new UncheckedIOException(ioe);
-            }
-            if (read == -1) {
-                throw new UncheckedIOException(new EOFException());
-            }
+            } while (b.position() == 0);
             b.flip();
         }
         return b.get() & 0xFF;
@@ -182,11 +191,11 @@ final BitInput input = BitInputFactory.newInstance(
 ```java
 final BitInput input;
 
-final boolean b = input.readBoolean();      // 1-bit boolean        1    1
-final int   ui6 = input.readUnsignedInt(6); // 6-bit unsigned int   6    7
-final long sl47 = input.readLong(47);       // 47-bit signed long  47   54
+final boolean b = input.readBoolean();        // 1-bit boolean        1    1
+final int ui6 = input.readInt(true, 6);       // 6-bit unsigned int   6    7
+final long sl47 = input.readLong(false, 47);  // 47-bit signed long  47   54
 
-final long discarded = input.align(1);      // aligns to 8-bit      2   56
+final long discarded = input.align(1);        // aligns to 8-bit      2   56
 assert discarded == 2L;
 ```
 ```
@@ -201,12 +210,12 @@ biiiiiil llllllll llllllll llllllll llllllll llllllll lllllldd
 ```java
 final BitOutput output;
 
-output.writeBoolean(false);          // 1-bit boolean          1    1
-output.writeInt(9, -72);             // 7-bit signed int       9   10
-output.writeBoolean(true);           // 1-bit boolean          1   11
-output.writeUnsignedLong(33, 99L);   // 33-bit unsigned long  33   44
+output.writeBoolean(false);           // 1-bit boolean          1    1
+output.writeInt(false, 9, -72);       // 7-bit signed int       9   10
+output.writeBoolean(true);            // 1-bit boolean          1   11
+output.writeLong(true, 33, 99L);      // 33-bit unsigned long  33   44
 
-final long padded = output.align(4); // aligns to 32-bit      20   64
+final long padded = output.align(4);  // aligns to 32-bit      20   64
 assert padded == 20L;
 ```
 ```

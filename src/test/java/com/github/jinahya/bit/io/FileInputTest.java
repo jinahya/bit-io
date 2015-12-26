@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.jinahya.bit.io.octet;
+package com.github.jinahya.bit.io;
 
 
 import java.io.IOException;
@@ -32,7 +32,7 @@ public class FileInputTest {
     @Test
     public void lazySource() {
 
-        final ByteInput byteInput = new RandomAccessInput(null) {
+        final ByteInput byteInput = new FileInput(null) {
 
             @Override
             public int read() throws IOException {

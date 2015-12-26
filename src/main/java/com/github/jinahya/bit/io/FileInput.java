@@ -15,7 +15,7 @@
  */
 
 
-package com.github.jinahya.bit.io.octet;
+package com.github.jinahya.bit.io;
 
 
 import java.io.EOFException;
@@ -26,9 +26,9 @@ import java.io.RandomAccessFile;
 /**
  * A {@link ByteInput} implementation for {@link RandomAccessFile}s.
  *
- * @see RandomAccessOutput
+ * @see FileOutput
  */
-public class RandomAccessInput extends AbstractByteInput<RandomAccessFile> {
+public class FileInput extends AbstractByteInput<RandomAccessFile> {
 
 
     /**
@@ -37,16 +37,16 @@ public class RandomAccessInput extends AbstractByteInput<RandomAccessFile> {
      * @param source the source file or {@code null} if it's supposed to be
      * lazily initialized and set
      */
-    public RandomAccessInput(final RandomAccessFile source) {
+    public FileInput(final RandomAccessFile source) {
 
         super(source);
     }
 
 
     /**
-     * {@inheritDoc} The {@code read()} method of {@code RandomAccessInput}
-     * class invokes {@link RandomAccessFile#read()} on {@link #source} and
-     * returns the result if it is not {@code -1}. Override this method if
+     * {@inheritDoc} The {@code read()} method of {@code FileInput} class
+     * invokes {@link RandomAccessFile#read()} on {@link #source} and returns
+     * the result if it is not {@code -1}. Override this method if
      * {@link #source} is supposed to be lazily initialized and set.
      *
      * @return {@inheritDoc}

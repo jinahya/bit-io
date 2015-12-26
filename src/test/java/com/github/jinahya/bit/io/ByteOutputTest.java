@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.jinahya.bit.io.octet;
+package com.github.jinahya.bit.io;
 
 
 import java.io.IOException;

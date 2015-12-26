@@ -17,7 +17,6 @@
 package com.github.jinahya.bit.io;
 
 
-import com.github.jinahya.bit.io.octet.ByteInput;
 import java.io.IOException;
 import static java.util.Objects.requireNonNull;
 import static java.util.concurrent.ThreadLocalRandom.current;

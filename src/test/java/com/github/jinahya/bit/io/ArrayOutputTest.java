@@ -14,29 +14,27 @@
  * limitations under the License.
  */
 
-package com.github.jinahya.bit.io.octet;
+package com.github.jinahya.bit.io;
 
-
-import java.io.IOException;
 
 
 /**
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
-public class DataOutput extends AbstractByteOutput<java.io.DataOutput> {
+public class ArrayOutputTest extends ByteOutputTest<ArrayOutput> {
 
 
-    public DataOutput(final java.io.DataOutput target) {
+    public ArrayOutputTest() {
 
-        super(target);
+        super(ArrayOutput.class);
     }
 
 
     @Override
-    public void write(final int value) throws IOException {
+    ArrayOutput instance(final int capacity) {
 
-        target.writeByte(value);
+        return new ArrayOutput(new byte[capacity], capacity, 0);
     }
 
 }

@@ -14,30 +14,14 @@
  * limitations under the License.
  */
 
-package com.github.jinahya.bit.io.octet;
-
-
-import java.io.IOException;
+package com.github.jinahya.bit.io;
 
 
 /**
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
-public class DataInput extends AbstractByteInput<java.io.DataInput> {
-
-
-    public DataInput(final java.io.DataInput source) {
-
-        super(source);
-    }
-
-
-    @Override
-    public int read() throws IOException {
-
-        return source.readUnsignedByte();
-    }
+public class ByteIoPack {
 
 }
 

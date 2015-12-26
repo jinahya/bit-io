@@ -14,20 +14,40 @@
  * limitations under the License.
  */
 
-package com.github.jinahya.bit.io.codec;
+package com.github.jinahya.bit.io;
+
+
+import java.io.IOException;
+import java.nio.channels.ReadableByteChannel;
 
 
 /**
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
+ * @deprecated
  */
-public class UsAsciiCodec extends StringCodec {
+@Deprecated
+public class ChannelInput extends AbstractByteInput<ReadableByteChannel> {
 
 
-    public UsAsciiCodec(final boolean nullable, final int scale) {
+    public ChannelInput(final ReadableByteChannel source) {
 
-        super(nullable, scale, true, 7, "US-ASCII");
+        super(source);
     }
+
+
+    @Override
+    public int read() throws IOException {
+
+        if (input == null) {
+            input = BufferInput.newInstance(source, 1, false);
+        }
+
+        return input.read();
+    }
+
+
+    private ByteInput input;
 
 }
 

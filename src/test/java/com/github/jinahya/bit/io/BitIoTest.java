@@ -17,87 +17,168 @@
 package com.github.jinahya.bit.io;
 
 
-import com.github.jinahya.bit.io.octet.ArrayInput;
-import com.github.jinahya.bit.io.octet.ArrayOutput;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
-import java.util.LinkedList;
-import java.util.List;
+import java.io.RandomAccessFile;
+import java.nio.ByteBuffer;
+import java.nio.file.Files;
+import java.util.function.Consumer;
 import org.slf4j.Logger;
 import static org.slf4j.LoggerFactory.getLogger;
 import static org.testng.Assert.assertEquals;
-import org.testng.annotations.Test;
 
 
 /**
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
-public class BitIoTest {
+public final class BitIoTest {
 
 
-    private static void test(final BitIoType type) throws IOException {
+    private static final Logger logger = getLogger(BitIoTest.class);
 
-        final byte[] array = new byte[8];
-        final List<Object> params = new LinkedList<>();
 
-        final BitOutput output = new DefaultBitOutput<>(
-            new ArrayOutput(array, array.length, 0));
-        final Object expected = type.write(params, output);
+    public static void array(final Consumer<BitOutput> writer,
+                             final Consumer<BitInput> reader)
+        throws IOException {
+
+        if (writer == null) {
+            throw new NullPointerException("null writer");
+        }
+
+        if (reader == null) {
+            throw new NullPointerException("null reader");
+        }
+
+        final byte[] array = new byte[1048576];
+
+        final DefaultBitOutput<ArrayOutput> output
+            = new DefaultBitOutput<>(new ArrayOutput(array, array.length, 0));
+        writer.accept(output);
         final long padded = output.align(1);
 
         final BitInput input = new DefaultBitInput<>(
-            new ArrayInput(array, array.length, 0));
-        final Object actual = type.read(params, input);
+            new ArrayInput(array, output.getDelegate().getIndex(), 0));
+        reader.accept(input);
+        final long discarded = input.align(1);
+
+        assertEquals(discarded, padded, "discarded != padded");
+    }
+
+
+    public static void buffer(final Consumer<BitOutput> writer,
+                              final Consumer<BitInput> reader)
+        throws IOException {
+
+        if (writer == null) {
+            throw new NullPointerException("null writer");
+        }
+
+        if (reader == null) {
+            throw new NullPointerException("null reader");
+        }
+
+        final ByteBuffer buffer = ByteBuffer.allocate(1048576);
+
+        final BitOutput output
+            = new DefaultBitOutput<>(new BufferOutput(buffer));
+        writer.accept(output);
+        final long padded = output.align(1);
+
+        buffer.flip();
+
+        final BitInput input = new DefaultBitInput<>(new BufferInput(buffer));
+        reader.accept(input);
         final long discarded = input.align(1);
 
         assertEquals(discarded, padded);
-        assertEquals(actual, expected, "type: " + type);
     }
 
 
-    @Test(enabled = true, invocationCount = 1024)
-    public void _boolean() throws IOException {
+    public static void file(final Consumer<BitOutput> writer,
+                            final Consumer<BitInput> reader)
+        throws IOException {
 
-        test(BitIoType.BOOLEAN);
+        if (writer == null) {
+            throw new NullPointerException("null writer");
+        }
+
+        if (reader == null) {
+            throw new NullPointerException("null reader");
+        }
+
+        final File file = Files.createTempFile(null, null).toFile();
+        file.deleteOnExit();
+
+        final RandomAccessFile target = new RandomAccessFile(file, "rwd");
+        final BitOutput output = new DefaultBitOutput<>(new FileOutput(target));
+        writer.accept(output);
+        final long padded = output.align(1);
+        target.close();
+
+        final RandomAccessFile source = new RandomAccessFile(file, "r");
+        final BitInput input = new DefaultBitInput<>(new FileInput(source));
+        reader.accept(input);
+        final long discarded = input.align(1);
+        source.close();
+
+        assertEquals(discarded, padded);
     }
 
 
-    @Test(enabled = true, invocationCount = 1024)
-    public void _byte() throws IOException {
+    public static void stream(final Consumer<BitOutput> writer,
+                              final Consumer<BitInput> reader)
+        throws IOException {
 
-        test(BitIoType.BYTE);
+        if (writer == null) {
+            throw new NullPointerException("null writer");
+        }
+
+        if (reader == null) {
+            throw new NullPointerException("null reader");
+        }
+
+        final ByteArrayOutputStream target = new ByteArrayOutputStream(1048576);
+        final BitOutput output
+            = new DefaultBitOutput<>(new StreamOutput(target));
+        writer.accept(output);
+        final long padded = output.align(1);
+
+        final ByteArrayInputStream source
+            = new ByteArrayInputStream(target.toByteArray());
+        final BitInput input = new DefaultBitInput<>(new StreamInput(source));
+        reader.accept(input);
+        final long discarded = input.align(1);
+
+        assertEquals(discarded, padded);
     }
 
 
-    @Test(enabled = true, invocationCount = 1024)
-    public void _short() throws IOException {
+    public static void all(final Consumer<BitOutput> writer,
+                           final Consumer<BitInput> reader)
+        throws IOException {
 
-        test(BitIoType.SHORT);
+        if (writer == null) {
+            throw new NullPointerException("null writer");
+        }
+
+        if (reader == null) {
+            throw new NullPointerException("null reader");
+        }
+
+        array(writer, reader);
+        buffer(writer, reader);
+        file(writer, reader);
+        stream(writer, reader);
     }
 
 
-    @Test(enabled = true, invocationCount = 1024)
-    public void _int() throws IOException {
+    private BitIoTest() {
 
-        test(BitIoType.INT);
+        super();
     }
-
-
-    @Test(enabled = true, invocationCount = 1024)
-    public void _long() throws IOException {
-
-        test(BitIoType.LONG);
-    }
-
-
-    @Test(enabled = true, invocationCount = 1024)
-    public void _char() throws IOException {
-
-        test(BitIoType.CHAR);
-    }
-
-
-    private transient final Logger logger = getLogger(getClass());
 
 }
 

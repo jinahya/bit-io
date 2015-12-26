@@ -19,7 +19,6 @@ package com.github.jinahya.bit.io;
 
 
 import com.github.jinahya.bit.io.codec.BitEncoder;
-import com.github.jinahya.bit.io.octet.ByteOutput;
 import java.io.IOException;
 
 
@@ -230,7 +229,9 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
             writeBoolean(value != null);
         }
 
-        value.write(this);
+        if (!nullable || value != null) {
+            value.write(this);
+        }
     }
 
 

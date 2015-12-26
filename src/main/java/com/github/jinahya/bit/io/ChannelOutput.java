@@ -14,33 +14,40 @@
  * limitations under the License.
  */
 
-
-package com.github.jinahya.bit.io.octet;
+package com.github.jinahya.bit.io;
 
 
 import java.io.IOException;
-import java.util.function.Supplier;
+import java.nio.channels.WritableByteChannel;
 
 
 /**
- * A {@link ByteInput} implementation uses a {@link Supplier} instance.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
+ * @deprecated
  */
-public class SupplierInput extends AbstractByteInput<Supplier<Byte>> {
+@Deprecated
+public class ChannelOutput extends AbstractByteOutput<WritableByteChannel> {
 
 
-    public SupplierInput(final Supplier<Byte> source) {
+    public ChannelOutput(final WritableByteChannel target) {
 
-        super(source);
+        super(target);
     }
 
 
     @Override
-    public int read() throws IOException {
+    public void write(final int value) throws IOException {
 
-        return source.get() & 0xFF;
+        if (output == null) {
+            output = BufferOutput.newInstance(target, 1, false);
+        }
+
+        output.write(value);
     }
+
+
+    private ByteOutput output;
 
 }
 

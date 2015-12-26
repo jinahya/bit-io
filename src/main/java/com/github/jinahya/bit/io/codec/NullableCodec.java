@@ -32,6 +32,72 @@ public abstract class NullableCodec<T> extends Nullable implements BitCodec<T> {
 
 
     /**
+     * Creates a new instance with specified decoder and encoder.
+     *
+     * @param <T> value type parameter
+     * @param nullable the nullable flag
+     * @param decoder the decoder
+     * @param encoder the encoder
+     *
+     * @return a new instance.
+     */
+    public static <T> NullableCodec<T> newInstance(
+        final boolean nullable, final BitDecoder<? extends T> decoder,
+        final BitEncoder<? super T> encoder) {
+
+        return new NullableCodec<T>(nullable) {
+
+            @Override
+            protected T decodeValue(final BitInput input) throws IOException {
+
+                return decoder.decode(input);
+            }
+
+
+            @Override
+            protected void encodeValue(final BitOutput output, final T value)
+                throws IOException {
+
+                encoder.encode(output, value);
+            }
+
+        };
+    }
+
+
+    /**
+     * Creates a new instance with specified decoder and encoder.
+     *
+     * @param <T> value type parameter
+     * @param nullable the nullable flag
+     * @param codec the decoder
+     *
+     * @return a new instance.
+     */
+    public static <T> NullableCodec<T> newInstance(
+        final boolean nullable, final BitCodec<T> codec) {
+
+        return new NullableCodec<T>(nullable) {
+
+            @Override
+            protected T decodeValue(final BitInput input) throws IOException {
+
+                return codec.decode(input);
+            }
+
+
+            @Override
+            protected void encodeValue(final BitOutput output, final T value)
+                throws IOException {
+
+                codec.encode(output, value);
+            }
+
+        };
+    }
+
+
+    /**
      * Creates a new instance.
      *
      * @param nullable a flag for nullability of the value.

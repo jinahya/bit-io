@@ -30,7 +30,7 @@ public class UriCodec extends BridgeCodec<URI, String> {
 
     public UriCodec(final boolean nullable, final int scale) {
 
-        super(new UsAsciiCodec(nullable, scale));
+        super(new StringCodec(nullable, scale, true, 7, "US-ASCII"));
     }
 
 

@@ -23,6 +23,7 @@ import java.io.UncheckedIOException;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
+import org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement;
 
 
 /**
@@ -30,6 +31,7 @@ import java.util.function.UnaryOperator;
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
+@IgnoreJRERequirement
 final class BitIoUtilities {
 
 

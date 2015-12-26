@@ -18,8 +18,6 @@
 package com.github.jinahya.bit.io;
 
 
-import com.github.jinahya.bit.io.octet.ArrayInput;
-import com.github.jinahya.bit.io.octet.ArrayOutput;
 import java.io.IOException;
 import static java.lang.Integer.toBinaryString;
 import static java.util.stream.Collectors.joining;

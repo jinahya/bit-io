@@ -18,7 +18,6 @@
 package com.github.jinahya.bit.io;
 
 
-import com.github.jinahya.bit.io.octet.ByteInput;
 import com.google.inject.Provider;
 
 

@@ -14,40 +14,29 @@
  * limitations under the License.
  */
 
-package com.github.jinahya.bit.io.octet;
+package com.github.jinahya.bit.io;
 
 
-import java.io.IOException;
-import java.nio.channels.ReadableByteChannel;
+import com.google.inject.AbstractModule;
 
 
 /**
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
- * @deprecated
+ * @param <T> byte output type parameter
  */
-@Deprecated
-public class ChannelInput extends AbstractByteInput<ReadableByteChannel> {
-
-
-    public ChannelInput(final ReadableByteChannel source) {
-
-        super(source);
-    }
+public abstract class ByteOutputModule<T extends ByteOutput>
+    extends AbstractModule {
 
 
     @Override
-    public int read() throws IOException {
+    protected void configure() {
 
-        if (input == null) {
-            input = BufferInput.newInstance(source, 1, false);
-        }
-
-        return input.read();
+        bind(ByteOutput.class).toInstance(instance());
     }
 
 
-    private ByteInput input;
+    protected abstract T instance();
 
 }
 

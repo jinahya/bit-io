@@ -14,26 +14,23 @@
  * limitations under the License.
  */
 
-package com.github.jinahya.bit.io.octet;
+package com.github.jinahya.bit.io;
+
+
+import java.nio.ByteBuffer;
 
 
 /**
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
-public class ArrayOutputTest extends ByteOutputTest<ArrayOutput> {
-
-
-    public ArrayOutputTest() {
-
-        super(ArrayOutput.class);
-    }
+public class BufferOutputModule extends ByteOutputModule<BufferOutput> {
 
 
     @Override
-    ArrayOutput instance(final int capacity) {
+    protected BufferOutput instance() {
 
-        return new ArrayOutput(new byte[capacity], capacity, 0);
+        return new BufferOutput(ByteBuffer.allocate(1048576));
     }
 
 }

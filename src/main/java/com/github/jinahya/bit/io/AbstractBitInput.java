@@ -19,7 +19,6 @@ package com.github.jinahya.bit.io;
 
 
 import com.github.jinahya.bit.io.codec.BitDecoder;
-import com.github.jinahya.bit.io.octet.ByteInput;
 import java.io.IOException;
 
 
@@ -78,8 +77,7 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
         final int required = size - available;
 
         if (required > 0) {
-            return (read8(available) << required)
-                   | read8(required);
+            return (read8(available) << required) | read8(required);
         }
 
         int value = 0x00;

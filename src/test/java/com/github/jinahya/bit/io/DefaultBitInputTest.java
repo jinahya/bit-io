@@ -17,7 +17,6 @@
 package com.github.jinahya.bit.io;
 
 
-import com.github.jinahya.bit.io.octet.BufferInput;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import org.testng.annotations.Test;

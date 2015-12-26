@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Jin Kwon &lt;jinahya_at_gmail.com&gt;.
+ * Copyright 2014 Jin Kwon.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,40 +14,31 @@
  * limitations under the License.
  */
 
-package com.github.jinahya.bit.io.octet;
+
+package com.github.jinahya.bit.io;
 
 
 import java.io.IOException;
-import java.nio.channels.WritableByteChannel;
 
 
 /**
+ * An interface for suppling bytes.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
- * @deprecated
  */
-@Deprecated
-public class ChannelOutput extends AbstractByteOutput<WritableByteChannel> {
+//@FunctionalInterface
+public interface ByteInput {
 
 
-    public ChannelOutput(final WritableByteChannel target) {
-
-        super(target);
-    }
-
-
-    @Override
-    public void write(final int value) throws IOException {
-
-        if (output == null) {
-            output = BufferOutput.newInstance(target, 1, false);
-        }
-
-        output.write(value);
-    }
-
-
-    private ByteOutput output;
+    /**
+     * Supplies an unsigned 8-bit value.
+     *
+     * @return an unsigned 8-bit value between {@code 0} (inclusive) and
+     * {@code 256} (exclusive)
+     *
+     * @throws IOException if an I/O error occurs.
+     */
+    int read() throws IOException;
 
 }
 

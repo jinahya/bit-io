@@ -18,7 +18,6 @@
 package com.github.jinahya.bit.io;
 
 
-import com.github.jinahya.bit.io.octet.ByteInput;
 import java.io.IOException;
 
 
@@ -63,7 +62,7 @@ public class DefaultBitInput<T extends ByteInput> extends AbstractBitInput {
 
 
     /**
-     * returns the current value of {@link #delegate}.
+     * Returns the current value of {@link #delegate}.
      *
      * @return current value of {@link #delegate}
      */

@@ -56,12 +56,12 @@ public class Person implements BitReadable, BitWritable {
 ```
 It's, now, too obvious you can do this.
 ```java
-final Person person = getPersion();
+final Person person = new Person().age(31).married(true);
 person.read(input);
 person.write(output);
 ```
 #### Using `BitDecoder`/`BitEncoder`
-If modifying already existing classes (e.g. implementing additional interfaces) is not applicable, you can make specialized classes for decoding/encoding instance of those classes.
+If modifying existing classes (e.g. implementing additional interfaces) is not applicable, you can make some sort of specialized classes for decoding/encoding.
 ```java
 public class PersonDecoder extends NullableDecoder<Person> {
 

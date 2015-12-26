@@ -54,16 +54,17 @@ public class Person implements BitReadable, BitWritable {
     }
 }
 ```
-It's, now, too obvious you can use like this.
+It's, now, too obvious you can do this.
 ```java
-Person person = getPersion();
+final Person person = getPersion();
 person.read(input);
 person.write(output);
 ```
-#### Using ~~`BitDecoder`~~/~~`BitEncoder`~~
+#### Using `BitDecoder`/`BitEncoder`
 If modifying already existing classes (e.g. implementing additional interfaces) is not applicable, you can make specialized classes for decoding/encoding instance of those classes.
 ```java
 public class PersonDecoder implements BitDecoder<Person> {
+
     @Override
     public Person decode(final BitInput input) throws IOException {
         if (!readBoolean() {
@@ -72,9 +73,11 @@ public class PersonDecoder implements BitDecoder<Person> {
         return new Person().age(input.readInt(true, 7)).married(input.readBoolean());
     }
 }
+
 public class PersonEncoder implements BitEncoder<Person> {
+
     @Override
-    public void encode(final Person value, final BitOutput output) throws IOException {
+    public void encode(final BitOutput output, final Person value) throws IOException {
         output.writeBoolean(value != null);
         if (value != null) {
             output.writeInt(true, 7, value.getAge());
@@ -83,12 +86,22 @@ public class PersonEncoder implements BitEncoder<Person> {
     }
 }
 ```
-There is an abstract class for implementing these two interfaces easily.
+There is an abstract class for implementing these two interfaces easily (including the nullable feature).
 ```java
 public class PersonCodec extends NullableCodec<Person> {
 
     public PersonCodec(final boolean nullable) {
         super(nullable);
+    }
+    
+    @Override
+    public Person decode(final BitInput input) throws IOException {
+        return super.decode(input); // nullable handled here
+    }
+    
+    @Override
+    public void encode(final BitOutput output, final Person value) throws IOException {
+        super.encode(output, value); // nullable handled here
     }
 
     @Override
@@ -108,7 +121,7 @@ public class PersonCodec extends NullableCodec<Person> {
 Again, you can use the codec like this.
 ```java
 final PersonCodec codec = new PersonCodec(true);
-Person person = codec.decode(input));
+final Person person = codec.decode(input));
 codec.encode(output, person);
 ```
 ## Reading

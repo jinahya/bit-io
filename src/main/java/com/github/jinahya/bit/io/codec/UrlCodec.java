@@ -14,33 +14,41 @@
  * limitations under the License.
  */
 
-package com.github.jinahya.bit.codec;
+package com.github.jinahya.bit.io.codec;
 
 
-import com.github.jinahya.bit.io.BitOutput;
-import com.github.jinahya.bit.io.Person;
-import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 
 /**
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
-public class PersonEncoder extends NullableEncoder<Person> {
+public class UrlCodec extends BridgeCodec<URL, String> {
 
 
-    public PersonEncoder(final boolean nullable) {
+    public UrlCodec(final boolean nullable, final int scale) {
 
-        super(nullable);
+        super(new StringCodec(nullable, scale, true, 8, "UTF-8"));
     }
 
 
     @Override
-    protected void encodeValue(final BitOutput output, final Person value)
-        throws IOException {
+    protected URL convertFrom(final String u) {
 
-        output.writeInt(true, 7, value.getAge());
-        output.writeBoolean(value.isMarried());
+        try {
+            return new URL(u);
+        } catch (final MalformedURLException murle) {
+            throw new RuntimeException(murle);
+        }
+    }
+
+
+    @Override
+    protected String convertTo(final URL t) {
+
+        return t.toString();
     }
 
 }

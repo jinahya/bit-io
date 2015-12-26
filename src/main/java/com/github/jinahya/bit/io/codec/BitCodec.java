@@ -14,34 +14,16 @@
  * limitations under the License.
  */
 
-package com.github.jinahya.bit.codec;
-
-
-import com.github.jinahya.bit.io.BitInput;
-import com.github.jinahya.bit.io.Person;
-import java.io.IOException;
+package com.github.jinahya.bit.io.codec;
 
 
 /**
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
+ *
+ * @param <T> type parameter
  */
-public class PersonDecoder extends NullableDecoder<Person> {
-
-
-    public PersonDecoder(final boolean nullable) {
-
-        super(nullable);
-    }
-
-
-    @Override
-    protected Person decodeValue(final BitInput input) throws IOException {
-
-        return new Person()
-            .age(input.readInt(true, 7))
-            .married(input.readBoolean());
-    }
+public interface BitCodec<T> extends BitDecoder<T>, BitEncoder<T> {
 
 }
 

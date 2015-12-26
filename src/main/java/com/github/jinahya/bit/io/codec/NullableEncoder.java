@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.jinahya.bit.codec;
+package com.github.jinahya.bit.io.codec;
 
 
 import com.github.jinahya.bit.io.BitOutput;
@@ -22,21 +22,38 @@ import java.io.IOException;
 
 
 /**
+ * An abstract class for implementing {@code BitCodec}.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  * @param <T> value type parameter
  */
-public abstract class NullableEncoder<T> implements BitEncoder<T> {
+public abstract class NullableEncoder<T> extends Nullable
+    implements BitEncoder<T> {
 
 
+    /**
+     * Creates a new instance.
+     *
+     * @param nullable a flag for nullability of the value.
+     */
     public NullableEncoder(final boolean nullable) {
 
-        super();
-
-        this.nullable = nullable;
+        super(nullable);
     }
 
 
+    /**
+     * {@inheritDoc} This method optionally (by the value of {@link #nullable})
+     * encodes additional 1-bit boolean flag and, if the value should be
+     * encoded, invokes
+     * {@link #encodeValue(com.github.jinahya.bit.io.BitOutput, java.lang.Object)}
+     * with given input and value.
+     *
+     * @param output {@inheritDoc}
+     * @param value {@inheritDoc}
+     *
+     * @throws IOException {@inheritDoc}
+     */
     @Override
     public void encode(final BitOutput output, final T value)
         throws IOException {
@@ -53,31 +70,23 @@ public abstract class NullableEncoder<T> implements BitEncoder<T> {
             output.writeBoolean(value != null);
         }
 
-        if (nullable || value != null) {
+        if (!nullable || value != null) {
             encodeValue(output, value);
         }
     }
 
 
     /**
-     * Encodes given value to specified output.
+     * Encodes specified value to given output. If this method is invoked the
+     * value is always not {@code null}.
      *
      * @param output the output
-     * @param value the value to encode
+     * @param value the value to encode; never {@code null}
      *
      * @throws IOException if an I/O error occurs.
      */
     protected abstract void encodeValue(BitOutput output, T value)
         throws IOException;
-
-
-    public boolean isNullable() {
-
-        return nullable;
-    }
-
-
-    protected final boolean nullable;
 
 }
 

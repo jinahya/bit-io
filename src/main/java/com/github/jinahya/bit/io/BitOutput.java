@@ -18,7 +18,7 @@
 package com.github.jinahya.bit.io;
 
 
-import com.github.jinahya.bit.codec.BitEncoder;
+import com.github.jinahya.bit.io.codec.BitEncoder;
 import java.io.IOException;
 
 

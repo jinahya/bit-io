@@ -14,31 +14,20 @@
  * limitations under the License.
  */
 
-package com.github.jinahya.bit.codec;
-
-
-import com.github.jinahya.bit.io.BitOutput;
-import java.io.IOException;
+package com.github.jinahya.bit.io.codec;
 
 
 /**
- * An interface for encoding custom values
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
- * @param <T> value type parameter
  */
-public interface BitEncoder<T> {
+public class UsAsciiCodec extends StringCodec {
 
 
-    /**
-     * Encodes given value to specified output.
-     *
-     * @param output the output
-     * @param value the value to encode
-     *
-     * @throws IOException if an I/O error occurs.
-     */
-    void encode(BitOutput output, T value) throws IOException;
+    public UsAsciiCodec(final boolean nullable, final int scale) {
+
+        super(nullable, scale, true, 7, "US-ASCII");
+    }
 
 }
 

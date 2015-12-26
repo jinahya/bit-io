@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.jinahya.bit.codec;
+package com.github.jinahya.bit.io.codec;
 
 
 import com.github.jinahya.bit.io.BitInput;
@@ -22,21 +22,38 @@ import java.io.IOException;
 
 
 /**
+ * An abstract class for implementing {@code BitCodec}.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  * @param <T> value type parameter
  */
-public abstract class NullableDecoder<T> implements BitDecoder<T> {
+public abstract class NullableDecoder<T> extends Nullable
+    implements BitDecoder<T> {
 
 
+    /**
+     * Creates a new instance.
+     *
+     * @param nullable a flag for nullability of the value.
+     */
     public NullableDecoder(final boolean nullable) {
 
-        super();
-
-        this.nullable = nullable;
+        super(nullable);
     }
 
 
+    /**
+     * {@inheritDoc} This method optionally (by the value of {@link #nullable})
+     * decodes additional 1-bit boolean and, if the value need to be decoded,
+     * invokes {@link #decodeValue(com.github.jinahya.bit.io.BitInput)} with
+     * given {@code input}.
+     *
+     * @param input {@inheritDoc}
+     *
+     * @return {@inheritDoc}
+     *
+     * @throws IOException {@inheritDoc}
+     */
     @Override
     public T decode(final BitInput input) throws IOException {
 
@@ -53,24 +70,16 @@ public abstract class NullableDecoder<T> implements BitDecoder<T> {
 
 
     /**
-     * Decodes value from specified input.
+     * Decodes value from given input. This method is supposed to return a
+     * non-null value.
      *
      * @param input the input
      *
-     * @return a decoded value.
+     * @return decoded value; should not be {@code null}.
      *
      * @throws IOException if an I/O error occurs.
      */
-    protected abstract T decodeValue(BitInput input) throws IOException;
-
-
-    public boolean isNullable() {
-
-        return nullable;
-    }
-
-
-    protected final boolean nullable;
+    protected abstract T decodeValue(final BitInput input) throws IOException;
 
 }
 

@@ -18,7 +18,7 @@
 package com.github.jinahya.bit.io;
 
 
-import com.github.jinahya.bit.codec.BitDecoder;
+import com.github.jinahya.bit.io.codec.BitDecoder;
 import com.github.jinahya.bit.io.octet.ByteInput;
 import java.io.IOException;
 

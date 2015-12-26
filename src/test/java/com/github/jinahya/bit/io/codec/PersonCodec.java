@@ -14,32 +14,50 @@
  * limitations under the License.
  */
 
-package com.github.jinahya.bit.codec;
+package com.github.jinahya.bit.io.codec;
 
 
 import com.github.jinahya.bit.io.BitInput;
+import com.github.jinahya.bit.io.BitOutput;
+import com.github.jinahya.bit.io.Person;
 import java.io.IOException;
 
 
 /**
- * An interface for decoding custom values.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
- * @param <T> value type parameter
  */
-public interface BitDecoder<T> {
+public class PersonCodec extends NullableCodec<Person> {
 
 
-    /**
-     * Decode a value from specified input.
-     *
-     * @param input the input
-     *
-     * @return a decoded value.
-     *
-     * @throws IOException if an I/O error occurs.
-     */
-    T decode(BitInput input) throws IOException;
+    public PersonCodec(final boolean nullable) {
+
+        super(nullable);
+
+        decoder = new PersonDecoder(false);
+        encoder = new PersonEncoder(false);
+    }
+
+
+    @Override
+    protected Person decodeValue(final BitInput input) throws IOException {
+
+        return decoder.decode(input);
+    }
+
+
+    @Override
+    protected void encodeValue(final BitOutput output, final Person value)
+        throws IOException {
+
+        encoder.encode(output, value);
+    }
+
+
+    private final BitDecoder<Person> decoder;
+
+
+    private final BitEncoder<Person> encoder;
 
 }
 

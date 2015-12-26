@@ -145,15 +145,15 @@ Prepare an instance of `ByteInput` from various sources.
 new ArrayInput(byte[], int, int);
 new BufferInput(java.nio.ByteBuffer);
 new DataInput(java.io.DataInput);
-new IntSupplierInput(java.util.function.IntSuppiler);
 new RandomAccessInput(java.io.RandomAccessFile);
 new StreamInput(java.io.InputStream);
-new SupplierInput(java.util.function.Supplier<Byte>);
 ````
 Those constructors don't check arguments which means you can lazily instantiate and set them.
 ```java
 final InputStream output = openFile();
+
 final ByteInput input = new ArrayInput(null, -1, -1) {
+
     @Override
     public int read() throws IOException {
         if (source == null) {
@@ -178,11 +178,13 @@ final ByteInput input = new ArrayInput(null, -1, -1) {
 Construct with an already created a `ByteInput`.
 ```java
 final ByteInput delegate = createByteInput();
+
 final BitInput input = new DefalutBitInput(delegate);
 ```
 Or lazliy instantiate its `delegate` field.
 ```java
 new DefaultBitInput<InputStream>(null) {
+
     @Override
     public int read() throws IOException {
         if (delegate == null) {
@@ -196,6 +198,7 @@ new DefaultBitInput<InputStream>(null) {
 You can create `BitInput`s using various `newInstance(...)` methods.
 ```java
 final RedableByteChannel channel = openChannel();
+
 final BitInput input = BitInputFactory.newInstance(
     () -> (ByteBuffer) ByteBuffer.allocate(10).position(10),
     b -> {

@@ -114,8 +114,8 @@ Person person = codec.decode(input));
 codec.encode(output, person);
 ```
 ## Reading
-### Preparing ~~`ByteInput`~~`OctetInput`
-Prepare an instance of `OctetInput` from various sources.
+### Preparing `ByteInput`
+Prepare an instance of `ByteInput` from various sources.
 ````java
 new ArrayInput(byte[], int, int);
 new BufferInput(java.nio.ByteBuffer);
@@ -128,9 +128,9 @@ new SupplierInput(java.util.function.Supplier<Byte>);
 Those constructors don't check arguments which means you can lazily instantiate and set them.
 ```java
 final InputStream output = openFile();
-final OctetInput input = new ArrayInput(null, -1, -1) {
+final ByteInput input = new ArrayInput(null, -1, -1) {
     @Override
-    public int readOctet() throws IOException {
+    public int read() throws IOException {
         if (source == null) {
             source = byte[16];
             limit = source.length;
@@ -144,26 +144,26 @@ final OctetInput input = new ArrayInput(null, -1, -1) {
             limit = read;
             index = 0;
         }
-        return super.readOctet();
+        return super.read();
     }
 };
 ```
 ### Creating `BitInput`
 #### Using `DefaultBitInput`
-Construct with an already created a `OctetInput`.
+Construct with an already created a `ByteInput`.
 ```java
-final OctetInput delegate = createOctetInput();
+final ByteInput delegate = createByteInput();
 final BitInput input = new DefalutBitInput(delegate);
 ```
 Or lazliy instantiate its `delegate` field.
 ```java
 new DefaultBitInput<InputStream>(null) {
     @Override
-    public int readOctet() throws IOException {
+    public int read() throws IOException {
         if (delegate == null) {
             delegate = new StreamInput(openFile());
         }
-        return super.readOctet();
+        return super.read();
     }
 };
 ```
@@ -202,7 +202,7 @@ assert discarded == 2L;
 biiiiiil llllllll llllllll llllllll llllllll llllllll lllllldd
 ```
 ## Writing
-### Preparing ~~`ByteOutput`~~`OctetOutput`
+### Preparing `ByteOutput`
 ### Creating `BitOutput`
 #### Using `DefalutBitOutput`
 #### Using `BitOutputFactory`

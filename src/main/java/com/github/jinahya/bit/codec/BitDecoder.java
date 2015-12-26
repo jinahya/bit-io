@@ -14,28 +14,32 @@
  * limitations under the License.
  */
 
-package com.github.jinahya.bit.io;
+package com.github.jinahya.bit.codec;
 
 
+import com.github.jinahya.bit.io.BitInput;
 import java.io.IOException;
 
 
 /**
- * An interface for enabling objects writable directly to a {@code BitOutput}.
+ * An interface for decoding custom values.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
+ * @param <T> value type parameter
  */
-public interface BitWritable {
+public interface BitDecoder<T> {
 
 
     /**
-     * Writes properties to specified output.
+     * Decode a value from specified input.
      *
-     * @param output the output
+     * @param input the input
+     *
+     * @return a decoded value.
      *
      * @throws IOException if an I/O error occurs.
      */
-    void write(BitOutput output) throws IOException;
+    T decode(BitInput input) throws IOException;
 
 }
 

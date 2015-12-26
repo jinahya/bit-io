@@ -130,14 +130,6 @@ public class ArrayInput extends AbstractByteInput<byte[]> {
     }
 
 
-//    @Deprecated
-//    public static ArrayInput newInstanceWithOffsetLength(
-//        final byte[] array, final int offset, final int length) {
-//
-//        BitIoConstraints.requireValidArrayOffsetLength(array, offset, length);
-//
-//        return new ArrayInput(array, offset + length, offset);
-//    }
     /**
      * Creates a new instance with given parameters.
      *
@@ -156,10 +148,10 @@ public class ArrayInput extends AbstractByteInput<byte[]> {
 
     /**
      * {@inheritDoc} The {@code read()} method of {@code ArrayInput} class
-     * returns the value of following code.
-     * <blockquote><pre>source[index++] &amp; 0xFF</pre></blockquote> Override
-     * this method if either {@link #source}, {@link #index}, or {@link #limit}
-     * needs to be initialized or adjusted.
+     * returns {@code source[index]} as an unsigned int while incrementing
+     * {@link #index}. Override this method if either
+     * {@link #source}, {@link #index}, or {@link #limit} needs to be
+     * initialized or adjusted.
      *
      * @return {@inheritDoc}
      *

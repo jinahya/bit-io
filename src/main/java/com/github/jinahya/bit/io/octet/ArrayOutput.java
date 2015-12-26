@@ -101,17 +101,17 @@ public class ArrayOutput extends AbstractByteOutput<byte[]> {
             @Override
             public void write(final int value) throws IOException {
 
-                if (getTarget() == null) {
-                    target(new byte[length]);
-                    index(0);
-                    limit(getTarget().length);
+                if (target == null) {
+                    target = new byte[length];
+                    index = 0;
+                    limit = target.length;
                 }
 
                 super.write(value);
 
-                if (getIndex() == getLimit()) {
-                    file.write(getTarget());
-                    index(0);
+                if (index == getLimit()) {
+                    file.write(target);
+                    index = 0;
                 }
             }
 
@@ -119,14 +119,6 @@ public class ArrayOutput extends AbstractByteOutput<byte[]> {
     }
 
 
-//    @Deprecated
-//    public static ArrayOutput newInstanceWithOffsetLength(
-//        final byte[] array, final int offset, final int length) {
-//
-//        BitIoConstraints.requireValidArrayOffsetLength(array, offset, length);
-//
-//        return new ArrayOutput(array, offset + length, offset);
-//    }
     /**
      * Creates a new instance with given parameters.
      *
@@ -144,9 +136,8 @@ public class ArrayOutput extends AbstractByteOutput<byte[]> {
 
 
     /**
-     * {@inheritDoc} The {@code write(int)} method of {@code ArrayOutput} class
-     * executes following statement.
-     * <blockquote><pre>target[index++] = (byte) value</pre></blockquote>
+     * {@inheritDoc} The {@code write(int)} method of {@code ArrayOutput} sets
+     * {@code target[index]} with given value while incrementing {@code #index}.
      * Override this method if either {@link #target}, {@link #index}, or
      * {@link #limit} needs to be initialized or adjusted.
      *

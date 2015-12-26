@@ -14,28 +14,34 @@
  * limitations under the License.
  */
 
-package com.github.jinahya.bit.io;
+package com.github.jinahya.bit.codec;
 
 
+import com.github.jinahya.bit.io.BitOutput;
+import com.github.jinahya.bit.io.Person;
 import java.io.IOException;
 
 
 /**
- * An interface for enabling objects writable directly to a {@code BitOutput}.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
-public interface BitWritable {
+public class PersonEncoder extends NullableEncoder<Person> {
 
 
-    /**
-     * Writes properties to specified output.
-     *
-     * @param output the output
-     *
-     * @throws IOException if an I/O error occurs.
-     */
-    void write(BitOutput output) throws IOException;
+    public PersonEncoder(final boolean nullable) {
+
+        super(nullable);
+    }
+
+
+    @Override
+    protected void encodeValue(final BitOutput output, final Person value)
+        throws IOException {
+
+        output.writeInt(true, 7, value.getAge());
+        output.writeBoolean(value.isMarried());
+    }
 
 }
 

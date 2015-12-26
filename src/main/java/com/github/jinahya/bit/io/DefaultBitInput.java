@@ -27,9 +27,6 @@ import java.io.IOException;
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  * @param <T> byte input type parameter
- *
- * @see BitInputFactory#newInstance(com.github.jinahya.bit.io.ByteInput)
- * @see BitInputFactory#newInstance(java.util.function.Supplier)
  */
 public class DefaultBitInput<T extends ByteInput> extends AbstractBitInput {
 

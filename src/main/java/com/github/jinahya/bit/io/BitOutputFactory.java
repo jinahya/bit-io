@@ -56,9 +56,6 @@ public class BitOutputFactory {
                 output.write(value);
             }
 
-
-            private T output;
-
         };
     }
 

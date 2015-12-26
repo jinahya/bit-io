@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.ReadableByteChannel;
+import static java.util.concurrent.ThreadLocalRandom.current;
 import org.mockito.Mockito;
 import org.testng.annotations.Test;
 
@@ -31,6 +32,15 @@ import org.testng.annotations.Test;
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
 public class BitInputFactoryTest {
+
+
+    @Test
+    public static void newInstanceWithByteInput() {
+
+        BitInputFactory.newInstance(() -> {
+            return current().nextInt(255);
+        });
+    }
 
 
     @Test

@@ -18,6 +18,7 @@
 package com.github.jinahya.bit.io;
 
 
+import com.github.jinahya.bit.codec.BitEncoder;
 import com.github.jinahya.bit.io.octet.ByteOutput;
 import java.io.IOException;
 
@@ -46,14 +47,10 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
 
 
     /**
-     * Writes an unsigned int value whose size is equals to or less than
-     * {@value BitIoConstants#U8_SIZE_MAX}. Only the lower {@code size} bits in
-     * given {@code value} are written.
+     * Writes an unsigned 8-bit int value.
      *
-     * @param size the number of lower bits to write; between
-     * {@value com.github.jinahya.bit.io.BitIoConstants#U8_SIZE_MIN} (inclusive)
-     * and {@value com.github.jinahya.bit.io.BitIoConstants#U8_SIZE_MAX}
-     * (inclusive).
+     * @param size the number of lower bits to write; between {@code 1}
+     * (inclusive) and {@code 8} (inclusive).
      * @param value the value to write
      *
      * @throws IOException if an I/O error occurs.
@@ -93,15 +90,10 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
 
 
     /**
-     * Writes an unsigned int value whose size is equals to or less than
-     * {@value BitIoConstants#U16_SIZE_MAX}. Only the specified lower bits in
-     * {@code value} are written.
+     * Writes an unsigned 16-bit int value.
      *
-     * @param size the number of lower bits to write; between
-     * {@value com.github.jinahya.bit.io.BitIoConstants#U16_SIZE_MIN}
-     * (inclusive) and
-     * {@value com.github.jinahya.bit.io.BitIoConstants#U16_SIZE_MAX}
-     * (inclusive).
+     * @param size the number of lower bits to write; between {@code 1}
+     * (inclusive) and {@code 16} (inclusive).
      * @param value the value to write
      *
      * @throws IOException if an I/O error occurs
@@ -123,7 +115,6 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
     }
 
 
-    // ----------------------------------------------------------------- boolean
     @Override
     public void writeBoolean(final boolean value) throws IOException {
 
@@ -227,11 +218,16 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
 
 
     @Override
-    public <T extends BitWritable> void writeObject(final T value)
+    public <T extends BitWritable> void writeObject(final boolean nullable,
+                                                    final T value)
         throws IOException {
 
-        if (value == null) {
-            throw new NullPointerException("null value");
+        if (!nullable && value == null) {
+            throw new NullPointerException("null value with false nullable");
+        }
+
+        if (nullable) {
+            writeBoolean(value != null);
         }
 
         value.write(this);
@@ -239,18 +235,18 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
 
 
     @Override
-    public <T extends BitWritable> void writeNullable(final T value)
+    public <T> void encodeObject(final BitEncoder<? super T> encoder,
+                                 final T value)
         throws IOException {
 
-        writeBoolean(value != null);
-
-        if (value != null) {
-            writeObject(value);
+        if (encoder == null) {
+            throw new NullPointerException("null encoder");
         }
+
+        encoder.encode(this, value);
     }
 
 
-    // ------------------------------------------------------------------- align
     @Override
     public long align(final int bytes) throws IOException {
 

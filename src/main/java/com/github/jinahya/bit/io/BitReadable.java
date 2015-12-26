@@ -21,7 +21,7 @@ import java.io.IOException;
 
 
 /**
- * An interface for enabling objects to be directly decoded.
+ * An interface for enabling objects readable directly from {@code BitInput}.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
@@ -29,7 +29,7 @@ public interface BitReadable {
 
 
     /**
-     * Decodes values from specified input.
+     * Reads properties from specified input.
      *
      * @param input the input
      *

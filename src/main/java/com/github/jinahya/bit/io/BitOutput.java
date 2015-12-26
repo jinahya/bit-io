@@ -18,6 +18,7 @@
 package com.github.jinahya.bit.io;
 
 
+import com.github.jinahya.bit.codec.BitEncoder;
 import java.io.IOException;
 
 
@@ -55,13 +56,22 @@ public interface BitOutput {
     void writeShort(boolean unsigned, int size, short value) throws IOException;
 
 
-    void writeChar(int size, char value) throws IOException;
-
-
     void writeInt(boolean unsigned, int size, int value) throws IOException;
 
 
     void writeLong(boolean unsigned, int size, long value) throws IOException;
+
+
+    /**
+     * Writes a char value.
+     *
+     * @param size the number of bits for value; between {@code 1} (inclusive)
+     * and {@code 16} (inclusive)
+     * @param value the value to write
+     *
+     * @throws IOException if an I/O error occurs.
+     */
+    void writeChar(int size, char value) throws IOException;
 
 
     void writeFloat(float value) throws IOException;
@@ -71,29 +81,33 @@ public interface BitOutput {
 
 
     /**
-     * Writes given object reference value.
+     * Writes an object reference value. This method, if {@code nullable} is
+     * {@code true}, writes a preceding 1-bit boolean value for nullability and
+     * writes specified value if it is not {@code null}.
      *
      * @param <T> value type parameter
+     * @param nullable a flag for nullability
      * @param value the value to write.
      *
      * @throws IOException if an I/O error occurs.
+     * @throws NullPointerException if {@code nullable} is {@code flase} and
+     * {@code value} is {@code null}.
      */
-    <T extends BitWritable> void writeObject(T value) throws IOException;
+    <T extends BitWritable> void writeObject(boolean nullable, T value)
+        throws IOException;
 
 
     /**
-     * Writes given object reference value which is possibly {@code null}. This
-     * method writes preceding 1-bit boolean flag which representing the
-     * nullability of the value and invokes
-     * {@link #writeObject(com.github.jinahya.bit.io.BitWritable)} with
-     * specified value if it is not {@code null}.
+     * Encodes an object reference value using specified encoder.
      *
      * @param <T> value type parameter
-     * @param value the value to write
+     * @param encoder the encoder
+     * @param value the value to encode
      *
      * @throws IOException if an I/O error occurs.
      */
-    <T extends BitWritable> void writeNullable(T value) throws IOException;
+    <T> void encodeObject(BitEncoder<? super T> encoder, T value)
+        throws IOException;
 
 
     /**

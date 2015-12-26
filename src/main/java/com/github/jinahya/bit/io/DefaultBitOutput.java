@@ -27,9 +27,6 @@ import java.io.IOException;
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  * @param <T> byte output type parameter
- *
- * @see BitOutputFactory#newInstance(com.github.jinahya.bit.io.ByteOutput)
- * @see BitOutputFactory#newInstance(java.util.function.Supplier)
  */
 public class DefaultBitOutput<T extends ByteOutput> extends AbstractBitOutput {
 
@@ -50,9 +47,9 @@ public class DefaultBitOutput<T extends ByteOutput> extends AbstractBitOutput {
 
     /**
      * {@inheritDoc} The {@code write(int)} method of {@code DefaultBitOutput}
-     * class invokes {@link ByteOutput#write(int)} with given value. Override
-     * this method if {@link #delegate} is supposed to be lazily initialized and
-     * set.
+     * class invokes {@link ByteOutput#write(int)} on {@link #delegate} with
+     * given value. Override this method if {@link #delegate} is supposed to be
+     * lazily initialized and set.
      *
      * @param value {@inheritDoc}
      *

@@ -18,6 +18,7 @@
 package com.github.jinahya.bit.io;
 
 
+import com.github.jinahya.bit.codec.BitDecoder;
 import com.github.jinahya.bit.io.octet.ByteInput;
 import java.io.IOException;
 
@@ -48,13 +49,10 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
 
 
     /**
-     * Reads an unsigned int value whose size is equals to or less than
-     * {@value BitIoConstants#U8_SIZE_MAX}.
+     * Reads an unsigned 8-bit int value.
      *
-     * @param size the number of bits for the value; between
-     * {@value com.github.jinahya.bit.io.BitIoConstants#U8_SIZE_MIN} (inclusive)
-     * and {@value com.github.jinahya.bit.io.BitIoConstants#U8_SIZE_MAX}
-     * (inclusive).
+     * @param size the number of bits for the value; between {@code 1}
+     * (inclusive) and {@code 8} (inclusive).
      *
      * @return an unsigned byte value.
      *
@@ -96,14 +94,10 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
 
 
     /**
-     * Reads an unsigned int value whose size is equals to or less than
-     * {@value BitIoConstants#U16_SIZE_MAX}.
+     * Reads an unsigned 16-bit int value.
      *
-     * @param size the number of bits for the value; between
-     * {@value com.github.jinahya.bit.io.BitIoConstants#U16_SIZE_MIN}
-     * (inclusive) and
-     * {@value com.github.jinahya.bit.io.BitIoConstants#U16_SIZE_MAX}
-     * (inclusive).
+     * @param size the number of bits for the value; between {@code 1}
+     * (inclusive) and {@code 16} (inclusive).
      *
      * @return an unsigned short value.
      *
@@ -132,7 +126,6 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
     }
 
 
-    // ----------------------------------------------------------------- boolean
     @Override
     public boolean readBoolean() throws IOException {
 
@@ -216,7 +209,6 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
     }
 
 
-    // -------------------------------------------------------------------- char
     @Override
     public char readChar(int size) throws IOException {
 
@@ -226,13 +218,6 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
     }
 
 
-//    @Deprecated
-//    @Override
-//    public char readChar() throws IOException {
-//
-//        return readChar(BitIoConstants.CHAR_SIZE_MAX);
-//    }
-    // ------------------------------------------------------------------- float
     @Override
     public float readFloat() throws IOException {
 
@@ -240,7 +225,6 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
     }
 
 
-    // ------------------------------------------------------------------ double
     @Override
     public double readDouble() throws IOException {
 
@@ -249,11 +233,16 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
 
 
     @Override
-    public <T extends BitReadable> T readObject(final Class<T> type)
+    public <T extends BitReadable> T readObject(final boolean nullable,
+                                                final Class<T> type)
         throws IOException {
 
         if (type == null) {
             throw new NullPointerException("null type");
+        }
+
+        if (nullable && !readBoolean()) {
+            return null;
         }
 
         final T value;
@@ -272,18 +261,14 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
 
 
     @Override
-    public <T extends BitReadable> T readNullable(final Class<T> type)
+    public <T> T decodeObject(final BitDecoder<? extends T> decoder)
         throws IOException {
 
-        if (type == null) {
-            throw new NullPointerException("null type");
+        if (decoder == null) {
+            throw new NullPointerException("null decoder");
         }
 
-        if (!readBoolean()) {
-            return null;
-        }
-
-        return readObject(type);
+        return decoder.decode(this);
     }
 
 

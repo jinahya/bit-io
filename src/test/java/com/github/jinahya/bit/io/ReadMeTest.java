@@ -76,6 +76,8 @@ public class ReadMeTest {
             .mapToObj(v -> leftPad(toBinaryString(array[v] & 0xFF), 8, '0'))
             .collect(joining(" "));
         logger.info("w: {}", w);
+        assertEquals(w, "01101110 00100000 00000000 00000000"
+                        + " 00000110 00110000 00000000 00000000");
     }
 
 }

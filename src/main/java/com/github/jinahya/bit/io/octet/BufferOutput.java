@@ -31,6 +31,42 @@ import java.nio.channels.WritableByteChannel;
 public class BufferOutput extends AbstractByteOutput<ByteBuffer> {
 
 
+    /**
+     * Ensures specified byte buffer has remaining for writing. This method, if
+     * the buffer has no remaining, writes the buffer to specified channel until
+     * at least one byte is written.
+     *
+     * @param buffer the byte buffer
+     * @param channel a channel for draining buffer.
+     *
+     * @return given buffer.
+     *
+     * @throws IOException if an I/O error occurs.
+     */
+    public static ByteBuffer ensureRemaining(final ByteBuffer buffer,
+                                             final WritableByteChannel channel)
+        throws IOException {
+
+        if (buffer == null) {
+            throw new NullPointerException("null buffer");
+        }
+
+        if (channel == null) {
+            throw new NullPointerException("null channel");
+        }
+
+        if (!buffer.hasRemaining()) {
+            buffer.flip(); // limit -> position; position -> zero;
+            do {
+                channel.write(buffer);
+            } while (buffer.position() == 0);
+            buffer.compact(); // position -> n+1; limit -> capacity
+        }
+
+        return buffer;
+    }
+
+
     public static BufferOutput newInstance(final WritableByteChannel channel,
                                            final int capacity,
                                            final boolean direct) {
@@ -53,26 +89,11 @@ public class BufferOutput extends AbstractByteOutput<ByteBuffer> {
                     target = direct
                              ? ByteBuffer.allocateDirect(capacity)
                              : ByteBuffer.allocate(capacity);
-                    assert target.position() == 0;
-                    assert target.limit() == target.capacity();
                 }
 
                 super.write(value);
 
-//                if (!target.hasRemaining()) {
-//                    target.rewind(); // position -> zero;
-//                    while (target.hasRemaining()) {
-//                        channel.write(target);
-//                    }
-//                    target.rewind();
-//                }
-                if (!target.hasRemaining()) {
-                    target.flip(); // limit -> position; position -> zero;
-                    do {
-                        channel.write(target);
-                    } while (target.position() == 0);
-                    target.compact(); // position -> n+1; limit -> capacity
-                }
+                ensureRemaining(target, channel);
             }
 
         };
@@ -93,21 +114,18 @@ public class BufferOutput extends AbstractByteOutput<ByteBuffer> {
 
     /**
      * {@inheritDoc} The {@code write(int)} method of {@code BufferOutput} class
-     * calls {@link ByteBuffer#put(byte)} on {@link #target} with given
+     * invokes {@link ByteBuffer#put(byte)} on {@link #getTarget()} with given
      * {@code value}. Override this method if {@link #target} is supposed to be
      * lazily initialized or adjusted.
      *
      * @param value {@inheritDoc }
      *
      * @throws IOException {@inheritDoc }
-     *
-     * @see #target
-     * @see ByteBuffer#put(byte)
      */
     @Override
     public void write(final int value) throws IOException {
 
-        target.put((byte) value);
+        getTarget().put((byte) value);
     }
 
 }

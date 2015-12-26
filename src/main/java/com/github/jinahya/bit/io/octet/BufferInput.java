@@ -33,6 +33,45 @@ import java.nio.channels.ReadableByteChannel;
 public class BufferInput extends AbstractByteInput<ByteBuffer> {
 
 
+    /**
+     * Ensures specified byte buffer has remaining for reading. This method, if
+     * the buffer has no remaining, reads the buffer from specified channel
+     * until at least one byte is read.
+     *
+     * @param buffer the byte buffer
+     * @param channel a channel for filling buffer.
+     *
+     * @return given buffer.
+     *
+     * @throws IOException if an I/O error occurs.
+     */
+    public static ByteBuffer ensureRemaining(final ByteBuffer buffer,
+                                             final ReadableByteChannel channel)
+        throws IOException {
+
+        if (buffer == null) {
+            throw new NullPointerException("null buffer");
+        }
+
+        if (channel == null) {
+            throw new NullPointerException("null channel");
+        }
+
+        if (!buffer.hasRemaining()) {
+            buffer.clear(); // position -> zero; limit -> capacity;
+            do {
+                final int read = channel.read(buffer);
+                if (read == -1) {
+                    throw new EOFException();
+                }
+            } while (buffer.position() == 0);
+            buffer.flip(); // limit -> position; position -> zero;
+        }
+
+        return buffer;
+    }
+
+
     public static BufferInput newInstance(final ReadableByteChannel channel,
                                           final int capacity,
                                           final boolean direct) {
@@ -58,16 +97,7 @@ public class BufferInput extends AbstractByteInput<ByteBuffer> {
                     source.position(source.limit());
                 }
 
-                if (!source.hasRemaining()) {
-                    source.clear(); // position -> zero; limit -> capacity;
-                    do {
-                        final int read = channel.read(source);
-                        if (read == -1) {
-                            throw new EOFException();
-                        }
-                    } while (source.position() == 0);
-                    source.flip(); // limit -> position; position -> zero;
-                }
+                ensureRemaining(source, channel);
 
                 return super.read();
             }
@@ -89,23 +119,19 @@ public class BufferInput extends AbstractByteInput<ByteBuffer> {
 
 
     /**
-     * {@inheritDoc} The {@code read()} method of {@code BufferInput} class
-     * returns the value of following code.
-     * <blockquote><pre>source.get() &amp; 0xFF</pre></blockquote> Override this
-     * method if {@link #source source} is supposed to be lazily initialized or
-     * adjusted.
+     * {@inheritDoc} The {@code read()} method of {@code BufferInput} invokes
+     * {@link ByteBuffer#get()} on {@link #getSource()} and return the result as
+     * an unsigned int. Override this method if {@link #source} is supposed to
+     * be lazily initialized or adjusted.
      *
      * @return {@inheritDoc }
      *
      * @throws IOException {@inheritDoc }
-     *
-     * @see #source
-     * @see ByteBuffer#get()
      */
     @Override
     public int read() throws IOException {
 
-        return source.get() & 0xFF;
+        return getSource().get() & 0xFF;
     }
 
 }

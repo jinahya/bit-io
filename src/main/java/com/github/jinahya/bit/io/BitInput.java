@@ -18,6 +18,7 @@
 package com.github.jinahya.bit.io;
 
 
+import com.github.jinahya.bit.codec.BitDecoder;
 import java.io.IOException;
 
 
@@ -46,13 +47,23 @@ public interface BitInput {
     short readShort(boolean unsigned, int size) throws IOException;
 
 
-    char readChar(int size) throws IOException;
-
-
     int readInt(boolean unsigned, int size) throws IOException;
 
 
     long readLong(boolean unsigned, int size) throws IOException;
+
+
+    /**
+     * Reads a char value.
+     *
+     * @param size the number of bits for value; between {@code 1} (inclusive)
+     * and {@code 16} (inclusive)
+     *
+     * @return a char value
+     *
+     * @throws IOException if an I/O error occurs.
+     */
+    char readChar(int size) throws IOException;
 
 
     float readFloat() throws IOException;
@@ -62,33 +73,33 @@ public interface BitInput {
 
 
     /**
-     * Reads an object reference value.
-     *
-     * @param <T> value type parameter
-     * @param type the type of the value
-     *
-     * @return a object reference value.
-     *
-     * @throws IOException if an I/O error occurs.
-     */
-    <T extends BitReadable> T readObject(Class<T> type) throws IOException;
-
-
-    /**
      * Reads an object reference value which is possibly {@code null}. This
-     * method reads preceding 1-bit boolean flag which representing the
-     * nullability of the value and invokes
-     * {@link #readObject(java.lang.Class) } with specified type if the flag is
-     * {@code true}.
+     * method reads preceding 1-bit boolean flag and, if it is {@code true},
+     * reads an instance of specified type.
      *
      * @param <T> value type parameter
+     * @param nullable flat for nullability
      * @param type value type.
      *
      * @return an object reference value; may be {@code null}.
      *
      * @throws IOException if an I/O error occurs.
      */
-    <T extends BitReadable> T readNullable(Class<T> type) throws IOException;
+    <T extends BitReadable> T readObject(boolean nullable, Class<T> type)
+        throws IOException;
+
+
+    /**
+     * Decodes an object reference value using specified decoder.
+     *
+     * @param <T> value type parameter
+     * @param decoder the decoder
+     *
+     * @return decoded value.
+     *
+     * @throws IOException if an I/O error occurs.
+     */
+    <T> T decodeObject(BitDecoder<? extends T> decoder) throws IOException;
 
 
     /**

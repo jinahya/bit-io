@@ -57,9 +57,6 @@ public class BitInputFactory {
                 return input.read();
             }
 
-
-            private T input;
-
         };
     }
 

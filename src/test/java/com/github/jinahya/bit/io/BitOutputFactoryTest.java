@@ -17,13 +17,10 @@
 package com.github.jinahya.bit.io;
 
 
-import java.io.EOFException;
 import java.io.IOException;
 import java.io.UncheckedIOException;
-import java.nio.ByteBuffer;
-import java.nio.channels.ReadableByteChannel;
-import java.nio.channels.WritableByteChannel;
-import org.mockito.Mockito;
+import java.util.function.Supplier;
+import java.util.function.UnaryOperator;
 import org.testng.annotations.Test;
 
 
@@ -34,70 +31,137 @@ import org.testng.annotations.Test;
 public class BitOutputFactoryTest {
 
 
+    @Test(expectedExceptions = NullPointerException.class)
+    public static void newInstanceWithNullByteOutput() {
+
+        BitOutputFactory.newInstance((ByteOutput) null);
+    }
+
+
     @Test
     public static void newInstanceWithByteOutput() {
 
-        BitOutputFactory.newInstance((v) -> {
+        final BitOutput output = BitOutputFactory.newInstance((v) -> {
         });
+
+        try {
+            BitOutputTest.test(output);
+        } catch (final IOException ioe) {
+            throw new UncheckedIOException(ioe);
+        }
+    }
+
+
+    @Test(expectedExceptions = NullPointerException.class)
+    public static void newInstanceWithNullSupplier() {
+
+        BitOutputFactory.newInstance((Supplier<? extends ByteOutput>) null);
     }
 
 
     @Test
-    public static void newInstanceWithSupplierObjIntConsumer() {
+    public static void newInstanceWithSupplier() {
 
-        final WritableByteChannel source
-            = Mockito.mock(WritableByteChannel.class);
+        final BitOutput output = BitOutputFactory.newInstance(() -> v -> {
+        });
 
-        final BitOutput input = BitOutputFactory.newInstance(
-            () -> ByteBuffer.allocate(10),
-            (b, v) -> {
-                if (!b.hasRemaining()) {
-                    b.clear(); // position->zero; limit->capacity;
-                    do {
-                        try {
-                            source.write(b);
-                        } catch (final IOException ioe) {
-                            throw new RuntimeException(ioe);
-                        }
-                    } while (b.position() == 0);
-                    b.compact();
-                    b.put((byte) v);
+        try {
+            BitOutputTest.test(output);
+        } catch (final IOException ioe) {
+            throw new UncheckedIOException(ioe);
+        }
+    }
+
+
+    @Test(expectedExceptions = NullPointerException.class)
+    public static void newInstanceWithNullOperator() {
+
+        BitOutputFactory.newInstance((UnaryOperator<ByteOutput>) null);
+    }
+
+
+    @Test
+    public static void newInstanceWithOperator() {
+
+        final BitOutput output = BitOutputFactory.newInstance(
+            o -> o != null ? o : v -> {
                 }
+        );
+
+        try {
+            BitOutputTest.test(output);
+        } catch (final IOException ioe) {
+            throw new UncheckedIOException(ioe);
+        }
+    }
+
+
+    @Test(expectedExceptions = NullPointerException.class)
+    public static void newInstanceWithNullSupplierConsumer() {
+
+        BitOutputFactory.newInstance(
+            (Supplier<?>) null,
+            (t, i) -> {
+            });
+    }
+
+
+    @Test(expectedExceptions = NullPointerException.class)
+    public static void newInstanceWithSupplierNullConsumer() {
+
+        BitOutputFactory.newInstance(() -> null, null);
+    }
+
+
+    @Test
+    public static void newInstanceWithSupplierConsumer() {
+
+        final BitOutput output = BitOutputFactory.newInstance(
+            () -> new Object(),
+            (b, v) -> {
             }
         );
 
+        try {
+            BitOutputTest.test(output);
+        } catch (final IOException ioe) {
+            throw new UncheckedIOException(ioe);
+        }
+    }
+
+
+    @Test(expectedExceptions = NullPointerException.class)
+    public static void newInstanceWithNullOperatorConsumer() {
+
+        BitOutputFactory.newInstance(
+            (UnaryOperator<?>) null,
+            (t, i) -> {
+            });
+    }
+
+
+    @Test(expectedExceptions = NullPointerException.class)
+    public static void newInstanceWithOperatorNullConsumer() {
+
+        BitOutputFactory.newInstance(
+            (t) -> t,
+            null);
     }
 
 
     @Test
-    public static void newInstanceWithUnaryOperatorToIntFunction() {
+    public static void newInstanceWithOperatorConsumer() {
 
-        final ReadableByteChannel source
-            = Mockito.mock(ReadableByteChannel.class);
+        final BitOutput output = BitOutputFactory.newInstance(
+            (t) -> null,
+            (t, i) -> {
+            });
 
-        final BitInput input = BitInputFactory.<ByteBuffer>newInstance(
-            b -> {
-                if (b == null) {
-                    return (ByteBuffer) ByteBuffer.allocate(10).position(10);
-                }
-                if (!b.hasRemaining()) {
-                    b.clear(); // position->zero; limit->capacity;
-                    int read;
-                    try {
-                        while ((read = source.read(b)) == 0) {
-                        }
-                    } catch (final IOException ioe) {
-                        throw new UncheckedIOException(ioe);
-                    }
-                    if (read == -1) {
-                        throw new UncheckedIOException(new EOFException());
-                    }
-                    b.flip();
-                }
-                return b;
-            },
-            b -> b.get() & 0xFF
-        );
+        try {
+            BitOutputTest.test(output);
+        } catch (final IOException ioe) {
+            throw new UncheckedIOException(ioe);
+        }
     }
 
 }

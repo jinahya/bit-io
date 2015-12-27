@@ -52,23 +52,13 @@ public class BitInputFactoryTest {
         final BitInput input = BitInputFactory.newInstance(
             () -> (ByteBuffer) ByteBuffer.allocate(10).position(10),
             b -> {
-                if (!b.hasRemaining()) {
-                    b.clear(); // position->zero; limit->capacity;
-                    int read;
-                    try {
-                        while ((read = source.read(b)) == 0) {
-                        }
-                    } catch (final IOException ioe) {
-                        throw new UncheckedIOException(ioe);
-                    }
-                    if (read == -1) {
-                        throw new UncheckedIOException(new EOFException());
-                    }
-                    b.flip();
+                try {
+                    BufferInput.ensureRemaining(b, source);
+                } catch (final IOException ioe) {
+                    throw new UncheckedIOException(ioe);
                 }
                 return b.get() & 0xFF;
             });
-
     }
 
 

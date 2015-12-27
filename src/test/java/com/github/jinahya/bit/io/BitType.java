@@ -197,6 +197,56 @@ enum BitType {
             return value;
         }
 
+    },
+    FLOAT() {
+
+        @Override
+        Object read(final List<Object> params, final BitInput input)
+            throws IOException {
+
+            final float value = input.readFloat();
+
+            return value;
+        }
+
+
+        @Override
+        Object write(final List<Object> params, final BitOutput output)
+            throws IOException {
+
+            final float value = current().doubles(
+                1L, -Float.MAX_VALUE, Math.nextUp((double) Float.MAX_VALUE))
+                .iterator().next().floatValue();
+            output.writeFloat(value);
+
+            return value;
+        }
+
+    },
+    DOUBLE() {
+
+        @Override
+        Object read(final List<Object> params, final BitInput input)
+            throws IOException {
+
+            final double value = input.readDouble();
+
+            return value;
+        }
+
+
+        @Override
+        Object write(final List<Object> params, final BitOutput output)
+            throws IOException {
+
+            final double value = current().doubles(
+                1L, -Float.MAX_VALUE, Math.nextUp((double) Float.MAX_VALUE))
+                .iterator().next();
+            output.writeDouble(value);
+
+            return value;
+        }
+
     };
 
 

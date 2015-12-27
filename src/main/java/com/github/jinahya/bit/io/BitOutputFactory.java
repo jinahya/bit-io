@@ -30,20 +30,17 @@ import org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement;
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
-@IgnoreJRERequirement
 public class BitOutputFactory {
 
 
     /**
-     * Creates new {@code BitOutput} instance from which specified byte output
-     * consumes bytes.
+     * Creates new instance which writes bytes to specified byte output.
      *
-     * @param <T> byte output type parameter
-     * @param output byte output
+     * @param output the byte output
      *
-     * @return a new {@code BitOutput} instance.
+     * @return a new bit output
      */
-    public static <T extends ByteOutput> BitOutput newInstance(final T output) {
+    public static BitOutput newInstance(final ByteOutput output) {
 
         if (output == null) {
             throw new NullPointerException("null output");
@@ -61,8 +58,9 @@ public class BitOutputFactory {
     }
 
 
-    public static <T extends ByteOutput> BitOutput newInstance(
-        final Supplier<? extends T> supplier) {
+    @IgnoreJRERequirement
+    public static BitOutput newInstance(
+        final Supplier<? extends ByteOutput> supplier) {
 
         if (supplier == null) {
             throw new NullPointerException("null supplier");
@@ -81,12 +79,13 @@ public class BitOutputFactory {
             }
 
 
-            private T output;
+            private ByteOutput output;
 
         };
     }
 
 
+    @IgnoreJRERequirement
     public static <T extends ByteOutput> BitOutput newInstance(
         final UnaryOperator<T> operator) {
 
@@ -111,16 +110,17 @@ public class BitOutputFactory {
     }
 
 
+    @IgnoreJRERequirement
     public static <T> BitOutput newInstance(
-        final Supplier<? extends T> targetSupplier,
-        final ObjIntConsumer<? super T> octetConsumer) {
+        final Supplier<? extends T> supplier,
+        final ObjIntConsumer<? super T> consumer) {
 
-        if (targetSupplier == null) {
-            throw new NullPointerException("null targetSupplier");
+        if (supplier == null) {
+            throw new NullPointerException("null supplier");
         }
 
-        if (octetConsumer == null) {
-            throw new NullPointerException("null octetConsumer");
+        if (consumer == null) {
+            throw new NullPointerException("null consumer");
         }
 
         return new AbstractBitOutput() {
@@ -129,18 +129,10 @@ public class BitOutputFactory {
             public void write(final int value) throws IOException {
 
                 if (target == null) {
-                    target = BitIoUtilities.get(targetSupplier);
+                    target = BitIoUtilities.get(supplier);
                 }
 
-                try {
-                    octetConsumer.accept(target, value);
-                } catch (final RuntimeException re) {
-                    final Throwable cause = re.getCause();
-                    if (cause instanceof IOException) {
-                        throw (IOException) cause;
-                    }
-                    throw re;
-                }
+                BitIoUtilities.accept(consumer, target, value);
             }
 
 
@@ -150,16 +142,17 @@ public class BitOutputFactory {
     }
 
 
+    @IgnoreJRERequirement
     public static <T> BitOutput newInstance(
-        final UnaryOperator<T> targetOperator,
-        final ObjIntConsumer<? super T> octetConsumer) {
+        final UnaryOperator<T> operator,
+        final ObjIntConsumer<? super T> consumer) {
 
-        if (targetOperator == null) {
-            throw new NullPointerException("null targetOperator");
+        if (operator == null) {
+            throw new NullPointerException("null operator");
         }
 
-        if (octetConsumer == null) {
-            throw new NullPointerException("null octetConsumer");
+        if (consumer == null) {
+            throw new NullPointerException("null consumer");
         }
 
         return new AbstractBitOutput() {
@@ -167,17 +160,9 @@ public class BitOutputFactory {
             @Override
             public void write(final int value) throws IOException {
 
-                target = BitIoUtilities.apply(targetOperator, target);
+                target = BitIoUtilities.apply(operator, target);
 
-                try {
-                    octetConsumer.accept(target, value);
-                } catch (final RuntimeException re) {
-                    final Throwable cause = re.getCause();
-                    if (cause instanceof IOException) {
-                        throw (IOException) cause;
-                    }
-                    throw re;
-                }
+                BitIoUtilities.accept(consumer, target, value);
             }
 
 

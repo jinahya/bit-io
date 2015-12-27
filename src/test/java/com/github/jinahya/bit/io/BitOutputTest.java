@@ -35,8 +35,11 @@ import org.testng.annotations.Test;
 public class BitOutputTest {
 
 
-    @Test(invocationCount = 128)
-    public void writeBoolean() throws IOException {
+    public static void writeBoolean(final BitOutput output) throws IOException {
+
+        if (output == null) {
+            throw new NullPointerException("null output");
+        }
 
         final boolean value = current().nextBoolean();
 
@@ -44,8 +47,11 @@ public class BitOutputTest {
     }
 
 
-    @Test(invocationCount = 128)
-    public void writeByte() throws IOException {
+    public static void writeByte(final BitOutput output) throws IOException {
+
+        if (output == null) {
+            throw new NullPointerException("null output");
+        }
 
         final boolean unsigned = current().nextBoolean();
         final int size = BitIoRandoms.size(unsigned, 3);
@@ -55,8 +61,11 @@ public class BitOutputTest {
     }
 
 
-    @Test(invocationCount = 128)
-    public void writeShort() throws IOException {
+    public static void writeShort(final BitOutput output) throws IOException {
+
+        if (output == null) {
+            throw new NullPointerException("null output");
+        }
 
         final boolean unsigned = current().nextBoolean();
         final int size = BitIoRandoms.size(unsigned, 4);
@@ -66,8 +75,11 @@ public class BitOutputTest {
     }
 
 
-    @Test(invocationCount = 128)
-    public void writeInt() throws IOException {
+    public static void writeInt(final BitOutput output) throws IOException {
+
+        if (output == null) {
+            throw new NullPointerException("null output");
+        }
 
         final boolean unsigned = current().nextBoolean();
         final int size = BitIoRandoms.size(unsigned, 5);
@@ -77,8 +89,11 @@ public class BitOutputTest {
     }
 
 
-    @Test(invocationCount = 128)
-    public void writeLong() throws IOException {
+    public static void writeLong(final BitOutput output) throws IOException {
+
+        if (output == null) {
+            throw new NullPointerException("null output");
+        }
 
         final boolean unsigned = current().nextBoolean();
         final int size = BitIoRandoms.size(unsigned, 6);
@@ -88,13 +103,73 @@ public class BitOutputTest {
     }
 
 
-    @Test(invocationCount = 128)
-    public void writeChar() throws IOException {
+    public static void writeChar(final BitOutput output) throws IOException {
+
+        if (output == null) {
+            throw new NullPointerException("null output");
+        }
 
         final int size = BitIoRandoms.size(true, 4);
         final char value = (char) BitIoRandoms.value(true, 4, size);
 
         output.writeChar(size, value);
+    }
+
+
+    public static void test(final BitOutput output) throws IOException {
+
+        if (output == null) {
+            throw new NullPointerException("null output");
+        }
+
+        writeBoolean(output);
+        writeByte(output);
+        writeShort(output);
+        writeInt(output);
+        writeLong(output);
+        writeChar(output);
+    }
+
+
+    @Test(invocationCount = 128)
+    public void writeBoolean() throws IOException {
+
+        writeBoolean(output);
+    }
+
+
+    @Test(invocationCount = 128)
+    public void writeByte() throws IOException {
+
+        writeByte(output);
+    }
+
+
+    @Test(invocationCount = 128)
+    public void writeShort() throws IOException {
+
+        writeShort(output);
+    }
+
+
+    @Test(invocationCount = 128)
+    public void writeInt() throws IOException {
+
+        writeInt(output);
+    }
+
+
+    @Test(invocationCount = 128)
+    public void writeLong() throws IOException {
+
+        writeLong(output);
+    }
+
+
+    @Test(invocationCount = 128)
+    public void writeChar() throws IOException {
+
+        writeChar(output);
     }
 
 

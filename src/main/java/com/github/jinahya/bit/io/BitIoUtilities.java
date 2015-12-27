@@ -19,9 +19,9 @@ package com.github.jinahya.bit.io;
 
 
 import java.io.IOException;
-import java.io.UncheckedIOException;
-import java.util.function.Function;
+import java.util.function.ObjIntConsumer;
 import java.util.function.Supplier;
+import java.util.function.ToIntFunction;
 import java.util.function.UnaryOperator;
 import org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement;
 
@@ -41,47 +41,12 @@ final class BitIoUtilities {
 
         try {
             return supplier.get();
-        } catch (final UncheckedIOException uioe) {
-            throw uioe.getCause();
+//        } catch (final UncheckedIOException uioe) {
+//            throw uioe.getCause();
         } catch (final RuntimeException re) {
             final Throwable cause = re.getCause();
             if (cause instanceof IOException) {
                 throw (IOException) cause;
-            }
-            throw re;
-        }
-    }
-
-
-    @Deprecated
-    public static <T, U extends Throwable> T get(
-        final Supplier<? extends T> supplier, final Class<U> throwable)
-        throws U {
-
-        try {
-            return supplier.get();
-        } catch (final RuntimeException re) {
-            final Throwable cause = re.getCause();
-            if (throwable.isInstance(cause)) {
-                throw throwable.cast(cause);
-            }
-            throw re;
-        }
-    }
-
-
-    @Deprecated
-    public static <T, R, U extends Throwable> R apply(
-        final Function<? super T, ? extends R> function, final T t,
-        final Class<U> throwable)
-        throws U {
-
-        try {
-            return function.apply(t);
-        } catch (final RuntimeException re) {
-            final Throwable cause = re.getCause();
-            if (throwable.isInstance(cause)) {
-                throw throwable.cast(cause);
             }
             throw re;
         }
@@ -94,8 +59,8 @@ final class BitIoUtilities {
 
         try {
             return operator.apply(t);
-        } catch (final UncheckedIOException uioe) {
-            throw uioe.getCause();
+//        } catch (final UncheckedIOException uioe) {
+//            throw uioe.getCause();
         } catch (final RuntimeException re) {
             final Throwable cause = re.getCause();
             if (cause instanceof IOException) {
@@ -106,17 +71,44 @@ final class BitIoUtilities {
     }
 
 
-    @Deprecated
-    public static <T, U extends Throwable> T apply(
-        final UnaryOperator<T> operator, final T t, final Class<U> throwable)
-        throws U {
+    public static <T> void accept(
+        final ObjIntConsumer<? super T> consumer, final T t, final int i)
+        throws IOException {
+
+        if (consumer == null) {
+            throw new NullPointerException("null consumer");
+        }
 
         try {
-            return operator.apply(t);
+            consumer.accept(t, i);
+//        } catch (final UncheckedIOException uioe) {
+//            throw uioe.getCause();
         } catch (final RuntimeException re) {
             final Throwable cause = re.getCause();
-            if (throwable.isInstance(cause)) {
-                throw throwable.cast(cause);
+            if (cause instanceof IOException) {
+                throw (IOException) cause;
+            }
+            throw re;
+        }
+    }
+
+
+    public static <T> int apply(
+        final ToIntFunction<? super T> function, final T t)
+        throws IOException {
+
+        if (function == null) {
+            throw new NullPointerException("null consumer");
+        }
+
+        try {
+            return function.applyAsInt(t);
+//        } catch (final UncheckedIOException uioe) {
+//            throw uioe.getCause();
+        } catch (final RuntimeException re) {
+            final Throwable cause = re.getCause();
+            if (cause instanceof IOException) {
+                throw (IOException) cause;
             }
             throw re;
         }

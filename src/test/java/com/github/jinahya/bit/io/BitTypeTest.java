@@ -107,6 +107,20 @@ public class BitTypeTest {
     }
 
 
+    @Test(enabled = true, invocationCount = 1024)
+    public void _float() throws IOException {
+
+        test(BitType.FLOAT);
+    }
+
+
+    @Test(enabled = true, invocationCount = 1024)
+    public void _double() throws IOException {
+
+        test(BitType.DOUBLE);
+    }
+
+
     private transient final Logger logger = getLogger(getClass());
 
 }

@@ -134,7 +134,7 @@ new StreamInput(java.io.InputStream);
 ````
 Those constructors don't check arguments which means you can lazily instantiate and set them.
 ```java
-final InputStream output = openFile();
+final InputStream stream = openFile();
 
 final ByteInput input = new ArrayInput(null, -1, -1) {
 

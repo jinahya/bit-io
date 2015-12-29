@@ -41,7 +41,7 @@ The size(min) is `1 + (unsigned ? 0 : 1)` and the size(max) is `(int) Math.pow(2
 |`double`|(64)     |(64)     |`readDouble()`, `writeDouble(double)`|
 ### References
 #### Implementing `BitReadable`/`BitWritable`
-You can directly read/write values from/to `BitInput`/`BitOutput` by making your class implementing those interfaces.
+You can directly read/write values from/to `BitInput`/`BitOutput` by making your class implementing these interfaces.
 ```java
 public class Person implements BitReadable, BitWritable {
 

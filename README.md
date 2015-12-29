@@ -12,7 +12,8 @@ A library for reading/writing non octet aligned values such as `1-bit boolean` o
 ## Versions
 |version|site|apidocs|notes|
 |-------|----|-------|-----|
-|1.3.1-SNAPSHOT|[site](http://jinahya.github.io/bit-io/sites/1.3.1-SNAPSHOT/index.html)|[apidocs](http://jinahya.github.io/bit-io/sites/1.3.1-SNAPSHOT/apidocs/index.html)||
+|1.3.2-SNAPSHOT|[site](http://jinahya.github.io/bit-io/sites/1.3.2-SNAPSHOT/index.html)|[apidocs](http://jinahya.github.io/bit-io/sites/1.3.2-SNAPSHOT/apidocs/index.html)||
+|1.3.1|[site](http://jinahya.github.io/bit-io/sites/1.3.1/index.html)|[apidocs](http://jinahya.github.io/bit-io/sites/1.3.1/apidocs/index.html)||
 |1.3.0|[site](http://jinahya.github.io/bit-io/sites/1.3.0/index.html)|[apidocs](http://jinahya.github.io/bit-io/sites/1.3.0/apidocs/index.html)||
 
 ## Specifications
@@ -43,7 +44,7 @@ The size(min) is `1 + (unsigned ? 0 : 1)` and the size(max) is `(int) Math.pow(2
 #### Implementing `BitReadable`/`BitWritable`
 You can directly read/write values from/to `BitInput`/`BitOutput` by making your class implementing these interfaces.
 ```java
-public class Person implements BitReadable, BitWritable {
+public class Employee implements BitReadable, BitWritable {
 
     @Override
     public void read(final BitInput input) throws IOException {
@@ -60,82 +61,100 @@ public class Person implements BitReadable, BitWritable {
 ```
 It's, now, too obvious you can do this.
 ```java
-final Person person = new Person().age(39).married(false);
-person.read(input);
-person.write(output);
+final Emplyee employee = new Employee().age(39).married(false);
+employee.read(input);
+employee.write(output);
 ```
-Or use `<T extends BitReadable> T BitInput#readObject(boolean, Class<? extends T> type)` and `<T extends BitReadable> void BitOutput#writeObject(boolean, T)`.
+Or use `BitInput#readObject(boolean, Class<? extends T> type)` and `void BitOutput#writeObject(boolean, T)`.
 ```java
 final boolean nullable = true;
-final Person person = input.read(nullable, Person.class);
-output.write(nullable, person);
+final Employee employee = input.read(nullable, Employee.class);
+output.write(nullable, employee);
 ```
 #### Using `BitDecoder`/`BitEncoder`
 If modifying existing classes (e.g. implementing additional interfaces) is not applicable, you can make specialized classes for decoding/encoding those existing classes.
 ```java
-public class PersonDecoder extends NullableDecoder<Person> {
+public class CompanyDecoder extends NullableDecoder<Company> {
 
-    public PersonDecoder(final boolean nullable) {
+    public CompanyDecoder(final boolean nullable) {
         super(nullable);
+        employeeDecoder = NullableDecoder.newInstance(
+            true,
+            i -> {
+                try {
+                    return i.readObject(new Employee());
+                } catch (final IOException ioe) {
+                    throw new UncheckedIOException(ioe);
+                }
+            });
     }
-
-    //@Override
-    //public Person decode(final BitInput input) throws IOException {
-    //    return super.decode();
-    //}
 
     @Override
-    public Person decodeValue(final BitInput input) throws IOException {
-        return new Person().age(input.readInt(true, 7)).married(input.readBoolean());
+    protected Company decodeValue(final BitInput input) throws IOException {
+        final Company value = new Company();
+        final int size = input.readInt(true, Company.EMPLOYEES_SIZE);
+        for (int i = 0; i < size; i++) {
+            value.getEmployees().add(employeeDecoder.decode(input));
+        }
+        return value;
     }
+
+    private final BitDecoder<Employee> employeeDecoder;
 }
 
-public class PersonEncoder extends NullableEncoder<Person> {
+public class CompanyEncoder extends NullableEncoder<Company> {
 
-    public PersonEncoder(final boolean nullable) {
+    public CompanyEncoder(final boolean nullable) {
         super(nullable);
+        employeeEncoder = NullableEncoder.newInstance(
+            true,
+            (o, v) -> {
+                try {
+                    v.write(o);
+                } catch (final IOException ioe) {
+                    throw new UncheckedIOException(ioe);
+                }
+            });
     }
-
-    //@Override
-    //public void encode(final BitOutput output) throws IOException {
-    //    super.encode(output);
-    //}
 
     @Override
-    public void encodeValue(final BitOutput output, final Person person) throws IOException {
-        output.writeInt(true, 7, value.getAge());
-        output.writeBoolean(value.isMarried());
+    protected void encodeValue(final BitOutput output, final Company value) throws IOException {
+        output.writeInt(true, 31, value.getEmployees().size());
+        for (final Employee employee : value.getEmployees()) {
+            employeeEncoder.encode(output, employee);
+        }
     }
+
+    private final BitEncoder<Employee> employeeEncoder;
 }
 ```
 There is an abstract class for implementing these two interfaces easily (including the nullable feature).
 ```java
-public class PersonCodec extends NullableCodec<Person> {
+public class CompanyCodec extends NullableCodec<Company> {
 
-    public PersonCodec(final boolean nullable) {
+    public CompanyCodec(final boolean nullable) {
         super(nullable);
-        decoder = new PersonDecoder(false);
-        encoder = new PersonEncoder(false);
+        decoder = new CompanyDecoder(false);
+        encoder = new CompanyEncoder(false);
     }
 
     @Override
-    protected Person decodeValue(final BitInput input) throws IOException {
-        return decoder.decode(input); // no need to concern the nullability
+    protected Company decodeValue(final BitInput input) throws IOException {
+        return decoder.decode(input);
     }
 
     @Override
-    protected void encodeValue(final BitOutput output, final Person value) throws IOException {
-        encoder.encode(output, value); // no need to concern the nullability
+    protected void encodeValue(final BitOutput output, final Company value) throws IOException {
+        encoder.encode(output, value);
     }
 
-    private final BitDecoder<Person> decoder;
-    private final BitEncoder<Person> encoder;
+    private final BitDecoder<Company> decoder;
+    private final BitEncoder<Company> encoder;
 }
 ```
 Again, you can use the codec like this.
 ```java
-final boolean nullable = true;
-final BitCodec<Person> codec = new PersonCodec(nullable);
+final BitCodec<Company> codec = new CompanyCodec(true);
 codec.encode(output, codec.decode(input)));
 ```
 ## Reading

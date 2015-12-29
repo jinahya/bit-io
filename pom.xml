@@ -308,7 +308,7 @@
       <id>graphviz</id>
       <properties>
         <additionalparam>
-          -hide java.* -visibility
+          -hide java.* -hide Nullable -visibility
           -collapsible -horizontal
           -inferdep -inferdepinpackage -inferrel
           -outputencoding UTF-8

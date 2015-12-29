@@ -81,7 +81,7 @@ public class PersonDecoder extends NullableDecoder<Person> {
 
     //@Override
     //public Person decode(final BitInput input) throws IOException {
-    //    return super.decode(); // `nullable` flag handled here and optionally invokes `decodeValue(input)`
+    //    return super.decode();
     //}
 
     @Override
@@ -98,7 +98,7 @@ public class PersonEncoder extends NullableEncoder<Person> {
 
     //@Override
     //public void encode(final BitOutput output) throws IOException {
-    //    super.encode(output); // `nullable` flag handled here and optionally invokes `encodeValue(output)`.
+    //    super.encode(output);
     //}
 
     @Override

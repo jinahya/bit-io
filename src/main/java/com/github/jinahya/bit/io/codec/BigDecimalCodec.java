@@ -47,5 +47,6 @@ public class BigDecimalCodec extends BridgeCodec<BigDecimal, BigInteger> {
         return t.unscaledValue();
     }
 
+
 }
 

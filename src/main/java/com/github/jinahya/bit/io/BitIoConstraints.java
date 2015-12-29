@@ -61,9 +61,7 @@ public final class BitIoConstraints {
 
     private static final int MIN_EXPONENT = 3;
 
-
     private static final int MAX_EXPONENT = 6;
-
 
     private static final List<Integer> MAXES;
 
@@ -145,6 +143,7 @@ public final class BitIoConstraints {
 
         super();
     }
+
 
 }
 

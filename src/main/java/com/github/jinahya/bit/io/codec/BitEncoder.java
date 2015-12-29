@@ -40,5 +40,6 @@ public interface BitEncoder<T> {
      */
     void encode(BitOutput output, T value) throws IOException;
 
+
 }
 

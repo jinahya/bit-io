@@ -54,6 +54,7 @@ public class BitInputFactory {
                 return input.read();
             }
 
+
         };
     }
 
@@ -176,6 +177,7 @@ public class BitInputFactory {
 
         super();
     }
+
 
 }
 

@@ -43,5 +43,6 @@ public class FloatCodec extends BridgeCodec<Float, Integer> {
         return Float.floatToRawIntBits(t);
     }
 
+
 }
 

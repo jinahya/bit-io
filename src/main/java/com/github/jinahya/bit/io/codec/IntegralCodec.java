@@ -49,7 +49,6 @@ public abstract class IntegralCodec<T> extends NullableCodec<T> {
 
     protected final boolean unsigned;
 
-
     protected final int size;
 
 }

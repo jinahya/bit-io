@@ -59,5 +59,6 @@ public class BooleanArrayCodec extends ScaleCodec<boolean[], Boolean> {
         }
     }
 
+
 }
 

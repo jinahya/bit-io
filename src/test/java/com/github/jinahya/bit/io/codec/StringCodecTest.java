@@ -67,5 +67,6 @@ public class StringCodecTest extends BitCodecTest<StringCodec, String> {
         BitCodecTests.test(codec, value);
     }
 
+
 }
 

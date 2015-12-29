@@ -43,5 +43,6 @@ public class DoubleCodec extends BridgeCodec<Double, Long> {
         return Double.doubleToRawLongBits(t);
     }
 
+
 }
 

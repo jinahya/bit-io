@@ -49,5 +49,6 @@ public class ByteCodec extends BridgeCodec<Byte, Integer> {
         return t.intValue();
     }
 
+
 }
 

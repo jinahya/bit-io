@@ -32,7 +32,6 @@ public class Company {
 
     public static final int EMPLOYEES_SIZE = 10;
 
-
     public static final boolean EMPLOYEE_NULLABLE = true;
 
 

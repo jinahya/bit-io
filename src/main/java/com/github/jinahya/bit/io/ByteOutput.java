@@ -40,5 +40,6 @@ public interface ByteOutput {
      */
     void write(int value) throws IOException;
 
+
 }
 

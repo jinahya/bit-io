@@ -103,6 +103,7 @@ public class BufferByteInput extends AbstractByteInput<ByteBuffer> {
                 return super.read();
             }
 
+
         };
     }
 
@@ -120,10 +121,10 @@ public class BufferByteInput extends AbstractByteInput<ByteBuffer> {
 
 
     /**
-     * {@inheritDoc} The {@code read()} method of {@code BufferByteInput} invokes
-     * {@link ByteBuffer#get()} on {@link #getSource()} and return the result as
-     * an unsigned int. Override this method if {@link #source} is supposed to
-     * be lazily initialized or adjusted.
+     * {@inheritDoc} The {@code read()} method of {@code BufferByteInput}
+     * invokes {@link ByteBuffer#get()} on {@link #getSource()} and return the
+     * result as an unsigned int. Override this method if {@link #source} is
+     * supposed to be lazily initialized or adjusted.
      *
      * @return {@inheritDoc }
      *
@@ -134,6 +135,7 @@ public class BufferByteInput extends AbstractByteInput<ByteBuffer> {
 
         return getSource().get() & 0xFF;
     }
+
 
 }
 

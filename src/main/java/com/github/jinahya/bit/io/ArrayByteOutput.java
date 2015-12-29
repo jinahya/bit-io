@@ -71,6 +71,7 @@ public class ArrayByteOutput extends AbstractByteOutput<byte[]> {
                 }
             }
 
+
         };
     }
 
@@ -114,6 +115,7 @@ public class ArrayByteOutput extends AbstractByteOutput<byte[]> {
                     index = 0;
                 }
             }
+
 
         };
     }
@@ -212,7 +214,6 @@ public class ArrayByteOutput extends AbstractByteOutput<byte[]> {
      * The index of the {@link #target} which {@link #index} can't exceed.
      */
     protected int limit;
-
 
     /**
      * The index in the {@link #target} to write.

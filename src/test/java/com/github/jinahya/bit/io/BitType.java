@@ -52,6 +52,7 @@ enum BitType {
             return value;
         }
 
+
     },
     BYTE() {
 
@@ -80,6 +81,7 @@ enum BitType {
 
             return value;
         }
+
 
     },
     SHORT() {
@@ -111,6 +113,7 @@ enum BitType {
             return value;
         }
 
+
     },
     INT() {
 
@@ -139,6 +142,7 @@ enum BitType {
 
             return value;
         }
+
 
     },
     LONG() {
@@ -169,6 +173,7 @@ enum BitType {
             return value;
         }
 
+
     },
     CHAR() {
 
@@ -197,6 +202,7 @@ enum BitType {
             return value;
         }
 
+
     },
     FLOAT() {
 
@@ -221,6 +227,7 @@ enum BitType {
 
             return value;
         }
+
 
     },
     DOUBLE() {
@@ -247,8 +254,8 @@ enum BitType {
             return value;
         }
 
-    };
 
+    };
 
     private static final Logger logger
         = LoggerFactory.getLogger(BitType.class);
@@ -260,6 +267,7 @@ enum BitType {
 
     abstract Object write(List<Object> params, BitOutput output)
         throws IOException;
+
 
 }
 

@@ -178,7 +178,6 @@ public class BitOutputTest {
      */
     private transient final Logger logger = getLogger(getClass());
 
-
     @Inject
     private transient BitOutput output;
 

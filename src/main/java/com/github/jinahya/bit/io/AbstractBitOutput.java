@@ -342,12 +342,10 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
      */
     private final boolean[] flags = new boolean[8];
 
-
     /**
      * bit index to write.
      */
     private int index = 0;
-
 
     /**
      * number of bytes written so far.

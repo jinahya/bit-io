@@ -51,5 +51,6 @@ public class UriCodec extends BridgeCodec<URI, String> {
         return t.toASCIIString();
     }
 
+
 }
 

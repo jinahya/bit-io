@@ -161,5 +161,6 @@ public interface BitInput {
      */
     long align(int bytes) throws IOException;
 
+
 }
 

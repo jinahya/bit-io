@@ -37,5 +37,6 @@ public interface BitWritable {
      */
     void write(BitOutput output) throws IOException;
 
+
 }
 

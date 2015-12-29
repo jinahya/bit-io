@@ -17,12 +17,7 @@
 package com.github.jinahya.bit.io;
 
 
-import com.github.jinahya.bit.io.BitOutput;
-import com.github.jinahya.bit.io.Company;
-import com.github.jinahya.bit.io.Employee;
 import com.github.jinahya.bit.io.codec.BitEncoder;
-import com.github.jinahya.bit.io.codec.BitEncoder;
-import com.github.jinahya.bit.io.codec.NullableEncoder;
 import com.github.jinahya.bit.io.codec.NullableEncoder;
 import java.io.IOException;
 import java.io.UncheckedIOException;

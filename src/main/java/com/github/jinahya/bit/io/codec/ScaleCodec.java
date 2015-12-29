@@ -107,7 +107,6 @@ public abstract class ScaleCodec<T, U> extends NullableCodec<T> {
 
     protected final int scale;
 
-
     protected final BitCodec<U> codec;
 
 }

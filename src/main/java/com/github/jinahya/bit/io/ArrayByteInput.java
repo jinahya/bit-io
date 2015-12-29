@@ -79,6 +79,7 @@ public class ArrayByteInput extends AbstractByteInput<byte[]> {
                 return super.read();
             }
 
+
         };
     }
 
@@ -125,6 +126,7 @@ public class ArrayByteInput extends AbstractByteInput<byte[]> {
 
                 return super.read();
             }
+
 
         };
     }
@@ -266,7 +268,6 @@ public class ArrayByteInput extends AbstractByteInput<byte[]> {
      * The index of the {@link #source} which {@link #index} can't exceed.
      */
     protected int limit;
-
 
     /**
      * The index in the {@link #source} to read.

@@ -67,5 +67,6 @@ public class StreamByteInput extends AbstractByteInput<InputStream> {
         return value;
     }
 
+
 }
 

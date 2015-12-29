@@ -40,5 +40,6 @@ public interface ByteInput {
      */
     int read() throws IOException;
 
+
 }
 

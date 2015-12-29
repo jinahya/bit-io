@@ -43,5 +43,6 @@ public class CharacterCodec extends BridgeCodec<Character, Integer> {
         return (int) t;
     }
 
+
 }
 

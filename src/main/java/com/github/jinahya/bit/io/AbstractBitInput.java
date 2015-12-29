@@ -359,12 +359,10 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
      */
     private final boolean[] flags = new boolean[8];
 
-
     /**
      * The next bit index to read.
      */
     private int index = 8;
-
 
     /**
      * number of bytes read so far.

@@ -43,5 +43,6 @@ public class CompanyTest extends BitIoTest {
         codec.encode(getOutput(), codec.decode(getInput()));
     }
 
+
 }
 

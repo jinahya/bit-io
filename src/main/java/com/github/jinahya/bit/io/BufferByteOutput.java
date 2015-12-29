@@ -97,6 +97,7 @@ public class BufferByteOutput extends AbstractByteOutput<ByteBuffer> {
                 ensureRemaining(target, channel);
             }
 
+
         };
     }
 
@@ -114,10 +115,10 @@ public class BufferByteOutput extends AbstractByteOutput<ByteBuffer> {
 
 
     /**
-     * {@inheritDoc} The {@code write(int)} method of {@code BufferByteOutput} class
-     * invokes {@link ByteBuffer#put(byte)} on {@link #getTarget()} with given
-     * {@code value}. Override this method if {@link #target} is supposed to be
-     * lazily initialized or adjusted.
+     * {@inheritDoc} The {@code write(int)} method of {@code BufferByteOutput}
+     * class invokes {@link ByteBuffer#put(byte)} on {@link #getTarget()} with
+     * given {@code value}. Override this method if {@link #target} is supposed
+     * to be lazily initialized or adjusted.
      *
      * @param value {@inheritDoc }
      *
@@ -128,6 +129,7 @@ public class BufferByteOutput extends AbstractByteOutput<ByteBuffer> {
 
         getTarget().put((byte) value);
     }
+
 
 }
 

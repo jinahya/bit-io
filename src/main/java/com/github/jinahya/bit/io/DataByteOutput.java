@@ -51,5 +51,6 @@ public class DataByteOutput extends AbstractByteOutput<DataOutput> {
         target.writeByte(value);
     }
 
+
 }
 

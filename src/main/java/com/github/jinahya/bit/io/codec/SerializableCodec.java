@@ -55,6 +55,7 @@ public class SerializableCodec<T extends Serializable>
                     return input.readInt(true, 8);
                 }
 
+
             }).readObject();
         } catch (final ClassNotFoundException cnfe) {
             throw new RuntimeException(cnfe);
@@ -74,8 +75,10 @@ public class SerializableCodec<T extends Serializable>
                 output.writeInt(true, 8, b);
             }
 
+
         }).writeObject(value);
     }
+
 
 }
 

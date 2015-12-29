@@ -52,5 +52,6 @@ public class IntegerCodec extends IntegralCodec<Integer> {
         output.writeInt(unsigned, size, value);
     }
 
+
 }
 

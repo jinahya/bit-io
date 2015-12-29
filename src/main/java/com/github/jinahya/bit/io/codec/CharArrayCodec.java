@@ -59,5 +59,6 @@ public class CharArrayCodec extends ScaleCodec<char[], Character> {
         }
     }
 
+
 }
 

@@ -165,7 +165,7 @@ final ByteInput input = new ArrayInput(null, -1, -1) {
 ```
 ### Creating `BitInput`
 #### Using `DefaultBitInput`
-Construct with an already created a `ByteInput`.
+Construct with an already existing `ByteInput`.
 ```java
 final ByteInput delegate = createByteInput();
 
@@ -177,9 +177,11 @@ new DefaultBitInput<InputStream>(null) {
 
     @Override
     public int read() throws IOException {
+
         if (delegate == null) {
             delegate = new StreamInput(openFile());
         }
+
         return super.read();
     }
 };

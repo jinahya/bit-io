@@ -10,7 +10,7 @@ bit-io
 A library for reading/writing non octet aligned values such as `1-bit boolean` or `17-bit unsigned int`.
 
 ## Versions
-|Version|Site|Apidocs|Notes|
+|version|site|apidocs|notes|
 |-------|----|-------|-----|
 |1.3.1-SNAPSHOT|[site](http://jinahya.github.io/bit-io/sites/1.3.1-SNAPSHOT/index.html)|[apidocs](http://jinahya.github.io/bit-io/sites/1.3.1-SNAPSHOT/apidocs/index.html)||
 |1.3.0|[site](http://jinahya.github.io/bit-io/sites/1.3.0/index.html)|[apidocs](http://jinahya.github.io/bit-io/sites/1.3.0/apidocs/index.html)||

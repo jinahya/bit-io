@@ -73,6 +73,11 @@ public class PersonDecoder extends NullableDecoder<Person> {
         super(nullable);
     }
 
+    //@Override
+    //public Person decode(final BitInput input) throws IOException {
+    //    return super.decode(); // `nullable` flag handled here and optionally invokes `decodeValue(input)`
+    //}
+
     @Override
     public Person decodeValue(final BitInput input) throws IOException {
         return new Person().age(input.readInt(true, 7)).married(input.readBoolean());
@@ -84,6 +89,11 @@ public class PersonEncoder extends NullableEncoder<Person> {
     public PersonEncoder(final boolean nullable) {
         super(nullable);
     }
+
+    //@Override
+    //public void encode(final BitOutput output) throws IOException {
+    //    super.encode(output); // `nullable` flag handled here and optionally invokes `encodeValue(output)`.
+    //}
 
     @Override
     public void encodeValue(final BitOutput output, final Person person) throws IOException {
@@ -104,12 +114,12 @@ public class PersonCodec extends NullableCodec<Person> {
 
     @Override
     protected Person decodeValue(final BitInput input) throws IOException {
-        return decoder.decode(input);
+        return decoder.decode(input); // no need to concern the nullability
     }
 
     @Override
     protected void encodeValue(final BitOutput output, final Person value) throws IOException {
-        encoder.encode(output, value);
+        encoder.encode(output, value); // no need to concern the nullability
     }
 
     private final BitDecoder<Person> decoder;

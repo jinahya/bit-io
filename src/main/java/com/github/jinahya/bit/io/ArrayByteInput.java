@@ -33,7 +33,7 @@ import java.io.RandomAccessFile;
  * @see #limit
  * @see #index
  */
-public class ArrayInput extends AbstractByteInput<byte[]> {
+public class ArrayByteInput extends AbstractByteInput<byte[]> {
 
 
     /**
@@ -45,8 +45,8 @@ public class ArrayInput extends AbstractByteInput<byte[]> {
      *
      * @return a new instance.
      */
-    public static ArrayInput newInstance(final InputStream stream,
-                                         final int length) {
+    public static ArrayByteInput newInstance(final InputStream stream,
+                                             final int length) {
 
         if (stream == null) {
             throw new NullPointerException("null stream");
@@ -56,7 +56,7 @@ public class ArrayInput extends AbstractByteInput<byte[]> {
             throw new IllegalArgumentException("length(" + length + ") <= 0");
         }
 
-        return new ArrayInput(null, -1, -1) {
+        return new ArrayByteInput(null, -1, -1) {
 
             @Override
             public int read() throws IOException {
@@ -92,8 +92,8 @@ public class ArrayInput extends AbstractByteInput<byte[]> {
      *
      * @return a new instance.
      */
-    public static ArrayInput newInstance(final RandomAccessFile file,
-                                         final int length) {
+    public static ArrayByteInput newInstance(final RandomAccessFile file,
+                                             final int length) {
 
         if (file == null) {
             throw new NullPointerException("null file");
@@ -103,7 +103,7 @@ public class ArrayInput extends AbstractByteInput<byte[]> {
             throw new IllegalArgumentException("length(" + length + ") <= 0");
         }
 
-        return new ArrayInput(null, -1, -1) {
+        return new ArrayByteInput(null, -1, -1) {
 
             @Override
             public int read() throws IOException {
@@ -137,7 +137,7 @@ public class ArrayInput extends AbstractByteInput<byte[]> {
      * @param limit the array index that {@code index} can't exceed
      * @param index array index to read
      */
-    public ArrayInput(final byte[] source, final int limit, final int index) {
+    public ArrayByteInput(final byte[] source, final int limit, final int index) {
 
         super(source);
 
@@ -147,9 +147,9 @@ public class ArrayInput extends AbstractByteInput<byte[]> {
 
 
     /**
-     * {@inheritDoc} The {@code read()} method of {@code ArrayInput} class
-     * returns {@code source[index]} as an unsigned int while incrementing
-     * {@link #index}. Override this method if either
+     * {@inheritDoc} The {@code read()} method of {@code ArrayByteInput} class
+     * returns the element in {@link #source} at {@link #index} as an unsigned
+     * int and increments {@link #index}. Override this method if either
      * {@link #source}, {@link #index}, or {@link #limit} needs to be
      * initialized or adjusted.
      *
@@ -178,7 +178,7 @@ public class ArrayInput extends AbstractByteInput<byte[]> {
      *
      * @return this instance.
      */
-    public ArrayInput source(final byte[] target) {
+    public ArrayByteInput source(final byte[] target) {
 
         setSource(target);
 
@@ -216,7 +216,7 @@ public class ArrayInput extends AbstractByteInput<byte[]> {
      *
      * @return this instance.
      */
-    public ArrayInput limit(final int limit) {
+    public ArrayByteInput limit(final int limit) {
 
         setLimit(limit);
 
@@ -254,7 +254,7 @@ public class ArrayInput extends AbstractByteInput<byte[]> {
      *
      * @return this instance.
      */
-    public ArrayInput index(final int index) {
+    public ArrayByteInput index(final int index) {
 
         setIndex(index);
 

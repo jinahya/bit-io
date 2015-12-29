@@ -28,7 +28,7 @@ import java.io.RandomAccessFile;
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
-public class ArrayOutput extends AbstractByteOutput<byte[]> {
+public class ArrayByteOutput extends AbstractByteOutput<byte[]> {
 
 
     /**
@@ -41,8 +41,8 @@ public class ArrayOutput extends AbstractByteOutput<byte[]> {
      *
      * @return a new instance.
      */
-    public static ArrayOutput newInstance(final OutputStream stream,
-                                          final int length) {
+    public static ArrayByteOutput newInstance(final OutputStream stream,
+                                              final int length) {
 
         if (stream == null) {
             throw new NullPointerException("null stream");
@@ -52,7 +52,7 @@ public class ArrayOutput extends AbstractByteOutput<byte[]> {
             throw new IllegalArgumentException("length(" + length + ") <= 0");
         }
 
-        return new ArrayOutput(null, -1, -1) {
+        return new ArrayByteOutput(null, -1, -1) {
 
             @Override
             public void write(final int value) throws IOException {
@@ -85,8 +85,8 @@ public class ArrayOutput extends AbstractByteOutput<byte[]> {
      *
      * @return a new instance.
      */
-    public static ArrayOutput newInstance(final RandomAccessFile file,
-                                          final int length) {
+    public static ArrayByteOutput newInstance(final RandomAccessFile file,
+                                              final int length) {
 
         if (file == null) {
             throw new NullPointerException("null file");
@@ -96,7 +96,7 @@ public class ArrayOutput extends AbstractByteOutput<byte[]> {
             throw new IllegalArgumentException("length(" + length + ") <= 0");
         }
 
-        return new ArrayOutput(null, -1, -1) {
+        return new ArrayByteOutput(null, -1, -1) {
 
             @Override
             public void write(final int value) throws IOException {
@@ -126,7 +126,7 @@ public class ArrayOutput extends AbstractByteOutput<byte[]> {
      * @param limit the array index that {@code index} can't exceed
      * @param index array index to write
      */
-    public ArrayOutput(final byte[] target, final int limit, final int index) {
+    public ArrayByteOutput(final byte[] target, final int limit, final int index) {
 
         super(target);
 
@@ -136,10 +136,11 @@ public class ArrayOutput extends AbstractByteOutput<byte[]> {
 
 
     /**
-     * {@inheritDoc} The {@code write(int)} method of {@code ArrayOutput} sets
-     * {@code target[index]} with given value while incrementing {@code #index}.
-     * Override this method if either {@link #target}, {@link #index}, or
-     * {@link #limit} needs to be initialized or adjusted.
+     * {@inheritDoc} The {@code write(int)} method of {@code ArrayByteOutput}
+     * sets the element in {@link #target} at {@link #index} with given value
+     * and increments {@code #index}. Override this method if either
+     * {@link #target}, {@link #index}, or {@link #limit} needs to be
+     * initialized or adjusted.
      *
      * @param value {@inheritDoc}
      *
@@ -159,7 +160,7 @@ public class ArrayOutput extends AbstractByteOutput<byte[]> {
     }
 
 
-    public ArrayOutput target(final byte[] target) {
+    public ArrayByteOutput target(final byte[] target) {
 
         setTarget(target);
 
@@ -179,7 +180,7 @@ public class ArrayOutput extends AbstractByteOutput<byte[]> {
     }
 
 
-    public ArrayOutput limit(final int limit) {
+    public ArrayByteOutput limit(final int limit) {
 
         setLimit(limit);
 
@@ -199,7 +200,7 @@ public class ArrayOutput extends AbstractByteOutput<byte[]> {
     }
 
 
-    public ArrayOutput index(final int index) {
+    public ArrayByteOutput index(final int index) {
 
         setIndex(index);
 

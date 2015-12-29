@@ -14,33 +14,30 @@
  * limitations under the License.
  */
 
-package com.github.jinahya.bit.io.codec;
+package com.github.jinahya.bit.io;
 
 
-import com.github.jinahya.bit.io.BitInput;
-import com.github.jinahya.bit.io.Person;
 import java.io.IOException;
 
 
 /**
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
+ * @see DataByteOutput
  */
-public class PersonDecoder extends NullableDecoder<Person> {
+public class DataByteInput extends AbstractByteInput<java.io.DataInput> {
 
 
-    public PersonDecoder(final boolean nullable) {
+    public DataByteInput(final java.io.DataInput source) {
 
-        super(nullable);
+        super(source);
     }
 
 
     @Override
-    protected Person decodeValue(final BitInput input) throws IOException {
+    public int read() throws IOException {
 
-        return new Person()
-            .age(input.readInt(true, 7))
-            .married(input.readBoolean());
+        return source.readUnsignedByte();
     }
 
 }

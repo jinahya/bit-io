@@ -31,7 +31,7 @@ import java.util.List;
 public final class BitIoConstraints {
 
 
-    static int requireValid8Size(final int size) {
+    static int requireValidUnsigned8Size(final int size) {
 
         if (size < 1) {
             throw new IllegalArgumentException("size(" + size + ") < 1");
@@ -45,7 +45,7 @@ public final class BitIoConstraints {
     }
 
 
-    static int requireValid16Size(final int size) {
+    static int requireValidUnsigned16Size(final int size) {
 
         if (size < 1) {
             throw new IllegalArgumentException("size(" + size + ") < 1");
@@ -104,6 +104,40 @@ public final class BitIoConstraints {
         }
 
         return size;
+    }
+
+
+    public static int requireValidByteSize(final boolean unsigned,
+                                           final int size) {
+
+        return requireValidSize(unsigned, 3, size);
+    }
+
+
+    public static int requireValidShortSize(final boolean unsigned,
+                                            final int size) {
+
+        return requireValidSize(unsigned, 4, size);
+    }
+
+
+    public static int requireValidIntSize(final boolean unsigned,
+                                          final int size) {
+
+        return requireValidSize(unsigned, 5, size);
+    }
+
+
+    public static int requireValidLongSize(final boolean unsigned,
+                                           final int size) {
+
+        return requireValidSize(unsigned, 6, size);
+    }
+
+
+    public static int requireValidCharSize(final int size) {
+
+        return requireValidUnsigned16Size(size);
     }
 
 

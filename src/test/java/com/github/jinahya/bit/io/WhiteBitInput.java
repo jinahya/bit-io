@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Jin Kwon &lt;jinahya_at_gmail.com&gt;.
+ * Copyright 2014 Jin Kwon.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,30 +14,25 @@
  * limitations under the License.
  */
 
+
 package com.github.jinahya.bit.io;
 
 
 import java.io.IOException;
+import static java.util.concurrent.ThreadLocalRandom.current;
 
 
 /**
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
- * @see DataInput
  */
-public class DataOutput extends AbstractByteOutput<java.io.DataOutput> {
-
-
-    public DataOutput(final java.io.DataOutput target) {
-
-        super(target);
-    }
+public class WhiteBitInput extends AbstractBitInput {
 
 
     @Override
-    public void write(final int value) throws IOException {
+    public int read() throws IOException {
 
-        target.writeByte(value);
+        return current().nextInt(256);
     }
 
 }

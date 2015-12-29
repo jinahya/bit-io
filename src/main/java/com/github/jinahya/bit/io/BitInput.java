@@ -72,6 +72,9 @@ public interface BitInput {
     double readDouble() throws IOException;
 
 
+    <T extends BitReadable> T readObject(T value) throws IOException;
+
+
     /**
      * Reads an object reference value which is possibly {@code null}. This
      * method reads preceding 1-bit boolean flag and, if it is {@code true},
@@ -85,7 +88,8 @@ public interface BitInput {
      *
      * @throws IOException if an I/O error occurs.
      */
-    <T extends BitReadable> T readObject(boolean nullable, Class<T> type)
+    <T extends BitReadable> T readObject(boolean nullable,
+                                         Class<? extends T> type)
         throws IOException;
 
 

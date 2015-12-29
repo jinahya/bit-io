@@ -31,8 +31,8 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
 
 
     /**
-     * Returns the value of {@link #read()} while incrementing the {@code count}
-     * by one.
+     * Supplies the value of {@link #read()} while incrementing the
+     * {@code count} by one.
      *
      * @return an unsigned byte value.
      *
@@ -48,7 +48,7 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
 
 
     /**
-     * Reads an unsigned 8-bit int value.
+     * Reads an unsigned byte value.
      *
      * @param size the number of bits for the value; between {@code 1}
      * (inclusive) and {@code 8} (inclusive).
@@ -57,9 +57,9 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
      *
      * @throws IOException if an I/O error occurs.
      */
-    protected int read8(final int size) throws IOException {
+    protected int unsigned8(final int size) throws IOException {
 
-        BitIoConstraints.requireValid8Size(size);
+        BitIoConstraints.requireValidUnsigned8Size(size);
 
         if (index == 8) {
             int octet = octet();
@@ -77,7 +77,7 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
         final int required = size - available;
 
         if (required > 0) {
-            return (read8(available) << required) | read8(required);
+            return (unsigned8(available) << required) | unsigned8(required);
         }
 
         int value = 0x00;
@@ -92,7 +92,7 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
 
 
     /**
-     * Reads an unsigned 16-bit int value.
+     * Reads an unsigned short value.
      *
      * @param size the number of bits for the value; between {@code 1}
      * (inclusive) and {@code 16} (inclusive).
@@ -101,9 +101,9 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
      *
      * @throws IOException if an I/O error occurs.
      */
-    protected int read16(final int size) throws IOException {
+    protected int unsigned16(final int size) throws IOException {
 
-        BitIoConstraints.requireValid16Size(size);
+        BitIoConstraints.requireValidUnsigned16Size(size);
 
         int value = 0x00;
 
@@ -112,12 +112,12 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
 
         for (int i = 0; i < quotient; i++) {
             value <<= 8;
-            value |= read8(8);
+            value |= unsigned8(8);
         }
 
         if (remainder > 0) {
             value <<= remainder;
-            value |= read8(remainder);
+            value |= unsigned8(remainder);
         }
 
         return value;
@@ -168,11 +168,11 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
         final int remainder = size % 16;
         for (int i = 0; i < quotient; i++) {
             value <<= 16;
-            value |= read16(16);
+            value |= unsigned16(16);
         }
         if (remainder > 0) {
             value <<= remainder;
-            value |= read16(remainder);
+            value |= unsigned16(remainder);
         }
 
         return value;
@@ -231,8 +231,22 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
 
 
     @Override
+    public <T extends BitReadable> T readObject(T value)
+        throws IOException {
+
+        if (value == null) {
+            throw new NullPointerException("null value");
+        }
+
+        value.read(this);
+
+        return value;
+    }
+
+
+    @Override
     public <T extends BitReadable> T readObject(final boolean nullable,
-                                                final Class<T> type)
+                                                final Class<? extends T> type)
         throws IOException {
 
         if (type == null) {
@@ -282,13 +296,13 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
         // discard remained bits in current octet.
         if (index < 8) {
             bits += (8 - index);
-            read8((int) bits); // count increments
+            unsigned8((int) bits); // count increments
         }
 
         final long remainder = count % bytes;
         long octets = (remainder > 0 ? bytes : 0) - remainder;
         for (; octets > 0; octets--) {
-            read8(8);
+            unsigned8(8);
             bits += 8;
         }
 

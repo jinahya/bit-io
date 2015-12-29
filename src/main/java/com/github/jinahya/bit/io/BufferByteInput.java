@@ -29,8 +29,9 @@ import java.nio.channels.ReadableByteChannel;
  * {@link #source}.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
+ * @see BufferByteOutput
  */
-public class BufferInput extends AbstractByteInput<ByteBuffer> {
+public class BufferByteInput extends AbstractByteInput<ByteBuffer> {
 
 
     /**
@@ -72,9 +73,9 @@ public class BufferInput extends AbstractByteInput<ByteBuffer> {
     }
 
 
-    public static BufferInput newInstance(final ReadableByteChannel channel,
-                                          final int capacity,
-                                          final boolean direct) {
+    public static BufferByteInput newInstance(final ReadableByteChannel channel,
+                                              final int capacity,
+                                              final boolean direct) {
 
         if (channel == null) {
             throw new NullPointerException("null channel");
@@ -85,7 +86,7 @@ public class BufferInput extends AbstractByteInput<ByteBuffer> {
                 "capacity(" + capacity + ") <= 0");
         }
 
-        return new BufferInput(null) {
+        return new BufferByteInput(null) {
 
             @Override
             public int read() throws IOException {
@@ -112,14 +113,14 @@ public class BufferInput extends AbstractByteInput<ByteBuffer> {
      * @param source the byte buffer or {@code null} if it's supposed to be
      * lazily initialized and set.
      */
-    public BufferInput(final ByteBuffer source) {
+    public BufferByteInput(final ByteBuffer source) {
 
         super(source);
     }
 
 
     /**
-     * {@inheritDoc} The {@code read()} method of {@code BufferInput} invokes
+     * {@inheritDoc} The {@code read()} method of {@code BufferByteInput} invokes
      * {@link ByteBuffer#get()} on {@link #getSource()} and return the result as
      * an unsigned int. Override this method if {@link #source} is supposed to
      * be lazily initialized or adjusted.

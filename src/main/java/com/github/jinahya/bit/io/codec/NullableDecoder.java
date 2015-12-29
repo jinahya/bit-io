@@ -19,6 +19,8 @@ package com.github.jinahya.bit.io.codec;
 
 import com.github.jinahya.bit.io.BitInput;
 import java.io.IOException;
+import java.util.function.Function;
+import org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement;
 
 
 /**
@@ -29,6 +31,27 @@ import java.io.IOException;
  */
 public abstract class NullableDecoder<T> extends Nullable
     implements BitDecoder<T> {
+
+
+    @IgnoreJRERequirement
+    public static <T> NullableDecoder<T> newInstance(
+        final boolean nullable,
+        final Function<BitInput, ? extends T> function) {
+
+        if (function == null) {
+            throw new NullPointerException("null function");
+        }
+
+        return new NullableDecoder<T>(nullable) {
+
+            @Override
+            protected T decodeValue(final BitInput input) throws IOException {
+
+                return function.apply(input);
+            }
+
+        };
+    }
 
 
     /**

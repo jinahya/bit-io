@@ -80,6 +80,9 @@ public interface BitOutput {
     void writeDouble(double value) throws IOException;
 
 
+    <T extends BitWritable> T writeObject(T value) throws IOException;
+
+
     /**
      * Writes an object reference value. This method, if {@code nullable} is
      * {@code true}, writes a preceding 1-bit boolean value for nullability and

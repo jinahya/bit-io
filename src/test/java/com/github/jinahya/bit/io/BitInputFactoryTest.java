@@ -53,7 +53,7 @@ public class BitInputFactoryTest {
             () -> (ByteBuffer) ByteBuffer.allocate(10).position(10),
             b -> {
                 try {
-                    BufferInput.ensureRemaining(b, source);
+                    BufferByteInput.ensureRemaining(b, source);
                 } catch (final IOException ioe) {
                     throw new UncheckedIOException(ioe);
                 }

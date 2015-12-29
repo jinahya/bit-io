@@ -27,8 +27,9 @@ import java.nio.channels.WritableByteChannel;
  * A {@link ByteOutput} implementation for {@link ByteBuffer}s.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
+ * @see BufferByteInput
  */
-public class BufferOutput extends AbstractByteOutput<ByteBuffer> {
+public class BufferByteOutput extends AbstractByteOutput<ByteBuffer> {
 
 
     /**
@@ -67,9 +68,9 @@ public class BufferOutput extends AbstractByteOutput<ByteBuffer> {
     }
 
 
-    public static BufferOutput newInstance(final WritableByteChannel channel,
-                                           final int capacity,
-                                           final boolean direct) {
+    public static BufferByteOutput newInstance(final WritableByteChannel channel,
+                                               final int capacity,
+                                               final boolean direct) {
 
         if (channel == null) {
             throw new NullPointerException("null channel");
@@ -80,7 +81,7 @@ public class BufferOutput extends AbstractByteOutput<ByteBuffer> {
                 "capacity(" + capacity + ") <= 0");
         }
 
-        return new BufferOutput(null) {
+        return new BufferByteOutput(null) {
 
             @Override
             public void write(final int value) throws IOException {
@@ -106,14 +107,14 @@ public class BufferOutput extends AbstractByteOutput<ByteBuffer> {
      * @param buffer the {@code ByteBuffer} to wrap or {@code null} if it's
      * supposed to be lazily initialized and set.
      */
-    public BufferOutput(final ByteBuffer buffer) {
+    public BufferByteOutput(final ByteBuffer buffer) {
 
         super(buffer);
     }
 
 
     /**
-     * {@inheritDoc} The {@code write(int)} method of {@code BufferOutput} class
+     * {@inheritDoc} The {@code write(int)} method of {@code BufferByteOutput} class
      * invokes {@link ByteBuffer#put(byte)} on {@link #getTarget()} with given
      * {@code value}. Override this method if {@link #target} is supposed to be
      * lazily initialized or adjusted.

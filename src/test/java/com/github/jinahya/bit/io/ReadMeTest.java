@@ -44,7 +44,7 @@ public class ReadMeTest {
 
         final byte[] array = new byte[8];
         final BitInput input = new DefaultBitInput<>(
-            new ArrayInput(array, array.length, 0));
+            new ArrayByteInput(array, array.length, 0));
 
         input.readBoolean();
         input.readInt(true, 6);
@@ -60,7 +60,7 @@ public class ReadMeTest {
 
         final byte[] array = new byte[8];
         final BitOutput output = new DefaultBitOutput<>(
-            new ArrayOutput(array, array.length, 0));
+            new ArrayByteOutput(array, array.length, 0));
 
         output.writeBoolean(false);
         output.writeInt(false, 9, -72);

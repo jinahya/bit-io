@@ -25,12 +25,12 @@ import static java.util.concurrent.ThreadLocalRandom.current;
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
-public class Person implements BitReadable, BitWritable {
+public class Employee implements BitReadable, BitWritable {
 
 
-    public static Person newRandomInstance() {
+    public static Employee newRandomInstance() {
 
-        final Person instance = new Person();
+        final Employee instance = new Employee();
 
         instance.age = current().nextInt(128);
         instance.married = current().nextBoolean();
@@ -50,7 +50,7 @@ public class Person implements BitReadable, BitWritable {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final Person other = (Person) obj;
+        final Employee other = (Employee) obj;
         if (this.age != other.age) {
             return false;
         }
@@ -98,7 +98,7 @@ public class Person implements BitReadable, BitWritable {
     }
 
 
-    public Person age(final int age) {
+    public Employee age(final int age) {
 
         setAge(age);
 
@@ -118,7 +118,7 @@ public class Person implements BitReadable, BitWritable {
     }
 
 
-    public Person married(final boolean married) {
+    public Employee married(final boolean married) {
 
         setMerried(married);
 

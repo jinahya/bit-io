@@ -17,27 +17,31 @@
 package com.github.jinahya.bit.io;
 
 
+import com.github.jinahya.bit.io.codec.BitCodec;
+import com.github.jinahya.bit.io.codec.CompanyCodec;
 import java.io.IOException;
+import static java.util.concurrent.ThreadLocalRandom.current;
+import org.slf4j.Logger;
+import static org.slf4j.LoggerFactory.getLogger;
+import org.testng.annotations.Test;
 
 
 /**
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
- * @see DataOutput
  */
-public class DataInput extends AbstractByteInput<java.io.DataInput> {
+public class CompanyTest extends BitIoTest {
 
 
-    public DataInput(final java.io.DataInput source) {
-
-        super(source);
-    }
+    private static final Logger logger = getLogger(CompanyTest.class);
 
 
-    @Override
-    public int read() throws IOException {
+    @Test
+    public void decodeEncode() throws IOException {
 
-        return source.readUnsignedByte();
+        final boolean nullable = current().nextBoolean();
+        final BitCodec<Company> codec = new CompanyCodec(nullable);
+        codec.encode(getOutput(), codec.decode(getInput()));
     }
 
 }

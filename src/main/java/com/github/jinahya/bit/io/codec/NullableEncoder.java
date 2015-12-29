@@ -19,6 +19,8 @@ package com.github.jinahya.bit.io.codec;
 
 import com.github.jinahya.bit.io.BitOutput;
 import java.io.IOException;
+import java.util.function.BiConsumer;
+import org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement;
 
 
 /**
@@ -29,6 +31,28 @@ import java.io.IOException;
  */
 public abstract class NullableEncoder<T> extends Nullable
     implements BitEncoder<T> {
+
+
+    @IgnoreJRERequirement
+    public static <T> NullableEncoder<T> newInstance(
+        final boolean nullable,
+        final BiConsumer<BitOutput, ? super T> consumer) {
+
+        if (consumer == null) {
+            throw new NullPointerException("null consumer");
+        }
+
+        return new NullableEncoder<T>(nullable) {
+
+            @Override
+            protected void encodeValue(final BitOutput output, final T value)
+                throws IOException {
+
+                consumer.accept(output, value);
+            }
+
+        };
+    }
 
 
     /**

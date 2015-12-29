@@ -40,7 +40,7 @@ public class ChannelOutput extends AbstractByteOutput<WritableByteChannel> {
     public void write(final int value) throws IOException {
 
         if (output == null) {
-            output = BufferOutput.newInstance(target, 1, false);
+            output = BufferByteOutput.newInstance(target, 1, false);
         }
 
         output.write(value);

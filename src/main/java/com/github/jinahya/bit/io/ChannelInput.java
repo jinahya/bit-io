@@ -40,7 +40,7 @@ public class ChannelInput extends AbstractByteInput<ReadableByteChannel> {
     public int read() throws IOException {
 
         if (input == null) {
-            input = BufferInput.newInstance(source, 1, false);
+            input = BufferByteInput.newInstance(source, 1, false);
         }
 
         return input.read();

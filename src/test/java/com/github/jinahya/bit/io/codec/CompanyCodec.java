@@ -19,7 +19,7 @@ package com.github.jinahya.bit.io.codec;
 
 import com.github.jinahya.bit.io.BitInput;
 import com.github.jinahya.bit.io.BitOutput;
-import com.github.jinahya.bit.io.Person;
+import com.github.jinahya.bit.io.Company;
 import java.io.IOException;
 
 
@@ -27,37 +27,37 @@ import java.io.IOException;
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
-public class PersonCodec extends NullableCodec<Person> {
+public class CompanyCodec extends NullableCodec<Company> {
 
 
-    public PersonCodec(final boolean nullable) {
+    public CompanyCodec(final boolean nullable) {
 
         super(nullable);
 
-        decoder = new PersonDecoder(false);
-        encoder = new PersonEncoder(false);
+        decoder = new CompanyDecoder(false);
+        encoder = new CompanyEncoder(false);
     }
 
 
     @Override
-    protected Person decodeValue(final BitInput input) throws IOException {
+    protected Company decodeValue(final BitInput input) throws IOException {
 
         return decoder.decode(input);
     }
 
 
     @Override
-    protected void encodeValue(final BitOutput output, final Person value)
+    protected void encodeValue(final BitOutput output, final Company value)
         throws IOException {
 
         encoder.encode(output, value);
     }
 
 
-    private final BitDecoder<Person> decoder;
+    private final BitDecoder<Company> decoder;
 
 
-    private final BitEncoder<Person> encoder;
+    private final BitEncoder<Company> encoder;
 
 }
 

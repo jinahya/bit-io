@@ -31,9 +31,10 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
 
 
     /**
-     * Consumes given unsigned byte value while incrementing {@code count}.
+     * Consumes given byte value via {@link #write(int)} while incrementing
+     * {@code count}.
      *
-     * @param value the unsigned byte value
+     * @param value the byte value
      *
      * @throws IOException if an I/O error occurs.
      */
@@ -46,7 +47,7 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
 
 
     /**
-     * Writes an unsigned 8-bit int value.
+     * Writes an unsigned byte value.
      *
      * @param size the number of lower bits to write; between {@code 1}
      * (inclusive) and {@code 8} (inclusive).
@@ -54,9 +55,9 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
      *
      * @throws IOException if an I/O error occurs.
      */
-    protected void write8(final int size, int value) throws IOException {
+    protected void unsigned8(final int size, int value) throws IOException {
 
-        BitIoConstraints.requireValid8Size(size);
+        BitIoConstraints.requireValidUnsigned8Size(size);
 
         if (size == 8 && index == 0) {
             octet(value);
@@ -65,8 +66,8 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
 
         final int required = size - (8 - index);
         if (required > 0) {
-            write8(size - required, value >> required);
-            write8(required, value);
+            unsigned8(size - required, value >> required);
+            unsigned8(required, value);
             return;
         }
 
@@ -89,7 +90,7 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
 
 
     /**
-     * Writes an unsigned 16-bit int value.
+     * Writes an unsigned short value.
      *
      * @param size the number of lower bits to write; between {@code 1}
      * (inclusive) and {@code 16} (inclusive).
@@ -97,19 +98,20 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
      *
      * @throws IOException if an I/O error occurs
      */
-    protected void write16(final int size, final int value) throws IOException {
+    protected void unsigned16(final int size, final int value)
+        throws IOException {
 
-        BitIoConstraints.requireValid16Size(size);
+        BitIoConstraints.requireValidUnsigned16Size(size);
 
         final int quotient = size / 8;
         final int remainder = size % 8;
 
         if (remainder > 0) {
-            write8(remainder, value >> (quotient * 8));
+            unsigned8(remainder, value >> (quotient * 8));
         }
 
         for (int i = quotient - 1; i >= 0; i--) {
-            write8(8, value >> (8 * i));
+            unsigned8(8, value >> (8 * i));
         }
     }
 
@@ -160,10 +162,10 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
         final int quotient = size / 16;
         final int remainder = size % 16;
         if (remainder > 0) {
-            write16(remainder, value >> (quotient * 16));
+            unsigned16(remainder, value >> (quotient * 16));
         }
         for (int i = quotient - 1; i >= 0; i--) {
-            write16(16, value >> (16 * i));
+            unsigned16(16, value >> (16 * i));
         }
     }
 
@@ -217,6 +219,20 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
 
 
     @Override
+    public <T extends BitWritable> T writeObject(final T value)
+        throws IOException {
+
+        if (value == null) {
+            throw new NullPointerException("null value");
+        }
+
+        value.write(this);
+
+        return value;
+    }
+
+
+    @Override
     public <T extends BitWritable> void writeObject(final boolean nullable,
                                                     final T value)
         throws IOException {
@@ -260,13 +276,13 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
         // pad remained bits into current octet
         if (index > 0) {
             bits += (8 - index);
-            write8((int) bits, 0x00); // count incremented
+            unsigned8((int) bits, 0x00); // count incremented
         }
 
         final long remainder = count % bytes;
         long octets = (remainder > 0 ? bytes : 0) - remainder;
         for (; octets > 0; octets--) {
-            write8(8, 0x00);
+            unsigned8(8, 0x00);
             bits += 8;
         }
 

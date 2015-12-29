@@ -14,33 +14,41 @@
  * limitations under the License.
  */
 
-package com.github.jinahya.bit.io.codec;
+package com.github.jinahya.bit.io;
 
 
-import com.github.jinahya.bit.io.BitOutput;
-import com.github.jinahya.bit.io.Person;
+import java.io.DataOutput;
 import java.io.IOException;
 
 
 /**
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
+ * @see DataByteInput
  */
-public class PersonEncoder extends NullableEncoder<Person> {
+public class DataByteOutput extends AbstractByteOutput<DataOutput> {
 
 
-    public PersonEncoder(final boolean nullable) {
+    public DataByteOutput(final DataOutput target) {
 
-        super(nullable);
+        super(target);
     }
 
 
+    /**
+     * {@inheritDoc } The {@code write(int)} method of {@code DataByteOutput}
+     * class invokes {@link DataOutput#writeByte(int)} on {@link #target} with
+     * specified {@code value}. Override this method if {@link #target} is
+     * supposed to be lazily initialized and set.
+     *
+     * @param value {@inheritDoc }
+     *
+     * @throws IOException {@inheritDoc }
+     */
     @Override
-    protected void encodeValue(final BitOutput output, final Person value)
-        throws IOException {
+    public void write(final int value) throws IOException {
 
-        output.writeInt(true, 7, value.getAge());
-        output.writeBoolean(value.isMarried());
+        target.writeByte(value);
     }
 
 }

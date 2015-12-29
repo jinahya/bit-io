@@ -20,46 +20,48 @@ package com.github.jinahya.bit.io;
 
 import java.io.EOFException;
 import java.io.IOException;
-import java.io.RandomAccessFile;
+import java.io.InputStream;
 
 
 /**
- * A {@link ByteInput} implementation for {@link RandomAccessFile}s.
+ * A {@link ByteInput} implementation for {@link InputStream}s.
  *
- * @see FileOutput
+ * @see StreamByteOutput
  */
-public class FileInput extends AbstractByteInput<RandomAccessFile> {
+public class StreamByteInput extends AbstractByteInput<InputStream> {
 
 
     /**
      * Creates a new instance built on top of the specified input stream.
      *
-     * @param source the source file or {@code null} if it's supposed to be
-     * lazily initialized and set
+     * @param source the stream or {@code null} if it's supposed to be lazily
+     * initialized and set
      */
-    public FileInput(final RandomAccessFile source) {
+    public StreamByteInput(final InputStream source) {
 
         super(source);
     }
 
 
     /**
-     * {@inheritDoc} The {@code read()} method of {@code FileInput} class
-     * invokes {@link RandomAccessFile#read()} on {@link #source} and returns
-     * the result if it is not {@code -1}. Override this method if
-     * {@link #source} is supposed to be lazily initialized and set.
+     * {@inheritDoc} The {@code read()} method of {@code StreamByteInput} class
+     * invokes {@link InputStream#read()} on {@link #source} and returns the
+     * result if it is not an {@code end of stream}.
      *
      * @return {@inheritDoc}
      *
      * @throws IOException {@inheritDoc}
-     * @throws EOFException if the underlying file reached to end
+     * @throws EOFException if the underlying stream reached to end of stream.
+     *
+     * @see #source
+     * @see InputStream#read()
      */
     @Override
     public int read() throws IOException {
 
         final int value = source.read();
         if (value == -1) {
-            throw new EOFException();
+            throw new EOFException("eof");
         }
 
         return value;

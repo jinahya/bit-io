@@ -19,38 +19,41 @@ package com.github.jinahya.bit.io;
 
 
 import java.io.IOException;
-import java.io.RandomAccessFile;
+import java.io.OutputStream;
 
 
 /**
- * A {@link ByteOutput} implementation for {@link RandomAccessFile}s.
+ * A {@link ByteOutput} implementation for {@link OutputStream}s.
  *
- * @see FileInput
+ * @see StreamByteInput
  */
-public class FileOutput extends AbstractByteOutput<RandomAccessFile> {
+public class StreamByteOutput extends AbstractByteOutput<OutputStream> {
 
 
     /**
      * Creates a new instance built on top of the specified output stream.
      *
-     * @param target the output file or {@code null} if it's supposed to be
+     * @param target the output stream or {@code null} if it's supposed to be
      * lazily initialized and set.
      */
-    public FileOutput(final RandomAccessFile target) {
+    public StreamByteOutput(final OutputStream target) {
 
         super(target);
     }
 
 
     /**
-     * {@inheritDoc} The {@code write(int)} method of {@code FileOutput} class
-     * invokes {@link RandomAccessFile#write(int)} on {@link #target} with given
-     * {@code value}. Override this method if {@link #target} is supposed to be
-     * lazily initialized and set.
+     * {@inheritDoc} The {@code writeUnsginedByte(int)} method of
+     * {@code StreamByteOutput} class invokes {@link OutputStream#write(int)} on
+     * {@link #target} with given {@code value}. Override this method if
+     * {@link #target} is supposed to be lazily initialized and set.
      *
      * @param value {@inheritDoc}
      *
      * @throws IOException {@inheritDoc}
+     *
+     * @see #target
+     * @see OutputStream#write(int)
      */
     @Override
     public void write(final int value) throws IOException {

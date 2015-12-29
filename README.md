@@ -80,7 +80,7 @@ public class CompanyDecoder extends NullableDecoder<Company> {
         super(nullable);
         employeeDecoder = NullableDecoder.newInstance(
             true,
-            i -> {
+            (BitDecoder<Employee>) i -> {
                 try {
                     return i.readObject(new Employee());
                 } catch (final IOException ioe) {
@@ -108,7 +108,7 @@ public class CompanyEncoder extends NullableEncoder<Company> {
         super(nullable);
         employeeEncoder = NullableEncoder.newInstance(
             true,
-            (o, v) -> {
+            (BitEncoder<Employee>) (o, v) -> {
                 try {
                     v.write(o);
                 } catch (final IOException ioe) {

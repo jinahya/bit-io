@@ -305,7 +305,7 @@
 
   <profiles>
     <profile>
-      <id>graphviz</id>
+      <id>umlgraph</id>
       <properties>
         <additionalparam>
           -hide java.* -hide Nullable -visibility

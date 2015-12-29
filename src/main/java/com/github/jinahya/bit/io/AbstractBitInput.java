@@ -179,6 +179,22 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
     }
 
 
+    @Deprecated
+    @Override
+    public int readUnsignedInt(final int size) throws IOException {
+
+        return readInt(true, size);
+    }
+
+
+    @Deprecated
+    @Override
+    public int readInt(final int size) throws IOException {
+
+        return readInt(false, size);
+    }
+
+
     @Override
     public long readLong(final boolean unsigned, final int size)
         throws IOException {
@@ -204,6 +220,22 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
         }
 
         return value;
+    }
+
+
+    @Deprecated
+    @Override
+    public long readUnsignedLong(final int size) throws IOException {
+
+        return readLong(true, size);
+    }
+
+
+    @Deprecated
+    @Override
+    public long readLong(final int size) throws IOException {
+
+        return readLong(false, size);
     }
 
 

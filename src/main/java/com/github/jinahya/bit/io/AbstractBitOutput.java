@@ -170,6 +170,23 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
     }
 
 
+    @Deprecated
+    @Override
+    public void writeUnsignedInt(final int size, final int value)
+        throws IOException {
+
+        writeInt(true, size, value);
+    }
+
+
+    @Deprecated
+    @Override
+    public void writeInt(final int size, final int value) throws IOException {
+
+        writeInt(false, size, value);
+    }
+
+
     @Override
     public void writeLong(final boolean unsigned, final int size,
                           final long value)
@@ -192,6 +209,23 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
         for (int i = quotient - 1; i >= 0; i--) {
             writeInt(true, 31, (int) (value >> (i * 31)));
         }
+    }
+
+
+    @Deprecated
+    @Override
+    public void writeUnsignedLong(final int size, final long value)
+        throws IOException {
+
+        writeLong(true, size, value);
+    }
+
+
+    @Deprecated
+    @Override
+    public void writeLong(final int size, final long value) throws IOException {
+
+        writeLong(false, size, value);
     }
 
 

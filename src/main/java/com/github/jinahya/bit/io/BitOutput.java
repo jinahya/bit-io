@@ -56,10 +56,46 @@ public interface BitOutput {
     void writeShort(boolean unsigned, int size, short value) throws IOException;
 
 
+    /**
+     * Writes an int value. Only the lower specified number of bits are written.
+     *
+     * @param unsigned an unsigned flag
+     * @param size the number of lower valid bits; {@code [1..31]} for unsigned,
+     * {@code [2..32]} for signed.
+     * @param value the value to write
+     *
+     * @throws IOException if an I/O error occurs.
+     */
     void writeInt(boolean unsigned, int size, int value) throws IOException;
 
 
+    @Deprecated
+    void writeUnsignedInt(int size, int value) throws IOException;
+
+
+    @Deprecated
+    void writeInt(int size, int value) throws IOException;
+
+
+    /**
+     * Writes a long value. Only the lower specified number of bits are written.
+     *
+     * @param unsigned an unsigned flag
+     * @param size the number of lower valid bits; {@code [1..63]} for unsigned,
+     * {@code [2..64]} for signed.
+     * @param value the value to write
+     *
+     * @throws IOException if an I/O error occurs.
+     */
     void writeLong(boolean unsigned, int size, long value) throws IOException;
+
+
+    @Deprecated
+    void writeUnsignedLong(int size, long value) throws IOException;
+
+
+    @Deprecated
+    void writeLong(int size, long value) throws IOException;
 
 
     /**

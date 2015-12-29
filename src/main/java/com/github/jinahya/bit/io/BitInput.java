@@ -50,7 +50,23 @@ public interface BitInput {
     int readInt(boolean unsigned, int size) throws IOException;
 
 
+    @Deprecated
+    int readUnsignedInt(int size) throws IOException;
+
+
+    @Deprecated
+    int readInt(int size) throws IOException;
+
+
     long readLong(boolean unsigned, int size) throws IOException;
+
+
+    @Deprecated
+    long readUnsignedLong(int size) throws IOException;
+
+
+    @Deprecated
+    long readLong(int size) throws IOException;
 
 
     /**

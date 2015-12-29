@@ -119,6 +119,7 @@ public class PersonCodec extends NullableCodec<Person> {
 Again, you can use the codec like this.
 ```java
 final PersonCodec codec = new PersonCodec(true);
+
 final Person person = codec.decode(input));
 codec.encode(output, person);
 ```
@@ -132,7 +133,7 @@ new DataInput(java.io.DataInput);
 new FileInput(java.io.RandomAccessFile);
 new StreamInput(java.io.InputStream);
 ````
-Those constructors don't check arguments which means you can lazily instantiate and set them.
+Constructors of these classes don't check arguments which means you can lazily instantiate and set them.
 ```java
 final InputStream stream = openFile();
 
@@ -140,11 +141,15 @@ final ByteInput input = new ArrayInput(null, -1, -1) {
 
     @Override
     public int read() throws IOException {
+
+        // initialize the `source` field value
         if (source == null) {
             source = byte[16];
             limit = source.length;
             index = limit;
         }
+
+        // read bytes from the stream if empty
         if (index == limit) {
             final int read = stream.read(source);
             if (read == -1) {
@@ -153,6 +158,7 @@ final ByteInput input = new ArrayInput(null, -1, -1) {
             limit = read;
             index = 0;
         }
+
         return super.read();
     }
 };

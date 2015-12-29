@@ -14,12 +14,18 @@
  * limitations under the License.
  */
 
-package com.github.jinahya.bit.io.codec;
+package com.github.jinahya.bit.io;
 
 
 import com.github.jinahya.bit.io.BitInput;
 import com.github.jinahya.bit.io.BitOutput;
 import com.github.jinahya.bit.io.Company;
+import com.github.jinahya.bit.io.codec.BitDecoder;
+import com.github.jinahya.bit.io.codec.BitDecoder;
+import com.github.jinahya.bit.io.codec.BitEncoder;
+import com.github.jinahya.bit.io.codec.BitEncoder;
+import com.github.jinahya.bit.io.codec.NullableCodec;
+import com.github.jinahya.bit.io.codec.NullableCodec;
 import java.io.IOException;
 
 

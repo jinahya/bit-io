@@ -66,16 +66,20 @@ public abstract class NullableCodec<T> extends Nullable implements BitCodec<T> {
 
 
     /**
-     * Creates a new instance with specified decoder and encoder.
+     * Creates a new instance with specified codec.
      *
      * @param <T> value type parameter
      * @param nullable the nullable flag
-     * @param codec the decoder
+     * @param codec the codec
      *
      * @return a new instance.
      */
     public static <T> NullableCodec<T> newInstance(
         final boolean nullable, final BitCodec<T> codec) {
+
+        if (codec == null) {
+            throw new NullPointerException("null codec");
+        }
 
         return new NullableCodec<T>(nullable) {
 
@@ -136,12 +140,11 @@ public abstract class NullableCodec<T> extends Nullable implements BitCodec<T> {
 
 
     /**
-     * Decodes value from given input. This method is supposed to return a
-     * non-null value.
+     * Decodes value from given input.
      *
      * @param input the input
      *
-     * @return decoded value; should not be {@code null}.
+     * @return decoded value
      *
      * @throws IOException if an I/O error occurs.
      */
@@ -183,11 +186,10 @@ public abstract class NullableCodec<T> extends Nullable implements BitCodec<T> {
 
 
     /**
-     * Encodes specified value to given output. If this method is invoked the
-     * value is always not {@code null}.
+     * Encodes specified value to given output.
      *
      * @param output the output
-     * @param value the value to encode; never {@code null}
+     * @param value the value to encode
      *
      * @throws IOException if an I/O error occurs.
      */

@@ -80,11 +80,19 @@ public interface BitOutput {
     void writeDouble(double value) throws IOException;
 
 
-    <T extends BitWritable> T writeObject(T value) throws IOException;
+    /**
+     * Writes a reference value.
+     *
+     * @param <T> value type parameter
+     * @param value the value to write
+     *
+     * @throws IOException if an I/O error occurs.
+     */
+    <T extends BitWritable> void writeObject(T value) throws IOException;
 
 
     /**
-     * Writes an object reference value. This method, if {@code nullable} is
+     * Writes a reference value. This method, if {@code nullable} is
      * {@code true}, writes a preceding 1-bit boolean value for nullability and
      * writes specified value if it is not {@code null}.
      *
@@ -101,7 +109,7 @@ public interface BitOutput {
 
 
     /**
-     * Encodes an object reference value using specified encoder.
+     * Encodes a reference value using specified encoder.
      *
      * @param <T> value type parameter
      * @param encoder the encoder

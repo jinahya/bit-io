@@ -35,6 +35,26 @@ public abstract class NullableDecoder<T> extends Nullable
 
     @IgnoreJRERequirement
     public static <T> NullableDecoder<T> newInstance(
+        final boolean nullable, final BitDecoder<? extends T> decoder) {
+
+        if (decoder == null) {
+            throw new NullPointerException("null decoder");
+        }
+
+        return new NullableDecoder<T>(nullable) {
+
+            @Override
+            protected T decodeValue(final BitInput input) throws IOException {
+
+                return decoder.decode(input);
+            }
+
+        };
+    }
+
+
+    @IgnoreJRERequirement
+    public static <T> NullableDecoder<T> newInstance(
         final boolean nullable,
         final Function<BitInput, ? extends T> function) {
 
@@ -93,12 +113,11 @@ public abstract class NullableDecoder<T> extends Nullable
 
 
     /**
-     * Decodes value from given input. This method is supposed to return a
-     * non-null value.
+     * Decodes value from given input.
      *
      * @param input the input
      *
-     * @return decoded value; should not be {@code null}.
+     * @return decoded value
      *
      * @throws IOException if an I/O error occurs.
      */

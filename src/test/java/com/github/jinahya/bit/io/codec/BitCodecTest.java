@@ -17,81 +17,20 @@
 package com.github.jinahya.bit.io.codec;
 
 
-import com.github.jinahya.bit.io.BitIoTests;
-import java.io.IOException;
-import java.io.UncheckedIOException;
-import java.util.function.BiConsumer;
-import static org.testng.Assert.assertEquals;
+import org.slf4j.Logger;
+import static org.slf4j.LoggerFactory.getLogger;
 
 
 /**
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
+ * @param <T> codec type parameter
+ * @param <V> value type parameter
  */
-public final class BitCodecTest {
+public abstract class BitCodecTest<T extends BitCodec<V>, V> {
 
 
-    /**
-     * Encodes given value using specified codec and accepts to specified
-     * consumer with the value decoded by the same codec.
-     *
-     * @param <T> codec type parameter
-     * @param <V> value type parameter
-     * @param codec the codec
-     * @param expected the value to encode
-     * @param consumer the consumer to accept
-     *
-     * @throws IOException if an I/O error occurs.
-     */
-    protected <T extends BitCodec<V>, V> void test(
-        final T codec, final V expected,
-        final BiConsumer<? super V, ? super V> consumer)
-        throws IOException {
-
-        BitIoTests.all(
-            o -> {
-                try {
-                    codec.encode(o, expected);
-                } catch (final IOException ioe) {
-                    throw new UncheckedIOException(ioe);
-                }
-            },
-            i -> {
-                final V actual;
-                try {
-                    actual = codec.decode(i);
-                } catch (final IOException ioe) {
-                    throw new UncheckedIOException(ioe);
-                }
-                consumer.accept(actual, expected);
-            });
-    }
-
-
-    /**
-     * Encodes given value using specified codec and compares to the value
-     * decoded using the same codec.
-     *
-     * @param <T> codec type parameter
-     * @param <V> value type parameter
-     * @param codec the codec
-     * @param expected the value to encode
-     *
-     * @throws IOException if an I/O error occurs.
-     */
-    protected <T extends BitCodec<V>, V> void test(final T codec,
-                                                   final V expected)
-        throws IOException {
-
-        if (codec == null) {
-            throw new NullPointerException("null codec");
-        }
-
-        test(codec, expected, (a, e) -> {
-             assertEquals(a, e);
-         });
-
-    }
+    protected transient final Logger logger = getLogger(getClass());
 
 }
 

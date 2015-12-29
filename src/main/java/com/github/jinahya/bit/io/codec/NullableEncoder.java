@@ -35,6 +35,27 @@ public abstract class NullableEncoder<T> extends Nullable
 
     @IgnoreJRERequirement
     public static <T> NullableEncoder<T> newInstance(
+        final boolean nullable, final BitEncoder<? super T> encoder) {
+
+        if (encoder == null) {
+            throw new NullPointerException("null encoder");
+        }
+
+        return new NullableEncoder<T>(nullable) {
+
+            @Override
+            protected void encodeValue(final BitOutput output, final T value)
+                throws IOException {
+
+                encoder.encode(output, value);
+            }
+
+        };
+    }
+
+
+    @IgnoreJRERequirement
+    public static <T> NullableEncoder<T> newInstance(
         final boolean nullable,
         final BiConsumer<BitOutput, ? super T> consumer) {
 
@@ -101,11 +122,10 @@ public abstract class NullableEncoder<T> extends Nullable
 
 
     /**
-     * Encodes specified value to given output. If this method is invoked the
-     * value is always not {@code null}.
+     * Encodes specified value to given output.
      *
      * @param output the output
-     * @param value the value to encode; never {@code null}
+     * @param value the value to encode
      *
      * @throws IOException if an I/O error occurs.
      */

@@ -72,21 +72,33 @@ public interface BitInput {
     double readDouble() throws IOException;
 
 
+    /**
+     * Reads a reference value.
+     *
+     * @param <T> value type parameter
+     * @param value the value to read
+     *
+     * @return given value
+     *
+     * @throws IOException if an I/O error occurs.
+     */
     <T extends BitReadable> T readObject(T value) throws IOException;
 
 
     /**
-     * Reads an object reference value which is possibly {@code null}. This
-     * method reads preceding 1-bit boolean flag and, if it is {@code true},
-     * reads an instance of specified type.
+     * Reads reference value which is possibly {@code null}. This method reads
+     * preceding 1-bit boolean flag and, if it is {@code true}, reads an
+     * instance of specified type.
      *
      * @param <T> value type parameter
-     * @param nullable flat for nullability
+     * @param nullable a flag of nullability
      * @param type value type.
      *
      * @return an object reference value; may be {@code null}.
      *
      * @throws IOException if an I/O error occurs.
+     *
+     * @see #readObject(com.github.jinahya.bit.io.BitReadable)
      */
     <T extends BitReadable> T readObject(boolean nullable,
                                          Class<? extends T> type)
@@ -94,7 +106,7 @@ public interface BitInput {
 
 
     /**
-     * Decodes an object reference value using specified decoder.
+     * Decodes a reference value using specified decoder.
      *
      * @param <T> value type parameter
      * @param decoder the decoder

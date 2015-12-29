@@ -14,12 +14,16 @@
  * limitations under the License.
  */
 
-package com.github.jinahya.bit.io.codec;
+package com.github.jinahya.bit.io;
 
 
 import com.github.jinahya.bit.io.BitOutput;
 import com.github.jinahya.bit.io.Company;
 import com.github.jinahya.bit.io.Employee;
+import com.github.jinahya.bit.io.codec.BitEncoder;
+import com.github.jinahya.bit.io.codec.BitEncoder;
+import com.github.jinahya.bit.io.codec.NullableEncoder;
+import com.github.jinahya.bit.io.codec.NullableEncoder;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 
@@ -37,7 +41,7 @@ public class CompanyEncoder extends NullableEncoder<Company> {
 
         employeeEncoder = NullableEncoder.newInstance(
             Company.EMPLOYEE_NULLABLE,
-            (o, v) -> {
+            (BitEncoder<Employee>) (o, v) -> {
                 try {
                     v.write(o);
                 } catch (final IOException ioe) {

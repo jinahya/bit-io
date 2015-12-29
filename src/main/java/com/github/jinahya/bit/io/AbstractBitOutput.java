@@ -219,7 +219,7 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
 
 
     @Override
-    public <T extends BitWritable> T writeObject(final T value)
+    public <T extends BitWritable> void writeObject(final T value)
         throws IOException {
 
         if (value == null) {
@@ -227,8 +227,6 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
         }
 
         value.write(this);
-
-        return value;
     }
 
 
@@ -238,7 +236,7 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
         throws IOException {
 
         if (!nullable && value == null) {
-            throw new NullPointerException("null value with false nullable");
+            throw new NullPointerException("null value");
         }
 
         if (nullable) {
@@ -246,7 +244,8 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
         }
 
         if (!nullable || value != null) {
-            value.write(this);
+            //value.write(this);
+            writeObject(value);
         }
     }
 

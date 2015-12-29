@@ -266,9 +266,7 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
             throw new RuntimeException(iae);
         }
 
-        value.read(this);
-
-        return value;
+        return readObject(value);
     }
 
 

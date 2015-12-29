@@ -14,12 +14,16 @@
  * limitations under the License.
  */
 
-package com.github.jinahya.bit.io.codec;
+package com.github.jinahya.bit.io;
 
 
 import com.github.jinahya.bit.io.BitInput;
 import com.github.jinahya.bit.io.Company;
 import com.github.jinahya.bit.io.Employee;
+import com.github.jinahya.bit.io.codec.BitDecoder;
+import com.github.jinahya.bit.io.codec.BitDecoder;
+import com.github.jinahya.bit.io.codec.NullableDecoder;
+import com.github.jinahya.bit.io.codec.NullableDecoder;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 
@@ -37,7 +41,7 @@ public class CompanyDecoder extends NullableDecoder<Company> {
 
         employeeDecoder = NullableDecoder.newInstance(
             Company.EMPLOYEE_NULLABLE,
-            i -> {
+            (BitDecoder<Employee>) i -> {
                 try {
                     return i.readObject(new Employee());
                 } catch (final IOException ioe) {
@@ -53,7 +57,6 @@ public class CompanyDecoder extends NullableDecoder<Company> {
         final Company value = new Company();
 
         final int size = input.readInt(true, Company.EMPLOYEES_SIZE);
-
         for (int i = 0; i < size; i++) {
             value.getEmployees().add(employeeDecoder.decode(input));
         }

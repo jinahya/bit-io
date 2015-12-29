@@ -18,7 +18,6 @@ package com.github.jinahya.bit.io;
 
 
 import com.github.jinahya.bit.io.codec.BitCodec;
-import com.github.jinahya.bit.io.codec.CompanyCodec;
 import java.io.IOException;
 import static java.util.concurrent.ThreadLocalRandom.current;
 import org.slf4j.Logger;

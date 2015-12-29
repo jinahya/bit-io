@@ -60,9 +60,8 @@ public class Person implements BitReadable, BitWritable {
 ```
 It's, now, too obvious you can do this.
 ```java
-final Person person = new Person().age(38).married(false);
-person.read(input);
-person.write(output);
+final boolean nullable = true;
+output.write(nullable, input.read(nullable, Person.class));
 ```
 #### Using `BitDecoder`/`BitEncoder`
 If modifying existing classes (e.g. implementing additional interfaces) is not applicable, you can make specialized classes for decoding/encoding those existing classes.
@@ -128,10 +127,9 @@ public class PersonCodec extends NullableCodec<Person> {
 ```
 Again, you can use the codec like this.
 ```java
-final PersonCodec codec = new PersonCodec(true);
-
-final Person person = codec.decode(input));
-codec.encode(output, person);
+final boolean nullable = true;
+final PersonCodec codec = new PersonCodec(nullable);
+codec.encode(output, codec.decode(input)));
 ```
 ## Reading
 ### Preparing `ByteInput`

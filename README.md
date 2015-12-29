@@ -43,30 +43,28 @@ The size(min) is `1 + (unsigned ? 0 : 1)` and the size(max) is `(int) Math.pow(2
 #### Implementing `BitReadable`/`BitWritable`
 You can directly read/write values from/to `BitInput`/`BitOutput` by making your class implementing these interfaces.
 ```java
-public class Person implements BitReadable<Person>, BitWritable<Person> {
+public class Person implements BitReadable, BitWritable {
 
     @Override
-    public Person read(final BitInput input) throws IOException {
+    public void read(final BitInput input) throws IOException {
         setAge(input.readInt(true, 7));
         setMarried(input.readBoolean());
-        return this;
     }
 
     @Override
-    public Person write(final BitOutput output) throws IOException {
+    public void write(final BitOutput output) throws IOException {
         output.writeInt(true, 7, getAge());
         output.writeBoolean(isMarried());
-        return this;
     }
 }
 ```
 It's, now, too obvious you can do this.
 ```java
-final Person person = new Person();
+final Person person = new Person().age(39).married(false);
 person.read(input);
 person.write(output);
 ```
-Or use `BitInput#readObject(boolean, Class<T> type)` and `BitOutput#writeObject(boolean, T)`.
+Or use `<T extends BitReadable> T BitInput#readObject(boolean, Class<? extends T> type)` and `<T extends BitReadable> void BitOutput#writeObject(boolean, T)`.
 ```java
 final boolean nullable = true;
 final Person person = input.read(nullable, Person.class);

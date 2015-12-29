@@ -60,7 +60,7 @@ public class Person implements BitReadable, BitWritable {
 ```
 It's, now, too obvious you can do this.
 ```java
-final Person person = new Person().age(31).married(true);
+final Person person = new Person().age(38).married(false);
 person.read(input);
 person.write(output);
 ```

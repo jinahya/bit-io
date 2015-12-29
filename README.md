@@ -43,25 +43,34 @@ The size(min) is `1 + (unsigned ? 0 : 1)` and the size(max) is `(int) Math.pow(2
 #### Implementing `BitReadable`/`BitWritable`
 You can directly read/write values from/to `BitInput`/`BitOutput` by making your class implementing these interfaces.
 ```java
-public class Person implements BitReadable, BitWritable {
+public class Person implements BitReadable<Person>, BitWritable<Person> {
 
     @Override
-    public void read(final BitInput input) throws IOException {
+    public Person read(final BitInput input) throws IOException {
         setAge(input.readInt(true, 7));
         setMarried(input.readBoolean());
+        return this;
     }
 
     @Override
-    public void write(final BitOutput output) throws IOException {
+    public Person write(final BitOutput output) throws IOException {
         output.writeInt(true, 7, getAge());
         output.writeBoolean(isMarried());
+        return this;
     }
 }
 ```
 It's, now, too obvious you can do this.
 ```java
+final Person person = new Person();
+person.read(input);
+person.write(output);
+```
+Or use `BitInput#readObject(boolean, Class<T> type)` and `BitOutput#writeObject(boolean, T)`.
+```java
 final boolean nullable = true;
-output.write(nullable, input.read(nullable, Person.class));
+final Person person = input.read(nullable, Person.class);
+output.write(nullable, person);
 ```
 #### Using `BitDecoder`/`BitEncoder`
 If modifying existing classes (e.g. implementing additional interfaces) is not applicable, you can make specialized classes for decoding/encoding those existing classes.
@@ -128,7 +137,7 @@ public class PersonCodec extends NullableCodec<Person> {
 Again, you can use the codec like this.
 ```java
 final boolean nullable = true;
-final PersonCodec codec = new PersonCodec(nullable);
+final BitCodec<Person> codec = new PersonCodec(nullable);
 codec.encode(output, codec.decode(input)));
 ```
 ## Reading

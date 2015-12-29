@@ -44,6 +44,7 @@ public abstract class BitIoTest {
     @Inject
     private BitInput input;
 
+
     @Inject
     private BitOutput output;
 

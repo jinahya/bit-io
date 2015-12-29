@@ -21,7 +21,6 @@ package com.github.jinahya.bit.io;
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.RandomAccessFile;
 
 
 /**
@@ -69,54 +68,6 @@ public class ArrayByteInput extends AbstractByteInput<byte[]> {
 
                 if (index == limit) {
                     final int read = stream.read(source);
-                    if (read == -1) {
-                        throw new EOFException();
-                    }
-                    limit = read;
-                    index = 0;
-                }
-
-                return super.read();
-            }
-
-
-        };
-    }
-
-
-    /**
-     * Creates a new instance which continuously supplies bytes from specified
-     * {@code RandomAccessFile}.
-     *
-     * @param file the {@code RandomAccessFile}
-     * @param length the length of the byte array; must be positive.
-     *
-     * @return a new instance.
-     */
-    public static ArrayByteInput newInstance(final RandomAccessFile file,
-                                             final int length) {
-
-        if (file == null) {
-            throw new NullPointerException("null file");
-        }
-
-        if (length <= 0) {
-            throw new IllegalArgumentException("length(" + length + ") <= 0");
-        }
-
-        return new ArrayByteInput(null, -1, -1) {
-
-            @Override
-            public int read() throws IOException {
-
-                if (source == null) {
-                    source = new byte[length];
-                    limit = source.length;
-                    index = limit;
-                }
-
-                if (index == limit) {
-                    final int read = file.read(source);
                     if (read == -1) {
                         throw new EOFException();
                     }
@@ -268,6 +219,7 @@ public class ArrayByteInput extends AbstractByteInput<byte[]> {
      * The index of the {@link #source} which {@link #index} can't exceed.
      */
     protected int limit;
+
 
     /**
      * The index in the {@link #source} to read.

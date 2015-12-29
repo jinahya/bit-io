@@ -20,7 +20,6 @@ package com.github.jinahya.bit.io;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.RandomAccessFile;
 
 
 /**
@@ -77,58 +76,14 @@ public class ArrayByteOutput extends AbstractByteOutput<byte[]> {
 
 
     /**
-     * Creates a new instance which continously writes aggregated bytes to
-     * specified {@code RandomAccessFile}.
-     *
-     * @param file the {@code RandomAccessFile} to which aggregated bytes are
-     * written.
-     * @param length the length of the byte array; must be positive.
-     *
-     * @return a new instance.
-     */
-    public static ArrayByteOutput newInstance(final RandomAccessFile file,
-                                              final int length) {
-
-        if (file == null) {
-            throw new NullPointerException("null file");
-        }
-
-        if (length <= 0) {
-            throw new IllegalArgumentException("length(" + length + ") <= 0");
-        }
-
-        return new ArrayByteOutput(null, -1, -1) {
-
-            @Override
-            public void write(final int value) throws IOException {
-
-                if (target == null) {
-                    target = new byte[length];
-                    index = 0;
-                    limit = target.length;
-                }
-
-                super.write(value);
-
-                if (index == getLimit()) {
-                    file.write(target);
-                    index = 0;
-                }
-            }
-
-
-        };
-    }
-
-
-    /**
      * Creates a new instance with given parameters.
      *
      * @param target a byte array
      * @param limit the array index that {@code index} can't exceed
      * @param index array index to write
      */
-    public ArrayByteOutput(final byte[] target, final int limit, final int index) {
+    public ArrayByteOutput(final byte[] target, final int limit,
+                           final int index) {
 
         super(target);
 
@@ -214,6 +169,7 @@ public class ArrayByteOutput extends AbstractByteOutput<byte[]> {
      * The index of the {@link #target} which {@link #index} can't exceed.
      */
     protected int limit;
+
 
     /**
      * The index in the {@link #target} to write.

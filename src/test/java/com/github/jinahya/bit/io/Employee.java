@@ -128,6 +128,7 @@ public class Employee implements BitReadable, BitWritable {
 
     private int age;
 
+
     private boolean married;
 
 }

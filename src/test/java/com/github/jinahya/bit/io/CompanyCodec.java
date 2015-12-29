@@ -56,6 +56,7 @@ public class CompanyCodec extends NullableCodec<Company> {
 
     private final BitDecoder<Company> decoder;
 
+
     private final BitEncoder<Company> encoder;
 
 }

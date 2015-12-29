@@ -65,7 +65,7 @@ person.read(input);
 person.write(output);
 ```
 #### Using `BitDecoder`/`BitEncoder`
-If modifying existing classes (e.g. implementing additional interfaces) is not applicable, you can make some sort of specialized classes for decoding/encoding.
+If modifying existing classes (e.g. implementing additional interfaces) is not applicable, you can make specialized classes for decoding/encoding those existing classes.
 ```java
 public class PersonDecoder extends NullableDecoder<Person> {
 

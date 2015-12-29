@@ -137,17 +137,16 @@ codec.encode(output, person);
 ### Preparing `ByteInput`
 Prepare an instance of `ByteInput` from various sources.
 ````java
-new ArrayInput(byte[], int, int);
-new BufferInput(java.nio.ByteBuffer);
-new DataInput(java.io.DataInput);
-new FileInput(java.io.RandomAccessFile);
-new StreamInput(java.io.InputStream);
+new ArrayByteInput(byte[], int, int);
+new BufferByteInput(java.nio.ByteBuffer);
+new DataByteInput(java.io.DataInput);
+new StreamByteInput(java.io.InputStream);
 ````
 Constructors of these classes don't check arguments which means you can lazily instantiate and set them.
 ```java
 final InputStream stream = openFile();
 
-final ByteInput input = new ArrayInput(null, -1, -1) {
+final ByteInput input = new ArrayByteInput(null, -1, -1) {
 
     @Override
     public int read() throws IOException {
@@ -179,17 +178,17 @@ Construct with an already existing `ByteInput`.
 ```java
 final ByteInput delegate = createByteInput();
 
-final BitInput input = new DefalutBitInput(delegate);
+final BitInput input = new DefalutBitInput<>(delegate);
 ```
 Or lazliy instantiate its `delegate` field.
 ```java
-new DefaultBitInput<InputStream>(null) {
+new DefaultBitInput<StreamByteInput>(null) {
 
     @Override
     public int read() throws IOException {
 
         if (delegate == null) {
-            delegate = new StreamInput(openFile());
+            delegate = new StreamByteInput(openFile());
         }
 
         return super.read();

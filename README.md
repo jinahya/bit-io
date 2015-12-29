@@ -60,9 +60,15 @@ public class Person implements BitReadable, BitWritable {
 ```
 It's, now, too obvious you can do this.
 ```java
-final Person person = new Person().age(31).married(true);
+final Person person = new Person().age(39).married(false);
 person.read(input);
 person.write(output);
+```
+Or use `<T extends BitReadable> T BitInput#readObject(boolean, Class<? extends T> type)` and `<T extends BitReadable> void BitOutput#writeObject(boolean, T)`.
+```java
+final boolean nullable = true;
+final Person person = input.read(nullable, Person.class);
+output.write(nullable, person);
 ```
 #### Using `BitDecoder`/`BitEncoder`
 If modifying existing classes (e.g. implementing additional interfaces) is not applicable, you can make specialized classes for decoding/encoding those existing classes.
@@ -75,7 +81,7 @@ public class PersonDecoder extends NullableDecoder<Person> {
 
     //@Override
     //public Person decode(final BitInput input) throws IOException {
-    //    return super.decode(); // `nullable` flag handled here and optionally invokes `decodeValue(input)`
+    //    return super.decode();
     //}
 
     @Override
@@ -92,7 +98,7 @@ public class PersonEncoder extends NullableEncoder<Person> {
 
     //@Override
     //public void encode(final BitOutput output) throws IOException {
-    //    super.encode(output); // `nullable` flag handled here and optionally invokes `encodeValue(output)`.
+    //    super.encode(output);
     //}
 
     @Override
@@ -128,26 +134,24 @@ public class PersonCodec extends NullableCodec<Person> {
 ```
 Again, you can use the codec like this.
 ```java
-final PersonCodec codec = new PersonCodec(true);
-
-final Person person = codec.decode(input));
-codec.encode(output, person);
+final boolean nullable = true;
+final BitCodec<Person> codec = new PersonCodec(nullable);
+codec.encode(output, codec.decode(input)));
 ```
 ## Reading
 ### Preparing `ByteInput`
 Prepare an instance of `ByteInput` from various sources.
 ````java
-new ArrayInput(byte[], int, int);
-new BufferInput(java.nio.ByteBuffer);
-new DataInput(java.io.DataInput);
-new FileInput(java.io.RandomAccessFile);
-new StreamInput(java.io.InputStream);
+new ArrayByteInput(byte[], int, int);
+new BufferByteInput(java.nio.ByteBuffer);
+new DataByteInput(java.io.DataInput);
+new StreamByteInput(java.io.InputStream);
 ````
 Constructors of these classes don't check arguments which means you can lazily instantiate and set them.
 ```java
 final InputStream stream = openFile();
 
-final ByteInput input = new ArrayInput(null, -1, -1) {
+final ByteInput input = new ArrayByteInput(null, -1, -1) {
 
     @Override
     public int read() throws IOException {
@@ -179,17 +183,17 @@ Construct with an already existing `ByteInput`.
 ```java
 final ByteInput delegate = createByteInput();
 
-final BitInput input = new DefalutBitInput(delegate);
+final BitInput input = new DefalutBitInput<>(delegate);
 ```
 Or lazliy instantiate its `delegate` field.
 ```java
-new DefaultBitInput<InputStream>(null) {
+new DefaultBitInput<StreamByteInput>(null) {
 
     @Override
     public int read() throws IOException {
 
         if (delegate == null) {
-            delegate = new StreamInput(openFile());
+            delegate = new StreamByteInput(openFile());
         }
 
         return super.read();

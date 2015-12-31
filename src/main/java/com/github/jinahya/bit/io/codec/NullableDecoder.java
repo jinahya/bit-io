@@ -49,7 +49,6 @@ public abstract class NullableDecoder<T> extends Nullable
                 return decoder.decode(input);
             }
 
-
         };
     }
 
@@ -70,7 +69,6 @@ public abstract class NullableDecoder<T> extends Nullable
 
                 return function.apply(input);
             }
-
 
         };
     }
@@ -124,7 +122,6 @@ public abstract class NullableDecoder<T> extends Nullable
      * @throws IOException if an I/O error occurs.
      */
     protected abstract T decodeValue(final BitInput input) throws IOException;
-
 
 }
 

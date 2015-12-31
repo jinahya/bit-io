@@ -97,7 +97,6 @@ public class BufferByteOutput extends AbstractByteOutput<ByteBuffer> {
                 ensureRemaining(target, channel);
             }
 
-
         };
     }
 
@@ -129,7 +128,6 @@ public class BufferByteOutput extends AbstractByteOutput<ByteBuffer> {
 
         getTarget().put((byte) value);
     }
-
 
 }
 

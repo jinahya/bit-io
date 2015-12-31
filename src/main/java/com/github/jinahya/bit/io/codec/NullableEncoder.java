@@ -50,7 +50,6 @@ public abstract class NullableEncoder<T> extends Nullable
                 encoder.encode(output, value);
             }
 
-
         };
     }
 
@@ -72,7 +71,6 @@ public abstract class NullableEncoder<T> extends Nullable
 
                 consumer.accept(output, value);
             }
-
 
         };
     }
@@ -133,7 +131,6 @@ public abstract class NullableEncoder<T> extends Nullable
      */
     protected abstract void encodeValue(BitOutput output, T value)
         throws IOException;
-
 
 }
 

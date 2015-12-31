@@ -103,7 +103,6 @@ public class BufferByteInput extends AbstractByteInput<ByteBuffer> {
                 return super.read();
             }
 
-
         };
     }
 
@@ -135,7 +134,6 @@ public class BufferByteInput extends AbstractByteInput<ByteBuffer> {
 
         return getSource().get() & 0xFF;
     }
-
 
 }
 

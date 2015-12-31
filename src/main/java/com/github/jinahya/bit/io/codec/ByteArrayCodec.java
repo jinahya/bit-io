@@ -60,6 +60,5 @@ public class ByteArrayCodec extends ScaleCodec<byte[], Byte> {
         }
     }
 
-
 }
 

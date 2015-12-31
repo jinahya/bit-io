@@ -61,7 +61,6 @@ public abstract class NullableCodec<T> extends Nullable implements BitCodec<T> {
                 encoder.encode(output, value);
             }
 
-
         };
     }
 
@@ -97,7 +96,6 @@ public abstract class NullableCodec<T> extends Nullable implements BitCodec<T> {
 
                 codec.encode(output, value);
             }
-
 
         };
     }
@@ -197,7 +195,6 @@ public abstract class NullableCodec<T> extends Nullable implements BitCodec<T> {
      */
     protected abstract void encodeValue(BitOutput output, T value)
         throws IOException;
-
 
 }
 

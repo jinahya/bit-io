@@ -54,7 +54,6 @@ public class BitOutputFactory {
                 output.write(value);
             }
 
-
         };
     }
 
@@ -177,7 +176,6 @@ public class BitOutputFactory {
 
         super();
     }
-
 
 }
 

@@ -93,6 +93,5 @@ public final class BitCodecTests {
 
     }
 
-
 }
 

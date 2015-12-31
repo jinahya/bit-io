@@ -207,6 +207,5 @@ public final class BitIoTests {
         super();
     }
 
-
 }
 

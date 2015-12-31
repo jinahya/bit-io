@@ -90,6 +90,5 @@ public class EmployeeTest extends BitIoTest {
         getOutput().writeObject(getInput().readObject(new Employee()));
     }
 
-
 }
 

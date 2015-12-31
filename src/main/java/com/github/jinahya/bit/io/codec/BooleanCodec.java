@@ -49,6 +49,5 @@ public class BooleanCodec extends NullableCodec<Boolean> {
         output.writeBoolean(value);
     }
 
-
 }
 

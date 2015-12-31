@@ -34,6 +34,5 @@ public class BlackBitOutput extends AbstractBitOutput {
         // empty
     }
 
-
 }
 

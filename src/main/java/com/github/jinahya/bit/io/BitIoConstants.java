@@ -31,6 +31,5 @@ final class BitIoConstants {
         super();
     }
 
-
 }
 

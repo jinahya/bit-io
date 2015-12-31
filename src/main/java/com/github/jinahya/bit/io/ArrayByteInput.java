@@ -78,7 +78,6 @@ public class ArrayByteInput extends AbstractByteInput<byte[]> {
                 return super.read();
             }
 
-
         };
     }
 

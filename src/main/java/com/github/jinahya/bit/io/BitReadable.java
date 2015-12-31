@@ -37,6 +37,5 @@ public interface BitReadable {
      */
     void read(BitInput input) throws IOException;
 
-
 }
 

@@ -60,6 +60,5 @@ public class IntArrayCodec extends ScaleCodec<int[], Integer> {
         }
     }
 
-
 }
 

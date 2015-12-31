@@ -49,6 +49,5 @@ public class ShortCodec extends BridgeCodec<Short, Integer> {
         return t.intValue();
     }
 
-
 }
 

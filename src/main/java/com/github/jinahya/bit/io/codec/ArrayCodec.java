@@ -62,6 +62,5 @@ public class ArrayCodec<T> extends ScaleCodec<T[], T> {
         }
     }
 
-
 }
 

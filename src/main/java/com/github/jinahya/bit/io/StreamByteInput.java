@@ -46,7 +46,8 @@ public class StreamByteInput extends AbstractByteInput<InputStream> {
     /**
      * {@inheritDoc} The {@code read()} method of {@code StreamByteInput} class
      * invokes {@link InputStream#read()} on {@link #source} and returns the
-     * result if it is not an {@code end of stream}.
+     * result. Override this method if {@link #source} is supposed to be lazily
+     * initialized and set.
      *
      * @return {@inheritDoc}
      *
@@ -66,7 +67,6 @@ public class StreamByteInput extends AbstractByteInput<InputStream> {
 
         return value;
     }
-
 
 }
 

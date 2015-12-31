@@ -41,6 +41,5 @@ public interface BitDecoder<T> {
      */
     T decode(BitInput input) throws IOException;
 
-
 }
 

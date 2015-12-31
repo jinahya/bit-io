@@ -35,6 +35,5 @@ public class WhiteBitInput extends AbstractBitInput {
         return current().nextInt(256);
     }
 
-
 }
 

@@ -70,7 +70,6 @@ public class ArrayByteOutput extends AbstractByteOutput<byte[]> {
                 }
             }
 
-
         };
     }
 

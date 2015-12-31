@@ -184,6 +184,5 @@ public interface BitOutput {
      */
     long align(int bytes) throws IOException;
 
-
 }
 

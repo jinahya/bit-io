@@ -40,6 +40,5 @@ public class DataByteInput extends AbstractByteInput<java.io.DataInput> {
         return source.readUnsignedByte();
     }
 
-
 }
 

@@ -51,6 +51,5 @@ public class UrlCodec extends BridgeCodec<URL, String> {
         return t.toString();
     }
 
-
 }
 

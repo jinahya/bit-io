@@ -20,10 +20,6 @@ package com.github.jinahya.bit.io.codec;
 import com.github.jinahya.bit.io.BitInput;
 import com.github.jinahya.bit.io.BitOutput;
 import java.io.IOException;
-import java.lang.reflect.GenericDeclaration;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.lang.reflect.TypeVariable;
 import java.util.Collection;
 
 
@@ -33,12 +29,12 @@ import java.util.Collection;
  * @param <T> collection type parameter
  * @param <E> element type parameter
  */
-public class CollectionCodec<T extends Collection<Object>, E>
+public class CollectionCodec<T extends Collection<E>, E>
     extends ScaleCodec<T, E> {
 
 
     public CollectionCodec(final boolean nullable, final int scale,
-                           final BitCodec<E> codec, final Class<?> type) {
+                           final BitCodec<E> codec, final Class<T> type) {
 
         super(nullable, scale, codec);
 
@@ -50,37 +46,21 @@ public class CollectionCodec<T extends Collection<Object>, E>
     @SuppressWarnings("unchecked")
     protected T decodeValue(final BitInput input) throws IOException {
 
-        final TypeVariable<?>[] typeParameters = getClass().getTypeParameters();
-        for (final TypeVariable<?> typeParameter : typeParameters) {
-            System.out.println("typeParamter: " + typeParameter);
-            final GenericDeclaration genericDeclaration = typeParameter.getGenericDeclaration();
-            System.out.println("\tgenericDeclaration: " + genericDeclaration);
-            final Type[] bounds = typeParameter.getBounds();
-            for (final Type bound : bounds) {
-                System.out.println("\tbound: " + bound);
-                if (bound instanceof ParameterizedType) {
-                    final Type[] actualTypeArguments = ((ParameterizedType) bound).getActualTypeArguments();
-                    for (final Type actualTypeArgument : actualTypeArguments) {
-                        System.out.println("\t\tactualTypeArgument: " + actualTypeArgument);
-                    }
-                }
-            }
+        final int size = readCount(input);
+
+        final Collection<E> value;
+        try {
+            value = type.newInstance();
+        } catch (final InstantiationException ie) {
+            throw new RuntimeException(ie);
+        } catch (final IllegalAccessException iae) {
+            throw new RuntimeException(iae);
         }
 
-//        final int length = readCount(input);
-//
-//        final Collection<E> value;
-//        try {
-//            value = (Collection<E>) type.newInstance();
-//        } catch (final InstantiationException ie) {
-//            throw new RuntimeException(ie);
-//        } catch (final IllegalAccessException iae) {
-//            throw new RuntimeException(iae);
-//        }
-//
-//        for (int i = 0; i < length; i++) {
-//            value.add(codec.decode(input));
-//        }
+        for (int i = 0; i < size; i++) {
+            value.add(codec.decode(input));
+        }
+
         return null;
     }
 
@@ -91,13 +71,13 @@ public class CollectionCodec<T extends Collection<Object>, E>
 
         writeCount(output, collection.size());
 
-        for (final Object element : collection) {
-            codec.encode(output, (E) element);
+        for (final E element : collection) {
+            codec.encode(output, element);
         }
     }
 
 
-    private final Class<?> type;
+    private final Class<T> type;
 
 }
 

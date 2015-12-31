@@ -61,6 +61,5 @@ public class StreamByteOutput extends AbstractByteOutput<OutputStream> {
         target.write(value);
     }
 
-
 }
 

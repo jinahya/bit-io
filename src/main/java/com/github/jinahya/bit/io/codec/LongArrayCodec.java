@@ -60,6 +60,5 @@ public class LongArrayCodec extends ScaleCodec<long[], Long> {
         }
     }
 
-
 }
 

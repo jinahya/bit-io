@@ -52,6 +52,5 @@ public class LongCodec extends IntegralCodec<Long> {
         output.writeLong(unsigned, size, value);
     }
 
-
 }
 

@@ -134,6 +134,23 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
     }
 
 
+    @Deprecated
+    @Override
+    public void writeUnsignedByte(final int size, final byte value)
+        throws IOException {
+
+        writeByte(true, size, value);
+    }
+
+
+    @Deprecated
+    @Override
+    public void writeByte(final int size, final byte value) throws IOException {
+
+        writeByte(false, size, value);
+    }
+
+
     @Override
     public void writeShort(final boolean unsigned, final int size,
                            final short value)
@@ -142,6 +159,24 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
         BitIoConstraints.requireValidSize(unsigned, 4, size);
 
         writeInt(unsigned, size, value);
+    }
+
+
+    @Deprecated
+    @Override
+    public void writeUnsignedShort(final int size, final short value)
+        throws IOException {
+
+        writeShort(true, size, value);
+    }
+
+
+    @Deprecated
+    @Override
+    public void writeShort(final int size, final short value)
+        throws IOException {
+
+        writeShort(false, size, value);
     }
 
 
@@ -279,14 +314,14 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
 
         if (!nullable || value != null) {
             //value.write(this);
-            writeObject(value);
+            AbstractBitOutput.this.writeObject(value);
         }
     }
 
 
     @Override
-    public <T> void encodeObject(final BitEncoder<? super T> encoder,
-                                 final T value)
+    public <T> void writeObject(final BitEncoder<? super T> encoder,
+                                final T value)
         throws IOException {
 
         if (encoder == null) {

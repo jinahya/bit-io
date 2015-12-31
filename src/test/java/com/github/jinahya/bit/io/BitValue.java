@@ -28,7 +28,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
-enum BitType {
+enum BitValue {
 
     BOOLEAN() {
 
@@ -251,7 +251,7 @@ enum BitType {
 
 
     private static final Logger logger
-        = LoggerFactory.getLogger(BitType.class);
+        = LoggerFactory.getLogger(BitValue.class);
 
 
     abstract Object read(List<Object> params, BitInput input)

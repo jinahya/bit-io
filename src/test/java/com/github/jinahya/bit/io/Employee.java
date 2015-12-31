@@ -17,6 +17,8 @@
 package com.github.jinahya.bit.io;
 
 
+import com.github.jinahya.bit.io.bind.annotation.BitProperty;
+import com.github.jinahya.bit.io.bind.annotation.BitType;
 import java.io.IOException;
 import static java.util.concurrent.ThreadLocalRandom.current;
 
@@ -25,6 +27,7 @@ import static java.util.concurrent.ThreadLocalRandom.current;
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
+@BitType(order = {"age", "married"})
 public class Employee implements BitReadable, BitWritable {
 
 
@@ -126,6 +129,7 @@ public class Employee implements BitReadable, BitWritable {
     }
 
 
+    @BitProperty(size = 7, unsigned = true)
     private int age;
 
 

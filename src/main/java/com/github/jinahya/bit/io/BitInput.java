@@ -44,7 +44,23 @@ public interface BitInput {
     byte readByte(boolean unsigned, int size) throws IOException;
 
 
+    @Deprecated
+    byte readUnsignedByte(int size) throws IOException;
+
+
+    @Deprecated
+    byte readByte(int size) throws IOException;
+
+
     short readShort(boolean unsigned, int size) throws IOException;
+
+
+    @Deprecated
+    short readUnsignedShort(int size) throws IOException;
+
+
+    @Deprecated
+    short readShort(int size) throws IOException;
 
 
     int readInt(boolean unsigned, int size) throws IOException;
@@ -97,14 +113,15 @@ public interface BitInput {
      * @return given value
      *
      * @throws IOException if an I/O error occurs.
+     * @throws NullPointerException if {@code value} is {@code null}
      */
     <T extends BitReadable> T readObject(T value) throws IOException;
 
 
     /**
-     * Reads reference value which is possibly {@code null}. This method reads
-     * preceding 1-bit boolean flag and, if it is {@code true}, reads an
-     * instance of specified type.
+     * Reads reference value which is possibly {@code null}. This method, if
+     * {@code nullable} is {@code true}, reads preceding 1-bit boolean flag and
+     * reads a value if it is required to be read.
      *
      * @param <T> value type parameter
      * @param nullable a flag of nullability
@@ -122,7 +139,7 @@ public interface BitInput {
 
 
     /**
-     * Decodes a reference value using specified decoder.
+     * Reads a reference value using specified decoder.
      *
      * @param <T> value type parameter
      * @param decoder the decoder
@@ -131,7 +148,7 @@ public interface BitInput {
      *
      * @throws IOException if an I/O error occurs.
      */
-    <T> T decodeObject(BitDecoder<? extends T> decoder) throws IOException;
+    <T> T readObject(BitDecoder<? extends T> decoder) throws IOException;
 
 
     /**

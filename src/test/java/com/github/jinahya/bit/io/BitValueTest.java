@@ -31,10 +31,10 @@ import org.testng.annotations.Test;
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
-public class BitTypeTest {
+public class BitValueTest {
 
 
-    private static void test(final BitType type) throws IOException {
+    private static void test(final BitValue type) throws IOException {
 
         final List<Object> params = new LinkedList<>();
         final Object[] w = new Object[1];
@@ -68,56 +68,56 @@ public class BitTypeTest {
     @Test(enabled = true, invocationCount = 1024)
     public void _boolean() throws IOException {
 
-        test(BitType.BOOLEAN);
+        test(BitValue.BOOLEAN);
     }
 
 
     @Test(enabled = true, invocationCount = 1024)
     public void _byte() throws IOException {
 
-        test(BitType.BYTE);
+        test(BitValue.BYTE);
     }
 
 
     @Test(enabled = true, invocationCount = 1024)
     public void _short() throws IOException {
 
-        test(BitType.SHORT);
+        test(BitValue.SHORT);
     }
 
 
     @Test(enabled = true, invocationCount = 1024)
     public void _int() throws IOException {
 
-        test(BitType.INT);
+        test(BitValue.INT);
     }
 
 
     @Test(enabled = true, invocationCount = 1024)
     public void _long() throws IOException {
 
-        test(BitType.LONG);
+        test(BitValue.LONG);
     }
 
 
     @Test(enabled = true, invocationCount = 1024)
     public void _char() throws IOException {
 
-        test(BitType.CHAR);
+        test(BitValue.CHAR);
     }
 
 
     @Test(enabled = true, invocationCount = 1024)
     public void _float() throws IOException {
 
-        test(BitType.FLOAT);
+        test(BitValue.FLOAT);
     }
 
 
     @Test(enabled = true, invocationCount = 1024)
     public void _double() throws IOException {
 
-        test(BitType.DOUBLE);
+        test(BitValue.DOUBLE);
     }
 
 

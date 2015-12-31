@@ -141,6 +141,22 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
     }
 
 
+    @Deprecated
+    @Override
+    public byte readUnsignedByte(final int size) throws IOException {
+
+        return readByte(true, size);
+    }
+
+
+    @Deprecated
+    @Override
+    public byte readByte(final int size) throws IOException {
+
+        return readByte(false, size);
+    }
+
+
     @Override
     public short readShort(final boolean unsigned, final int size)
         throws IOException {
@@ -148,6 +164,22 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
         BitIoConstraints.requireValidSize(unsigned, 4, size);
 
         return (short) readInt(unsigned, size);
+    }
+
+
+    @Deprecated
+    @Override
+    public short readUnsignedShort(final int size) throws IOException {
+
+        return readShort(true, size);
+    }
+
+
+    @Deprecated
+    @Override
+    public short readShort(final int size) throws IOException {
+
+        return readShort(false, size);
     }
 
 
@@ -303,7 +335,7 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
 
 
     @Override
-    public <T> T decodeObject(final BitDecoder<? extends T> decoder)
+    public <T> T readObject(final BitDecoder<? extends T> decoder)
         throws IOException {
 
         if (decoder == null) {

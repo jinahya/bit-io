@@ -45,7 +45,8 @@ public interface BitOutput {
      * Writes a {@code byte} value.
      *
      * @param unsigned a flag indicating unsigned value.
-     * @param size the number of bits for value.
+     * @param size the number of bits for value; {@code [1..7]} for unsigned,
+     * {@code [2..8]} for signed.
      * @param value the value to write
      *
      * @throws IOException if an I/O error occurs.
@@ -53,7 +54,23 @@ public interface BitOutput {
     void writeByte(boolean unsigned, int size, byte value) throws IOException;
 
 
+    @Deprecated
+    void writeUnsignedByte(int size, byte value) throws IOException;
+
+
+    @Deprecated
+    void writeByte(int size, byte value) throws IOException;
+
+
     void writeShort(boolean unsigned, int size, short value) throws IOException;
+
+
+    @Deprecated
+    void writeUnsignedShort(int size, short value) throws IOException;
+
+
+    @Deprecated
+    void writeShort(int size, short value) throws IOException;
 
 
     /**
@@ -123,6 +140,7 @@ public interface BitOutput {
      * @param value the value to write
      *
      * @throws IOException if an I/O error occurs.
+     * @throws NullPointerException if {@code value} is {@code null}
      */
     <T extends BitWritable> void writeObject(T value) throws IOException;
 
@@ -130,7 +148,7 @@ public interface BitOutput {
     /**
      * Writes a reference value. This method, if {@code nullable} is
      * {@code true}, writes a preceding 1-bit boolean value for nullability and
-     * writes specified value if it is not {@code null}.
+     * writes specified value if it is required to be written.
      *
      * @param <T> value type parameter
      * @param nullable a flag for nullability
@@ -145,7 +163,7 @@ public interface BitOutput {
 
 
     /**
-     * Encodes a reference value using specified encoder.
+     * Writes a reference value using specified encoder.
      *
      * @param <T> value type parameter
      * @param encoder the encoder
@@ -153,7 +171,7 @@ public interface BitOutput {
      *
      * @throws IOException if an I/O error occurs.
      */
-    <T> void encodeObject(BitEncoder<? super T> encoder, T value)
+    <T> void writeObject(BitEncoder<? super T> encoder, T value)
         throws IOException;
 
 

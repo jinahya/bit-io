@@ -17,6 +17,7 @@
 package com.github.jinahya.bit.io;
 
 
+import com.github.jinahya.bit.io.bind.annotation.BitProperty;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -33,7 +34,7 @@ public class Company {
     public static final int EMPLOYEES_SIZE = 10;
 
 
-    public static final boolean EMPLOYEE_NULLABLE = true;
+    public static final boolean EMPLOYEE_NULLABLE = false;
 
 
     public static Company newRandomInstance() {
@@ -77,13 +78,18 @@ public class Company {
     }
 
 
+    @BitProperty(nullable = EMPLOYEE_NULLABLE, scale = EMPLOYEES_SIZE)
     public List<Employee> getEmployees() {
+
+        if (employees == null) {
+            employees = new ArrayList<>();
+        }
 
         return employees;
     }
 
 
-    private final List<Employee> employees = new ArrayList<>();
+    private List<Employee> employees;
 
 }
 

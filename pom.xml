@@ -58,6 +58,12 @@
       <scope>test</scope>
     </dependency>
     <dependency>
+      <groupId>javax.validation</groupId>
+      <artifactId>validation-api</artifactId>
+      <version>1.1.0.Final</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
       <version>3.4</version>
@@ -88,11 +94,6 @@
       <plugins>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-compiler-plugin</artifactId>
-          <version>3.3</version>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-site-plugin</artifactId>
           <version>3.4</version>
         </plugin>
@@ -119,7 +120,7 @@
               <target>
                 <taskdef name="retrotranslator" classname="net.sf.retrotranslator.transformer.RetrotranslatorTask" classpathref="maven.plugin.classpath" />
                 <mkdir dir="${project.build.outputDirectory.retrotranslated13}" />
-                <retrotranslator srcdir="${project.build.outputDirectory}" destdir="${project.build.outputDirectory.retrotranslated13}" embed="com.github.jinahya.bio.retrotranslated13" failonwarning="false" smart="true" stripannot="true" stripsign="true" syncvolatile="true" target="1.3" verbose="true" verify="false">
+                <retrotranslator srcdir="${project.build.outputDirectory}" destdir="${project.build.outputDirectory.retrotranslated13}" embed="com.github.jinahya.bio.retrotranslated13" failonwarning="false" smart="true" stripannot="true" stripsign="true" syncvolatile="true" target="1.3" verbose="false" verify="false">
                   <classpath>
                     <fileset dir="${basedir}/ext/retrotranslated13" includes="**/*.jar" />
                   </classpath>
@@ -137,7 +138,7 @@
               <target>
                 <taskdef name="retrotranslator" classname="net.sf.retrotranslator.transformer.RetrotranslatorTask" classpathref="maven.plugin.classpath" />
                 <mkdir dir="${project.build.outputDirectory.retrotranslated14}" />
-                <retrotranslator srcdir="${project.build.outputDirectory}" destdir="${project.build.outputDirectory.retrotranslated14}" embed="com.github.jinahya.bio.retrotranslated14" failonwarning="false" smart="true" stripannot="true" stripsign="true" syncvolatile="true" target="1.4" verbose="true" verify="false">
+                <retrotranslator srcdir="${project.build.outputDirectory}" destdir="${project.build.outputDirectory.retrotranslated14}" embed="com.github.jinahya.bio.retrotranslated14" failonwarning="false" smart="true" stripannot="true" stripsign="true" syncvolatile="true" target="1.4" verbose="false" verify="false">
                   <classpath>
                     <fileset dir="${basedir}/ext/retrotranslated14" includes="**/*.jar" />
                   </classpath>
@@ -153,6 +154,39 @@
             <version>1.2.9</version>
           </dependency>
         </dependencies>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.3</version>
+        <executions>
+          <execution>
+            <id>default-compile</id>
+            <configuration>
+              <proc>none</proc>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.bsc.maven</groupId>
+        <artifactId>maven-processor-plugin</artifactId>
+        <version>3.1.0-beta1</version>
+        <executions>
+          <execution>
+            <id>process</id>
+            <goals>
+              <goal>process</goal>
+            </goals>
+            <phase>process-classes</phase>
+          </execution>
+          <execution>
+            <id>process-test</id>
+            <goals>
+              <goal>process-test</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -203,7 +237,7 @@
         <executions>
           <execution>
             <id>check-signature-java16</id>
-            <phase>process-classes</phase> <!-- default -->
+            <phase>process-classes</phase>
             <goals>
               <goal>check</goal>
             </goals>
@@ -226,6 +260,20 @@
                 <groupId>net.sf.androidscents.signature</groupId>
                 <artifactId>android-api-level-9</artifactId>
                 <version>2.3.1_r2</version>
+              </signature>
+            </configuration>
+          </execution>
+          <execution>
+            <id>check-signature-android-api-level-16</id>
+            <phase>process-classes</phase>
+            <goals>
+              <!--<goal>check</goal>-->
+            </goals>
+            <configuration>
+              <signature>
+                <groupId>net.sf.androidscents.signature</groupId>
+                <artifactId>android-api-level-16</artifactId>
+                <version>4.1.2_r5</version>
               </signature>
             </configuration>
           </execution>

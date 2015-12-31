@@ -41,6 +41,17 @@ public interface BitInput {
     boolean readBoolean() throws IOException;
 
 
+    /**
+     * Reads a byte value.
+     *
+     * @param unsigned a flag for unsigned
+     * @param size number of bits for value; {@code [1..7]} for unsigned,
+     * {@code [2..8]} for signed.
+     *
+     * @return a byte value
+     *
+     * @throws IOException if an I/O error occurs.
+     */
     byte readByte(boolean unsigned, int size) throws IOException;
 
 
@@ -52,6 +63,17 @@ public interface BitInput {
     byte readByte(int size) throws IOException;
 
 
+    /**
+     * Reads a short value.
+     *
+     * @param unsigned a flag for unsigned
+     * @param size number of bits for value; {@code [1..15]} for unsigned,
+     * {@code [2..16]} for signed.
+     *
+     * @return a short value
+     *
+     * @throws IOException if an I/O error occurs.
+     */
     short readShort(boolean unsigned, int size) throws IOException;
 
 
@@ -63,6 +85,17 @@ public interface BitInput {
     short readShort(int size) throws IOException;
 
 
+    /**
+     * Reads an int value.
+     *
+     * @param unsigned a flag for unsigned
+     * @param size number of bits for value; {@code [1..31]} for unsigned,
+     * {@code [2..64]} for signed.
+     *
+     * @return an int value
+     *
+     * @throws IOException if an I/O error occurs.
+     */
     int readInt(boolean unsigned, int size) throws IOException;
 
 
@@ -74,6 +107,17 @@ public interface BitInput {
     int readInt(int size) throws IOException;
 
 
+    /**
+     * Reads a long value.
+     *
+     * @param unsigned a flag for unsigned
+     * @param size number of valid bits for value; {@code [1..63]} for unsigned,
+     * {@code [2..64]} for signed.
+     *
+     * @return a long value
+     *
+     * @throws IOException if an I/O error occurs.
+     */
     long readLong(boolean unsigned, int size) throws IOException;
 
 
@@ -98,9 +142,33 @@ public interface BitInput {
     char readChar(int size) throws IOException;
 
 
+    /**
+     * Reads a float value. This method reads a signed 32-bit int value using
+     * {@link #readInt(boolean, int)} and returns the value after converted with
+     * {@link Float#intBitsToFloat(int)}.
+     *
+     * @return a float value
+     *
+     * @throws IOException if an I/O error occurs.
+     *
+     * @see #readInt(boolean, int)
+     * @see Float#intBitsToFloat(int)
+     */
     float readFloat() throws IOException;
 
 
+    /**
+     * Reads a double value. The method reads a signed 64-bit long value using
+     * {@link #readLong(boolean, int)} and returns the value after converted
+     * with {@link Double#longBitsToDouble(long)}.
+     *
+     * @return a double value
+     *
+     * @throws IOException if an I/O error occurs.
+     *
+     * @see #readLong(boolean, int)
+     * @see Double#longBitsToDouble(long)
+     */
     double readDouble() throws IOException;
 
 

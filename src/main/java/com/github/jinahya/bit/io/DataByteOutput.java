@@ -22,6 +22,7 @@ import java.io.IOException;
 
 
 /**
+ * An implementation uses an {@link DataOutput} as its {@link #target}.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  * @see DataByteInput
@@ -29,6 +30,12 @@ import java.io.IOException;
 public class DataByteOutput extends AbstractByteOutput<DataOutput> {
 
 
+    /**
+     * Creates a new instance with given {@code target}
+     *
+     * @param target the byte target or {@code null} if it is supposed to be
+     * lazily initialized and set.
+     */
     public DataByteOutput(final DataOutput target) {
 
         super(target);
@@ -38,7 +45,7 @@ public class DataByteOutput extends AbstractByteOutput<DataOutput> {
     /**
      * {@inheritDoc } The {@code write(int)} method of {@code DataByteOutput}
      * class invokes {@link DataOutput#writeByte(int)} on {@link #target} with
-     * specified {@code value}. Override this method if {@link #target} is
+     * specified {@code value}. Override this method if the {@link #target} is
      * supposed to be lazily initialized and set.
      *
      * @param value {@inheritDoc }

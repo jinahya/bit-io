@@ -33,6 +33,7 @@ import org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement;
 
 
 /**
+ * An annotation processor for {@link BitProperty}.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */

@@ -17,23 +17,41 @@
 package com.github.jinahya.bit.io;
 
 
+import java.io.DataInput;
 import java.io.IOException;
 
 
 /**
+ * An implementation uses an {@link DataInput} as its {@link #source}.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  * @see DataByteOutput
  */
-public class DataByteInput extends AbstractByteInput<java.io.DataInput> {
+public class DataByteInput extends AbstractByteInput<DataInput> {
 
 
-    public DataByteInput(final java.io.DataInput source) {
+    /**
+     * Creates a new instance with given {@code source}.
+     *
+     * @param source the byte source or {@code null} if it is supposed to lazily
+     * initialized and set
+     */
+    public DataByteInput(final DataInput source) {
 
         super(source);
     }
 
 
+    /**
+     * {@inheritDoc } The {@code read()} method of {@code DataByteInput} class
+     * invokes {@link DataInput#readUnsignedByte()} on {@link #source} and
+     * returns the result. Override this method if the {@link #source} is
+     * supposed to lazily initialized and set.
+     *
+     * @return {@inheritDoc }
+     *
+     * @throws IOException {@inheritDoc }
+     */
     @Override
     public int read() throws IOException {
 

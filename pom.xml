@@ -37,6 +37,7 @@
     <project.build.outputDirectory.retrotranslated14>${project.build.directory}/classes-retrotranslated14</project.build.outputDirectory.retrotranslated14>
     <animal-sniffer.version>1.14</animal-sniffer.version>
     <excludePackageNames>com.github.jinahya.bit.io.bind.annotation.processing</excludePackageNames>
+    <github.site.noJekyll>true</github.site.noJekyll>
   </properties>
 
   <dependencies>

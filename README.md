@@ -27,14 +27,14 @@ A library for reading/writing non octet aligned values such as `1-bit boolean` o
 |`boolean`|1        |1        |`readBoolean()`, `writeBoolean(boolean)`|
 ### numeric
 #### integral
-The size(min) is `1 + (unsigned ? 0 : 1)` and the size(max) is `(int) Math.pow(2, e) - (unsigned ? 1 : 0)`.
+The size(min) is `1` and the size(max) is `(int) Math.pow(2, e) - (unsigned ? 1 : 0)`.
 
 |type   |e  |size(min)|size(max)|notes
 |-------|---|---------|---------|-----
-|`byte` |3  |1/2      |7/8      |`readByte(unsigned, size)`, `readByte(unsigned, size, byte)`|
-|`short`|4  |1/2      |15/16    |`readShort(unsigned, size)`, `writeShort(unsigned, size, short)`|
-|`int`  |5  |1/2      |31/32    |`readInt(unsigned, size)`, `writeInt(unsigned, size, int)`|
-|`long` |6  |1/2      |63/64    |`readLong(unsigned, size)`, `writeLong(unsigned, size, long)`|
+|`byte` |3  |1        |7/8      |`readByte(unsigned, size)`, `readByte(unsigned, size, byte)`|
+|`short`|4  |1        |15/16    |`readShort(unsigned, size)`, `writeShort(unsigned, size, short)`|
+|`int`  |5  |1        |31/32    |`readInt(unsigned, size)`, `writeInt(unsigned, size, int)`|
+|`long` |6  |1        |63/64    |`readLong(unsigned, size)`, `writeLong(unsigned, size, long)`|
 |`char` |   |1        |16       |`readChar(size)`, `writeChar(size, char)`|
 #### floating-point
 `float`s and `double`s are handled as `int`s and `long`s, respectively, using `xxxToRawYYYBits` and `yyyBitsToXXX`.

@@ -73,6 +73,16 @@ public class BufferByteInput extends AbstractByteInput<ByteBuffer> {
     }
 
 
+    /**
+     * Creates a new instance of {@code BufferByteInput} whose {@link #source}
+     * is filled from the specified {@code channel}.
+     *
+     * @param channel the input channel
+     * @param capacity the capacity of the {@code ByteBuffer}
+     * @param direct a flag for direct allocation
+     *
+     * @return a new instance of {@code BufferByteInput}
+     */
     public static BufferByteInput newInstance(final ReadableByteChannel channel,
                                               final int capacity,
                                               final boolean direct) {

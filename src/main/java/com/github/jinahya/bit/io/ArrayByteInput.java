@@ -89,7 +89,8 @@ public class ArrayByteInput extends AbstractByteInput<byte[]> {
      * @param limit the array index that {@code index} can't exceed
      * @param index array index to read
      */
-    public ArrayByteInput(final byte[] source, final int limit, final int index) {
+    public ArrayByteInput(final byte[] source, final int limit,
+                          final int index) {
 
         super(source);
 

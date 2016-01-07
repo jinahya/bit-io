@@ -47,7 +47,7 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
 
 
     /**
-     * Writes an unsigned byte value.
+     * Writes an unsigned value whose size is max {@code 8}.
      *
      * @param size the number of lower bits to write; between {@code 1}
      * (inclusive) and {@code 8} (inclusive).
@@ -57,7 +57,7 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
      */
     protected void unsigned8(final int size, int value) throws IOException {
 
-        BitIoConstraints.requireValidUnsigned8Size(size);
+        BitIoConstraints.requireValidSize(false, 3, size);
 
         if (size == 8 && index == 0) {
             octet(value);
@@ -90,7 +90,7 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
 
 
     /**
-     * Writes an unsigned short value.
+     * Writes an unsigned value whose size is max {@code 16}.
      *
      * @param size the number of lower bits to write; between {@code 1}
      * (inclusive) and {@code 16} (inclusive).
@@ -101,7 +101,7 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
     protected void unsigned16(final int size, final int value)
         throws IOException {
 
-        BitIoConstraints.requireValidUnsigned16Size(size);
+        BitIoConstraints.requireValidSize(false, 4, size);
 
         final int quotient = size / 8;
         final int remainder = size % 8;
@@ -190,7 +190,9 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
         if (!unsigned) {
             final int usize = size - 1;
             writeInt(true, 1, value >> usize);
-            writeInt(true, usize, value);
+            if (usize > 0) {
+                writeInt(true, usize, value);
+            }
             return;
         }
 
@@ -232,7 +234,9 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
         if (!unsigned) {
             final int usize = size - 1;
             writeLong(true, 1, value >> usize);
-            writeLong(true, usize, value);
+            if (usize > 0) {
+                writeLong(true, usize, value);
+            }
             return;
         }
 

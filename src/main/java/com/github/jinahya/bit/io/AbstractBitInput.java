@@ -48,7 +48,7 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
 
 
     /**
-     * Reads an unsigned byte value.
+     * Reads an unsigned value whose maximum size is {@code 8}.
      *
      * @param size the number of bits for the value; between {@code 1}
      * (inclusive) and {@code 8} (inclusive).
@@ -59,7 +59,7 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
      */
     protected int unsigned8(final int size) throws IOException {
 
-        BitIoConstraints.requireValidUnsigned8Size(size);
+        BitIoConstraints.requireValidSize(false, 3, size);
 
         if (index == 8) {
             int octet = octet();
@@ -92,7 +92,7 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
 
 
     /**
-     * Reads an unsigned short value.
+     * Reads an unsigned value whose maximum size is {@code 16}.
      *
      * @param size the number of bits for the value; between {@code 1}
      * (inclusive) and {@code 16} (inclusive).
@@ -103,7 +103,7 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
      */
     protected int unsigned16(final int size) throws IOException {
 
-        BitIoConstraints.requireValidUnsigned16Size(size);
+        BitIoConstraints.requireValidSize(false, 4, size);
 
         int value = 0x00;
 
@@ -191,7 +191,12 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
 
         if (!unsigned) {
             final int usize = size - 1;
-            return ((0 - readInt(true, 1)) << usize) | readInt(true, usize);
+            int value = 0 - readInt(true, 1);
+            if (usize > 0) {
+                value <<= usize;
+                value |= readInt(true, usize);
+            }
+            return value;
         }
 
         int value = 0x00;
@@ -235,7 +240,12 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
 
         if (!unsigned) {
             final int usize = size - 1;
-            return ((0L - readLong(true, 1)) << usize) | readLong(true, usize);
+            long value = 0L - readLong(true, 1);
+            if (usize > 0) {
+                value <<= usize;
+                value |= readLong(true, usize);
+            }
+            return value;
         }
 
         long value = 0x00L;

@@ -44,9 +44,10 @@ public interface BitInput {
     /**
      * Reads a byte value.
      *
-     * @param unsigned a flag for unsigned
-     * @param size number of bits for value; {@code [1..7]} for unsigned,
-     * {@code [2..8]} for signed.
+     * @param unsigned a flag for unsigned value.
+     * @param size number of bits for value; between {@code 1} and
+     * {@code 7 + delta} where the {@code delta} is {@code 0} for unsigned and
+     * {@code 1} for signed.
      *
      * @return a byte value
      *
@@ -66,9 +67,10 @@ public interface BitInput {
     /**
      * Reads a short value.
      *
-     * @param unsigned a flag for unsigned
-     * @param size number of bits for value; {@code [1..15]} for unsigned,
-     * {@code [2..16]} for signed.
+     * @param unsigned a flag for unsigned value
+     * @param size number of bits for value; between {@code 1} and
+     * {@code 15 + delta} where the {@code delta} is {@code 0} for unsigned and
+     * {@code 1} for signed
      *
      * @return a short value
      *
@@ -88,9 +90,9 @@ public interface BitInput {
     /**
      * Reads an int value.
      *
-     * @param unsigned a flag for unsigned
-     * @param size number of bits for value; {@code [1..31]} for unsigned,
-     * {@code [2..64]} for signed.
+     * @param unsigned a flag for unsigned value
+     * @param size number of bits for value ranged
+     * {@code [1..(7 + unsigned ? 0 : 1)]}
      *
      * @return an int value
      *
@@ -110,9 +112,9 @@ public interface BitInput {
     /**
      * Reads a long value.
      *
-     * @param unsigned a flag for unsigned
-     * @param size number of valid bits for value; {@code [1..63]} for unsigned,
-     * {@code [2..64]} for signed.
+     * @param unsigned a flag for unsigned value
+     * @param size number of valid bits for value ranged
+     * {@code [1..(15 + unsigned ? 0 : 1)]}
      *
      * @return a long value
      *

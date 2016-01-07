@@ -30,9 +30,10 @@ public final class BitIoRandoms {
 
     public static int size(final boolean unsigned, final int exponent) {
 
-        final int delta = unsigned ? 0 : 1;
-        final int size = current().nextInt(
-            1 + delta, (int) Math.pow(2, exponent) + delta);
+        final int origin = 1;
+        final int bound = (int) Math.pow(2, exponent) + (unsigned ? 0 : 1);
+
+        final int size = current().nextInt(origin, bound);
 
         return BitIoConstraints.requireValidSize(unsigned, exponent, size);
     }
@@ -51,6 +52,7 @@ public final class BitIoRandoms {
 
 
     private BitIoRandoms() {
+
         super();
     }
 

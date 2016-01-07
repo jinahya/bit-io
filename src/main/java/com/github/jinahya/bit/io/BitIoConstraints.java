@@ -31,49 +31,21 @@ import java.util.List;
 public final class BitIoConstraints {
 
 
-    static int requireValidUnsigned8Size(final int size) {
-
-        if (size < 1) {
-            throw new IllegalArgumentException("size(" + size + ") < 1");
-        }
-
-        if (size > 8) {
-            throw new IllegalArgumentException("size(" + size + ") > 8");
-        }
-
-        return size;
-    }
-
-
-    static int requireValidUnsigned16Size(final int size) {
-
-        if (size < 1) {
-            throw new IllegalArgumentException("size(" + size + ") < 1");
-        }
-
-        if (size > 16) {
-            throw new IllegalArgumentException("size(" + size + ") > 16");
-        }
-
-        return size;
-    }
-
-
     private static final int MIN_EXPONENT = 3;
 
 
     private static final int MAX_EXPONENT = 6;
 
 
-    private static final List<Integer> MAXES;
+    private static final List<Integer> MAX_SIGNED_SIZES;
 
 
     static {
-        final List<Integer> maxes = new ArrayList<Integer>(4);
+        final List<Integer> maxSignedSizes = new ArrayList<Integer>(4);
         for (int i = MIN_EXPONENT; i <= MAX_EXPONENT; i++) {
-            maxes.add((int) Math.pow(2, i));
+            maxSignedSizes.add((int) Math.pow(2, i));
         }
-        MAXES = Collections.unmodifiableList(maxes);
+        MAX_SIGNED_SIZES = Collections.unmodifiableList(maxSignedSizes);
     }
 
 
@@ -90,17 +62,15 @@ public final class BitIoConstraints {
                 "exponent(" + exponent + ") > " + MAX_EXPONENT);
         }
 
-        final int min = unsigned ? 1 : 2;
-        final int max = MAXES.get(exponent - MIN_EXPONENT) - (unsigned ? 1 : 0);
-
-        if (size < min) {
-            throw new IllegalArgumentException(
-                "size(" + size + ") < min(" + min + ")");
+        if (size < 1) {
+            throw new IllegalArgumentException("size(" + size + ") < 1");
         }
 
-        if (size > max) {
+        final int maxSize = MAX_SIGNED_SIZES.get(exponent - MIN_EXPONENT)
+                            - (unsigned ? 1 : 0);
+        if (size > maxSize) {
             throw new IllegalArgumentException(
-                "size(" + size + ") > max(" + max + ")");
+                "size(" + size + ") > max(" + maxSize + ")");
         }
 
         return size;
@@ -137,7 +107,7 @@ public final class BitIoConstraints {
 
     public static int requireValidCharSize(final int size) {
 
-        return requireValidUnsigned16Size(size);
+        return requireValidSize(true, 4, size);
     }
 
 

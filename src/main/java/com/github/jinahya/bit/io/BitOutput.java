@@ -31,8 +31,8 @@ public interface BitOutput {
 
 
     /**
-     * Writes a 1-bit boolean value. This method writes {@code 1} for
-     * {@code true} and {@code 0} for {@code false}.
+     * Writes a 1-bit boolean value. This method writes {@code 0b1} for
+     * {@code true} and {@code 0b0} for {@code false}.
      *
      * @param value the value to write.
      *
@@ -45,8 +45,8 @@ public interface BitOutput {
      * Writes a {@code byte} value.
      *
      * @param unsigned a flag indicating unsigned value.
-     * @param size the number of bits for value; {@code [1..7]} for unsigned,
-     * {@code [2..8]} for signed.
+     * @param size the number of bits for value ranged
+     * {@code [1..(7 + (unsigned ? 0 : 1))]}
      * @param value the value to write
      *
      * @throws IOException if an I/O error occurs.
@@ -62,6 +62,16 @@ public interface BitOutput {
     void writeByte(int size, byte value) throws IOException;
 
 
+    /**
+     * Writes a {@code short} value.
+     *
+     * @param unsigned a flag for unsigned value
+     * @param size the number of bits for value ranged
+     * {@code [1..(15 + (unsigned ? 0 : 1))]}
+     * @param value the value to write
+     *
+     * @throws IOException if an I/O error occurs.
+     */
     void writeShort(boolean unsigned, int size, short value) throws IOException;
 
 
@@ -74,11 +84,12 @@ public interface BitOutput {
 
 
     /**
-     * Writes an int value. Only the lower specified number of bits are written.
+     * Writes an {@code int} value. Only the lower specified number of bits are
+     * written.
      *
-     * @param unsigned an unsigned flag
-     * @param size the number of lower valid bits; {@code [1..31]} for unsigned,
-     * {@code [2..32]} for signed.
+     * @param unsigned a flag for unsigned value.
+     * @param size the number of bits for value range
+     * {@code [1..(31 + (unsigned ? 0 : 1))]}
      * @param value the value to write
      *
      * @throws IOException if an I/O error occurs.
@@ -95,11 +106,12 @@ public interface BitOutput {
 
 
     /**
-     * Writes a long value. Only the lower specified number of bits are written.
+     * Writes a {@code long} value. Only the lower specified number of bits are
+     * written.
      *
-     * @param unsigned an unsigned flag
-     * @param size the number of lower valid bits; {@code [1..63]} for unsigned,
-     * {@code [2..64]} for signed.
+     * @param unsigned a flag for unsigned value
+     * @param size the number of valid bits for value ranged
+     * {@code [1..(63 + unsigned ? 0 : 1))]}
      * @param value the value to write
      *
      * @throws IOException if an I/O error occurs.
@@ -116,7 +128,7 @@ public interface BitOutput {
 
 
     /**
-     * Writes a char value.
+     * Writes a {@code char} value.
      *
      * @param size the number of bits for value; between {@code 1} (inclusive)
      * and {@code 16} (inclusive)
@@ -127,9 +139,34 @@ public interface BitOutput {
     void writeChar(int size, char value) throws IOException;
 
 
+    /**
+     * Writes a {@code float} value. This method converts given {@code value} to
+     * a 32-bit signed int value using {@link Float#floatToRawIntBits(float)}
+     * and writes the result using {@link #writeInt(boolean, int, int)} with
+     * {@code false}, {@code 32}, and the {@code result}.
+     *
+     * @param value the value to write
+     *
+     * @throws IOException if an I/O error occurs.
+     * @see Float#floatToRawIntBits(float)
+     * @see #writeInt(boolean, int, int)
+     */
     void writeFloat(float value) throws IOException;
 
 
+    /**
+     * Writes a {@code double} value. This method converts given {@code value}
+     * to a 64-bit signed long value using
+     * {@link Double#doubleToRawLongBits(double)} and writes the result using
+     * {@link #writeLong(boolean, int, long)} with {@code false}, {@code 64},
+     * and the {@code result}.
+     *
+     * @param value the value to write
+     *
+     * @throws IOException if an I/O error occurs.
+     * @see Double#doubleToRawLongBits(double)
+     * @see #writeLong(boolean, int, long)
+     */
     void writeDouble(double value) throws IOException;
 
 

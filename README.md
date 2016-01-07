@@ -1,7 +1,5 @@
 bit-io
 ======
-> Bit by bit, I've realized that he was here with me. And I looked into my father's eyes. - My Father's Eyes, Eric Clapton -
-
 [![GitHub license](https://img.shields.io/github/license/jinahya/bit-io.svg)](http://www.apache.org/licenses/LICENSE-2.0)
 [![Dependency Status](https://www.versioneye.com/user/projects/563ccc514d415e001e00009b/badge.svg)](https://www.versioneye.com/user/projects/563ccc514d415e001e00009b)
 [![Build Status](https://travis-ci.org/jinahya/bit-io.svg?branch=develop)](https://travis-ci.org/jinahya/bit-io)

@@ -13,9 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.github.jinahya.bit.io.codec;
-
 
 /**
  *
@@ -24,9 +22,8 @@ package com.github.jinahya.bit.io.codec;
  */
 public abstract class IntegralCodec<T> extends NullableCodec<T> {
 
-
     public IntegralCodec(final boolean nullable, final boolean unsigned,
-                         final int size) {
+            final int size) {
 
         super(nullable);
 
@@ -34,23 +31,18 @@ public abstract class IntegralCodec<T> extends NullableCodec<T> {
         this.size = size;
     }
 
-
     public boolean isUnsigned() {
 
         return unsigned;
     }
-
 
     public int getSize() {
 
         return size;
     }
 
-
     protected final boolean unsigned;
-
 
     protected final int size;
 
 }
-

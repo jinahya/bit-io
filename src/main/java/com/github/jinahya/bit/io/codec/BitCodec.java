@@ -13,9 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.github.jinahya.bit.io.codec;
-
 
 /**
  *
@@ -26,4 +24,3 @@ package com.github.jinahya.bit.io.codec;
 public interface BitCodec<T> extends BitDecoder<T>, BitEncoder<T> {
 
 }
-

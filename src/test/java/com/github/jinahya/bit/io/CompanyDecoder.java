@@ -13,15 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.github.jinahya.bit.io;
-
 
 import com.github.jinahya.bit.io.codec.BitDecoder;
 import com.github.jinahya.bit.io.codec.NullableDecoder;
 import java.io.IOException;
 import java.io.UncheckedIOException;
-
 
 /**
  *
@@ -29,22 +26,20 @@ import java.io.UncheckedIOException;
  */
 public class CompanyDecoder extends NullableDecoder<Company> {
 
-
     public CompanyDecoder(final boolean nullable) {
 
         super(nullable);
 
         employeeDecoder = NullableDecoder.newInstance(
-            Company.EMPLOYEE_NULLABLE,
-            (BitDecoder<Employee>) i -> {
-                try {
-                    return i.readObject(new Employee());
-                } catch (final IOException ioe) {
-                    throw new UncheckedIOException(ioe);
-                }
-            });
+                Company.EMPLOYEE_NULLABLE,
+                (BitDecoder<Employee>) i -> {
+                    try {
+                        return i.readObject(new Employee());
+                    } catch (final IOException ioe) {
+                        throw new UncheckedIOException(ioe);
+                    }
+                });
     }
-
 
     @Override
     protected Company decodeValue(final BitInput input) throws IOException {
@@ -59,8 +54,6 @@ public class CompanyDecoder extends NullableDecoder<Company> {
         return value;
     }
 
-
     private final BitDecoder<Employee> employeeDecoder;
 
 }
-

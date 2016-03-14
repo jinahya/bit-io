@@ -13,9 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.github.jinahya.bit.io;
-
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -23,20 +21,17 @@ import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 import org.testng.annotations.Test;
 
-
 /**
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
 public class BitOutputFactoryTest {
 
-
     @Test(expectedExceptions = NullPointerException.class)
     public static void newInstanceWithNullByteOutput() {
 
         BitOutputFactory.newInstance((ByteOutput) null);
     }
-
 
     @Test
     public static void newInstanceWithByteOutput() {
@@ -51,13 +46,11 @@ public class BitOutputFactoryTest {
         }
     }
 
-
     @Test(expectedExceptions = NullPointerException.class)
     public static void newInstanceWithNullSupplier() {
 
         BitOutputFactory.newInstance((Supplier<? extends ByteOutput>) null);
     }
-
 
     @Test
     public static void newInstanceWithSupplier() {
@@ -72,19 +65,48 @@ public class BitOutputFactoryTest {
         }
     }
 
-
     @Test(expectedExceptions = NullPointerException.class)
     public static void newInstanceWithNullOperator() {
 
         BitOutputFactory.newInstance((UnaryOperator<ByteOutput>) null);
     }
 
-
     @Test
     public static void newInstanceWithOperator() {
 
         final BitOutput output = BitOutputFactory.newInstance(
-            o -> o != null ? o : v -> {
+                o -> o != null ? o : v -> {
+                        }
+        );
+
+        try {
+            BitOutputTest.test(output);
+        } catch (final IOException ioe) {
+            throw new UncheckedIOException(ioe);
+        }
+    }
+
+    @Test(expectedExceptions = NullPointerException.class)
+    public static void newInstanceWithNullSupplierConsumer() {
+
+        BitOutputFactory.newInstance(
+                (Supplier<?>) null,
+                (t, i) -> {
+                });
+    }
+
+    @Test(expectedExceptions = NullPointerException.class)
+    public static void newInstanceWithSupplierNullConsumer() {
+
+        BitOutputFactory.newInstance(() -> null, null);
+    }
+
+    @Test
+    public static void newInstanceWithSupplierConsumer() {
+
+        final BitOutput output = BitOutputFactory.newInstance(
+                () -> new Object(),
+                (b, v) -> {
                 }
         );
 
@@ -95,67 +117,30 @@ public class BitOutputFactoryTest {
         }
     }
 
-
-    @Test(expectedExceptions = NullPointerException.class)
-    public static void newInstanceWithNullSupplierConsumer() {
-
-        BitOutputFactory.newInstance(
-            (Supplier<?>) null,
-            (t, i) -> {
-            });
-    }
-
-
-    @Test(expectedExceptions = NullPointerException.class)
-    public static void newInstanceWithSupplierNullConsumer() {
-
-        BitOutputFactory.newInstance(() -> null, null);
-    }
-
-
-    @Test
-    public static void newInstanceWithSupplierConsumer() {
-
-        final BitOutput output = BitOutputFactory.newInstance(
-            () -> new Object(),
-            (b, v) -> {
-            }
-        );
-
-        try {
-            BitOutputTest.test(output);
-        } catch (final IOException ioe) {
-            throw new UncheckedIOException(ioe);
-        }
-    }
-
-
     @Test(expectedExceptions = NullPointerException.class)
     public static void newInstanceWithNullOperatorConsumer() {
 
         BitOutputFactory.newInstance(
-            (UnaryOperator<?>) null,
-            (t, i) -> {
-            });
+                (UnaryOperator<?>) null,
+                (t, i) -> {
+                });
     }
-
 
     @Test(expectedExceptions = NullPointerException.class)
     public static void newInstanceWithOperatorNullConsumer() {
 
         BitOutputFactory.newInstance(
-            (t) -> t,
-            null);
+                (t) -> t,
+                null);
     }
-
 
     @Test
     public static void newInstanceWithOperatorConsumer() {
 
         final BitOutput output = BitOutputFactory.newInstance(
-            (t) -> null,
-            (t, i) -> {
-            });
+                (t) -> null,
+                (t, i) -> {
+                });
 
         try {
             BitOutputTest.test(output);
@@ -165,4 +150,3 @@ public class BitOutputFactoryTest {
     }
 
 }
-

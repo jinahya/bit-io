@@ -13,12 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.github.jinahya.bit.io;
 
-
 import java.io.IOException;
-
 
 /**
  * An interface for enabling objects readable directly from {@code BitInput}.
@@ -26,7 +23,6 @@ import java.io.IOException;
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
 public interface BitReadable {
-
 
     /**
      * Reads properties from specified input.
@@ -38,4 +34,3 @@ public interface BitReadable {
     void read(BitInput input) throws IOException;
 
 }
-

@@ -13,9 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.github.jinahya.bit.io.codec;
-
 
 /**
  *
@@ -23,19 +21,16 @@ package com.github.jinahya.bit.io.codec;
  */
 public class DoubleCodec extends BridgeCodec<Double, Long> {
 
-
     public DoubleCodec(final boolean nullable) {
 
         super(new LongCodec(nullable, false, 64));
     }
-
 
     @Override
     protected Double convertFrom(final Long u) {
 
         return Double.longBitsToDouble(u);
     }
-
 
     @Override
     protected Long convertTo(final Double t) {
@@ -44,4 +39,3 @@ public class DoubleCodec extends BridgeCodec<Double, Long> {
     }
 
 }
-

@@ -13,9 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.github.jinahya.bit.io;
-
 
 import com.github.jinahya.bit.io.codec.BitCodec;
 import java.io.IOException;
@@ -24,16 +22,13 @@ import org.slf4j.Logger;
 import static org.slf4j.LoggerFactory.getLogger;
 import org.testng.annotations.Test;
 
-
 /**
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
 public class CompanyTest extends BitIoTest {
 
-
     private static final Logger logger = getLogger(CompanyTest.class);
-
 
     @Test
     public void decodeEncode() throws IOException {
@@ -44,4 +39,3 @@ public class CompanyTest extends BitIoTest {
     }
 
 }
-

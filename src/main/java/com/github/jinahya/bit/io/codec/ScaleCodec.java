@@ -13,15 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.github.jinahya.bit.io.codec;
-
 
 import com.github.jinahya.bit.io.BitInput;
 import com.github.jinahya.bit.io.BitIoConstraints;
 import com.github.jinahya.bit.io.BitOutput;
 import java.io.IOException;
-
 
 /**
  * A codec class uses a {@code scale} for counting.
@@ -32,9 +29,8 @@ import java.io.IOException;
  */
 public abstract class ScaleCodec<T, U> extends NullableCodec<T> {
 
-
     public static int readCount(final BitInput input, final int scale)
-        throws IOException {
+            throws IOException {
 
         if (input == null) {
             throw new NullPointerException("null input");
@@ -45,10 +41,9 @@ public abstract class ScaleCodec<T, U> extends NullableCodec<T> {
         return input.readInt(true, scale);
     }
 
-
     public static void writeCount(final BitOutput output, final int scale,
-                                  final int count)
-        throws IOException {
+            final int count)
+            throws IOException {
 
         if (output == null) {
             throw new NullPointerException("null output");
@@ -62,12 +57,11 @@ public abstract class ScaleCodec<T, U> extends NullableCodec<T> {
         final int shifted = count >> scale;
         if (shifted > 0) {
             throw new IllegalArgumentException(
-                shifted + "(" + count + " >> " + scale + ") > 0");
+                    shifted + "(" + count + " >> " + scale + ") > 0");
         }
 
         output.writeInt(true, scale, count);
     }
-
 
     /**
      * Creates a new instance.
@@ -77,7 +71,7 @@ public abstract class ScaleCodec<T, U> extends NullableCodec<T> {
      * @param codec a codec that this codec adapts
      */
     public ScaleCodec(final boolean nullable, final int scale,
-                      final BitCodec<U> codec) {
+            final BitCodec<U> codec) {
 
         super(nullable);
 
@@ -91,24 +85,19 @@ public abstract class ScaleCodec<T, U> extends NullableCodec<T> {
         this.codec = codec;
     }
 
-
     protected int readCount(final BitInput input) throws IOException {
 
         return readCount(input, scale);
     }
 
-
     protected void writeCount(final BitOutput output, final int count)
-        throws IOException {
+            throws IOException {
 
         writeCount(output, scale, count);
     }
 
-
     protected final int scale;
-
 
     protected final BitCodec<U> codec;
 
 }
-

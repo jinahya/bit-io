@@ -13,9 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.github.jinahya.bit.io;
-
 
 import java.io.EOFException;
 import java.io.IOException;
@@ -26,13 +24,11 @@ import static java.util.concurrent.ThreadLocalRandom.current;
 import org.mockito.Mockito;
 import org.testng.annotations.Test;
 
-
 /**
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
 public class BitInputFactoryTest {
-
 
     @Test
     public static void newInstanceWithByteInput() {
@@ -42,56 +38,53 @@ public class BitInputFactoryTest {
         });
     }
 
-
     @Test
     public static void newInstanceWithSupplierToIntFunction() {
 
         final ReadableByteChannel source
-            = Mockito.mock(ReadableByteChannel.class);
+                = Mockito.mock(ReadableByteChannel.class);
 
         final BitInput input = BitInputFactory.newInstance(
-            () -> (ByteBuffer) ByteBuffer.allocate(10).position(10),
-            b -> {
-                try {
-                    BufferByteInput.ensureRemaining(b, source);
-                } catch (final IOException ioe) {
-                    throw new UncheckedIOException(ioe);
-                }
-                return b.get() & 0xFF;
-            });
+                () -> (ByteBuffer) ByteBuffer.allocate(10).position(10),
+                b -> {
+                    try {
+                        BufferByteInput.ensureRemaining(b, source);
+                    } catch (final IOException ioe) {
+                        throw new UncheckedIOException(ioe);
+                    }
+                    return b.get() & 0xFF;
+                });
     }
-
 
     @Test
     public static void newInstanceWithUnaryOperatorToIntFunction() {
 
         final ReadableByteChannel source
-            = Mockito.mock(ReadableByteChannel.class);
+                = Mockito.mock(ReadableByteChannel.class);
 
         final BitInput input = BitInputFactory.<ByteBuffer>newInstance(
-            b -> {
-                if (b == null) {
-                    return (ByteBuffer) ByteBuffer.allocate(10).position(10);
-                }
-                if (!b.hasRemaining()) {
-                    b.clear(); // position->zero; limit->capacity;
-                    int read;
-                    try {
-                        while ((read = source.read(b)) == 0) {
+                b -> {
+                    if (b == null) {
+                        return (ByteBuffer) ByteBuffer.allocate(10).position(10);
+                    }
+                    if (!b.hasRemaining()) {
+                        b.clear(); // position->zero; limit->capacity;
+                        int read;
+                        try {
+                            while ((read = source.read(b)) == 0) {
+                            }
+                        } catch (final IOException ioe) {
+                            throw new UncheckedIOException(ioe);
                         }
-                    } catch (final IOException ioe) {
-                        throw new UncheckedIOException(ioe);
+                        if (read == -1) {
+                            throw new UncheckedIOException(new EOFException());
+                        }
+                        b.flip();
                     }
-                    if (read == -1) {
-                        throw new UncheckedIOException(new EOFException());
-                    }
-                    b.flip();
-                }
-                return b;
-            },
-            b -> b.get() & 0xFF
+                    return b;
+                },
+                b -> b.get() & 0xFF
         );
     }
 
 }
-

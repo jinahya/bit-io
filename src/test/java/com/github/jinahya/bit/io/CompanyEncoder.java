@@ -13,15 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.github.jinahya.bit.io;
-
 
 import com.github.jinahya.bit.io.codec.BitEncoder;
 import com.github.jinahya.bit.io.codec.NullableEncoder;
 import java.io.IOException;
 import java.io.UncheckedIOException;
-
 
 /**
  *
@@ -29,37 +26,33 @@ import java.io.UncheckedIOException;
  */
 public class CompanyEncoder extends NullableEncoder<Company> {
 
-
     public CompanyEncoder(final boolean nullable) {
 
         super(nullable);
 
         employeeEncoder = NullableEncoder.newInstance(
-            Company.EMPLOYEE_NULLABLE,
-            (BitEncoder<Employee>) (o, v) -> {
-                try {
-                    v.write(o);
-                } catch (final IOException ioe) {
-                    throw new UncheckedIOException(ioe);
-                }
-            });
+                Company.EMPLOYEE_NULLABLE,
+                (BitEncoder<Employee>) (o, v) -> {
+                    try {
+                        v.write(o);
+                    } catch (final IOException ioe) {
+                        throw new UncheckedIOException(ioe);
+                    }
+                });
     }
-
 
     @Override
     protected void encodeValue(final BitOutput output, final Company value)
-        throws IOException {
+            throws IOException {
 
         output.writeInt(true, Company.EMPLOYEES_SIZE,
-                        value.getEmployees().size());
+                value.getEmployees().size());
 
         for (final Employee employee : value.getEmployees()) {
             employeeEncoder.encode(output, employee);
         }
     }
 
-
     private final BitEncoder<Employee> employeeEncoder;
 
 }
-

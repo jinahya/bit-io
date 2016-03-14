@@ -13,15 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.github.jinahya.bit.io.codec;
-
 
 import com.github.jinahya.bit.io.BitInput;
 import com.github.jinahya.bit.io.BitOutput;
 import java.io.IOException;
 import java.util.Collection;
-
 
 /**
  *
@@ -30,17 +27,15 @@ import java.util.Collection;
  * @param <E> element type parameter
  */
 public class CollectionCodec<T extends Collection<E>, E>
-    extends ScaleCodec<T, E> {
-
+        extends ScaleCodec<T, E> {
 
     public CollectionCodec(final boolean nullable, final int scale,
-                           final BitCodec<E> codec, final Class<T> type) {
+            final BitCodec<E> codec, final Class<T> type) {
 
         super(nullable, scale, codec);
 
         this.type = type;
     }
-
 
     @Override
     @SuppressWarnings("unchecked")
@@ -64,10 +59,9 @@ public class CollectionCodec<T extends Collection<E>, E>
         return null;
     }
 
-
     @Override
     protected void encodeValue(final BitOutput output, final T collection)
-        throws IOException {
+            throws IOException {
 
         writeCount(output, collection.size());
 
@@ -76,8 +70,6 @@ public class CollectionCodec<T extends Collection<E>, E>
         }
     }
 
-
     private final Class<T> type;
 
 }
-

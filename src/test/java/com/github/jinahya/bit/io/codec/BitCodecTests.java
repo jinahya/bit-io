@@ -13,9 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.github.jinahya.bit.io.codec;
-
 
 import com.github.jinahya.bit.io.BitIoTests;
 import java.io.IOException;
@@ -23,13 +21,11 @@ import java.io.UncheckedIOException;
 import java.util.function.BiConsumer;
 import static org.testng.Assert.assertEquals;
 
-
 /**
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
 public final class BitCodecTests {
-
 
     /**
      * Encodes given value using specified codec and accepts to specified
@@ -44,29 +40,28 @@ public final class BitCodecTests {
      * @throws IOException if an I/O error occurs.
      */
     public static <T extends BitCodec<V>, V> void test(
-        final T codec, final V expected,
-        final BiConsumer<? super V, ? super V> consumer)
-        throws IOException {
+            final T codec, final V expected,
+            final BiConsumer<? super V, ? super V> consumer)
+            throws IOException {
 
         BitIoTests.all(
-            o -> {
-                try {
-                    codec.encode(o, expected);
-                } catch (final IOException ioe) {
-                    throw new UncheckedIOException(ioe);
-                }
-            },
-            i -> {
-                final V actual;
-                try {
-                    actual = codec.decode(i);
-                } catch (final IOException ioe) {
-                    throw new UncheckedIOException(ioe);
-                }
-                consumer.accept(actual, expected);
-            });
+                o -> {
+                    try {
+                        codec.encode(o, expected);
+                    } catch (final IOException ioe) {
+                        throw new UncheckedIOException(ioe);
+                    }
+                },
+                i -> {
+                    final V actual;
+                    try {
+                        actual = codec.decode(i);
+                    } catch (final IOException ioe) {
+                        throw new UncheckedIOException(ioe);
+                    }
+                    consumer.accept(actual, expected);
+                });
     }
-
 
     /**
      * Encodes given value using specified codec and compares to the value
@@ -80,18 +75,17 @@ public final class BitCodecTests {
      * @throws IOException if an I/O error occurs.
      */
     public static <T extends BitCodec<V>, V> void test(final T codec,
-                                                       final V expected)
-        throws IOException {
+            final V expected)
+            throws IOException {
 
         if (codec == null) {
             throw new NullPointerException("null codec");
         }
 
         test(codec, expected, (a, e) -> {
-             assertEquals(a, e);
-         });
+            assertEquals(a, e);
+        });
 
     }
 
 }
-

@@ -13,9 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.github.jinahya.bit.io.codec;
-
 
 /**
  *
@@ -23,19 +21,16 @@ package com.github.jinahya.bit.io.codec;
  */
 public class FloatCodec extends BridgeCodec<Float, Integer> {
 
-
     public FloatCodec(final boolean nullable) {
 
         super(new IntegerCodec(nullable, false, 32));
     }
-
 
     @Override
     protected Float convertFrom(final Integer u) {
 
         return Float.intBitsToFloat(u);
     }
-
 
     @Override
     protected Integer convertTo(final Float t) {
@@ -44,4 +39,3 @@ public class FloatCodec extends BridgeCodec<Float, Integer> {
     }
 
 }
-

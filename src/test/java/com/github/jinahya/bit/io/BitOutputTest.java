@@ -13,10 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-
 package com.github.jinahya.bit.io;
-
 
 import java.io.IOException;
 import static java.util.concurrent.ThreadLocalRandom.current;
@@ -26,14 +23,12 @@ import static org.slf4j.LoggerFactory.getLogger;
 import org.testng.annotations.Guice;
 import org.testng.annotations.Test;
 
-
 /**
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
 @Guice(modules = {BlackBitOutputModule.class})
 public class BitOutputTest {
-
 
     public static void writeBoolean(final BitOutput output) throws IOException {
 
@@ -45,7 +40,6 @@ public class BitOutputTest {
 
         output.writeBoolean(value);
     }
-
 
     public static void writeByte(final BitOutput output) throws IOException {
 
@@ -60,7 +54,6 @@ public class BitOutputTest {
         output.writeByte(unsigned, size, value);
     }
 
-
     public static void writeShort(final BitOutput output) throws IOException {
 
         if (output == null) {
@@ -73,7 +66,6 @@ public class BitOutputTest {
 
         output.writeShort(unsigned, size, value);
     }
-
 
     public static void writeInt(final BitOutput output) throws IOException {
 
@@ -88,7 +80,6 @@ public class BitOutputTest {
         output.writeInt(unsigned, size, value);
     }
 
-
     public static void writeLong(final BitOutput output) throws IOException {
 
         if (output == null) {
@@ -102,7 +93,6 @@ public class BitOutputTest {
         output.writeLong(unsigned, size, value);
     }
 
-
     public static void writeChar(final BitOutput output) throws IOException {
 
         if (output == null) {
@@ -114,7 +104,6 @@ public class BitOutputTest {
 
         output.writeChar(size, value);
     }
-
 
     public static void test(final BitOutput output) throws IOException {
 
@@ -130,13 +119,11 @@ public class BitOutputTest {
         writeChar(output);
     }
 
-
     @Test(invocationCount = 128)
     public void writeBoolean() throws IOException {
 
         writeBoolean(output);
     }
-
 
     @Test(invocationCount = 128)
     public void writeByte() throws IOException {
@@ -144,13 +131,11 @@ public class BitOutputTest {
         writeByte(output);
     }
 
-
     @Test(invocationCount = 128)
     public void writeShort() throws IOException {
 
         writeShort(output);
     }
-
 
     @Test(invocationCount = 128)
     public void writeInt() throws IOException {
@@ -158,13 +143,11 @@ public class BitOutputTest {
         writeInt(output);
     }
 
-
     @Test(invocationCount = 128)
     public void writeLong() throws IOException {
 
         writeLong(output);
     }
-
 
     @Test(invocationCount = 128)
     public void writeChar() throws IOException {
@@ -172,15 +155,12 @@ public class BitOutputTest {
         writeChar(output);
     }
 
-
     /**
      * logger.
      */
     private transient final Logger logger = getLogger(getClass());
 
-
     @Inject
     private transient BitOutput output;
 
 }
-

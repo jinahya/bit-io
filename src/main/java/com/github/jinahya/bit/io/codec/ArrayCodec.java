@@ -13,14 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.github.jinahya.bit.io.codec;
-
 
 import com.github.jinahya.bit.io.BitInput;
 import com.github.jinahya.bit.io.BitOutput;
 import java.io.IOException;
-
 
 /**
  *
@@ -29,13 +26,11 @@ import java.io.IOException;
  */
 public class ArrayCodec<T> extends ScaleCodec<T[], T> {
 
-
     public ArrayCodec(final boolean nullable, final int scale,
-                      final BitCodec<T> codec) {
+            final BitCodec<T> codec) {
 
         super(nullable, scale, codec);
     }
-
 
     @Override
     protected T[] decodeValue(final BitInput input) throws IOException {
@@ -51,10 +46,9 @@ public class ArrayCodec<T> extends ScaleCodec<T[], T> {
         return value;
     }
 
-
     @Override
     protected void encodeValue(final BitOutput output, final T[] value)
-        throws IOException {
+            throws IOException {
 
         writeCount(output, value.length);
         for (final T e : value) {
@@ -63,4 +57,3 @@ public class ArrayCodec<T> extends ScaleCodec<T[], T> {
     }
 
 }
-

@@ -13,9 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.github.jinahya.bit.io.codec;
-
 
 /**
  *
@@ -23,19 +21,16 @@ package com.github.jinahya.bit.io.codec;
  */
 public class CharacterCodec extends BridgeCodec<Character, Integer> {
 
-
     public CharacterCodec(final boolean nullable) {
 
         super(new IntegerCodec(nullable, true, 16));
     }
-
 
     @Override
     protected Character convertFrom(final Integer u) {
 
         return (char) (int) u;
     }
-
 
     @Override
     protected Integer convertTo(final Character t) {
@@ -44,4 +39,3 @@ public class CharacterCodec extends BridgeCodec<Character, Integer> {
     }
 
 }
-

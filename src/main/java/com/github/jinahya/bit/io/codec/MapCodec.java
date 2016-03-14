@@ -13,12 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.github.jinahya.bit.io.codec;
 
-
 import java.util.Map;
-
 
 /**
  *
@@ -28,13 +25,11 @@ import java.util.Map;
  * @param <V> value type parameter
  */
 public abstract class MapCodec<T extends Map<K, V>, K, V>
-    extends ScaleCodec<T, Map.Entry<K, V>> {
-
+        extends ScaleCodec<T, Map.Entry<K, V>> {
 
     public MapCodec(final boolean nullable, final int scale,
-                    final BitCodec<Map.Entry<K, V>> codec) {
+            final BitCodec<Map.Entry<K, V>> codec) {
         super(nullable, scale, codec);
     }
 
 }
-

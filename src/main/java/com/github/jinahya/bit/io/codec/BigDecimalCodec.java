@@ -13,13 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.github.jinahya.bit.io.codec;
-
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-
 
 /**
  *
@@ -27,19 +24,16 @@ import java.math.BigInteger;
  */
 public class BigDecimalCodec extends BridgeCodec<BigDecimal, BigInteger> {
 
-
     public BigDecimalCodec(final boolean nullable, final int scale) {
 
         super(new BigIntegerCodec(nullable, scale));
     }
-
 
     @Override
     protected BigDecimal convertFrom(final BigInteger u) {
 
         return new BigDecimal(u);
     }
-
 
     @Override
     protected BigInteger convertTo(final BigDecimal t) {
@@ -48,4 +42,3 @@ public class BigDecimalCodec extends BridgeCodec<BigDecimal, BigInteger> {
     }
 
 }
-

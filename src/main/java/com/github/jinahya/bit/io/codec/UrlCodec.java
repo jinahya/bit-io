@@ -13,13 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.github.jinahya.bit.io.codec;
-
 
 import java.net.MalformedURLException;
 import java.net.URL;
-
 
 /**
  *
@@ -27,12 +24,10 @@ import java.net.URL;
  */
 public class UrlCodec extends BridgeCodec<URL, String> {
 
-
     public UrlCodec(final boolean nullable, final int scale) {
 
         super(new StringCodec(nullable, scale, true, 8, "UTF-8"));
     }
-
 
     @Override
     protected URL convertFrom(final String u) {
@@ -44,7 +39,6 @@ public class UrlCodec extends BridgeCodec<URL, String> {
         }
     }
 
-
     @Override
     protected String convertTo(final URL t) {
 
@@ -52,4 +46,3 @@ public class UrlCodec extends BridgeCodec<URL, String> {
     }
 
 }
-

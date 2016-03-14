@@ -13,10 +13,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-
-
 package com.github.jinahya.bit.io;
-
 
 import java.io.IOException;
 import java.util.function.ObjIntConsumer;
@@ -24,7 +21,6 @@ import java.util.function.Supplier;
 import java.util.function.ToIntFunction;
 import java.util.function.UnaryOperator;
 import org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement;
-
 
 /**
  * A class for constraints.
@@ -34,10 +30,9 @@ import org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement;
 @IgnoreJRERequirement
 final class BitIoUtilities {
 
-
     public static <T, U extends Throwable> T get(
-        final Supplier<? extends T> supplier)
-        throws IOException {
+            final Supplier<? extends T> supplier)
+            throws IOException {
 
         try {
             return supplier.get();
@@ -52,10 +47,9 @@ final class BitIoUtilities {
         }
     }
 
-
     public static <T, U extends Throwable> T apply(
-        final UnaryOperator<T> operator, final T t)
-        throws IOException {
+            final UnaryOperator<T> operator, final T t)
+            throws IOException {
 
         try {
             return operator.apply(t);
@@ -70,10 +64,9 @@ final class BitIoUtilities {
         }
     }
 
-
     public static <T> void accept(
-        final ObjIntConsumer<? super T> consumer, final T t, final int i)
-        throws IOException {
+            final ObjIntConsumer<? super T> consumer, final T t, final int i)
+            throws IOException {
 
         if (consumer == null) {
             throw new NullPointerException("null consumer");
@@ -92,10 +85,9 @@ final class BitIoUtilities {
         }
     }
 
-
     public static <T> int apply(
-        final ToIntFunction<? super T> function, final T t)
-        throws IOException {
+            final ToIntFunction<? super T> function, final T t)
+            throws IOException {
 
         if (function == null) {
             throw new NullPointerException("null consumer");
@@ -114,11 +106,9 @@ final class BitIoUtilities {
         }
     }
 
-
     private BitIoUtilities() {
 
         super();
     }
 
 }
-

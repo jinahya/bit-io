@@ -13,13 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.github.jinahya.bit.io.codec;
-
 
 import com.github.jinahya.bit.io.BitInput;
 import java.io.IOException;
-
 
 /**
  * An interface for decoding custom values.
@@ -28,7 +25,6 @@ import java.io.IOException;
  * @param <T> value type parameter
  */
 public interface BitDecoder<T> {
-
 
     /**
      * Decode a value from specified input.
@@ -42,4 +38,3 @@ public interface BitDecoder<T> {
     T decode(BitInput input) throws IOException;
 
 }
-

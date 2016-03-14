@@ -13,13 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.github.jinahya.bit.io.codec;
-
 
 import java.net.URI;
 import java.net.URISyntaxException;
-
 
 /**
  *
@@ -27,12 +24,10 @@ import java.net.URISyntaxException;
  */
 public class UriCodec extends BridgeCodec<URI, String> {
 
-
     public UriCodec(final boolean nullable, final int scale) {
 
         super(new StringCodec(nullable, scale, true, 7, "US-ASCII"));
     }
-
 
     @Override
     protected URI convertFrom(final String u) {
@@ -44,7 +39,6 @@ public class UriCodec extends BridgeCodec<URI, String> {
         }
     }
 
-
     @Override
     protected String convertTo(final URI t) {
 
@@ -52,4 +46,3 @@ public class UriCodec extends BridgeCodec<URI, String> {
     }
 
 }
-

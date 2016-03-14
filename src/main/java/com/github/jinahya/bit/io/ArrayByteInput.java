@@ -13,15 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-
 package com.github.jinahya.bit.io;
-
 
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
-
 
 /**
  * A {@code ByteInput} implementation uses a byte array, a limit, and an index.
@@ -34,7 +30,6 @@ import java.io.InputStream;
  */
 public class ArrayByteInput extends AbstractByteInput<byte[]> {
 
-
     /**
      * Creates a new instance which continuously supplies bytes from specified
      * {@code InputStream}.
@@ -45,7 +40,7 @@ public class ArrayByteInput extends AbstractByteInput<byte[]> {
      * @return a new instance.
      */
     public static ArrayByteInput newInstance(final InputStream stream,
-                                             final int length) {
+            final int length) {
 
         if (stream == null) {
             throw new NullPointerException("null stream");
@@ -81,7 +76,6 @@ public class ArrayByteInput extends AbstractByteInput<byte[]> {
         };
     }
 
-
     /**
      * Creates a new instance with given parameters.
      *
@@ -90,14 +84,13 @@ public class ArrayByteInput extends AbstractByteInput<byte[]> {
      * @param index array index to read
      */
     public ArrayByteInput(final byte[] source, final int limit,
-                          final int index) {
+            final int index) {
 
         super(source);
 
         this.limit = limit;
         this.index = index;
     }
-
 
     /**
      * {@inheritDoc} The {@code read()} method of {@code ArrayByteInput} class
@@ -117,12 +110,11 @@ public class ArrayByteInput extends AbstractByteInput<byte[]> {
 
         if (index >= limit) {
             throw new IndexOutOfBoundsException(
-                "index(" + index + ") >= limit(" + limit + ")");
+                    "index(" + index + ") >= limit(" + limit + ")");
         }
 
         return source[index++] & 0xFF;
     }
-
 
     /**
      * Replaces the value of {@link #source} with given and returns this.
@@ -138,7 +130,6 @@ public class ArrayByteInput extends AbstractByteInput<byte[]> {
         return this;
     }
 
-
     /**
      * Returns the current value of {@link #limit}.
      *
@@ -149,7 +140,6 @@ public class ArrayByteInput extends AbstractByteInput<byte[]> {
         return limit;
     }
 
-
     /**
      * Replaces the value of {@link #limit} with given.
      *
@@ -159,7 +149,6 @@ public class ArrayByteInput extends AbstractByteInput<byte[]> {
 
         this.limit = limit;
     }
-
 
     /**
      * Replaces the value of {@link #limit} with given and returns this
@@ -176,7 +165,6 @@ public class ArrayByteInput extends AbstractByteInput<byte[]> {
         return this;
     }
 
-
     /**
      * Returns the current value of {@link #index}.
      *
@@ -187,7 +175,6 @@ public class ArrayByteInput extends AbstractByteInput<byte[]> {
         return index;
     }
 
-
     /**
      * Replaces the current value of {@link #index} with given.
      *
@@ -197,7 +184,6 @@ public class ArrayByteInput extends AbstractByteInput<byte[]> {
 
         this.index = index;
     }
-
 
     /**
      * Replaces the current value of {@link #index} with given and returns this
@@ -214,12 +200,10 @@ public class ArrayByteInput extends AbstractByteInput<byte[]> {
         return this;
     }
 
-
     /**
      * The index of the {@link #source} which {@link #index} can't exceed.
      */
     protected int limit;
-
 
     /**
      * The index in the {@link #source} to read.
@@ -227,4 +211,3 @@ public class ArrayByteInput extends AbstractByteInput<byte[]> {
     protected int index;
 
 }
-

@@ -13,9 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.github.jinahya.bit.io.codec;
-
 
 import com.github.jinahya.bit.io.BitInput;
 import com.github.jinahya.bit.io.BitOutput;
@@ -26,21 +24,18 @@ import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
 
-
 /**
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  * @param <T> value type parameter
  */
 public class SerializableCodec<T extends Serializable>
-    extends NullableCodec<T> {
-
+        extends NullableCodec<T> {
 
     public SerializableCodec(final boolean nullable) {
 
         super(nullable);
     }
-
 
     @Override
     @SuppressWarnings("unchecked")
@@ -61,10 +56,9 @@ public class SerializableCodec<T extends Serializable>
         }
     }
 
-
     @Override
     protected void encodeValue(final BitOutput output, final T value)
-        throws IOException {
+            throws IOException {
 
         new ObjectOutputStream(new OutputStream() {
 
@@ -78,4 +72,3 @@ public class SerializableCodec<T extends Serializable>
     }
 
 }
-

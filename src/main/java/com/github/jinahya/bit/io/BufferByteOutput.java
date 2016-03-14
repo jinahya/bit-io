@@ -13,15 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-
 package com.github.jinahya.bit.io;
-
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.WritableByteChannel;
-
 
 /**
  * A {@link ByteOutput} implementation for {@link ByteBuffer}s.
@@ -30,7 +26,6 @@ import java.nio.channels.WritableByteChannel;
  * @see BufferByteInput
  */
 public class BufferByteOutput extends AbstractByteOutput<ByteBuffer> {
-
 
     /**
      * Ensures specified byte buffer has remaining for writing. This method, if
@@ -45,8 +40,8 @@ public class BufferByteOutput extends AbstractByteOutput<ByteBuffer> {
      * @throws IOException if an I/O error occurs.
      */
     public static ByteBuffer ensureRemaining(final ByteBuffer buffer,
-                                             final WritableByteChannel channel)
-        throws IOException {
+            final WritableByteChannel channel)
+            throws IOException {
 
         if (buffer == null) {
             throw new NullPointerException("null buffer");
@@ -67,10 +62,9 @@ public class BufferByteOutput extends AbstractByteOutput<ByteBuffer> {
         return buffer;
     }
 
-
     public static BufferByteOutput newInstance(final WritableByteChannel channel,
-                                               final int capacity,
-                                               final boolean direct) {
+            final int capacity,
+            final boolean direct) {
 
         if (channel == null) {
             throw new NullPointerException("null channel");
@@ -78,7 +72,7 @@ public class BufferByteOutput extends AbstractByteOutput<ByteBuffer> {
 
         if (capacity <= 0) {
             throw new IllegalArgumentException(
-                "capacity(" + capacity + ") <= 0");
+                    "capacity(" + capacity + ") <= 0");
         }
 
         return new BufferByteOutput(null) {
@@ -88,8 +82,8 @@ public class BufferByteOutput extends AbstractByteOutput<ByteBuffer> {
 
                 if (target == null) {
                     target = direct
-                             ? ByteBuffer.allocateDirect(capacity)
-                             : ByteBuffer.allocate(capacity);
+                            ? ByteBuffer.allocateDirect(capacity)
+                            : ByteBuffer.allocate(capacity);
                 }
 
                 super.write(value);
@@ -99,7 +93,6 @@ public class BufferByteOutput extends AbstractByteOutput<ByteBuffer> {
 
         };
     }
-
 
     /**
      * Creates a new instance with given {@code ByteBufer}.
@@ -111,7 +104,6 @@ public class BufferByteOutput extends AbstractByteOutput<ByteBuffer> {
 
         super(buffer);
     }
-
 
     /**
      * {@inheritDoc} The {@code write(int)} method of {@code BufferByteOutput}
@@ -130,4 +122,3 @@ public class BufferByteOutput extends AbstractByteOutput<ByteBuffer> {
     }
 
 }
-

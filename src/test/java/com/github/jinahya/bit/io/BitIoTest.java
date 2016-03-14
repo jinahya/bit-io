@@ -13,13 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.github.jinahya.bit.io;
-
 
 import javax.inject.Inject;
 import org.testng.annotations.Guice;
-
 
 /**
  *
@@ -28,25 +25,20 @@ import org.testng.annotations.Guice;
 @Guice(modules = {WhiteBitInputModule.class, BlackBitOutputModule.class})
 public abstract class BitIoTest {
 
-
     protected BitInput getInput() {
 
         return input;
     }
-
 
     protected BitOutput getOutput() {
 
         return output;
     }
 
-
     @Inject
     private BitInput input;
-
 
     @Inject
     private BitOutput output;
 
 }
-

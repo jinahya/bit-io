@@ -13,16 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.github.jinahya.bit.io;
 
-
-import com.github.jinahya.bit.io.bind.annotation.BitProperty;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import static java.util.concurrent.ThreadLocalRandom.current;
-
 
 /**
  *
@@ -30,12 +26,9 @@ import static java.util.concurrent.ThreadLocalRandom.current;
  */
 public class Company {
 
-
     public static final int EMPLOYEES_SIZE = 10;
 
-
     public static final boolean EMPLOYEE_NULLABLE = false;
-
 
     public static Company newRandomInstance() {
 
@@ -44,12 +37,11 @@ public class Company {
         final int size = current().nextInt(256);
         for (int i = 0; i < size; i++) {
             instance.getEmployees().add(
-                current().nextBoolean() ? Employee.newRandomInstance() : null);
+                    current().nextBoolean() ? Employee.newRandomInstance() : null);
         }
 
         return instance;
     }
-
 
     @Override
     public int hashCode() {
@@ -57,7 +49,6 @@ public class Company {
         hash = 71 * hash + Objects.hashCode(this.employees);
         return hash;
     }
-
 
     @Override
     public boolean equals(Object obj) {
@@ -77,8 +68,6 @@ public class Company {
         return true;
     }
 
-
-    @BitProperty(nullable = EMPLOYEE_NULLABLE, scale = EMPLOYEES_SIZE)
     public List<Employee> getEmployees() {
 
         if (employees == null) {
@@ -88,8 +77,6 @@ public class Company {
         return employees;
     }
 
-
     private List<Employee> employees;
 
 }
-

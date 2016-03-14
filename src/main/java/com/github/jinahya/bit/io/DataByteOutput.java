@@ -13,13 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.github.jinahya.bit.io;
-
 
 import java.io.DataOutput;
 import java.io.IOException;
-
 
 /**
  * An implementation uses an {@link DataOutput} as its {@link #target}.
@@ -28,7 +25,6 @@ import java.io.IOException;
  * @see DataByteInput
  */
 public class DataByteOutput extends AbstractByteOutput<DataOutput> {
-
 
     /**
      * Creates a new instance with given {@code target}
@@ -40,7 +36,6 @@ public class DataByteOutput extends AbstractByteOutput<DataOutput> {
 
         super(target);
     }
-
 
     /**
      * {@inheritDoc } The {@code write(int)} method of {@code DataByteOutput}
@@ -59,4 +54,3 @@ public class DataByteOutput extends AbstractByteOutput<DataOutput> {
     }
 
 }
-

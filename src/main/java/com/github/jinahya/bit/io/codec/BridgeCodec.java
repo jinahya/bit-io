@@ -13,14 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.github.jinahya.bit.io.codec;
-
 
 import com.github.jinahya.bit.io.BitInput;
 import com.github.jinahya.bit.io.BitOutput;
 import java.io.IOException;
-
 
 /**
  * An abstract class for implementing {@code BitCodec}.
@@ -30,7 +27,6 @@ import java.io.IOException;
  * @param <U> adapting value type parameter
  */
 public abstract class BridgeCodec<T, U> implements BitCodec<T> {
-
 
     /**
      * Creates a new instance.
@@ -48,7 +44,6 @@ public abstract class BridgeCodec<T, U> implements BitCodec<T> {
         this.codec = codec;
     }
 
-
     @Override
     public T decode(final BitInput input) throws IOException {
 
@@ -60,10 +55,9 @@ public abstract class BridgeCodec<T, U> implements BitCodec<T> {
         return convertFrom(value);
     }
 
-
     @Override
     public void encode(final BitOutput output, final T value)
-        throws IOException {
+            throws IOException {
 
         if (value == null) {
             codec.encode(output, null);
@@ -72,7 +66,6 @@ public abstract class BridgeCodec<T, U> implements BitCodec<T> {
 
         codec.encode(output, convertTo(value));
     }
-
 
     /**
      * Converts given value to the decoding result of this codec.
@@ -83,7 +76,6 @@ public abstract class BridgeCodec<T, U> implements BitCodec<T> {
      */
     protected abstract T convertFrom(U u);
 
-
     /**
      * Converts given value to the encoding value of {@link #codec}.
      *
@@ -93,11 +85,9 @@ public abstract class BridgeCodec<T, U> implements BitCodec<T> {
      */
     protected abstract U convertTo(T t);
 
-
     /**
      * The codec this codec wraps.
      */
     protected final BitCodec<U> codec;
 
 }
-

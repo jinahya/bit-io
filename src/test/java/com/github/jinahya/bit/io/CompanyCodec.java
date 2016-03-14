@@ -13,22 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.github.jinahya.bit.io;
-
 
 import com.github.jinahya.bit.io.codec.BitDecoder;
 import com.github.jinahya.bit.io.codec.BitEncoder;
 import com.github.jinahya.bit.io.codec.NullableCodec;
 import java.io.IOException;
 
-
 /**
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
 public class CompanyCodec extends NullableCodec<Company> {
-
 
     public CompanyCodec(final boolean nullable) {
 
@@ -38,26 +34,21 @@ public class CompanyCodec extends NullableCodec<Company> {
         encoder = new CompanyEncoder(false);
     }
 
-
     @Override
     protected Company decodeValue(final BitInput input) throws IOException {
 
         return decoder.decode(input);
     }
 
-
     @Override
     protected void encodeValue(final BitOutput output, final Company value)
-        throws IOException {
+            throws IOException {
 
         encoder.encode(output, value);
     }
 
-
     private final BitDecoder<Company> decoder;
-
 
     private final BitEncoder<Company> encoder;
 
 }
-

@@ -13,15 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.github.jinahya.bit.io.codec;
-
 
 import com.github.jinahya.bit.io.BitInput;
 import com.github.jinahya.bit.io.BitIoConstraints;
 import com.github.jinahya.bit.io.BitOutput;
 import java.io.IOException;
-
 
 /**
  *
@@ -29,14 +26,12 @@ import java.io.IOException;
  */
 public class IntegerCodec extends IntegralCodec<Integer> {
 
-
     public IntegerCodec(final boolean nullable, final boolean unsigned,
-                        final int size) {
+            final int size) {
 
         super(nullable, unsigned,
-              BitIoConstraints.requireValidSize(unsigned, 5, size));
+                BitIoConstraints.requireValidSize(unsigned, 5, size));
     }
-
 
     @Override
     protected Integer decodeValue(final BitInput input) throws IOException {
@@ -44,13 +39,11 @@ public class IntegerCodec extends IntegralCodec<Integer> {
         return input.readInt(unsigned, size);
     }
 
-
     @Override
     protected void encodeValue(final BitOutput output, final Integer value)
-        throws IOException {
+            throws IOException {
 
         output.writeInt(unsigned, size, value);
     }
 
 }
-

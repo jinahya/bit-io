@@ -13,20 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-
 package com.github.jinahya.bit.io;
 
-
 import static java.util.concurrent.ThreadLocalRandom.current;
-
 
 /**
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
 public final class BitIoRandoms {
-
 
     public static int size(final boolean unsigned, final int exponent) {
 
@@ -38,9 +33,8 @@ public final class BitIoRandoms {
         return BitIoConstraints.requireValidSize(unsigned, exponent, size);
     }
 
-
     public static long value(final boolean unsigned, final int exponent,
-                             final int size) {
+            final int size) {
 
         BitIoConstraints.requireValidSize(unsigned, exponent, size);
 
@@ -50,11 +44,9 @@ public final class BitIoRandoms {
         return unsigned ? value >>> shift : value >> shift;
     }
 
-
     private BitIoRandoms() {
 
         super();
     }
 
 }
-

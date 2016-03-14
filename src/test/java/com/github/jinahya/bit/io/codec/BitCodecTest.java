@@ -13,13 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.github.jinahya.bit.io.codec;
-
 
 import org.slf4j.Logger;
 import static org.slf4j.LoggerFactory.getLogger;
-
 
 /**
  *
@@ -29,8 +26,6 @@ import static org.slf4j.LoggerFactory.getLogger;
  */
 public abstract class BitCodecTest<T extends BitCodec<V>, V> {
 
-
     protected transient final Logger logger = getLogger(getClass());
 
 }
-

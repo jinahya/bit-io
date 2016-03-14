@@ -13,15 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.github.jinahya.bit.io.codec;
-
 
 import com.github.jinahya.bit.io.BitInput;
 import java.io.IOException;
 import java.util.function.Function;
 import org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement;
-
 
 /**
  * An abstract class for implementing {@code BitCodec}.
@@ -30,12 +27,11 @@ import org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement;
  * @param <T> value type parameter
  */
 public abstract class NullableDecoder<T> extends Nullable
-    implements BitDecoder<T> {
-
+        implements BitDecoder<T> {
 
     @IgnoreJRERequirement
     public static <T> NullableDecoder<T> newInstance(
-        final boolean nullable, final BitDecoder<? extends T> decoder) {
+            final boolean nullable, final BitDecoder<? extends T> decoder) {
 
         if (decoder == null) {
             throw new NullPointerException("null decoder");
@@ -52,11 +48,10 @@ public abstract class NullableDecoder<T> extends Nullable
         };
     }
 
-
     @IgnoreJRERequirement
     public static <T> NullableDecoder<T> newInstance(
-        final boolean nullable,
-        final Function<BitInput, ? extends T> function) {
+            final boolean nullable,
+            final Function<BitInput, ? extends T> function) {
 
         if (function == null) {
             throw new NullPointerException("null function");
@@ -73,7 +68,6 @@ public abstract class NullableDecoder<T> extends Nullable
         };
     }
 
-
     /**
      * Creates a new instance.
      *
@@ -83,7 +77,6 @@ public abstract class NullableDecoder<T> extends Nullable
 
         super(nullable);
     }
-
 
     /**
      * {@inheritDoc} This method optionally (by the value of {@link #nullable})
@@ -111,7 +104,6 @@ public abstract class NullableDecoder<T> extends Nullable
         return decodeValue(input);
     }
 
-
     /**
      * Decodes value from given input.
      *
@@ -124,4 +116,3 @@ public abstract class NullableDecoder<T> extends Nullable
     protected abstract T decodeValue(final BitInput input) throws IOException;
 
 }
-

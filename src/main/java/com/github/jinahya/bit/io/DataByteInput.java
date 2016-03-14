@@ -13,13 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.github.jinahya.bit.io;
-
 
 import java.io.DataInput;
 import java.io.IOException;
-
 
 /**
  * An implementation uses an {@link DataInput} as its {@link #source}.
@@ -28,7 +25,6 @@ import java.io.IOException;
  * @see DataByteOutput
  */
 public class DataByteInput extends AbstractByteInput<DataInput> {
-
 
     /**
      * Creates a new instance with given {@code source}.
@@ -40,7 +36,6 @@ public class DataByteInput extends AbstractByteInput<DataInput> {
 
         super(source);
     }
-
 
     /**
      * {@inheritDoc } The {@code read()} method of {@code DataByteInput} class
@@ -59,4 +54,3 @@ public class DataByteInput extends AbstractByteInput<DataInput> {
     }
 
 }
-

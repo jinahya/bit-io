@@ -13,14 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.github.jinahya.bit.io.codec;
-
 
 import com.github.jinahya.bit.io.BitInput;
 import com.github.jinahya.bit.io.BitOutput;
 import java.io.IOException;
-
 
 /**
  * An abstract class for implementing {@code BitCodec}.
@@ -29,7 +26,6 @@ import java.io.IOException;
  * @param <T> value type parameter
  */
 public abstract class NullableCodec<T> extends Nullable implements BitCodec<T> {
-
 
     /**
      * Creates a new instance with specified decoder and encoder.
@@ -42,8 +38,8 @@ public abstract class NullableCodec<T> extends Nullable implements BitCodec<T> {
      * @return a new instance.
      */
     public static <T> NullableCodec<T> newInstance(
-        final boolean nullable, final BitDecoder<? extends T> decoder,
-        final BitEncoder<? super T> encoder) {
+            final boolean nullable, final BitDecoder<? extends T> decoder,
+            final BitEncoder<? super T> encoder) {
 
         return new NullableCodec<T>(nullable) {
 
@@ -53,17 +49,15 @@ public abstract class NullableCodec<T> extends Nullable implements BitCodec<T> {
                 return decoder.decode(input);
             }
 
-
             @Override
             protected void encodeValue(final BitOutput output, final T value)
-                throws IOException {
+                    throws IOException {
 
                 encoder.encode(output, value);
             }
 
         };
     }
-
 
     /**
      * Creates a new instance with specified codec.
@@ -75,7 +69,7 @@ public abstract class NullableCodec<T> extends Nullable implements BitCodec<T> {
      * @return a new instance.
      */
     public static <T> NullableCodec<T> newInstance(
-        final boolean nullable, final BitCodec<T> codec) {
+            final boolean nullable, final BitCodec<T> codec) {
 
         if (codec == null) {
             throw new NullPointerException("null codec");
@@ -89,17 +83,15 @@ public abstract class NullableCodec<T> extends Nullable implements BitCodec<T> {
                 return codec.decode(input);
             }
 
-
             @Override
             protected void encodeValue(final BitOutput output, final T value)
-                throws IOException {
+                    throws IOException {
 
                 codec.encode(output, value);
             }
 
         };
     }
-
 
     /**
      * Creates a new instance.
@@ -110,7 +102,6 @@ public abstract class NullableCodec<T> extends Nullable implements BitCodec<T> {
 
         super(nullable);
     }
-
 
     /**
      * {@inheritDoc} This method optionally (by the value of {@link #nullable})
@@ -138,7 +129,6 @@ public abstract class NullableCodec<T> extends Nullable implements BitCodec<T> {
         return decodeValue(input);
     }
 
-
     /**
      * Decodes value from given input.
      *
@@ -149,7 +139,6 @@ public abstract class NullableCodec<T> extends Nullable implements BitCodec<T> {
      * @throws IOException if an I/O error occurs.
      */
     protected abstract T decodeValue(final BitInput input) throws IOException;
-
 
     /**
      * {@inheritDoc} This method optionally (by the value of {@link #nullable})
@@ -165,7 +154,7 @@ public abstract class NullableCodec<T> extends Nullable implements BitCodec<T> {
      */
     @Override
     public void encode(final BitOutput output, final T value)
-        throws IOException {
+            throws IOException {
 
         if (output == null) {
             throw new NullPointerException("null output");
@@ -184,7 +173,6 @@ public abstract class NullableCodec<T> extends Nullable implements BitCodec<T> {
         }
     }
 
-
     /**
      * Encodes specified value to given output.
      *
@@ -194,7 +182,6 @@ public abstract class NullableCodec<T> extends Nullable implements BitCodec<T> {
      * @throws IOException if an I/O error occurs.
      */
     protected abstract void encodeValue(BitOutput output, T value)
-        throws IOException;
+            throws IOException;
 
 }
-

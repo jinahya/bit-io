@@ -13,10 +13,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-
-
 package com.github.jinahya.bit.io;
-
 
 import java.io.IOException;
 import java.util.function.ObjIntConsumer;
@@ -24,14 +21,12 @@ import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 import org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement;
 
-
 /**
  * A factory class for creating {@link BitOutput}s.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
 public class BitOutputFactory {
-
 
     /**
      * Creates new instance which writes bytes to specified byte output.
@@ -57,10 +52,9 @@ public class BitOutputFactory {
         };
     }
 
-
     @IgnoreJRERequirement
     public static BitOutput newInstance(
-        final Supplier<? extends ByteOutput> supplier) {
+            final Supplier<? extends ByteOutput> supplier) {
 
         if (supplier == null) {
             throw new NullPointerException("null supplier");
@@ -78,16 +72,14 @@ public class BitOutputFactory {
                 output.write(value);
             }
 
-
             private ByteOutput output;
 
         };
     }
 
-
     @IgnoreJRERequirement
     public static <T extends ByteOutput> BitOutput newInstance(
-        final UnaryOperator<T> operator) {
+            final UnaryOperator<T> operator) {
 
         if (operator == null) {
             throw new NullPointerException("null operator");
@@ -103,17 +95,15 @@ public class BitOutputFactory {
                 output.write(value);
             }
 
-
             private T output;
 
         };
     }
 
-
     @IgnoreJRERequirement
     public static <T> BitOutput newInstance(
-        final Supplier<? extends T> supplier,
-        final ObjIntConsumer<? super T> consumer) {
+            final Supplier<? extends T> supplier,
+            final ObjIntConsumer<? super T> consumer) {
 
         if (supplier == null) {
             throw new NullPointerException("null supplier");
@@ -135,17 +125,15 @@ public class BitOutputFactory {
                 BitIoUtilities.accept(consumer, target, value);
             }
 
-
             private T target;
 
         };
     }
 
-
     @IgnoreJRERequirement
     public static <T> BitOutput newInstance(
-        final UnaryOperator<T> operator,
-        final ObjIntConsumer<? super T> consumer) {
+            final UnaryOperator<T> operator,
+            final ObjIntConsumer<? super T> consumer) {
 
         if (operator == null) {
             throw new NullPointerException("null operator");
@@ -165,12 +153,10 @@ public class BitOutputFactory {
                 BitIoUtilities.accept(consumer, target, value);
             }
 
-
             private T target;
 
         };
     }
-
 
     private BitOutputFactory() {
 
@@ -178,4 +164,3 @@ public class BitOutputFactory {
     }
 
 }
-

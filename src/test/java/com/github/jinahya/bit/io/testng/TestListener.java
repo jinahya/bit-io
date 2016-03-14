@@ -13,22 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.github.jinahya.bit.io.testng;
-
 
 import org.slf4j.Logger;
 import static org.slf4j.LoggerFactory.getLogger;
 import org.testng.ITestResult;
 import org.testng.TestListenerAdapter;
 
-
 /**
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
 public class TestListener extends TestListenerAdapter {
-
 
     @Override
     public void onTestStart(ITestResult result) {
@@ -37,26 +33,21 @@ public class TestListener extends TestListenerAdapter {
         logger.debug("onTestStart({})", result);
     }
 
-
     @Override
     public void onTestSkipped(ITestResult tr) {
         super.onTestSkipped(tr);
     }
-
 
     @Override
     public void onTestFailure(ITestResult tr) {
         super.onTestFailure(tr);
     }
 
-
     @Override
     public void onTestSuccess(ITestResult tr) {
         super.onTestSuccess(tr);
     }
 
-
     private transient final Logger logger = getLogger(getClass());
 
 }
-

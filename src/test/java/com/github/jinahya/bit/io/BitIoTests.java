@@ -13,9 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.github.jinahya.bit.io;
-
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -29,20 +27,17 @@ import org.slf4j.Logger;
 import static org.slf4j.LoggerFactory.getLogger;
 import static org.testng.Assert.assertEquals;
 
-
 /**
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
 public final class BitIoTests {
 
-
     private static final Logger logger = getLogger(BitIoTests.class);
 
-
     public static void array(final Consumer<? super BitOutput> writer,
-                             final Consumer<? super BitInput> reader)
-        throws IOException {
+            final Consumer<? super BitInput> reader)
+            throws IOException {
 
         if (writer == null) {
             throw new NullPointerException("null writer");
@@ -55,7 +50,7 @@ public final class BitIoTests {
         final byte[] array = new byte[1048576];
 
         final ArrayByteOutput target
-            = new ArrayByteOutput(array, array.length, 0);
+                = new ArrayByteOutput(array, array.length, 0);
         final BitOutput output = new DefaultBitOutput<>(target);
         writer.accept(output);
         final long padded = output.align(1);
@@ -68,10 +63,9 @@ public final class BitIoTests {
         assertEquals(discarded, padded, "discarded != padded");
     }
 
-
     public static void buffer(final Consumer<? super BitOutput> writer,
-                              final Consumer<? super BitInput> reader)
-        throws IOException {
+            final Consumer<? super BitInput> reader)
+            throws IOException {
 
         if (writer == null) {
             throw new NullPointerException("null writer");
@@ -84,24 +78,23 @@ public final class BitIoTests {
         final ByteBuffer buffer = ByteBuffer.allocate(1048576);
 
         final BitOutput output
-            = new DefaultBitOutput<>(new BufferByteOutput(buffer));
+                = new DefaultBitOutput<>(new BufferByteOutput(buffer));
         writer.accept(output);
         final long padded = output.align(1);
 
         buffer.flip();
 
         final BitInput input
-            = new DefaultBitInput<>(new BufferByteInput(buffer));
+                = new DefaultBitInput<>(new BufferByteInput(buffer));
         reader.accept(input);
         final long discarded = input.align(1);
 
         assertEquals(discarded, padded);
     }
 
-
     public static void data(final Consumer<? super BitOutput> writer,
-                            final Consumer<? super BitInput> reader)
-        throws IOException {
+            final Consumer<? super BitInput> reader)
+            throws IOException {
 
         if (writer == null) {
             throw new NullPointerException("null writer");
@@ -114,13 +107,13 @@ public final class BitIoTests {
         final ByteArrayOutputStream baos = new ByteArrayOutputStream(1048576);
         final DataOutputStream target = new DataOutputStream(baos);
         final BitOutput output
-            = new DefaultBitOutput<>(new DataByteOutput(target));
+                = new DefaultBitOutput<>(new DataByteOutput(target));
         writer.accept(output);
         final long padded = output.align(1);
         target.flush();
 
         final ByteArrayInputStream bais
-            = new ByteArrayInputStream(baos.toByteArray());
+                = new ByteArrayInputStream(baos.toByteArray());
         final DataInputStream dis = new DataInputStream(bais);
         final BitInput input = new DefaultBitInput<>(new DataByteInput(dis));
         reader.accept(input);
@@ -129,10 +122,9 @@ public final class BitIoTests {
         assertEquals(discarded, padded);
     }
 
-
     public static void stream(final Consumer<? super BitOutput> writer,
-                              final Consumer<? super BitInput> reader)
-        throws IOException {
+            final Consumer<? super BitInput> reader)
+            throws IOException {
 
         if (writer == null) {
             throw new NullPointerException("null writer");
@@ -144,25 +136,24 @@ public final class BitIoTests {
 
         final ByteArrayOutputStream target = new ByteArrayOutputStream(1048576);
         final BitOutput output
-            = new DefaultBitOutput<>(new StreamByteOutput(target));
+                = new DefaultBitOutput<>(new StreamByteOutput(target));
         writer.accept(output);
         final long padded = output.align(1);
         target.flush();
 
         final ByteArrayInputStream source
-            = new ByteArrayInputStream(target.toByteArray());
+                = new ByteArrayInputStream(target.toByteArray());
         final BitInput input
-            = new DefaultBitInput<>(new StreamByteInput(source));
+                = new DefaultBitInput<>(new StreamByteInput(source));
         reader.accept(input);
         final long discarded = input.align(1);
 
         assertEquals(discarded, padded);
     }
 
-
     public static void all(final Consumer<? super BitOutput> writer,
-                           final Consumer<? super BitInput> reader)
-        throws IOException {
+            final Consumer<? super BitInput> reader)
+            throws IOException {
 
         if (writer == null) {
             throw new NullPointerException("null writer");
@@ -178,29 +169,27 @@ public final class BitIoTests {
         stream(writer, reader);
     }
 
-
     public static <T extends BitReadable & BitWritable> void all(
-        final boolean nullable, final Class<? extends T> type, final T expected)
-        throws IOException {
+            final boolean nullable, final Class<? extends T> type, final T expected)
+            throws IOException {
 
         all(
-            o -> {
-                try {
-                    o.writeObject(nullable, expected);
-                } catch (final IOException ioe) {
-                    throw new UncheckedIOException(ioe);
-                }
-            },
-            i -> {
-                try {
-                    final T actual = i.readObject(nullable, type);
-                    assertEquals(actual, expected);
-                } catch (final IOException ioe) {
-                    throw new UncheckedIOException(ioe);
-                }
-            });
+                o -> {
+                    try {
+                        o.writeObject(nullable, expected);
+                    } catch (final IOException ioe) {
+                        throw new UncheckedIOException(ioe);
+                    }
+                },
+                i -> {
+                    try {
+                        final T actual = i.readObject(nullable, type);
+                        assertEquals(actual, expected);
+                    } catch (final IOException ioe) {
+                        throw new UncheckedIOException(ioe);
+                    }
+                });
     }
-
 
     private BitIoTests() {
 
@@ -208,4 +197,3 @@ public final class BitIoTests {
     }
 
 }
-

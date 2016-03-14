@@ -13,9 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.github.jinahya.bit.io;
-
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -26,19 +24,16 @@ import org.slf4j.Logger;
 import static org.slf4j.LoggerFactory.getLogger;
 import org.testng.annotations.Test;
 
-
 /**
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
 public class EmployeeTest extends BitIoTest {
 
-
     private static final Logger logger = getLogger(EmployeeTest.class);
 
-
     private static List<Employee> employees(final boolean nullable)
-        throws IOException {
+            throws IOException {
 
         final int count = current().nextInt(1024, 2048);
 
@@ -55,7 +50,6 @@ public class EmployeeTest extends BitIoTest {
         return Collections.unmodifiableList(employees);
     }
 
-
     @Test
     public static void nullable() throws IOException {
 
@@ -66,7 +60,6 @@ public class EmployeeTest extends BitIoTest {
             BitIoTests.all(nullable, Employee.class, employee);
         }
     }
-
 
     @Test
     public static void nonnull() throws IOException {
@@ -79,7 +72,6 @@ public class EmployeeTest extends BitIoTest {
         }
     }
 
-
     @Test
     public void readWrite() throws IOException {
 
@@ -91,4 +83,3 @@ public class EmployeeTest extends BitIoTest {
     }
 
 }
-

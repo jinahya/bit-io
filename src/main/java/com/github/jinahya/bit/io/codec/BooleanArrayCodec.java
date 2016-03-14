@@ -13,14 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.github.jinahya.bit.io.codec;
-
 
 import com.github.jinahya.bit.io.BitInput;
 import com.github.jinahya.bit.io.BitOutput;
 import java.io.IOException;
-
 
 /**
  *
@@ -28,12 +25,10 @@ import java.io.IOException;
  */
 public class BooleanArrayCodec extends ScaleCodec<boolean[], Boolean> {
 
-
     public BooleanArrayCodec(final boolean nullable, final int scale) {
 
         super(nullable, scale, new BooleanCodec(false));
     }
-
 
     @Override
     protected boolean[] decodeValue(final BitInput input) throws IOException {
@@ -47,10 +42,9 @@ public class BooleanArrayCodec extends ScaleCodec<boolean[], Boolean> {
         return value;
     }
 
-
     @Override
     protected void encodeValue(final BitOutput output, final boolean[] value)
-        throws IOException {
+            throws IOException {
 
         writeCount(output, value.length);
 
@@ -60,4 +54,3 @@ public class BooleanArrayCodec extends ScaleCodec<boolean[], Boolean> {
     }
 
 }
-

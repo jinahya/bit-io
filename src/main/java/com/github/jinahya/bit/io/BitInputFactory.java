@@ -13,10 +13,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-
-
 package com.github.jinahya.bit.io;
-
 
 import java.io.IOException;
 import java.util.function.Supplier;
@@ -24,14 +21,12 @@ import java.util.function.ToIntFunction;
 import java.util.function.UnaryOperator;
 import org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement;
 
-
 /**
  * A factory class for creating {@link BitOutput}s.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
 public class BitInputFactory {
-
 
     /**
      * Creates new instance which read bytes from specified byte input.
@@ -57,10 +52,9 @@ public class BitInputFactory {
         };
     }
 
-
     @IgnoreJRERequirement
     public static BitInput newInstance(
-        final Supplier<? extends ByteInput> supplier) {
+            final Supplier<? extends ByteInput> supplier) {
 
         if (supplier == null) {
             throw new NullPointerException("null supplier");
@@ -78,16 +72,14 @@ public class BitInputFactory {
                 return input.read();
             }
 
-
             private ByteInput input;
 
         };
     }
 
-
     @IgnoreJRERequirement
     public static <T extends ByteInput> BitInput newInstance(
-        final UnaryOperator<T> operator) {
+            final UnaryOperator<T> operator) {
 
         if (operator == null) {
             throw new NullPointerException("null operator");
@@ -103,17 +95,15 @@ public class BitInputFactory {
                 return input.read();
             }
 
-
             private T input;
 
         };
     }
 
-
     @IgnoreJRERequirement
     public static <T> BitInput newInstance(
-        final Supplier<? extends T> supplier,
-        final ToIntFunction<? super T> function) {
+            final Supplier<? extends T> supplier,
+            final ToIntFunction<? super T> function) {
 
         if (supplier == null) {
             throw new NullPointerException("null supplier");
@@ -135,17 +125,15 @@ public class BitInputFactory {
                 return BitIoUtilities.apply(function, source);
             }
 
-
             private T source;
 
         };
     }
 
-
     @IgnoreJRERequirement
     public static <T> BitInput newInstance(
-        final UnaryOperator<T> operator,
-        final ToIntFunction<? super T> function) {
+            final UnaryOperator<T> operator,
+            final ToIntFunction<? super T> function) {
 
         if (operator == null) {
             throw new NullPointerException("null operator");
@@ -165,12 +153,10 @@ public class BitInputFactory {
                 return BitIoUtilities.apply(function, source);
             }
 
-
             private T source;
 
         };
     }
-
 
     private BitInputFactory() {
 
@@ -178,4 +164,3 @@ public class BitInputFactory {
     }
 
 }
-

@@ -13,9 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.github.jinahya.bit.io.codec;
-
 
 /**
  * An abstract class for implementing {@code BitCodec}.
@@ -23,7 +21,6 @@ package com.github.jinahya.bit.io.codec;
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
 abstract class Nullable {
-
 
     /**
      * Creates a new instance.
@@ -37,7 +34,6 @@ abstract class Nullable {
         this.nullable = nullable;
     }
 
-
     /**
      * Returns the value of {@link #nullable}.
      *
@@ -48,11 +44,9 @@ abstract class Nullable {
         return nullable;
     }
 
-
     /**
      * a flag for nullability.
      */
     protected final boolean nullable;
 
 }
-

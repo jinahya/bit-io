@@ -13,12 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.github.jinahya.bit.io.codec;
 
-
 import com.github.jinahya.bit.io.BitIoConstraints;
-
 
 /**
  *
@@ -26,22 +23,19 @@ import com.github.jinahya.bit.io.BitIoConstraints;
  */
 public class ShortCodec extends BridgeCodec<Short, Integer> {
 
-
     public ShortCodec(final boolean nullable, final boolean unsigned,
-                      final int size) {
+            final int size) {
 
         super(new IntegerCodec(
-            nullable, unsigned,
-            BitIoConstraints.requireValidSize(unsigned, 4, size)));
+                nullable, unsigned,
+                BitIoConstraints.requireValidSize(unsigned, 4, size)));
     }
-
 
     @Override
     protected Short convertFrom(final Integer u) {
 
         return u.shortValue();
     }
-
 
     @Override
     protected Integer convertTo(final Short t) {
@@ -50,4 +44,3 @@ public class ShortCodec extends BridgeCodec<Short, Integer> {
     }
 
 }
-

@@ -13,12 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.github.jinahya.bit.io.codec;
 
-
 import java.io.UnsupportedEncodingException;
-
 
 /**
  *
@@ -26,10 +23,9 @@ import java.io.UnsupportedEncodingException;
  */
 public class StringCodec extends BridgeCodec<String, byte[]> {
 
-
     public StringCodec(final boolean nullable, final int scale,
-                       final boolean unsigned, final int size,
-                       final String charsetName) {
+            final boolean unsigned, final int size,
+            final String charsetName) {
 
         super(new ByteArrayCodec(nullable, scale, unsigned, size));
 
@@ -39,7 +35,6 @@ public class StringCodec extends BridgeCodec<String, byte[]> {
 
         this.charsetName = charsetName;
     }
-
 
     @Override
     protected String convertFrom(final byte[] u) {
@@ -51,7 +46,6 @@ public class StringCodec extends BridgeCodec<String, byte[]> {
         }
     }
 
-
     @Override
     protected byte[] convertTo(final String t) {
 
@@ -62,8 +56,6 @@ public class StringCodec extends BridgeCodec<String, byte[]> {
         }
     }
 
-
     protected final String charsetName;
 
 }
-

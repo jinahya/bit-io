@@ -13,22 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.github.jinahya.bit.io.codec;
-
 
 import java.io.IOException;
 import static java.util.concurrent.ThreadLocalRandom.current;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.testng.annotations.Test;
 
-
 /**
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
 public class StringCodecTest extends BitCodecTest<StringCodec, String> {
-
 
     @Test(invocationCount = 1024)
     public void utf8() throws IOException {
@@ -37,7 +33,7 @@ public class StringCodecTest extends BitCodecTest<StringCodec, String> {
         final int scale = current().nextInt(1, 10);
 
         final BitCodec<String> codec
-            = new StringCodec(nullable, scale, false, 8, "UTF-8");
+                = new StringCodec(nullable, scale, false, 8, "UTF-8");
 
         final int count = current().nextInt((int) Math.pow(2, scale)) / 4;
         String value = RandomStringUtils.random(count);
@@ -48,7 +44,6 @@ public class StringCodecTest extends BitCodecTest<StringCodec, String> {
         BitCodecTests.test(codec, value);
     }
 
-
     @Test(invocationCount = 1024)
     public void ascii() throws IOException {
 
@@ -56,7 +51,7 @@ public class StringCodecTest extends BitCodecTest<StringCodec, String> {
         final int scale = current().nextInt(1, 10);
 
         final BitCodec<String> codec
-            = new StringCodec(nullable, scale, true, 7, "US-ASCII");
+                = new StringCodec(nullable, scale, true, 7, "US-ASCII");
 
         final int count = current().nextInt((int) Math.pow(2, scale));
         String value = RandomStringUtils.randomAscii(count);
@@ -68,4 +63,3 @@ public class StringCodecTest extends BitCodecTest<StringCodec, String> {
     }
 
 }
-

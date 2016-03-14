@@ -13,15 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.github.jinahya.bit.io.codec;
-
 
 import com.github.jinahya.bit.io.BitOutput;
 import java.io.IOException;
 import java.util.function.BiConsumer;
 import org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement;
-
 
 /**
  * An abstract class for implementing {@code BitCodec}.
@@ -30,12 +27,11 @@ import org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement;
  * @param <T> value type parameter
  */
 public abstract class NullableEncoder<T> extends Nullable
-    implements BitEncoder<T> {
-
+        implements BitEncoder<T> {
 
     @IgnoreJRERequirement
     public static <T> NullableEncoder<T> newInstance(
-        final boolean nullable, final BitEncoder<? super T> encoder) {
+            final boolean nullable, final BitEncoder<? super T> encoder) {
 
         if (encoder == null) {
             throw new NullPointerException("null encoder");
@@ -45,7 +41,7 @@ public abstract class NullableEncoder<T> extends Nullable
 
             @Override
             protected void encodeValue(final BitOutput output, final T value)
-                throws IOException {
+                    throws IOException {
 
                 encoder.encode(output, value);
             }
@@ -53,11 +49,10 @@ public abstract class NullableEncoder<T> extends Nullable
         };
     }
 
-
     @IgnoreJRERequirement
     public static <T> NullableEncoder<T> newInstance(
-        final boolean nullable,
-        final BiConsumer<BitOutput, ? super T> consumer) {
+            final boolean nullable,
+            final BiConsumer<BitOutput, ? super T> consumer) {
 
         if (consumer == null) {
             throw new NullPointerException("null consumer");
@@ -67,14 +62,13 @@ public abstract class NullableEncoder<T> extends Nullable
 
             @Override
             protected void encodeValue(final BitOutput output, final T value)
-                throws IOException {
+                    throws IOException {
 
                 consumer.accept(output, value);
             }
 
         };
     }
-
 
     /**
      * Creates a new instance.
@@ -85,7 +79,6 @@ public abstract class NullableEncoder<T> extends Nullable
 
         super(nullable);
     }
-
 
     /**
      * {@inheritDoc} This method optionally (by the value of {@link #nullable})
@@ -101,7 +94,7 @@ public abstract class NullableEncoder<T> extends Nullable
      */
     @Override
     public void encode(final BitOutput output, final T value)
-        throws IOException {
+            throws IOException {
 
         if (output == null) {
             throw new NullPointerException("null output");
@@ -120,7 +113,6 @@ public abstract class NullableEncoder<T> extends Nullable
         }
     }
 
-
     /**
      * Encodes specified value to given output.
      *
@@ -130,7 +122,6 @@ public abstract class NullableEncoder<T> extends Nullable
      * @throws IOException if an I/O error occurs.
      */
     protected abstract void encodeValue(BitOutput output, T value)
-        throws IOException;
+            throws IOException;
 
 }
-

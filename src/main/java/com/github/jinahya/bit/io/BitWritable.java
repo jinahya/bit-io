@@ -13,12 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.github.jinahya.bit.io;
 
-
 import java.io.IOException;
-
 
 /**
  * An interface for enabling objects writable directly to a {@code BitOutput}.
@@ -26,7 +23,6 @@ import java.io.IOException;
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
 public interface BitWritable {
-
 
     /**
      * Writes properties to specified output.
@@ -38,4 +34,3 @@ public interface BitWritable {
     void write(BitOutput output) throws IOException;
 
 }
-

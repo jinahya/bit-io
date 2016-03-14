@@ -15,6 +15,7 @@
  */
 package com.github.jinahya.bit.io;
 
+import com.github.jinahya.bit.io.codec.BitEncoder;
 import java.io.IOException;
 
 /**
@@ -264,6 +265,48 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
     public void writeDouble(final double value) throws IOException {
 
         writeLong(false, 64, Double.doubleToRawLongBits(value));
+    }
+
+    @Override
+    public <T extends BitWritable> void writeObject(final T value)
+            throws IOException {
+
+        if (value == null) {
+            throw new NullPointerException("null value");
+        }
+
+        value.write(this);
+    }
+
+    @Override
+    public <T extends BitWritable> void writeObject(final boolean nullable,
+            final T value)
+            throws IOException {
+
+        if (!nullable && value == null) {
+            throw new NullPointerException("null value");
+        }
+
+        if (nullable) {
+            writeBoolean(value != null);
+        }
+
+        if (!nullable || value != null) {
+            //value.write(this);
+            AbstractBitOutput.this.writeObject(value);
+        }
+    }
+
+    @Override
+    public <T> void writeObject(final BitEncoder<? super T> encoder,
+            final T value)
+            throws IOException {
+
+        if (encoder == null) {
+            throw new NullPointerException("null encoder");
+        }
+
+        encoder.encode(this, value);
     }
 
     @Override

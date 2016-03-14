@@ -20,6 +20,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.nio.ByteBuffer;
 import java.util.function.Consumer;
 import org.slf4j.Logger;
@@ -166,6 +167,28 @@ public final class BitIoTests {
         buffer(writer, reader);
         data(writer, reader);
         stream(writer, reader);
+    }
+
+    public static <T extends BitReadable & BitWritable> void all(
+            final boolean nullable, final Class<? extends T> type, final T expected)
+            throws IOException {
+
+        all(
+                o -> {
+                    try {
+                        o.writeObject(nullable, expected);
+                    } catch (final IOException ioe) {
+                        throw new UncheckedIOException(ioe);
+                    }
+                },
+                i -> {
+                    try {
+                        final T actual = i.readObject(nullable, type);
+                        assertEquals(actual, expected);
+                    } catch (final IOException ioe) {
+                        throw new UncheckedIOException(ioe);
+                    }
+                });
     }
 
     private BitIoTests() {

@@ -15,6 +15,7 @@
  */
 package com.github.jinahya.bit.io;
 
+import com.github.jinahya.bit.io.codec.BitDecoder;
 import java.io.IOException;
 
 /**
@@ -151,6 +152,50 @@ public interface BitInput {
      * @see Double#longBitsToDouble(long)
      */
     double readDouble() throws IOException;
+
+    /**
+     * Reads a reference value.
+     *
+     * @param <T> value type parameter
+     * @param value the value to read
+     *
+     * @return given value
+     *
+     * @throws IOException if an I/O error occurs.
+     * @throws NullPointerException if {@code value} is {@code null}
+     */
+    <T extends BitReadable> T readObject(T value) throws IOException;
+
+    /**
+     * Reads reference value which is possibly {@code null}. This method, if
+     * {@code nullable} is {@code true}, reads preceding 1-bit boolean flag and
+     * reads a value if it is required to be read.
+     *
+     * @param <T> value type parameter
+     * @param nullable a flag of nullability
+     * @param type value type.
+     *
+     * @return an object reference value; may be {@code null}.
+     *
+     * @throws IOException if an I/O error occurs.
+     *
+     * @see #readObject(com.github.jinahya.bit.io.BitReadable)
+     */
+    <T extends BitReadable> T readObject(boolean nullable,
+            Class<? extends T> type)
+            throws IOException;
+
+    /**
+     * Reads a reference value using specified decoder.
+     *
+     * @param <T> value type parameter
+     * @param decoder the decoder
+     *
+     * @return decoded value.
+     *
+     * @throws IOException if an I/O error occurs.
+     */
+    <T> T readObject(BitDecoder<? extends T> decoder) throws IOException;
 
     /**
      * Returns the number of bytes read so far.

@@ -182,7 +182,7 @@ public interface BitInput {
      * @see #readObject(com.github.jinahya.bit.io.BitReadable)
      */
     <T extends BitReadable> T readObject(boolean nullable,
-            Class<? extends T> type)
+                                         Class<? extends T> type)
             throws IOException;
 
     /**

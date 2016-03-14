@@ -30,7 +30,6 @@ public interface BitOutput {
      * {@code true} and {@code 0b0} for {@code false}.
      *
      * @param value the value to write.
-     *
      * @throws IOException if an I/O error occurs
      */
     void writeBoolean(boolean value) throws IOException;
@@ -42,7 +41,6 @@ public interface BitOutput {
      * @param size the number of bits for value ranged
      * {@code [1..(7 + (unsigned ? 0 : 1))]}
      * @param value the value to write
-     *
      * @throws IOException if an I/O error occurs.
      */
     void writeByte(boolean unsigned, int size, byte value) throws IOException;
@@ -60,7 +58,6 @@ public interface BitOutput {
      * @param size the number of bits for value ranged
      * {@code [1..(15 + (unsigned ? 0 : 1))]}
      * @param value the value to write
-     *
      * @throws IOException if an I/O error occurs.
      */
     void writeShort(boolean unsigned, int size, short value) throws IOException;
@@ -79,7 +76,6 @@ public interface BitOutput {
      * @param size the number of bits for value range
      * {@code [1..(31 + (unsigned ? 0 : 1))]}
      * @param value the value to write
-     *
      * @throws IOException if an I/O error occurs.
      */
     void writeInt(boolean unsigned, int size, int value) throws IOException;
@@ -98,7 +94,6 @@ public interface BitOutput {
      * @param size the number of valid bits for value ranged
      * {@code [1..(63 + unsigned ? 0 : 1))]}
      * @param value the value to write
-     *
      * @throws IOException if an I/O error occurs.
      */
     void writeLong(boolean unsigned, int size, long value) throws IOException;
@@ -115,7 +110,6 @@ public interface BitOutput {
      * @param size the number of bits for value; between {@code 1} (inclusive)
      * and {@code 16} (inclusive)
      * @param value the value to write
-     *
      * @throws IOException if an I/O error occurs.
      */
     void writeChar(int size, char value) throws IOException;
@@ -127,7 +121,6 @@ public interface BitOutput {
      * {@code false}, {@code 32}, and the {@code result}.
      *
      * @param value the value to write
-     *
      * @throws IOException if an I/O error occurs.
      * @see Float#floatToRawIntBits(float)
      * @see #writeInt(boolean, int, int)
@@ -142,7 +135,6 @@ public interface BitOutput {
      * and the {@code result}.
      *
      * @param value the value to write
-     *
      * @throws IOException if an I/O error occurs.
      * @see Double#doubleToRawLongBits(double)
      * @see #writeLong(boolean, int, long)
@@ -154,7 +146,6 @@ public interface BitOutput {
      *
      * @param <T> value type parameter
      * @param value the value to write
-     *
      * @throws IOException if an I/O error occurs.
      * @throws NullPointerException if {@code value} is {@code null}
      */
@@ -168,7 +159,6 @@ public interface BitOutput {
      * @param <T> value type parameter
      * @param nullable a flag for nullability
      * @param value the value to write.
-     *
      * @throws IOException if an I/O error occurs.
      * @throws NullPointerException if {@code nullable} is {@code flase} and
      * {@code value} is {@code null}.
@@ -182,7 +172,6 @@ public interface BitOutput {
      * @param <T> value type parameter
      * @param encoder the encoder
      * @param value the value to encode
-     *
      * @throws IOException if an I/O error occurs.
      */
     <T> void writeObject(BitEncoder<? super T> encoder, T value)
@@ -206,11 +195,8 @@ public interface BitOutput {
      * Aligns to specified number of bytes.
      *
      * @param bytes the number of bytes to align; must be positive.
-     *
      * @return the number of bits padded while aligning
-     *
      * @throws IOException if an I/O error occurs.
      */
     long align(int bytes) throws IOException;
-
 }

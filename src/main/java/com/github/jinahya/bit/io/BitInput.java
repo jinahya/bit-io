@@ -30,7 +30,6 @@ public interface BitInput {
      * return {@code true} for {@code 1} and {@code false} for {@code 0}.
      *
      * @return {@code true} for {@code 1}, {@code false} for {@code 0}
-     *
      * @throws IOException if an I/O error occurs.
      */
     boolean readBoolean() throws IOException;
@@ -44,7 +43,6 @@ public interface BitInput {
      * {@code 1} for signed.
      *
      * @return a byte value
-     *
      * @throws IOException if an I/O error occurs.
      */
     byte readByte(boolean unsigned, int size) throws IOException;
@@ -64,7 +62,6 @@ public interface BitInput {
      * {@code 1} for signed
      *
      * @return a short value
-     *
      * @throws IOException if an I/O error occurs.
      */
     short readShort(boolean unsigned, int size) throws IOException;
@@ -83,7 +80,6 @@ public interface BitInput {
      * {@code [1..(7 + unsigned ? 0 : 1)]}
      *
      * @return an int value
-     *
      * @throws IOException if an I/O error occurs.
      */
     int readInt(boolean unsigned, int size) throws IOException;
@@ -102,7 +98,6 @@ public interface BitInput {
      * {@code [1..(15 + unsigned ? 0 : 1)]}
      *
      * @return a long value
-     *
      * @throws IOException if an I/O error occurs.
      */
     long readLong(boolean unsigned, int size) throws IOException;
@@ -120,7 +115,6 @@ public interface BitInput {
      * and {@code 16} (inclusive)
      *
      * @return a char value
-     *
      * @throws IOException if an I/O error occurs.
      */
     char readChar(int size) throws IOException;
@@ -131,9 +125,7 @@ public interface BitInput {
      * {@link Float#intBitsToFloat(int)}.
      *
      * @return a float value
-     *
      * @throws IOException if an I/O error occurs.
-     *
      * @see #readInt(boolean, int)
      * @see Float#intBitsToFloat(int)
      */
@@ -145,9 +137,7 @@ public interface BitInput {
      * with {@link Double#longBitsToDouble(long)}.
      *
      * @return a double value
-     *
      * @throws IOException if an I/O error occurs.
-     *
      * @see #readLong(boolean, int)
      * @see Double#longBitsToDouble(long)
      */
@@ -158,9 +148,7 @@ public interface BitInput {
      *
      * @param <T> value type parameter
      * @param value the value to read
-     *
      * @return given value
-     *
      * @throws IOException if an I/O error occurs.
      * @throws NullPointerException if {@code value} is {@code null}
      */
@@ -174,11 +162,8 @@ public interface BitInput {
      * @param <T> value type parameter
      * @param nullable a flag of nullability
      * @param type value type.
-     *
      * @return an object reference value; may be {@code null}.
-     *
      * @throws IOException if an I/O error occurs.
-     *
      * @see #readObject(com.github.jinahya.bit.io.BitReadable)
      */
     <T extends BitReadable> T readObject(boolean nullable,
@@ -190,9 +175,7 @@ public interface BitInput {
      *
      * @param <T> value type parameter
      * @param decoder the decoder
-     *
      * @return decoded value.
-     *
      * @throws IOException if an I/O error occurs.
      */
     <T> T readObject(BitDecoder<? extends T> decoder) throws IOException;
@@ -215,11 +198,8 @@ public interface BitInput {
      * Aligns to given number of bytes.
      *
      * @param bytes the number of bytes to align; must be positive.
-     *
      * @return the number of bits discarded while aligning
-     *
      * @throws IOException if an I/O error occurs.
      */
     long align(int bytes) throws IOException;
-
 }

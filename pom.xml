@@ -36,7 +36,6 @@
     <project.build.outputDirectory.retrotranslated13>${project.build.directory}/classes-retrotranslated13</project.build.outputDirectory.retrotranslated13>
     <project.build.outputDirectory.retrotranslated14>${project.build.directory}/classes-retrotranslated14</project.build.outputDirectory.retrotranslated14>
     <animal-sniffer.version>1.14</animal-sniffer.version>
-    <excludePackageNames>com.github.jinahya.bit.io.bind.annotation.processing</excludePackageNames>
     <github.site.noJekyll>true</github.site.noJekyll>
   </properties>
 
@@ -156,39 +155,6 @@
             <version>1.2.9</version>
           </dependency>
         </dependencies>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.3</version>
-        <executions>
-          <execution>
-            <id>default-compile</id>
-            <configuration>
-              <proc>none</proc>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.bsc.maven</groupId>
-        <artifactId>maven-processor-plugin</artifactId>
-        <version>3.1.0-beta1</version>
-        <executions>
-          <execution>
-            <id>process</id>
-            <goals>
-              <goal>process</goal>
-            </goals>
-            <phase>process-classes</phase>
-          </execution>
-          <execution>
-            <id>process-test</id>
-            <goals>
-              <goal>process-test</goal>
-            </goals>
-          </execution>
-        </executions>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>

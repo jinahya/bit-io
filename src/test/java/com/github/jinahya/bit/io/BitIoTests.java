@@ -37,131 +37,75 @@ public final class BitIoTests {
     public static void array(final Consumer<? super BitOutput> writer,
                              final Consumer<? super BitInput> reader)
             throws IOException {
-
-        if (writer == null) {
-            throw new NullPointerException("null writer");
-        }
-
-        if (reader == null) {
-            throw new NullPointerException("null reader");
-        }
-
         final byte[] array = new byte[1048576];
-
         final ArrayByteOutput target
-                              = new ArrayByteOutput(array, array.length, 0);
+                = new ArrayByteOutput(array, array.length, 0);
         final BitOutput output = new DefaultBitOutput<>(target);
         writer.accept(output);
         final long padded = output.align(1);
-
         final ByteInput source = new ArrayByteInput(array, target.index, 0);
         final BitInput input = new DefaultBitInput<>(source);
         reader.accept(input);
         final long discarded = input.align(1);
-
         assertEquals(discarded, padded, "discarded != padded");
     }
 
     public static void buffer(final Consumer<? super BitOutput> writer,
                               final Consumer<? super BitInput> reader)
             throws IOException {
-
-        if (writer == null) {
-            throw new NullPointerException("null writer");
-        }
-
-        if (reader == null) {
-            throw new NullPointerException("null reader");
-        }
-
         final ByteBuffer buffer = ByteBuffer.allocate(1048576);
-
         final BitOutput output
-                        = new DefaultBitOutput<>(new BufferByteOutput(buffer));
+                = new DefaultBitOutput<>(new BufferByteOutput(buffer));
         writer.accept(output);
         final long padded = output.align(1);
-
         buffer.flip();
-
         final BitInput input
-                       = new DefaultBitInput<>(new BufferByteInput(buffer));
+                = new DefaultBitInput<>(new BufferByteInput(buffer));
         reader.accept(input);
         final long discarded = input.align(1);
-
         assertEquals(discarded, padded);
     }
 
     public static void data(final Consumer<? super BitOutput> writer,
                             final Consumer<? super BitInput> reader)
             throws IOException {
-
-        if (writer == null) {
-            throw new NullPointerException("null writer");
-        }
-
-        if (reader == null) {
-            throw new NullPointerException("null reader");
-        }
-
         final ByteArrayOutputStream baos = new ByteArrayOutputStream(1048576);
         final DataOutputStream target = new DataOutputStream(baos);
         final BitOutput output
-                        = new DefaultBitOutput<>(new DataByteOutput(target));
+                = new DefaultBitOutput<>(new DataByteOutput(target));
         writer.accept(output);
         final long padded = output.align(1);
         target.flush();
-
         final ByteArrayInputStream bais
-                                   = new ByteArrayInputStream(baos.toByteArray());
+                = new ByteArrayInputStream(baos.toByteArray());
         final DataInputStream dis = new DataInputStream(bais);
         final BitInput input = new DefaultBitInput<>(new DataByteInput(dis));
         reader.accept(input);
         final long discarded = input.align(1);
-
         assertEquals(discarded, padded);
     }
 
     public static void stream(final Consumer<? super BitOutput> writer,
                               final Consumer<? super BitInput> reader)
             throws IOException {
-
-        if (writer == null) {
-            throw new NullPointerException("null writer");
-        }
-
-        if (reader == null) {
-            throw new NullPointerException("null reader");
-        }
-
         final ByteArrayOutputStream target = new ByteArrayOutputStream(1048576);
         final BitOutput output
-                        = new DefaultBitOutput<>(new StreamByteOutput(target));
+                = new DefaultBitOutput<>(new StreamByteOutput(target));
         writer.accept(output);
         final long padded = output.align(1);
         target.flush();
-
         final ByteArrayInputStream source
-                                   = new ByteArrayInputStream(target.toByteArray());
+                = new ByteArrayInputStream(target.toByteArray());
         final BitInput input
-                       = new DefaultBitInput<>(new StreamByteInput(source));
+                = new DefaultBitInput<>(new StreamByteInput(source));
         reader.accept(input);
         final long discarded = input.align(1);
-
         assertEquals(discarded, padded);
     }
 
     public static void all(final Consumer<? super BitOutput> writer,
                            final Consumer<? super BitInput> reader)
             throws IOException {
-
-        if (writer == null) {
-            throw new NullPointerException("null writer");
-        }
-
-        if (reader == null) {
-            throw new NullPointerException("null reader");
-        }
-
         array(writer, reader);
         buffer(writer, reader);
         data(writer, reader);
@@ -190,8 +134,6 @@ public final class BitIoTests {
 //                });
 //    }
     private BitIoTests() {
-
         super();
     }
-
 }

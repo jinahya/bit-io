@@ -31,13 +31,11 @@ import org.testng.annotations.Test;
 public class BitValueTest {
 
     private static void test(final BitValue type) throws IOException {
-
         final List<Object> params = new LinkedList<>();
         final Object[] w = new Object[1];
         final long[] p = new long[1];
         final Object[] r = new Object[1];
         final long[] d = new long[1];
-
         BitIoTests.all(
                 o -> {
                     try {
@@ -62,52 +60,43 @@ public class BitValueTest {
 
     @Test(enabled = true, invocationCount = 1024)
     public void _boolean() throws IOException {
-
         test(BitValue.BOOLEAN);
     }
 
     @Test(enabled = true, invocationCount = 1024)
     public void _byte() throws IOException {
-
         test(BitValue.BYTE);
     }
 
     @Test(enabled = true, invocationCount = 1024)
     public void _short() throws IOException {
-
         test(BitValue.SHORT);
     }
 
     @Test(enabled = true, invocationCount = 1024)
     public void _int() throws IOException {
-
         test(BitValue.INT);
     }
 
     @Test(enabled = true, invocationCount = 1024)
     public void _long() throws IOException {
-
         test(BitValue.LONG);
     }
 
     @Test(enabled = true, invocationCount = 1024)
     public void _char() throws IOException {
-
         test(BitValue.CHAR);
     }
 
     @Test(enabled = true, invocationCount = 1024)
     public void _float() throws IOException {
-
         test(BitValue.FLOAT);
     }
 
     @Test(enabled = true, invocationCount = 1024)
     public void _double() throws IOException {
-
         test(BitValue.DOUBLE);
     }
 
     private transient final Logger logger = getLogger(getClass());
-
 }

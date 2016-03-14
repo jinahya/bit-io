@@ -13,13 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-
 package com.github.jinahya.bit.io;
 
-
 import java.io.IOException;
-
 
 /**
  * A default implementation writes bytes to {@link #delegate}.
@@ -28,7 +24,6 @@ import java.io.IOException;
  * @param <T> byte output type parameter
  */
 public class DefaultBitOutput<T extends ByteOutput> extends AbstractBitOutput {
-
 
     /**
      * Creates new instance with specified byte output.
@@ -42,7 +37,6 @@ public class DefaultBitOutput<T extends ByteOutput> extends AbstractBitOutput {
 
         this.delegate = delegate;
     }
-
 
     /**
      * {@inheritDoc} The {@code write(int)} method of {@code DefaultBitOutput}
@@ -60,7 +54,6 @@ public class DefaultBitOutput<T extends ByteOutput> extends AbstractBitOutput {
         delegate.write(value);
     }
 
-
     /**
      * returns the current value of {@link #delegate}.
      *
@@ -70,7 +63,6 @@ public class DefaultBitOutput<T extends ByteOutput> extends AbstractBitOutput {
 
         return delegate;
     }
-
 
     /**
      * Replaces the value of {@link #delegate} with given.
@@ -82,11 +74,9 @@ public class DefaultBitOutput<T extends ByteOutput> extends AbstractBitOutput {
         this.delegate = delegate;
     }
 
-
     /**
      * The delegate on which {@link #write(int)} is invoked.
      */
     protected T delegate;
 
 }
-

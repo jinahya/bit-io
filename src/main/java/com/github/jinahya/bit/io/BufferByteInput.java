@@ -13,16 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-
 package com.github.jinahya.bit.io;
-
 
 import java.io.EOFException;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.ReadableByteChannel;
-
 
 /**
  * A {@link ByteInput} implementation uses a {@link ByteBuffer} as
@@ -32,7 +28,6 @@ import java.nio.channels.ReadableByteChannel;
  * @see BufferByteOutput
  */
 public class BufferByteInput extends AbstractByteInput<ByteBuffer> {
-
 
     /**
      * Ensures specified byte buffer has remaining for reading. This method, if
@@ -47,8 +42,8 @@ public class BufferByteInput extends AbstractByteInput<ByteBuffer> {
      * @throws IOException if an I/O error occurs.
      */
     public static ByteBuffer ensureRemaining(final ByteBuffer buffer,
-                                             final ReadableByteChannel channel)
-        throws IOException {
+            final ReadableByteChannel channel)
+            throws IOException {
 
         if (buffer == null) {
             throw new NullPointerException("null buffer");
@@ -72,7 +67,6 @@ public class BufferByteInput extends AbstractByteInput<ByteBuffer> {
         return buffer;
     }
 
-
     /**
      * Creates a new instance of {@code BufferByteInput} whose {@link #source}
      * is filled from the specified {@code channel}.
@@ -84,8 +78,8 @@ public class BufferByteInput extends AbstractByteInput<ByteBuffer> {
      * @return a new instance of {@code BufferByteInput}
      */
     public static BufferByteInput newInstance(final ReadableByteChannel channel,
-                                              final int capacity,
-                                              final boolean direct) {
+            final int capacity,
+            final boolean direct) {
 
         if (channel == null) {
             throw new NullPointerException("null channel");
@@ -93,7 +87,7 @@ public class BufferByteInput extends AbstractByteInput<ByteBuffer> {
 
         if (capacity <= 0) {
             throw new IllegalArgumentException(
-                "capacity(" + capacity + ") <= 0");
+                    "capacity(" + capacity + ") <= 0");
         }
 
         return new BufferByteInput(null) {
@@ -103,8 +97,8 @@ public class BufferByteInput extends AbstractByteInput<ByteBuffer> {
 
                 if (source == null) {
                     source = direct
-                             ? ByteBuffer.allocateDirect(capacity)
-                             : ByteBuffer.allocate(capacity);
+                            ? ByteBuffer.allocateDirect(capacity)
+                            : ByteBuffer.allocate(capacity);
                     source.position(source.limit());
                 }
 
@@ -116,7 +110,6 @@ public class BufferByteInput extends AbstractByteInput<ByteBuffer> {
         };
     }
 
-
     /**
      * Creates a new instance built on top of the specified byte buffer.
      *
@@ -127,7 +120,6 @@ public class BufferByteInput extends AbstractByteInput<ByteBuffer> {
 
         super(source);
     }
-
 
     /**
      * {@inheritDoc} The {@code read()} method of {@code BufferByteInput}
@@ -146,4 +138,3 @@ public class BufferByteInput extends AbstractByteInput<ByteBuffer> {
     }
 
 }
-

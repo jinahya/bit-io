@@ -13,10 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-
 package com.github.jinahya.bit.io;
-
 
 /**
  * An abstract class for implementing {@code ByteInput}.
@@ -25,7 +22,6 @@ package com.github.jinahya.bit.io;
  * @param <T> byte source type parameter
  */
 public abstract class AbstractByteInput<T> implements ByteInput {
-
 
     /**
      * Creates a new instance wrapping specified byte source.
@@ -40,7 +36,6 @@ public abstract class AbstractByteInput<T> implements ByteInput {
         this.source = source;
     }
 
-
     /**
      * Returns the current value of {@link #source}.
      *
@@ -50,7 +45,6 @@ public abstract class AbstractByteInput<T> implements ByteInput {
 
         return source;
     }
-
 
     /**
      * Replaces the current value of {@link #source} with given.
@@ -62,11 +56,9 @@ public abstract class AbstractByteInput<T> implements ByteInput {
         this.source = source;
     }
 
-
     /**
      * The underlying byte source.
      */
     protected T source;
 
 }
-

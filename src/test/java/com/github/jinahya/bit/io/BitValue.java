@@ -13,16 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.github.jinahya.bit.io;
-
 
 import java.io.IOException;
 import java.util.List;
 import static java.util.concurrent.ThreadLocalRandom.current;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 
 /**
  *
@@ -34,17 +31,16 @@ enum BitValue {
 
         @Override
         Object read(final List<Object> params, final BitInput input)
-            throws IOException {
+                throws IOException {
 
             final boolean value = input.readBoolean();
 
             return value;
         }
 
-
         @Override
         Object write(final List<Object> params, final BitOutput output)
-            throws IOException {
+                throws IOException {
 
             final boolean value = current().nextBoolean();
             output.writeBoolean(value);
@@ -57,7 +53,7 @@ enum BitValue {
 
         @Override
         Object read(final List<Object> params, final BitInput input)
-            throws IOException {
+                throws IOException {
 
             final boolean unsigned = (boolean) params.remove(0);
             final int size = (int) params.remove(0);
@@ -66,10 +62,9 @@ enum BitValue {
             return value;
         }
 
-
         @Override
         Object write(final List<Object> params, final BitOutput output)
-            throws IOException {
+                throws IOException {
 
             final boolean unsigned = current().nextBoolean();
             final int size = BitIoRandoms.size(unsigned, 3);
@@ -86,7 +81,7 @@ enum BitValue {
 
         @Override
         Object read(final List<Object> params, final BitInput input)
-            throws IOException {
+                throws IOException {
 
             final boolean unsigned = (boolean) params.remove(0);
             final int size = (int) params.remove(0);
@@ -95,10 +90,9 @@ enum BitValue {
             return value;
         }
 
-
         @Override
         Object write(final List<Object> params, final BitOutput output)
-            throws IOException {
+                throws IOException {
 
             final boolean u = current().nextBoolean();
             final int e = 4;
@@ -116,7 +110,7 @@ enum BitValue {
 
         @Override
         Object read(final List<Object> params, final BitInput input)
-            throws IOException {
+                throws IOException {
 
             final boolean unsigned = (boolean) params.remove(0);
             final int size = (int) params.remove(0);
@@ -125,10 +119,9 @@ enum BitValue {
             return value;
         }
 
-
         @Override
         Object write(final List<Object> params, final BitOutput output)
-            throws IOException {
+                throws IOException {
 
             final boolean unsigned = current().nextBoolean();
             final int size = BitIoRandoms.size(unsigned, 5);
@@ -145,7 +138,7 @@ enum BitValue {
 
         @Override
         Object read(final List<Object> params, final BitInput input)
-            throws IOException {
+                throws IOException {
 
             final boolean unsigned = (boolean) params.remove(0);
             final int size = (int) params.remove(0);
@@ -154,10 +147,9 @@ enum BitValue {
             return value;
         }
 
-
         @Override
         Object write(final List<Object> params, final BitOutput output)
-            throws IOException {
+                throws IOException {
 
             final boolean unsigned = current().nextBoolean();
             final int size = BitIoRandoms.size(unsigned, 6);
@@ -174,7 +166,7 @@ enum BitValue {
 
         @Override
         Object read(final List<Object> params, final BitInput input)
-            throws IOException {
+                throws IOException {
 
             final int size = (int) params.remove(0);
             final char value = input.readChar(size);
@@ -182,10 +174,9 @@ enum BitValue {
             return value;
         }
 
-
         @Override
         Object write(final List<Object> params, final BitOutput output)
-            throws IOException {
+                throws IOException {
 
             final boolean u = true;
             final int e = 4;
@@ -202,21 +193,20 @@ enum BitValue {
 
         @Override
         Object read(final List<Object> params, final BitInput input)
-            throws IOException {
+                throws IOException {
 
             final float value = input.readFloat();
 
             return value;
         }
 
-
         @Override
         Object write(final List<Object> params, final BitOutput output)
-            throws IOException {
+                throws IOException {
 
             final float value = current().doubles(
-                1L, -Float.MAX_VALUE, Math.nextUp((double) Float.MAX_VALUE))
-                .iterator().next().floatValue();
+                    1L, -Float.MAX_VALUE, Math.nextUp((double) Float.MAX_VALUE))
+                    .iterator().next().floatValue();
             output.writeFloat(value);
 
             return value;
@@ -227,21 +217,20 @@ enum BitValue {
 
         @Override
         Object read(final List<Object> params, final BitInput input)
-            throws IOException {
+                throws IOException {
 
             final double value = input.readDouble();
 
             return value;
         }
 
-
         @Override
         Object write(final List<Object> params, final BitOutput output)
-            throws IOException {
+                throws IOException {
 
             final double value = current().doubles(
-                1L, -Float.MAX_VALUE, Math.nextUp((double) Float.MAX_VALUE))
-                .iterator().next();
+                    1L, -Float.MAX_VALUE, Math.nextUp((double) Float.MAX_VALUE))
+                    .iterator().next();
             output.writeDouble(value);
 
             return value;
@@ -249,17 +238,13 @@ enum BitValue {
 
     };
 
-
     private static final Logger logger
-        = LoggerFactory.getLogger(BitValue.class);
-
+            = LoggerFactory.getLogger(BitValue.class);
 
     abstract Object read(List<Object> params, BitInput input)
-        throws IOException;
-
+            throws IOException;
 
     abstract Object write(List<Object> params, BitOutput output)
-        throws IOException;
+            throws IOException;
 
 }
-

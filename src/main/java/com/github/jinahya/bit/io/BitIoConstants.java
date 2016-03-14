@@ -13,10 +13,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-
-
 package com.github.jinahya.bit.io;
-
 
 /**
  * A class for constants.
@@ -25,11 +22,9 @@ package com.github.jinahya.bit.io;
  */
 final class BitIoConstants {
 
-
     private BitIoConstants() {
 
         super();
     }
 
 }
-

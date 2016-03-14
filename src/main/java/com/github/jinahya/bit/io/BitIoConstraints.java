@@ -13,15 +13,11 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-
-
 package com.github.jinahya.bit.io;
-
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
 
 /**
  * A class for constraints.
@@ -30,15 +26,11 @@ import java.util.List;
  */
 public final class BitIoConstraints {
 
-
     private static final int MIN_EXPONENT = 3;
-
 
     private static final int MAX_EXPONENT = 6;
 
-
     private static final List<Integer> MAX_SIGNED_SIZES;
-
 
     static {
         final List<Integer> maxSignedSizes = new ArrayList<Integer>(4);
@@ -48,18 +40,17 @@ public final class BitIoConstraints {
         MAX_SIGNED_SIZES = Collections.unmodifiableList(maxSignedSizes);
     }
 
-
     public static int requireValidSize(final boolean unsigned,
-                                       final int exponent, final int size) {
+            final int exponent, final int size) {
 
         if (exponent < MIN_EXPONENT) {
             throw new IllegalArgumentException(
-                "exponent(" + exponent + ") < " + MIN_EXPONENT);
+                    "exponent(" + exponent + ") < " + MIN_EXPONENT);
         }
 
         if (exponent > MAX_EXPONENT) {
             throw new IllegalArgumentException(
-                "exponent(" + exponent + ") > " + MAX_EXPONENT);
+                    "exponent(" + exponent + ") > " + MAX_EXPONENT);
         }
 
         if (size < 1) {
@@ -67,49 +58,43 @@ public final class BitIoConstraints {
         }
 
         final int maxSize = MAX_SIGNED_SIZES.get(exponent - MIN_EXPONENT)
-                            - (unsigned ? 1 : 0);
+                - (unsigned ? 1 : 0);
         if (size > maxSize) {
             throw new IllegalArgumentException(
-                "size(" + size + ") > max(" + maxSize + ")");
+                    "size(" + size + ") > max(" + maxSize + ")");
         }
 
         return size;
     }
 
-
     public static int requireValidByteSize(final boolean unsigned,
-                                           final int size) {
+            final int size) {
 
         return requireValidSize(unsigned, 3, size);
     }
 
-
     public static int requireValidShortSize(final boolean unsigned,
-                                            final int size) {
+            final int size) {
 
         return requireValidSize(unsigned, 4, size);
     }
 
-
     public static int requireValidIntSize(final boolean unsigned,
-                                          final int size) {
+            final int size) {
 
         return requireValidSize(unsigned, 5, size);
     }
 
-
     public static int requireValidLongSize(final boolean unsigned,
-                                           final int size) {
+            final int size) {
 
         return requireValidSize(unsigned, 6, size);
     }
-
 
     public static int requireValidCharSize(final int size) {
 
         return requireValidSize(true, 4, size);
     }
-
 
     public BitIoConstraints() {
 
@@ -117,4 +102,3 @@ public final class BitIoConstraints {
     }
 
 }
-

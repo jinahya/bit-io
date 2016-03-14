@@ -13,14 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-
 package com.github.jinahya.bit.io;
-
 
 import java.io.IOException;
 import java.io.OutputStream;
-
 
 /**
  * A {@link ByteOutput} implementation for {@link OutputStream}s.
@@ -28,7 +24,6 @@ import java.io.OutputStream;
  * @see StreamByteInput
  */
 public class StreamByteOutput extends AbstractByteOutput<OutputStream> {
-
 
     /**
      * Creates a new instance built on top of the specified output stream.
@@ -40,7 +35,6 @@ public class StreamByteOutput extends AbstractByteOutput<OutputStream> {
 
         super(target);
     }
-
 
     /**
      * {@inheritDoc} The {@code writeUnsginedByte(int)} method of
@@ -62,4 +56,3 @@ public class StreamByteOutput extends AbstractByteOutput<OutputStream> {
     }
 
 }
-

@@ -13,13 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-
 package com.github.jinahya.bit.io;
 
-
 import java.io.IOException;
-
 
 /**
  * A default implementation read bytes from {@link #delegate}.
@@ -28,7 +24,6 @@ import java.io.IOException;
  * @param <T> byte input type parameter
  */
 public class DefaultBitInput<T extends ByteInput> extends AbstractBitInput {
-
 
     /**
      * Create a new instance with specified delegate.
@@ -42,7 +37,6 @@ public class DefaultBitInput<T extends ByteInput> extends AbstractBitInput {
 
         this.delegate = delegate;
     }
-
 
     /**
      * {@inheritDoc} The {@code read()} method of {@code DefaultBitInput} class
@@ -60,7 +54,6 @@ public class DefaultBitInput<T extends ByteInput> extends AbstractBitInput {
         return delegate.read();
     }
 
-
     /**
      * Returns the current value of {@link #delegate}.
      *
@@ -70,7 +63,6 @@ public class DefaultBitInput<T extends ByteInput> extends AbstractBitInput {
 
         return delegate;
     }
-
 
     /**
      * Replaces the value of {@link #delegate} with given.
@@ -82,11 +74,9 @@ public class DefaultBitInput<T extends ByteInput> extends AbstractBitInput {
         this.delegate = delegate;
     }
 
-
     /**
      * The delegate on which {@link #read()} is invoked.
      */
     protected T delegate;
 
 }
-

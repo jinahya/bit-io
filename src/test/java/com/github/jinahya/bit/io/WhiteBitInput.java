@@ -13,21 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-
 package com.github.jinahya.bit.io;
-
 
 import java.io.IOException;
 import static java.util.concurrent.ThreadLocalRandom.current;
-
 
 /**
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
 public class WhiteBitInput extends AbstractBitInput {
-
 
     @Override
     public int read() throws IOException {
@@ -36,4 +31,3 @@ public class WhiteBitInput extends AbstractBitInput {
     }
 
 }
-

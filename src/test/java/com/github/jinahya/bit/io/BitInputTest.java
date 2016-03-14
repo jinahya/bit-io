@@ -13,10 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-
 package com.github.jinahya.bit.io;
-
 
 import java.io.IOException;
 import static java.util.concurrent.ThreadLocalRandom.current;
@@ -26,14 +23,12 @@ import static org.slf4j.LoggerFactory.getLogger;
 import org.testng.annotations.Guice;
 import org.testng.annotations.Test;
 
-
 /**
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
 @Guice(modules = {WhiteBitInputModule.class})
 public class BitInputTest {
-
 
     public static void readBoolean(final BitInput input) throws IOException {
 
@@ -43,7 +38,6 @@ public class BitInputTest {
 
         final boolean value = input.readBoolean();
     }
-
 
     public static void readByte(final BitInput input) throws IOException {
 
@@ -57,7 +51,6 @@ public class BitInputTest {
         final byte value = input.readByte(unsigned, size);
     }
 
-
     public static void readShort(final BitInput input) throws IOException {
 
         if (input == null) {
@@ -69,7 +62,6 @@ public class BitInputTest {
 
         final short value = input.readShort(unsigned, size);
     }
-
 
     public static void readInt(final BitInput input) throws IOException {
 
@@ -83,7 +75,6 @@ public class BitInputTest {
         final int value = input.readInt(unsigned, size);
     }
 
-
     public static void readLong(final BitInput input) throws IOException {
 
         if (input == null) {
@@ -96,7 +87,6 @@ public class BitInputTest {
         final long value = input.readLong(unsigned, size);
     }
 
-
     public static void readChar(final BitInput input) throws IOException {
 
         if (input == null) {
@@ -107,7 +97,6 @@ public class BitInputTest {
 
         final char value = input.readChar(size);
     }
-
 
     public static void test(final BitInput input) throws IOException {
 
@@ -123,13 +112,11 @@ public class BitInputTest {
         readChar(input);
     }
 
-
     @Test(invocationCount = 128)
     public void readBoolean() throws IOException {
 
         readBoolean(input);
     }
-
 
     @Test(invocationCount = 128)
     public void readByte() throws IOException {
@@ -137,13 +124,11 @@ public class BitInputTest {
         readByte(input);
     }
 
-
     @Test(invocationCount = 128)
     public void readShort() throws IOException {
 
         readShort(input);
     }
-
 
     @Test(invocationCount = 128)
     public void readInt() throws IOException {
@@ -151,13 +136,11 @@ public class BitInputTest {
         readInt(input);
     }
 
-
     @Test(invocationCount = 128)
     public void readLong() throws IOException {
 
         readLong(input);
     }
-
 
     @Test(invocationCount = 128)
     public void readChar() throws IOException {
@@ -165,12 +148,9 @@ public class BitInputTest {
         readChar(input);
     }
 
-
     private transient final Logger logger = getLogger(getClass());
-
 
     @Inject
     private transient BitInput input;
 
 }
-

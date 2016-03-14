@@ -13,15 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-
 package com.github.jinahya.bit.io;
-
 
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
-
 
 /**
  * A {@link ByteInput} implementation for {@link InputStream}s.
@@ -29,7 +25,6 @@ import java.io.InputStream;
  * @see StreamByteOutput
  */
 public class StreamByteInput extends AbstractByteInput<InputStream> {
-
 
     /**
      * Creates a new instance built on top of the specified input stream.
@@ -41,7 +36,6 @@ public class StreamByteInput extends AbstractByteInput<InputStream> {
 
         super(source);
     }
-
 
     /**
      * {@inheritDoc} The {@code read()} method of {@code StreamByteInput} class
@@ -69,4 +63,3 @@ public class StreamByteInput extends AbstractByteInput<InputStream> {
     }
 
 }
-

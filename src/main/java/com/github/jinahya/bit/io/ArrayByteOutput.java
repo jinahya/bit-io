@@ -32,39 +32,31 @@ public class ArrayByteOutput extends AbstractByteOutput<byte[]> {
      * @param stream the {@code OutputStream} to which aggregated bytes are
      * written.
      * @param length the length of the byte array; must be positive
-     *
      * @return a new instance.
      */
     public static ArrayByteOutput newInstance(final OutputStream stream,
-            final int length) {
-
+                                              final int length) {
         if (stream == null) {
             throw new NullPointerException("null stream");
         }
-
         if (length <= 0) {
             throw new IllegalArgumentException("length(" + length + ") <= 0");
         }
-
         return new ArrayByteOutput(null, -1, -1) {
 
             @Override
             public void write(final int value) throws IOException {
-
                 if (target == null) {
                     target = new byte[length];
                     index = 0;
                     limit = target.length;
                 }
-
                 super.write(value);
-
                 if (index == limit) {
                     stream.write(target);
                     index = 0;
                 }
             }
-
         };
     }
 
@@ -76,10 +68,8 @@ public class ArrayByteOutput extends AbstractByteOutput<byte[]> {
      * @param index array index to write
      */
     public ArrayByteOutput(final byte[] target, final int limit,
-            final int index) {
-
+                           final int index) {
         super(target);
-
         this.limit = limit;
         this.index = index;
     }
@@ -92,60 +82,47 @@ public class ArrayByteOutput extends AbstractByteOutput<byte[]> {
      * initialized or adjusted.
      *
      * @param value {@inheritDoc}
-     *
      * @throws IOException {@inheritDoc}
      * @throws IndexOutOfBoundsException if {@link #index} is greater than or
      * equals to {@link #limit}.
      */
     @Override
     public void write(final int value) throws IOException {
-
         if (index >= limit) {
             throw new IndexOutOfBoundsException(
                     "index(" + index + ") >= limit(" + limit + ")");
         }
-
         target[index++] = (byte) value;
     }
 
     public ArrayByteOutput target(final byte[] target) {
-
         setTarget(target);
-
         return this;
     }
 
     public int getLimit() {
-
         return limit;
     }
 
     public void setLimit(final int limit) {
-
         this.limit = limit;
     }
 
     public ArrayByteOutput limit(final int limit) {
-
         setLimit(limit);
-
         return this;
     }
 
     public int getIndex() {
-
         return index;
     }
 
     public void setIndex(final int index) {
-
         this.index = index;
     }
 
     public ArrayByteOutput index(final int index) {
-
         setIndex(index);
-
         return this;
     }
 
@@ -158,5 +135,4 @@ public class ArrayByteOutput extends AbstractByteOutput<byte[]> {
      * The index in the {@link #target} to write.
      */
     protected int index;
-
 }

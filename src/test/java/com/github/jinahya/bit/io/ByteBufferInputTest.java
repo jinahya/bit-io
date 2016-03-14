@@ -50,7 +50,7 @@ public class ByteBufferInputTest {
 
         when(channel.read(any(ByteBuffer.class))).then(invocation -> {
             final ByteBuffer buffer
-                    = invocation.getArgumentAt(0, ByteBuffer.class);
+                             = invocation.getArgumentAt(0, ByteBuffer.class);
             while (buffer.hasRemaining()) {
                 buffer.put((byte) current().nextInt(256));
             }

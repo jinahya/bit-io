@@ -23,7 +23,6 @@ import java.io.InputStream;
  * A {@code ByteInput} implementation uses a byte array, a limit, and an index.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
- *
  * @see #source
  * @see #limit
  * @see #index
@@ -31,7 +30,7 @@ import java.io.InputStream;
 public class ArrayByteInput extends AbstractByteInput<byte[]> {
 
     /**
-     * Creates a new instance which continuously supplies bytes from specified
+     * Creates a new instance which read bytes from specified
      * {@code InputStream}.
      *
      * @param stream the {@code InputStream}
@@ -40,27 +39,22 @@ public class ArrayByteInput extends AbstractByteInput<byte[]> {
      * @return a new instance.
      */
     public static ArrayByteInput newInstance(final InputStream stream,
-            final int length) {
-
+                                             final int length) {
         if (stream == null) {
             throw new NullPointerException("null stream");
         }
-
         if (length <= 0) {
             throw new IllegalArgumentException("length(" + length + ") <= 0");
         }
-
         return new ArrayByteInput(null, -1, -1) {
 
             @Override
             public int read() throws IOException {
-
                 if (source == null) {
                     source = new byte[length];
                     limit = source.length;
                     index = limit;
                 }
-
                 if (index == limit) {
                     final int read = stream.read(source);
                     if (read == -1) {
@@ -69,10 +63,8 @@ public class ArrayByteInput extends AbstractByteInput<byte[]> {
                     limit = read;
                     index = 0;
                 }
-
                 return super.read();
             }
-
         };
     }
 
@@ -84,10 +76,8 @@ public class ArrayByteInput extends AbstractByteInput<byte[]> {
      * @param index array index to read
      */
     public ArrayByteInput(final byte[] source, final int limit,
-            final int index) {
-
+                          final int index) {
         super(source);
-
         this.limit = limit;
         this.index = index;
     }
@@ -100,19 +90,16 @@ public class ArrayByteInput extends AbstractByteInput<byte[]> {
      * initialized or adjusted.
      *
      * @return {@inheritDoc}
-     *
      * @throws IOException {@inheritDoc}
      * @throws IndexOutOfBoundsException if {@link #index} is greater than or
      * equals to {@link #limit}.
      */
     @Override
     public int read() throws IOException {
-
         if (index >= limit) {
             throw new IndexOutOfBoundsException(
                     "index(" + index + ") >= limit(" + limit + ")");
         }
-
         return source[index++] & 0xFF;
     }
 
@@ -120,13 +107,10 @@ public class ArrayByteInput extends AbstractByteInput<byte[]> {
      * Replaces the value of {@link #source} with given and returns this.
      *
      * @param target new value of {@link #source}.
-     *
      * @return this instance.
      */
     public ArrayByteInput source(final byte[] target) {
-
         setSource(target);
-
         return this;
     }
 
@@ -136,7 +120,6 @@ public class ArrayByteInput extends AbstractByteInput<byte[]> {
      * @return current value of {@link #limit}.
      */
     public int getLimit() {
-
         return limit;
     }
 
@@ -146,7 +129,6 @@ public class ArrayByteInput extends AbstractByteInput<byte[]> {
      * @param limit new value for {@link #limit}.
      */
     public void setLimit(int limit) {
-
         this.limit = limit;
     }
 
@@ -159,9 +141,7 @@ public class ArrayByteInput extends AbstractByteInput<byte[]> {
      * @return this instance.
      */
     public ArrayByteInput limit(final int limit) {
-
         setLimit(limit);
-
         return this;
     }
 
@@ -171,7 +151,6 @@ public class ArrayByteInput extends AbstractByteInput<byte[]> {
      * @return current value of {@link #index}.
      */
     public int getIndex() {
-
         return index;
     }
 
@@ -181,7 +160,6 @@ public class ArrayByteInput extends AbstractByteInput<byte[]> {
      * @param index new value for {@link #index}.
      */
     public void setIndex(int index) {
-
         this.index = index;
     }
 
@@ -194,9 +172,7 @@ public class ArrayByteInput extends AbstractByteInput<byte[]> {
      * @return this instance.
      */
     public ArrayByteInput index(final int index) {
-
         setIndex(index);
-
         return this;
     }
 
@@ -209,5 +185,4 @@ public class ArrayByteInput extends AbstractByteInput<byte[]> {
      * The index in the {@link #source} to read.
      */
     protected int index;
-
 }

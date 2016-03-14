@@ -239,7 +239,7 @@ enum BitValue {
     };
 
     private static final Logger logger
-            = LoggerFactory.getLogger(BitValue.class);
+                                = LoggerFactory.getLogger(BitValue.class);
 
     abstract Object read(List<Object> params, BitInput input)
             throws IOException;

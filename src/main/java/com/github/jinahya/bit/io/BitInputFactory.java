@@ -134,33 +134,25 @@ public class BitInputFactory {
     public static <T> BitInput newInstance(
             final UnaryOperator<T> operator,
             final ToIntFunction<? super T> function) {
-
         if (operator == null) {
             throw new NullPointerException("null operator");
         }
-
         if (function == null) {
             throw new NullPointerException("null function");
         }
-
         return new AbstractBitInput() {
 
             @Override
             public int read() throws IOException {
-
                 source = BitIoUtilities.apply(operator, source);
-
                 return BitIoUtilities.apply(function, source);
             }
 
             private T source;
-
         };
     }
 
     private BitInputFactory() {
-
         super();
     }
-
 }

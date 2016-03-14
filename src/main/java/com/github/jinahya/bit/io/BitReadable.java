@@ -28,9 +28,7 @@ public interface BitReadable {
      * Reads properties from specified input.
      *
      * @param input the input
-     *
      * @throws IOException if an I/O error occurs.
      */
     void read(BitInput input) throws IOException;
-
 }

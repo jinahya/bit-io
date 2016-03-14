@@ -36,67 +36,53 @@ public class BitOutputFactory {
      * @return a new bit output
      */
     public static BitOutput newInstance(final ByteOutput output) {
-
         if (output == null) {
             throw new NullPointerException("null output");
         }
-
         return new AbstractBitOutput() {
 
             @Override
             public void write(final int value) throws IOException {
-
                 output.write(value);
             }
-
         };
     }
 
     @IgnoreJRERequirement
     public static BitOutput newInstance(
             final Supplier<? extends ByteOutput> supplier) {
-
         if (supplier == null) {
             throw new NullPointerException("null supplier");
         }
-
         return new AbstractBitOutput() {
 
             @Override
             public void write(final int value) throws IOException {
-
                 if (output == null) {
                     output = BitIoUtilities.get(supplier);
                 }
-
                 output.write(value);
             }
 
             private ByteOutput output;
-
         };
     }
 
     @IgnoreJRERequirement
     public static <T extends ByteOutput> BitOutput newInstance(
             final UnaryOperator<T> operator) {
-
         if (operator == null) {
             throw new NullPointerException("null operator");
         }
-
         return new AbstractBitOutput() {
 
             @Override
             public void write(final int value) throws IOException {
-
                 output = BitIoUtilities.apply(operator, output);
-
                 output.write(value);
             }
 
             private T output;
-
         };
     }
 
@@ -104,29 +90,23 @@ public class BitOutputFactory {
     public static <T> BitOutput newInstance(
             final Supplier<? extends T> supplier,
             final ObjIntConsumer<? super T> consumer) {
-
         if (supplier == null) {
             throw new NullPointerException("null supplier");
         }
-
         if (consumer == null) {
             throw new NullPointerException("null consumer");
         }
-
         return new AbstractBitOutput() {
 
             @Override
             public void write(final int value) throws IOException {
-
                 if (target == null) {
                     target = BitIoUtilities.get(supplier);
                 }
-
                 BitIoUtilities.accept(consumer, target, value);
             }
 
             private T target;
-
         };
     }
 
@@ -134,33 +114,25 @@ public class BitOutputFactory {
     public static <T> BitOutput newInstance(
             final UnaryOperator<T> operator,
             final ObjIntConsumer<? super T> consumer) {
-
         if (operator == null) {
             throw new NullPointerException("null operator");
         }
-
         if (consumer == null) {
             throw new NullPointerException("null consumer");
         }
-
         return new AbstractBitOutput() {
 
             @Override
             public void write(final int value) throws IOException {
-
                 target = BitIoUtilities.apply(operator, target);
-
                 BitIoUtilities.accept(consumer, target, value);
             }
 
             private T target;
-
         };
     }
 
     private BitOutputFactory() {
-
         super();
     }
-
 }

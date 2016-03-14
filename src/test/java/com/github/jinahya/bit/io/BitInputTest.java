@@ -31,79 +31,39 @@ import org.testng.annotations.Test;
 public class BitInputTest {
 
     public static void readBoolean(final BitInput input) throws IOException {
-
-        if (input == null) {
-            throw new NullPointerException("null input");
-        }
-
         final boolean value = input.readBoolean();
     }
 
     public static void readByte(final BitInput input) throws IOException {
-
-        if (input == null) {
-            throw new NullPointerException("null input");
-        }
-
         final boolean unsigned = current().nextBoolean();
         final int size = BitIoRandoms.size(unsigned, 3);
-
         final byte value = input.readByte(unsigned, size);
     }
 
     public static void readShort(final BitInput input) throws IOException {
-
-        if (input == null) {
-            throw new NullPointerException("null input");
-        }
-
         final boolean unsigned = current().nextBoolean();
         final int size = BitIoRandoms.size(unsigned, 4);
-
         final short value = input.readShort(unsigned, size);
     }
 
     public static void readInt(final BitInput input) throws IOException {
-
-        if (input == null) {
-            throw new NullPointerException("null input");
-        }
-
         final boolean unsigned = current().nextBoolean();
         final int size = BitIoRandoms.size(unsigned, 5);
-
         final int value = input.readInt(unsigned, size);
     }
 
     public static void readLong(final BitInput input) throws IOException {
-
-        if (input == null) {
-            throw new NullPointerException("null input");
-        }
-
         final boolean unsigned = current().nextBoolean();
         final int size = BitIoRandoms.size(unsigned, 6);
-
         final long value = input.readLong(unsigned, size);
     }
 
     public static void readChar(final BitInput input) throws IOException {
-
-        if (input == null) {
-            throw new NullPointerException("null input");
-        }
-
-        final int size = BitIoRandoms.size(true, 4);
-
+        final int size = current().nextInt(1, 17);
         final char value = input.readChar(size);
     }
 
     public static void test(final BitInput input) throws IOException {
-
-        if (input == null) {
-            throw new NullPointerException("null input");
-        }
-
         readBoolean(input);
         readByte(input);
         readShort(input);
@@ -114,37 +74,31 @@ public class BitInputTest {
 
     @Test(invocationCount = 128)
     public void readBoolean() throws IOException {
-
         readBoolean(input);
     }
 
     @Test(invocationCount = 128)
     public void readByte() throws IOException {
-
         readByte(input);
     }
 
     @Test(invocationCount = 128)
     public void readShort() throws IOException {
-
         readShort(input);
     }
 
     @Test(invocationCount = 128)
     public void readInt() throws IOException {
-
         readInt(input);
     }
 
     @Test(invocationCount = 128)
     public void readLong() throws IOException {
-
         readLong(input);
     }
 
     @Test(invocationCount = 128)
     public void readChar() throws IOException {
-
         readChar(input);
     }
 
@@ -152,5 +106,4 @@ public class BitInputTest {
 
     @Inject
     private transient BitInput input;
-
 }

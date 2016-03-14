@@ -40,7 +40,7 @@ public class BufferByteOutput extends AbstractByteOutput<ByteBuffer> {
      * @throws IOException if an I/O error occurs.
      */
     public static ByteBuffer ensureRemaining(final ByteBuffer buffer,
-            final WritableByteChannel channel)
+                                             final WritableByteChannel channel)
             throws IOException {
 
         if (buffer == null) {
@@ -63,8 +63,8 @@ public class BufferByteOutput extends AbstractByteOutput<ByteBuffer> {
     }
 
     public static BufferByteOutput newInstance(final WritableByteChannel channel,
-            final int capacity,
-            final boolean direct) {
+                                               final int capacity,
+                                               final boolean direct) {
 
         if (channel == null) {
             throw new NullPointerException("null channel");
@@ -82,8 +82,8 @@ public class BufferByteOutput extends AbstractByteOutput<ByteBuffer> {
 
                 if (target == null) {
                     target = direct
-                            ? ByteBuffer.allocateDirect(capacity)
-                            : ByteBuffer.allocate(capacity);
+                             ? ByteBuffer.allocateDirect(capacity)
+                             : ByteBuffer.allocate(capacity);
                 }
 
                 super.write(value);

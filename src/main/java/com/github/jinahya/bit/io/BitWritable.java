@@ -28,7 +28,6 @@ public interface BitWritable {
      * Writes properties to specified output.
      *
      * @param output the output
-     *
      * @throws IOException if an I/O error occurs.
      */
     void write(BitOutput output) throws IOException;

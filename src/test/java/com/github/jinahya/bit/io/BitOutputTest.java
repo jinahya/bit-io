@@ -31,86 +31,45 @@ import org.testng.annotations.Test;
 public class BitOutputTest {
 
     public static void writeBoolean(final BitOutput output) throws IOException {
-
-        if (output == null) {
-            throw new NullPointerException("null output");
-        }
-
         final boolean value = current().nextBoolean();
-
         output.writeBoolean(value);
     }
 
     public static void writeByte(final BitOutput output) throws IOException {
-
-        if (output == null) {
-            throw new NullPointerException("null output");
-        }
-
         final boolean unsigned = current().nextBoolean();
         final int size = BitIoRandoms.size(unsigned, 3);
         final byte value = (byte) BitIoRandoms.value(unsigned, 3, size);
-
         output.writeByte(unsigned, size, value);
     }
 
     public static void writeShort(final BitOutput output) throws IOException {
-
-        if (output == null) {
-            throw new NullPointerException("null output");
-        }
-
         final boolean unsigned = current().nextBoolean();
         final int size = BitIoRandoms.size(unsigned, 4);
         final short value = (short) BitIoRandoms.value(unsigned, 4, size);
-
         output.writeShort(unsigned, size, value);
     }
 
     public static void writeInt(final BitOutput output) throws IOException {
-
-        if (output == null) {
-            throw new NullPointerException("null output");
-        }
-
         final boolean unsigned = current().nextBoolean();
         final int size = BitIoRandoms.size(unsigned, 5);
         final int value = (int) BitIoRandoms.value(unsigned, 5, size);
-
         output.writeInt(unsigned, size, value);
     }
 
     public static void writeLong(final BitOutput output) throws IOException {
-
-        if (output == null) {
-            throw new NullPointerException("null output");
-        }
-
         final boolean unsigned = current().nextBoolean();
         final int size = BitIoRandoms.size(unsigned, 6);
         final long value = BitIoRandoms.value(unsigned, 6, size);
-
         output.writeLong(unsigned, size, value);
     }
 
     public static void writeChar(final BitOutput output) throws IOException {
-
-        if (output == null) {
-            throw new NullPointerException("null output");
-        }
-
         final int size = BitIoRandoms.size(true, 4);
         final char value = (char) BitIoRandoms.value(true, 4, size);
-
         output.writeChar(size, value);
     }
 
     public static void test(final BitOutput output) throws IOException {
-
-        if (output == null) {
-            throw new NullPointerException("null output");
-        }
-
         writeBoolean(output);
         writeByte(output);
         writeShort(output);
@@ -121,37 +80,31 @@ public class BitOutputTest {
 
     @Test(invocationCount = 128)
     public void writeBoolean() throws IOException {
-
         writeBoolean(output);
     }
 
     @Test(invocationCount = 128)
     public void writeByte() throws IOException {
-
         writeByte(output);
     }
 
     @Test(invocationCount = 128)
     public void writeShort() throws IOException {
-
         writeShort(output);
     }
 
     @Test(invocationCount = 128)
     public void writeInt() throws IOException {
-
         writeInt(output);
     }
 
     @Test(invocationCount = 128)
     public void writeLong() throws IOException {
-
         writeLong(output);
     }
 
     @Test(invocationCount = 128)
     public void writeChar() throws IOException {
-
         writeChar(output);
     }
 
@@ -162,5 +115,4 @@ public class BitOutputTest {
 
     @Inject
     private transient BitOutput output;
-
 }

@@ -20,7 +20,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.UncheckedIOException;
 import java.nio.ByteBuffer;
 import java.util.function.Consumer;
 import org.slf4j.Logger;
@@ -36,7 +35,7 @@ public final class BitIoTests {
     private static final Logger logger = getLogger(BitIoTests.class);
 
     public static void array(final Consumer<? super BitOutput> writer,
-            final Consumer<? super BitInput> reader)
+                             final Consumer<? super BitInput> reader)
             throws IOException {
 
         if (writer == null) {
@@ -50,7 +49,7 @@ public final class BitIoTests {
         final byte[] array = new byte[1048576];
 
         final ArrayByteOutput target
-                = new ArrayByteOutput(array, array.length, 0);
+                              = new ArrayByteOutput(array, array.length, 0);
         final BitOutput output = new DefaultBitOutput<>(target);
         writer.accept(output);
         final long padded = output.align(1);
@@ -64,7 +63,7 @@ public final class BitIoTests {
     }
 
     public static void buffer(final Consumer<? super BitOutput> writer,
-            final Consumer<? super BitInput> reader)
+                              final Consumer<? super BitInput> reader)
             throws IOException {
 
         if (writer == null) {
@@ -78,14 +77,14 @@ public final class BitIoTests {
         final ByteBuffer buffer = ByteBuffer.allocate(1048576);
 
         final BitOutput output
-                = new DefaultBitOutput<>(new BufferByteOutput(buffer));
+                        = new DefaultBitOutput<>(new BufferByteOutput(buffer));
         writer.accept(output);
         final long padded = output.align(1);
 
         buffer.flip();
 
         final BitInput input
-                = new DefaultBitInput<>(new BufferByteInput(buffer));
+                       = new DefaultBitInput<>(new BufferByteInput(buffer));
         reader.accept(input);
         final long discarded = input.align(1);
 
@@ -93,7 +92,7 @@ public final class BitIoTests {
     }
 
     public static void data(final Consumer<? super BitOutput> writer,
-            final Consumer<? super BitInput> reader)
+                            final Consumer<? super BitInput> reader)
             throws IOException {
 
         if (writer == null) {
@@ -107,13 +106,13 @@ public final class BitIoTests {
         final ByteArrayOutputStream baos = new ByteArrayOutputStream(1048576);
         final DataOutputStream target = new DataOutputStream(baos);
         final BitOutput output
-                = new DefaultBitOutput<>(new DataByteOutput(target));
+                        = new DefaultBitOutput<>(new DataByteOutput(target));
         writer.accept(output);
         final long padded = output.align(1);
         target.flush();
 
         final ByteArrayInputStream bais
-                = new ByteArrayInputStream(baos.toByteArray());
+                                   = new ByteArrayInputStream(baos.toByteArray());
         final DataInputStream dis = new DataInputStream(bais);
         final BitInput input = new DefaultBitInput<>(new DataByteInput(dis));
         reader.accept(input);
@@ -123,7 +122,7 @@ public final class BitIoTests {
     }
 
     public static void stream(final Consumer<? super BitOutput> writer,
-            final Consumer<? super BitInput> reader)
+                              final Consumer<? super BitInput> reader)
             throws IOException {
 
         if (writer == null) {
@@ -136,15 +135,15 @@ public final class BitIoTests {
 
         final ByteArrayOutputStream target = new ByteArrayOutputStream(1048576);
         final BitOutput output
-                = new DefaultBitOutput<>(new StreamByteOutput(target));
+                        = new DefaultBitOutput<>(new StreamByteOutput(target));
         writer.accept(output);
         final long padded = output.align(1);
         target.flush();
 
         final ByteArrayInputStream source
-                = new ByteArrayInputStream(target.toByteArray());
+                                   = new ByteArrayInputStream(target.toByteArray());
         final BitInput input
-                = new DefaultBitInput<>(new StreamByteInput(source));
+                       = new DefaultBitInput<>(new StreamByteInput(source));
         reader.accept(input);
         final long discarded = input.align(1);
 
@@ -152,7 +151,7 @@ public final class BitIoTests {
     }
 
     public static void all(final Consumer<? super BitOutput> writer,
-            final Consumer<? super BitInput> reader)
+                           final Consumer<? super BitInput> reader)
             throws IOException {
 
         if (writer == null) {
@@ -169,28 +168,27 @@ public final class BitIoTests {
         stream(writer, reader);
     }
 
-    public static <T extends BitReadable & BitWritable> void all(
-            final boolean nullable, final Class<? extends T> type, final T expected)
-            throws IOException {
-
-        all(
-                o -> {
-                    try {
-                        o.writeObject(nullable, expected);
-                    } catch (final IOException ioe) {
-                        throw new UncheckedIOException(ioe);
-                    }
-                },
-                i -> {
-                    try {
-                        final T actual = i.readObject(nullable, type);
-                        assertEquals(actual, expected);
-                    } catch (final IOException ioe) {
-                        throw new UncheckedIOException(ioe);
-                    }
-                });
-    }
-
+//    public static <T extends BitReadable & BitWritable> void all(
+//            final boolean nullable, final Class<? extends T> type, final T expected)
+//            throws IOException {
+//
+//        all(
+//                o -> {
+//                    try {
+//                        o.writeObject(nullable, expected);
+//                    } catch (final IOException ioe) {
+//                        throw new UncheckedIOException(ioe);
+//                    }
+//                },
+//                i -> {
+//                    try {
+//                        final T actual = i.readObject(nullable, type);
+//                        assertEquals(actual, expected);
+//                    } catch (final IOException ioe) {
+//                        throw new UncheckedIOException(ioe);
+//                    }
+//                });
+//    }
     private BitIoTests() {
 
         super();

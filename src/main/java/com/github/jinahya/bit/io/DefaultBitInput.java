@@ -32,9 +32,7 @@ public class DefaultBitInput<T extends ByteInput> extends AbstractBitInput {
      * lazily initialized and set.
      */
     public DefaultBitInput(final T delegate) {
-
         super();
-
         this.delegate = delegate;
     }
 
@@ -45,12 +43,10 @@ public class DefaultBitInput<T extends ByteInput> extends AbstractBitInput {
      * lazily initialized and set.
      *
      * @return {@inheritDoc}
-     *
      * @throws IOException {@inheritDoc}
      */
     @Override
     public int read() throws IOException {
-
         return delegate.read();
     }
 
@@ -60,7 +56,6 @@ public class DefaultBitInput<T extends ByteInput> extends AbstractBitInput {
      * @return current value of {@link #delegate}
      */
     public T getDelegate() {
-
         return delegate;
     }
 
@@ -70,7 +65,6 @@ public class DefaultBitInput<T extends ByteInput> extends AbstractBitInput {
      * @param delegate new value of {@link #delegate}.
      */
     public void setDelegate(final T delegate) {
-
         this.delegate = delegate;
     }
 
@@ -78,5 +72,4 @@ public class DefaultBitInput<T extends ByteInput> extends AbstractBitInput {
      * The delegate on which {@link #read()} is invoked.
      */
     protected T delegate;
-
 }

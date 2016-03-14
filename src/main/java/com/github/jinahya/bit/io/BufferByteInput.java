@@ -36,13 +36,11 @@ public class BufferByteInput extends AbstractByteInput<ByteBuffer> {
      *
      * @param buffer the byte buffer
      * @param channel a channel for filling buffer.
-     *
      * @return given buffer.
-     *
      * @throws IOException if an I/O error occurs.
      */
     public static ByteBuffer ensureRemaining(final ByteBuffer buffer,
-            final ReadableByteChannel channel)
+                                             final ReadableByteChannel channel)
             throws IOException {
 
         if (buffer == null) {
@@ -78,8 +76,8 @@ public class BufferByteInput extends AbstractByteInput<ByteBuffer> {
      * @return a new instance of {@code BufferByteInput}
      */
     public static BufferByteInput newInstance(final ReadableByteChannel channel,
-            final int capacity,
-            final boolean direct) {
+                                              final int capacity,
+                                              final boolean direct) {
 
         if (channel == null) {
             throw new NullPointerException("null channel");
@@ -97,8 +95,8 @@ public class BufferByteInput extends AbstractByteInput<ByteBuffer> {
 
                 if (source == null) {
                     source = direct
-                            ? ByteBuffer.allocateDirect(capacity)
-                            : ByteBuffer.allocate(capacity);
+                             ? ByteBuffer.allocateDirect(capacity)
+                             : ByteBuffer.allocate(capacity);
                     source.position(source.limit());
                 }
 

@@ -33,7 +33,6 @@ public class StreamByteInput extends AbstractByteInput<InputStream> {
      * initialized and set
      */
     public StreamByteInput(final InputStream source) {
-
         super(source);
     }
 
@@ -44,22 +43,17 @@ public class StreamByteInput extends AbstractByteInput<InputStream> {
      * initialized and set.
      *
      * @return {@inheritDoc}
-     *
      * @throws IOException {@inheritDoc}
      * @throws EOFException if the underlying stream reached to end of stream.
-     *
      * @see #source
      * @see InputStream#read()
      */
     @Override
     public int read() throws IOException {
-
         final int value = source.read();
         if (value == -1) {
             throw new EOFException("eof");
         }
-
         return value;
     }
-
 }

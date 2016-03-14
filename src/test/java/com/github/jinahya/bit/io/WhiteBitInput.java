@@ -22,12 +22,10 @@ import static java.util.concurrent.ThreadLocalRandom.current;
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
-public class WhiteBitInput extends AbstractBitInput {
+class WhiteBitInput extends AbstractBitInput {
 
     @Override
     public int read() throws IOException {
-
         return current().nextInt(256);
     }
-
 }

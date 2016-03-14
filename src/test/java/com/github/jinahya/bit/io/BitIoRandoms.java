@@ -24,29 +24,21 @@ import static java.util.concurrent.ThreadLocalRandom.current;
 public final class BitIoRandoms {
 
     public static int size(final boolean unsigned, final int exponent) {
-
-        final int origin = 1;
+        final int origin = 1 + (unsigned ? 0 : 1);
         final int bound = (int) Math.pow(2, exponent) + (unsigned ? 0 : 1);
-
         final int size = current().nextInt(origin, bound);
-
         return BitIoConstraints.requireValidSize(unsigned, exponent, size);
     }
 
     public static long value(final boolean unsigned, final int exponent,
-            final int size) {
-
+                             final int size) {
         BitIoConstraints.requireValidSize(unsigned, exponent, size);
-
         final long value = current().nextLong();
         final int shift = Long.SIZE - size;
-
         return unsigned ? value >>> shift : value >> shift;
     }
 
     private BitIoRandoms() {
-
         super();
     }
-
 }

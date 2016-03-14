@@ -23,8 +23,6 @@ package com.github.jinahya.bit.io;
 final class BitIoConstants {
 
     private BitIoConstants() {
-
         super();
     }
-
 }

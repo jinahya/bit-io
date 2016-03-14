@@ -15,7 +15,6 @@
  */
 package com.github.jinahya.bit.io;
 
-import com.github.jinahya.bit.io.codec.BitEncoder;
 import java.io.IOException;
 
 /**
@@ -146,36 +145,11 @@ public interface BitOutput {
      *
      * @param <T> value type parameter
      * @param value the value to write
+     * @return given value
      * @throws IOException if an I/O error occurs.
      * @throws NullPointerException if {@code value} is {@code null}
      */
-    <T extends BitWritable> void writeObject(T value) throws IOException;
-
-    /**
-     * Writes a reference value. This method, if {@code nullable} is
-     * {@code true}, writes a preceding 1-bit boolean value for nullability and
-     * writes specified value if it is required to be written.
-     *
-     * @param <T> value type parameter
-     * @param nullable a flag for nullability
-     * @param value the value to write.
-     * @throws IOException if an I/O error occurs.
-     * @throws NullPointerException if {@code nullable} is {@code flase} and
-     * {@code value} is {@code null}.
-     */
-    <T extends BitWritable> void writeObject(boolean nullable, T value)
-            throws IOException;
-
-    /**
-     * Writes a reference value using specified encoder.
-     *
-     * @param <T> value type parameter
-     * @param encoder the encoder
-     * @param value the value to encode
-     * @throws IOException if an I/O error occurs.
-     */
-    <T> void writeObject(BitEncoder<? super T> encoder, T value)
-            throws IOException;
+    <T extends BitWritable> T writeObject(T value) throws IOException;
 
     /**
      * Returns the number of bytes written so far.

@@ -30,9 +30,7 @@ public abstract class AbstractByteOutput<T> implements ByteOutput {
      * supposed to be lazily initialized and set.
      */
     public AbstractByteOutput(final T target) {
-
         super();
-
         this.target = target;
     }
 
@@ -42,7 +40,6 @@ public abstract class AbstractByteOutput<T> implements ByteOutput {
      * @return the current value of {@link #target}.
      */
     public T getTarget() {
-
         return target;
     }
 
@@ -52,7 +49,6 @@ public abstract class AbstractByteOutput<T> implements ByteOutput {
      * @param target new value for {@link #target}.
      */
     public void setTarget(final T target) {
-
         this.target = target;
     }
 
@@ -60,5 +56,4 @@ public abstract class AbstractByteOutput<T> implements ByteOutput {
      * The underlying byte target.
      */
     protected T target;
-
 }

@@ -33,7 +33,6 @@ final class BitIoUtilities {
     public static <T, U extends Throwable> T get(
             final Supplier<? extends T> supplier)
             throws IOException {
-
         try {
             return supplier.get();
 //        } catch (final UncheckedIOException uioe) {
@@ -50,7 +49,6 @@ final class BitIoUtilities {
     public static <T, U extends Throwable> T apply(
             final UnaryOperator<T> operator, final T t)
             throws IOException {
-
         try {
             return operator.apply(t);
 //        } catch (final UncheckedIOException uioe) {
@@ -67,11 +65,9 @@ final class BitIoUtilities {
     public static <T> void accept(
             final ObjIntConsumer<? super T> consumer, final T t, final int i)
             throws IOException {
-
         if (consumer == null) {
             throw new NullPointerException("null consumer");
         }
-
         try {
             consumer.accept(t, i);
 //        } catch (final UncheckedIOException uioe) {
@@ -88,11 +84,9 @@ final class BitIoUtilities {
     public static <T> int apply(
             final ToIntFunction<? super T> function, final T t)
             throws IOException {
-
         if (function == null) {
             throw new NullPointerException("null consumer");
         }
-
         try {
             return function.applyAsInt(t);
 //        } catch (final UncheckedIOException uioe) {
@@ -107,8 +101,6 @@ final class BitIoUtilities {
     }
 
     private BitIoUtilities() {
-
         super();
     }
-
 }

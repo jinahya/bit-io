@@ -33,7 +33,6 @@ public class DataByteOutput extends AbstractByteOutput<DataOutput> {
      * lazily initialized and set.
      */
     public DataByteOutput(final DataOutput target) {
-
         super(target);
     }
 
@@ -49,8 +48,6 @@ public class DataByteOutput extends AbstractByteOutput<DataOutput> {
      */
     @Override
     public void write(final int value) throws IOException {
-
         target.writeByte(value);
     }
-
 }

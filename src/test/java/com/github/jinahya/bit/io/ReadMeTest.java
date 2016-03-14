@@ -35,40 +35,31 @@ public class ReadMeTest {
 
     @Test
     public void read() throws IOException {
-
         final byte[] array = new byte[8];
         final BitInput input = new DefaultBitInput<>(
                 new ArrayByteInput(array, array.length, 0));
-
         input.readBoolean();
         input.readInt(true, 6);
         input.readLong(false, 47);
-
         final long discarded = input.align(1);
         assertEquals(discarded, 2L);
     }
 
     @Test
     public void write() throws IOException {
-
         final byte[] array = new byte[8];
         final BitOutput output = new DefaultBitOutput<>(
                 new ArrayByteOutput(array, array.length, 0));
-
         output.writeBoolean(false);
         output.writeInt(false, 9, -72);
         output.writeBoolean(true);
         output.writeLong(true, 33, 99L);
-
         final long padded = output.align(4);
         assertEquals(padded, 20L);
-
         final String w = range(0, array.length)
                 .mapToObj(v -> leftPad(toBinaryString(array[v] & 0xFF), 8, '0'))
                 .collect(joining(" "));
-//        logger.debug("w: {}", w);
         assertEquals(w, "01101110 00100000 00000000 00000000"
-                + " 00000110 00110000 00000000 00000000");
+                        + " 00000110 00110000 00000000 00000000");
     }
-
 }

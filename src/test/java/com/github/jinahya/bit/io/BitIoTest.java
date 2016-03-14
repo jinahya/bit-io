@@ -26,12 +26,10 @@ import org.testng.annotations.Guice;
 public abstract class BitIoTest {
 
     protected BitInput getInput() {
-
         return input;
     }
 
     protected BitOutput getOutput() {
-
         return output;
     }
 

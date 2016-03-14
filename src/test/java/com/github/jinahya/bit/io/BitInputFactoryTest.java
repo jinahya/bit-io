@@ -42,7 +42,7 @@ public class BitInputFactoryTest {
     public static void newInstanceWithSupplierToIntFunction() {
 
         final ReadableByteChannel source
-                = Mockito.mock(ReadableByteChannel.class);
+                                  = Mockito.mock(ReadableByteChannel.class);
 
         final BitInput input = BitInputFactory.newInstance(
                 () -> (ByteBuffer) ByteBuffer.allocate(10).position(10),
@@ -60,7 +60,7 @@ public class BitInputFactoryTest {
     public static void newInstanceWithUnaryOperatorToIntFunction() {
 
         final ReadableByteChannel source
-                = Mockito.mock(ReadableByteChannel.class);
+                                  = Mockito.mock(ReadableByteChannel.class);
 
         final BitInput input = BitInputFactory.<ByteBuffer>newInstance(
                 b -> {

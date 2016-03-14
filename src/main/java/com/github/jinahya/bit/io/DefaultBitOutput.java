@@ -32,9 +32,7 @@ public class DefaultBitOutput<T extends ByteOutput> extends AbstractBitOutput {
      * lazily initialized and set.
      */
     public DefaultBitOutput(final T delegate) {
-
         super();
-
         this.delegate = delegate;
     }
 
@@ -45,12 +43,10 @@ public class DefaultBitOutput<T extends ByteOutput> extends AbstractBitOutput {
      * lazily initialized and set.
      *
      * @param value {@inheritDoc}
-     *
      * @throws IOException {@inheritDoc}
      */
     @Override
     public void write(final int value) throws IOException {
-
         delegate.write(value);
     }
 
@@ -60,7 +56,6 @@ public class DefaultBitOutput<T extends ByteOutput> extends AbstractBitOutput {
      * @return current value of {@link #delegate}
      */
     public T getDelegate() {
-
         return delegate;
     }
 
@@ -70,7 +65,6 @@ public class DefaultBitOutput<T extends ByteOutput> extends AbstractBitOutput {
      * @param delegate new value of {@link #delegate}.
      */
     public void setDelegate(final T delegate) {
-
         this.delegate = delegate;
     }
 
@@ -78,5 +72,4 @@ public class DefaultBitOutput<T extends ByteOutput> extends AbstractBitOutput {
      * The delegate on which {@link #write(int)} is invoked.
      */
     protected T delegate;
-
 }

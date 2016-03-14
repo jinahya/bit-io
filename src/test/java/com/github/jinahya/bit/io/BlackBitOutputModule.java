@@ -21,12 +21,10 @@ import com.google.inject.AbstractModule;
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
-public class BlackBitOutputModule extends AbstractModule {
+class BlackBitOutputModule extends AbstractModule {
 
     @Override
     protected void configure() {
-
         bind(BitOutput.class).to(BlackBitOutput.class);
     }
-
 }

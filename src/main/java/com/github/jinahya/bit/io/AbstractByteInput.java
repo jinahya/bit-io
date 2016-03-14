@@ -30,9 +30,7 @@ public abstract class AbstractByteInput<T> implements ByteInput {
      * intended to be lazily initialized and set.
      */
     public AbstractByteInput(final T source) {
-
         super();
-
         this.source = source;
     }
 
@@ -42,7 +40,6 @@ public abstract class AbstractByteInput<T> implements ByteInput {
      * @return the current value of {@link #source}
      */
     public T getSource() {
-
         return source;
     }
 
@@ -52,7 +49,6 @@ public abstract class AbstractByteInput<T> implements ByteInput {
      * @param source new value for {@link #source}
      */
     public void setSource(final T source) {
-
         this.source = source;
     }
 
@@ -60,5 +56,4 @@ public abstract class AbstractByteInput<T> implements ByteInput {
      * The underlying byte source.
      */
     protected T source;
-
 }

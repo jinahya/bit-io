@@ -32,7 +32,6 @@ public class StreamByteOutput extends AbstractByteOutput<OutputStream> {
      * lazily initialized and set.
      */
     public StreamByteOutput(final OutputStream target) {
-
         super(target);
     }
 
@@ -43,16 +42,12 @@ public class StreamByteOutput extends AbstractByteOutput<OutputStream> {
      * {@link #target} is supposed to be lazily initialized and set.
      *
      * @param value {@inheritDoc}
-     *
      * @throws IOException {@inheritDoc}
-     *
      * @see #target
      * @see OutputStream#write(int)
      */
     @Override
     public void write(final int value) throws IOException {
-
         target.write(value);
     }
-
 }

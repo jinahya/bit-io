@@ -33,7 +33,6 @@ public class DataByteInput extends AbstractByteInput<DataInput> {
      * initialized and set
      */
     public DataByteInput(final DataInput source) {
-
         super(source);
     }
 
@@ -44,13 +43,10 @@ public class DataByteInput extends AbstractByteInput<DataInput> {
      * supposed to lazily initialized and set.
      *
      * @return {@inheritDoc }
-     *
      * @throws IOException {@inheritDoc }
      */
     @Override
     public int read() throws IOException {
-
         return source.readUnsignedByte();
     }
-
 }

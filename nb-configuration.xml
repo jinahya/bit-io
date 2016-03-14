@@ -33,7 +33,6 @@
         <org-netbeans-modules-editor-indent.text.x-java.CodeStyle.project.alignMultilineDisjunctiveCatchTypes>true</org-netbeans-modules-editor-indent.text.x-java.CodeStyle.project.alignMultilineDisjunctiveCatchTypes>
         <org-netbeans-modules-editor-indent.text.x-java.CodeStyle.project.alignMultilineFor>true</org-netbeans-modules-editor-indent.text.x-java.CodeStyle.project.alignMultilineFor>
         <org-netbeans-modules-editor-indent.text.x-java.CodeStyle.project.alignMultilineImplements>true</org-netbeans-modules-editor-indent.text.x-java.CodeStyle.project.alignMultilineImplements>
-        <org-netbeans-modules-editor-indent.text.x-java.CodeStyle.project.alignMultilineAssignment>true</org-netbeans-modules-editor-indent.text.x-java.CodeStyle.project.alignMultilineAssignment>
         <org-netbeans-modules-editor-indent.text.x-java.CodeStyle.project.alignMultilineAnnotationArgs>true</org-netbeans-modules-editor-indent.text.x-java.CodeStyle.project.alignMultilineAnnotationArgs>
         <org-netbeans-modules-editor-indent.text.x-java.CodeStyle.project.alignMultilineArrayInit>true</org-netbeans-modules-editor-indent.text.x-java.CodeStyle.project.alignMultilineArrayInit>
         <org-netbeans-modules-editor-indent.text.x-java.CodeStyle.project.alignMultilineCallArgs>true</org-netbeans-modules-editor-indent.text.x-java.CodeStyle.project.alignMultilineCallArgs>

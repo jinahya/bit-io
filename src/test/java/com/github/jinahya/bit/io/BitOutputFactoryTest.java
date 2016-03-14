@@ -29,16 +29,13 @@ public class BitOutputFactoryTest {
 
     @Test(expectedExceptions = NullPointerException.class)
     public static void newInstanceWithNullByteOutput() {
-
         BitOutputFactory.newInstance((ByteOutput) null);
     }
 
     @Test
     public static void newInstanceWithByteOutput() {
-
         final BitOutput output = BitOutputFactory.newInstance((v) -> {
         });
-
         try {
             BitOutputTest.test(output);
         } catch (final IOException ioe) {
@@ -48,16 +45,13 @@ public class BitOutputFactoryTest {
 
     @Test(expectedExceptions = NullPointerException.class)
     public static void newInstanceWithNullSupplier() {
-
         BitOutputFactory.newInstance((Supplier<? extends ByteOutput>) null);
     }
 
     @Test
     public static void newInstanceWithSupplier() {
-
         final BitOutput output = BitOutputFactory.newInstance(() -> v -> {
         });
-
         try {
             BitOutputTest.test(output);
         } catch (final IOException ioe) {
@@ -67,18 +61,15 @@ public class BitOutputFactoryTest {
 
     @Test(expectedExceptions = NullPointerException.class)
     public static void newInstanceWithNullOperator() {
-
         BitOutputFactory.newInstance((UnaryOperator<ByteOutput>) null);
     }
 
     @Test
     public static void newInstanceWithOperator() {
-
         final BitOutput output = BitOutputFactory.newInstance(
                 o -> o != null ? o : v -> {
                         }
         );
-
         try {
             BitOutputTest.test(output);
         } catch (final IOException ioe) {
@@ -88,7 +79,6 @@ public class BitOutputFactoryTest {
 
     @Test(expectedExceptions = NullPointerException.class)
     public static void newInstanceWithNullSupplierConsumer() {
-
         BitOutputFactory.newInstance(
                 (Supplier<?>) null,
                 (t, i) -> {
@@ -97,19 +87,16 @@ public class BitOutputFactoryTest {
 
     @Test(expectedExceptions = NullPointerException.class)
     public static void newInstanceWithSupplierNullConsumer() {
-
         BitOutputFactory.newInstance(() -> null, null);
     }
 
     @Test
     public static void newInstanceWithSupplierConsumer() {
-
         final BitOutput output = BitOutputFactory.newInstance(
                 () -> new Object(),
                 (b, v) -> {
                 }
         );
-
         try {
             BitOutputTest.test(output);
         } catch (final IOException ioe) {
@@ -119,7 +106,6 @@ public class BitOutputFactoryTest {
 
     @Test(expectedExceptions = NullPointerException.class)
     public static void newInstanceWithNullOperatorConsumer() {
-
         BitOutputFactory.newInstance(
                 (UnaryOperator<?>) null,
                 (t, i) -> {
@@ -128,7 +114,6 @@ public class BitOutputFactoryTest {
 
     @Test(expectedExceptions = NullPointerException.class)
     public static void newInstanceWithOperatorNullConsumer() {
-
         BitOutputFactory.newInstance(
                 (t) -> t,
                 null);
@@ -136,7 +121,6 @@ public class BitOutputFactoryTest {
 
     @Test
     public static void newInstanceWithOperatorConsumer() {
-
         final BitOutput output = BitOutputFactory.newInstance(
                 (t) -> null,
                 (t, i) -> {
@@ -148,5 +132,4 @@ public class BitOutputFactoryTest {
             throw new UncheckedIOException(ioe);
         }
     }
-
 }

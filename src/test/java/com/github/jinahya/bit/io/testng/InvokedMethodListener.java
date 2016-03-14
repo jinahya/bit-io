@@ -29,14 +29,14 @@ public class InvokedMethodListener implements IInvokedMethodListener {
 
     @Override
     public void beforeInvocation(final IInvokedMethod method,
-            final ITestResult result) {
+                                 final ITestResult result) {
 
         logger.debug("beforeInvocation({}, {})", method, result);
     }
 
     @Override
     public void afterInvocation(final IInvokedMethod method,
-            final ITestResult result) {
+                                final ITestResult result) {
 
         logger.debug("afterInvocation({}, {})", method, result);
     }

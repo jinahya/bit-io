@@ -21,12 +21,10 @@ import com.google.inject.AbstractModule;
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
-public class WhiteBitInputModule extends AbstractModule {
+class WhiteBitInputModule extends AbstractModule {
 
     @Override
     protected void configure() {
-
         bind(BitInput.class).to(WhiteBitInput.class);
     }
-
 }

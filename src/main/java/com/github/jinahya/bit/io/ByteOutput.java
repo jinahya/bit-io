@@ -30,9 +30,7 @@ public interface ByteOutput {
      *
      * @param value an unsigned 8-bit value between {@code 0} (inclusive) and
      * {@code 256} (exclusive).
-     *
      * @throws IOException if an I/O error occurs.
      */
     void write(int value) throws IOException;
-
 }

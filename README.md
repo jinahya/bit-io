@@ -97,27 +97,6 @@ new DefaultBitInput<StreamByteInput>(null) {
     }
 };
 ```
-#### Using `BitInputFactory`
-You can create `BitInput`s using various `newInstance(...)` methods.
-```java
-final RedableByteChannel channel = openChannel();
-
-final BitInput input = BitInputFactory.newInstance(
-    () -> (ByteBuffer) ByteBuffer.allocate(10).position(10),
-    b -> {
-        if (!b.hasRemaining()) {
-            b.clear();
-            do {
-                final int read = channel.read(b);
-                if (read == -1) {
-                    throw new EOFException();
-                }
-            } while (b.position() == 0);
-            b.flip();
-        }
-        return b.get() & 0xFF;
-    });
-```
 ### Reading values.
 ```java
 final BitInput input;
@@ -136,7 +115,6 @@ biiiiiil llllllll llllllll llllllll llllllll llllllll lllllldd
 ### Preparing `ByteOutput`
 ### Creating `BitOutput`
 #### Using `DefalutBitOutput`
-#### Using `BitOutputFactory`
 ### Writing values.
 ```java
 final BitOutput output;

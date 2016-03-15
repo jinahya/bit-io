@@ -174,14 +174,12 @@ final ByteInput input = new ArrayByteInput(null, -1, -1) {
 
     @Override
     public int read() throws IOException {
-
         // initialize the `source` field value
         if (source == null) {
             source = byte[16];
             limit = source.length;
             index = limit;
         }
-
         // read bytes from the stream if empty
         if (index == limit) {
             final int read = stream.read(source);
@@ -191,7 +189,6 @@ final ByteInput input = new ArrayByteInput(null, -1, -1) {
             limit = read;
             index = 0;
         }
-
         return super.read();
     }
 };
@@ -210,11 +207,9 @@ new DefaultBitInput<StreamByteInput>(null) {
 
     @Override
     public int read() throws IOException {
-
         if (delegate == null) {
             delegate = new StreamByteInput(openFile());
         }
-
         return super.read();
     }
 };

@@ -45,7 +45,7 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
      * @throws IOException if an I/O error occurs.
      */
     protected void unsigned8(final int size, int value) throws IOException {
-        BitIoConstraints.requireValidUnsigned8Size(size);
+        BitIoConstraints.requireValidSizeUnsigned8(size);
         if (size == 8 && index == 0) {
             octet(value);
             return;
@@ -82,7 +82,7 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
      */
     protected void unsigned16(final int size, final int value)
             throws IOException {
-        BitIoConstraints.requireValidUnsigned16Size(size);
+        BitIoConstraints.requireValidSizeUnsigned16(size);
         final int quotient = size / 8;
         final int remainder = size % 8;
         if (remainder > 0) {
@@ -215,7 +215,7 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
 
     @Override
     public void writeChar(final int size, final char value) throws IOException {
-        BitIoConstraints.requireValidCharSize(size);
+        BitIoConstraints.requireValidSizeChar(size);
         unsigned16(size, value);
     }
 
@@ -230,16 +230,12 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
     }
 
     @Override
-    public <T extends BitWritable> T writeObject(final T value)
-            throws IOException {
-        value.write(this);
-        return value;
-    }
-
-    @Override
     public long align(final int bytes) throws IOException {
-        if (bytes <= 0) {
-            throw new IllegalArgumentException("bytes(" + bytes + ") <= 0");
+        if (bytes < 0) {
+            throw new IllegalArgumentException("bytes(" + bytes + ") < 0");
+        }
+        if (bytes == 0) {
+            return 0L;
         }
         long bits = 0; // number of bits to be padded
         // pad remained bits into current octet

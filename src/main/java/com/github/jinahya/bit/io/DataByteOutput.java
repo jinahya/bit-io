@@ -43,7 +43,6 @@ public class DataByteOutput extends AbstractByteOutput<DataOutput> {
      * supposed to be lazily initialized and set.
      *
      * @param value {@inheritDoc }
-     *
      * @throws IOException {@inheritDoc }
      */
     @Override

@@ -46,7 +46,7 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
      * @throws IOException if an I/O error occurs.
      */
     protected int unsigned8(final int size) throws IOException {
-        BitIoConstraints.requireValidUnsigned8Size(size);
+        BitIoConstraints.requireValidSizeUnsigned8(size);
         if (index == 8) {
             int octet = octet();
             if (size == 8) {
@@ -80,7 +80,7 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
      * @throws IOException if an I/O error occurs.
      */
     protected int unsigned16(final int size) throws IOException {
-        BitIoConstraints.requireValidUnsigned16Size(size);
+        BitIoConstraints.requireValidSizeUnsigned16(size);
         int value = 0x00;
         final int quotient = size / 8;
         final int remainder = size % 8;
@@ -218,7 +218,7 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
 
     @Override
     public char readChar(final int size) throws IOException {
-        BitIoConstraints.requireValidCharSize(size);
+        BitIoConstraints.requireValidSizeChar(size);
         return (char) unsigned16(size);
     }
 
@@ -233,15 +233,12 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
     }
 
     @Override
-    public <T extends BitReadable> T readObject(T value) throws IOException {
-        value.read(this);
-        return value;
-    }
-
-    @Override
     public long align(final int bytes) throws IOException {
-        if (bytes <= 0) {
-            throw new IllegalArgumentException("bytes(" + bytes + ") <= 0");
+        if (bytes < 0) {
+            throw new IllegalArgumentException("bytes(" + bytes + ") < 0");
+        }
+        if (bytes == 0) {
+            return 0L;
         }
         long bits = 0; // number of bits to be discarded
         // discard remained bits in current octet.

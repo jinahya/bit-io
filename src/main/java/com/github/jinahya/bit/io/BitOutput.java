@@ -141,17 +141,6 @@ public interface BitOutput {
     void writeDouble(double value) throws IOException;
 
     /**
-     * Writes a reference value.
-     *
-     * @param <T> value type parameter
-     * @param value the value to write
-     * @return given value
-     * @throws IOException if an I/O error occurs.
-     * @throws NullPointerException if {@code value} is {@code null}
-     */
-    <T extends BitWritable> T writeObject(T value) throws IOException;
-
-    /**
      * Returns the number of bytes written so far.
      *
      * @return number of byte written so far.
@@ -168,7 +157,7 @@ public interface BitOutput {
     /**
      * Aligns to specified number of bytes.
      *
-     * @param bytes the number of bytes to align; must be positive.
+     * @param bytes the number of bytes to align
      * @return the number of bits padded while aligning
      * @throws IOException if an I/O error occurs.
      */

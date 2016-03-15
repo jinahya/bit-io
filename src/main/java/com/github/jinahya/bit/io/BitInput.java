@@ -138,17 +138,6 @@ public interface BitInput {
     double readDouble() throws IOException;
 
     /**
-     * Reads a reference value.
-     *
-     * @param <T> value type parameter
-     * @param value the value to read
-     * @return given value
-     * @throws IOException if an I/O error occurs.
-     * @throws NullPointerException if {@code value} is {@code null}
-     */
-    <T extends BitReadable> T readObject(T value) throws IOException;
-
-    /**
      * Returns the number of bytes read so far.
      *
      * @return number of byte read so far.
@@ -165,7 +154,7 @@ public interface BitInput {
     /**
      * Aligns to given number of bytes.
      *
-     * @param bytes the number of bytes to align; must be positive.
+     * @param bytes the number of bytes to align
      * @return the number of bits discarded while aligning
      * @throws IOException if an I/O error occurs.
      */

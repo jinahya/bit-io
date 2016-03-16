@@ -15,26 +15,10 @@
  */
 package com.github.jinahya.bit.io;
 
-import java.io.InputStream;
-import static org.mockito.Mockito.mock;
-import static org.testng.Assert.assertThrows;
-import org.testng.annotations.Test;
-
 /**
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
 public class ArrayByteInputTest extends ByteInputTest<ArrayByteInput> {
 
-    @Test
-    public static void newInstance() {
-        assertThrows(NullPointerException.class,
-                     () -> ArrayByteInput.newInstance(null, 1));
-        assertThrows(IllegalArgumentException.class,
-                     () -> ArrayByteInput.newInstance(
-                             mock(InputStream.class), 0));
-        assertThrows(IllegalArgumentException.class,
-                     () -> ArrayByteInput.newInstance(
-                             mock(InputStream.class), -1));
-    }
 }

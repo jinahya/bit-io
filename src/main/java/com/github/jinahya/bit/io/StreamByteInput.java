@@ -38,9 +38,9 @@ public class StreamByteInput extends AbstractByteInput<InputStream> {
 
     /**
      * {@inheritDoc} The {@code read()} method of {@code StreamByteInput} class
-     * invokes {@link InputStream#read()} on {@link #source} and returns the
-     * result. Override this method if {@link #source} is supposed to be lazily
-     * initialized and set.
+     * invokes {@link InputStream#read()} on {@link #getSource()} and returns
+     * the result. Override this method if {@link #source} is supposed to be
+     * lazily initialized and set.
      *
      * @return {@inheritDoc}
      * @throws IOException {@inheritDoc}
@@ -50,9 +50,9 @@ public class StreamByteInput extends AbstractByteInput<InputStream> {
      */
     @Override
     public int read() throws IOException {
-        final int value = source.read();
+        final int value = getSource().read();
         if (value == -1) {
-            throw new EOFException("eof");
+            throw new EOFException();
         }
         return value;
     }

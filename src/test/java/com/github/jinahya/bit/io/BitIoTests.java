@@ -38,12 +38,11 @@ public final class BitIoTests {
                              final Consumer<? super BitInput> reader)
             throws IOException {
         final byte[] array = new byte[1048576];
-        final ArrayByteOutput target
-                = new ArrayByteOutput(array, array.length, 0);
+        final ArrayByteOutput target = new ArrayByteOutput(array);
         final BitOutput output = new DefaultBitOutput<>(target);
         writer.accept(output);
         final long padded = output.align(1);
-        final ByteInput source = new ArrayByteInput(array, target.index, 0);
+        final ByteInput source = new ArrayByteInput(array);
         final BitInput input = new DefaultBitInput<>(source);
         reader.accept(input);
         final long discarded = input.align(1);

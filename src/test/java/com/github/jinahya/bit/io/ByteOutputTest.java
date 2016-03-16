@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Jin Kwon.
+ * Copyright 2016 Jin Kwon &lt;jinahya_at_gmail.com&gt;.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,16 +15,10 @@
  */
 package com.github.jinahya.bit.io;
 
-import java.io.IOException;
-
 /**
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
-class WhiteBitInput extends AbstractBitInput {
+abstract class ByteOutputTest<T extends ByteOutput> {
 
-    @Override
-    public int read() throws IOException {
-        return 0;
-    }
 }

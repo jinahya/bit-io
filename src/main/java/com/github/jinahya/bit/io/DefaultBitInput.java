@@ -28,8 +28,8 @@ public class DefaultBitInput<T extends ByteInput> extends AbstractBitInput {
     /**
      * Create a new instance with specified delegate.
      *
-     * @param delegate the delegate; may be {@code null} if it is intended to be
-     * lazily initialized and set.
+     * @param delegate the delegate on which {@link #read()} is invoked; may be
+     * {@code null} if it is intended to be lazily initialized and set.
      */
     public DefaultBitInput(final T delegate) {
         super();
@@ -66,6 +66,17 @@ public class DefaultBitInput<T extends ByteInput> extends AbstractBitInput {
      */
     public void setDelegate(final T delegate) {
         this.delegate = delegate;
+    }
+
+    /**
+     * Replaces {@link #delegate} with given and returns self.
+     *
+     * @param delegate new value for {@link #delegate}
+     * @return this instance
+     */
+    public DefaultBitInput<T> delegate(final T delegate) {
+        setDelegate(delegate);
+        return this;
     }
 
     /**

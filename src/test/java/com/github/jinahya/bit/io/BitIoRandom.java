@@ -15,30 +15,46 @@
  */
 package com.github.jinahya.bit.io;
 
+import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSize;
 import static java.util.concurrent.ThreadLocalRandom.current;
 
 /**
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
-public final class BitIoRandoms {
+final class BitIoRandom {
 
-    public static int size(final boolean unsigned, final int exponent) {
+    /**
+     * Generates a random size for given argument.
+     *
+     * @param unsigned the flag for unsigned
+     * @param exponent the exponent
+     * @return a random size.
+     */
+    public static int nextSize(final boolean unsigned, final int exponent) {
         final int origin = 1 + (unsigned ? 0 : 1);
         final int bound = (int) Math.pow(2, exponent) + (unsigned ? 0 : 1);
         final int size = current().nextInt(origin, bound);
-        return BitIoConstraints.requireValidSize(unsigned, exponent, size);
+        return requireValidSize(unsigned, exponent, size);
     }
 
-    public static long value(final boolean unsigned, final int exponent,
-                             final int size) {
-        BitIoConstraints.requireValidSize(unsigned, exponent, size);
+    /**
+     * Generates a random value for given arguments.
+     *
+     * @param unsigned the flag for unsigned
+     * @param exponent the exponent
+     * @param size the size
+     * @return a random value.
+     */
+    public static long nextValue(final boolean unsigned, final int exponent,
+                                 final int size) {
+        requireValidSize(unsigned, exponent, size);
         final long value = current().nextLong();
         final int shift = Long.SIZE - size;
         return unsigned ? value >>> shift : value >> shift;
     }
 
-    private BitIoRandoms() {
+    private BitIoRandom() {
         super();
     }
 }

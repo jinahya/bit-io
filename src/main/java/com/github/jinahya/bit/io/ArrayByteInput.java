@@ -15,79 +15,40 @@
  */
 package com.github.jinahya.bit.io;
 
-import java.io.EOFException;
 import java.io.IOException;
-import java.io.InputStream;
 
 /**
- * A {@code ByteInput} implementation uses a byte array, a limit, and an index.
+ * A {@code ByteInput} implementation uses a byte array and an index.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
- * @see #source
- * @see #limit
- * @see #index
  */
 public class ArrayByteInput extends AbstractByteInput<byte[]> {
-
-    /**
-     * Creates a new instance which read bytes from specified
-     * {@code InputStream}.
-     *
-     * @param stream the {@code InputStream}
-     * @param length the length of the byte array; must be positive.
-     *
-     * @return a new instance.
-     */
-    public static ArrayByteInput newInstance(final InputStream stream,
-                                             final int length) {
-        if (stream == null) {
-            throw new NullPointerException("null stream");
-        }
-        if (length <= 0) {
-            throw new IllegalArgumentException("length(" + length + ") <= 0");
-        }
-        return new ArrayByteInput(null, -1, -1) {
-
-            @Override
-            public int read() throws IOException {
-                if (source == null) {
-                    source = new byte[length];
-                    limit = source.length;
-                    index = limit;
-                }
-                if (index == limit) {
-                    final int read = stream.read(source);
-                    if (read == -1) {
-                        throw new EOFException();
-                    }
-                    limit = read;
-                    index = 0;
-                }
-                return super.read();
-            }
-        };
-    }
 
     /**
      * Creates a new instance with given parameters.
      *
      * @param source a byte array
-     * @param limit the array index that {@code index} can't exceed
      * @param index array index to read
      */
-    public ArrayByteInput(final byte[] source, final int limit,
-                          final int index) {
+    public ArrayByteInput(final byte[] source, final int index) {
         super(source);
-        this.limit = limit;
         this.index = index;
     }
 
     /**
+     * Creates a new instance with given array.
+     *
+     * @param source the array.
+     */
+    public ArrayByteInput(final byte[] source) {
+        this(source, 0);
+    }
+
+    /**
      * {@inheritDoc} The {@code read()} method of {@code ArrayByteInput} class
-     * returns the element in {@link #source} at {@link #index} as an unsigned
-     * int and increments {@link #index}. Override this method if either
-     * {@link #source}, {@link #index}, or {@link #limit} needs to be
-     * initialized or adjusted.
+     * returns {@code source[index]} as an unsigned int and increments
+     * {@link #index}. Override this method if either {@link #source}, or
+     * {@link #index} needs to be lazily initialized or adjusted.
      *
      * @return {@inheritDoc}
      * @throws IOException {@inheritDoc}
@@ -96,10 +57,6 @@ public class ArrayByteInput extends AbstractByteInput<byte[]> {
      */
     @Override
     public int read() throws IOException {
-        if (index >= limit) {
-            throw new IndexOutOfBoundsException(
-                    "index(" + index + ") >= limit(" + limit + ")");
-        }
         return source[index++] & 0xFF;
     }
 
@@ -111,37 +68,6 @@ public class ArrayByteInput extends AbstractByteInput<byte[]> {
      */
     public ArrayByteInput source(final byte[] target) {
         setSource(target);
-        return this;
-    }
-
-    /**
-     * Returns the current value of {@link #limit}.
-     *
-     * @return current value of {@link #limit}.
-     */
-    public int getLimit() {
-        return limit;
-    }
-
-    /**
-     * Replaces the value of {@link #limit} with given.
-     *
-     * @param limit new value for {@link #limit}.
-     */
-    public void setLimit(int limit) {
-        this.limit = limit;
-    }
-
-    /**
-     * Replaces the value of {@link #limit} with given and returns this
-     * instance.
-     *
-     * @param limit new value for {@link #limit}
-     *
-     * @return this instance.
-     */
-    public ArrayByteInput limit(final int limit) {
-        setLimit(limit);
         return this;
     }
 
@@ -175,11 +101,6 @@ public class ArrayByteInput extends AbstractByteInput<byte[]> {
         setIndex(index);
         return this;
     }
-
-    /**
-     * The index of the {@link #source} which {@link #index} can't exceed.
-     */
-    protected int limit;
 
     /**
      * The index in the {@link #source} to read.

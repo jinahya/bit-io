@@ -53,7 +53,6 @@ public class BitValueTest {
                         throw new UncheckedIOException(ioe);
                     }
                 });
-
         assertEquals(d[0], p[0]);
         assertEquals(r[0], w[0], "type: " + type);
     }

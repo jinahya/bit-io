@@ -23,7 +23,7 @@ import org.testng.annotations.Guice;
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
 @Guice(modules = {WhiteBitInputModule.class, BlackBitOutputModule.class})
-public abstract class BitIoTest {
+abstract class BitIoTest {
 
     protected BitInput getInput() {
         return input;
@@ -38,5 +38,4 @@ public abstract class BitIoTest {
 
     @Inject
     private BitOutput output;
-
 }

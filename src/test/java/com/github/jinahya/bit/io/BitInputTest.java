@@ -15,6 +15,7 @@
  */
 package com.github.jinahya.bit.io;
 
+import static com.github.jinahya.bit.io.BitIoRandom.nextSize;
 import java.io.IOException;
 import static java.util.concurrent.ThreadLocalRandom.current;
 import javax.inject.Inject;
@@ -24,6 +25,7 @@ import org.testng.annotations.Guice;
 import org.testng.annotations.Test;
 
 /**
+ * Test class tests {@link BitInput}.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
@@ -36,25 +38,25 @@ public class BitInputTest {
 
     public static void readByte(final BitInput input) throws IOException {
         final boolean unsigned = current().nextBoolean();
-        final int size = BitIoRandoms.size(unsigned, 3);
+        final int size = nextSize(unsigned, 3);
         final byte value = input.readByte(unsigned, size);
     }
 
     public static void readShort(final BitInput input) throws IOException {
         final boolean unsigned = current().nextBoolean();
-        final int size = BitIoRandoms.size(unsigned, 4);
+        final int size = nextSize(unsigned, 4);
         final short value = input.readShort(unsigned, size);
     }
 
     public static void readInt(final BitInput input) throws IOException {
         final boolean unsigned = current().nextBoolean();
-        final int size = BitIoRandoms.size(unsigned, 5);
+        final int size = nextSize(unsigned, 5);
         final int value = input.readInt(unsigned, size);
     }
 
     public static void readLong(final BitInput input) throws IOException {
         final boolean unsigned = current().nextBoolean();
-        final int size = BitIoRandoms.size(unsigned, 6);
+        final int size = nextSize(unsigned, 6);
         final long value = input.readLong(unsigned, size);
     }
 

@@ -15,6 +15,8 @@
  */
 package com.github.jinahya.bit.io;
 
+import static com.github.jinahya.bit.io.BitIoRandom.nextSize;
+import static com.github.jinahya.bit.io.BitIoRandom.nextValue;
 import java.io.IOException;
 import static java.util.concurrent.ThreadLocalRandom.current;
 import javax.inject.Inject;
@@ -37,35 +39,35 @@ public class BitOutputTest {
 
     public static void writeByte(final BitOutput output) throws IOException {
         final boolean unsigned = current().nextBoolean();
-        final int size = BitIoRandoms.size(unsigned, 3);
-        final byte value = (byte) BitIoRandoms.value(unsigned, 3, size);
+        final int size = nextSize(unsigned, 3);
+        final byte value = (byte) nextValue(unsigned, 3, size);
         output.writeByte(unsigned, size, value);
     }
 
     public static void writeShort(final BitOutput output) throws IOException {
         final boolean unsigned = current().nextBoolean();
-        final int size = BitIoRandoms.size(unsigned, 4);
-        final short value = (short) BitIoRandoms.value(unsigned, 4, size);
+        final int size = nextSize(unsigned, 4);
+        final short value = (short) nextValue(unsigned, 4, size);
         output.writeShort(unsigned, size, value);
     }
 
     public static void writeInt(final BitOutput output) throws IOException {
         final boolean unsigned = current().nextBoolean();
-        final int size = BitIoRandoms.size(unsigned, 5);
-        final int value = (int) BitIoRandoms.value(unsigned, 5, size);
+        final int size = nextSize(unsigned, 5);
+        final int value = (int) nextValue(unsigned, 5, size);
         output.writeInt(unsigned, size, value);
     }
 
     public static void writeLong(final BitOutput output) throws IOException {
         final boolean unsigned = current().nextBoolean();
-        final int size = BitIoRandoms.size(unsigned, 6);
-        final long value = BitIoRandoms.value(unsigned, 6, size);
+        final int size = nextSize(unsigned, 6);
+        final long value = nextValue(unsigned, 6, size);
         output.writeLong(unsigned, size, value);
     }
 
     public static void writeChar(final BitOutput output) throws IOException {
-        final int size = BitIoRandoms.size(true, 4);
-        final char value = (char) BitIoRandoms.value(true, 4, size);
+        final int size = nextSize(true, 4);
+        final char value = (char) nextValue(true, 4, size);
         output.writeChar(size, value);
     }
 

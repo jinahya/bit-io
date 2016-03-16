@@ -53,23 +53,18 @@ Constructors of these classes don't check arguments which means you can lazily i
 ```java
 final InputStream stream = openFile();
 
-final ByteInput input = new ArrayByteInput(null, -1, -1) {
+final ByteInput input = new ArrayByteInput(null, -1) {
 
     @Override
     public int read() throws IOException {
         // initialize the `source` field value
         if (source == null) {
             source = byte[16];
-            limit = source.length;
-            index = limit;
+            index = source.length;
         }
         // read bytes from the stream if empty
-        if (index == limit) {
-            final int read = stream.read(source);
-            if (read == -1) {
-                throw new EOFException();
-            }
-            limit = read;
+        if (index == source.length) {
+            stream.readFully(source);
             index = 0;
         }
         return super.read();

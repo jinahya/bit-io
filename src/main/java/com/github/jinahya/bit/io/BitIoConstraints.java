@@ -61,7 +61,8 @@ public final class BitIoConstraints {
     public static int requireValidSize(final boolean unsigned,
                                        final int exponent, final int size) {
         requireValidExponent(exponent);
-        final int minSize = 1 + (unsigned ? 0 : 1);
+        //final int minSize = 1 + (unsigned ? 0 : 1);
+        final int minSize = 1;
         if (size < minSize) {
             throw new IllegalArgumentException(
                     "size(" + size + ") < " + minSize + ";unsigned=" + unsigned

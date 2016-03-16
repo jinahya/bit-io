@@ -13,8 +13,8 @@ A library for reading/writing non octet aligned values such as `1-bit boolean` o
 |version|site|apidocs|notes|
 |-------|----|-------|-----|
 |1.3.2-SNAPSHOT|[site](http://jinahya.github.io/bit-io/sites/1.3.2-SNAPSHOT/index.html)|[apidocs](http://jinahya.github.io/bit-io/sites/1.3.2-SNAPSHOT/apidocs/index.html)||
-|1.3.1|[site](http://jinahya.github.io/bit-io/sites/1.3.1/index.html)|[javadoc-io](http://www.javadoc.io/doc/com.github.jinahya/bit-io/1.3.0)||
-|1.3.0|[site](http://jinahya.github.io/bit-io/sites/1.3.0/index.html)|[apidocs](http://jinahya.github.io/bit-io/sites/1.3.0/apidocs/index.html)||
+|1.3.1|[site](http://jinahya.github.io/bit-io/sites/1.3.1/index.html)|[javadoc-io](http://www.javadoc.io/doc/com.github.jinahya/bit-io/1.3.1)||
+|1.3.0|[site](http://jinahya.github.io/bit-io/sites/1.3.0/index.html)|[javadoc-io](http://www.javadoc.io/doc/com.github.jinahya/bit-io/1.3.0)||
 
 ## Specifications
 ### boolean

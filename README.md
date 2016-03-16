@@ -23,7 +23,7 @@ A library for reading/writing non octet aligned values such as `1-bit boolean` o
 |`boolean`|1        |1        |`readBoolean()`, `writeBoolean(boolean)`|
 ### numeric
 #### integral
-The size(min) is `1` and the size(max) is `(int) Math.pow(2, e) - (unsigned ? 1 : 0)`.
+The size(min) is `1` and the size(max) is `2^e - (unsigned ? 1 : 0)`.
 
 |type   |e  |size(min)|size(max)|notes
 |-------|---|---------|---------|-----

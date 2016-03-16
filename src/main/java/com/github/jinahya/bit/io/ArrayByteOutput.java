@@ -52,8 +52,6 @@ public class ArrayByteOutput extends AbstractByteOutput<byte[]> {
      *
      * @param value {@inheritDoc}
      * @throws IOException {@inheritDoc}
-     * @throws IndexOutOfBoundsException if {@link #index} is greater than or
-     * equals to {@link #limit}.
      */
     @Override
     public void write(final int value) throws IOException {

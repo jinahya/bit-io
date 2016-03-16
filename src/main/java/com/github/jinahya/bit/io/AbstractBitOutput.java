@@ -231,11 +231,8 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
 
     @Override
     public long align(final int bytes) throws IOException {
-        if (bytes < 0) {
-            throw new IllegalArgumentException("bytes(" + bytes + ") < 0");
-        }
-        if (bytes == 0) {
-            return 0L;
+        if (bytes <= 0) {
+            throw new IllegalArgumentException("bytes(" + bytes + ") <= 0");
         }
         long bits = 0; // number of bits to be padded
         // pad remained bits into current octet

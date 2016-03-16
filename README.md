@@ -44,7 +44,7 @@ The size(min) is `1` and the size(max) is `2^e - (unsigned ? 1 : 0)`.
 ### Preparing `ByteInput`
 Prepare an instance of `ByteInput` from various sources.
 ````java
-new ArrayByteInput(byte[], int, int);
+new ArrayByteInput(byte[], int);
 new BufferByteInput(java.nio.ByteBuffer);
 new DataByteInput(java.io.DataInput);
 new StreamByteInput(java.io.InputStream);

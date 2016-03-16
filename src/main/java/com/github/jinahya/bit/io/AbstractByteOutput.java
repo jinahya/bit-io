@@ -13,10 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-
 package com.github.jinahya.bit.io;
-
 
 /**
  * An abstract class for implementing {@code ByteOutput}.
@@ -26,7 +23,6 @@ package com.github.jinahya.bit.io;
  */
 public abstract class AbstractByteOutput<T> implements ByteOutput {
 
-
     /**
      * Creates a new instance wrapping specified byte target.
      *
@@ -34,12 +30,9 @@ public abstract class AbstractByteOutput<T> implements ByteOutput {
      * supposed to be lazily initialized and set.
      */
     public AbstractByteOutput(final T target) {
-
         super();
-
         this.target = target;
     }
-
 
     /**
      * Returns the current value of {@link #target}.
@@ -47,10 +40,8 @@ public abstract class AbstractByteOutput<T> implements ByteOutput {
      * @return the current value of {@link #target}.
      */
     public T getTarget() {
-
         return target;
     }
-
 
     /**
      * Replaces the value of {@link #target} with given.
@@ -58,15 +49,11 @@ public abstract class AbstractByteOutput<T> implements ByteOutput {
      * @param target new value for {@link #target}.
      */
     public void setTarget(final T target) {
-
         this.target = target;
     }
-
 
     /**
      * The underlying byte target.
      */
     protected T target;
-
 }
-

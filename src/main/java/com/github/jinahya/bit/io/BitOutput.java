@@ -13,14 +13,9 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-
-
 package com.github.jinahya.bit.io;
 
-
-import com.github.jinahya.bit.io.codec.BitEncoder;
 import java.io.IOException;
-
 
 /**
  * An interface for writing arbitrary length of bits.
@@ -29,86 +24,121 @@ import java.io.IOException;
  */
 public interface BitOutput {
 
-
     /**
-     * Writes a 1-bit boolean value. This method writes {@code 1} for
-     * {@code true} and {@code 0} for {@code false}.
+     * Writes a 1-bit boolean value. This method writes {@code 0b1} for
+     * {@code true} and {@code 0b0} for {@code false}.
      *
      * @param value the value to write.
-     *
      * @throws IOException if an I/O error occurs
      */
     void writeBoolean(boolean value) throws IOException;
-
 
     /**
      * Writes a {@code byte} value.
      *
      * @param unsigned a flag indicating unsigned value.
-     * @param size the number of bits for value.
+     * @param size the number of bits for value ranged
+     * {@code [1..(7 + (unsigned ? 0 : 1))]}
      * @param value the value to write
-     *
      * @throws IOException if an I/O error occurs.
      */
     void writeByte(boolean unsigned, int size, byte value) throws IOException;
 
+    @Deprecated
+    void writeUnsignedByte(int size, byte value) throws IOException;
 
-    void writeShort(boolean unsigned, int size, short value) throws IOException;
-
-
-    void writeInt(boolean unsigned, int size, int value) throws IOException;
-
-
-    void writeLong(boolean unsigned, int size, long value) throws IOException;
-
+    @Deprecated
+    void writeByte(int size, byte value) throws IOException;
 
     /**
-     * Writes a char value.
+     * Writes a {@code short} value.
+     *
+     * @param unsigned a flag for unsigned value
+     * @param size the number of bits for value ranged
+     * {@code [1..(15 + (unsigned ? 0 : 1))]}
+     * @param value the value to write
+     * @throws IOException if an I/O error occurs.
+     */
+    void writeShort(boolean unsigned, int size, short value) throws IOException;
+
+    @Deprecated
+    void writeUnsignedShort(int size, short value) throws IOException;
+
+    @Deprecated
+    void writeShort(int size, short value) throws IOException;
+
+    /**
+     * Writes an {@code int} value. Only the lower specified number of bits are
+     * written.
+     *
+     * @param unsigned a flag for unsigned value.
+     * @param size the number of bits for value range
+     * {@code [1..(31 + (unsigned ? 0 : 1))]}
+     * @param value the value to write
+     * @throws IOException if an I/O error occurs.
+     */
+    void writeInt(boolean unsigned, int size, int value) throws IOException;
+
+    @Deprecated
+    void writeUnsignedInt(int size, int value) throws IOException;
+
+    @Deprecated
+    void writeInt(int size, int value) throws IOException;
+
+    /**
+     * Writes a {@code long} value. Only the lower specified number of bits are
+     * written.
+     *
+     * @param unsigned a flag for unsigned value
+     * @param size the number of valid bits for value ranged
+     * {@code [1..(63 + unsigned ? 0 : 1))]}
+     * @param value the value to write
+     * @throws IOException if an I/O error occurs.
+     */
+    void writeLong(boolean unsigned, int size, long value) throws IOException;
+
+    @Deprecated
+    void writeUnsignedLong(int size, long value) throws IOException;
+
+    @Deprecated
+    void writeLong(int size, long value) throws IOException;
+
+    /**
+     * Writes a {@code char} value.
      *
      * @param size the number of bits for value; between {@code 1} (inclusive)
      * and {@code 16} (inclusive)
      * @param value the value to write
-     *
      * @throws IOException if an I/O error occurs.
      */
     void writeChar(int size, char value) throws IOException;
 
-
+    /**
+     * Writes a {@code float} value. This method converts given {@code value} to
+     * a 32-bit signed int value using {@link Float#floatToRawIntBits(float)}
+     * and writes the result using {@link #writeInt(boolean, int, int)} with
+     * {@code false}, {@code 32}, and the {@code result}.
+     *
+     * @param value the value to write
+     * @throws IOException if an I/O error occurs.
+     * @see Float#floatToRawIntBits(float)
+     * @see #writeInt(boolean, int, int)
+     */
     void writeFloat(float value) throws IOException;
 
-
+    /**
+     * Writes a {@code double} value. This method converts given {@code value}
+     * to a 64-bit signed long value using
+     * {@link Double#doubleToRawLongBits(double)} and writes the result using
+     * {@link #writeLong(boolean, int, long)} with {@code false}, {@code 64},
+     * and the {@code result}.
+     *
+     * @param value the value to write
+     * @throws IOException if an I/O error occurs.
+     * @see Double#doubleToRawLongBits(double)
+     * @see #writeLong(boolean, int, long)
+     */
     void writeDouble(double value) throws IOException;
-
-
-    /**
-     * Writes an object reference value. This method, if {@code nullable} is
-     * {@code true}, writes a preceding 1-bit boolean value for nullability and
-     * writes specified value if it is not {@code null}.
-     *
-     * @param <T> value type parameter
-     * @param nullable a flag for nullability
-     * @param value the value to write.
-     *
-     * @throws IOException if an I/O error occurs.
-     * @throws NullPointerException if {@code nullable} is {@code flase} and
-     * {@code value} is {@code null}.
-     */
-    <T extends BitWritable> void writeObject(boolean nullable, T value)
-        throws IOException;
-
-
-    /**
-     * Encodes an object reference value using specified encoder.
-     *
-     * @param <T> value type parameter
-     * @param encoder the encoder
-     * @param value the value to encode
-     *
-     * @throws IOException if an I/O error occurs.
-     */
-    <T> void encodeObject(BitEncoder<? super T> encoder, T value)
-        throws IOException;
-
 
     /**
      * Returns the number of bytes written so far.
@@ -117,7 +147,6 @@ public interface BitOutput {
      */
     long getCount();
 
-
     /**
      * Returns the bit index to write in current octet.
      *
@@ -125,17 +154,13 @@ public interface BitOutput {
      */
     int getIndex();
 
-
     /**
      * Aligns to specified number of bytes.
      *
      * @param bytes the number of bytes to align; must be positive.
-     *
      * @return the number of bits padded while aligning
-     *
+     * @throws IllegalArgumentException if {@code bytes} is less than {@code 1}.
      * @throws IOException if an I/O error occurs.
      */
     long align(int bytes) throws IOException;
-
 }
-

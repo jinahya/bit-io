@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Jin Kwon &lt;jinahya_at_gmail.com&gt;.
+ * Copyright 2016 Jin Kwon &lt;jinahya_at_gmail.com&gt;.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,16 +15,10 @@
  */
 package com.github.jinahya.bit.io;
 
-import com.google.inject.AbstractModule;
-
 /**
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
-class BlackBitOutputModule extends AbstractModule {
+public class ArrayByteInputTest extends ByteInputTest<ArrayByteInput> {
 
-    @Override
-    protected void configure() {
-        bind(BitOutput.class).to(BlackBitOutput.class);
-    }
 }

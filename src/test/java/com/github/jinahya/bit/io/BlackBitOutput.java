@@ -15,16 +15,16 @@
  */
 package com.github.jinahya.bit.io;
 
-import com.google.inject.AbstractModule;
+import java.io.IOException;
 
 /**
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
-class BlackBitOutputModule extends AbstractModule {
+class BlackBitOutput extends AbstractBitOutput {
 
     @Override
-    protected void configure() {
-        bind(BitOutput.class).to(BlackBitOutput.class);
+    public void write(final int value) throws IOException {
+        // empty
     }
 }

@@ -13,11 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-
 package com.github.jinahya.bit.io;
 
-
+import static com.github.jinahya.bit.io.BitIoRandom.nextSize;
 import java.io.IOException;
 import static java.util.concurrent.ThreadLocalRandom.current;
 import javax.inject.Inject;
@@ -26,79 +24,88 @@ import static org.slf4j.LoggerFactory.getLogger;
 import org.testng.annotations.Guice;
 import org.testng.annotations.Test;
 
-
 /**
+ * Test class tests {@link BitInput}.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
 @Guice(modules = {WhiteBitInputModule.class})
 public class BitInputTest {
 
-
-    @Test(invocationCount = 128)
-    public void readBoolean() throws IOException {
-
+    public static void readBoolean(final BitInput input) throws IOException {
         final boolean value = input.readBoolean();
     }
 
-
-    @Test(invocationCount = 128)
-    public void readByte() throws IOException {
-
+    public static void readByte(final BitInput input) throws IOException {
         final boolean unsigned = current().nextBoolean();
-        final int size = BitIoRandoms.size(unsigned, 3);
-
+        final int size = nextSize(unsigned, 3);
         final byte value = input.readByte(unsigned, size);
     }
 
-
-    @Test(invocationCount = 128)
-    public void readShort() throws IOException {
-
+    public static void readShort(final BitInput input) throws IOException {
         final boolean unsigned = current().nextBoolean();
-        final int size = BitIoRandoms.size(unsigned, 4);
-
+        final int size = nextSize(unsigned, 4);
         final short value = input.readShort(unsigned, size);
     }
 
-
-    @Test(invocationCount = 128)
-    public void readInt() throws IOException {
-
+    public static void readInt(final BitInput input) throws IOException {
         final boolean unsigned = current().nextBoolean();
-        final int size = BitIoRandoms.size(unsigned, 5);
-
+        final int size = nextSize(unsigned, 5);
         final int value = input.readInt(unsigned, size);
     }
 
-
-    @Test(invocationCount = 128)
-    public void readLong() throws IOException {
-
+    public static void readLong(final BitInput input) throws IOException {
         final boolean unsigned = current().nextBoolean();
-        final int size = BitIoRandoms.size(unsigned, 6);
-
+        final int size = nextSize(unsigned, 6);
         final long value = input.readLong(unsigned, size);
     }
 
+    public static void readChar(final BitInput input) throws IOException {
+        final int size = current().nextInt(1, 17);
+        final char value = input.readChar(size);
+    }
+
+    public static void test(final BitInput input) throws IOException {
+        readBoolean(input);
+        readByte(input);
+        readShort(input);
+        readInt(input);
+        readLong(input);
+        readChar(input);
+    }
+
+    @Test(invocationCount = 128)
+    public void readBoolean() throws IOException {
+        readBoolean(input);
+    }
+
+    @Test(invocationCount = 128)
+    public void readByte() throws IOException {
+        readByte(input);
+    }
+
+    @Test(invocationCount = 128)
+    public void readShort() throws IOException {
+        readShort(input);
+    }
+
+    @Test(invocationCount = 128)
+    public void readInt() throws IOException {
+        readInt(input);
+    }
+
+    @Test(invocationCount = 128)
+    public void readLong() throws IOException {
+        readLong(input);
+    }
 
     @Test(invocationCount = 128)
     public void readChar() throws IOException {
-
-        final int size = BitIoRandoms.size(true, 4);
-
-        final long value = input.readChar(size);
+        readChar(input);
     }
 
-
-    /**
-     * logger.
-     */
     private transient final Logger logger = getLogger(getClass());
-
 
     @Inject
     private transient BitInput input;
-
 }
-

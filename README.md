@@ -10,163 +10,61 @@ bit-io
 A library for reading/writing non octet aligned values such as `1-bit boolean` or `17-bit unsigned int`.
 
 ## Versions
-|Version|Site|Apidocs|Notes|
+|version|site|apidocs|notes|
 |-------|----|-------|-----|
-|1.3.1-SNAPSHOT|[site](http://jinahya.github.io/bit-io/sites/1.3.1-SNAPSHOT/index.html)|[apidocs](http://jinahya.github.io/bit-io/sites/1.3.1-SNAPSHOT/apidocs/index.html)||
+|1.3.2-SNAPSHOT|[site](http://jinahya.github.io/bit-io/sites/1.3.2-SNAPSHOT/index.html)|[apidocs](http://jinahya.github.io/bit-io/sites/1.3.2-SNAPSHOT/apidocs/index.html)||
+|1.3.1|[site](http://jinahya.github.io/bit-io/sites/1.3.1/index.html)|[apidocs](http://jinahya.github.io/bit-io/sites/1.3.1/apidocs/index.html)||
 |1.3.0|[site](http://jinahya.github.io/bit-io/sites/1.3.0/index.html)|[apidocs](http://jinahya.github.io/bit-io/sites/1.3.0/apidocs/index.html)||
 
 ## Specifications
-### Primitives
 ### boolean
-|Type     |Size(min)|Size(max)|Notes|
+|type     |size(min)|size(max)|notes|
 |---------|---------|---------|-----|
-|`boolean`|1        |1        |`readBoolean()`, `writeBoolean()`|
+|`boolean`|1        |1        |`readBoolean()`, `writeBoolean(boolean)`|
 ### numeric
 #### integral
-|Type   |Size(min)|Size(max)|Notes|
-|-------|---------|---------|-----|
-|`byte` |2        |8        |`readByte(boolean, int)`, `readByte(boolean, int, byte)`|
-|`short`|2        |16       |`readShort(boolean, int)`, `writeShort(boolean, int, short)`|
-|`int`  |2        |32       |`readInt(boolean, int)`, `writeInt(boolean, int, int)`|
-|`long` |2        |64       |`readLong(boolean, int)`, `writeLong(boolean, int, long)`|
-|`char` |1        |16       |`readChar(int)`, `writeChar(int, char)`|
+The size(min) is `1` and the size(max) is `2^e - (unsigned ? 1 : 0)`.
+
+|type   |e  |size(min)|size(max)|notes
+|-------|---|---------|---------|-----
+|`byte` |3  |1        |7/8      |`readByte(unsigned, size)`, `readByte(unsigned, size, byte)`|
+|`short`|4  |1        |15/16    |`readShort(unsigned, size)`, `writeShort(unsigned, size, short)`|
+|`int`  |5  |1        |31/32    |`readInt(unsigned, size)`, `writeInt(unsigned, size, int)`|
+|`long` |6  |1        |63/64    |`readLong(unsigned, size)`, `writeLong(unsigned, size, long)`|
+|`char` |   |1        |16       |`readChar(size)`, `writeChar(size, char)`|
 #### floating-point
-|Type    |Size(min)|Size(max)|Notes|
+`float`s and `double`s are handled as `int`s and `long`s, respectively, using `xxxToRawYYYBits` and `yyyBitsToXXX`.
+
+|type    |size(min)|size(max)|notes|
 |--------|---------|---------|-----|
 |`float` |(32)     |(32)     |`readFloat()`, `writeFloat(float)`|
 |`double`|(64)     |(64)     |`readDouble()`, `writeDouble(double)`|
-### References
-#### Implementing `BitReadable`/`BitWritable`
-You can directly read/write values from/to `BitInput`/`BitOutput` by making your class implementing those interfaces.
-```java
-public class Person implements BitReadable, BitWritable {
 
-    @Override
-    public void read(final BitInput input) throws IOException {
-        setAge(input.readInt(true, 7));
-        setMarried(input.readBoolean());
-    }
-
-    @Override
-    public void write(final BitOutput output) throws IOException {
-        output.writeInt(true, 7, getAge());
-        output.writeBoolean(isMarried());
-    }
-}
-```
-It's, now, too obvious you can do this.
-```java
-final Person person = new Person().age(31).married(true);
-person.read(input);
-person.write(output);
-```
-#### Using `BitDecoder`/`BitEncoder`
-If modifying existing classes (e.g. implementing additional interfaces) is not applicable, you can make some sort of specialized classes for decoding/encoding.
-```java
-public class PersonDecoder extends NullableDecoder<Person> {
-
-    public PersonDecoder(final boolean nullable) {
-        super(nullable);
-    }
-
-    @Override
-    public Person decode(final BitInput input) throws IOException {
-        return super.decode(input);
-    }
-
-    @Override
-    public Person decodeValue(final BitInput input) throws IOException {
-        return new Person().age(input.readInt(true, 7)).married(input.readBoolean());
-    }
-}
-
-public class PersonEncoder extends NullableEncoder<Person> {
-
-    public PersonEncoder(final boolean nullable) {
-        super(nullable);
-    }
-
-    @Override
-    public void encode(final BitOutput output, final Person value) throws IOException {
-        super.encode(output, value);
-    }
-
-    @Override
-    public void encodeValue(final BitOutput output, final Person person) throws IOException {
-        output.writeInt(true, 7, value.getAge());
-        output.writeBoolean(value.isMarried());
-    }
-}
-```
-There is an abstract class for implementing these two interfaces easily (including the nullable feature).
-```java
-public class PersonCodec extends NullableCodec<Person> {
-
-    public PersonCodec(final boolean nullable) {
-        super(nullable);
-        decoder = new PersonDecoder(false);
-        encoder = new PersonEncoder(false);
-    }
-    
-    @Override
-    public Person decode(final BitInput input) throws IOException {
-        return super.decode(input);
-    }
-    
-    @Override
-    public void encode(final BitOutput output, final Person value) throws IOException {
-        super.encode(output, value);
-    }
-
-    @Override
-    protected Person decodeValue(final BitInput input) throws IOException {
-        return decoder.decode(input);
-    }
-
-    @Override
-    protected void encodeValue(final BitOutput output, final Person value) throws IOException {
-        encoder.encode(output, value);
-    }
-
-    private final BitDecoder<Person> decoder;
-    private final BitEncoder<Person> encoder;
-}
-```
-Again, you can use the codec like this.
-```java
-final PersonCodec codec = new PersonCodec(true);
-final Person person = codec.decode(input));
-codec.encode(output, person);
-```
 ## Reading
 ### Preparing `ByteInput`
 Prepare an instance of `ByteInput` from various sources.
 ````java
-new ArrayInput(byte[], int, int);
-new BufferInput(java.nio.ByteBuffer);
-new DataInput(java.io.DataInput);
-new FileInput(java.io.RandomAccessFile);
-new StreamInput(java.io.InputStream);
+new ArrayByteInput(byte[], int);
+new BufferByteInput(java.nio.ByteBuffer);
+new DataByteInput(java.io.DataInput);
+new StreamByteInput(java.io.InputStream);
 ````
-Those constructors don't check arguments which means you can lazily instantiate and set them.
+Constructors of these classes don't check arguments which means you can lazily instantiate and set them.
 ```java
-final InputStream output = openFile();
+final InputStream stream = openFile();
 
-final ByteInput input = new ArrayInput(null, -1, -1) {
+final ByteInput input = new ArrayByteInput(null, -1) {
 
     @Override
     public int read() throws IOException {
+        // initialize the `source` field value
         if (source == null) {
             source = byte[16];
-            limit = source.length;
-            index = limit;
+            index = source.length;
         }
-        if (index == limit) {
-            final int read = stream.read(source);
-            if (read == -1) {
-                throw new EOFException();
-            }
-            limit = read;
+        // read bytes from the stream if empty
+        if (index == source.length) {
+            stream.readFully(source);
             index = 0;
         }
         return super.read();
@@ -175,45 +73,24 @@ final ByteInput input = new ArrayInput(null, -1, -1) {
 ```
 ### Creating `BitInput`
 #### Using `DefaultBitInput`
-Construct with an already created a `ByteInput`.
+Construct with an already existing `ByteInput`.
 ```java
 final ByteInput delegate = createByteInput();
 
-final BitInput input = new DefalutBitInput(delegate);
+final BitInput input = new DefalutBitInput<>(delegate);
 ```
 Or lazliy instantiate its `delegate` field.
 ```java
-new DefaultBitInput<InputStream>(null) {
+new DefaultBitInput<StreamByteInput>(null) {
 
     @Override
     public int read() throws IOException {
         if (delegate == null) {
-            delegate = new StreamInput(openFile());
+            delegate = new StreamByteInput(openFile());
         }
         return super.read();
     }
 };
-```
-#### Using `BitInputFactory`
-You can create `BitInput`s using various `newInstance(...)` methods.
-```java
-final RedableByteChannel channel = openChannel();
-
-final BitInput input = BitInputFactory.newInstance(
-    () -> (ByteBuffer) ByteBuffer.allocate(10).position(10),
-    b -> {
-        if (!b.hasRemaining()) {
-            b.clear();
-            do {
-                final int read = channel.read(b);
-                if (read == -1) {
-                    throw new EOFException();
-                }
-            } while (b.position() == 0);
-            b.flip();
-        }
-        return b.get() & 0xFF;
-    });
 ```
 ### Reading values.
 ```java
@@ -233,7 +110,6 @@ biiiiiil llllllll llllllll llllllll llllllll llllllll lllllldd
 ### Preparing `ByteOutput`
 ### Creating `BitOutput`
 #### Using `DefalutBitOutput`
-#### Using `BitOutputFactory`
 ### Writing values.
 ```java
 final BitOutput output;

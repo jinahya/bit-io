@@ -13,10 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-
 package com.github.jinahya.bit.io;
-
 
 import java.io.IOException;
 import static java.lang.Integer.toBinaryString;
@@ -28,55 +25,40 @@ import static org.slf4j.LoggerFactory.getLogger;
 import static org.testng.Assert.assertEquals;
 import org.testng.annotations.Test;
 
-
 /**
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
 public class ReadMeTest {
 
-
     private static final Logger logger = getLogger(ReadMeTest.class);
-
 
     @Test
     public void read() throws IOException {
-
         final byte[] array = new byte[8];
-        final BitInput input = new DefaultBitInput<>(
-            new ArrayInput(array, array.length, 0));
-
+        final BitInput input = new DefaultBitInput<>(new ArrayByteInput(array));
         input.readBoolean();
         input.readInt(true, 6);
         input.readLong(false, 47);
-
         final long discarded = input.align(1);
         assertEquals(discarded, 2L);
     }
 
-
     @Test
     public void write() throws IOException {
-
         final byte[] array = new byte[8];
-        final BitOutput output = new DefaultBitOutput<>(
-            new ArrayOutput(array, array.length, 0));
-
+        final BitOutput output
+                = new DefaultBitOutput<>(new ArrayByteOutput(array));
         output.writeBoolean(false);
         output.writeInt(false, 9, -72);
         output.writeBoolean(true);
         output.writeLong(true, 33, 99L);
-
         final long padded = output.align(4);
         assertEquals(padded, 20L);
-
         final String w = range(0, array.length)
-            .mapToObj(v -> leftPad(toBinaryString(array[v] & 0xFF), 8, '0'))
-            .collect(joining(" "));
-        logger.info("w: {}", w);
+                .mapToObj(v -> leftPad(toBinaryString(array[v] & 0xFF), 8, '0'))
+                .collect(joining(" "));
         assertEquals(w, "01101110 00100000 00000000 00000000"
                         + " 00000110 00110000 00000000 00000000");
     }
-
 }
-

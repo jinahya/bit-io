@@ -13,13 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-
 package com.github.jinahya.bit.io;
 
-
 import java.io.IOException;
-
 
 /**
  * An interface for consuming bytes.
@@ -29,16 +25,12 @@ import java.io.IOException;
 //@FunctionalInterface
 public interface ByteOutput {
 
-
     /**
      * Consumes an unsigned 8-bit value.
      *
      * @param value an unsigned 8-bit value between {@code 0} (inclusive) and
      * {@code 256} (exclusive).
-     *
      * @throws IOException if an I/O error occurs.
      */
     void write(int value) throws IOException;
-
 }
-

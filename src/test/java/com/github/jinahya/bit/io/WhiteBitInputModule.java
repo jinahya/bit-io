@@ -13,29 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-
 package com.github.jinahya.bit.io;
 
-
 import com.google.inject.AbstractModule;
-import static java.util.concurrent.ThreadLocalRandom.current;
-
 
 /**
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
-public class WhiteBitInputModule extends AbstractModule {
-
+class WhiteBitInputModule extends AbstractModule {
 
     @Override
     protected void configure() {
-
-        bind(BitInput.class).toInstance(new DefaultBitInput<>(() -> {
-            return current().nextInt(256);
-        }));
+        bind(BitInput.class).to(WhiteBitInput.class);
     }
-
 }
-

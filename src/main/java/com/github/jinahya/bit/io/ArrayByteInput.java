@@ -52,8 +52,6 @@ public class ArrayByteInput extends AbstractByteInput<byte[]> {
      *
      * @return {@inheritDoc}
      * @throws IOException {@inheritDoc}
-     * @throws IndexOutOfBoundsException if {@link #index} is greater than or
-     * equals to {@link #limit}.
      */
     @Override
     public int read() throws IOException {

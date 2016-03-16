@@ -23,7 +23,7 @@ A library for reading/writing non octet aligned values such as `1-bit boolean` o
 |`boolean`|1        |1        |`readBoolean()`, `writeBoolean(boolean)`|
 ### numeric
 #### integral
-The size(min) is `1` and the size(max) is `(int) Math.pow(2, e) - (unsigned ? 1 : 0)`.
+The size(min) is `1` and the size(max) is `2^e - (unsigned ? 1 : 0)`.
 
 |type   |e  |size(min)|size(max)|notes
 |-------|---|---------|---------|-----
@@ -44,7 +44,7 @@ The size(min) is `1` and the size(max) is `(int) Math.pow(2, e) - (unsigned ? 1 
 ### Preparing `ByteInput`
 Prepare an instance of `ByteInput` from various sources.
 ````java
-new ArrayByteInput(byte[], int, int);
+new ArrayByteInput(byte[], int);
 new BufferByteInput(java.nio.ByteBuffer);
 new DataByteInput(java.io.DataInput);
 new StreamByteInput(java.io.InputStream);

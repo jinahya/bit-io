@@ -37,9 +37,8 @@ public interface BitInput {
      * Reads a byte value.
      *
      * @param unsigned a flag for unsigned value.
-     * @param size number of bits for value; between {@code 1} and
-     * {@code 7 + delta} where the {@code delta} is {@code 0} for unsigned and
-     * {@code 1} for signed.
+     * @param size number of bits for value; between {@code 1} (inclusive) and
+     * {@code 7 + (unsigned ? 0 : 1)} (inclusive)
      * @return a byte value
      * @throws IOException if an I/O error occurs.
      */

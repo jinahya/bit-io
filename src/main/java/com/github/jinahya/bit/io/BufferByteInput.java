@@ -39,7 +39,7 @@ public class BufferByteInput extends AbstractByteInput<ByteBuffer> {
 
     /**
      * {@inheritDoc} The {@code read()} method of {@code BufferByteInput}
-     * invokes {@link ByteBuffer#get()} on {@link #getSource()} and returns the
+     * invokes {@link ByteBuffer#get()} on {@link #source} and returns the
      * result as an unsigned 8-bit int. Override this method if {@link #source}
      * is supposed to be lazily initialized or adjusted.
      *
@@ -49,6 +49,6 @@ public class BufferByteInput extends AbstractByteInput<ByteBuffer> {
      */
     @Override
     public int read() throws IOException {
-        return getSource().get() & 0xFF;
+        return source.get() & 0xFF;
     }
 }

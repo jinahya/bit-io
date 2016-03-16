@@ -69,6 +69,17 @@ public class DefaultBitOutput<T extends ByteOutput> extends AbstractBitOutput {
     }
 
     /**
+     * Replaces {@link #delegate} with given and returns self.
+     *
+     * @param delegate new value for {@link #delegate}
+     * @return this instance
+     */
+    public DefaultBitOutput<T> delegate(final T delegate) {
+        setDelegate(delegate);
+        return this;
+    }
+
+    /**
      * The delegate on which {@link #write(int)} is invoked.
      */
     protected T delegate;

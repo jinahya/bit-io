@@ -38,7 +38,7 @@ public class DataByteInput extends AbstractByteInput<DataInput> {
 
     /**
      * {@inheritDoc} The {@code read()} method of {@code DataByteInput} class
-     * invokes {@link DataInput#readUnsignedByte()} on {@link #getSource()} and
+     * invokes {@link DataInput#readUnsignedByte()} on {@link #source} and
      * returns the result. Override this method if the {@link #source} is
      * supposed to lazily initialized and set.
      *
@@ -47,6 +47,6 @@ public class DataByteInput extends AbstractByteInput<DataInput> {
      */
     @Override
     public int read() throws IOException {
-        return getSource().readUnsignedByte();
+        return source.readUnsignedByte();
     }
 }

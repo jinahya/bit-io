@@ -38,7 +38,7 @@ public class StreamByteOutput extends AbstractByteOutput<OutputStream> {
     /**
      * {@inheritDoc} The {@code writeUnsginedByte(int)} method of
      * {@code StreamByteOutput} class invokes {@link OutputStream#write(int)} on
-     * {@link #getTarget()} with given {@code value}. Override this method if
+     * {@link #target} with given {@code value}. Override this method if
      * {@link #target} is supposed to be lazily initialized and set.
      *
      * @param value {@inheritDoc}
@@ -48,6 +48,6 @@ public class StreamByteOutput extends AbstractByteOutput<OutputStream> {
      */
     @Override
     public void write(final int value) throws IOException {
-        getTarget().write(value);
+        target.write(value);
     }
 }

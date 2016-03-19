@@ -140,20 +140,18 @@ public interface BitOutput {
      */
     void writeDouble(double value) throws IOException;
 
-    /**
-     * Returns the number of bytes written so far.
-     *
-     * @return number of byte written so far.
-     */
-    long getCount();
-
-    /**
-     * Returns the bit index to write in current octet.
-     *
-     * @return bit index to write in current octet.
-     */
-    int getIndex();
-
+//    /**
+//     * Returns the number of bytes written so far.
+//     *
+//     * @return number of byte written so far.
+//     */
+//    long getCount();
+//    /**
+//     * Returns the bit index to write in current octet.
+//     *
+//     * @return bit index to write in current octet.
+//     */
+//    int getIndex();
     /**
      * Aligns to specified number of bytes.
      *

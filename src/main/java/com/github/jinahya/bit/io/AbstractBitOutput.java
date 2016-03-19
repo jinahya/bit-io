@@ -220,11 +220,13 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
     }
 
     @Override
+    @Deprecated
     public void writeFloat(final float value) throws IOException {
         writeInt(false, 32, Float.floatToRawIntBits(value));
     }
 
     @Override
+    @Deprecated
     public void writeDouble(final double value) throws IOException {
         writeLong(false, 64, Double.doubleToRawLongBits(value));
     }

@@ -17,7 +17,7 @@ A library for reading/writing non octet aligned values such as `1-bit boolean` o
 |1.3.0|[site](http://jinahya.github.io/bit-io/sites/1.3.0/index.html)|[javadoc-io](http://www.javadoc.io/doc/com.github.jinahya/bit-io/1.3.0)||
 
 ## Specifications
-### boolean
+#### boolean
 |type     |size(min)|size(max)|notes|
 |---------|---------|---------|-----|
 |`boolean`|1        |1        |`readBoolean()`, `writeBoolean(boolean)`|
@@ -33,12 +33,7 @@ The size(min) is `1` and the size(max) is `2^e - (unsigned ? 1 : 0)`.
 |`long` |6  |1        |63/64    |`readLong(unsigned, size)`, `writeLong(unsigned, size, long)`|
 |`char` |   |1        |16       |`readChar(size)`, `writeChar(size, char)`|
 #### floating-point
-`float`s and `double`s are handled as `int`s and `long`s, respectively, using `xxxToRawYYYBits` and `yyyBitsToXXX`.
-
-|type    |size(min)|size(max)|notes|
-|--------|---------|---------|-----|
-|`float` |(32)     |(32)     |`readFloat()`, `writeFloat(float)`|
-|`double`|(64)     |(64)     |`readDouble()`, `writeDouble(double)`|
+`float`s and `double`s can be read/written as`int`s and `long`s, respectively, using `xxxToRawYYYBits` and `yyyBitsToXXX`.
 
 ## Reading
 ### Preparing `ByteInput`

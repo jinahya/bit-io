@@ -36,15 +36,6 @@ public class ArrayByteInput extends AbstractByteInput<byte[]> {
     }
 
     /**
-     * Creates a new instance with given array.
-     *
-     * @param source the array.
-     */
-    public ArrayByteInput(final byte[] source) {
-        this(source, 0);
-    }
-
-    /**
      * {@inheritDoc} The {@code read()} method of {@code ArrayByteInput} class
      * returns {@code source[index]} as an unsigned int and increments
      * {@link #index}. Override this method if either {@link #source}, or

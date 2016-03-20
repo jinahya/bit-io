@@ -123,7 +123,11 @@ public interface BitOutput {
      * @throws IOException if an I/O error occurs.
      * @see Float#floatToRawIntBits(float)
      * @see #writeInt(boolean, int, int)
+     * @deprecated Use {@link #writeInt(boolean, int, int)} with {@code true}
+     * and {@value Integer#SIZE} and the value converted with
+     * {@link Float#floatToRawIntBits(float)}.
      */
+    @Deprecated
     void writeFloat(float value) throws IOException;
 
     /**
@@ -137,23 +141,25 @@ public interface BitOutput {
      * @throws IOException if an I/O error occurs.
      * @see Double#doubleToRawLongBits(double)
      * @see #writeLong(boolean, int, long)
+     * @deprecated Use {@link #writeLong(boolean, int, long)} with {@code true}
+     * and {@value Long#SIZE} and the value converted with
+     * {@link Double#doubleToRawLongBits(double)}.
      */
+    @Deprecated
     void writeDouble(double value) throws IOException;
 
-    /**
-     * Returns the number of bytes written so far.
-     *
-     * @return number of byte written so far.
-     */
-    long getCount();
-
-    /**
-     * Returns the bit index to write in current octet.
-     *
-     * @return bit index to write in current octet.
-     */
-    int getIndex();
-
+//    /**
+//     * Returns the number of bytes written so far.
+//     *
+//     * @return number of byte written so far.
+//     */
+//    long getCount();
+//    /**
+//     * Returns the bit index to write in current octet.
+//     *
+//     * @return bit index to write in current octet.
+//     */
+//    int getIndex();
     /**
      * Aligns to specified number of bytes.
      *

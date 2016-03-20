@@ -223,11 +223,13 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
     }
 
     @Override
+    @Deprecated
     public float readFloat() throws IOException {
         return Float.intBitsToFloat(readInt(false, 32));
     }
 
     @Override
+    @Deprecated
     public double readDouble() throws IOException {
         return Double.longBitsToDouble(readLong(false, 64));
     }
@@ -252,16 +254,14 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
         return bits;
     }
 
-    @Override
-    public long getCount() {
-        return count;
-    }
-
-    @Override
-    public int getIndex() {
-        return index;
-    }
-
+//    @Override
+//    public long getCount() {
+//        return count;
+//    }
+//    @Override
+//    public int getIndex() {
+//        return index;
+//    }
     /**
      * bit flags.
      */

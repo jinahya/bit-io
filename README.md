@@ -10,14 +10,15 @@ bit-io
 A library for reading/writing non octet aligned values such as `1-bit boolean` or `17-bit unsigned int`.
 
 ## Versions
-|version|site|apidocs|notes|
-|-------|----|-------|-----|
-|1.3.2-SNAPSHOT|[site](http://jinahya.github.io/bit-io/sites/1.3.2-SNAPSHOT/index.html)|[apidocs](http://jinahya.github.io/bit-io/sites/1.3.2-SNAPSHOT/apidocs/index.html)||
-|1.3.1|[site](http://jinahya.github.io/bit-io/sites/1.3.1/index.html)|[apidocs](http://jinahya.github.io/bit-io/sites/1.3.1/apidocs/index.html)||
-|1.3.0|[site](http://jinahya.github.io/bit-io/sites/1.3.0/index.html)|[apidocs](http://jinahya.github.io/bit-io/sites/1.3.0/apidocs/index.html)||
+|version|apidocs|notes|
+|-------|-------|-----|
+|1.3.3-SNAPSHOT|[github.io](http://jinahya.github.io/bit-io/sites/1.3.3-SNAPSHOT/apidocs/index.html)||
+|1.3.2|[javadoc-io](http://www.javadoc.io/doc/com.github.jinahya/bit-io/1.3.2)||
+|1.3.1|[javadoc-io](http://www.javadoc.io/doc/com.github.jinahya/bit-io/1.3.1)||
+|1.3.0|[javadoc-io](http://www.javadoc.io/doc/com.github.jinahya/bit-io/1.3.0)||
 
 ## Specifications
-### boolean
+#### boolean
 |type     |size(min)|size(max)|notes|
 |---------|---------|---------|-----|
 |`boolean`|1        |1        |`readBoolean()`, `writeBoolean(boolean)`|
@@ -33,12 +34,7 @@ The size(min) is `1` and the size(max) is `2^e - (unsigned ? 1 : 0)`.
 |`long` |6  |1        |63/64    |`readLong(unsigned, size)`, `writeLong(unsigned, size, long)`|
 |`char` |   |1        |16       |`readChar(size)`, `writeChar(size, char)`|
 #### floating-point
-`float`s and `double`s are handled as `int`s and `long`s, respectively, using `xxxToRawYYYBits` and `yyyBitsToXXX`.
-
-|type    |size(min)|size(max)|notes|
-|--------|---------|---------|-----|
-|`float` |(32)     |(32)     |`readFloat()`, `writeFloat(float)`|
-|`double`|(64)     |(64)     |`readDouble()`, `writeDouble(double)`|
+`float`s and `double`s can be read/written as`int`s and `long`s, respectively, using `xxxToRawYYYBits` and `yyyBitsToXXX`.
 
 ## Reading
 ### Preparing `ByteInput`
@@ -51,10 +47,7 @@ new StreamByteInput(java.io.InputStream);
 ````
 Constructors of these classes don't check arguments which means you can lazily instantiate and set them.
 ```java
-final InputStream stream = openFile();
-
 final ByteInput input = new ArrayByteInput(null, -1) {
-
     @Override
     public int read() throws IOException {
         // initialize the `source` field value
@@ -75,14 +68,12 @@ final ByteInput input = new ArrayByteInput(null, -1) {
 #### Using `DefaultBitInput`
 Construct with an already existing `ByteInput`.
 ```java
-final ByteInput delegate = createByteInput();
-
-final BitInput input = new DefalutBitInput<>(delegate);
+final ByteInput byteInput = createByteInput();
+final BitInput bitInput = new DefalutBitInput<>(byteInput);
 ```
 Or lazliy instantiate its `delegate` field.
 ```java
 new DefaultBitInput<StreamByteInput>(null) {
-
     @Override
     public int read() throws IOException {
         if (delegate == null) {

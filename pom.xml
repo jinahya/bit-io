@@ -295,11 +295,13 @@
         <artifactId>maven-pmd-plugin</artifactId>
         <version>3.6</version>
       </plugin>
+      <!--
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>cobertura-maven-plugin</artifactId>
         <version>2.7</version>
-      </plugin>
+	</plugin>
+	-->
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>findbugs-maven-plugin</artifactId>

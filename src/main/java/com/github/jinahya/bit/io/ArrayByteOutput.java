@@ -36,15 +36,6 @@ public class ArrayByteOutput extends AbstractByteOutput<byte[]> {
     }
 
     /**
-     * Creates new instance with given parameter.
-     *
-     * @param target a byte array
-     */
-    public ArrayByteOutput(final byte[] target) {
-        this(target, 0);
-    }
-
-    /**
      * {@inheritDoc} The {@code write(int)} method of {@code ArrayByteOutput}
      * sets {@code target[index]} with given value and increments
      * {@code #index}. Override this method if either {@link #target} or

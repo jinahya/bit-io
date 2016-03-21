@@ -220,11 +220,13 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
     }
 
     @Override
+    @Deprecated
     public void writeFloat(final float value) throws IOException {
         writeInt(false, 32, Float.floatToRawIntBits(value));
     }
 
     @Override
+    @Deprecated
     public void writeDouble(final double value) throws IOException {
         writeLong(false, 64, Double.doubleToRawLongBits(value));
     }
@@ -249,16 +251,14 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
         return bits;
     }
 
-    @Override
-    public long getCount() {
-        return count;
-    }
-
-    @Override
-    public int getIndex() {
-        return index;
-    }
-
+//    @Override
+//    public long getCount() {
+//        return count;
+//    }
+//    @Override
+//    public int getIndex() {
+//        return index;
+//    }
     /**
      * bit flags.
      */

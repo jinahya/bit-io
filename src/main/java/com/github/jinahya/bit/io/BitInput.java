@@ -121,7 +121,11 @@ public interface BitInput {
      * @throws IOException if an I/O error occurs.
      * @see #readInt(boolean, int)
      * @see Float#intBitsToFloat(int)
+     * @deprecated Use {@link #readInt(boolean, int)} with {@code true} and
+     * {@value Integer#SIZE} and convert through
+     * {@link Float#intBitsToFloat(int)}.
      */
+    @Deprecated
     float readFloat() throws IOException;
 
     /**
@@ -133,23 +137,25 @@ public interface BitInput {
      * @throws IOException if an I/O error occurs.
      * @see #readLong(boolean, int)
      * @see Double#longBitsToDouble(long)
+     * @deprecated Use {@link #readLong(boolean, int)} with {@code true} and
+     * {@value Long#SIZE} and convert through
+     * {@link Double#longBitsToDouble(long)}
      */
+    @Deprecated
     double readDouble() throws IOException;
 
-    /**
-     * Returns the number of bytes read so far.
-     *
-     * @return number of byte read so far.
-     */
-    long getCount();
-
-    /**
-     * Returns the bit index to read in current octet.
-     *
-     * @return bit index to read in current octet.
-     */
-    int getIndex();
-
+//    /**
+//     * Returns the number of bytes read so far.
+//     *
+//     * @return number of byte read so far.
+//     */
+//    long getCount();
+//    /**
+//     * Returns the bit index to read in current octet.
+//     *
+//     * @return bit index to read in current octet.
+//     */
+//    int getIndex();
     /**
      * Aligns to given number of bytes.
      *

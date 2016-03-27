@@ -273,7 +273,7 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
     private int index = 8;
 
     /**
-     * number of bytes read so far.
+     * The number of bytes read so far.
      */
     private long count = 0L;
 }

@@ -29,19 +29,13 @@ public class ArrayByteOutput extends AbstractByteOutput<byte[]> {
      *
      * @param target a byte array
      * @param index array index to write
+     * @param limit array index to limit
      */
-    public ArrayByteOutput(final byte[] target, final int index) {
+    public ArrayByteOutput(final byte[] target, final int index,
+                           final int limit) {
         super(target);
         this.index = index;
-    }
-
-    /**
-     * Creates new instance with given parameter.
-     *
-     * @param target a byte array
-     */
-    public ArrayByteOutput(final byte[] target) {
-        this(target, 0);
+        this.limit = limit;
     }
 
     /**
@@ -98,8 +92,26 @@ public class ArrayByteOutput extends AbstractByteOutput<byte[]> {
         return this;
     }
 
+    public int getLimit() {
+        return limit;
+    }
+
+    public void setLimit(int limit) {
+        this.limit = limit;
+    }
+
+    public ArrayByteOutput limit(final int limit) {
+        setLimit(limit);
+        return this;
+    }
+
     /**
      * The index in the {@link #target} to write.
      */
     protected int index;
+
+    /**
+     * The index in the {@link #target} that {@link #index} can't exceed.
+     */
+    protected int limit;
 }

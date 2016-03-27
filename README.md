@@ -41,23 +41,24 @@ The size(min) is `1` and the size(max) is `2^e - (unsigned ? 1 : 0)`.
 ### Preparing `ByteInput`
 Prepare an instance of `ByteInput` from various sources.
 ````java
-new ArrayByteInput(byte[], int);
+new ArrayByteInput(byte[], int, int);
 new BufferByteInput(java.nio.ByteBuffer);
 new DataByteInput(java.io.DataInput);
 new StreamByteInput(java.io.InputStream);
 ````
 Constructors of these classes don't check arguments which means you can lazily instantiate and set them.
 ```java
-final ByteInput input = new ArrayByteInput(null, -1) {
+final ByteInput input = new ArrayByteInput(null, -1, -1) {
     @Override
     public int read() throws IOException {
         // initialize the `source` field value
         if (source == null) {
             source = byte[16];
             index = source.length;
+            limit = source.length;
         }
         // read bytes from the stream if empty
-        if (index == source.length) {
+        if (index == limit) {
             stream.readFully(source);
             index = 0;
         }

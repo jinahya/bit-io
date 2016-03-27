@@ -50,9 +50,6 @@ public class ArrayByteInput extends AbstractByteInput<byte[]> {
      */
     @Override
     public int read() throws IOException {
-        if (index < 0) {
-            throw new IllegalStateException("index(" + index + ") < 0");
-        }
         if (index >= limit) {
             throw new IllegalStateException(
                     "index(" + index + ") >= limit(" + limit + ")");

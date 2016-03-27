@@ -49,6 +49,10 @@ public class ArrayByteOutput extends AbstractByteOutput<byte[]> {
      */
     @Override
     public void write(final int value) throws IOException {
+        if (index >= limit) {
+            throw new IllegalStateException(
+                    "index(" + index + ") >= limit(" + limit + ")");
+        }
         target[index++] = (byte) value;
     }
 

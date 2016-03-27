@@ -29,23 +29,34 @@ public class ArrayByteInput extends AbstractByteInput<byte[]> {
      *
      * @param source a byte array
      * @param index array index to read
+     * @param limit array index to limit
      */
-    public ArrayByteInput(final byte[] source, final int index) {
+    public ArrayByteInput(final byte[] source, final int index,
+                          final int limit) {
         super(source);
         this.index = index;
+        this.limit = limit;
     }
 
     /**
      * {@inheritDoc} The {@code read()} method of {@code ArrayByteInput} class
      * returns {@code source[index]} as an unsigned int and increments
-     * {@link #index}. Override this method if either {@link #source}, or
-     * {@link #index} needs to be lazily initialized or adjusted.
+     * {@link #index}. Override this method if either
+     * {@link #source}, {@link #index}, or {@link #limit} needs to be lazily
+     * initialized or adjusted.
      *
      * @return {@inheritDoc}
      * @throws IOException {@inheritDoc}
      */
     @Override
     public int read() throws IOException {
+        if (index < 0) {
+            throw new IllegalStateException("index(" + index + ") < 0");
+        }
+        if (index >= limit) {
+            throw new IllegalStateException(
+                    "index(" + index + ") >= limit(" + limit + ")");
+        }
         return source[index++] & 0xFF;
     }
 
@@ -91,8 +102,26 @@ public class ArrayByteInput extends AbstractByteInput<byte[]> {
         return this;
     }
 
+    public int getLimit() {
+        return limit;
+    }
+
+    public void setLimit(final int limit) {
+        this.limit = limit;
+    }
+
+    public ArrayByteInput limit(final int limit) {
+        setLimit(limit);
+        return this;
+    }
+
     /**
      * The index in the {@link #source} to read.
      */
     protected int index;
+
+    /**
+     * The index in the {@link #source} that {@link #index} can't exceeds.
+     */
+    protected int limit;
 }

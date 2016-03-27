@@ -36,8 +36,8 @@ public class ReadMeTest {
     @Test
     public void read() throws IOException {
         final byte[] array = new byte[8];
-        final BitInput input
-                = new DefaultBitInput<>(new ArrayByteInput(array, 0));
+        final BitInput input = new DefaultBitInput<>(
+                new ArrayByteInput(array, 0, array.length));
         input.readBoolean();
         input.readInt(true, 6);
         input.readLong(false, 47);
@@ -48,8 +48,8 @@ public class ReadMeTest {
     @Test
     public void write() throws IOException {
         final byte[] array = new byte[8];
-        final BitOutput output
-                = new DefaultBitOutput<>(new ArrayByteOutput(array, 0));
+        final BitOutput output = new DefaultBitOutput<>(
+                new ArrayByteOutput(array, 0, array.length));
         output.writeBoolean(false);
         output.writeInt(false, 9, -72);
         output.writeBoolean(true);

@@ -122,7 +122,7 @@ public interface BitInput {
      * @see #readInt(boolean, int)
      * @see Float#intBitsToFloat(int)
      * @deprecated Use {@link #readInt(boolean, int)} with {@code true} and
-     * {@value Integer#SIZE} and convert through
+     * {@value java.lang.Integer#SIZE} and convert through
      * {@link Float#intBitsToFloat(int)}.
      */
     @Deprecated
@@ -138,7 +138,7 @@ public interface BitInput {
      * @see #readLong(boolean, int)
      * @see Double#longBitsToDouble(long)
      * @deprecated Use {@link #readLong(boolean, int)} with {@code true} and
-     * {@value Long#SIZE} and convert through
+     * {@value java.lang.Long#SIZE} and convert through
      * {@link Double#longBitsToDouble(long)}
      */
     @Deprecated

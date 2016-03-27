@@ -41,5 +41,6 @@
     <org-netbeans-modules-editor-indent.text.x-java.CodeStyle.project.alignMultilineParenthesized>true</org-netbeans-modules-editor-indent.text.x-java.CodeStyle.project.alignMultilineParenthesized>
     <org-netbeans-modules-editor-indent.text.x-java.CodeStyle.project.alignMultilineThrows>true</org-netbeans-modules-editor-indent.text.x-java.CodeStyle.project.alignMultilineThrows>
     <org-netbeans-modules-editor-indent.text.x-java.CodeStyle.project.alignMultilineTernaryOp>true</org-netbeans-modules-editor-indent.text.x-java.CodeStyle.project.alignMultilineTernaryOp>
+    <org-netbeans-modules-editor-indent.text.x-java.CodeStyle.project.blankLinesBeforeFields>1</org-netbeans-modules-editor-indent.text.x-java.CodeStyle.project.blankLinesBeforeFields>
   </properties>
 </project-shared-configuration>

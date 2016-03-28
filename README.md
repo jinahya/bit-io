@@ -58,8 +58,8 @@ final ByteInput input = new ArrayByteInput(null, -1, -1) {
             limit = source.length;
         }
         // read bytes from the stream if empty
-        if (index == limit) {
-            stream.readFully(source);
+        if (index >= limit) {
+            limit = stream.read(source);
             index = 0;
         }
         return super.read();

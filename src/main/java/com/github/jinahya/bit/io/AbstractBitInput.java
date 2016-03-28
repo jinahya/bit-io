@@ -254,14 +254,6 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
         return bits;
     }
 
-//    @Override
-//    public long getCount() {
-//        return count;
-//    }
-//    @Override
-//    public int getIndex() {
-//        return index;
-//    }
     /**
      * bit flags.
      */

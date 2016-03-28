@@ -251,14 +251,6 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
         return bits;
     }
 
-//    @Override
-//    public long getCount() {
-//        return count;
-//    }
-//    @Override
-//    public int getIndex() {
-//        return index;
-//    }
     /**
      * bit flags.
      */

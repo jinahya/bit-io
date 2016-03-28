@@ -40,12 +40,14 @@ public class ArrayByteOutput extends AbstractByteOutput<byte[]> {
 
     /**
      * {@inheritDoc} The {@code write(int)} method of {@code ArrayByteOutput}
-     * sets {@code target[index]} with given value and increments
-     * {@code #index}. Override this method if either {@link #target} or
-     * {@link #index} needs to be lazily initialized or adjusted.
+     * sets {@code target[index++]} with given value. Override this method if
+     * either {@link #target}, {@link #index}, or {@link #limit} needs to be
+     * lazily initialized or adjusted.
      *
      * @param value {@inheritDoc}
      * @throws IOException {@inheritDoc}
+     * @throws IllegalStateException if {@link #index} is equals to or greater
+     * than {@link #limit}
      */
     @Override
     public void write(final int value) throws IOException {

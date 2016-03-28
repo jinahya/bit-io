@@ -108,7 +108,7 @@ biiiiiil llllllll llllllll llllllll llllllll llllllll lllllldd
 final BitOutput output;
 
 output.writeBoolean(false);           // 1-bit boolean          1    1
-output.writeInt(false, 9, -72);       // 7-bit signed int       9   10
+output.writeInt(false, 9, -72);       // 9-bit signed int       9   10
 output.writeBoolean(true);            // 1-bit boolean          1   11
 output.writeLong(true, 33, 99L);      // 33-bit unsigned long  33   44
 

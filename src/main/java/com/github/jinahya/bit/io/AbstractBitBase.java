@@ -22,7 +22,7 @@ import static java.lang.Math.pow;
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
-abstract class AbstractBit {
+abstract class AbstractBitBase {
 
     static final int requireValidSize(final boolean unsigned,
                                       final int exponent, final int size) {

@@ -23,7 +23,9 @@ import java.util.List;
  * A class for constraints.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
+ * @deprecated remove this
  */
+@Deprecated
 final class BitIoConstraints {
 
     private static final int MIN_EXPONENT = 3;

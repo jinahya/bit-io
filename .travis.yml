@@ -1,19 +1,4 @@
 language: java
 jdk:
   - oraclejdk8
-
-before_install:
-install:
-
-  before_script:
-script:
-
-  after_success:
-after_failure:
-
-before_deploy:
-deploy:
-after_deploy:
-
-after_script:
                 

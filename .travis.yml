@@ -4,10 +4,11 @@ jdk:
 
 before_install:
 install:
-before_script:
+
+  before_script:
 script:
-  - mvn -X clean test
-after_success:
+
+  after_success:
 after_failure:
 
 before_deploy:

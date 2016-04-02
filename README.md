@@ -58,8 +58,8 @@ final ByteInput input = new ArrayByteInput(null, -1, -1) {
             limit = source.length;
         }
         // read bytes from the stream if empty
-        if (index == limit) {
-            stream.readFully(source);
+        if (index >= limit) {
+            limit = stream.read(source);
             index = 0;
         }
         return super.read();
@@ -108,7 +108,7 @@ biiiiiil llllllll llllllll llllllll llllllll llllllll lllllldd
 final BitOutput output;
 
 output.writeBoolean(false);           // 1-bit boolean          1    1
-output.writeInt(false, 9, -72);       // 7-bit signed int       9   10
+output.writeInt(false, 9, -72);       // 9-bit signed int       9   10
 output.writeBoolean(true);            // 1-bit boolean          1   11
 output.writeLong(true, 33, 99L);      // 33-bit unsigned long  33   44
 

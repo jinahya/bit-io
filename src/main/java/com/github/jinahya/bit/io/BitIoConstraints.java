@@ -61,15 +61,14 @@ final class BitIoConstraints {
     public static int requireValidSize(final boolean unsigned,
                                        final int exponent, final int size) {
         requireValidExponent(exponent);
-        //final int minSize = 1 + (unsigned ? 0 : 1);
         final int minSize = 1;
         if (size < minSize) {
             throw new IllegalArgumentException(
                     "size(" + size + ") < " + minSize + ";unsigned=" + unsigned
                     + ";exponent=" + exponent);
         }
-        final int index = exponent - MIN_EXPONENT;
-        final int maxSize = MAX_SIGNED_SIZES.get(index) - (unsigned ? 1 : 0);
+        final int maxSize = MAX_SIGNED_SIZES.get(exponent - MIN_EXPONENT)
+                            - (unsigned ? 1 : 0);
         if (size > maxSize) {
             throw new IllegalArgumentException(
                     "size(" + size + ") > " + maxSize + ";unsigned=" + unsigned
@@ -126,7 +125,7 @@ final class BitIoConstraints {
         return requireValidSizeUnsigned16(size);
     }
 
-    public BitIoConstraints() {
+    private BitIoConstraints() {
         super();
     }
 }

@@ -26,7 +26,7 @@ public interface BitInput {
 
     /**
      * Reads a 1-bit boolean value. This method read a 1-bit unsigned int and
-     * return {@code true} for {@code 1} and {@code false} for {@code 0}.
+     * returns {@code true} for {@code 1} and {@code false} for {@code 0}.
      *
      * @return {@code true} for {@code 1}, {@code false} for {@code 0}
      * @throws IOException if an I/O error occurs.

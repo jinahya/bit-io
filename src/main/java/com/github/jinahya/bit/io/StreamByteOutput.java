@@ -36,10 +36,10 @@ public class StreamByteOutput extends AbstractByteOutput<OutputStream> {
     }
 
     /**
-     * {@inheritDoc} The {@code writeUnsginedByte(int)} method of
-     * {@code StreamByteOutput} class invokes {@link OutputStream#write(int)} on
-     * {@link #target} with given {@code value}. Override this method if
-     * {@link #target} is supposed to be lazily initialized and set.
+     * {@inheritDoc} The {@code write(int)} method of {@code StreamByteOutput}
+     * class invokes {@link OutputStream#write(int)} on {@link #target} with
+     * given {@code value}. Override this method if {@link #target} is supposed
+     * to be lazily initialized and set.
      *
      * @param value {@inheritDoc}
      * @throws IOException {@inheritDoc}

@@ -24,7 +24,7 @@ import java.util.List;
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
-public final class BitIoConstraints {
+final class BitIoConstraints {
 
     private static final int MIN_EXPONENT = 3;
 

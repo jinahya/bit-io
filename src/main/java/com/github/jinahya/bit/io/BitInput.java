@@ -144,18 +144,6 @@ public interface BitInput {
     @Deprecated
     double readDouble() throws IOException;
 
-//    /**
-//     * Returns the number of bytes read so far.
-//     *
-//     * @return number of byte read so far.
-//     */
-//    long getCount();
-//    /**
-//     * Returns the bit index to read in current octet.
-//     *
-//     * @return bit index to read in current octet.
-//     */
-//    int getIndex();
     /**
      * Aligns to given number of bytes.
      *

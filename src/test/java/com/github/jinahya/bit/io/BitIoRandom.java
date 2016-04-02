@@ -16,6 +16,7 @@
 package com.github.jinahya.bit.io;
 
 import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSize;
+import static java.lang.Math.pow;
 import static java.util.concurrent.ThreadLocalRandom.current;
 
 /**
@@ -32,8 +33,9 @@ final class BitIoRandom {
      * @return a random size.
      */
     public static int nextSize(final boolean unsigned, final int exponent) {
-        final int origin = 1 + (unsigned ? 0 : 1);
-        final int bound = (int) Math.pow(2, exponent) + (unsigned ? 0 : 1);
+        //final int origin = 1 + (unsigned ? 0 : 1);
+        final int origin = 1;
+        final int bound = (int) pow(2, exponent) + (unsigned ? 0 : 1);
         final int size = current().nextInt(origin, bound);
         return requireValidSize(unsigned, exponent, size);
     }
@@ -51,7 +53,7 @@ final class BitIoRandom {
         requireValidSize(unsigned, exponent, size);
         final long value = current().nextLong();
         final int shift = Long.SIZE - size;
-        return unsigned ? value >>> shift : value >> shift;
+        return unsigned ? (value >>> shift) : (value >> shift);
     }
 
     private BitIoRandom() {

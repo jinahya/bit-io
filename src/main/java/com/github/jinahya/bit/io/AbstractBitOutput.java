@@ -16,6 +16,8 @@
 package com.github.jinahya.bit.io;
 
 import java.io.IOException;
+import static java.lang.Double.doubleToRawLongBits;
+import static java.lang.Float.floatToRawIntBits;
 
 /**
  * An abstract class partially implementing {@link BitInput}.
@@ -222,13 +224,13 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
     @Override
     @Deprecated
     public void writeFloat(final float value) throws IOException {
-        writeInt(false, 32, Float.floatToRawIntBits(value));
+        writeInt(false, 32, floatToRawIntBits(value));
     }
 
     @Override
     @Deprecated
     public void writeDouble(final double value) throws IOException {
-        writeLong(false, 64, Double.doubleToRawLongBits(value));
+        writeLong(false, 64, doubleToRawLongBits(value));
     }
 
     @Override
@@ -251,14 +253,6 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
         return bits;
     }
 
-//    @Override
-//    public long getCount() {
-//        return count;
-//    }
-//    @Override
-//    public int getIndex() {
-//        return index;
-//    }
     /**
      * bit flags.
      */

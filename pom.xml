@@ -231,20 +231,6 @@
               </signature>
             </configuration>
           </execution>
-          <execution>
-            <id>check-signature-android-api-level-16</id>
-            <phase>process-classes</phase>
-            <goals>
-              <!--<goal>check</goal>-->
-            </goals>
-            <configuration>
-              <signature>
-                <groupId>net.sf.androidscents.signature</groupId>
-                <artifactId>android-api-level-16</artifactId>
-                <version>4.1.2_r5</version>
-              </signature>
-            </configuration>
-          </execution>
         </executions>
       </plugin>
       <plugin>

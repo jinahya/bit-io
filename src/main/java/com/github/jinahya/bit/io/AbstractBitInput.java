@@ -25,8 +25,12 @@ import static java.lang.Float.intBitsToFloat;
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
 //public abstract class AbstractBitInput implements BitInput, ByteInput {
-public abstract class AbstractBitInput extends AbstractBitBase implements BitInput, ByteInput {
+public abstract class AbstractBitInput extends AbstractBitBase
+        implements BitInput, ByteInput {
 
+    /**
+     * Creates a new instance.
+     */
     public AbstractBitInput() {
         super();
         index = 8;

@@ -25,8 +25,12 @@ import static java.lang.Float.floatToRawIntBits;
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
 //public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
-public abstract class AbstractBitOutput extends AbstractBitBase implements BitOutput, ByteOutput {
+public abstract class AbstractBitOutput extends AbstractBitBase
+        implements BitOutput, ByteOutput {
 
+    /**
+     * Creates a new instance.
+     */
     public AbstractBitOutput() {
         super();
         index = 0;

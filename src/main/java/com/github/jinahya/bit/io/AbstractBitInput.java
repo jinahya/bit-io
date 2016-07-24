@@ -16,13 +16,25 @@
 package com.github.jinahya.bit.io;
 
 import java.io.IOException;
+import static java.lang.Double.longBitsToDouble;
+import static java.lang.Float.intBitsToFloat;
 
 /**
  * An abstract class partially implementing {@link BitInput}.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
-public abstract class AbstractBitInput implements BitInput, ByteInput {
+//public abstract class AbstractBitInput implements BitInput, ByteInput {
+public abstract class AbstractBitInput extends AbstractBitBase
+        implements BitInput, ByteInput {
+
+    /**
+     * Creates a new instance.
+     */
+    public AbstractBitInput() {
+        super();
+        index = 8;
+    }
 
     /**
      * Supplies the value of {@link #read()} while incrementing the
@@ -46,7 +58,8 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
      * @throws IOException if an I/O error occurs.
      */
     protected int unsigned8(final int size) throws IOException {
-        BitIoConstraints.requireValidSizeUnsigned8(size);
+        //BitIoConstraints.requireValidSizeUnsigned8(size);
+        requireValidSizeUnsigned8(size);
         if (index == 8) {
             int octet = octet();
             if (size == 8) {
@@ -80,7 +93,8 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
      * @throws IOException if an I/O error occurs.
      */
     protected int unsigned16(final int size) throws IOException {
-        BitIoConstraints.requireValidSizeUnsigned16(size);
+        //BitIoConstraints.requireValidSizeUnsigned16(size);
+        requireValidSizeUnsigned16(size);
         int value = 0x00;
         final int quotient = size / 8;
         final int remainder = size % 8;
@@ -103,7 +117,8 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
     @Override
     public byte readByte(final boolean unsigned, final int size)
             throws IOException {
-        BitIoConstraints.requireValidSize(unsigned, 3, size);
+        //BitIoConstraints.requireValidSize(unsigned, 3, size);
+        requireValidSize(unsigned, 3, size);
         return (byte) readInt(unsigned, size);
     }
 
@@ -122,7 +137,8 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
     @Override
     public short readShort(final boolean unsigned, final int size)
             throws IOException {
-        BitIoConstraints.requireValidSize(unsigned, 4, size);
+        //BitIoConstraints.requireValidSize(unsigned, 4, size);
+        requireValidSize(unsigned, 4, size);
         return (short) readInt(unsigned, size);
     }
 
@@ -141,7 +157,8 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
     @Override
     public int readInt(final boolean unsigned, final int size)
             throws IOException {
-        BitIoConstraints.requireValidSize(unsigned, 5, size);
+        //BitIoConstraints.requireValidSize(unsigned, 5, size);
+        requireValidSize(unsigned, 5, size);
         if (!unsigned) {
             final int usize = size - 1;
             int value = 0 - readInt(true, 1);
@@ -180,7 +197,8 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
     @Override
     public long readLong(final boolean unsigned, final int size)
             throws IOException {
-        BitIoConstraints.requireValidSize(unsigned, 6, size);
+        //BitIoConstraints.requireValidSize(unsigned, 6, size);
+        requireValidSize(unsigned, 6, size);
         if (!unsigned) {
             final int usize = size - 1;
             long value = 0L - readLong(true, 1);
@@ -218,20 +236,21 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
 
     @Override
     public char readChar(final int size) throws IOException {
-        BitIoConstraints.requireValidSizeChar(size);
+        //BitIoConstraints.requireValidSizeChar(size);
+        requireValidSizeChar(size);
         return (char) unsigned16(size);
     }
 
     @Override
     @Deprecated
     public float readFloat() throws IOException {
-        return Float.intBitsToFloat(readInt(false, 32));
+        return intBitsToFloat(readInt(false, 32));
     }
 
     @Override
     @Deprecated
     public double readDouble() throws IOException {
-        return Double.longBitsToDouble(readLong(false, 64));
+        return longBitsToDouble(readLong(false, 64));
     }
 
     @Override
@@ -254,26 +273,18 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
         return bits;
     }
 
-//    @Override
-//    public long getCount() {
-//        return count;
-//    }
-//    @Override
-//    public int getIndex() {
-//        return index;
-//    }
-    /**
-     * bit flags.
-     */
-    private final boolean[] flags = new boolean[8];
-
-    /**
-     * The next bit index to read.
-     */
-    private int index = 8;
-
-    /**
-     * The number of bytes read so far.
-     */
-    private long count = 0L;
+//    /**
+//     * bit flags.
+//     */
+//    private final boolean[] flags = new boolean[8];
+//
+//    /**
+//     * The next bit index to read.
+//     */
+//    private int index = 8;
+//
+//    /**
+//     * The number of bytes read so far.
+//     */
+//    private long count = 0L;
 }

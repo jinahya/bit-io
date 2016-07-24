@@ -1,20 +1,6 @@
 language: java
 jdk:
   - oraclejdk8
-
-before_install:
-install:
-  - sudo apt-get -y upgradel oracle-java8-installer
-
-before_script:
-script:
-  - mvn -X clean test
 after_success:
-after_failure:
-
-before_deploy:
-deploy:
-after_deploy:
-
-after_script:
+  - python <(curl -s https://raw.githubusercontent.com/TouK/sputnik-ci/master/sputnik-ci.py)
                 

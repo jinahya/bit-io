@@ -40,19 +40,17 @@ public class ArrayByteInput extends AbstractByteInput<byte[]> {
 
     /**
      * {@inheritDoc} The {@code read()} method of {@code ArrayByteInput} class
-     * returns {@code source[index]} as an unsigned int and increments
-     * {@link #index}. Override this method if either
-     * {@link #source}, {@link #index}, or {@link #limit} needs to be lazily
-     * initialized or adjusted.
+     * returns {@code source[index++]} as an unsigned. Override this method if
+     * either {@link #source}, {@link #index}, or {@link #limit} needs to be
+     * lazily initialized or adjusted.
      *
      * @return {@inheritDoc}
      * @throws IOException {@inheritDoc}
+     * @throws IllegalStateException if {@link #index} is equals to or greater
+     * than {@link #limit}
      */
     @Override
     public int read() throws IOException {
-        if (index < 0) {
-            throw new IllegalStateException("index(" + index + ") < 0");
-        }
         if (index >= limit) {
             throw new IllegalStateException(
                     "index(" + index + ") >= limit(" + limit + ")");
@@ -102,14 +100,31 @@ public class ArrayByteInput extends AbstractByteInput<byte[]> {
         return this;
     }
 
+    /**
+     * Returns the value of {@link #limit}
+     *
+     * @return the value of {@link #limit}
+     */
     public int getLimit() {
         return limit;
     }
 
+    /**
+     * Replaces the value of {@link #limit} with given.
+     *
+     * @param limit new value of {@link #limit}
+     */
     public void setLimit(final int limit) {
         this.limit = limit;
     }
 
+    /**
+     * Replaces the value of {@link #limit} with given and returns this
+     * instance.
+     *
+     * @param limit new value of {@link #limit}
+     * @return this instance
+     */
     public ArrayByteInput limit(final int limit) {
         setLimit(limit);
         return this;

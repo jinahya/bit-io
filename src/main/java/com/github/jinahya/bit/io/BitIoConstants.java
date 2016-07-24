@@ -19,7 +19,9 @@ package com.github.jinahya.bit.io;
  * A class for constants.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
+ * @deprecated remove this
  */
+@Deprecated
 final class BitIoConstants {
 
     private BitIoConstants() {

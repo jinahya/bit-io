@@ -26,7 +26,7 @@ public interface BitInput {
 
     /**
      * Reads a 1-bit boolean value. This method read a 1-bit unsigned int and
-     * return {@code true} for {@code 1} and {@code false} for {@code 0}.
+     * returns {@code true} for {@code 1} and {@code false} for {@code 0}.
      *
      * @return {@code true} for {@code 1}, {@code false} for {@code 0}
      * @throws IOException if an I/O error occurs.
@@ -73,7 +73,7 @@ public interface BitInput {
      *
      * @param unsigned a flag for unsigned value
      * @param size number of bits for value ranged
-     * {@code [1..(7 + unsigned ? 0 : 1)]}
+     * {@code [1..(31 + (unsigned ? 0 : 1))]}
      * @return an int value
      * @throws IOException if an I/O error occurs.
      */
@@ -90,7 +90,7 @@ public interface BitInput {
      *
      * @param unsigned a flag for unsigned value
      * @param size number of valid bits for value ranged
-     * {@code [1..(15 + unsigned ? 0 : 1)]}
+     * {@code [1..(63 + (unsigned ? 0 : 1))]}
      * @return a long value
      * @throws IOException if an I/O error occurs.
      */
@@ -144,18 +144,6 @@ public interface BitInput {
     @Deprecated
     double readDouble() throws IOException;
 
-//    /**
-//     * Returns the number of bytes read so far.
-//     *
-//     * @return number of byte read so far.
-//     */
-//    long getCount();
-//    /**
-//     * Returns the bit index to read in current octet.
-//     *
-//     * @return bit index to read in current octet.
-//     */
-//    int getIndex();
     /**
      * Aligns to given number of bytes.
      *

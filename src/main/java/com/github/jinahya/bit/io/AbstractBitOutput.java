@@ -16,13 +16,25 @@
 package com.github.jinahya.bit.io;
 
 import java.io.IOException;
+import static java.lang.Double.doubleToRawLongBits;
+import static java.lang.Float.floatToRawIntBits;
 
 /**
  * An abstract class partially implementing {@link BitInput}.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
-public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
+//public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
+public abstract class AbstractBitOutput extends AbstractBitBase
+        implements BitOutput, ByteOutput {
+
+    /**
+     * Creates a new instance.
+     */
+    public AbstractBitOutput() {
+        super();
+        index = 0;
+    }
 
     /**
      * Consumes given byte value via {@link #write(int)} while incrementing
@@ -45,7 +57,8 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
      * @throws IOException if an I/O error occurs.
      */
     protected void unsigned8(final int size, int value) throws IOException {
-        BitIoConstraints.requireValidSizeUnsigned8(size);
+        //BitIoConstraints.requireValidSizeUnsigned8(size);
+        requireValidSizeUnsigned8(size);
         if (size == 8 && index == 0) {
             octet(value);
             return;
@@ -82,7 +95,8 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
      */
     protected void unsigned16(final int size, final int value)
             throws IOException {
-        BitIoConstraints.requireValidSizeUnsigned16(size);
+        //BitIoConstraints.requireValidSizeUnsigned16(size);
+        requireValidSizeUnsigned16(size);
         final int quotient = size / 8;
         final int remainder = size % 8;
         if (remainder > 0) {
@@ -102,7 +116,8 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
     public void writeByte(final boolean unsigned, final int size,
                           final byte value)
             throws IOException {
-        BitIoConstraints.requireValidSize(unsigned, 3, size);
+        //BitIoConstraints.requireValidSize(unsigned, 3, size);
+        requireValidSize(unsigned, 3, size);
         writeInt(unsigned, size, value);
     }
 
@@ -123,7 +138,8 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
     public void writeShort(final boolean unsigned, final int size,
                            final short value)
             throws IOException {
-        BitIoConstraints.requireValidSize(unsigned, 4, size);
+        //BitIoConstraints.requireValidSize(unsigned, 4, size);
+        requireValidSize(unsigned, 4, size);
         writeInt(unsigned, size, value);
     }
 
@@ -145,7 +161,8 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
     public void writeInt(final boolean unsigned, final int size,
                          final int value)
             throws IOException {
-        BitIoConstraints.requireValidSize(unsigned, 5, size);
+        //BitIoConstraints.requireValidSize(unsigned, 5, size);
+        requireValidSize(unsigned, 5, size);
         if (!unsigned) {
             final int usize = size - 1;
             writeInt(true, 1, value >> usize);
@@ -181,7 +198,8 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
     public void writeLong(final boolean unsigned, final int size,
                           final long value)
             throws IOException {
-        BitIoConstraints.requireValidSize(unsigned, 6, size);
+        //BitIoConstraints.requireValidSize(unsigned, 6, size);
+        requireValidSize(unsigned, 6, size);
         if (!unsigned) {
             final int usize = size - 1;
             writeLong(true, 1, value >> usize);
@@ -215,20 +233,21 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
 
     @Override
     public void writeChar(final int size, final char value) throws IOException {
-        BitIoConstraints.requireValidSizeChar(size);
+        //BitIoConstraints.requireValidSizeChar(size);
+        requireValidSizeChar(size);
         unsigned16(size, value);
     }
 
     @Override
     @Deprecated
     public void writeFloat(final float value) throws IOException {
-        writeInt(false, 32, Float.floatToRawIntBits(value));
+        writeInt(false, 32, floatToRawIntBits(value));
     }
 
     @Override
     @Deprecated
     public void writeDouble(final double value) throws IOException {
-        writeLong(false, 64, Double.doubleToRawLongBits(value));
+        writeLong(false, 64, doubleToRawLongBits(value));
     }
 
     @Override
@@ -251,26 +270,18 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
         return bits;
     }
 
-//    @Override
-//    public long getCount() {
-//        return count;
-//    }
-//    @Override
-//    public int getIndex() {
-//        return index;
-//    }
-    /**
-     * bit flags.
-     */
-    private final boolean[] flags = new boolean[8];
-
-    /**
-     * bit index to write.
-     */
-    private int index = 0;
-
-    /**
-     * number of bytes written so far.
-     */
-    private long count = 0L;
+//    /**
+//     * bit flags.
+//     */
+//    private final boolean[] flags = new boolean[8];
+//
+//    /**
+//     * bit index to write.
+//     */
+//    private int index = 0;
+//
+//    /**
+//     * number of bytes written so far.
+//     */
+//    private long count = 0L;
 }

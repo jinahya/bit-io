@@ -87,15 +87,5 @@ public class BitValueTest {
         test(BitValue.CHAR);
     }
 
-    @Test(enabled = true, invocationCount = 1024)
-    public void _float() throws IOException {
-        test(BitValue.FLOAT);
-    }
-
-    @Test(enabled = true, invocationCount = 1024)
-    public void _double() throws IOException {
-        test(BitValue.DOUBLE);
-    }
-
     private transient final Logger logger = getLogger(getClass());
 }

@@ -73,7 +73,7 @@ public interface BitInput {
      *
      * @param unsigned a flag for unsigned value
      * @param size number of bits for value ranged
-     * {@code [1..(7 + unsigned ? 0 : 1)]}
+     * {@code [1..(31 + (unsigned ? 0 : 1))]}
      * @return an int value
      * @throws IOException if an I/O error occurs.
      */
@@ -90,7 +90,7 @@ public interface BitInput {
      *
      * @param unsigned a flag for unsigned value
      * @param size number of valid bits for value ranged
-     * {@code [1..(15 + unsigned ? 0 : 1)]}
+     * {@code [1..(63 + (unsigned ? 0 : 1))]}
      * @return a long value
      * @throws IOException if an I/O error occurs.
      */

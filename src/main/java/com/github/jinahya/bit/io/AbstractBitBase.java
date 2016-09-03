@@ -96,12 +96,12 @@ abstract class AbstractBitBase {
     final boolean[] flags = new boolean[8];
 
     /**
-     * The next bit index to read.
+     * The next bit index to read/write.
      */
     int index;
 
     /**
-     * The number of bytes read so far.
+     * The number of bytes read/written so far.
      */
     long count = 0L;
 }

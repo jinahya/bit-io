@@ -96,12 +96,12 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-site-plugin</artifactId>
-          <version>3.5</version>
+          <version>3.5.1</version>
         </plugin>
         <plugin>
           <groupId>org.jacoco</groupId>
           <artifactId>jacoco-maven-plugin</artifactId>
-          <version>0.7.6.201602180812</version>
+          <version>0.7.7.201606060606</version>
         </plugin>
       </plugins>
     </pluginManagement>
@@ -159,7 +159,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
-        <version>2.6</version>
+        <version>3.0.2</version>
         <executions>
           <execution>
             <id>retrotranslated13</id>
@@ -292,12 +292,12 @@
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>findbugs-maven-plugin</artifactId>
-        <version>3.0.3</version>
+        <version>3.0.4</version>
       </plugin>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>versions-maven-plugin</artifactId>
-        <version>2.2</version>
+        <version>2.3</version>
         <reportSets>
           <reportSet>
             <reports>

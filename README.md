@@ -85,7 +85,7 @@ final boolean b = input.readBoolean();        // 1-bit boolean        1    1
 final int ui6 = input.readInt(true, 6);       // 6-bit unsigned int   6    7
 final long sl47 = input.readLong(false, 47);  // 47-bit signed long  47   54
 
-final long discarded = input.align(1);        // aligns to (1*8)-bit      2   56
+final long discarded = input.align(1);        // aligns to (1*8)-bit  2   56
 assert discarded == 2L;
 ```
 ```
@@ -104,7 +104,7 @@ output.writeInt(false, 9, -72);       // 9-bit signed int       9   10
 output.writeBoolean(true);            // 1-bit boolean          1   11
 output.writeLong(true, 33, 99L);      // 33-bit unsigned long  33   44
 
-final long padded = output.align(4);  // aligns to (4*8)-bit      20   64
+final long padded = output.align(4);  // aligns to (4*8)-bit   20   64
 assert padded == 20L;
 ```
 ```

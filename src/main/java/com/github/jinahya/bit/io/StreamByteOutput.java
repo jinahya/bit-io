@@ -19,7 +19,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 /**
- * A {@link ByteOutput} implementation for {@link OutputStream}s.
+ * A {@link ByteOutput} writes bytes to an {@link OutputStream}.
  *
  * @see StreamByteInput
  */
@@ -28,7 +28,7 @@ public class StreamByteOutput extends AbstractByteOutput<OutputStream> {
     /**
      * Creates a new instance built on top of the specified output stream.
      *
-     * @param target the output stream or {@code null} if it's supposed to be
+     * @param target the output stream; {@code null} if it's supposed to be
      * lazily initialized and set.
      */
     public StreamByteOutput(final OutputStream target) {
@@ -38,8 +38,7 @@ public class StreamByteOutput extends AbstractByteOutput<OutputStream> {
     /**
      * {@inheritDoc} The {@code write(int)} method of {@code StreamByteOutput}
      * class invokes {@link OutputStream#write(int)} on {@link #target} with
-     * given {@code value}. Override this method if {@link #target} is supposed
-     * to be lazily initialized and set.
+     * given {@code value}.
      *
      * @param value {@inheritDoc}
      * @throws IOException {@inheritDoc}
@@ -49,5 +48,10 @@ public class StreamByteOutput extends AbstractByteOutput<OutputStream> {
     @Override
     public void write(final int value) throws IOException {
         target.write(value);
+    }
+
+    @Override
+    public StreamByteOutput target(final OutputStream target) {
+        return (StreamByteOutput) super.target(target);
     }
 }

@@ -16,11 +16,9 @@
 package com.github.jinahya.bit.io;
 
 import java.io.IOException;
-import static java.lang.Double.doubleToRawLongBits;
-import static java.lang.Float.floatToRawIntBits;
 
 /**
- * An abstract class partially implementing {@link BitInput}.
+ * An abstract class for implementing {@link BitInput}.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
@@ -37,8 +35,9 @@ public abstract class AbstractBitOutput extends AbstractBitBase
     }
 
     /**
-     * Consumes given byte value via {@link #write(int)} while incrementing
-     * {@code count}.
+     * Writes given octet. The {@code octet(int)} method of
+     * {@code AbstractBitOutput} class invokes {@link #write(int)} with given
+     * value while incrementing {@code count}.
      *
      * @param value the byte value
      * @throws IOException if an I/O error occurs.
@@ -51,8 +50,8 @@ public abstract class AbstractBitOutput extends AbstractBitBase
     /**
      * Writes an unsigned value whose size is max {@code 8}.
      *
-     * @param size the number of lower bits to write; between {@code 1}
-     * (inclusive) and {@code 8} (inclusive).
+     * @param size the number of lower bits to write; between {@code 1} and
+     * {@code 8}, both inclusive.
      * @param value the value to write
      * @throws IOException if an I/O error occurs.
      */
@@ -88,8 +87,8 @@ public abstract class AbstractBitOutput extends AbstractBitBase
     /**
      * Writes an unsigned value whose size is max {@code 16}.
      *
-     * @param size the number of lower bits to write; between {@code 1}
-     * (inclusive) and {@code 16} (inclusive).
+     * @param size the number of lower bits to write; between {@code 1} and
+     * {@code 16}, both inclusive.
      * @param value the value to write
      * @throws IOException if an I/O error occurs
      */
@@ -121,19 +120,17 @@ public abstract class AbstractBitOutput extends AbstractBitBase
         writeInt(unsigned, size, value);
     }
 
-    @Deprecated
-    @Override
-    public void writeUnsignedByte(final int size, final byte value)
-            throws IOException {
-        writeByte(true, size, value);
-    }
-
-    @Deprecated
-    @Override
-    public void writeByte(final int size, final byte value) throws IOException {
-        writeByte(false, size, value);
-    }
-
+//    @Deprecated
+//    @Override
+//    public void writeUnsignedByte(final int size, final byte value)
+//            throws IOException {
+//        writeByte(true, size, value);
+//    }
+//    @Deprecated
+//    @Override
+//    public void writeByte(final int size, final byte value) throws IOException {
+//        writeByte(false, size, value);
+//    }
     @Override
     public void writeShort(final boolean unsigned, final int size,
                            final short value)
@@ -143,20 +140,18 @@ public abstract class AbstractBitOutput extends AbstractBitBase
         writeInt(unsigned, size, value);
     }
 
-    @Deprecated
-    @Override
-    public void writeUnsignedShort(final int size, final short value)
-            throws IOException {
-        writeShort(true, size, value);
-    }
-
-    @Deprecated
-    @Override
-    public void writeShort(final int size, final short value)
-            throws IOException {
-        writeShort(false, size, value);
-    }
-
+//    @Deprecated
+//    @Override
+//    public void writeUnsignedShort(final int size, final short value)
+//            throws IOException {
+//        writeShort(true, size, value);
+//    }
+//    @Deprecated
+//    @Override
+//    public void writeShort(final int size, final short value)
+//            throws IOException {
+//        writeShort(false, size, value);
+//    }
     @Override
     public void writeInt(final boolean unsigned, final int size,
                          final int value)
@@ -181,19 +176,17 @@ public abstract class AbstractBitOutput extends AbstractBitBase
         }
     }
 
-    @Deprecated
-    @Override
-    public void writeUnsignedInt(final int size, final int value)
-            throws IOException {
-        writeInt(true, size, value);
-    }
-
-    @Deprecated
-    @Override
-    public void writeInt(final int size, final int value) throws IOException {
-        writeInt(false, size, value);
-    }
-
+//    @Deprecated
+//    @Override
+//    public void writeUnsignedInt(final int size, final int value)
+//            throws IOException {
+//        writeInt(true, size, value);
+//    }
+//    @Deprecated
+//    @Override
+//    public void writeInt(final int size, final int value) throws IOException {
+//        writeInt(false, size, value);
+//    }
     @Override
     public void writeLong(final boolean unsigned, final int size,
                           final long value)
@@ -218,19 +211,17 @@ public abstract class AbstractBitOutput extends AbstractBitBase
         }
     }
 
-    @Deprecated
-    @Override
-    public void writeUnsignedLong(final int size, final long value)
-            throws IOException {
-        writeLong(true, size, value);
-    }
-
-    @Deprecated
-    @Override
-    public void writeLong(final int size, final long value) throws IOException {
-        writeLong(false, size, value);
-    }
-
+//    @Deprecated
+//    @Override
+//    public void writeUnsignedLong(final int size, final long value)
+//            throws IOException {
+//        writeLong(true, size, value);
+//    }
+//    @Deprecated
+//    @Override
+//    public void writeLong(final int size, final long value) throws IOException {
+//        writeLong(false, size, value);
+//    }
     @Override
     public void writeChar(final int size, final char value) throws IOException {
         //BitIoConstraints.requireValidSizeChar(size);
@@ -238,18 +229,16 @@ public abstract class AbstractBitOutput extends AbstractBitBase
         unsigned16(size, value);
     }
 
-    @Override
-    @Deprecated
-    public void writeFloat(final float value) throws IOException {
-        writeInt(false, 32, floatToRawIntBits(value));
-    }
-
-    @Override
-    @Deprecated
-    public void writeDouble(final double value) throws IOException {
-        writeLong(false, 64, doubleToRawLongBits(value));
-    }
-
+//    @Override
+//    @Deprecated
+//    public void writeFloat(final float value) throws IOException {
+//        writeInt(false, 32, floatToRawIntBits(value));
+//    }
+//    @Override
+//    @Deprecated
+//    public void writeDouble(final double value) throws IOException {
+//        writeLong(false, 64, doubleToRawLongBits(value));
+//    }
     @Override
     public long align(final int bytes) throws IOException {
         if (bytes <= 0) {

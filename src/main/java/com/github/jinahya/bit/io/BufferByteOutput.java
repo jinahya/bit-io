@@ -19,7 +19,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 
 /**
- * A {@link ByteOutput} implementation for {@link ByteBuffer}s.
+ * A {@link ByteOutput} uses a {@link ByteBuffer} as the {@link #target}.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  * @see BufferByteInput
@@ -29,8 +29,8 @@ public class BufferByteOutput extends AbstractByteOutput<ByteBuffer> {
     /**
      * Creates a new instance with given {@code ByteBufer}.
      *
-     * @param buffer the {@code ByteBuffer} to wrap or {@code null} if it's
-     * supposed to be lazily initialized and set.
+     * @param buffer the {@code ByteBuffer} to which bytes are written;
+     * {@code null} if it's supposed to be lazily initialized and set.
      */
     public BufferByteOutput(final ByteBuffer buffer) {
         super(buffer);
@@ -39,14 +39,21 @@ public class BufferByteOutput extends AbstractByteOutput<ByteBuffer> {
     /**
      * {@inheritDoc} The {@code write(int)} method of {@code BufferByteOutput}
      * class invokes {@link ByteBuffer#put(byte)} on {@link #target} with given
-     * {@code value}. Override this method if {@link #target} is supposed to be
-     * lazily initialized or adjusted.
+     * {@code value}. Override this method if the {@link #target} is supposed to
+     * be lazily initialized or adjusted.
      *
      * @param value {@inheritDoc}
      * @throws IOException {@inheritDoc}
+     * @see #target
+     * @see ByteBuffer#put(byte)
      */
     @Override
     public void write(final int value) throws IOException {
         target.put((byte) value);
+    }
+
+    @Override
+    public BufferByteOutput target(final ByteBuffer target) {
+        return (BufferByteOutput) super.target(target);
     }
 }

@@ -27,7 +27,8 @@ public class ArrayByteInput extends AbstractByteInput<byte[]> {
     /**
      * Creates a new instance with given parameters.
      *
-     * @param source a byte array
+     * @param source a byte array; {@code null} if it's supposed to be lazily
+     * initialized an set.
      * @param index array index to read
      * @param limit array index to limit
      */
@@ -58,15 +59,9 @@ public class ArrayByteInput extends AbstractByteInput<byte[]> {
         return source[index++] & 0xFF;
     }
 
-    /**
-     * Replaces the value of {@link #source} with given and returns this.
-     *
-     * @param target new value of {@link #source}.
-     * @return this instance.
-     */
+    @Override
     public ArrayByteInput source(final byte[] target) {
-        setSource(target);
-        return this;
+        return (ArrayByteInput) super.source(target);
     }
 
     /**
@@ -81,9 +76,9 @@ public class ArrayByteInput extends AbstractByteInput<byte[]> {
     /**
      * Replaces the current value of {@link #index} with given.
      *
-     * @param index new value for {@link #index}.
+     * @param index new value for {@link #index}
      */
-    public void setIndex(int index) {
+    public void setIndex(final int index) {
         this.index = index;
     }
 
@@ -92,8 +87,8 @@ public class ArrayByteInput extends AbstractByteInput<byte[]> {
      * instance.
      *
      * @param index new value for {@link #index}
-     *
      * @return this instance.
+     * @see #setIndex(int)
      */
     public ArrayByteInput index(final int index) {
         setIndex(index);
@@ -124,9 +119,10 @@ public class ArrayByteInput extends AbstractByteInput<byte[]> {
      *
      * @param limit new value of {@link #limit}
      * @return this instance
+     * @see #setLimit(int)
      */
     public ArrayByteInput limit(final int limit) {
-        setLimit(limit);
+        this.limit = limit;
         return this;
     }
 

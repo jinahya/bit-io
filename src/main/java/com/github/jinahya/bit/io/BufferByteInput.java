@@ -19,8 +19,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 
 /**
- * A {@link ByteInput} implementation uses a {@link ByteBuffer} as
- * {@link #source}.
+ * A {@link ByteInput} uses a {@link ByteBuffer} as the {@link #source}.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  * @see BufferByteOutput
@@ -30,8 +29,8 @@ public class BufferByteInput extends AbstractByteInput<ByteBuffer> {
     /**
      * Creates a new instance built on top of the specified byte buffer.
      *
-     * @param source the byte buffer or {@code null} if it's supposed to be
-     * lazily initialized and set.
+     * @param source the byte buffer; {@code null} if it's supposed to be lazily
+     * initialized and set.
      */
     public BufferByteInput(final ByteBuffer source) {
         super(source);
@@ -45,10 +44,16 @@ public class BufferByteInput extends AbstractByteInput<ByteBuffer> {
      *
      * @return {@inheritDoc }
      * @throws IOException {@inheritDoc}
+     * @see #source
      * @see ByteBuffer#get()
      */
     @Override
     public int read() throws IOException {
         return source.get() & 0xFF;
+    }
+
+    @Override
+    public BufferByteInput source(final ByteBuffer source) {
+        return (BufferByteInput) super.source(source);
     }
 }

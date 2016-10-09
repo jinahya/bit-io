@@ -20,7 +20,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * A {@link ByteInput} implementation for {@link InputStream}s.
+ * A {@link ByteInput} reads bytes from an {@link InputStream}.
  *
  * @see StreamByteOutput
  */
@@ -29,8 +29,8 @@ public class StreamByteInput extends AbstractByteInput<InputStream> {
     /**
      * Creates a new instance built on top of the specified input stream.
      *
-     * @param source the stream or {@code null} if it's supposed to be lazily
-     * initialized and set
+     * @param source the input stream; {@code null} if it's supposed to be
+     * lazily initialized and set
      */
     public StreamByteInput(final InputStream source) {
         super(source);
@@ -39,8 +39,7 @@ public class StreamByteInput extends AbstractByteInput<InputStream> {
     /**
      * {@inheritDoc} The {@code read()} method of {@code StreamByteInput} class
      * invokes {@link InputStream#read()} on {@link #source} and returns the
-     * result. Override this method if {@link #source} is supposed to be lazily
-     * initialized and set.
+     * result.
      *
      * @return {@inheritDoc}
      * @throws IOException {@inheritDoc}
@@ -55,5 +54,10 @@ public class StreamByteInput extends AbstractByteInput<InputStream> {
             throw new EOFException();
         }
         return value;
+    }
+
+    @Override
+    public StreamByteInput source(final InputStream source) {
+        return (StreamByteInput) super.source(source);
     }
 }

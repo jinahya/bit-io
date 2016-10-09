@@ -26,10 +26,10 @@ import java.io.IOException;
 public interface ByteOutput {
 
     /**
-     * Consumes an unsigned 8-bit value.
+     * Writes given unsigned 8-bit value.
      *
-     * @param value an unsigned 8-bit value between {@code 0} (inclusive) and
-     * {@code 256} (exclusive).
+     * @param value an unsigned 8-bit value between {@code 0} and {@code 255},
+     * both inclusive.
      * @throws IOException if an I/O error occurs.
      */
     void write(int value) throws IOException;

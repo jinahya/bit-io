@@ -26,10 +26,10 @@ import java.io.IOException;
 public interface ByteInput {
 
     /**
-     * Supplies an unsigned 8-bit value.
+     * Reads an unsigned 8-bit value.
      *
-     * @return an unsigned 8-bit value between {@code 0} (inclusive) and
-     * {@code 256} (exclusive)
+     * @return an unsigned 8-bit value; between {@code 0} and {@code 255}, both
+     * inclusive.
      * @throws IOException if an I/O error occurs.
      */
     int read() throws IOException;

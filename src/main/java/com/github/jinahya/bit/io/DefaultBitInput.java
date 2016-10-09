@@ -18,7 +18,7 @@ package com.github.jinahya.bit.io;
 import java.io.IOException;
 
 /**
- * A default implementation read bytes from {@link #delegate}.
+ * A default implementation read bytes from the {@link #delegate}.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  * @param <T> byte input type parameter

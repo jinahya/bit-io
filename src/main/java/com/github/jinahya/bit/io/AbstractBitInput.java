@@ -16,15 +16,12 @@
 package com.github.jinahya.bit.io;
 
 import java.io.IOException;
-import static java.lang.Double.longBitsToDouble;
-import static java.lang.Float.intBitsToFloat;
 
 /**
- * An abstract class partially implementing {@link BitInput}.
+ * An abstract class for implementing {@link BitInput}.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
-//public abstract class AbstractBitInput implements BitInput, ByteInput {
 public abstract class AbstractBitInput extends AbstractBitBase
         implements BitInput, ByteInput {
 
@@ -37,8 +34,9 @@ public abstract class AbstractBitInput extends AbstractBitBase
     }
 
     /**
-     * Supplies the value of {@link #read()} while incrementing the
-     * {@code count} by one.
+     * Reads the next octet. The {@code octet()} method of
+     * {@code AbstractBitInput} class returns the value of {@link #read()} while
+     * incrementing the {@code count} by one.
      *
      * @return an unsigned byte value.
      * @throws IOException if an I/O error occurs.
@@ -52,8 +50,8 @@ public abstract class AbstractBitInput extends AbstractBitBase
     /**
      * Reads an unsigned value whose maximum size is {@code 8}.
      *
-     * @param size the number of bits for the value; between {@code 1}
-     * (inclusive) and {@code 8} (inclusive).
+     * @param size the number of bits for the value; between {@code 1} and
+     * {@code 8}, both inclusive.
      * @return an unsigned byte value.
      * @throws IOException if an I/O error occurs.
      */
@@ -87,8 +85,8 @@ public abstract class AbstractBitInput extends AbstractBitBase
     /**
      * Reads an unsigned value whose maximum size is {@code 16}.
      *
-     * @param size the number of bits for the value; between {@code 1}
-     * (inclusive) and {@code 16} (inclusive).
+     * @param size the number of bits for the value; between {@code 1} and
+     * {@code 16}, both inclusive.
      * @return an unsigned short value.
      * @throws IOException if an I/O error occurs.
      */
@@ -117,23 +115,20 @@ public abstract class AbstractBitInput extends AbstractBitBase
     @Override
     public byte readByte(final boolean unsigned, final int size)
             throws IOException {
-        //BitIoConstraints.requireValidSize(unsigned, 3, size);
         requireValidSize(unsigned, 3, size);
         return (byte) readInt(unsigned, size);
     }
 
-    @Deprecated
-    @Override
-    public byte readUnsignedByte(final int size) throws IOException {
-        return readByte(true, size);
-    }
-
-    @Deprecated
-    @Override
-    public byte readByte(final int size) throws IOException {
-        return readByte(false, size);
-    }
-
+//    @Deprecated
+//    @Override
+//    public byte readUnsignedByte(final int size) throws IOException {
+//        return readByte(true, size);
+//    }
+//    @Deprecated
+//    @Override
+//    public byte readByte(final int size) throws IOException {
+//        return readByte(false, size);
+//    }
     @Override
     public short readShort(final boolean unsigned, final int size)
             throws IOException {
@@ -142,18 +137,16 @@ public abstract class AbstractBitInput extends AbstractBitBase
         return (short) readInt(unsigned, size);
     }
 
-    @Deprecated
-    @Override
-    public short readUnsignedShort(final int size) throws IOException {
-        return readShort(true, size);
-    }
-
-    @Deprecated
-    @Override
-    public short readShort(final int size) throws IOException {
-        return readShort(false, size);
-    }
-
+//    @Deprecated
+//    @Override
+//    public short readUnsignedShort(final int size) throws IOException {
+//        return readShort(true, size);
+//    }
+//    @Deprecated
+//    @Override
+//    public short readShort(final int size) throws IOException {
+//        return readShort(false, size);
+//    }
     @Override
     public int readInt(final boolean unsigned, final int size)
             throws IOException {
@@ -182,18 +175,16 @@ public abstract class AbstractBitInput extends AbstractBitBase
         return value;
     }
 
-    @Deprecated
-    @Override
-    public int readUnsignedInt(final int size) throws IOException {
-        return readInt(true, size);
-    }
-
-    @Deprecated
-    @Override
-    public int readInt(final int size) throws IOException {
-        return readInt(false, size);
-    }
-
+//    @Deprecated
+//    @Override
+//    public int readUnsignedInt(final int size) throws IOException {
+//        return readInt(true, size);
+//    }
+//    @Deprecated
+//    @Override
+//    public int readInt(final int size) throws IOException {
+//        return readInt(false, size);
+//    }
     @Override
     public long readLong(final boolean unsigned, final int size)
             throws IOException {
@@ -222,18 +213,16 @@ public abstract class AbstractBitInput extends AbstractBitBase
         return value;
     }
 
-    @Deprecated
-    @Override
-    public long readUnsignedLong(final int size) throws IOException {
-        return readLong(true, size);
-    }
-
-    @Deprecated
-    @Override
-    public long readLong(final int size) throws IOException {
-        return readLong(false, size);
-    }
-
+//    @Deprecated
+//    @Override
+//    public long readUnsignedLong(final int size) throws IOException {
+//        return readLong(true, size);
+//    }
+//    @Deprecated
+//    @Override
+//    public long readLong(final int size) throws IOException {
+//        return readLong(false, size);
+//    }
     @Override
     public char readChar(final int size) throws IOException {
         //BitIoConstraints.requireValidSizeChar(size);
@@ -241,18 +230,16 @@ public abstract class AbstractBitInput extends AbstractBitBase
         return (char) unsigned16(size);
     }
 
-    @Override
-    @Deprecated
-    public float readFloat() throws IOException {
-        return intBitsToFloat(readInt(false, 32));
-    }
-
-    @Override
-    @Deprecated
-    public double readDouble() throws IOException {
-        return longBitsToDouble(readLong(false, 64));
-    }
-
+//    @Override
+//    @Deprecated
+//    public float readFloat() throws IOException {
+//        return intBitsToFloat(readInt(false, 32));
+//    }
+//    @Override
+//    @Deprecated
+//    public double readDouble() throws IOException {
+//        return longBitsToDouble(readLong(false, 64));
+//    }
     @Override
     public long align(final int bytes) throws IOException {
         if (bytes <= 0) {

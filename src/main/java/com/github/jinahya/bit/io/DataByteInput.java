@@ -19,7 +19,7 @@ import java.io.DataInput;
 import java.io.IOException;
 
 /**
- * An implementation uses an {@link DataInput} as its {@link #source}.
+ * An {@link ByteInput} uses a {@link DataInput} as its {@link #source}.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  * @see DataByteOutput
@@ -29,7 +29,7 @@ public class DataByteInput extends AbstractByteInput<DataInput> {
     /**
      * Creates a new instance with given {@code source}.
      *
-     * @param source the byte source or {@code null} if it is supposed to lazily
+     * @param source the byte source; {@code null} if it's supposed to lazily
      * initialized and set
      */
     public DataByteInput(final DataInput source) {
@@ -48,5 +48,10 @@ public class DataByteInput extends AbstractByteInput<DataInput> {
     @Override
     public int read() throws IOException {
         return source.readUnsignedByte();
+    }
+
+    @Override
+    public DataByteInput source(final DataInput source) {
+        return (DataByteInput) super.source(source);
     }
 }

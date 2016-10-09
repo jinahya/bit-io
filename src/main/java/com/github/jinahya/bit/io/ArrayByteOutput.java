@@ -64,9 +64,9 @@ public class ArrayByteOutput extends AbstractByteOutput<byte[]> {
      * @param target new value for {@link #target}
      * @return this instance.
      */
+    @Override
     public ArrayByteOutput target(final byte[] target) {
-        setTarget(target);
-        return this;
+        return (ArrayByteOutput) super.target(target);
     }
 
     /**

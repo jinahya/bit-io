@@ -53,6 +53,18 @@ public abstract class AbstractByteInput<T> implements ByteInput {
     }
 
     /**
+     * Replaces the current value of {@link #source} with given.
+     *
+     * @param source new value for {@link #source}
+     * @return this instance
+     * @see #setSource(java.lang.Object)
+     */
+    public AbstractByteInput<T> source(final T source) {
+        setSource(source);
+        return this;
+    }
+
+    /**
      * The underlying byte source.
      */
     protected T source;

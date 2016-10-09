@@ -18,7 +18,7 @@ package com.github.jinahya.bit.io;
 import java.io.IOException;
 
 /**
- * A default implementation writes bytes to {@link #delegate}.
+ * A default implementation writes bytes to the {@link #delegate}.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  * @param <T> byte output type parameter

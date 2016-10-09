@@ -38,7 +38,8 @@ public class StreamByteOutput extends AbstractByteOutput<OutputStream> {
     /**
      * {@inheritDoc} The {@code write(int)} method of {@code StreamByteOutput}
      * class invokes {@link OutputStream#write(int)} on {@link #target} with
-     * given {@code value}.
+     * given {@code value}. Override this method if the {@link #target} is
+     * supposed to be lazily initialized and set.
      *
      * @param value {@inheritDoc}
      * @throws IOException {@inheritDoc}

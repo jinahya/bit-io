@@ -10,7 +10,7 @@
 
   <groupId>com.github.jinahya</groupId>
   <artifactId>bit-io</artifactId>
-  <version>1.3.5-SNAPSHOT</version>
+  <version>1.3.6-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <name>${project.artifactId}</name>

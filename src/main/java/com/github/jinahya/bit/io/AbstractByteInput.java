@@ -53,7 +53,8 @@ public abstract class AbstractByteInput<T> implements ByteInput {
     }
 
     /**
-     * Replaces the current value of {@link #source} with given.
+     * Replaces the current value of {@link #source} with given and returns this
+     * instance.
      *
      * @param source new value for {@link #source}
      * @return this instance

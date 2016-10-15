@@ -15,6 +15,10 @@
  */
 package com.github.jinahya.bit.io;
 
+import static com.github.jinahya.bit.io.AbstractBitBase.requireValidSize;
+import static com.github.jinahya.bit.io.AbstractBitBase.requireValidSizeChar;
+import static com.github.jinahya.bit.io.AbstractBitBase.requireValidSizeUnsigned16;
+import static com.github.jinahya.bit.io.AbstractBitBase.requireValidSizeUnsigned8;
 import java.io.IOException;
 
 /**
@@ -23,7 +27,7 @@ import java.io.IOException;
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
 //public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
-public abstract class AbstractBitOutput extends AbstractBitBase
+public abstract class AbstractBitOutput //extends AbstractBitBase
         implements BitOutput, ByteOutput {
 
     /**
@@ -259,18 +263,18 @@ public abstract class AbstractBitOutput extends AbstractBitBase
         return bits;
     }
 
-//    /**
-//     * bit flags.
-//     */
-//    private final boolean[] flags = new boolean[8];
-//
-//    /**
-//     * bit index to write.
-//     */
-//    private int index = 0;
-//
-//    /**
-//     * number of bytes written so far.
-//     */
-//    private long count = 0L;
+    /**
+     * bit flags.
+     */
+    private final boolean[] flags = new boolean[8];
+
+    /**
+     * bit index to write.
+     */
+    private int index = 0;
+
+    /**
+     * number of bytes written so far.
+     */
+    private long count = 0L;
 }

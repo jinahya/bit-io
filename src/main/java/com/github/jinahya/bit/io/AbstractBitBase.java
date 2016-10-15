@@ -21,6 +21,7 @@ import static java.lang.Math.pow;
  * An abstract class partially implementing {@link BitInput}.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
+ * @deprecated
  */
 abstract class AbstractBitBase {
 

@@ -15,6 +15,10 @@
  */
 package com.github.jinahya.bit.io;
 
+import static com.github.jinahya.bit.io.AbstractBitBase.requireValidSize;
+import static com.github.jinahya.bit.io.AbstractBitBase.requireValidSizeChar;
+import static com.github.jinahya.bit.io.AbstractBitBase.requireValidSizeUnsigned16;
+import static com.github.jinahya.bit.io.AbstractBitBase.requireValidSizeUnsigned8;
 import java.io.IOException;
 
 /**
@@ -22,7 +26,7 @@ import java.io.IOException;
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
-public abstract class AbstractBitInput extends AbstractBitBase
+public abstract class AbstractBitInput //extends AbstractBitBase
         implements BitInput, ByteInput {
 
     /**
@@ -260,18 +264,18 @@ public abstract class AbstractBitInput extends AbstractBitBase
         return bits;
     }
 
-//    /**
-//     * bit flags.
-//     */
-//    private final boolean[] flags = new boolean[8];
-//
-//    /**
-//     * The next bit index to read.
-//     */
-//    private int index = 8;
-//
-//    /**
-//     * The number of bytes read so far.
-//     */
-//    private long count = 0L;
+    /**
+     * bit flags.
+     */
+    private final boolean[] flags = new boolean[8];
+
+    /**
+     * The next bit index to read.
+     */
+    private int index = 8;
+
+    /**
+     * The number of bytes read so far.
+     */
+    private long count = 0L;
 }

@@ -34,15 +34,15 @@ public abstract class AbstractBitOutput extends AbstractBitBase
         index = 0;
     }
 
-    /**
-     * Writes given octet. The {@code octet(int)} method of
-     * {@code AbstractBitOutput} class invokes {@link #write(int)} with given
-     * value while incrementing {@code count}.
-     *
-     * @param value the byte value
-     * @throws IOException if an I/O error occurs.
-     */
-    protected void octet(final int value) throws IOException {
+//    /**
+//     * Writes given octet. The {@code octet(int)} method of
+//     * {@code AbstractBitOutput} class invokes {@link #write(int)} with given
+//     * value while incrementing {@code count}.
+//     *
+//     * @param value the byte value
+//     * @throws IOException if an I/O error occurs.
+//     */
+    private void octet(final int value) throws IOException {
         write(value & 0xFF);
         count++;
     }

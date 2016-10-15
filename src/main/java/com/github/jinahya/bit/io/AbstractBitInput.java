@@ -33,15 +33,15 @@ public abstract class AbstractBitInput extends AbstractBitBase
         index = 8;
     }
 
-    /**
-     * Reads the next octet. The {@code octet()} method of
-     * {@code AbstractBitInput} class returns the value of {@link #read()} while
-     * incrementing the {@code count} by one.
-     *
-     * @return an unsigned byte value.
-     * @throws IOException if an I/O error occurs.
-     */
-    protected int octet() throws IOException {
+//    /**
+//     * Reads the next octet. The {@code octet()} method of
+//     * {@code AbstractBitInput} class returns the value of {@link #read()} while
+//     * incrementing the {@code count} by one.
+//     *
+//     * @return an unsigned byte value.
+//     * @throws IOException if an I/O error occurs.
+//     */
+    private int octet() throws IOException {
         final int octet = read() & 0xFF;
         ++count;
         return octet;

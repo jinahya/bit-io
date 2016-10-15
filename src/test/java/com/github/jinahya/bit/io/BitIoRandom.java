@@ -15,7 +15,7 @@
  */
 package com.github.jinahya.bit.io;
 
-import static com.github.jinahya.bit.io.AbstractBitBase.requireValidSize;
+import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSize;
 import static java.lang.Long.SIZE;
 import static java.lang.Math.pow;
 import static java.util.concurrent.ThreadLocalRandom.current;

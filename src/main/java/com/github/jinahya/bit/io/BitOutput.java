@@ -44,10 +44,6 @@ public interface BitOutput {
      */
     void writeByte(boolean unsigned, int size, byte value) throws IOException;
 
-//    @Deprecated
-//    void writeUnsignedByte(int size, byte value) throws IOException;
-//    @Deprecated
-//    void writeByte(int size, byte value) throws IOException;
     /**
      * Writes a {@code short} value.
      *
@@ -59,10 +55,6 @@ public interface BitOutput {
      */
     void writeShort(boolean unsigned, int size, short value) throws IOException;
 
-//    @Deprecated
-//    void writeUnsignedShort(int size, short value) throws IOException;
-//    @Deprecated
-//    void writeShort(int size, short value) throws IOException;
     /**
      * Writes an {@code int} value. Only the lower specified number of bits are
      * written.
@@ -75,10 +67,6 @@ public interface BitOutput {
      */
     void writeInt(boolean unsigned, int size, int value) throws IOException;
 
-//    @Deprecated
-//    void writeUnsignedInt(int size, int value) throws IOException;
-//    @Deprecated
-//    void writeInt(int size, int value) throws IOException;
     /**
      * Writes a {@code long} value. Only the lower specified number of bits are
      * written.
@@ -91,10 +79,6 @@ public interface BitOutput {
      */
     void writeLong(boolean unsigned, int size, long value) throws IOException;
 
-//    @Deprecated
-//    void writeUnsignedLong(int size, long value) throws IOException;
-//    @Deprecated
-//    void writeLong(int size, long value) throws IOException;
     /**
      * Writes a {@code char} value.
      *
@@ -105,39 +89,6 @@ public interface BitOutput {
      */
     void writeChar(int size, char value) throws IOException;
 
-//    /**
-//     * Writes a {@code float} value. This method converts given {@code value} to
-//     * a 32-bit signed int value using {@link Float#floatToRawIntBits(float)}
-//     * and writes the result using {@link #writeInt(boolean, int, int)} with
-//     * {@code false}, {@code 32}, and the {@code result}.
-//     *
-//     * @param value the value to write
-//     * @throws IOException if an I/O error occurs.
-//     * @see Float#floatToRawIntBits(float)
-//     * @see #writeInt(boolean, int, int)
-//     * @deprecated Use {@link #writeInt(boolean, int, int)} with {@code true}
-//     * and {@value java.lang.Integer#SIZE} and the value converted with
-//     * {@link Float#floatToRawIntBits(float)}.
-//     */
-//    @Deprecated
-//    void writeFloat(float value) throws IOException;
-//    /**
-//     * Writes a {@code double} value. This method converts given {@code value}
-//     * to a 64-bit signed long value using
-//     * {@link Double#doubleToRawLongBits(double)} and writes the result using
-//     * {@link #writeLong(boolean, int, long)} with {@code false}, {@code 64},
-//     * and the {@code result}.
-//     *
-//     * @param value the value to write
-//     * @throws IOException if an I/O error occurs.
-//     * @see Double#doubleToRawLongBits(double)
-//     * @see #writeLong(boolean, int, long)
-//     * @deprecated Use {@link #writeLong(boolean, int, long)} with {@code true}
-//     * and {@value java.lang.Long#SIZE} and the value converted with
-//     * {@link Double#doubleToRawLongBits(double)}.
-//     */
-//    @Deprecated
-//    void writeDouble(double value) throws IOException;
     /**
      * Aligns to specified number of bytes.
      *

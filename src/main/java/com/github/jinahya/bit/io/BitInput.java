@@ -44,10 +44,6 @@ public interface BitInput {
      */
     byte readByte(boolean unsigned, int size) throws IOException;
 
-//    @Deprecated
-//    byte readUnsignedByte(int size) throws IOException;
-//    @Deprecated
-//    byte readByte(int size) throws IOException;
     /**
      * Reads a short value.
      *
@@ -59,10 +55,6 @@ public interface BitInput {
      */
     short readShort(boolean unsigned, int size) throws IOException;
 
-//    @Deprecated
-//    short readUnsignedShort(int size) throws IOException;
-//    @Deprecated
-//    short readShort(int size) throws IOException;
     /**
      * Reads an int value.
      *
@@ -74,10 +66,6 @@ public interface BitInput {
      */
     int readInt(boolean unsigned, int size) throws IOException;
 
-//    @Deprecated
-//    int readUnsignedInt(int size) throws IOException;
-//    @Deprecated
-//    int readInt(int size) throws IOException;
     /**
      * Reads a long value.
      *
@@ -89,10 +77,6 @@ public interface BitInput {
      */
     long readLong(boolean unsigned, int size) throws IOException;
 
-//    @Deprecated
-//    long readUnsignedLong(int size) throws IOException;
-//    @Deprecated
-//    long readLong(int size) throws IOException;
     /**
      * Reads a char value.
      *
@@ -103,36 +87,6 @@ public interface BitInput {
      */
     char readChar(int size) throws IOException;
 
-//    /**
-//     * Reads a float value. This method reads a signed 32-bit int value using
-//     * {@link #readInt(boolean, int)} and returns the value after converted with
-//     * {@link Float#intBitsToFloat(int)}.
-//     *
-//     * @return a float value
-//     * @throws IOException if an I/O error occurs.
-//     * @see #readInt(boolean, int)
-//     * @see Float#intBitsToFloat(int)
-//     * @deprecated Use {@link #readInt(boolean, int)} with {@code true} and
-//     * {@value java.lang.Integer#SIZE} and convert through
-//     * {@link Float#intBitsToFloat(int)}.
-//     */
-//    @Deprecated
-//    float readFloat() throws IOException;
-//    /**
-//     * Reads a double value. The method reads a signed 64-bit long value using
-//     * {@link #readLong(boolean, int)} and returns the value after converted
-//     * with {@link Double#longBitsToDouble(long)}.
-//     *
-//     * @return a double value
-//     * @throws IOException if an I/O error occurs.
-//     * @see #readLong(boolean, int)
-//     * @see Double#longBitsToDouble(long)
-//     * @deprecated Use {@link #readLong(boolean, int)} with {@code true} and
-//     * {@value java.lang.Long#SIZE} and convert through
-//     * {@link Double#longBitsToDouble(long)}
-//     */
-//    @Deprecated
-//    double readDouble() throws IOException;
     /**
      * Aligns to given number of bytes.
      *

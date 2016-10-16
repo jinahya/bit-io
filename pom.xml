@@ -86,11 +86,6 @@
           <artifactId>maven-site-plugin</artifactId>
           <version>3.5.1</version>
         </plugin>
-        <plugin>
-          <groupId>org.jacoco</groupId>
-          <artifactId>jacoco-maven-plugin</artifactId>
-          <version>0.7.7.201606060606</version>
-        </plugin>
       </plugins>
     </pluginManagement>
     <plugins>
@@ -178,13 +173,13 @@
         <artifactId>maven-surefire-plugin</artifactId>
         <version>2.19.1</version>
         <configuration>
+          <argLine>-Xms1024m -Xmx2048m</argLine> <!-- travis -->
           <properties>
             <property>
               <name>listeners</name>
               <value>com.github.jinahya.bit.io.testng.InvokedMethodListener,com.github.jinahya.bit.io.testng.TestListener</value>
             </property>
           </properties>
-          <argLine>-Xms1024m -Xmx2048m</argLine> <!-- travis -->
         </configuration>
       </plugin>
       <plugin>
@@ -218,45 +213,6 @@
                 <artifactId>android-api-level-9</artifactId>
                 <version>2.3.1_r2</version>
               </signature>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.jacoco</groupId>
-        <artifactId>jacoco-maven-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>default-prepare-agent</id>
-            <goals>
-              <goal>prepare-agent</goal>
-            </goals>
-          </execution>
-          <execution>
-            <id>default-report</id>
-            <phase>prepare-package</phase>
-            <goals>
-              <goal>report</goal>
-            </goals>
-          </execution>
-          <execution>
-            <id>default-check</id>
-            <goals>
-              <goal>check</goal>
-            </goals>
-            <configuration>
-              <rules>
-                <rule>
-                  <element>BUNDLE</element>
-                  <limits>
-                    <limit>
-                      <counter>COMPLEXITY</counter>
-                      <value>COVEREDRATIO</value>
-                      <minimum>0.60</minimum>
-                    </limit>
-                  </limits>
-                </rule>
-              </rules>
             </configuration>
           </execution>
         </executions>
@@ -314,10 +270,6 @@
           </reportSet>
         </reportSets>
       </plugin>
-      <plugin>
-        <groupId>org.jacoco</groupId>
-        <artifactId>jacoco-maven-plugin</artifactId>
-      </plugin>
     </plugins>
   </reporting>
 
@@ -326,7 +278,7 @@
       <id>umlgraph</id>
       <properties>
         <additionalparam>
-          -hide java.* -visibility
+          -all -hide java.*
           -collapsible -horizontal
           -inferdep -inferdepinpackage -inferrel
           -outputencoding UTF-8

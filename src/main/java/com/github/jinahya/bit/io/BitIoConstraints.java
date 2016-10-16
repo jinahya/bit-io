@@ -24,8 +24,8 @@ import static java.lang.Math.pow;
  */
 final class BitIoConstraints {
 
-    static final int requireValidSize(final boolean unsigned,
-                                      final int exponent, final int size) {
+    static int requireValidSize(final boolean unsigned,
+                                final int exponent, final int size) {
         if (exponent <= 0) {
             throw new IllegalArgumentException(
                     "exponent(" + exponent + ") <= 0");
@@ -42,7 +42,7 @@ final class BitIoConstraints {
         return size;
     }
 
-    static final int requireValidSizeUnsigned8(final int size) {
+    static int requireValidSizeUnsigned8(final int size) {
         if (size < 1) {
             throw new IllegalArgumentException(
                     "unsigned8.size(" + size + ") < 1");
@@ -54,7 +54,7 @@ final class BitIoConstraints {
         return size;
     }
 
-    static final int requireValidSizeUnsigned16(final int size) {
+    static int requireValidSizeUnsigned16(final int size) {
         if (size < 1) {
             throw new IllegalArgumentException(
                     "unsigned16.size(" + size + ") < 1");
@@ -66,27 +66,23 @@ final class BitIoConstraints {
         return size;
     }
 
-    static final int requireValidSizeByte(final boolean unsigned,
-                                          final int size) {
+    static int requireValidSizeByte(final boolean unsigned, final int size) {
         return requireValidSize(unsigned, 3, size);
     }
 
-    static final int requireValidSizeShort(final boolean unsigned,
-                                           final int size) {
+    static int requireValidSizeShort(final boolean unsigned, final int size) {
         return requireValidSize(unsigned, 4, size);
     }
 
-    static final int requireValidSizeInt(final boolean unsigned,
-                                         final int size) {
+    static int requireValidSizeInt(final boolean unsigned, final int size) {
         return requireValidSize(unsigned, 5, size);
     }
 
-    static final int requireValidSizeLong(final boolean unsigned,
-                                          final int size) {
+    static int requireValidSizeLong(final boolean unsigned, final int size) {
         return requireValidSize(unsigned, 6, size);
     }
 
-    static final int requireValidSizeChar(final int size) {
+    static int requireValidSizeChar(final int size) {
         return requireValidSizeUnsigned16(size);
     }
 

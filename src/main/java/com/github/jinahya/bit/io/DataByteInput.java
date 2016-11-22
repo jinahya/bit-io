@@ -29,7 +29,7 @@ public class DataByteInput extends AbstractByteInput<DataInput> {
     /**
      * Creates a new instance with given {@code source}.
      *
-     * @param source the byte source; {@code null} if it's supposed to lazily
+     * @param source the byte source; {@code null} if it's supposed to be lazily
      * initialized and set
      */
     public DataByteInput(final DataInput source) {
@@ -40,7 +40,7 @@ public class DataByteInput extends AbstractByteInput<DataInput> {
      * {@inheritDoc} The {@code read()} method of {@code DataByteInput} class
      * invokes {@link DataInput#readUnsignedByte()} on {@link #source} and
      * returns the result. Override this method if the {@link #source} is
-     * supposed to lazily initialized and set.
+     * supposed to be lazily initialized and set.
      *
      * @return {@inheritDoc }
      * @throws IOException {@inheritDoc }

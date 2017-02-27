@@ -17,14 +17,10 @@ package com.github.jinahya.bit.io;
 
 import java.io.IOException;
 
-/**
- *
- * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
- */
 class BlackBitOutput extends AbstractBitOutput {
 
     @Override
     public void write(final int value) throws IOException {
-        // empty
+        // does nothing
     }
 }

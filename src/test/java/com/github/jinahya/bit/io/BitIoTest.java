@@ -18,10 +18,6 @@ package com.github.jinahya.bit.io;
 import javax.inject.Inject;
 import org.testng.annotations.Guice;
 
-/**
- *
- * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
- */
 @Guice(modules = {WhiteBitInputModule.class, BlackBitOutputModule.class})
 abstract class BitIoTest {
 

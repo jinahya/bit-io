@@ -17,10 +17,6 @@ package com.github.jinahya.bit.io;
 
 import com.google.inject.AbstractModule;
 
-/**
- *
- * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
- */
 class BlackBitOutputModule extends AbstractModule {
 
     @Override

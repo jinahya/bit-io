@@ -24,6 +24,7 @@ import java.io.IOException;
  */
 public class ArrayByteInput extends AbstractByteInput<byte[]> {
 
+    // -------------------------------------------------------------------------
     /**
      * Creates a new instance with given parameters.
      *
@@ -39,6 +40,7 @@ public class ArrayByteInput extends AbstractByteInput<byte[]> {
         this.limit = limit;
     }
 
+    // -------------------------------------------------------------------------
     /**
      * {@inheritDoc} The {@code read()} method of {@code ArrayByteInput} class
      * returns {@code source[index++]} as an unsigned. Override this method if
@@ -59,11 +61,13 @@ public class ArrayByteInput extends AbstractByteInput<byte[]> {
         return source[index++] & 0xFF;
     }
 
+    // ------------------------------------------------------------------ source
     @Override
     public ArrayByteInput source(final byte[] target) {
         return (ArrayByteInput) super.source(target);
     }
 
+    // ------------------------------------------------------------------- index
     /**
      * Returns the current value of {@link #index}.
      *
@@ -95,6 +99,7 @@ public class ArrayByteInput extends AbstractByteInput<byte[]> {
         return this;
     }
 
+    // ------------------------------------------------------------------- limit
     /**
      * Returns the value of {@link #limit}
      *
@@ -126,6 +131,7 @@ public class ArrayByteInput extends AbstractByteInput<byte[]> {
         return this;
     }
 
+    // -------------------------------------------------------------------------
     /**
      * The index in the {@link #source} to read.
      */

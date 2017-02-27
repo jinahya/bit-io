@@ -25,6 +25,7 @@ import java.io.OutputStream;
  */
 public class StreamByteOutput extends AbstractByteOutput<OutputStream> {
 
+    // -------------------------------------------------------------------------
     /**
      * Creates a new instance built on top of the specified output stream.
      *
@@ -35,6 +36,7 @@ public class StreamByteOutput extends AbstractByteOutput<OutputStream> {
         super(target);
     }
 
+    // -------------------------------------------------------------------------
     /**
      * {@inheritDoc} The {@code write(int)} method of {@code StreamByteOutput}
      * class invokes {@link OutputStream#write(int)} on {@link #target} with
@@ -51,6 +53,7 @@ public class StreamByteOutput extends AbstractByteOutput<OutputStream> {
         target.write(value);
     }
 
+    // ------------------------------------------------------------------ target
     @Override
     public StreamByteOutput target(final OutputStream target) {
         return (StreamByteOutput) super.target(target);

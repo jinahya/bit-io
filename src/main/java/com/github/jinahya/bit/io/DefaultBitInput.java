@@ -18,13 +18,14 @@ package com.github.jinahya.bit.io;
 import java.io.IOException;
 
 /**
- * A default implementation read bytes from the {@link #delegate}.
+ * A default implementation read bytes from an instance of {@link ByteInput}.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  * @param <T> byte input type parameter
  */
 public class DefaultBitInput<T extends ByteInput> extends AbstractBitInput {
 
+    // -------------------------------------------------------------------------
     /**
      * Create a new instance with specified delegate.
      *
@@ -36,6 +37,7 @@ public class DefaultBitInput<T extends ByteInput> extends AbstractBitInput {
         this.delegate = delegate;
     }
 
+    // -------------------------------------------------------------------------
     /**
      * {@inheritDoc} The {@code read()} method of {@code DefaultBitInput} class
      * invokes {@link ByteInput#read()} on {@link #delegate} and returns the
@@ -50,6 +52,7 @@ public class DefaultBitInput<T extends ByteInput> extends AbstractBitInput {
         return delegate.read();
     }
 
+    // ---------------------------------------------------------------- delegate
     /**
      * Returns the current value of {@link #delegate}.
      *
@@ -79,6 +82,7 @@ public class DefaultBitInput<T extends ByteInput> extends AbstractBitInput {
         return this;
     }
 
+    // -------------------------------------------------------------------------
     /**
      * The delegate on which {@link #read()} is invoked.
      */

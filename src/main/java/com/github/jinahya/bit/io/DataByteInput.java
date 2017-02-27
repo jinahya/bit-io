@@ -19,13 +19,15 @@ import java.io.DataInput;
 import java.io.IOException;
 
 /**
- * An {@link ByteInput} uses a {@link DataInput} as its {@link #source}.
+ * An {@link ByteInput} uses an instance of {@link DataInput} as its
+ * {@link #source}.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  * @see DataByteOutput
  */
 public class DataByteInput extends AbstractByteInput<DataInput> {
 
+    // -------------------------------------------------------------------------
     /**
      * Creates a new instance with given {@code source}.
      *
@@ -36,6 +38,7 @@ public class DataByteInput extends AbstractByteInput<DataInput> {
         super(source);
     }
 
+    // -------------------------------------------------------------------------
     /**
      * {@inheritDoc} The {@code read()} method of {@code DataByteInput} class
      * invokes {@link DataInput#readUnsignedByte()} on {@link #source} and
@@ -50,6 +53,7 @@ public class DataByteInput extends AbstractByteInput<DataInput> {
         return source.readUnsignedByte();
     }
 
+    // -------------------------------------------------------------------------
     @Override
     public DataByteInput source(final DataInput source) {
         return (DataByteInput) super.source(source);

@@ -18,7 +18,7 @@ package com.github.jinahya.bit.io;
 import java.io.IOException;
 
 /**
- * A {@code ByteInput} implementation uses a byte array and an index.
+ * A {@code ByteInput} implementation uses a byte array.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
@@ -43,13 +43,13 @@ public class ArrayByteInput extends AbstractByteInput<byte[]> {
     // -------------------------------------------------------------------------
     /**
      * {@inheritDoc} The {@code read()} method of {@code ArrayByteInput} class
-     * returns {@code source[index++]} as an unsigned. Override this method if
-     * either {@link #source}, {@link #index}, or {@link #limit} needs to be
-     * lazily initialized or adjusted.
+     * returns {@code source[index++]} as an unsigned 8-bit value. Override this
+     * method if either {@link #source}, {@link #index}, or {@link #limit} needs
+     * to be lazily initialized or adjusted.
      *
      * @return {@inheritDoc}
      * @throws IOException {@inheritDoc}
-     * @throws IllegalStateException if {@link #index} is equals to or greater
+     * @throws IllegalStateException if {@link #index} is equal to or greater
      * than {@link #limit}
      */
     @Override

@@ -18,13 +18,14 @@ package com.github.jinahya.bit.io;
 import java.io.IOException;
 
 /**
- * A default implementation writes bytes to the {@link #delegate}.
+ * A default implementation writes bytes to an instance of {@link ByteOutput}.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  * @param <T> byte output type parameter
  */
 public class DefaultBitOutput<T extends ByteOutput> extends AbstractBitOutput {
 
+    // -------------------------------------------------------------------------
     /**
      * Creates new instance with specified delegate.
      *
@@ -36,6 +37,7 @@ public class DefaultBitOutput<T extends ByteOutput> extends AbstractBitOutput {
         this.delegate = delegate;
     }
 
+    // -------------------------------------------------------------------------
     /**
      * {@inheritDoc} The {@code write(int)} method of {@code DefaultBitOutput}
      * class invokes {@link ByteOutput#write(int)} on {@link #delegate} with
@@ -50,6 +52,7 @@ public class DefaultBitOutput<T extends ByteOutput> extends AbstractBitOutput {
         delegate.write(value);
     }
 
+    // ---------------------------------------------------------------- delegate
     /**
      * returns the current value of {@link #delegate}.
      *
@@ -79,6 +82,7 @@ public class DefaultBitOutput<T extends ByteOutput> extends AbstractBitOutput {
         return this;
     }
 
+    // -------------------------------------------------------------------------
     /**
      * The delegate on which {@link #write(int)} is invoked.
      */

@@ -24,6 +24,7 @@ import java.io.IOException;
  */
 public class ArrayByteOutput extends AbstractByteOutput<byte[]> {
 
+    // -------------------------------------------------------------------------
     /**
      * Creates a new instance with given parameters.
      *
@@ -38,6 +39,7 @@ public class ArrayByteOutput extends AbstractByteOutput<byte[]> {
         this.limit = limit;
     }
 
+    // -------------------------------------------------------------------------
     /**
      * {@inheritDoc} The {@code write(int)} method of {@code ArrayByteOutput}
      * sets {@code target[index++]} with given value. Override this method if
@@ -46,7 +48,7 @@ public class ArrayByteOutput extends AbstractByteOutput<byte[]> {
      *
      * @param value {@inheritDoc}
      * @throws IOException {@inheritDoc}
-     * @throws IllegalStateException if {@link #index} is equals to or greater
+     * @throws IllegalStateException if {@link #index} is equal to or greater
      * than {@link #limit}
      */
     @Override
@@ -58,6 +60,7 @@ public class ArrayByteOutput extends AbstractByteOutput<byte[]> {
         target[index++] = (byte) value;
     }
 
+    // ------------------------------------------------------------------ target
     /**
      * Replaces the {@link #target} with given and returns self.
      *
@@ -69,6 +72,7 @@ public class ArrayByteOutput extends AbstractByteOutput<byte[]> {
         return (ArrayByteOutput) super.target(target);
     }
 
+    // ------------------------------------------------------------------- index
     /**
      * Returns the current value of {@link #index}
      *
@@ -98,6 +102,7 @@ public class ArrayByteOutput extends AbstractByteOutput<byte[]> {
         return this;
     }
 
+    // ------------------------------------------------------------------- limit
     public int getLimit() {
         return limit;
     }
@@ -111,6 +116,7 @@ public class ArrayByteOutput extends AbstractByteOutput<byte[]> {
         return this;
     }
 
+    // -------------------------------------------------------------------------
     /**
      * The index in the {@link #target} to write.
      */

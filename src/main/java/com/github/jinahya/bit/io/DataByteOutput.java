@@ -19,13 +19,15 @@ import java.io.DataOutput;
 import java.io.IOException;
 
 /**
- * An {@code ByteOutput} uses a {@link DataOutput} as its {@link #target}.
+ * An {@code ByteOutput} uses an instance of {@link DataOutput} as its
+ * {@link #target}.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  * @see DataByteInput
  */
 public class DataByteOutput extends AbstractByteOutput<DataOutput> {
 
+    // -------------------------------------------------------------------------
     /**
      * Creates a new instance with given byte target.
      *
@@ -36,6 +38,7 @@ public class DataByteOutput extends AbstractByteOutput<DataOutput> {
         super(target);
     }
 
+    // -------------------------------------------------------------------------
     /**
      * {@inheritDoc} The {@code write(int)} method of {@code DataByteOutput}
      * class invokes {@link DataOutput#writeByte(int)} on {@link #target} with
@@ -50,6 +53,7 @@ public class DataByteOutput extends AbstractByteOutput<DataOutput> {
         target.writeByte(value);
     }
 
+    // ------------------------------------------------------------------ target
     @Override
     public DataByteOutput target(final DataOutput target) {
         return (DataByteOutput) super.target(target);

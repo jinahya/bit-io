@@ -19,13 +19,15 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 
 /**
- * A {@link ByteOutput} uses a {@link ByteBuffer} as the {@link #target}.
+ * A {@link ByteOutput} uses an instance of {@link ByteBuffer} as its
+ * {@link #target}.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  * @see BufferByteInput
  */
 public class BufferByteOutput extends AbstractByteOutput<ByteBuffer> {
 
+    // -------------------------------------------------------------------------
     /**
      * Creates a new instance with given {@code ByteBufer}.
      *
@@ -36,6 +38,7 @@ public class BufferByteOutput extends AbstractByteOutput<ByteBuffer> {
         super(buffer);
     }
 
+    // -------------------------------------------------------------------------
     /**
      * {@inheritDoc} The {@code write(int)} method of {@code BufferByteOutput}
      * class invokes {@link ByteBuffer#put(byte)} on {@link #target} with given
@@ -52,6 +55,7 @@ public class BufferByteOutput extends AbstractByteOutput<ByteBuffer> {
         target.put((byte) value);
     }
 
+    // ------------------------------------------------------------------ target
     @Override
     public BufferByteOutput target(final ByteBuffer target) {
         return (BufferByteOutput) super.target(target);

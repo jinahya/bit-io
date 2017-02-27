@@ -24,6 +24,7 @@ import java.io.IOException;
  */
 public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
 
+    // -------------------------------------------------------------------------
     private void octet(final int value) throws IOException {
         write(value & 0xFF);
         count++;
@@ -179,6 +180,7 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
         return bits;
     }
 
+    // -------------------------------------------------------------------------
     /**
      * bit flags.
      */

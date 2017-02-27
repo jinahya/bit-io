@@ -23,6 +23,7 @@ package com.github.jinahya.bit.io;
  */
 public abstract class AbstractByteInput<T> implements ByteInput {
 
+    // -------------------------------------------------------------------------
     /**
      * Creates a new instance wrapping specified byte source.
      *
@@ -34,6 +35,7 @@ public abstract class AbstractByteInput<T> implements ByteInput {
         this.source = source;
     }
 
+    // ------------------------------------------------------------------ source
     /**
      * Returns the current value of {@link #source}.
      *
@@ -65,6 +67,7 @@ public abstract class AbstractByteInput<T> implements ByteInput {
         return this;
     }
 
+    // -------------------------------------------------------------------------
     /**
      * The underlying byte source.
      */

@@ -26,6 +26,7 @@ import java.io.InputStream;
  */
 public class StreamByteInput extends AbstractByteInput<InputStream> {
 
+    // -------------------------------------------------------------------------
     /**
      * Creates a new instance built on top of the specified input stream.
      *
@@ -36,6 +37,7 @@ public class StreamByteInput extends AbstractByteInput<InputStream> {
         super(source);
     }
 
+    // -------------------------------------------------------------------------
     /**
      * {@inheritDoc} The {@code read()} method of {@code StreamByteInput} class
      * invokes {@link InputStream#read()} on {@link #source} and returns the
@@ -56,6 +58,7 @@ public class StreamByteInput extends AbstractByteInput<InputStream> {
         return value;
     }
 
+    // ------------------------------------------------------------------ source
     @Override
     public StreamByteInput source(final InputStream source) {
         return (StreamByteInput) super.source(source);

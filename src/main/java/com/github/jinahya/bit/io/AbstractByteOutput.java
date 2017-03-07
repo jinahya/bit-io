@@ -23,6 +23,7 @@ package com.github.jinahya.bit.io;
  */
 public abstract class AbstractByteOutput<T> implements ByteOutput {
 
+    // -------------------------------------------------------------------------
     /**
      * Creates a new instance wrapping specified byte target.
      *
@@ -34,6 +35,7 @@ public abstract class AbstractByteOutput<T> implements ByteOutput {
         this.target = target;
     }
 
+    // ------------------------------------------------------------------ target
     /**
      * Returns the current value of {@link #target}.
      *
@@ -65,6 +67,7 @@ public abstract class AbstractByteOutput<T> implements ByteOutput {
         return this;
     }
 
+    // -------------------------------------------------------------------------
     /**
      * The underlying byte target.
      */

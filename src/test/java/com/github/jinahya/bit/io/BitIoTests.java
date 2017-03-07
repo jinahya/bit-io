@@ -26,10 +26,6 @@ import org.slf4j.Logger;
 import static org.slf4j.LoggerFactory.getLogger;
 import static org.testng.Assert.assertEquals;
 
-/**
- *
- * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
- */
 public final class BitIoTests {
 
     private static final Logger logger = getLogger(BitIoTests.class);

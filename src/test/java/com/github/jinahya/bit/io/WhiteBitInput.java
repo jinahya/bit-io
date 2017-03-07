@@ -17,10 +17,6 @@ package com.github.jinahya.bit.io;
 
 import java.io.IOException;
 
-/**
- *
- * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
- */
 class WhiteBitInput extends AbstractBitInput {
 
     @Override

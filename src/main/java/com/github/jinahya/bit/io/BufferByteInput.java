@@ -19,13 +19,15 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 
 /**
- * A {@link ByteInput} uses a {@link ByteBuffer} as the {@link #source}.
+ * A {@link ByteInput} uses an instance of {@link ByteBuffer} as its
+ * {@link #source}.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  * @see BufferByteOutput
  */
 public class BufferByteInput extends AbstractByteInput<ByteBuffer> {
 
+    // -------------------------------------------------------------------------
     /**
      * Creates a new instance built on top of the specified byte buffer.
      *
@@ -36,6 +38,7 @@ public class BufferByteInput extends AbstractByteInput<ByteBuffer> {
         super(source);
     }
 
+    // -------------------------------------------------------------------------
     /**
      * {@inheritDoc} The {@code read()} method of {@code BufferByteInput}
      * invokes {@link ByteBuffer#get()} on {@link #source} and returns the
@@ -52,6 +55,7 @@ public class BufferByteInput extends AbstractByteInput<ByteBuffer> {
         return source.get() & 0xFF;
     }
 
+    // ------------------------------------------------------------------ source
     @Override
     public BufferByteInput source(final ByteBuffer source) {
         return (BufferByteInput) super.source(source);

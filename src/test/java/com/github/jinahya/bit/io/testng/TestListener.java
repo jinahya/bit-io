@@ -15,21 +15,20 @@
  */
 package com.github.jinahya.bit.io.testng;
 
+import static java.lang.invoke.MethodHandles.lookup;
 import org.slf4j.Logger;
 import static org.slf4j.LoggerFactory.getLogger;
 import org.testng.ITestResult;
 import org.testng.TestListenerAdapter;
 
-/**
- *
- * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
- */
 public class TestListener extends TestListenerAdapter {
 
+    private static final Logger logger = getLogger(lookup().lookupClass());
+
+    // -------------------------------------------------------------------------
     @Override
     public void onTestStart(ITestResult result) {
         super.onTestStart(result);
-
         logger.debug("onTestStart({})", result);
     }
 
@@ -47,7 +46,4 @@ public class TestListener extends TestListenerAdapter {
     public void onTestSuccess(ITestResult tr) {
         super.onTestSuccess(tr);
     }
-
-    private transient final Logger logger = getLogger(getClass());
-
 }

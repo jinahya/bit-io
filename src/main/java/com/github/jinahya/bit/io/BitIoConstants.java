@@ -24,6 +24,12 @@ package com.github.jinahya.bit.io;
 @Deprecated
 final class BitIoConstants {
 
+    /**
+     * The number of bits for a byte.
+     */    
+    static final int BYTE_SIZE = 8;
+
+    // -------------------------------------------------------------------------
     private BitIoConstants() {
         super();
     }

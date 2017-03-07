@@ -15,32 +15,27 @@
  */
 package com.github.jinahya.bit.io.testng;
 
+import static java.lang.invoke.MethodHandles.lookup;
 import org.slf4j.Logger;
 import static org.slf4j.LoggerFactory.getLogger;
 import org.testng.IInvokedMethod;
 import org.testng.IInvokedMethodListener;
 import org.testng.ITestResult;
 
-/**
- *
- * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
- */
 public class InvokedMethodListener implements IInvokedMethodListener {
 
+    private static final Logger logger = getLogger(lookup().lookupClass());
+
+    // -------------------------------------------------------------------------
     @Override
     public void beforeInvocation(final IInvokedMethod method,
                                  final ITestResult result) {
-
         logger.debug("beforeInvocation({}, {})", method, result);
     }
 
     @Override
     public void afterInvocation(final IInvokedMethod method,
                                 final ITestResult result) {
-
         logger.debug("afterInvocation({}, {})", method, result);
     }
-
-    private transient final Logger logger = getLogger(getClass());
-
 }

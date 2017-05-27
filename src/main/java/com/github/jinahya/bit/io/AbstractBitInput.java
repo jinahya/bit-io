@@ -113,8 +113,8 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
             throws IOException {
         BitIoConstraints.requireValidSize(unsigned, 5, size);
         if (!unsigned) {
-            final int usize = size - 1;
             int value = 0 - readInt(true, 1);
+            final int usize = size - 1;
             if (usize > 0) {
                 value <<= usize;
                 value |= readInt(true, usize);
@@ -140,8 +140,8 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
             throws IOException {
         BitIoConstraints.requireValidSize(unsigned, 6, size);
         if (!unsigned) {
-            final int usize = size - 1;
             long value = 0L - readLong(true, 1);
+            final int usize = size - 1;
             if (usize > 0) {
                 value <<= usize;
                 value |= readLong(true, usize);

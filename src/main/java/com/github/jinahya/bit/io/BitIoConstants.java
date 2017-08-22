@@ -26,7 +26,7 @@ final class BitIoConstants {
 
     /**
      * The number of bits for a byte.
-     */    
+     */
     static final int BYTE_SIZE = 8;
 
     // -------------------------------------------------------------------------

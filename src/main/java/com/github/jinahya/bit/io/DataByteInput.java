@@ -50,7 +50,7 @@ public class DataByteInput extends AbstractByteInput<DataInput> {
      */
     @Override
     public int read() throws IOException {
-        return source.readUnsignedByte();
+        return getSource().readUnsignedByte();
     }
 
     // -------------------------------------------------------------------------

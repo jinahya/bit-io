@@ -60,10 +60,10 @@ public class ChannelByteOutput<T extends WritableByteChannel>
      */
     @Override
     public void write(final int value) throws IOException {
-        while (!target.hasRemaining()) {
-            target.flip(); // limit->position, position->zero
-            channel.write(target);
-            target.compact(); // position->n+1, limit->capacity
+        while (!getTarget().hasRemaining()) {
+            getTarget().flip(); // limit->position, position->zero
+            channel.write(getTarget());
+            getTarget().compact(); // position->n+1, limit->capacity
         }
         super.write(value);
     }

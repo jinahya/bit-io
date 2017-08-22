@@ -52,7 +52,7 @@ public class BufferByteInput extends AbstractByteInput<ByteBuffer> {
      */
     @Override
     public int read() throws IOException {
-        return source.get() & 0xFF;
+        return getSource().get() & 0xFF;
     }
 
     // ------------------------------------------------------------------ source

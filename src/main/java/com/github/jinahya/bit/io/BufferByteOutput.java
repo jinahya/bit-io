@@ -52,7 +52,7 @@ public class BufferByteOutput extends AbstractByteOutput<ByteBuffer> {
      */
     @Override
     public void write(final int value) throws IOException {
-        target.put((byte) value);
+        getTarget().put((byte) value);
     }
 
     // ------------------------------------------------------------------ target

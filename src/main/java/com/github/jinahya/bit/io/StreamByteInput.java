@@ -51,7 +51,7 @@ public class StreamByteInput extends AbstractByteInput<InputStream> {
      */
     @Override
     public int read() throws IOException {
-        final int value = source.read();
+        final int value = getSource().read();
         if (value == -1) {
             throw new EOFException();
         }

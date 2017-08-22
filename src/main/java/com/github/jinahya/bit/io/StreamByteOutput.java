@@ -50,7 +50,7 @@ public class StreamByteOutput extends AbstractByteOutput<OutputStream> {
      */
     @Override
     public void write(final int value) throws IOException {
-        target.write(value);
+        getTarget().write(value);
     }
 
     // ------------------------------------------------------------------ target

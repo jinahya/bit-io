@@ -61,12 +61,12 @@ public class ChannelByteInput<T extends ReadableByteChannel>
      */
     @Override
     public int read() throws IOException {
-        while (!source.hasRemaining()) {
-            source.clear(); // position->zero, limit->capacity
-            channel.read(source);
-            source.flip(); // limit->position, position->zero
+        while (!getSource().hasRemaining()) {
+            getSource().clear(); // position->zero, limit->capacity
+            channel.read(getSource());
+            getSource().flip(); // limit->position, position->zero
         }
-        return source.get() & 0xFF;
+        return super.read();
     }
 
     // ------------------------------------------------------------------ source

@@ -17,6 +17,7 @@ package com.github.jinahya.bit.io;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import static java.lang.invoke.MethodHandles.lookup;
 import java.util.LinkedList;
 import java.util.List;
 import org.slf4j.Logger;
@@ -28,9 +29,11 @@ import org.testng.annotations.Test;
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
-public class BitValueTest {
+class BitUnitTest {
 
-    private static void test(final BitValue type) throws IOException {
+    private static final Logger logger = getLogger(lookup().lookupClass());
+
+    private static void test(final BitUnit type) throws IOException {
         final List<Object> params = new LinkedList<>();
         final Object[] w = new Object[1];
         final long[] p = new long[1];
@@ -59,33 +62,31 @@ public class BitValueTest {
 
     @Test(enabled = true, invocationCount = 1024)
     public void _boolean() throws IOException {
-        test(BitValue.BOOLEAN);
+        test(BitUnit.BOOLEAN);
     }
 
     @Test(enabled = true, invocationCount = 1024)
     public void _byte() throws IOException {
-        test(BitValue.BYTE);
+        test(BitUnit.BYTE);
     }
 
     @Test(enabled = true, invocationCount = 1024)
     public void _short() throws IOException {
-        test(BitValue.SHORT);
+        test(BitUnit.SHORT);
     }
 
     @Test(enabled = true, invocationCount = 1024)
     public void _int() throws IOException {
-        test(BitValue.INT);
+        test(BitUnit.INT);
     }
 
     @Test(enabled = true, invocationCount = 1024)
     public void _long() throws IOException {
-        test(BitValue.LONG);
+        test(BitUnit.LONG);
     }
 
     @Test(enabled = true, invocationCount = 1024)
     public void _char() throws IOException {
-        test(BitValue.CHAR);
+        test(BitUnit.CHAR);
     }
-
-    private transient final Logger logger = getLogger(getClass());
 }

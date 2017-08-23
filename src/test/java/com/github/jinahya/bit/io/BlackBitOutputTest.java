@@ -18,6 +18,7 @@ package com.github.jinahya.bit.io;
 import static com.github.jinahya.bit.io.BitIoRandom.nextSize;
 import static com.github.jinahya.bit.io.BitIoRandom.nextValue;
 import java.io.IOException;
+import static java.lang.invoke.MethodHandles.lookup;
 import static java.util.concurrent.ThreadLocalRandom.current;
 import javax.inject.Inject;
 import org.slf4j.Logger;
@@ -30,8 +31,11 @@ import org.testng.annotations.Test;
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
 @Guice(modules = {BlackBitOutputModule.class})
-public class BitOutputTest {
+public class BlackBitOutputTest {
 
+    private static final Logger logger = getLogger(lookup().lookupClass());
+
+    // -------------------------------------------------------------------------
     public static void writeBoolean(final BitOutput output) throws IOException {
         final boolean value = current().nextBoolean();
         output.writeBoolean(value);
@@ -110,11 +114,6 @@ public class BitOutputTest {
         writeChar(output);
     }
 
-    /**
-     * logger.
-     */
-    private transient final Logger logger = getLogger(getClass());
-
     @Inject
-    private transient BitOutput output;
+    private BitOutput output;
 }

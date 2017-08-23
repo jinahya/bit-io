@@ -15,23 +15,20 @@
  */
 package com.github.jinahya.bit.io;
 
-import javax.inject.Inject;
-import org.testng.annotations.Guice;
+import com.google.inject.AbstractModule;
+import java.nio.ByteBuffer;
+import static java.nio.ByteBuffer.wrap;
 
-@Guice(modules = {WhiteBitInputModule.class, BlackBitOutputModule.class})
-abstract class BitIoTest {
+class BitUnitsWriteReadBufferModule extends AbstractModule {
 
-    protected BitInput getInput() {
-        return input;
+    @Override
+    protected void configure() {
+        final byte[] array = new byte[1048576 * 8];
+        final ByteBuffer wbuffer = wrap(array);
+        final ByteBuffer rbuffer = wrap(array);
+        bind(BitOutput.class).toProvider(
+                () -> new DefaultBitOutput(new BufferByteOutput(wbuffer)));
+        bind(BitInput.class).toProvider(
+                () -> new DefaultBitInput(new BufferByteInput(rbuffer)));
     }
-
-    protected BitOutput getOutput() {
-        return output;
-    }
-
-    @Inject
-    private BitInput input;
-
-    @Inject
-    private BitOutput output;
 }

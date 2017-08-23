@@ -17,6 +17,7 @@ package com.github.jinahya.bit.io;
 
 import static com.github.jinahya.bit.io.BitIoRandom.nextSize;
 import java.io.IOException;
+import static java.lang.invoke.MethodHandles.lookup;
 import static java.util.concurrent.ThreadLocalRandom.current;
 import javax.inject.Inject;
 import org.slf4j.Logger;
@@ -30,7 +31,9 @@ import org.testng.annotations.Test;
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
 @Guice(modules = {WhiteBitInputModule.class})
-public class BitInputTest {
+public class WhiteBitInputTest {
+
+    private static final Logger logger = getLogger(lookup().lookupClass());
 
     public static void readBoolean(final BitInput input) throws IOException {
         final boolean value = input.readBoolean();
@@ -104,8 +107,6 @@ public class BitInputTest {
         readChar(input);
     }
 
-    private transient final Logger logger = getLogger(getClass());
-
     @Inject
-    private transient BitInput input;
+    private BitInput input;
 }

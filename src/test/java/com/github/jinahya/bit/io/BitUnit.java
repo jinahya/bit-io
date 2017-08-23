@@ -25,9 +25,10 @@ import static org.slf4j.LoggerFactory.getLogger;
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
-enum BitValue {
+enum BitUnit {
 
     BOOLEAN() {
+
         @Override
         Object read(final List<Object> params, final BitInput input)
                 throws IOException {
@@ -44,6 +45,7 @@ enum BitValue {
         }
     },
     BYTE() {
+
         @Override
         Object read(final List<Object> params, final BitInput input)
                 throws IOException {
@@ -66,6 +68,7 @@ enum BitValue {
         }
     },
     SHORT() {
+
         @Override
         Object read(final List<Object> params, final BitInput input)
                 throws IOException {
@@ -89,6 +92,7 @@ enum BitValue {
         }
     },
     INT() {
+        
         @Override
         Object read(final List<Object> params, final BitInput input)
                 throws IOException {
@@ -111,6 +115,7 @@ enum BitValue {
         }
     },
     LONG() {
+
         @Override
         Object read(final List<Object> params, final BitInput input)
                 throws IOException {
@@ -133,6 +138,7 @@ enum BitValue {
         }
     },
     CHAR() {
+
         @Override
         Object read(final List<Object> params, final BitInput input)
                 throws IOException {
@@ -154,7 +160,7 @@ enum BitValue {
         }
     };
 
-    private static final Logger logger = getLogger(BitValue.class);
+    private static final Logger logger = getLogger(BitUnit.class);
 
     abstract Object read(List<Object> params, BitInput input)
             throws IOException;

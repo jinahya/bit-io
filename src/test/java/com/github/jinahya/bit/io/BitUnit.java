@@ -16,10 +16,12 @@
 package com.github.jinahya.bit.io;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import static java.util.concurrent.ThreadLocalRandom.current;
 import org.slf4j.Logger;
 import static org.slf4j.LoggerFactory.getLogger;
+import static org.testng.Assert.assertEquals;
 
 /**
  *
@@ -92,7 +94,7 @@ enum BitUnit {
         }
     },
     INT() {
-        
+
         @Override
         Object read(final List<Object> params, final BitInput input)
                 throws IOException {
@@ -161,6 +163,27 @@ enum BitUnit {
     };
 
     private static final Logger logger = getLogger(BitUnit.class);
+
+    static void test(final int count, final BitOutput output,
+                     final BitInput input)
+            throws IOException {
+        final BitUnit[] units = BitUnit.values();
+        final List<Integer> ordinals = new ArrayList<>();
+        final List<Object> params = new ArrayList<>();
+        final List<Object> values = new ArrayList<>();
+        for (int i = 0; i < count; i++) {
+            final BitUnit unit = units[current().nextInt(units.length)];
+            ordinals.add(unit.ordinal());
+            final Object value = unit.write(params, output);
+            values.add(value);
+        }
+        output.align(1);
+        for (int i = 0; i < count; i++) {
+            final BitUnit unit = units[ordinals.get(i)];
+            final Object value = unit.read(params, input);
+            assertEquals(value, values.get(i));
+        }
+    }
 
     abstract Object read(List<Object> params, BitInput input)
             throws IOException;

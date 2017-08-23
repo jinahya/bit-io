@@ -16,34 +16,14 @@
 package com.github.jinahya.bit.io;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import static java.util.concurrent.ThreadLocalRandom.current;
 import javax.inject.Inject;
-import static org.testng.Assert.assertEquals;
 import org.testng.annotations.Test;
 
 abstract class BitUnitsWriteReadTest {
 
     @Test
     public void test() throws IOException {
-        final BitUnit[] units = BitUnit.values();
-        final List<Integer> ordinals = new ArrayList<>();
-        final List<Object> params = new ArrayList<>();
-        final List<Object> values = new ArrayList<>();
-        final int count = 1048576 / 8;
-        for (int i = 0; i < count; i++) {
-            final BitUnit unit = units[current().nextInt(units.length)];
-            ordinals.add(unit.ordinal());
-            final Object value = unit.write(params, output);
-            values.add(value);
-        }
-        output.align(1);
-        for (int i = 0; i < count; i++) {
-            final BitUnit unit = units[ordinals.get(i)];
-            final Object value = unit.read(params, input);
-            assertEquals(value, values.get(i));
-        }
+        BitUnit.test(1048576 / 8, output, input);
     }
 
     @Inject

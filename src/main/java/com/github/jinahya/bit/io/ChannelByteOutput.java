@@ -17,12 +17,11 @@ package com.github.jinahya.bit.io;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import static java.nio.ByteBuffer.allocate;
 import java.nio.channels.WritableByteChannel;
 
 /**
- * A {@link ByteOutput} uses an instance of {@link ByteBuffer} as its
- * {@link #target}.
+ * A implementation of {@link ByteOutput} uses an instance of
+ * {@link WritableByteChannel} as its {@link #target}.
  *
  * @author Jin Kwon &lt;onacit at gmail.com&gt;
  * @param <T> channel type parameter.
@@ -32,26 +31,28 @@ public class ChannelByteOutput<T extends WritableByteChannel>
 
     // -------------------------------------------------------------------------
     /**
-     * Creates a new instance with given {@code ByteBufer}.
+     * Creates a new instance with given {@code ByteBufer} and
+     * {@code WritableByteChannel}.
      *
-     * @param buffer the {@code ByteBuffer} to which bytes are written;
+     * @param buffer the {@code ByteBuffer} to which bytes are written or
      * {@code null} if it's supposed to be lazily initialized and set.
+     * @param channel the {@code WritableByteChannel} to which buffered bytes
+     * are written or {@code null} if it's supposed to be lazily initialized and
+     * set.
      */
     public ChannelByteOutput(final ByteBuffer buffer, final T channel) {
         super(buffer);
         this.channel = channel;
     }
 
-    public ChannelByteOutput(final T channel) {
-        this(allocate(1), channel);
-    }
-
     // -------------------------------------------------------------------------
     /**
-     * {@inheritDoc} The {@code write(int)} method of {@code BufferByteOutput}
-     * class invokes {@link ByteBuffer#put(byte)} on {@link #target} with given
-     * {@code value}. Override this method if the {@link #target} is supposed to
-     * be lazily initialized or adjusted.
+     * Writes an unsigned 8 bit value to the desired target. The
+     * {@code write(int)} method of {@code ChannelByteOutput} class loops for
+     * writing already buffered bytes to {@link #channel} while {@link #target}
+     * has no remaining and calls {@link BufferByteOutput#write(int)} method
+     * with given. Override this method if the {@link #target} or
+     * {@link #channel} is supposed to be lazily initialized or adjusted.
      *
      * @param value {@inheritDoc}
      * @throws IOException {@inheritDoc}
@@ -62,7 +63,7 @@ public class ChannelByteOutput<T extends WritableByteChannel>
     public void write(final int value) throws IOException {
         while (!getTarget().hasRemaining()) {
             getTarget().flip(); // limit->position, position->zero
-            channel.write(getTarget());
+            getChannel().write(getTarget());
             getTarget().compact(); // position->n+1, limit->capacity
         }
         super.write(value);
@@ -75,23 +76,39 @@ public class ChannelByteOutput<T extends WritableByteChannel>
     }
 
     // ----------------------------------------------------------------- channel
+    /**
+     * Returns the current value of {@link #channel}.
+     *
+     * @return the current value of {@link #channel}.
+     */
     public T getChannel() {
         return channel;
     }
 
-    public T channel() {
-        return getChannel();
-    }
-
+    /**
+     * Replaces the current value of {@link #channel} with given.
+     *
+     * @param channel new value for {@link #channel}
+     */
     public void setChannel(final T channel) {
         this.channel = channel;
     }
 
+    /**
+     * Replaces the current value of {@link #channel} with given and returns
+     * this instance.
+     *
+     * @param channel new value for {@link #channel}
+     * @return this instance
+     */
     public ChannelByteOutput channel(final T channel) {
         setChannel(channel);
         return this;
     }
 
     // -------------------------------------------------------------------------
+    /**
+     * The target to which buffered bytes are written.
+     */
     protected T channel;
 }

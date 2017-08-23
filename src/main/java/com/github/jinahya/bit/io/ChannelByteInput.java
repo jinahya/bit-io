@@ -17,12 +17,11 @@ package com.github.jinahya.bit.io;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import static java.nio.ByteBuffer.allocate;
 import java.nio.channels.ReadableByteChannel;
 
 /**
- * A {@link ByteInput} uses an instance of {@link ByteBuffer} as its
- * {@link #source}.
+ * A extended class for writing bytes to an instance of
+ * {@link ReadableByteChannel}.
  *
  * @author Jin Kwon &lt;onacit at gmail.com&gt;
  * @param <T> channel type parameter
@@ -33,18 +32,17 @@ public class ChannelByteInput<T extends ReadableByteChannel>
 
     // -------------------------------------------------------------------------
     /**
-     * Creates a new instance built on top of the specified byte buffer.
+     * Creates a new instance built on top of the specified byte buffer and the
+     * channel.
      *
-     * @param source the byte buffer; {@code null} if it's supposed to be lazily
-     * initialized and set.
+     * @param source a buffer the byte buffer; {@code null} if it's supposed to
+     * be lazily initialized and set.
+     * @param channel the channel from which bytes are written or {@code null}
+     * if it's supposed to be lazily initialized and set.
      */
     public ChannelByteInput(final ByteBuffer source, final T channel) {
         super(source);
         this.channel = channel;
-    }
-
-    public ChannelByteInput(final T channel) {
-        this((ByteBuffer) allocate(1).flip(), channel);
     }
 
     // -------------------------------------------------------------------------
@@ -63,7 +61,7 @@ public class ChannelByteInput<T extends ReadableByteChannel>
     public int read() throws IOException {
         while (!getSource().hasRemaining()) {
             getSource().clear(); // position->zero, limit->capacity
-            channel.read(getSource());
+            getChannel().read(getSource());
             getSource().flip(); // limit->position, position->zero
         }
         return super.read();
@@ -78,10 +76,6 @@ public class ChannelByteInput<T extends ReadableByteChannel>
     // ----------------------------------------------------------------- channel
     public T getChannel() {
         return channel;
-    }
-
-    public T channel() {
-        return getChannel();
     }
 
     public void setChannel(final T channel) {

@@ -22,9 +22,12 @@ import java.io.InputStream;
 /**
  * A {@link ByteInput} reads bytes from an {@link InputStream}.
  *
+ * @author Jin Kwon &lt;onacit at gmail.com&gt;
+ * @param <T> stream type parameter
  * @see StreamByteOutput
  */
-public class StreamByteInput extends AbstractByteInput<InputStream> {
+public class StreamByteInput<T extends InputStream>
+        extends AbstractByteInput<T> {
 
     // -------------------------------------------------------------------------
     /**
@@ -33,20 +36,20 @@ public class StreamByteInput extends AbstractByteInput<InputStream> {
      * @param source the input stream; {@code null} if it's supposed to be
      * lazily initialized and set
      */
-    public StreamByteInput(final InputStream source) {
+    public StreamByteInput(final T source) {
         super(source);
     }
 
     // -------------------------------------------------------------------------
     /**
      * {@inheritDoc} The {@code read()} method of {@code StreamByteInput} class
-     * invokes {@link InputStream#read()} on {@link #source} and returns the
-     * result. Override this method if the {@link #source} is supposed to be
-     * lazily initialized and set.
+     * invokes {@link InputStream#read()} on what {@link #getSource()} returns
+     * and returns the result. Override this method if the {@link #source} is
+     * supposed to be lazily initialized and set.
      *
      * @return {@inheritDoc}
      * @throws IOException {@inheritDoc}
-     * @see #source
+     * @see #getSource()
      * @see InputStream#read()
      */
     @Override
@@ -60,7 +63,7 @@ public class StreamByteInput extends AbstractByteInput<InputStream> {
 
     // ------------------------------------------------------------------ source
     @Override
-    public StreamByteInput source(final InputStream source) {
+    public StreamByteInput source(final T source) {
         return (StreamByteInput) super.source(source);
     }
 }

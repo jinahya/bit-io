@@ -19,7 +19,7 @@ import java.io.DataOutput;
 import java.io.IOException;
 
 /**
- * An {@code ByteOutput} uses an instance of {@link DataOutput} as its
+ * A {@code ByteOutput} uses an instance of {@link DataOutput} as its
  * {@link #target}.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;

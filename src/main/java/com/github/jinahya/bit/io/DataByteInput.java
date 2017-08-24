@@ -19,7 +19,7 @@ import java.io.DataInput;
 import java.io.IOException;
 
 /**
- * An {@link ByteInput} uses an instance of {@link DataInput} as its
+ * A {@link ByteInput} uses an instance of {@link DataInput} as its
  * {@link #source}.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;

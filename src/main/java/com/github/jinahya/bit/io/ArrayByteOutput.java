@@ -53,9 +53,9 @@ public class ArrayByteOutput extends AbstractByteOutput<byte[]> {
      */
     @Override
     public void write(final int value) throws IOException {
-        if (index >= limit) {
+        if (getIndex() >= getLimit()) {
             throw new IllegalStateException(
-                    "index(" + index + ") >= limit(" + limit + ")");
+                    "index(" + getIndex() + ") >= limit(" + getLimit() + ")");
         }
         getTarget()[index++] = (byte) value;
     }
@@ -103,14 +103,31 @@ public class ArrayByteOutput extends AbstractByteOutput<byte[]> {
     }
 
     // ------------------------------------------------------------------- limit
+    /**
+     * Returns the current value of {@link #limit}.
+     *
+     * @return the current value of {@link #limit}
+     */
     public int getLimit() {
         return limit;
     }
 
+    /**
+     * Replaces the current value of {@link #limit} with given.
+     *
+     * @param limit new value for {@link #limit}
+     */
     public void setLimit(int limit) {
         this.limit = limit;
     }
 
+    /**
+     * Replaces the current value of {@link #limit} with given and returns this
+     * instance.
+     *
+     * @param limit new value for {@link #limit}
+     * @return this instance.
+     */
     public ArrayByteOutput limit(final int limit) {
         setLimit(limit);
         return this;

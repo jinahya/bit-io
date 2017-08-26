@@ -18,7 +18,10 @@ package com.github.jinahya.bit.io;
 import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSize;
 import static java.lang.Long.SIZE;
 import static java.lang.Math.pow;
+import static java.lang.invoke.MethodHandles.lookup;
 import static java.util.concurrent.ThreadLocalRandom.current;
+import org.slf4j.Logger;
+import static org.slf4j.LoggerFactory.getLogger;
 
 /**
  *
@@ -26,6 +29,9 @@ import static java.util.concurrent.ThreadLocalRandom.current;
  */
 final class BitIoRandom {
 
+    private static final Logger logger = getLogger(lookup().lookupClass());
+
+    // -------------------------------------------------------------------------
     /**
      * Generates a random size for given argument.
      *
@@ -56,6 +62,7 @@ final class BitIoRandom {
         return unsigned ? (value >>> shift) : (value >> shift);
     }
 
+    // -------------------------------------------------------------------------
     private BitIoRandom() {
         super();
     }

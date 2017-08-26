@@ -54,9 +54,9 @@ public class ArrayByteInput extends AbstractByteInput<byte[]> {
      */
     @Override
     public int read() throws IOException {
-        if (index >= limit) {
+        if (getIndex() >= getLimit()) {
             throw new IllegalStateException(
-                    "index(" + index + ") >= limit(" + limit + ")");
+                    "index(" + getIndex() + ") >= limit(" + getLimit() + ")");
         }
         return getSource()[index++] & 0xFF;
     }

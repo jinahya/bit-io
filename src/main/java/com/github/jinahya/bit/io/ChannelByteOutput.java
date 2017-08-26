@@ -71,8 +71,9 @@ public class ChannelByteOutput<T extends WritableByteChannel>
 
     // ------------------------------------------------------------------ target
     @Override
-    public ChannelByteOutput target(final ByteBuffer target) {
-        return (ChannelByteOutput) super.target(target);
+    @SuppressWarnings("unchecked")
+    public ChannelByteOutput<T> target(final ByteBuffer target) {
+        return (ChannelByteOutput<T>) super.target(target);
     }
 
     // ----------------------------------------------------------------- channel
@@ -101,7 +102,7 @@ public class ChannelByteOutput<T extends WritableByteChannel>
      * @param channel new value for {@link #channel}
      * @return this instance
      */
-    public ChannelByteOutput channel(final T channel) {
+    public ChannelByteOutput<T> channel(final T channel) {
         setChannel(channel);
         return this;
     }

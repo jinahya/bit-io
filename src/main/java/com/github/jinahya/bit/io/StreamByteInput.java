@@ -63,7 +63,7 @@ public class StreamByteInput<T extends InputStream>
 
     // ------------------------------------------------------------------ source
     @Override
-    public StreamByteInput source(final T source) {
-        return (StreamByteInput) super.source(source);
+    public StreamByteInput<T> source(final T source) {
+        return (StreamByteInput<T>) super.source(source);
     }
 }

@@ -27,8 +27,8 @@ class BitUnitsWriteReadBufferModule extends AbstractModule {
         final ByteBuffer wbuffer = wrap(array);
         final ByteBuffer rbuffer = wrap(array);
         bind(BitOutput.class).toProvider(
-                () -> new DefaultBitOutput(new BufferByteOutput(wbuffer)));
+                () -> new DefaultBitOutput<>(new BufferByteOutput(wbuffer)));
         bind(BitInput.class).toProvider(
-                () -> new DefaultBitInput(new BufferByteInput(rbuffer)));
+                () -> new DefaultBitInput<>(new BufferByteInput(rbuffer)));
     }
 }

@@ -84,6 +84,11 @@
           <artifactId>maven-site-plugin</artifactId>
           <version>3.6</version>
         </plugin>
+        <plugin>
+          <groupId>org.jacoco</groupId>
+          <artifactId>jacoco-maven-plugin</artifactId>
+          <version>0.7.9</version>
+        </plugin>
       </plugins>
     </pluginManagement>
     <plugins>
@@ -139,6 +144,16 @@
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.6.2</version>
+        <configuration>
+          <compilerArgs>
+            <arg>-Xlint</arg>
+          </compilerArgs>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
         <version>3.0.2</version>
         <executions>
@@ -171,7 +186,9 @@
         <artifactId>maven-surefire-plugin</artifactId>
         <version>2.20</version>
         <configuration>
-          <argLine>-Xms1024m -Xmx2048m</argLine> <!-- travis -->
+          <!-- travis -->
+          <!-- https://issues.apache.org/jira/browse/SUREFIRE-951 -->
+          <argLine>-Xms1024m -Xmx2048m -Dfile.encoding=${project.build.sourceEncoding}</argLine>
           <properties>
             <property>
               <name>listeners</name>
@@ -186,7 +203,7 @@
         <version>1.15</version>
         <executions>
           <execution>
-            <id>check-signature-java16</id>
+            <id>check-signature-java16:1.1</id>
             <phase>process-classes</phase>
             <goals>
               <goal>check</goal>
@@ -200,7 +217,7 @@
             </configuration>
           </execution>
           <execution>
-            <id>check-signature-android-api-level-9</id>
+            <id>check-signature-android-api-level-9:2.3.1_r2</id>
             <phase>process-classes</phase>
             <goals>
               <goal>check</goal>

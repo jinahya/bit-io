@@ -20,6 +20,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import static java.lang.invoke.MethodHandles.lookup;
 import java.nio.ByteBuffer;
 import java.util.function.Consumer;
 import org.slf4j.Logger;
@@ -28,8 +29,9 @@ import static org.testng.Assert.assertEquals;
 
 public final class BitIoTests {
 
-    private static final Logger logger = getLogger(BitIoTests.class);
+    private static final Logger logger = getLogger(lookup().lookupClass());
 
+    // -------------------------------------------------------------------------
     public static void array(final Consumer<? super BitOutput> writer,
                              final Consumer<? super BitInput> reader)
             throws IOException {
@@ -86,14 +88,14 @@ public final class BitIoTests {
             throws IOException {
         final ByteArrayOutputStream target = new ByteArrayOutputStream(1048576);
         final BitOutput output
-                = new DefaultBitOutput<>(new StreamByteOutput(target));
+                = new DefaultBitOutput<>(new StreamByteOutput<>(target));
         writer.accept(output);
         final long padded = output.align(1);
         target.flush();
         final ByteArrayInputStream source
                 = new ByteArrayInputStream(target.toByteArray());
         final BitInput input
-                = new DefaultBitInput<>(new StreamByteInput(source));
+                = new DefaultBitInput<>(new StreamByteInput<>(source));
         reader.accept(input);
         final long discarded = input.align(1);
         assertEquals(discarded, padded);

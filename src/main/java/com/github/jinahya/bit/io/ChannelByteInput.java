@@ -37,8 +37,8 @@ public class ChannelByteInput<T extends ReadableByteChannel>
      *
      * @param source a buffer the byte buffer; {@code null} if it's supposed to
      * be lazily initialized and set.
-     * @param channel the channel from which bytes are written or {@code null}
-     * if it's supposed to be lazily initialized and set.
+     * @param channel the channel from which bytes are read or {@code null} if
+     * it's supposed to be lazily initialized and set.
      */
     public ChannelByteInput(final ByteBuffer source, final T channel) {
         super(source);
@@ -47,15 +47,19 @@ public class ChannelByteInput<T extends ReadableByteChannel>
 
     // -------------------------------------------------------------------------
     /**
-     * {@inheritDoc} The {@code read()} method of {@code BufferByteInput}
-     * invokes {@link ByteBuffer#get()} on {@link #source} and returns the
-     * result as an unsigned 8-bit int. Override this method if {@link #source}
-     * is supposed to be lazily initialized or adjusted.
+     * {@inheritDoc} The {@code read()} method of {@code ChannelByteInput}
+     * invokes {@link ReadableByteChannel#read(java.nio.ByteBuffer)} with
+     * {@link #source} while it has no remaining and invokes
+     * {@link BufferByteInput#read() super.read()}. Override this method if
+     * either {@link #source} or {@link #channel} is supposed to be lazily
+     * initialized and set.
      *
      * @return {@inheritDoc }
      * @throws IOException {@inheritDoc}
      * @see #source
-     * @see ByteBuffer#get()
+     * @see #channel
+     * @see ReadableByteChannel#read(java.nio.ByteBuffer)
+     * @see BufferByteInput#read()
      */
     @Override
     public int read() throws IOException {
@@ -69,24 +73,45 @@ public class ChannelByteInput<T extends ReadableByteChannel>
 
     // ------------------------------------------------------------------ source
     @Override
-    public ChannelByteInput source(final ByteBuffer source) {
-        return (ChannelByteInput) super.source(source);
+    @SuppressWarnings("unchecked")
+    public ChannelByteInput<T> source(final ByteBuffer source) {
+        return (ChannelByteInput<T>) super.source(source);
     }
 
     // ----------------------------------------------------------------- channel
+    /**
+     * Returns the current value of {@link #channel}.
+     *
+     * @return the current value of {@link #channel}
+     */
     public T getChannel() {
         return channel;
     }
 
+    /**
+     * Replaces the value of {@link #channel} with given.
+     *
+     * @param channel new value for {@link #channel}
+     */
     public void setChannel(final T channel) {
         this.channel = channel;
     }
 
-    public ChannelByteInput channel(final T channel) {
+    /**
+     * Replaces the value of {@link #channel} with given and returns this
+     * instance.
+     *
+     * @param channel new value for {@link #channel}.
+     * @return this instance
+     */
+    public ChannelByteInput<T> channel(final T channel) {
         setChannel(channel);
         return this;
     }
 
     // -------------------------------------------------------------------------
+    /**
+     * The channel from which bytes are written into {@link #source}.
+     */
     protected T channel;
 }

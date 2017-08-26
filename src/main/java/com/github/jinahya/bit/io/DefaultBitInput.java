@@ -40,16 +40,16 @@ public class DefaultBitInput<T extends ByteInput> extends AbstractBitInput {
     // -------------------------------------------------------------------------
     /**
      * {@inheritDoc} The {@code read()} method of {@code DefaultBitInput} class
-     * invokes {@link ByteInput#read()} on {@link #delegate} and returns the
-     * result. Override this method if {@link #delegate} is supposed to be
-     * lazily initialized and set.
+     * invokes {@link ByteInput#read()} on what {@link #getDelegate()} returns
+     * and returns the result. Override this method if the {@link #delegate} is
+     * supposed to be lazily initialized and set.
      *
      * @return {@inheritDoc}
      * @throws IOException {@inheritDoc}
      */
     @Override
     public int read() throws IOException {
-        return delegate.read();
+        return getDelegate().read();
     }
 
     // ---------------------------------------------------------------- delegate

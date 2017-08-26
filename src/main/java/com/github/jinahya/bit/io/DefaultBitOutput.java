@@ -40,16 +40,16 @@ public class DefaultBitOutput<T extends ByteOutput> extends AbstractBitOutput {
     // -------------------------------------------------------------------------
     /**
      * {@inheritDoc} The {@code write(int)} method of {@code DefaultBitOutput}
-     * class invokes {@link ByteOutput#write(int)} on {@link #delegate} with
-     * given value. Override this method if {@link #delegate} is supposed to be
-     * lazily initialized and set.
+     * class invokes {@link ByteOutput#write(int)} on what
+     * {@link #getDelegate()} returns with given value. Override this method if
+     * the {@link #delegate} is supposed to be lazily initialized and set.
      *
      * @param value {@inheritDoc}
      * @throws IOException {@inheritDoc}
      */
     @Override
     public void write(final int value) throws IOException {
-        delegate.write(value);
+        getDelegate().write(value);
     }
 
     // ---------------------------------------------------------------- delegate

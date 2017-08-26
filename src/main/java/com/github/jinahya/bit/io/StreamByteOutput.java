@@ -58,7 +58,7 @@ public class StreamByteOutput<T extends OutputStream>
 
     // ------------------------------------------------------------------ target
     @Override
-    public StreamByteOutput target(final T target) {
-        return (StreamByteOutput) super.target(target);
+    public StreamByteOutput<T> target(final T target) {
+        return (StreamByteOutput<T>) super.target(target);
     }
 }

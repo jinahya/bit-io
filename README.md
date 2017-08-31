@@ -51,6 +51,9 @@ final ByteInput input = new ArrayByteInput(null, -1, -1) {
         // read bytes from the stream if empty
         if (index >= limit) {
             limit = stream.read(source);
+            if (limit == -1) {
+                throw new EOFException("unexpected end of stream");
+            }
             index = 0;
         }
         return super.read();

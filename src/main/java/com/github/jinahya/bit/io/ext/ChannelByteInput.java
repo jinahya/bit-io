@@ -13,8 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.jinahya.bit.io;
+package com.github.jinahya.bit.io.ext;
 
+import com.github.jinahya.bit.io.BufferByteInput;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.ReadableByteChannel;
@@ -111,7 +112,7 @@ public class ChannelByteInput<T extends ReadableByteChannel>
 
     // -------------------------------------------------------------------------
     /**
-     * The channel from which bytes are written into {@link #source}.
+     * The channel from which bytes are read into {@link #source}.
      */
     protected T channel;
 }

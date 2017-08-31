@@ -58,7 +58,9 @@ public class ArrayByteInput extends AbstractByteInput<byte[]> {
             throw new IllegalStateException(
                     "index(" + getIndex() + ") >= limit(" + getLimit() + ")");
         }
-        return getSource()[index++] & 0xFF;
+        final int value = getSource()[getIndex()] & 0xFF;
+        setIndex(getIndex() + 1);
+        return value;
     }
 
     // ------------------------------------------------------------------ source

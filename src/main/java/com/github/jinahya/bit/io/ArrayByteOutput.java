@@ -57,7 +57,8 @@ public class ArrayByteOutput extends AbstractByteOutput<byte[]> {
             throw new IllegalStateException(
                     "index(" + getIndex() + ") >= limit(" + getLimit() + ")");
         }
-        getTarget()[index++] = (byte) value;
+        getTarget()[getIndex()] = (byte) value;
+        setIndex(getIndex() + 1);
     }
 
     // ------------------------------------------------------------------ target

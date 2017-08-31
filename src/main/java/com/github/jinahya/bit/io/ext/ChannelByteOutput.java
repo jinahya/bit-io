@@ -13,8 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.jinahya.bit.io;
+package com.github.jinahya.bit.io.ext;
 
+import com.github.jinahya.bit.io.BufferByteOutput;
+import com.github.jinahya.bit.io.ByteOutput;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.WritableByteChannel;
@@ -109,7 +111,7 @@ public class ChannelByteOutput<T extends WritableByteChannel>
 
     // -------------------------------------------------------------------------
     /**
-     * The target to which buffered bytes are written.
+     * The target to which buffered bytes are written from {@link #target}.
      */
     protected T channel;
 }

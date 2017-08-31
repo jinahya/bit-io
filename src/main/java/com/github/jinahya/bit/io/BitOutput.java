@@ -25,8 +25,8 @@ import java.io.IOException;
 public interface BitOutput {
 
     /**
-     * Writes a 1-bit boolean value. This method writes {@code 1} for
-     * {@code true} and {@code 0} for {@code false}.
+     * Writes a 1-bit boolean value. This method writes {@code 0b1} for
+     * {@code true} and {@code 0b0} for {@code false}.
      *
      * @param value the value to write.
      * @throws IOException if an I/O error occurs
@@ -90,7 +90,7 @@ public interface BitOutput {
     void writeChar(int size, char value) throws IOException;
 
     /**
-     * Aligns to specified number of bytes.
+     * Aligns to specified number of bytes by padding zeros.
      *
      * @param bytes the number of bytes to align; must be positive.
      * @return the number of bits padded while aligning

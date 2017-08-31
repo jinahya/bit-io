@@ -29,8 +29,8 @@ public class ArrayByteOutput extends AbstractByteOutput<byte[]> {
      * Creates a new instance with given parameters.
      *
      * @param target a byte array
-     * @param index array index to write
-     * @param limit array index to limit
+     * @param index the index in array to write
+     * @param limit the index in array that {@link #index} can exceed
      */
     public ArrayByteOutput(final byte[] target, final int index,
                            final int limit) {
@@ -42,14 +42,15 @@ public class ArrayByteOutput extends AbstractByteOutput<byte[]> {
     // -------------------------------------------------------------------------
     /**
      * {@inheritDoc} The {@code write(int)} method of {@code ArrayByteOutput}
-     * sets {@code target[index++]} with given value. Override this method if
-     * either {@link #target}, {@link #index}, or {@link #limit} needs to be
-     * lazily initialized or adjusted.
+     * class sets {@code getTarget[getIndex()]} with given value and increments
+     * the value of {@link #index} via {@link #setIndex(int)}. Override this
+     * method if either {@link #target}, {@link #index}, or {@link #limit} needs
+     * to be lazily initialized and/or adjusted.
      *
      * @param value {@inheritDoc}
      * @throws IOException {@inheritDoc}
-     * @throws IllegalStateException if {@link #index} is equal to or greater
-     * than {@link #limit}
+     * @throws IllegalStateException if the value {@link #getIndex()} returns is
+     * equal to or greater than the value {@link #getLimit()} returns.
      */
     @Override
     public void write(final int value) throws IOException {

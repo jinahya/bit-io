@@ -16,11 +16,12 @@
 package com.github.jinahya.bit.io;
 
 import java.io.IOException;
+import static java.util.concurrent.ThreadLocalRandom.current;
 
 class WhiteBitInput extends AbstractBitInput {
 
     @Override
     public int read() throws IOException {
-        return 0;
+        return current().nextInt(0, 255);
     }
 }

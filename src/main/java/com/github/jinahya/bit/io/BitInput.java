@@ -25,10 +25,10 @@ import java.io.IOException;
 public interface BitInput {
 
     /**
-     * Reads a 1-bit boolean value. This method read a 1-bit unsigned int and
-     * returns {@code true} for {@code 1} and {@code false} for {@code 0}.
+     * Reads a 1-bit boolean value. This method reads a 1-bit unsigned int and
+     * returns {@code true} for {@code 0b1} and {@code false} for {@code 0b0}.
      *
-     * @return {@code true} for {@code 1}, {@code false} for {@code 0}
+     * @return {@code true} for {@code 0b1}, {@code false} for {@code 0b0}
      * @throws IOException if an I/O error occurs.
      */
     boolean readBoolean() throws IOException;
@@ -88,7 +88,7 @@ public interface BitInput {
     char readChar(int size) throws IOException;
 
     /**
-     * Aligns to given number of bytes.
+     * Aligns to given number of bytes by discarding.
      *
      * @param bytes the number of bytes to align; must be positive.
      * @return the number of bits discarded while aligning

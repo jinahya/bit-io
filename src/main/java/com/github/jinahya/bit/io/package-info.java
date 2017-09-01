@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Jin Kwon.
+ * Copyright 2017 Jin Kwon &lt;onacit at gmail.com&gt;.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,24 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.jinahya.bit.io;
-
-import java.io.IOException;
-
 /**
- * An interface for suppling bytes.
- *
- * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
+ * Library for reading/writing non-octet aligned values.
  */
-@FunctionalInterface
-public interface ByteInput {
-
-    /**
-     * Reads an unsigned 8-bit value.
-     *
-     * @return an unsigned 8-bit value; between {@code 0} and {@code 255}, both
-     * inclusive.
-     * @throws IOException if an I/O error occurs.
-     */
-    int read() throws IOException;
-}
+package com.github.jinahya.bit.io;

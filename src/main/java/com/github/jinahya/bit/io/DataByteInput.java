@@ -53,7 +53,7 @@ public class DataByteInput extends AbstractByteInput<DataInput> {
         return getSource().readUnsignedByte();
     }
 
-    // -------------------------------------------------------------------------
+    // ------------------------------------------------------------------ source
     @Override
     public DataByteInput source(final DataInput source) {
         return (DataByteInput) super.source(source);

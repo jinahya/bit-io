@@ -29,6 +29,10 @@ final class BitIoConstants {
      */
     static final int BYTE_SIZE = 8;
 
+    static final int MAX_SIZE_INT_UNSIGNED = Integer.SIZE - 1;
+
+    static final int MAX_SIZE_LONG_UNSIGNED = Long.SIZE - 1;
+
     // -------------------------------------------------------------------------
     private BitIoConstants() {
         super();

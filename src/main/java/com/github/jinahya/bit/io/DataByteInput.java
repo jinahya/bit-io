@@ -54,6 +54,12 @@ public class DataByteInput extends AbstractByteInput<DataInput> {
     }
 
     // ------------------------------------------------------------------ source
+    /**
+     * {@inheritDoc}
+     *
+     * @param source {@inheritDoc}
+     * @return {@inheritDoc}
+     */
     @Override
     public DataByteInput source(final DataInput source) {
         return (DataByteInput) super.source(source);

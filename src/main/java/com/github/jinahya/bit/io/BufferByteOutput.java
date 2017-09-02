@@ -56,6 +56,12 @@ public class BufferByteOutput extends AbstractByteOutput<ByteBuffer> {
     }
 
     // ------------------------------------------------------------------ target
+    /**
+     * {@inheritDoc}
+     *
+     * @param target {@inheritDoc}
+     * @return {@inheritDoc}
+     */
     @Override
     public BufferByteOutput target(final ByteBuffer target) {
         return (BufferByteOutput) super.target(target);

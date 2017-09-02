@@ -30,6 +30,16 @@ public class ExtendedBitInput<T extends BitInput> {
         T get();
     }
 
+    public static interface Consumer1<T> {
+
+        void accept(T t);
+    }
+
+    public static interface BiConsumer1<T, U> {
+
+        void accept(T t, U u);
+    }
+
     public static interface Function1<T, R> {
 
         R apply(T t);

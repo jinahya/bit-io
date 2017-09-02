@@ -62,6 +62,12 @@ public class StreamByteInput<T extends InputStream>
     }
 
     // ------------------------------------------------------------------ source
+    /**
+     * {@inheritDoc}
+     *
+     * @param source {@inheritDoc}
+     * @return {@inheritDoc}
+     */
     @Override
     public StreamByteInput<T> source(final T source) {
         return (StreamByteInput<T>) super.source(source);

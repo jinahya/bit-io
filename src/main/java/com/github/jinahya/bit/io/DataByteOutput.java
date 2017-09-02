@@ -54,6 +54,12 @@ public class DataByteOutput extends AbstractByteOutput<DataOutput> {
     }
 
     // ------------------------------------------------------------------ target
+    /**
+     * {@inheritDoc}
+     *
+     * @param target {@inheritDoc}
+     * @return {@inheritDoc}
+     */
     @Override
     public DataByteOutput target(final DataOutput target) {
         return (DataByteOutput) super.target(target);

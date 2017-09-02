@@ -56,6 +56,12 @@ public class BufferByteInput extends AbstractByteInput<ByteBuffer> {
     }
 
     // ------------------------------------------------------------------ source
+    /**
+     * {@inheritDoc}
+     *
+     * @param source {@inheritDoc}
+     * @return {@inheritDoc}
+     */
     @Override
     public BufferByteInput source(final ByteBuffer source) {
         return (BufferByteInput) super.source(source);

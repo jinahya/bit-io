@@ -57,6 +57,12 @@ public class StreamByteOutput<T extends OutputStream>
     }
 
     // ------------------------------------------------------------------ target
+    /**
+     * {@inheritDoc}
+     *
+     * @param target {@inheritDoc}
+     * @return {@inheritDoc}
+     */
     @Override
     public StreamByteOutput<T> target(final T target) {
         return (StreamByteOutput<T>) super.target(target);

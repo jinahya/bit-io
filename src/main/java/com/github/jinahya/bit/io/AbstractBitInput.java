@@ -41,9 +41,9 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
      */
     protected int unsigned8(final int size) throws IOException {
         BitIoConstraints.requireValidSizeUnsigned8(size);
-        if (index == 8) {
+        if (index == Byte.SIZE) {
             int octet = octet();
-            if (size == 8) {
+            if (size == Byte.SIZE) {
                 return octet;
             }
             for (int i = 7; i >= 0; i--) {
@@ -52,7 +52,7 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
             }
             index = 0;
         }
-        final int available = 8 - index;
+        final int available = Byte.SIZE - index;
         final int required = size - available;
         if (required > 0) {
             return (unsigned8(available) << required) | unsigned8(required);
@@ -76,11 +76,11 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
     protected int unsigned16(final int size) throws IOException {
         BitIoConstraints.requireValidSizeUnsigned16(size);
         int value = 0x00;
-        final int quotient = size / 8;
-        final int remainder = size % 8;
+        final int quotient = size / Byte.SIZE;
+        final int remainder = size % Byte.SIZE;
         for (int i = 0; i < quotient; i++) {
             value <<= 8;
-            value |= unsigned8(8);
+            value |= unsigned8(Byte.SIZE);
         }
         if (remainder > 0) {
             value <<= remainder;
@@ -122,11 +122,11 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
             return value;
         }
         int value = 0x00;
-        final int quotient = size / 16;
-        final int remainder = size % 16;
+        final int quotient = size / Short.SIZE;
+        final int remainder = size % Short.SIZE;
         for (int i = 0; i < quotient; i++) {
-            value <<= 16;
-            value |= unsigned16(16);
+            value <<= Short.SIZE;
+            value |= unsigned16(Short.SIZE);
         }
         if (remainder > 0) {
             value <<= remainder;
@@ -175,15 +175,15 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
         }
         long bits = 0; // number of bits to be discarded
         // discard remained bits in current octet.
-        if (index < 8) {
-            bits += (8 - index);
+        if (index < Byte.SIZE) {
+            bits += (Byte.SIZE - index);
             unsigned8((int) bits); // count increments
         }
         final long remainder = count % bytes;
         long octets = (remainder > 0 ? bytes : 0) - remainder;
         for (; octets > 0; octets--) {
-            unsigned8(8);
-            bits += 8;
+            unsigned8(Byte.SIZE);
+            bits += Byte.SIZE;
         }
         return bits;
     }
@@ -192,12 +192,12 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
     /**
      * bit flags.
      */
-    private final boolean[] flags = new boolean[8];
+    private final boolean[] flags = new boolean[Byte.SIZE];
 
     /**
      * The next bit index to read.
      */
-    private int index = 8;
+    private int index = Byte.SIZE;
 
     /**
      * The number of bytes read so far.

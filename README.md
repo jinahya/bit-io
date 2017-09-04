@@ -1,5 +1,6 @@
 bit-io
 ======
+[![license](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 [![Dependency Status](https://www.versioneye.com/user/projects/563ccc514d415e001e00009b/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/563ccc514d415e001e00009b)
 [![Build Status](https://travis-ci.org/jinahya/bit-io.svg?branch=develop)](https://travis-ci.org/jinahya/bit-io)
 [![Sputnik](https://sputnik.ci/conf/badge)](https://sputnik.ci/app#/builds/jinahya/bit-io)

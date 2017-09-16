@@ -16,6 +16,7 @@
 package com.github.jinahya.bit.io.ext;
 
 import com.github.jinahya.bit.io.BufferByteInput;
+import java.io.EOFException;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.ReadableByteChannel;
@@ -66,7 +67,9 @@ public class ChannelByteInput<T extends ReadableByteChannel>
     public int read() throws IOException {
         while (!getSource().hasRemaining()) {
             getSource().clear(); // position->zero, limit->capacity
-            getChannel().read(getSource());
+            if (getChannel().read(getSource()) == -1) {
+                throw new EOFException();
+            }
             getSource().flip(); // limit->position, position->zero
         }
         return super.read();

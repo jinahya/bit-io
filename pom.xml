@@ -5,7 +5,7 @@
   <parent>
     <groupId>com.github.jinahya</groupId>
     <artifactId>jinahya-parent</artifactId>
-    <version>0.7.6</version>
+    <version>0.7.8</version>
   </parent>
 
   <groupId>com.github.jinahya</groupId>
@@ -16,6 +16,10 @@
   <name>${project.artifactId}</name>
   <description>library for reading/writing non-octet aligned values</description>
   <url>https://github.com/jinahya/${project.version}</url>
+
+  <prerequisites>
+    <maven>3.5.0</maven>
+  </prerequisites>
 
   <scm>
     <connection>scm:git:git@github.com:jinahya/${project.artifactId}.git</connection>
@@ -53,25 +57,25 @@
     <dependency>
       <groupId>commons-io</groupId>
       <artifactId>commons-io</artifactId>
-      <version>2.5</version>
+      <version>2.6</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
-      <version>3.6</version>
+      <version>3.7</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
-      <version>2.10.0</version>
+      <version>2.13.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.testng</groupId>
       <artifactId>testng</artifactId>
-      <version>6.11</version>
+      <version>6.13.1</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
@@ -255,7 +259,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
-	<version>3.0.0-M1</version>
+        <version>3.0.0-M1</version>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>

@@ -65,12 +65,24 @@ public class ChannelByteInput<T extends ReadableByteChannel>
      */
     @Override
     public int read() throws IOException {
-        while (!getSource().hasRemaining()) {
-            getSource().clear(); // position->zero, limit->capacity
-            if (getChannel().read(getSource()) == -1) {
+        if (source == null) {
+            throw new IllegalStateException("source is null");
+        }
+        if (source.capacity() == 0) {
+            throw new IllegalStateException("source.capacity is null");
+        }
+        if (channel == null) {
+            throw new IllegalStateException("channel is null");
+        }
+        if (!channel.isOpen()) {
+            throw new IllegalStateException("channel is not open");
+        }
+        while (!source.hasRemaining()) {
+            source.clear(); // position->zero, limit->capacity
+            if (channel.read(source) == -1) {
                 throw new EOFException();
             }
-            getSource().flip(); // limit->position, position->zero
+            source.flip(); // limit->position, position->zero
         }
         return super.read();
     }

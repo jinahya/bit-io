@@ -63,10 +63,22 @@ public class ChannelByteOutput<T extends WritableByteChannel>
      */
     @Override
     public void write(final int value) throws IOException {
-        while (!getTarget().hasRemaining()) {
-            getTarget().flip(); // limit->position, position->zero
-            getChannel().write(getTarget());
-            getTarget().compact(); // position->n+1, limit->capacity
+        if (target == null) {
+            throw new IllegalStateException("target is null");
+        }
+        if (target.capacity() == 0) {
+            throw new IllegalStateException("target.capacity is 0");
+        }
+        if (channel == null) {
+            throw new IllegalStateException("channel is null");
+        }
+        if (!channel.isOpen()) {
+            throw new IllegalStateException("channel is not open");
+        }
+        while (!target.hasRemaining()) {
+            target.flip(); // limit->position, position->zero
+            channel.write(target);
+            target.compact(); // position->n+1, limit->capacity
         }
         super.write(value);
     }

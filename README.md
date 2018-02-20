@@ -4,6 +4,8 @@ bit-io
 [![Dependency Status](https://www.versioneye.com/user/projects/563ccc514d415e001e00009b/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/563ccc514d415e001e00009b)
 [![Build Status](https://travis-ci.org/jinahya/bit-io.svg?branch=develop)](https://travis-ci.org/jinahya/bit-io)
 [![Sputnik](https://sputnik.ci/conf/badge)](https://sputnik.ci/app#/builds/jinahya/bit-io)
+
+[![Known Vulnerabilities](https://snyk.io/test/github/jinahya/bit-io/badge.svg?targetFile=pom.xml)](https://snyk.io/test/github/jinahya/bit-io?targetFile=pom.xml)
 [![Maven Central](https://img.shields.io/maven-central/v/com.github.jinahya/bit-io.svg?style=flat-square)](http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22bit-io%22)
 [![Javadocs](http://www.javadoc.io/badge/com.github.jinahya/bit-io.svg?style=flat-square)](http://www.javadoc.io/doc/com.github.jinahya/bit-io)
 [![Codacy Badge](https://api.codacy.com/project/badge/grade/53ae4f92af8246a48cbe8ecf0c04a002)](https://www.codacy.com/app/jinahya/bit-io)

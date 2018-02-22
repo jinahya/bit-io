@@ -2,7 +2,7 @@ bit-io
 ======
 [![Build Status](https://travis-ci.org/jinahya/bit-io.svg?branch=develop)](https://travis-ci.org/jinahya/bit-io)
 [ ![Codeship Status for jinahya/bit-io](https://app.codeship.com/projects/7e73e9f0-73f4-0135-cdd9-5adc5c5e3db7/status?branch=develop)](https://app.codeship.com/projects/243842)
-[![Dependency Status](https://www.versioneye.com/user/projects/563ccc514d415e001e00009b/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/563ccc514d415e001e00009b)
+[![Dependency Status](https://www.versioneye.com/user/projects/563ccc514d415e001e00009b/badge.svg)](https://www.versioneye.com/user/projects/563ccc514d415e001e00009b)
 [![Known Vulnerabilities](https://snyk.io/test/github/jinahya/bit-io/badge.svg?targetFile=pom.xml)](https://snyk.io/test/github/jinahya/bit-io?targetFile=pom.xml)
 [![Sputnik](https://sputnik.ci/conf/badge)](https://sputnik.ci/app#/builds/jinahya/bit-io)
 [![Maven Central](https://img.shields.io/maven-central/v/com.github.jinahya/bit-io.svg?style=flat-square)](http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22bit-io%22)

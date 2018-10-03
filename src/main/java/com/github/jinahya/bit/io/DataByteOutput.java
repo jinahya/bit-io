@@ -19,31 +19,30 @@ import java.io.DataOutput;
 import java.io.IOException;
 
 /**
- * A {@code ByteOutput} uses an instance of {@link DataOutput} as its
- * {@link #target}.
+ * A {@code ByteOutput} uses an instance of {@link DataOutput} as its {@link #target}.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  * @see DataByteInput
  */
 public class DataByteOutput extends AbstractByteOutput<DataOutput> {
 
-    // -------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
+
     /**
      * Creates a new instance with given byte target.
      *
-     * @param target the byte target; {@code null} if it is supposed to be
-     * lazily initialized and set.
+     * @param target the byte target; {@code null} if it is supposed to be lazily initialized and set.
      */
     public DataByteOutput(final DataOutput target) {
         super(target);
     }
 
     // -------------------------------------------------------------------------
+
     /**
-     * {@inheritDoc} The {@code write(int)} method of {@code DataByteOutput}
-     * class invokes {@link DataOutput#writeByte(int)} on {@link #target} with
-     * specified {@code value}. Override this method if the {@link #target} is
-     * supposed to be lazily initialized and set.
+     * {@inheritDoc} The {@code write(int)} method of {@code DataByteOutput} class invokes {@link
+     * DataOutput#writeByte(int)} on {@link #target} with specified {@code value}. Override this method if the {@link
+     * #target} is supposed to be lazily initialized and set.
      *
      * @param value {@inheritDoc }
      * @throws IOException {@inheritDoc }
@@ -53,7 +52,8 @@ public class DataByteOutput extends AbstractByteOutput<DataOutput> {
         getTarget().writeByte(value);
     }
 
-    // ------------------------------------------------------------------ target
+    // ---------------------------------------------------------------------------------------------------------- target
+
     /**
      * {@inheritDoc}
      *

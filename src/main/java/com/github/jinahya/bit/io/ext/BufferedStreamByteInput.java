@@ -16,14 +16,14 @@
 package com.github.jinahya.bit.io.ext;
 
 import com.github.jinahya.bit.io.ArrayByteInput;
+
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
 
 /**
- *
- * @author Jin Kwon &lt;onacit at gmail.com&gt;
  * @param <T> stream type parameter
+ * @author Jin Kwon &lt;onacit at gmail.com&gt;
  */
 public class BufferedStreamByteInput<T extends InputStream>
         extends ArrayByteInput {
@@ -69,6 +69,7 @@ public class BufferedStreamByteInput<T extends InputStream>
     }
 
     // ------------------------------------------------------------------ stream
+
     /**
      * Returns the current value of {@link #stream}.
      *
@@ -88,8 +89,7 @@ public class BufferedStreamByteInput<T extends InputStream>
     }
 
     /**
-     * Replaces the value of {@link #stream} with given and returns this
-     * instance.
+     * Replaces the value of {@link #stream} with given and returns this instance.
      *
      * @param stream new value for {@link #stream}
      * @return this instance
@@ -100,6 +100,7 @@ public class BufferedStreamByteInput<T extends InputStream>
     }
 
     // -------------------------------------------------------------------------
+
     /**
      * The input stream from which bytes are written onto {@link #source}.
      */

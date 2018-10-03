@@ -16,12 +16,12 @@
 package com.github.jinahya.bit.io.ext;
 
 import com.github.jinahya.bit.io.BitInput;
+
 import java.io.IOException;
 
 /**
- *
- * @author Jin Kwon &lt;onacit at gmail.com&gt;
  * @param <T> bit input type parameter
+ * @author Jin Kwon &lt;onacit at gmail.com&gt;
  */
 public class ExtendedBitInput<T extends BitInput> {
 

@@ -15,18 +15,19 @@
  */
 package com.github.jinahya.bit.io;
 
-import java.io.IOException;
-import java.io.UncheckedIOException;
-import static java.lang.invoke.MethodHandles.lookup;
-import java.util.LinkedList;
-import java.util.List;
 import org.slf4j.Logger;
-import static org.slf4j.LoggerFactory.getLogger;
-import static org.testng.Assert.assertEquals;
 import org.testng.annotations.Test;
 
+import java.io.IOException;
+import java.io.UncheckedIOException;
+import java.util.LinkedList;
+import java.util.List;
+
+import static java.lang.invoke.MethodHandles.lookup;
+import static org.slf4j.LoggerFactory.getLogger;
+import static org.testng.Assert.assertEquals;
+
 /**
- *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
 class BitUnitTest {

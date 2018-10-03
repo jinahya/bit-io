@@ -19,30 +19,30 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 
 /**
- * A {@link ByteOutput} uses an instance of {@link ByteBuffer} as its
- * {@link #target}.
+ * A {@link ByteOutput} uses an instance of {@link ByteBuffer} as its {@link #target}.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  * @see BufferByteInput
  */
 public class BufferByteOutput extends AbstractByteOutput<ByteBuffer> {
 
-    // -------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
+
     /**
      * Creates a new instance with given {@code ByteBufer}.
      *
-     * @param buffer the {@code ByteBuffer} to which bytes are written;
-     * {@code null} if it's supposed to be lazily initialized and set.
+     * @param buffer the {@code ByteBuffer} to which bytes are written; {@code null} if it's supposed to be lazily
+     *               initialized and set.
      */
     public BufferByteOutput(final ByteBuffer buffer) {
         super(buffer);
     }
 
-    // -------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
+
     /**
-     * {@inheritDoc} The {@code write(int)} method of {@code BufferByteOutput}
-     * class invokes {@link ByteBuffer#put(byte)} on what {@link #getTarget()}
-     * gives with given {@code value}. Override this method if the
+     * {@inheritDoc} The {@code write(int)} method of {@code BufferByteOutput} class invokes {@link
+     * ByteBuffer#put(byte)} on what {@link #getTarget()} gives with given {@code value}. Override this method if the
      * {@link #target} is supposed to be lazily initialized or adjusted.
      *
      * @param value {@inheritDoc}
@@ -55,7 +55,8 @@ public class BufferByteOutput extends AbstractByteOutput<ByteBuffer> {
         getTarget().put((byte) value);
     }
 
-    // ------------------------------------------------------------------ target
+    // ---------------------------------------------------------------------------------------------------------- target
+
     /**
      * {@inheritDoc}
      *

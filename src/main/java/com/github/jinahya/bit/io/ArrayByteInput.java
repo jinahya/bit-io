@@ -18,58 +18,56 @@ package com.github.jinahya.bit.io;
 import java.io.IOException;
 
 /**
- * A {@code ByteInput} implementation uses a byte array.
+ * A byte input reading bytes from an array of bytes.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
 public class ArrayByteInput extends AbstractByteInput<byte[]> {
 
-    // -------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
+
     /**
      * Creates a new instance with given parameters.
      *
-     * @param source a byte array; {@code null} if it's supposed to be lazily
-     * initialized an set.
-     * @param index array index to read
-     * @param limit array index to limit
+     * @param source a byte array; {@code null} if it's supposed to be lazily initialized an set.
+     * @param index  array index to read
+     * @param limit  array index to limit
      */
-    public ArrayByteInput(final byte[] source, final int index,
-                          final int limit) {
+    public ArrayByteInput(final byte[] source, final int index, final int limit) {
         super(source);
         this.index = index;
         this.limit = limit;
     }
 
-    // -------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
+
     /**
-     * {@inheritDoc} The {@code read()} method of {@code ArrayByteInput} class
-     * returns {@code source[index++]} as an unsigned 8-bit value. Override this
-     * method if either {@link #source}, {@link #index}, or {@link #limit} needs
-     * to be lazily initialized or adjusted.
+     * {@inheritDoc} The {@code read()} method of {@code ArrayByteInput} class returns {@code source[index++]} as an
+     * unsigned 8-bit value. Override this method if either {@link #source}, {@link #index}, or {@link #limit} needs to
+     * be lazily initialized or adjusted.
      *
      * @return {@inheritDoc}
-     * @throws IOException {@inheritDoc}
-     * @throws IllegalStateException if {@link #index} is equal to or greater
-     * than {@link #limit}
+     * @throws IOException           {@inheritDoc}
+     * @throws IllegalStateException if {@link #index} is equal to or greater than {@link #limit}
      */
     @Override
     public int read() throws IOException {
         if (getIndex() >= getLimit()) {
-            throw new IllegalStateException(
-                    "index(" + getIndex() + ") >= limit(" + getLimit() + ")");
+            throw new IllegalStateException("index(" + getIndex() + ") >= limit(" + getLimit() + ")");
         }
         final int value = getSource()[getIndex()] & 0xFF;
         setIndex(getIndex() + 1);
         return value;
     }
 
-    // ------------------------------------------------------------------ source
+    // ---------------------------------------------------------------------------------------------------------- source
     @Override
     public ArrayByteInput source(final byte[] target) {
         return (ArrayByteInput) super.source(target);
     }
 
-    // ------------------------------------------------------------------- index
+    // ----------------------------------------------------------------------------------------------------------- index
+
     /**
      * Returns the current value of {@link #index}.
      *
@@ -89,8 +87,7 @@ public class ArrayByteInput extends AbstractByteInput<byte[]> {
     }
 
     /**
-     * Replaces the current value of {@link #index} with given and returns this
-     * instance.
+     * Replaces the current value of {@link #index} with given and returns this instance.
      *
      * @param index new value for {@link #index}
      * @return this instance.
@@ -101,7 +98,8 @@ public class ArrayByteInput extends AbstractByteInput<byte[]> {
         return this;
     }
 
-    // ------------------------------------------------------------------- limit
+    // ----------------------------------------------------------------------------------------------------------- limit
+
     /**
      * Returns the value of {@link #limit}
      *
@@ -121,8 +119,7 @@ public class ArrayByteInput extends AbstractByteInput<byte[]> {
     }
 
     /**
-     * Replaces the value of {@link #limit} with given and returns this
-     * instance.
+     * Replaces the value of {@link #limit} with given and returns this instance.
      *
      * @param limit new value of {@link #limit}
      * @return this instance
@@ -133,7 +130,8 @@ public class ArrayByteInput extends AbstractByteInput<byte[]> {
         return this;
     }
 
-    // -------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
+
     /**
      * The index in the {@link #source} to read.
      */

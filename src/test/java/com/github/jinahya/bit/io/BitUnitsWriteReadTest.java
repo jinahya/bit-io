@@ -15,9 +15,10 @@
  */
 package com.github.jinahya.bit.io;
 
-import java.io.IOException;
-import javax.inject.Inject;
 import org.testng.annotations.Test;
+
+import javax.inject.Inject;
+import java.io.IOException;
 
 abstract class BitUnitsWriteReadTest {
 

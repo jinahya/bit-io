@@ -18,7 +18,6 @@ package com.github.jinahya.bit.io;
 import org.testng.annotations.Guice;
 
 /**
- *
  * @author Jin Kwon &lt;onacit at gmail.com&gt;
  */
 @Guice(modules = {BitUnitsWriteReadBufferModule.class})

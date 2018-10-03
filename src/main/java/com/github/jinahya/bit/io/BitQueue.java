@@ -16,12 +16,11 @@
 package com.github.jinahya.bit.io;
 
 /**
- *
  * @author Jin Kwon &lt;onacit at gmail.com&gt;
  */
 final class BitQueue {
 
-//    void enqueue
+    //    void enqueue
     // -------------------------------------------------------------------------
     BitQueue() {
         super();

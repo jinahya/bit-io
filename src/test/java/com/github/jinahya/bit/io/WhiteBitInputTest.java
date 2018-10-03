@@ -15,15 +15,17 @@
  */
 package com.github.jinahya.bit.io;
 
-import static com.github.jinahya.bit.io.BitIoRandom.nextSize;
-import java.io.IOException;
-import static java.lang.invoke.MethodHandles.lookup;
-import static java.util.concurrent.ThreadLocalRandom.current;
-import javax.inject.Inject;
 import org.slf4j.Logger;
-import static org.slf4j.LoggerFactory.getLogger;
 import org.testng.annotations.Guice;
 import org.testng.annotations.Test;
+
+import javax.inject.Inject;
+import java.io.IOException;
+
+import static com.github.jinahya.bit.io.BitIoRandom.nextSize;
+import static java.lang.invoke.MethodHandles.lookup;
+import static java.util.concurrent.ThreadLocalRandom.current;
+import static org.slf4j.LoggerFactory.getLogger;
 
 /**
  * Test class tests {@link BitInput}.

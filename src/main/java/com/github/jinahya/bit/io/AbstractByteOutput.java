@@ -18,24 +18,25 @@ package com.github.jinahya.bit.io;
 /**
  * An abstract class for implementing {@code ByteOutput}.
  *
- * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  * @param <T> byte target type parameter
+ * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
 public abstract class AbstractByteOutput<T> implements ByteOutput {
 
-    // -------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
+
     /**
-     * Creates a new instance wrapping specified byte target.
+     * Creates a new instance on top of given byte target.
      *
-     * @param target the underlying byte target; {@code null} if it is supposed
-     * to be lazily initialized and set.
+     * @param target the underlying byte target; {@code null} if it is supposed to be lazily initialized and set.
      */
     public AbstractByteOutput(final T target) {
         super();
         this.target = target;
     }
 
-    // ------------------------------------------------------------------ target
+    // ---------------------------------------------------------------------------------------------------------- target
+
     /**
      * Returns the current value of {@link #target}.
      *
@@ -55,8 +56,7 @@ public abstract class AbstractByteOutput<T> implements ByteOutput {
     }
 
     /**
-     * Replaces the value of {@link #target} with given and returns this
-     * instance.
+     * Replaces the value of {@link #target} with given and returns this instance.
      *
      * @param target new value for {@link #target}.
      * @return this instance.
@@ -67,7 +67,8 @@ public abstract class AbstractByteOutput<T> implements ByteOutput {
         return this;
     }
 
-    // -------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
+
     /**
      * The underlying byte target.
      */

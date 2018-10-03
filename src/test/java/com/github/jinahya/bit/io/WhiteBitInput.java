@@ -16,6 +16,7 @@
 package com.github.jinahya.bit.io;
 
 import java.io.IOException;
+
 import static java.util.concurrent.ThreadLocalRandom.current;
 
 class WhiteBitInput extends AbstractBitInput {

@@ -16,7 +16,6 @@
 package com.github.jinahya.bit.io;
 
 /**
- *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
 abstract class ByteOutputTest<T extends ByteOutput> {

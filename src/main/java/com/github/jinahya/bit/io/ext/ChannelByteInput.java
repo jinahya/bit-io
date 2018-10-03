@@ -16,45 +16,42 @@
 package com.github.jinahya.bit.io.ext;
 
 import com.github.jinahya.bit.io.BufferByteInput;
+
 import java.io.EOFException;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.ReadableByteChannel;
 
 /**
- * A extended class for writing bytes to an instance of
- * {@link ReadableByteChannel}.
+ * A extended class for writing bytes to an instance of {@link ReadableByteChannel}.
  *
- * @author Jin Kwon &lt;onacit at gmail.com&gt;
  * @param <T> channel type parameter
+ * @author Jin Kwon &lt;onacit at gmail.com&gt;
  * @see ChannelByteOutput
  */
-public class ChannelByteInput<T extends ReadableByteChannel>
-        extends BufferByteInput {
+public class ChannelByteInput<T extends ReadableByteChannel> extends BufferByteInput {
 
-    // -------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
+
     /**
-     * Creates a new instance built on top of the specified byte buffer and the
-     * channel.
+     * Creates a new instance built on top of the specified byte buffer and the channel.
      *
-     * @param source a buffer the byte buffer; {@code null} if it's supposed to
-     * be lazily initialized and set.
-     * @param channel the channel from which bytes are read or {@code null} if
-     * it's supposed to be lazily initialized and set.
+     * @param buffer  the byte buffer; {@code null} if it's supposed to be lazily initialized and set.
+     * @param channel the channel from which bytes are read or {@code null} if it's supposed to be lazily initialized
+     *                and set.
      */
-    public ChannelByteInput(final ByteBuffer source, final T channel) {
-        super(source);
+    public ChannelByteInput(final ByteBuffer buffer, final T channel) {
+        super(buffer);
         this.channel = channel;
     }
 
-    // -------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
+
     /**
-     * {@inheritDoc} The {@code read()} method of {@code ChannelByteInput}
-     * invokes {@link ReadableByteChannel#read(java.nio.ByteBuffer)} with
-     * {@link #source} while it has no remaining and invokes
-     * {@link BufferByteInput#read() super.read()}. Override this method if
-     * either {@link #source} or {@link #channel} is supposed to be lazily
-     * initialized and set.
+     * {@inheritDoc} The {@code read()} method of {@code ChannelByteInput} invokes {@link
+     * ReadableByteChannel#read(java.nio.ByteBuffer)} with {@link #source} while it has no remaining and invokes {@link
+     * BufferByteInput#read() super.read()}. Override this method if either {@link #source} or {@link #channel} is
+     * supposed to be lazily initialized and set.
      *
      * @return {@inheritDoc }
      * @throws IOException {@inheritDoc}
@@ -65,18 +62,18 @@ public class ChannelByteInput<T extends ReadableByteChannel>
      */
     @Override
     public int read() throws IOException {
-        if (source == null) {
-            throw new IllegalStateException("source is null");
-        }
-        if (source.capacity() == 0) {
-            throw new IllegalStateException("source.capacity is null");
-        }
-        if (channel == null) {
-            throw new IllegalStateException("channel is null");
-        }
-        if (!channel.isOpen()) {
-            throw new IllegalStateException("channel is not open");
-        }
+//        if (source == null) {
+//            throw new IllegalStateException("source is null");
+//        }
+//        if (source.capacity() == 0) {
+//            throw new IllegalStateException("source.capacity is null");
+//        }
+//        if (channel == null) {
+//            throw new IllegalStateException("channel is null");
+//        }
+//        if (!channel.isOpen()) {
+//            throw new IllegalStateException("channel is not open");
+//        }
         while (!source.hasRemaining()) {
             source.clear(); // position->zero, limit->capacity
             if (channel.read(source) == -1) {
@@ -87,14 +84,15 @@ public class ChannelByteInput<T extends ReadableByteChannel>
         return super.read();
     }
 
-    // ------------------------------------------------------------------ source
+    // ---------------------------------------------------------------------------------------------------------- source
     @Override
     @SuppressWarnings("unchecked")
     public ChannelByteInput<T> source(final ByteBuffer source) {
         return (ChannelByteInput<T>) super.source(source);
     }
 
-    // ----------------------------------------------------------------- channel
+    // --------------------------------------------------------------------------------------------------------- channel
+
     /**
      * Returns the current value of {@link #channel}.
      *
@@ -114,8 +112,7 @@ public class ChannelByteInput<T extends ReadableByteChannel>
     }
 
     /**
-     * Replaces the value of {@link #channel} with given and returns this
-     * instance.
+     * Replaces the value of {@link #channel} with given and returns this instance.
      *
      * @param channel new value for {@link #channel}.
      * @return this instance
@@ -125,7 +122,8 @@ public class ChannelByteInput<T extends ReadableByteChannel>
         return this;
     }
 
-    // -------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
+
     /**
      * The channel from which bytes are read into {@link #source}.
      */

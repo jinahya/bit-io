@@ -15,12 +15,13 @@
  */
 package com.github.jinahya.bit.io.testng;
 
-import static java.lang.invoke.MethodHandles.lookup;
 import org.slf4j.Logger;
-import static org.slf4j.LoggerFactory.getLogger;
 import org.testng.IInvokedMethod;
 import org.testng.IInvokedMethodListener;
 import org.testng.ITestResult;
+
+import static java.lang.invoke.MethodHandles.lookup;
+import static org.slf4j.LoggerFactory.getLogger;
 
 public class InvokedMethodListener implements IInvokedMethodListener {
 

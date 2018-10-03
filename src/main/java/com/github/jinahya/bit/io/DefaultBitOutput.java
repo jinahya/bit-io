@@ -20,29 +20,29 @@ import java.io.IOException;
 /**
  * A default implementation writes bytes to an instance of {@link ByteOutput}.
  *
- * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  * @param <T> byte output type parameter
+ * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
 public class DefaultBitOutput<T extends ByteOutput> extends AbstractBitOutput {
 
-    // -------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
+
     /**
      * Creates new instance with specified delegate.
      *
-     * @param delegate the delegate; {@code null} if if is supposed to be lazily
-     * initialized and set.
+     * @param delegate the delegate; {@code null} if if is supposed to be lazily initialized and set.
      */
     public DefaultBitOutput(final T delegate) {
         super();
         this.delegate = delegate;
     }
 
-    // -------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
+
     /**
-     * {@inheritDoc} The {@code write(int)} method of {@code DefaultBitOutput}
-     * class invokes {@link ByteOutput#write(int)} on what
-     * {@link #getDelegate()} returns with given value. Override this method if
-     * the {@link #delegate} is supposed to be lazily initialized and set.
+     * {@inheritDoc} The {@code write(int)} method of {@code DefaultBitOutput} class invokes {@link
+     * ByteOutput#write(int)} on what {@link #getDelegate()} returns with given value. Override this method if the
+     * {@link #delegate} is supposed to be lazily initialized and set.
      *
      * @param value {@inheritDoc}
      * @throws IOException {@inheritDoc}
@@ -52,7 +52,8 @@ public class DefaultBitOutput<T extends ByteOutput> extends AbstractBitOutput {
         getDelegate().write(value);
     }
 
-    // ---------------------------------------------------------------- delegate
+    // -------------------------------------------------------------------------------------------------------- delegate
+
     /**
      * returns the current value of {@link #delegate}.
      *
@@ -82,7 +83,8 @@ public class DefaultBitOutput<T extends ByteOutput> extends AbstractBitOutput {
         return this;
     }
 
-    // -------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
+
     /**
      * The delegate on which {@link #write(int)} is invoked.
      */

@@ -22,30 +22,29 @@ import java.io.InputStream;
 /**
  * A {@link ByteInput} reads bytes from an {@link InputStream}.
  *
- * @author Jin Kwon &lt;onacit at gmail.com&gt;
  * @param <T> stream type parameter
+ * @author Jin Kwon &lt;onacit at gmail.com&gt;
  * @see StreamByteOutput
  */
-public class StreamByteInput<T extends InputStream>
-        extends AbstractByteInput<T> {
+public class StreamByteInput<T extends InputStream> extends AbstractByteInput<T> {
 
-    // -------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
+
     /**
      * Creates a new instance built on top of the specified input stream.
      *
-     * @param source the input stream; {@code null} if it's supposed to be
-     * lazily initialized and set
+     * @param source the input stream; {@code null} if it's supposed to be lazily initialized and set
      */
     public StreamByteInput(final T source) {
         super(source);
     }
 
-    // -------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
+
     /**
-     * {@inheritDoc} The {@code read()} method of {@code StreamByteInput} class
-     * invokes {@link InputStream#read()} on what {@link #getSource()} returns
-     * and returns the result. Override this method if the {@link #source} is
-     * supposed to be lazily initialized and set.
+     * {@inheritDoc} The {@code read()} method of {@code StreamByteInput} class invokes {@link InputStream#read()} on
+     * what {@link #getSource()} returns and returns the result. Override this method if the {@link #source} is supposed
+     * to be lazily initialized and set.
      *
      * @return {@inheritDoc}
      * @throws IOException {@inheritDoc}
@@ -61,7 +60,8 @@ public class StreamByteInput<T extends InputStream>
         return value;
     }
 
-    // ------------------------------------------------------------------ source
+    // ---------------------------------------------------------------------------------------------------------- source
+
     /**
      * {@inheritDoc}
      *

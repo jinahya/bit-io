@@ -15,22 +15,22 @@
  */
 package com.github.jinahya.bit.io;
 
+import org.slf4j.Logger;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
 import static java.util.concurrent.ThreadLocalRandom.current;
-import org.slf4j.Logger;
 import static org.slf4j.LoggerFactory.getLogger;
 import static org.testng.Assert.assertEquals;
 
 /**
- *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
 enum BitUnit {
 
     BOOLEAN() {
-
         @Override
         Object read(final List<Object> params, final BitInput input)
                 throws IOException {
@@ -47,7 +47,6 @@ enum BitUnit {
         }
     },
     BYTE() {
-
         @Override
         Object read(final List<Object> params, final BitInput input)
                 throws IOException {
@@ -70,7 +69,6 @@ enum BitUnit {
         }
     },
     SHORT() {
-
         @Override
         Object read(final List<Object> params, final BitInput input)
                 throws IOException {
@@ -94,7 +92,6 @@ enum BitUnit {
         }
     },
     INT() {
-
         @Override
         Object read(final List<Object> params, final BitInput input)
                 throws IOException {
@@ -117,7 +114,6 @@ enum BitUnit {
         }
     },
     LONG() {
-
         @Override
         Object read(final List<Object> params, final BitInput input)
                 throws IOException {
@@ -140,7 +136,6 @@ enum BitUnit {
         }
     },
     CHAR() {
-
         @Override
         Object read(final List<Object> params, final BitInput input)
                 throws IOException {

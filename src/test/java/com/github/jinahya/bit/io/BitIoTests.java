@@ -15,15 +15,13 @@
  */
 package com.github.jinahya.bit.io;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import static java.lang.invoke.MethodHandles.lookup;
+import org.slf4j.Logger;
+
+import java.io.*;
 import java.nio.ByteBuffer;
 import java.util.function.Consumer;
-import org.slf4j.Logger;
+
+import static java.lang.invoke.MethodHandles.lookup;
 import static org.slf4j.LoggerFactory.getLogger;
 import static org.testng.Assert.assertEquals;
 
@@ -110,7 +108,7 @@ public final class BitIoTests {
         stream(writer, reader);
     }
 
-//    public static <T extends BitReadable & BitWritable> void all(
+    //    public static <T extends BitReadable & BitWritable> void all(
 //            final boolean nullable, final Class<? extends T> type, final T expected)
 //            throws IOException {
 //

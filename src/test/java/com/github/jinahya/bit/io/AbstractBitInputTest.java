@@ -15,11 +15,13 @@
  */
 package com.github.jinahya.bit.io;
 
+import org.mockito.Mockito;
+import org.testng.annotations.Test;
+
 import java.io.IOException;
 import java.util.concurrent.ThreadLocalRandom;
-import org.mockito.Mockito;
+
 import static org.mockito.Mockito.mock;
-import org.testng.annotations.Test;
 
 public class AbstractBitInputTest {
 

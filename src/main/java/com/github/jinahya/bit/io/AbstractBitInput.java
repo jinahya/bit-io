@@ -24,18 +24,20 @@ import java.io.IOException;
  */
 public abstract class AbstractBitInput implements BitInput, ByteInput {
 
-    // -------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
     private int octet() throws IOException {
-        final int octet = read() & 0xFF;
+        //final int octet = read() & 0xFF;
+        final int octet = read();
         ++count;
         return octet;
     }
 
+    // -----------------------------------------------------------------------------------------------------------------
+
     /**
      * Reads an unsigned value whose maximum size is {@code 8}.
      *
-     * @param size the number of bits for the value; between {@code 1} and
-     * {@code 8}, both inclusive.
+     * @param size the number of bits for the value; between {@code 1} and {@code 8}, both inclusive.
      * @return an unsigned byte value.
      * @throws IOException if an I/O error occurs.
      */
@@ -68,8 +70,7 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
     /**
      * Reads an unsigned value whose maximum size is {@code 16}.
      *
-     * @param size the number of bits for the value; between {@code 1} and
-     * {@code 16}, both inclusive.
+     * @param size the number of bits for the value; between {@code 1} and {@code 16}, both inclusive.
      * @return an unsigned short value.
      * @throws IOException if an I/O error occurs.
      */
@@ -89,28 +90,26 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
         return value;
     }
 
+    // -----------------------------------------------------------------------------------------------------------------
     @Override
     public boolean readBoolean() throws IOException {
         return readInt(true, 1) == 1;
     }
 
     @Override
-    public byte readByte(final boolean unsigned, final int size)
-            throws IOException {
+    public byte readByte(final boolean unsigned, final int size) throws IOException {
         BitIoConstraints.requireValidSize(unsigned, 3, size);
         return (byte) readInt(unsigned, size);
     }
 
     @Override
-    public short readShort(final boolean unsigned, final int size)
-            throws IOException {
+    public short readShort(final boolean unsigned, final int size) throws IOException {
         BitIoConstraints.requireValidSize(unsigned, 4, size);
         return (short) readInt(unsigned, size);
     }
 
     @Override
-    public int readInt(final boolean unsigned, final int size)
-            throws IOException {
+    public int readInt(final boolean unsigned, final int size) throws IOException {
         BitIoConstraints.requireValidSize(unsigned, 5, size);
         if (!unsigned) {
             int value = 0 - readInt(true, 1);
@@ -188,7 +187,7 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
         return bits;
     }
 
-    // -------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
     /**
      * bit flags.
      */

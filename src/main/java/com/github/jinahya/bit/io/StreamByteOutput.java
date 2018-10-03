@@ -21,30 +21,29 @@ import java.io.OutputStream;
 /**
  * A {@link ByteOutput} writes bytes to an {@link OutputStream}.
  *
- * @author Jin Kwon &lt;onacit at gmail.com&gt;
  * @param <T> stream type parameter
+ * @author Jin Kwon &lt;onacit at gmail.com&gt;
  * @see StreamByteInput
  */
-public class StreamByteOutput<T extends OutputStream>
-        extends AbstractByteOutput<T> {
+public class StreamByteOutput<T extends OutputStream> extends AbstractByteOutput<T> {
 
-    // -------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
+
     /**
      * Creates a new instance built on top of the specified output stream.
      *
-     * @param target the output stream; {@code null} if it's supposed to be
-     * lazily initialized and set.
+     * @param target the output stream; {@code null} if it's supposed to be lazily initialized and set.
      */
     public StreamByteOutput(final T target) {
         super(target);
     }
 
-    // -------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
+
     /**
-     * {@inheritDoc} The {@code write(int)} method of {@code StreamByteOutput}
-     * class invokes {@link OutputStream#write(int)} with given {@code value} on
-     * what {@link #getTarget()} returns. Override this method if the
-     * {@link #target} is supposed to be lazily initialized and set.
+     * {@inheritDoc} The {@code write(int)} method of {@code StreamByteOutput} class invokes {@link
+     * OutputStream#write(int)} with given {@code value} on what {@link #getTarget()} returns. Override this method if
+     * the {@link #target} is supposed to be lazily initialized and set.
      *
      * @param value {@inheritDoc}
      * @throws IOException {@inheritDoc}
@@ -56,7 +55,8 @@ public class StreamByteOutput<T extends OutputStream>
         getTarget().write(value);
     }
 
-    // ------------------------------------------------------------------ target
+    // ---------------------------------------------------------------------------------------------------------- target
+
     /**
      * {@inheritDoc}
      *

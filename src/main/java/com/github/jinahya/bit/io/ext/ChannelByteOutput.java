@@ -17,43 +17,40 @@ package com.github.jinahya.bit.io.ext;
 
 import com.github.jinahya.bit.io.BufferByteOutput;
 import com.github.jinahya.bit.io.ByteOutput;
+
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.WritableByteChannel;
 
 /**
- * A implementation of {@link ByteOutput} uses an instance of
- * {@link WritableByteChannel} as its {@link #target}.
+ * A implementation of {@link ByteOutput} uses an instance of {@link WritableByteChannel} as its {@link #target}.
  *
- * @author Jin Kwon &lt;onacit at gmail.com&gt;
  * @param <T> channel type parameter.
+ * @author Jin Kwon &lt;onacit at gmail.com&gt;
  */
-public class ChannelByteOutput<T extends WritableByteChannel>
-        extends BufferByteOutput {
+public class ChannelByteOutput<T extends WritableByteChannel> extends BufferByteOutput {
 
-    // -------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
+
     /**
-     * Creates a new instance with given {@code ByteBufer} and
-     * {@code WritableByteChannel}.
+     * Creates a new instance with given {@code ByteBufer} and {@code WritableByteChannel}.
      *
-     * @param buffer the {@code ByteBuffer} to which bytes are written or
-     * {@code null} if it's supposed to be lazily initialized and set.
-     * @param channel the {@code WritableByteChannel} to which buffered bytes
-     * are written or {@code null} if it's supposed to be lazily initialized and
-     * set.
+     * @param buffer  the {@code ByteBuffer} to which bytes are written or {@code null} if it's supposed to be lazily
+     *                initialized and set.
+     * @param channel the {@code WritableByteChannel} to which buffered bytes are written or {@code null} if it's
+     *                supposed to be lazily initialized and set.
      */
     public ChannelByteOutput(final ByteBuffer buffer, final T channel) {
         super(buffer);
         this.channel = channel;
     }
 
-    // -------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
+
     /**
-     * Writes an unsigned 8 bit value to the desired target. The
-     * {@code write(int)} method of {@code ChannelByteOutput} class loops for
-     * writing already buffered bytes to {@link #channel} while {@link #target}
-     * has no remaining and calls {@link BufferByteOutput#write(int)} method
-     * with given. Override this method if the {@link #target} or
+     * Writes an unsigned 8 bit value to the desired target. The {@code write(int)} method of {@code ChannelByteOutput}
+     * class loops for writing already buffered bytes to {@link #channel} while {@link #target} has no remaining and
+     * calls {@link BufferByteOutput#write(int)} method with given. Override this method if the {@link #target} or
      * {@link #channel} is supposed to be lazily initialized or adjusted.
      *
      * @param value {@inheritDoc}
@@ -63,18 +60,18 @@ public class ChannelByteOutput<T extends WritableByteChannel>
      */
     @Override
     public void write(final int value) throws IOException {
-        if (target == null) {
-            throw new IllegalStateException("target is null");
-        }
-        if (target.capacity() == 0) {
-            throw new IllegalStateException("target.capacity is 0");
-        }
-        if (channel == null) {
-            throw new IllegalStateException("channel is null");
-        }
-        if (!channel.isOpen()) {
-            throw new IllegalStateException("channel is not open");
-        }
+//        if (target == null) {
+//            throw new IllegalStateException("target is null");
+//        }
+//        if (target.capacity() == 0) {
+//            throw new IllegalStateException("target.capacity is 0");
+//        }
+//        if (channel == null) {
+//            throw new IllegalStateException("channel is null");
+//        }
+//        if (!channel.isOpen()) {
+//            throw new IllegalStateException("channel is not open");
+//        }
         while (!target.hasRemaining()) {
             target.flip(); // limit->position, position->zero
             channel.write(target);
@@ -83,14 +80,15 @@ public class ChannelByteOutput<T extends WritableByteChannel>
         super.write(value);
     }
 
-    // ------------------------------------------------------------------ target
+    // ---------------------------------------------------------------------------------------------------------- target
     @Override
     @SuppressWarnings("unchecked")
     public ChannelByteOutput<T> target(final ByteBuffer target) {
         return (ChannelByteOutput<T>) super.target(target);
     }
 
-    // ----------------------------------------------------------------- channel
+    // --------------------------------------------------------------------------------------------------------- channel
+
     /**
      * Returns the current value of {@link #channel}.
      *
@@ -110,8 +108,7 @@ public class ChannelByteOutput<T extends WritableByteChannel>
     }
 
     /**
-     * Replaces the current value of {@link #channel} with given and returns
-     * this instance.
+     * Replaces the current value of {@link #channel} with given and returns this instance.
      *
      * @param channel new value for {@link #channel}
      * @return this instance
@@ -121,7 +118,8 @@ public class ChannelByteOutput<T extends WritableByteChannel>
         return this;
     }
 
-    // -------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
+
     /**
      * The target to which buffered bytes are written from {@link #target}.
      */

@@ -16,13 +16,13 @@
 package com.github.jinahya.bit.io.ext;
 
 import com.github.jinahya.bit.io.ArrayByteOutput;
+
 import java.io.IOException;
 import java.io.OutputStream;
 
 /**
- *
- * @author Jin Kwon &lt;onacit at gmail.com&gt;
  * @param <T> stream type parameter
+ * @author Jin Kwon &lt;onacit at gmail.com&gt;
  */
 public class BufferedStreamByteOutput<T extends OutputStream>
         extends ArrayByteOutput {

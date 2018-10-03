@@ -16,7 +16,9 @@
 package com.github.jinahya.bit.io;
 
 import com.google.inject.AbstractModule;
+
 import java.nio.ByteBuffer;
+
 import static java.nio.ByteBuffer.wrap;
 
 class BitUnitsWriteReadBufferModule extends AbstractModule {

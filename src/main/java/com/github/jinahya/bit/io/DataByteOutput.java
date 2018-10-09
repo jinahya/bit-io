@@ -29,7 +29,7 @@ public class DataByteOutput extends AbstractByteOutput<DataOutput> {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * Creates a new instance with given byte target.
+     * Creates a new instance built on to of given byte target.
      *
      * @param target the byte target; {@code null} if it is supposed to be lazily initialized and set.
      */

@@ -29,7 +29,7 @@ public class DataByteInput extends AbstractByteInput<DataInput> {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * Creates a new instance with given {@code source}.
+     * Creates a new instance built on top of given {@code source}.
      *
      * @param source the byte source; {@code null} if it's supposed to be lazily initialized and set
      */

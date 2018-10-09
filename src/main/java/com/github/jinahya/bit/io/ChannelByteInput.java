@@ -13,9 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.jinahya.bit.io.ext;
-
-import com.github.jinahya.bit.io.BufferByteInput;
+package com.github.jinahya.bit.io;
 
 import java.io.EOFException;
 import java.io.IOException;
@@ -23,7 +21,7 @@ import java.nio.ByteBuffer;
 import java.nio.channels.ReadableByteChannel;
 
 /**
- * A extended class for writing bytes to an instance of {@link ReadableByteChannel}.
+ * A byte output reads bytes from a channel.
  *
  * @param <T> channel type parameter
  * @author Jin Kwon &lt;onacit at gmail.com&gt;
@@ -62,18 +60,6 @@ public class ChannelByteInput<T extends ReadableByteChannel> extends BufferByteI
      */
     @Override
     public int read() throws IOException {
-//        if (source == null) {
-//            throw new IllegalStateException("source is null");
-//        }
-//        if (source.capacity() == 0) {
-//            throw new IllegalStateException("source.capacity is null");
-//        }
-//        if (channel == null) {
-//            throw new IllegalStateException("channel is null");
-//        }
-//        if (!channel.isOpen()) {
-//            throw new IllegalStateException("channel is not open");
-//        }
         while (!source.hasRemaining()) {
             source.clear(); // position->zero, limit->capacity
             if (channel.read(source) == -1) {

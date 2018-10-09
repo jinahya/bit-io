@@ -13,17 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.jinahya.bit.io.ext;
-
-import com.github.jinahya.bit.io.BufferByteOutput;
-import com.github.jinahya.bit.io.ByteOutput;
+package com.github.jinahya.bit.io;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.WritableByteChannel;
 
 /**
- * A implementation of {@link ByteOutput} uses an instance of {@link WritableByteChannel} as its {@link #target}.
+ * A implementation of {@link ByteOutput} uses an instance of {@link WritableByteChannel} as its final target.
  *
  * @param <T> channel type parameter.
  * @author Jin Kwon &lt;onacit at gmail.com&gt;
@@ -33,12 +30,12 @@ public class ChannelByteOutput<T extends WritableByteChannel> extends BufferByte
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * Creates a new instance with given {@code ByteBufer} and {@code WritableByteChannel}.
+     * Creates a new instance built on top of specified byte buffer and channel.
      *
-     * @param buffer  the {@code ByteBuffer} to which bytes are written or {@code null} if it's supposed to be lazily
+     * @param buffer  the byte buffer to which bytes are written or {@code null} if it's supposed to be lazily
      *                initialized and set.
-     * @param channel the {@code WritableByteChannel} to which buffered bytes are written or {@code null} if it's
-     *                supposed to be lazily initialized and set.
+     * @param channel the channel to which buffered bytes are written or {@code null} if it's supposed to be lazily
+     *                initialized and set.
      */
     public ChannelByteOutput(final ByteBuffer buffer, final T channel) {
         super(buffer);
@@ -60,18 +57,6 @@ public class ChannelByteOutput<T extends WritableByteChannel> extends BufferByte
      */
     @Override
     public void write(final int value) throws IOException {
-//        if (target == null) {
-//            throw new IllegalStateException("target is null");
-//        }
-//        if (target.capacity() == 0) {
-//            throw new IllegalStateException("target.capacity is 0");
-//        }
-//        if (channel == null) {
-//            throw new IllegalStateException("channel is null");
-//        }
-//        if (!channel.isOpen()) {
-//            throw new IllegalStateException("channel is not open");
-//        }
         while (!target.hasRemaining()) {
             target.flip(); // limit->position, position->zero
             channel.write(target);

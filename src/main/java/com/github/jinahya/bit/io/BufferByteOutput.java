@@ -29,13 +29,13 @@ public class BufferByteOutput extends AbstractByteOutput<ByteBuffer> {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * Creates a new instance with given {@code ByteBufer}.
+     * Creates a new instance built on top of given {@code ByteBuffer}.
      *
-     * @param buffer the {@code ByteBuffer} to which bytes are written; {@code null} if it's supposed to be lazily
+     * @param target the {@code ByteBuffer} to which bytes are written; {@code null} if it's supposed to be lazily
      *               initialized and set.
      */
-    public BufferByteOutput(final ByteBuffer buffer) {
-        super(buffer);
+    public BufferByteOutput(final ByteBuffer target) {
+        super(target);
     }
 
     // -----------------------------------------------------------------------------------------------------------------

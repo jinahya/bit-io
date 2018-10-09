@@ -39,7 +39,7 @@ public class BufferedStreamByteInput<T extends InputStream>
         if (getIndex() >= getLimit()) {
             final int read = getStream().read(getSource(), 0, getLimit());
             if (read == -1) {
-                throw new EOFException("unexpected end-of-streame");
+                throw new EOFException("unexpected end-of-stream");
             }
             setLimit(read);
             setIndex(0);

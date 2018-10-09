@@ -26,14 +26,14 @@ import static org.mockito.Mockito.mock;
 public class AbstractBitOutputTest {
 
     @Test(expectedExceptions = {IllegalArgumentException.class})
-    public void alingWithZeroBytes() throws IOException {
+    public void alignWithZeroBytes() throws IOException {
         final BitOutput mock
                 = mock(AbstractBitOutput.class, Mockito.CALLS_REAL_METHODS);
         mock.align(0);
     }
 
     @Test(expectedExceptions = {IllegalArgumentException.class})
-    public void alingWithNegativeBytes() throws IOException {
+    public void alignWithNegativeBytes() throws IOException {
         final BitOutput mock
                 = mock(AbstractBitOutput.class, Mockito.CALLS_REAL_METHODS);
         mock.align(ThreadLocalRandom.current().nextInt() | Integer.MIN_VALUE);

@@ -34,7 +34,7 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * Writes an unsigned value whose size is max {@value Byte#SIZE}.
+     * Writes an unsigned value whose size is, in maximum, {@value Byte#SIZE}.
      *
      * @param size  the number of lower bits to write; between {@code 1} and {@value Byte#SIZE}, both inclusive.
      * @param value the value to write

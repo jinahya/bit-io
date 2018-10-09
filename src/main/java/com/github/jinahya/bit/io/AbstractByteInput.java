@@ -26,7 +26,7 @@ public abstract class AbstractByteInput<T> implements ByteInput {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * Creates a new instance wrapping specified byte source.
+     * Creates a new instance built on top of specified byte source.
      *
      * @param source the underlying byte source or {@code null} if it is intended to be lazily initialized and set.
      */

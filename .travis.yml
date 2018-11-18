@@ -1,6 +1,15 @@
 language: java
+
 jdk:
   - oraclejdk8
+
+addons:
+  sonarcloud:
+    organization: "jinahya-github"
+
+script:
+  - sonar-scanner
+
 after_success:
   - python <(curl -s https://raw.githubusercontent.com/TouK/sputnik-ci/master/sputnik-ci.py)
                 

@@ -2,4 +2,4 @@ target/
 *.sh
 
 .idea
-*.imlg
+*.iml

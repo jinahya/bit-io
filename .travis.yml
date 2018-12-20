@@ -8,6 +8,8 @@ addons:
   sonarcloud:
     organization: "jinahya-github"
     token: ${SONAR_TOKEN}
+    branches:
+      - developg
 
 script:
   - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar

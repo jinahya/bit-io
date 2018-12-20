@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
     <groupId>com.github.jinahya</groupId>
     <artifactId>jinahya-parent</artifactId>
-    <version>0.7.8</version>
+    <version>0.8.0</version>
   </parent>
 
   <groupId>com.github.jinahya</groupId>
@@ -15,7 +16,7 @@
 
   <name>${project.artifactId}</name>
   <description>library for reading/writing non-octet aligned values</description>
-  <url>https://github.com/jinahya/${project.version}</url>
+  <url>https://github.com/jinahya/${project.artifactId}</url>
 
   <prerequisites>
     <maven>3.3.9</maven>
@@ -37,8 +38,11 @@
     <maven.compiler.target>1.6</maven.compiler.target>
     <maven.compiler.testSource>1.8</maven.compiler.testSource>
     <maven.compiler.testTarget>1.8</maven.compiler.testTarget>
-    <project.build.outputDirectory.retrotranslated13>${project.build.directory}/classes-retrotranslated13</project.build.outputDirectory.retrotranslated13>
-    <project.build.outputDirectory.retrotranslated14>${project.build.directory}/classes-retrotranslated14</project.build.outputDirectory.retrotranslated14>
+    <version.org.junit.jupiter>5.3.2</version.org.junit.jupiter>
+    <project.build.outputDirectory.retrotranslated13>${project.build.directory}/classes-retrotranslated13
+    </project.build.outputDirectory.retrotranslated13>
+    <project.build.outputDirectory.retrotranslated14>${project.build.directory}/classes-retrotranslated14
+    </project.build.outputDirectory.retrotranslated14>
   </properties>
 
   <dependencies>
@@ -67,15 +71,21 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.mockito</groupId>
-      <artifactId>mockito-core</artifactId>
-      <version>2.23.0</version>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-api</artifactId>
+      <version>${version.org.junit.jupiter}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.testng</groupId>
-      <artifactId>testng</artifactId>
-      <version>6.14.3</version>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-engine</artifactId>
+      <version>${version.org.junit.jupiter}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-core</artifactId>
+      <version>2.23.0</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
@@ -114,11 +124,17 @@
             </goals>
             <configuration>
               <target>
-                <taskdef name="retrotranslator" classname="net.sf.retrotranslator.transformer.RetrotranslatorTask" classpathref="maven.plugin.classpath" />
-                <mkdir dir="${project.build.outputDirectory.retrotranslated13}" />
-                <retrotranslator srcdir="${project.build.outputDirectory}" destdir="${project.build.outputDirectory.retrotranslated13}" embed="com.github.jinahya.bit.io.retrotranslated13" failonwarning="false" smart="true" stripannot="true" stripsign="true" syncvolatile="true" target="1.3" verbose="false" verify="false">
+                <taskdef name="retrotranslator"
+                         classname="net.sf.retrotranslator.transformer.RetrotranslatorTask"
+                         classpathref="maven.plugin.classpath"/>
+                <mkdir dir="${project.build.outputDirectory.retrotranslated13}"/>
+                <retrotranslator srcdir="${project.build.outputDirectory}"
+                                 destdir="${project.build.outputDirectory.retrotranslated13}"
+                                 embed="com.github.jinahya.bit.io.retrotranslated13"
+                                 failonwarning="false" smart="true" stripannot="true" stripsign="true"
+                                 syncvolatile="true" target="1.3" verbose="false" verify="false">
                   <classpath>
-                    <fileset dir="${basedir}/ext/retrotranslated13" includes="**/*.jar" />
+                    <fileset dir="${basedir}/ext/retrotranslated13" includes="**/*.jar"/>
                   </classpath>
                 </retrotranslator>
               </target>
@@ -132,11 +148,17 @@
             </goals>
             <configuration>
               <target>
-                <taskdef name="retrotranslator" classname="net.sf.retrotranslator.transformer.RetrotranslatorTask" classpathref="maven.plugin.classpath" />
-                <mkdir dir="${project.build.outputDirectory.retrotranslated14}" />
-                <retrotranslator srcdir="${project.build.outputDirectory}" destdir="${project.build.outputDirectory.retrotranslated14}" embed="com.github.jinahya.bit.io.retrotranslated14" failonwarning="false" smart="true" stripannot="true" stripsign="true" syncvolatile="true" target="1.4" verbose="false" verify="false">
+                <taskdef name="retrotranslator"
+                         classname="net.sf.retrotranslator.transformer.RetrotranslatorTask"
+                         classpathref="maven.plugin.classpath"/>
+                <mkdir dir="${project.build.outputDirectory.retrotranslated14}"/>
+                <retrotranslator srcdir="${project.build.outputDirectory}"
+                                 destdir="${project.build.outputDirectory.retrotranslated14}"
+                                 embed="com.github.jinahya.bit.io.retrotranslated14"
+                                 failonwarning="false" smart="true" stripannot="true" stripsign="true"
+                                 syncvolatile="true" target="1.4" verbose="false" verify="false">
                   <classpath>
-                    <fileset dir="${basedir}/ext/retrotranslated14" includes="**/*.jar" />
+                    <fileset dir="${basedir}/ext/retrotranslated14" includes="**/*.jar"/>
                   </classpath>
                 </retrotranslator>
               </target>
@@ -194,17 +216,6 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
         <version>2.22.0</version>
-        <configuration>
-          <!-- travis -->
-          <!-- https://issues.apache.org/jira/browse/SUREFIRE-951 -->
-          <argLine>-Xms1024m -Xmx2048m -Dfile.encoding=${project.build.sourceEncoding}</argLine>
-          <properties>
-            <property>
-              <name>listeners</name>
-              <value>com.github.jinahya.bit.io.testng.InvokedMethodListener,com.github.jinahya.bit.io.testng.TestListener</value>
-            </property>
-          </properties>
-        </configuration>
       </plugin>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
@@ -241,6 +252,46 @@
           </execution>
         </executions>
       </plugin>
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>default-prepare-agent</id>
+            <goals>
+              <goal>prepare-agent</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>default-report</id>
+            <goals>
+              <goal>report</goal>
+            </goals>
+          </execution>
+          <!--<execution>-->
+            <!--<id>default-check</id>-->
+            <!--<goals>-->
+              <!--<goal>check</goal>-->
+            <!--</goals>-->
+            <!--<configuration>-->
+              <!--&lt;!&ndash;<rules>&ndash;&gt;-->
+                <!--&lt;!&ndash;&lt;!&ndash; implementation is needed only for Maven 2 &ndash;&gt;&ndash;&gt;-->
+                <!--&lt;!&ndash;<rule implementation="org.jacoco.maven.RuleConfiguration">&ndash;&gt;-->
+                  <!--&lt;!&ndash;<element>BUNDLE</element>&ndash;&gt;-->
+                  <!--&lt;!&ndash;<limits>&ndash;&gt;-->
+                    <!--&lt;!&ndash;&lt;!&ndash; implementation is needed only for Maven 2 &ndash;&gt;&ndash;&gt;-->
+                    <!--&lt;!&ndash;<limit implementation="org.jacoco.report.check.Limit">&ndash;&gt;-->
+                      <!--&lt;!&ndash;<counter>COMPLEXITY</counter>&ndash;&gt;-->
+                      <!--&lt;!&ndash;<value>COVEREDRATIO</value>&ndash;&gt;-->
+                      <!--&lt;!&ndash;<minimum>0.60</minimum>&ndash;&gt;-->
+                    <!--&lt;!&ndash;</limit>&ndash;&gt;-->
+                  <!--&lt;!&ndash;</limits>&ndash;&gt;-->
+                <!--&lt;!&ndash;</rule>&ndash;&gt;-->
+              <!--&lt;!&ndash;</rules>&ndash;&gt;-->
+            <!--</configuration>-->
+          <!--</execution>-->
+        </executions>
+      </plugin>
     </plugins>
   </build>
 
@@ -256,15 +307,15 @@
         <artifactId>maven-checkstyle-plugin</artifactId>
         <version>3.0.0</version>
       </plugin>
-      <!--<plugin>-->
-        <!--<groupId>org.apache.maven.plugins</groupId>-->
-        <!--<artifactId>maven-project-info-reports-plugin</artifactId>-->
-        <!--<version>2.9</version>-->
-      <!--</plugin>-->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-project-info-reports-plugin</artifactId>
+        <version>3.0.0</version>
+      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
-        <version>3.0.1</version>
+        <version>${version.maven-javadoc-plugin}</version>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -277,24 +328,24 @@
       </plugin>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
-        <artifactId>cobertura-maven-plugin</artifactId>
-        <version>2.7</version>
-      </plugin>
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>findbugs-maven-plugin</artifactId>
-        <version>3.0.5</version>
-      </plugin>
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
         <artifactId>versions-maven-plugin</artifactId>
-        <!--<version>2.7</version>-->
         <reportSets>
           <reportSet>
             <reports>
               <report>dependency-updates-report</report>
               <report>plugin-updates-report</report>
               <report>property-updates-report</report>
+            </reports>
+          </reportSet>
+        </reportSets>
+      </plugin>
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <reportSets>
+          <reportSet>
+            <reports>
+              <report>report</report>
             </reports>
           </reportSet>
         </reportSets>

@@ -75,8 +75,7 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
      * @param value the value to write
      * @throws IOException if an I/O error occurs
      */
-    protected void unsigned16(final int size, final int value)
-            throws IOException {
+    protected void unsigned16(final int size, final int value) throws IOException {
         BitIoConstraints.requireValidSizeUnsigned16(size);
         final int quotient = size / Byte.SIZE;
         final int remainder = size % Byte.SIZE;
@@ -175,6 +174,7 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
     }
 
     // -----------------------------------------------------------------------------------------------------------------
+
     /**
      * bit flags.
      */

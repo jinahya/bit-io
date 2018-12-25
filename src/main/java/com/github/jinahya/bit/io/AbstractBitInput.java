@@ -135,8 +135,7 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
     }
 
     @Override
-    public long readLong(final boolean unsigned, final int size)
-            throws IOException {
+    public long readLong(final boolean unsigned, final int size) throws IOException {
         BitIoConstraints.requireValidSize(unsigned, 6, size);
         if (!unsigned) {
             long value = 0L - readLong(true, 1);
@@ -188,6 +187,7 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
     }
 
     // -----------------------------------------------------------------------------------------------------------------
+
     /**
      * bit flags.
      */

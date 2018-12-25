@@ -26,24 +26,20 @@ final class BitIoConstraints {
 
     static int requireValidSizeUnsigned8(final int size) {
         if (size < 1) {
-            throw new IllegalArgumentException(
-                    "unsigned8.size(" + size + ") < 1");
+            throw new IllegalArgumentException("unsigned8.size(" + size + ") < 1");
         }
         if (size > Byte.SIZE) {
-            throw new IllegalArgumentException(
-                    "unsigned8.size(" + size + ") > " + Byte.SIZE);
+            throw new IllegalArgumentException("unsigned8.size(" + size + ") > " + Byte.SIZE);
         }
         return size;
     }
 
     static int requireValidSizeUnsigned16(final int size) {
         if (size < 1) {
-            throw new IllegalArgumentException(
-                    "unsigned16.size(" + size + ") < 1");
+            throw new IllegalArgumentException("unsigned16.size(" + size + ") < 1");
         }
         if (size > Short.SIZE) {
-            throw new IllegalArgumentException(
-                    "unsigned16.size(" + size + ") > " + Short.SIZE);
+            throw new IllegalArgumentException("unsigned16.size(" + size + ") > " + Short.SIZE);
         }
         return size;
     }
@@ -54,36 +50,29 @@ final class BitIoConstraints {
 
     private static final int MIN_SIZE = 1;
 
-    private static final int[] MAX_SIZES
-            = new int[MAX_EXPONENT - MIN_EXPONENT + 1];
+    private static final int[] MAX_SIZES = new int[MAX_EXPONENT - MIN_EXPONENT + 1];
 
     static {
         for (int i = 0; i < MAX_SIZES.length; i++) {
-            MAX_SIZES[i] = (int) pow(2, i + MIN_EXPONENT);
+            MAX_SIZES[i] = (int) pow(2.0d, (double) i + MIN_EXPONENT);
         }
     }
 
-    static int requireValidSize(final boolean unsigned,
-                                final int exponent, final int size) {
+    static int requireValidSize(final boolean unsigned, final int exponent, final int size) {
         if (exponent < MIN_EXPONENT) {
-            throw new IllegalArgumentException(
-                    "exponent(" + exponent + ") < " + MIN_EXPONENT);
+            throw new IllegalArgumentException("exponent(" + exponent + ") < " + MIN_EXPONENT);
         }
         if (exponent > MAX_EXPONENT) {
-            throw new IllegalArgumentException(
-                    "exponent(" + exponent + ") > " + MAX_EXPONENT);
+            throw new IllegalArgumentException("exponent(" + exponent + ") > " + MAX_EXPONENT);
         }
         if (size < MIN_SIZE) {
-            throw new IllegalArgumentException(
-                    "size(" + size + ") < " + MIN_SIZE);
+            throw new IllegalArgumentException("size(" + size + ") < " + MIN_SIZE);
         }
         //final int maxSize = (int) pow(2, exponent) - (unsigned ? 1 : 0);
-        final int maxSize
-                = MAX_SIZES[exponent - MIN_EXPONENT] - (unsigned ? 1 : 0);
+        final int maxSize = MAX_SIZES[exponent - MIN_EXPONENT] - (unsigned ? 1 : 0);
         if (size > maxSize) {
-            throw new IllegalArgumentException(
-                    "size(" + size + ") > " + maxSize + ";unsigned=" + unsigned
-                    + ";exponent=" + exponent);
+            throw new IllegalArgumentException("size(" + size + ") > " + maxSize + ";unsigned=" + unsigned
+                                               + ";exponent=" + exponent);
         }
         return size;
     }
@@ -108,7 +97,7 @@ final class BitIoConstraints {
         return requireValidSizeUnsigned16(size);
     }
 
-    // -------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
     private BitIoConstraints() {
         super();
     }

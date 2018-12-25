@@ -26,7 +26,6 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
 
     // -----------------------------------------------------------------------------------------------------------------
     private int octet() throws IOException {
-        //final int octet = read() & 0xFF;
         final int octet = read();
         ++count;
         return octet;

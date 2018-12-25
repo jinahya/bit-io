@@ -68,7 +68,6 @@ final class BitIoConstraints {
         if (size < MIN_SIZE) {
             throw new IllegalArgumentException("size(" + size + ") < " + MIN_SIZE);
         }
-        //final int maxSize = (int) pow(2, exponent) - (unsigned ? 1 : 0);
         final int maxSize = MAX_SIZES[exponent - MIN_EXPONENT] - (unsigned ? 1 : 0);
         if (size > maxSize) {
             throw new IllegalArgumentException("size(" + size + ") > " + maxSize + ";unsigned=" + unsigned

@@ -22,9 +22,24 @@ import java.io.IOException;
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
-public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
+public abstract class AbstractBitOutput implements BitOutput {
 
     // -----------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Writes given unsigned 32-bit integer.
+     *
+     * @param value an unsigned 32-bit integer to write
+     * @throws IOException if an I/O error occurs.
+     */
+    protected abstract void write(int value) throws IOException;
+
+    /**
+     * Writes given octet to {@link #write(int)}.
+     *
+     * @param value the octet to write.
+     * @throws IOException if an I/O error occurs.
+     */
     private void octet(final int value) throws IOException {
         write(value);
         count++;
@@ -175,17 +190,17 @@ public abstract class AbstractBitOutput implements BitOutput, ByteOutput {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * bit flags.
+     * An array booleans for bit flags.
      */
     private final boolean[] flags = new boolean[Byte.SIZE];
 
     /**
-     * bit index to write.
+     * The bit index in {@link #flags} to write.
      */
     private int index = 0;
 
     /**
-     * number of bytes written so far.
+     * The number of bytes written so far.
      */
     private long count = 0L;
 }

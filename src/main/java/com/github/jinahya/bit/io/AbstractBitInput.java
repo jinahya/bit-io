@@ -22,9 +22,24 @@ import java.io.IOException;
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
-public abstract class AbstractBitInput implements BitInput, ByteInput {
+public abstract class AbstractBitInput implements BitInput {
 
     // -----------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Reads an unsigned 32-bit integer.
+     *
+     * @return an unsigned 32-bit integer read
+     * @throws IOException if an I/O error occurs.
+     */
+    protected abstract int read() throws IOException;
+
+    /**
+     * Reads an octet from {@link #read()}.
+     *
+     * @return an octet read.
+     * @throws IOException if an I/O error occurs.
+     */
     private int octet() throws IOException {
         final int octet = read();
         ++count;

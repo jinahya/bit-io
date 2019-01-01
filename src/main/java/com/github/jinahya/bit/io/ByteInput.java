@@ -26,6 +26,7 @@ import java.io.IOException;
 public interface ByteInput {
 
     // -----------------------------------------------------------------------------------------------------------------
+
     /**
      * Reads an unsigned 8-bit value.
      *

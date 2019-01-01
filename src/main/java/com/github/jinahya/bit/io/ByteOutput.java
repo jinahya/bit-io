@@ -26,6 +26,7 @@ import java.io.IOException;
 public interface ByteOutput {
 
     // -----------------------------------------------------------------------------------------------------------------
+
     /**
      * Writes given unsigned 8-bit value.
      *

@@ -48,7 +48,7 @@ public class DefaultBitOutput<T extends ByteOutput> extends AbstractBitOutput {
      * @throws IOException {@inheritDoc}
      */
     @Override
-    public void write(final int value) throws IOException {
+    protected void write(final int value) throws IOException {
         getDelegate().write(value);
     }
 

@@ -49,7 +49,7 @@ public class DefaultBitInput<T extends ByteInput> extends AbstractBitInput {
      * @throws IOException {@inheritDoc}
      */
     @Override
-    public int read() throws IOException {
+    protected int read() throws IOException {
         return getDelegate().read();
     }
 

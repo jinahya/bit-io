@@ -68,6 +68,7 @@ public abstract class AbstractByteInput<T> implements ByteInput {
     }
 
     // -----------------------------------------------------------------------------------------------------------------
+
     /**
      * The underlying byte source.
      */

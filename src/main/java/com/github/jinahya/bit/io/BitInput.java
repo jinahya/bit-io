@@ -25,10 +25,10 @@ import java.io.IOException;
 public interface BitInput {
 
     /**
-     * Reads a 1-bit boolean value. This method read a 1-bit unsigned int and
-     * returns {@code true} for {@code 1} and {@code false} for {@code 0}.
+     * Reads a 1-bit boolean value. This method reads a 1-bit unsigned int and returns {@code true} for {@code 0b1} and
+     * {@code false} for {@code 0b0}.
      *
-     * @return {@code true} for {@code 1}, {@code false} for {@code 0}
+     * @return {@code true} for {@code 0b1}, {@code false} for {@code 0b0}
      * @throws IOException if an I/O error occurs.
      */
     boolean readBoolean() throws IOException;
@@ -36,9 +36,8 @@ public interface BitInput {
     /**
      * Reads a byte value.
      *
-     * @param unsigned a flag for unsigned value.
-     * @param size number of bits for value; between {@code 1} and
-     * {@code 7 + (unsigned ? 0 : 1)}, both inclusive.
+     * @param unsigned a flag for indicating unsigned value; {@code true} for unsigned, {@code false} for signed.
+     * @param size     number of bits for value; between {@code 1} and {@code 7 + (unsigned ? 0 : 1)}, both inclusive.
      * @return a byte value
      * @throws IOException if an I/O error occurs.
      */
@@ -47,9 +46,8 @@ public interface BitInput {
     /**
      * Reads a short value.
      *
-     * @param unsigned a flag for unsigned value
-     * @param size number of bits for value; between {@code 1} and
-     * {@code 15 + (unsigned ? 0 : 1)}, both inclusive.
+     * @param unsigned a flag for indicating unsigned value; {@code true} for unsigned, {@code false} for signed.
+     * @param size     number of bits for value; between {@code 1} and {@code 15 + (unsigned ? 0 : 1)}, both inclusive.
      * @return a short value
      * @throws IOException if an I/O error occurs.
      */
@@ -58,9 +56,8 @@ public interface BitInput {
     /**
      * Reads an int value.
      *
-     * @param unsigned a flag for unsigned value
-     * @param size number of bits for value; between {@code 1} and
-     * {@code 31 + (unsigned ? 0 : 1)}, both inclusive.
+     * @param unsigned a flag for indicating unsigned value; {@code true} for unsigned, {@code false} for signed.
+     * @param size     number of bits for value; between {@code 1} and {@code 31 + (unsigned ? 0 : 1)}, both inclusive.
      * @return an int value
      * @throws IOException if an I/O error occurs.
      */
@@ -69,9 +66,9 @@ public interface BitInput {
     /**
      * Reads a long value.
      *
-     * @param unsigned a flag for unsigned value
-     * @param size number of valid bits for value between {@code 1} and
-     * {@code 63 + (unsigned ? 0 : 1)}, both inclusive.
+     * @param unsigned a flag for indicating unsigned value; {@code true} for unsigned, {@code false} for signed.
+     * @param size     number of valid bits for value between {@code 1} and {@code 63 + (unsigned ? 0 : 1)}, both
+     *                 inclusive.
      * @return a long value
      * @throws IOException if an I/O error occurs.
      */
@@ -80,20 +77,19 @@ public interface BitInput {
     /**
      * Reads a char value.
      *
-     * @param size the number of bits for value; between {@code 1} and
-     * {@code 16}, both inclusive.
+     * @param size the number of bits for value; between {@code 1} and {@code 16}, both inclusive.
      * @return a char value
      * @throws IOException if an I/O error occurs.
      */
     char readChar(int size) throws IOException;
 
     /**
-     * Aligns to given number of bytes.
+     * Aligns to given number of bytes by discarding.
      *
      * @param bytes the number of bytes to align; must be positive.
      * @return the number of bits discarded while aligning
      * @throws IllegalArgumentException if {@code bytes} is less than {@code 1}.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException              if an I/O error occurs.
      */
     long align(int bytes) throws IOException;
 }

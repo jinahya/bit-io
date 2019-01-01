@@ -22,45 +22,54 @@ import java.io.InputStream;
 /**
  * A {@link ByteInput} reads bytes from an {@link InputStream}.
  *
+ * @param <T> stream type parameter
+ * @author Jin Kwon &lt;onacit at gmail.com&gt;
  * @see StreamByteOutput
  */
-public class StreamByteInput extends AbstractByteInput<InputStream> {
+public class StreamByteInput<T extends InputStream> extends AbstractByteInput<T> {
 
-    // -------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
+
     /**
      * Creates a new instance built on top of the specified input stream.
      *
-     * @param source the input stream; {@code null} if it's supposed to be
-     * lazily initialized and set
+     * @param source the input stream; {@code null} if it's supposed to be lazily initialized and set
      */
-    public StreamByteInput(final InputStream source) {
+    public StreamByteInput(final T source) {
         super(source);
     }
 
-    // -------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
+
     /**
-     * {@inheritDoc} The {@code read()} method of {@code StreamByteInput} class
-     * invokes {@link InputStream#read()} on {@link #source} and returns the
-     * result. Override this method if the {@link #source} is supposed to be
-     * lazily initialized and set.
+     * {@inheritDoc} The {@code read()} method of {@code StreamByteInput} class invokes {@link InputStream#read()} on
+     * what {@link #getSource()} returns and returns the result. Override this method if the {@link #source} is supposed
+     * to be lazily initialized and set.
      *
      * @return {@inheritDoc}
      * @throws IOException {@inheritDoc}
-     * @see #source
+     * @see #getSource()
      * @see InputStream#read()
      */
     @Override
     public int read() throws IOException {
-        final int value = source.read();
+        final int value = getSource().read();
         if (value == -1) {
             throw new EOFException();
         }
         return value;
     }
 
-    // ------------------------------------------------------------------ source
+    // ---------------------------------------------------------------------------------------------------------- source
+
+    /**
+     * {@inheritDoc}
+     *
+     * @param source {@inheritDoc}
+     * @return {@inheritDoc}
+     */
     @Override
-    public StreamByteInput source(final InputStream source) {
-        return (StreamByteInput) super.source(source);
+    public StreamByteInput<T> source(final T source) {
+        return (StreamByteInput<T>) super.source(source);
     }
 }

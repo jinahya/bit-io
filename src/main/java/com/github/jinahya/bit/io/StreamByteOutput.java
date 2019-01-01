@@ -21,41 +21,50 @@ import java.io.OutputStream;
 /**
  * A {@link ByteOutput} writes bytes to an {@link OutputStream}.
  *
+ * @param <T> stream type parameter
+ * @author Jin Kwon &lt;onacit at gmail.com&gt;
  * @see StreamByteInput
  */
-public class StreamByteOutput extends AbstractByteOutput<OutputStream> {
+public class StreamByteOutput<T extends OutputStream> extends AbstractByteOutput<T> {
 
-    // -------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
+
     /**
      * Creates a new instance built on top of the specified output stream.
      *
-     * @param target the output stream; {@code null} if it's supposed to be
-     * lazily initialized and set.
+     * @param target the output stream; {@code null} if it's supposed to be lazily initialized and set.
      */
-    public StreamByteOutput(final OutputStream target) {
+    public StreamByteOutput(final T target) {
         super(target);
     }
 
-    // -------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
+
     /**
-     * {@inheritDoc} The {@code write(int)} method of {@code StreamByteOutput}
-     * class invokes {@link OutputStream#write(int)} on {@link #target} with
-     * given {@code value}. Override this method if the {@link #target} is
-     * supposed to be lazily initialized and set.
+     * {@inheritDoc} The {@code write(int)} method of {@code StreamByteOutput} class invokes {@link
+     * OutputStream#write(int)} with given {@code value} on what {@link #getTarget()} returns. Override this method if
+     * the {@link #target} is supposed to be lazily initialized and set.
      *
      * @param value {@inheritDoc}
      * @throws IOException {@inheritDoc}
-     * @see #target
+     * @see #getTarget()
      * @see OutputStream#write(int)
      */
     @Override
     public void write(final int value) throws IOException {
-        target.write(value);
+        getTarget().write(value);
     }
 
-    // ------------------------------------------------------------------ target
+    // ---------------------------------------------------------------------------------------------------------- target
+
+    /**
+     * {@inheritDoc}
+     *
+     * @param target {@inheritDoc}
+     * @return {@inheritDoc}
+     */
     @Override
-    public StreamByteOutput target(final OutputStream target) {
-        return (StreamByteOutput) super.target(target);
+    public StreamByteOutput<T> target(final T target) {
+        return (StreamByteOutput<T>) super.target(target);
     }
 }

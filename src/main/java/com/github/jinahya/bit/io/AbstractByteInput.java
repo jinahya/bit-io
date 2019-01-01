@@ -18,24 +18,25 @@ package com.github.jinahya.bit.io;
 /**
  * An abstract class for implementing {@code ByteInput}.
  *
- * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  * @param <T> byte source type parameter
+ * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
 public abstract class AbstractByteInput<T> implements ByteInput {
 
-    // -------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
+
     /**
-     * Creates a new instance wrapping specified byte source.
+     * Creates a new instance built on top of specified byte source.
      *
-     * @param source the underlying byte source or {@code null} if it is
-     * intended to be lazily initialized and set.
+     * @param source the underlying byte source or {@code null} if it is intended to be lazily initialized and set.
      */
     public AbstractByteInput(final T source) {
         super();
         this.source = source;
     }
 
-    // ------------------------------------------------------------------ source
+    // ---------------------------------------------------------------------------------------------------------- source
+
     /**
      * Returns the current value of {@link #source}.
      *
@@ -55,8 +56,7 @@ public abstract class AbstractByteInput<T> implements ByteInput {
     }
 
     /**
-     * Replaces the current value of {@link #source} with given and returns this
-     * instance.
+     * Replaces the current value of {@link #source} with given and returns this instance.
      *
      * @param source new value for {@link #source}
      * @return this instance
@@ -67,7 +67,8 @@ public abstract class AbstractByteInput<T> implements ByteInput {
         return this;
     }
 
-    // -------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
+
     /**
      * The underlying byte source.
      */

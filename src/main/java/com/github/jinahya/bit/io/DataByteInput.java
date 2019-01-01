@@ -19,41 +19,47 @@ import java.io.DataInput;
 import java.io.IOException;
 
 /**
- * An {@link ByteInput} uses an instance of {@link DataInput} as its
- * {@link #source}.
+ * A {@link ByteInput} uses an instance of {@link DataInput} as its {@link #source}.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  * @see DataByteOutput
  */
 public class DataByteInput extends AbstractByteInput<DataInput> {
 
-    // -------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
+
     /**
-     * Creates a new instance with given {@code source}.
+     * Creates a new instance built on top of given {@code source}.
      *
-     * @param source the byte source; {@code null} if it's supposed to be lazily
-     * initialized and set
+     * @param source the byte source; {@code null} if it's supposed to be lazily initialized and set
      */
     public DataByteInput(final DataInput source) {
         super(source);
     }
 
-    // -------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
+
     /**
-     * {@inheritDoc} The {@code read()} method of {@code DataByteInput} class
-     * invokes {@link DataInput#readUnsignedByte()} on {@link #source} and
-     * returns the result. Override this method if the {@link #source} is
-     * supposed to be lazily initialized and set.
+     * {@inheritDoc} The {@code read()} method of {@code DataByteInput} class invokes {@link
+     * DataInput#readUnsignedByte()} on {@link #source} and returns the result. Override this method if the {@link
+     * #source} is supposed to be lazily initialized and set.
      *
      * @return {@inheritDoc }
      * @throws IOException {@inheritDoc }
      */
     @Override
     public int read() throws IOException {
-        return source.readUnsignedByte();
+        return getSource().readUnsignedByte();
     }
 
-    // -------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------------------------------------- source
+
+    /**
+     * {@inheritDoc}
+     *
+     * @param source {@inheritDoc}
+     * @return {@inheritDoc}
+     */
     @Override
     public DataByteInput source(final DataInput source) {
         return (DataByteInput) super.source(source);

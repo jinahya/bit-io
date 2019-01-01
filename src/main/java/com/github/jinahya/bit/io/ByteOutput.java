@@ -18,18 +18,19 @@ package com.github.jinahya.bit.io;
 import java.io.IOException;
 
 /**
- * An interface for consuming bytes.
+ * An interface for writing bytes.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
 //@FunctionalInterface
 public interface ByteOutput {
 
+    // -----------------------------------------------------------------------------------------------------------------
+
     /**
      * Writes given unsigned 8-bit value.
      *
-     * @param value an unsigned 8-bit value between {@code 0} and {@code 255},
-     * both inclusive.
+     * @param value an unsigned 8-bit value between {@code 0} and {@code 255}, both inclusive.
      * @throws IOException if an I/O error occurs.
      */
     void write(int value) throws IOException;

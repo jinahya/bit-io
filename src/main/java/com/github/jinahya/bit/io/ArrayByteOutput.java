@@ -18,49 +18,50 @@ package com.github.jinahya.bit.io;
 import java.io.IOException;
 
 /**
- * A {@code ByteOutput} implementation uses a byte array.
+ * A byte output writes byte to an array of bytes.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
 public class ArrayByteOutput extends AbstractByteOutput<byte[]> {
 
-    // -------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
+
     /**
      * Creates a new instance with given parameters.
      *
      * @param target a byte array
-     * @param index array index to write
-     * @param limit array index to limit
+     * @param index  the index in array to write
+     * @param limit  the index in array that {@link #index} can exceed
      */
-    public ArrayByteOutput(final byte[] target, final int index,
-                           final int limit) {
+    public ArrayByteOutput(final byte[] target, final int index, final int limit) {
         super(target);
         this.index = index;
         this.limit = limit;
     }
 
     // -------------------------------------------------------------------------
+
     /**
-     * {@inheritDoc} The {@code write(int)} method of {@code ArrayByteOutput}
-     * sets {@code target[index++]} with given value. Override this method if
-     * either {@link #target}, {@link #index}, or {@link #limit} needs to be
-     * lazily initialized or adjusted.
+     * {@inheritDoc} The {@code write(int)} method of {@code ArrayByteOutput} class sets {@code getTarget[getIndex()]}
+     * with given value and increments the value of {@link #index} via {@link #setIndex(int)}. Override this method if
+     * either {@link #target}, {@link #index}, or {@link #limit} needs to be lazily initialized and/or adjusted.
      *
      * @param value {@inheritDoc}
-     * @throws IOException {@inheritDoc}
-     * @throws IllegalStateException if {@link #index} is equal to or greater
-     * than {@link #limit}
+     * @throws IOException           {@inheritDoc}
+     * @throws IllegalStateException if the value {@link #getIndex()} returns is equal to or greater than the value
+     *                               {@link #getLimit()} returns.
      */
     @Override
     public void write(final int value) throws IOException {
-        if (index >= limit) {
-            throw new IllegalStateException(
-                    "index(" + index + ") >= limit(" + limit + ")");
+        if (getIndex() >= getLimit()) {
+            throw new IllegalStateException("index(" + getIndex() + ") >= limit(" + getLimit() + ")");
         }
-        target[index++] = (byte) value;
+        getTarget()[getIndex()] = (byte) value;
+        setIndex(getIndex() + 1);
     }
 
-    // ------------------------------------------------------------------ target
+    // ---------------------------------------------------------------------------------------------------------- target
+
     /**
      * Replaces the {@link #target} with given and returns self.
      *
@@ -72,7 +73,8 @@ public class ArrayByteOutput extends AbstractByteOutput<byte[]> {
         return (ArrayByteOutput) super.target(target);
     }
 
-    // ------------------------------------------------------------------- index
+    // ----------------------------------------------------------------------------------------------------------- index
+
     /**
      * Returns the current value of {@link #index}
      *
@@ -102,21 +104,39 @@ public class ArrayByteOutput extends AbstractByteOutput<byte[]> {
         return this;
     }
 
-    // ------------------------------------------------------------------- limit
+    // ----------------------------------------------------------------------------------------------------------- limit
+
+    /**
+     * Returns the current value of {@link #limit}.
+     *
+     * @return the current value of {@link #limit}
+     */
     public int getLimit() {
         return limit;
     }
 
+    /**
+     * Replaces the current value of {@link #limit} with given.
+     *
+     * @param limit new value for {@link #limit}
+     */
     public void setLimit(int limit) {
         this.limit = limit;
     }
 
+    /**
+     * Replaces the current value of {@link #limit} with given and returns this instance.
+     *
+     * @param limit new value for {@link #limit}
+     * @return this instance.
+     */
     public ArrayByteOutput limit(final int limit) {
         setLimit(limit);
         return this;
     }
 
-    // -------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
+
     /**
      * The index in the {@link #target} to write.
      */

@@ -22,28 +22,44 @@ import java.io.IOException;
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
-public abstract class AbstractBitInput implements BitInput, ByteInput {
+public abstract class AbstractBitInput implements BitInput {
 
-    // -------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Reads an unsigned 32-bit integer.
+     *
+     * @return an unsigned 32-bit integer read
+     * @throws IOException if an I/O error occurs.
+     */
+    protected abstract int read() throws IOException;
+
+    /**
+     * Reads an octet from {@link #read()}.
+     *
+     * @return an octet read.
+     * @throws IOException if an I/O error occurs.
+     */
     private int octet() throws IOException {
-        final int octet = read() & 0xFF;
+        final int octet = read();
         ++count;
         return octet;
     }
 
+    // -----------------------------------------------------------------------------------------------------------------
+
     /**
      * Reads an unsigned value whose maximum size is {@code 8}.
      *
-     * @param size the number of bits for the value; between {@code 1} and
-     * {@code 8}, both inclusive.
+     * @param size the number of bits for the value; between {@code 1} and {@code 8}, both inclusive.
      * @return an unsigned byte value.
      * @throws IOException if an I/O error occurs.
      */
     protected int unsigned8(final int size) throws IOException {
         BitIoConstraints.requireValidSizeUnsigned8(size);
-        if (index == 8) {
+        if (index == Byte.SIZE) {
             int octet = octet();
-            if (size == 8) {
+            if (size == Byte.SIZE) {
                 return octet;
             }
             for (int i = 7; i >= 0; i--) {
@@ -52,7 +68,7 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
             }
             index = 0;
         }
-        final int available = 8 - index;
+        final int available = Byte.SIZE - index;
         final int required = size - available;
         if (required > 0) {
             return (unsigned8(available) << required) | unsigned8(required);
@@ -60,7 +76,7 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
         int value = 0x00;
         for (int i = 0; i < size; i++) {
             value <<= 1;
-            value |= (flags[index++] ? 0x01 : 0x00);
+            value |= flags[index++] ? 0x01 : 0x00;
         }
         return value;
     }
@@ -68,19 +84,18 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
     /**
      * Reads an unsigned value whose maximum size is {@code 16}.
      *
-     * @param size the number of bits for the value; between {@code 1} and
-     * {@code 16}, both inclusive.
+     * @param size the number of bits for the value; between {@code 1} and {@code 16}, both inclusive.
      * @return an unsigned short value.
      * @throws IOException if an I/O error occurs.
      */
     protected int unsigned16(final int size) throws IOException {
         BitIoConstraints.requireValidSizeUnsigned16(size);
         int value = 0x00;
-        final int quotient = size / 8;
-        final int remainder = size % 8;
+        final int quotient = size / Byte.SIZE;
+        final int remainder = size % Byte.SIZE;
         for (int i = 0; i < quotient; i++) {
             value <<= 8;
-            value |= unsigned8(8);
+            value |= unsigned8(Byte.SIZE);
         }
         if (remainder > 0) {
             value <<= remainder;
@@ -89,32 +104,30 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
         return value;
     }
 
+    // -----------------------------------------------------------------------------------------------------------------
     @Override
     public boolean readBoolean() throws IOException {
         return readInt(true, 1) == 1;
     }
 
     @Override
-    public byte readByte(final boolean unsigned, final int size)
-            throws IOException {
+    public byte readByte(final boolean unsigned, final int size) throws IOException {
         BitIoConstraints.requireValidSize(unsigned, 3, size);
         return (byte) readInt(unsigned, size);
     }
 
     @Override
-    public short readShort(final boolean unsigned, final int size)
-            throws IOException {
+    public short readShort(final boolean unsigned, final int size) throws IOException {
         BitIoConstraints.requireValidSize(unsigned, 4, size);
         return (short) readInt(unsigned, size);
     }
 
     @Override
-    public int readInt(final boolean unsigned, final int size)
-            throws IOException {
+    public int readInt(final boolean unsigned, final int size) throws IOException {
         BitIoConstraints.requireValidSize(unsigned, 5, size);
         if (!unsigned) {
-            final int usize = size - 1;
             int value = 0 - readInt(true, 1);
+            final int usize = size - 1;
             if (usize > 0) {
                 value <<= usize;
                 value |= readInt(true, usize);
@@ -122,11 +135,11 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
             return value;
         }
         int value = 0x00;
-        final int quotient = size / 16;
-        final int remainder = size % 16;
+        final int quotient = size / Short.SIZE;
+        final int remainder = size % Short.SIZE;
         for (int i = 0; i < quotient; i++) {
-            value <<= 16;
-            value |= unsigned16(16);
+            value <<= Short.SIZE;
+            value |= unsigned16(Short.SIZE);
         }
         if (remainder > 0) {
             value <<= remainder;
@@ -136,12 +149,11 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
     }
 
     @Override
-    public long readLong(final boolean unsigned, final int size)
-            throws IOException {
+    public long readLong(final boolean unsigned, final int size) throws IOException {
         BitIoConstraints.requireValidSize(unsigned, 6, size);
         if (!unsigned) {
-            final int usize = size - 1;
             long value = 0L - readLong(true, 1);
+            final int usize = size - 1;
             if (usize > 0) {
                 value <<= usize;
                 value |= readLong(true, usize);
@@ -175,29 +187,30 @@ public abstract class AbstractBitInput implements BitInput, ByteInput {
         }
         long bits = 0; // number of bits to be discarded
         // discard remained bits in current octet.
-        if (index < 8) {
-            bits += (8 - index);
+        if (index < Byte.SIZE) {
+            bits += Byte.SIZE - index;
             unsigned8((int) bits); // count increments
         }
         final long remainder = count % bytes;
         long octets = (remainder > 0 ? bytes : 0) - remainder;
         for (; octets > 0; octets--) {
-            unsigned8(8);
-            bits += 8;
+            unsigned8(Byte.SIZE);
+            bits += Byte.SIZE;
         }
         return bits;
     }
 
-    // -------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
+
     /**
      * bit flags.
      */
-    private final boolean[] flags = new boolean[8];
+    private final boolean[] flags = new boolean[Byte.SIZE];
 
     /**
      * The next bit index to read.
      */
-    private int index = 8;
+    private int index = Byte.SIZE;
 
     /**
      * The number of bytes read so far.

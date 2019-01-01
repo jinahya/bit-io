@@ -19,31 +19,31 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 
 /**
- * A {@link ByteOutput} uses an instance of {@link ByteBuffer} as its
- * {@link #target}.
+ * A {@link ByteOutput} uses an instance of {@link ByteBuffer} as its {@link #target}.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  * @see BufferByteInput
  */
 public class BufferByteOutput extends AbstractByteOutput<ByteBuffer> {
 
-    // -------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
+
     /**
-     * Creates a new instance with given {@code ByteBufer}.
+     * Creates a new instance built on top of given {@code ByteBuffer}.
      *
-     * @param buffer the {@code ByteBuffer} to which bytes are written;
-     * {@code null} if it's supposed to be lazily initialized and set.
+     * @param target the {@code ByteBuffer} to which bytes are written; {@code null} if it's supposed to be lazily
+     *               initialized and set.
      */
-    public BufferByteOutput(final ByteBuffer buffer) {
-        super(buffer);
+    public BufferByteOutput(final ByteBuffer target) {
+        super(target);
     }
 
-    // -------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
+
     /**
-     * {@inheritDoc} The {@code write(int)} method of {@code BufferByteOutput}
-     * class invokes {@link ByteBuffer#put(byte)} on {@link #target} with given
-     * {@code value}. Override this method if the {@link #target} is supposed to
-     * be lazily initialized or adjusted.
+     * {@inheritDoc} The {@code write(int)} method of {@code BufferByteOutput} class invokes {@link
+     * ByteBuffer#put(byte)} on what {@link #getTarget()} gives with given {@code value}. Override this method if the
+     * {@link #target} is supposed to be lazily initialized or adjusted.
      *
      * @param value {@inheritDoc}
      * @throws IOException {@inheritDoc}
@@ -52,10 +52,17 @@ public class BufferByteOutput extends AbstractByteOutput<ByteBuffer> {
      */
     @Override
     public void write(final int value) throws IOException {
-        target.put((byte) value);
+        getTarget().put((byte) value);
     }
 
-    // ------------------------------------------------------------------ target
+    // ---------------------------------------------------------------------------------------------------------- target
+
+    /**
+     * {@inheritDoc}
+     *
+     * @param target {@inheritDoc}
+     * @return {@inheritDoc}
+     */
     @Override
     public BufferByteOutput target(final ByteBuffer target) {
         return (BufferByteOutput) super.target(target);

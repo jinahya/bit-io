@@ -18,18 +18,19 @@ package com.github.jinahya.bit.io;
 import java.io.IOException;
 
 /**
- * An interface for suppling bytes.
+ * An interface for reading bytes.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
 //@FunctionalInterface
 public interface ByteInput {
 
+    // -----------------------------------------------------------------------------------------------------------------
+
     /**
      * Reads an unsigned 8-bit value.
      *
-     * @return an unsigned 8-bit value; between {@code 0} and {@code 255}, both
-     * inclusive.
+     * @return an unsigned 8-bit value; between {@code 0} and {@code 255}, both inclusive.
      * @throws IOException if an I/O error occurs.
      */
     int read() throws IOException;

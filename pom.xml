@@ -5,23 +5,27 @@
   <parent>
     <groupId>com.github.jinahya</groupId>
     <artifactId>jinahya-parent</artifactId>
-    <version>0.7.5</version>
+    <version>0.8.0</version>
   </parent>
 
   <groupId>com.github.jinahya</groupId>
   <artifactId>bit-io</artifactId>
-  <version>1.3.7</version>
+  <version>1.3.9</version>
   <packaging>jar</packaging>
 
   <name>${project.artifactId}</name>
   <description>library for reading/writing non-octet aligned values</description>
-  <url>https://github.com/jinahya/${project.version}</url>
+  <url>https://github.com/jinahya/${project.artifactId}</url>
+
+  <prerequisites>
+    <maven>3.3.9</maven>
+  </prerequisites>
 
   <scm>
     <connection>scm:git:git@github.com:jinahya/${project.artifactId}.git</connection>
     <developerConnection>scm:git:git@github.com:jinahya/${project.artifactId}.git</developerConnection>
     <url>https://github.com/jinahya/${project.artifactId}</url>
-    <tag>1.3.7</tag>
+    <tag>1.3.9</tag>
   </scm>
   <issueManagement>
     <system>GitHub Issues</system>
@@ -33,47 +37,52 @@
     <maven.compiler.target>1.6</maven.compiler.target>
     <maven.compiler.testSource>1.8</maven.compiler.testSource>
     <maven.compiler.testTarget>1.8</maven.compiler.testTarget>
+    <version.org.junit.jupiter>5.3.2</version.org.junit.jupiter>
     <project.build.outputDirectory.retrotranslated13>${project.build.directory}/classes-retrotranslated13</project.build.outputDirectory.retrotranslated13>
     <project.build.outputDirectory.retrotranslated14>${project.build.directory}/classes-retrotranslated14</project.build.outputDirectory.retrotranslated14>
-    <animal-sniffer.version>1.15</animal-sniffer.version>
-    <github.site.noJekyll>true</github.site.noJekyll>
   </properties>
 
   <dependencies>
     <dependency>
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>
-      <version>1.2.1</version>
+      <version>1.2.3</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>com.google.inject</groupId>
       <artifactId>guice</artifactId>
-      <version>4.1.0</version>
+      <version>4.2.2</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>commons-io</groupId>
       <artifactId>commons-io</artifactId>
-      <version>2.5</version>
+      <version>2.6</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
-      <version>3.5</version>
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-api</artifactId>
+      <version>${version.org.junit.jupiter}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-engine</artifactId>
+      <version>${version.org.junit.jupiter}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
-      <version>2.7.13</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.testng</groupId>
-      <artifactId>testng</artifactId>
-      <version>6.11</version>
+      <version>2.23.4</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
@@ -84,7 +93,17 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-site-plugin</artifactId>
-          <version>3.6</version>
+          <version>3.7.1</version>
+        </plugin>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>versions-maven-plugin</artifactId>
+          <version>2.7</version>
+        </plugin>
+        <plugin>
+          <groupId>org.jacoco</groupId>
+          <artifactId>jacoco-maven-plugin</artifactId>
+          <version>0.8.2</version>
         </plugin>
       </plugins>
     </pluginManagement>
@@ -141,8 +160,18 @@
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.8.0</version>
+        <configuration>
+          <compilerArgs>
+            <arg>-Xlint</arg>
+          </compilerArgs>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
-        <version>3.0.2</version>
+        <version>3.1.1</version>
         <executions>
           <execution>
             <id>retrotranslated13</id>
@@ -171,24 +200,15 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
-        <version>2.19.1</version>
-        <configuration>
-          <argLine>-Xms1024m -Xmx2048m</argLine> <!-- travis -->
-          <properties>
-            <property>
-              <name>listeners</name>
-              <value>com.github.jinahya.bit.io.testng.InvokedMethodListener,com.github.jinahya.bit.io.testng.TestListener</value>
-            </property>
-          </properties>
-        </configuration>
+        <version>2.22.1</version>
       </plugin>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>animal-sniffer-maven-plugin</artifactId>
-        <version>${animal-sniffer.version}</version>
+        <version>1.17</version>
         <executions>
           <execution>
-            <id>check-signature-java16</id>
+            <id>check-signature-java16:1.1</id>
             <phase>process-classes</phase>
             <goals>
               <goal>check</goal>
@@ -202,7 +222,7 @@
             </configuration>
           </execution>
           <execution>
-            <id>check-signature-android-api-level-9</id>
+            <id>check-signature-android-api-level-9:2.3.1_r2</id>
             <phase>process-classes</phase>
             <goals>
               <goal>check</goal>
@@ -217,34 +237,80 @@
           </execution>
         </executions>
       </plugin>
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>default-prepare-agent</id>
+            <goals>
+              <goal>prepare-agent</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>default-report</id>
+            <goals>
+              <goal>report</goal>
+            </goals>
+          </execution>
+          <!--<execution>-->
+          <!--<id>default-check</id>-->
+          <!--<goals>-->
+          <!--<goal>check</goal>-->
+          <!--</goals>-->
+          <!--<configuration>-->
+          <!--&lt;!&ndash;<rules>&ndash;&gt;-->
+          <!--&lt;!&ndash;&lt;!&ndash; implementation is needed only for Maven 2 &ndash;&gt;&ndash;&gt;-->
+          <!--&lt;!&ndash;<rule implementation="org.jacoco.maven.RuleConfiguration">&ndash;&gt;-->
+          <!--&lt;!&ndash;<element>BUNDLE</element>&ndash;&gt;-->
+          <!--&lt;!&ndash;<limits>&ndash;&gt;-->
+          <!--&lt;!&ndash;&lt;!&ndash; implementation is needed only for Maven 2 &ndash;&gt;&ndash;&gt;-->
+          <!--&lt;!&ndash;<limit implementation="org.jacoco.report.check.Limit">&ndash;&gt;-->
+          <!--&lt;!&ndash;<counter>COMPLEXITY</counter>&ndash;&gt;-->
+          <!--&lt;!&ndash;<value>COVEREDRATIO</value>&ndash;&gt;-->
+          <!--&lt;!&ndash;<minimum>0.60</minimum>&ndash;&gt;-->
+          <!--&lt;!&ndash;</limit>&ndash;&gt;-->
+          <!--&lt;!&ndash;</limits>&ndash;&gt;-->
+          <!--&lt;!&ndash;</rule>&ndash;&gt;-->
+          <!--&lt;!&ndash;</rules>&ndash;&gt;-->
+          <!--</configuration>-->
+          <!--</execution>-->
+        </executions>
+      </plugin>
     </plugins>
   </build>
 
   <reporting>
     <plugins>
       <plugin>
+        <groupId>com.github.spotbugs</groupId>
+        <artifactId>spotbugs-maven-plugin</artifactId>
+        <version>3.1.10</version>
+      </plugin>
+      <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jxr-plugin</artifactId>
-        <version>2.5</version>
+        <version>3.0.0</version>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-checkstyle-plugin</artifactId>
-        <version>2.17</version>
+        <version>3.0.0</version>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-project-info-reports-plugin</artifactId>
-        <version>2.9</version>
+        <version>3.0.0</version>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
+        <version>${version.maven-javadoc-plugin}</version>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-pmd-plugin</artifactId>
-        <version>3.7</version>
+        <version>3.11.0</version>
         <configuration>
           <targetJdk>1.6</targetJdk>
           <skipEmptyReport>false</skipEmptyReport> <!-- https://issues.apache.org/jira/browse/MPMD-225 -->
@@ -252,24 +318,24 @@
       </plugin>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
-        <artifactId>cobertura-maven-plugin</artifactId>
-        <version>2.7</version>
-      </plugin>
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>findbugs-maven-plugin</artifactId>
-        <version>3.0.4</version>
-      </plugin>
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
         <artifactId>versions-maven-plugin</artifactId>
-        <version>2.3</version>
         <reportSets>
           <reportSet>
             <reports>
               <report>dependency-updates-report</report>
               <report>plugin-updates-report</report>
               <report>property-updates-report</report>
+            </reports>
+          </reportSet>
+        </reportSets>
+      </plugin>
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <reportSets>
+          <reportSet>
+            <reports>
+              <report>report</report>
             </reports>
           </reportSet>
         </reportSets>

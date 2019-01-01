@@ -39,10 +39,8 @@
     <maven.compiler.testSource>1.8</maven.compiler.testSource>
     <maven.compiler.testTarget>1.8</maven.compiler.testTarget>
     <version.org.junit.jupiter>5.3.2</version.org.junit.jupiter>
-    <project.build.outputDirectory.retrotranslated13>${project.build.directory}/classes-retrotranslated13
-    </project.build.outputDirectory.retrotranslated13>
-    <project.build.outputDirectory.retrotranslated14>${project.build.directory}/classes-retrotranslated14
-    </project.build.outputDirectory.retrotranslated14>
+    <project.build.outputDirectory.retrotranslated13>${project.build.directory}/classes-retrotranslated13</project.build.outputDirectory.retrotranslated13>
+    <project.build.outputDirectory.retrotranslated14>${project.build.directory}/classes-retrotranslated14</project.build.outputDirectory.retrotranslated14>
   </properties>
 
   <dependencies>
@@ -269,26 +267,26 @@
             </goals>
           </execution>
           <!--<execution>-->
-            <!--<id>default-check</id>-->
-            <!--<goals>-->
-              <!--<goal>check</goal>-->
-            <!--</goals>-->
-            <!--<configuration>-->
-              <!--&lt;!&ndash;<rules>&ndash;&gt;-->
-                <!--&lt;!&ndash;&lt;!&ndash; implementation is needed only for Maven 2 &ndash;&gt;&ndash;&gt;-->
-                <!--&lt;!&ndash;<rule implementation="org.jacoco.maven.RuleConfiguration">&ndash;&gt;-->
-                  <!--&lt;!&ndash;<element>BUNDLE</element>&ndash;&gt;-->
-                  <!--&lt;!&ndash;<limits>&ndash;&gt;-->
-                    <!--&lt;!&ndash;&lt;!&ndash; implementation is needed only for Maven 2 &ndash;&gt;&ndash;&gt;-->
-                    <!--&lt;!&ndash;<limit implementation="org.jacoco.report.check.Limit">&ndash;&gt;-->
-                      <!--&lt;!&ndash;<counter>COMPLEXITY</counter>&ndash;&gt;-->
-                      <!--&lt;!&ndash;<value>COVEREDRATIO</value>&ndash;&gt;-->
-                      <!--&lt;!&ndash;<minimum>0.60</minimum>&ndash;&gt;-->
-                    <!--&lt;!&ndash;</limit>&ndash;&gt;-->
-                  <!--&lt;!&ndash;</limits>&ndash;&gt;-->
-                <!--&lt;!&ndash;</rule>&ndash;&gt;-->
-              <!--&lt;!&ndash;</rules>&ndash;&gt;-->
-            <!--</configuration>-->
+          <!--<id>default-check</id>-->
+          <!--<goals>-->
+          <!--<goal>check</goal>-->
+          <!--</goals>-->
+          <!--<configuration>-->
+          <!--&lt;!&ndash;<rules>&ndash;&gt;-->
+          <!--&lt;!&ndash;&lt;!&ndash; implementation is needed only for Maven 2 &ndash;&gt;&ndash;&gt;-->
+          <!--&lt;!&ndash;<rule implementation="org.jacoco.maven.RuleConfiguration">&ndash;&gt;-->
+          <!--&lt;!&ndash;<element>BUNDLE</element>&ndash;&gt;-->
+          <!--&lt;!&ndash;<limits>&ndash;&gt;-->
+          <!--&lt;!&ndash;&lt;!&ndash; implementation is needed only for Maven 2 &ndash;&gt;&ndash;&gt;-->
+          <!--&lt;!&ndash;<limit implementation="org.jacoco.report.check.Limit">&ndash;&gt;-->
+          <!--&lt;!&ndash;<counter>COMPLEXITY</counter>&ndash;&gt;-->
+          <!--&lt;!&ndash;<value>COVEREDRATIO</value>&ndash;&gt;-->
+          <!--&lt;!&ndash;<minimum>0.60</minimum>&ndash;&gt;-->
+          <!--&lt;!&ndash;</limit>&ndash;&gt;-->
+          <!--&lt;!&ndash;</limits>&ndash;&gt;-->
+          <!--&lt;!&ndash;</rule>&ndash;&gt;-->
+          <!--&lt;!&ndash;</rules>&ndash;&gt;-->
+          <!--</configuration>-->
           <!--</execution>-->
         </executions>
       </plugin>

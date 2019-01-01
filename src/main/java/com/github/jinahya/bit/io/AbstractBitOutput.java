@@ -75,7 +75,7 @@ public abstract class AbstractBitOutput implements BitOutput {
             int octet = 0x00;
             for (int i = 0; i < Byte.SIZE; i++) {
                 octet <<= 1;
-                octet |= (flags[i] ? 0x01 : 0x00);
+                octet |= flags[i] ? 0x01 : 0x00;
             }
             octet(octet);
             index = 0;
@@ -175,7 +175,7 @@ public abstract class AbstractBitOutput implements BitOutput {
         long bits = 0; // number of bits to be padded
         // pad remained bits into current octet
         if (index > 0) {
-            bits += (Byte.SIZE - index);
+            bits += Byte.SIZE - index;
             unsigned8((int) bits, 0x00); // count incremented
         }
         final long remainder = count % bytes;

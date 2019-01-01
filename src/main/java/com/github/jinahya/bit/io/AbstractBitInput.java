@@ -76,7 +76,7 @@ public abstract class AbstractBitInput implements BitInput {
         int value = 0x00;
         for (int i = 0; i < size; i++) {
             value <<= 1;
-            value |= (flags[index++] ? 0x01 : 0x00);
+            value |= flags[index++] ? 0x01 : 0x00;
         }
         return value;
     }
@@ -188,7 +188,7 @@ public abstract class AbstractBitInput implements BitInput {
         long bits = 0; // number of bits to be discarded
         // discard remained bits in current octet.
         if (index < Byte.SIZE) {
-            bits += (Byte.SIZE - index);
+            bits += Byte.SIZE - index;
             unsigned8((int) bits); // count increments
         }
         final long remainder = count % bytes;

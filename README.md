@@ -14,13 +14,10 @@ bit-io
 [![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=com.github.jinahya%3Abit-io%3Adevelop&metric=sqale_index)](https://sonarcloud.io/component_measures?id=com.github.jinahya%3Abit-io%3Adevelop&metric=Maintainability)
 [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=com.github.jinahya%3Abit-io%3Adevelop&metric=vulnerabilities)](https://sonarcloud.io/component_measures?id=com.github.jinahya%3Abit-io%3Adevelop&metric=vulnerabilities)
 
-[![Codeship Status for jinahya/bit-io](https://app.codeship.com/projects/7e73e9f0-73f4-0135-cdd9-5adc5c5e3db7/status?branch=develop)](https://app.codeship.com/projects/243842)
-[![Dependency Status](https://www.versioneye.com/user/projects/563ccc514d415e001e00009b/badge.svg)](https://www.versioneye.com/user/projects/563ccc514d415e001e00009b)
-[![Known Vulnerabilities](https://snyk.io/test/github/jinahya/bit-io/badge.svg?targetFile=pom.xml)](https://snyk.io/test/github/jinahya/bit-io?targetFile=pom.xml)
 [![Sputnik](https://sputnik.ci/conf/badge)](https://sputnik.ci/app#/builds/jinahya/bit-io)
+
 [![Maven Central](https://img.shields.io/maven-central/v/com.github.jinahya/bit-io.svg)](http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22bit-io%22)
 [![Javadocs](http://www.javadoc.io/badge/com.github.jinahya/bit-io.svg)](http://www.javadoc.io/doc/com.github.jinahya/bit-io)
-[![Codacy Badge](https://api.codacy.com/project/badge/grade/53ae4f92af8246a48cbe8ecf0c04a002)](https://www.codacy.com/app/jinahya/bit-io)
 
 A library for reading/writing non octet aligned values such as `1-bit boolean` or `17-bit unsigned int`.
 

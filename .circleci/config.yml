@@ -3,7 +3,7 @@ jobs:
   build:
     working_directory: ~/bit-io
     docker:
-      g- image: circleci/openjdk:11.0.1-jdk-stretch
+      - image: circleci/openjdk:11.0.1-jdk-stretch
     steps:
       - checkout
       - restore_cache:

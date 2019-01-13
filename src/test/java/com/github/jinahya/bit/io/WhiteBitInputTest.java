@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * A class for testing {@link BitInput}.
  */
 @ExtendWith(value = {WhiteBitInputParameterResolver.class})
-class BitInputTest {
+class WhiteBitInputTest {
 
     // -----------------------------------------------------------------------------------------------------------------
     private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());

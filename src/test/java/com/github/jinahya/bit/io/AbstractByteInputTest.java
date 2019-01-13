@@ -1,15 +1,27 @@
 package com.github.jinahya.bit.io;
 
+import org.junit.jupiter.api.Test;
+
 import java.util.Objects;
 
-public abstract class AbstractByteInputTest<T extends AbstractByteInput<U>, U> extends ByteInputTest<T> {
+abstract class AbstractByteInputTest<T extends AbstractByteInput<U>, U> extends ByteInputTest<T> {
 
     // -----------------------------------------------------------------------------------------------------------------
-    public AbstractByteInputTest(final Class<T> byteInputClass, final Class<U> sourceClass) {
+    AbstractByteInputTest(final Class<T> byteInputClass, final Class<U> sourceClass) {
         super(byteInputClass);
         this.sourceClass = Objects.requireNonNull(sourceClass, "sourceClass is null");
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    protected final Class<U> sourceClass;
+    @Test
+    void testGetSource(final T byteInput) {
+        byteInput.getSource();
+    }
+
+    @Test
+    void testSetSource(final U byteSource) {
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    final Class<U> sourceClass;
 }

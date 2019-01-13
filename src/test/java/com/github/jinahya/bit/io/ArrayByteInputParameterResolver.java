@@ -3,28 +3,37 @@ package com.github.jinahya.bit.io;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.ParameterContext;
 import org.junit.jupiter.api.extension.ParameterResolutionException;
-import org.junit.jupiter.api.extension.ParameterResolver;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import java.lang.invoke.MethodHandles;
+import java.io.IOException;
 
-class ArrayByteInputParameterResolver implements ParameterResolver {
+class ArrayByteInputParameterResolver extends AbstractByteInputParameterResolver<ArrayByteInput, byte[]> {
 
     // -----------------------------------------------------------------------------------------------------------------
-    private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+    private static final int LENGTH = 1024;
 
     // -----------------------------------------------------------------------------------------------------------------
-    @Override
-    public boolean supportsParameter(final ParameterContext parameterContext, final ExtensionContext extensionContext)
-            throws ParameterResolutionException {
-        logger.debug("parameterContext.parameter.parameterisedType: {}", parameterContext.getParameter().getParameterizedType());
-        return ArrayByteInput.class.isAssignableFrom(parameterContext.getParameter().getType());
+    ArrayByteInputParameterResolver() {
+        super(ArrayByteInput.class);
     }
 
+    // -----------------------------------------------------------------------------------------------------------------
     @Override
     public Object resolveParameter(final ParameterContext parameterContext, final ExtensionContext extensionContext)
             throws ParameterResolutionException {
-        return new ArrayByteInput(new byte[1024], 0, 1024);
+        //return new ArrayByteInput(new byte[LENGTH], 0, LENGTH);
+        return new ArrayByteInput(null, -1, -1) {
+            @Override
+            public int read() throws IOException {
+                if (source == null) {
+                    source = new byte[LENGTH];
+                    limit = source.length;
+                    index = 0;
+                }
+                if (index == limit) {
+                    index = 0;
+                }
+                return super.read();
+            }
+        };
     }
 }

@@ -30,6 +30,7 @@ class ArrayByteInputParameterResolver extends AbstractByteInputParameterResolver
                     index = 0;
                 }
                 if (index == limit) {
+                    // normally, drain the array here.
                     index = 0;
                 }
                 return super.read();

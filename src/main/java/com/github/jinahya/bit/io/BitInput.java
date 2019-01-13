@@ -79,6 +79,7 @@ public interface BitInput {
     long readLong(boolean unsigned, int size) throws IOException;
 
     // -----------------------------------------------------------------------------------------------------------------
+
     /**
      * Reads a char value.
      *
@@ -89,6 +90,7 @@ public interface BitInput {
     char readChar(int size) throws IOException;
 
     // -----------------------------------------------------------------------------------------------------------------
+
     /**
      * Aligns to given number of bytes by discarding.
      *

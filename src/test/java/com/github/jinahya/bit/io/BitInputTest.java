@@ -1,7 +1,8 @@
 package com.github.jinahya.bit.io;
 
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.RepeatedTest;
 
+import java.io.IOException;
 import java.util.Objects;
 
 /**
@@ -24,8 +25,12 @@ public abstract class BitInputTest<T extends BitInput> {
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    @Test
-    void test() {
+    abstract T instance();
+
+    // -----------------------------------------------------------------------------------------------------------------
+    @RepeatedTest(1024)
+    void testReadBoolean() throws IOException {
+        final boolean value = instance().readBoolean();
     }
 
     // -----------------------------------------------------------------------------------------------------------------

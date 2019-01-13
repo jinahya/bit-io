@@ -110,6 +110,7 @@ public abstract class AbstractBitInput implements BitInput {
         return readInt(true, 1) == 1;
     }
 
+    // -----------------------------------------------------------------------------------------------------------------
     @Override
     public byte readByte(final boolean unsigned, final int size) throws IOException {
         BitIoConstraints.requireValidSize(unsigned, 3, size);
@@ -174,12 +175,14 @@ public abstract class AbstractBitInput implements BitInput {
         return value;
     }
 
+    // -----------------------------------------------------------------------------------------------------------------
     @Override
     public char readChar(final int size) throws IOException {
         BitIoConstraints.requireValidSizeChar(size);
         return (char) unsigned16(size);
     }
 
+    // -----------------------------------------------------------------------------------------------------------------
     @Override
     public long align(final int bytes) throws IOException {
         if (bytes <= 0) {

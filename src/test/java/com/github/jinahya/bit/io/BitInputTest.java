@@ -31,12 +31,12 @@ class BitInputTest {
      * @throws IOException if an I/O error occurs.
      */
     @RepeatedTest(1024)
-    void testReadBoolean(final WhiteBitInput bitInput) throws IOException {
+    void testReadBoolean(final BitInput bitInput) throws IOException {
         final boolean value = bitInput.readBoolean();
     }
 
     @RepeatedTest(1024)
-    void testReadByte(final WhiteBitInput bitInput) throws IOException {
+    void testReadByte(final BitInput bitInput) throws IOException {
         final boolean unsigned = current().nextBoolean();
         final int size = current().nextInt(1, Byte.SIZE + (unsigned ? 0 : 1));
         final byte value = bitInput.readByte(unsigned, size);
@@ -46,7 +46,7 @@ class BitInputTest {
     }
 
     @RepeatedTest(1024)
-    void testReadShort(final WhiteBitInput bitInput) throws IOException {
+    void testReadShort(final BitInput bitInput) throws IOException {
         final boolean unsigned = current().nextBoolean();
         final int size = current().nextInt(1, Short.SIZE + (unsigned ? 0 : 1));
         final short value = bitInput.readShort(unsigned, size);
@@ -56,7 +56,7 @@ class BitInputTest {
     }
 
     @RepeatedTest(1024)
-    void testReadInt(final WhiteBitInput bitInput) throws IOException {
+    void testReadInt(final BitInput bitInput) throws IOException {
         final boolean unsigned = current().nextBoolean();
         final int size = current().nextInt(1, Integer.SIZE + (unsigned ? 0 : 1));
         final int value = bitInput.readInt(unsigned, size);
@@ -66,7 +66,7 @@ class BitInputTest {
     }
 
     @RepeatedTest(1024)
-    void testReadLong(final WhiteBitInput bitInput) throws IOException {
+    void testReadLong(final BitInput bitInput) throws IOException {
         final boolean unsigned = current().nextBoolean();
         final int size = current().nextInt(1, Long.SIZE + (unsigned ? 0 : 1));
         final long value = bitInput.readLong(unsigned, size);
@@ -77,14 +77,14 @@ class BitInputTest {
 
     // -----------------------------------------------------------------------------------------------------------------
     @RepeatedTest(1024)
-    void testReadChar(final WhiteBitInput bitInput) throws IOException {
+    void testReadChar(final BitInput bitInput) throws IOException {
         final int size = current().nextInt(1, Character.SIZE);
         final char value = bitInput.readChar(size);
     }
 
     // -----------------------------------------------------------------------------------------------------------------
     @Test
-    void testAlign(final WhiteBitInput bitInput) throws IOException {
+    void testAlign(final BitInput bitInput) throws IOException {
         bitInput.align(current().nextInt(1, 256));
     }
 }

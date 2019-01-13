@@ -27,9 +27,9 @@ public abstract class AbstractBitInput implements BitInput {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * Reads an unsigned 32-bit integer.
+     * Reads an unsigned 8-bit integer.
      *
-     * @return an unsigned 32-bit integer read
+     * @return an unsigned 8-bit integer read
      * @throws IOException if an I/O error occurs.
      */
     protected abstract int read() throws IOException;

@@ -27,15 +27,15 @@ public abstract class AbstractBitOutput implements BitOutput {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * Writes given unsigned 32-bit integer.
+     * Writes given unsigned 8-bit integer.
      *
-     * @param value an unsigned 32-bit integer to write
+     * @param value an unsigned 8-bit integer to write
      * @throws IOException if an I/O error occurs.
      */
     protected abstract void write(int value) throws IOException;
 
     /**
-     * Writes given octet to {@link #write(int)}.
+     * Writes given octet to {@link #write(int)} and increments the {@code count}.
      *
      * @param value the octet to write.
      * @throws IOException if an I/O error occurs.

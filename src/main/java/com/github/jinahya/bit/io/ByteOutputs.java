@@ -12,7 +12,7 @@ public final class ByteOutputs {
     /**
      * An implementation of {@link ByteOutput} whose {@link ByteOutput#write(int)} simply discard given value.
      */
-    public static class NullByteOutput implements ByteOutput {
+    private static final class NullByteOutput implements ByteOutput {
 
         /**
          * {@inheritDoc} The {@code write} method of {@code NullByteOutput} class simply discards given value.

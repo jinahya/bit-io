@@ -14,7 +14,7 @@ public final class ByteInputs {
      * An implementation of {@link ByteInput} whose {@link ByteInput#read()} method always throws an {@link
      * EOFException}.
      */
-    public static class NullByteInput implements ByteInput {
+    private static class NullByteInput implements ByteInput {
 
         /**
          * {@inheritDoc} The {@code read} method of {@code NullByteInput} class always throws an {@link EOFException}.
@@ -31,7 +31,7 @@ public final class ByteInputs {
     /**
      * Returns a new {@link ByteInput} whose {@link ByteInput#read()} method always throws an {@link EOFException}.
      *
-     * @return a {@link ByteInput} reached to EOF.
+     * @return a {@link ByteInput} reached to the EOF.
      */
     public static ByteInput nullByteInput() {
         return new NullByteInput();

@@ -11,7 +11,7 @@ import java.lang.invoke.MethodHandles;
 import static java.util.concurrent.ThreadLocalRandom.current;
 
 @ExtendWith(value = {BlackBitOutputParameterResolver.class})
-class BitOutputTest {
+class BlackBitOutputTest {
 
     // -----------------------------------------------------------------------------------------------------------------
     private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());

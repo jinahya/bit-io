@@ -4,6 +4,7 @@ jobs:
     working_directory: ~/bit-io
     docker:
       - image: circleci/openjdk:8-jdk-browsers
+    steps:
       - checkout
       - restore_cache:
           key: circleci-demo-java-spring-{{ checksum "pom.xml" }}

@@ -92,11 +92,11 @@ public interface BitInput {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * Aligns to given number of bytes by discarding.
+     * Aligns to given number of bytes by discarding bits.
      *
      * @param bytes the number of bytes to align; must be positive.
      * @return the number of bits discarded while aligning
-     * @throws IllegalArgumentException if {@code bytes} is less than {@code 1}.
+     * @throws IllegalArgumentException if {@code bytes} is less than or equals to {@code 0}.
      * @throws IOException              if an I/O error occurs.
      */
     long align(int bytes) throws IOException;

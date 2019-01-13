@@ -94,11 +94,11 @@ public interface BitOutput {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * Aligns to specified number of bytes by padding zeros.
+     * Aligns to specified number of bytes by padding zero bits.
      *
      * @param bytes the number of bytes to align; must be positive.
      * @return the number of zero bits padded while aligning.
-     * @throws IllegalArgumentException if {@code bytes} is less than {@code 1}.
+     * @throws IllegalArgumentException if {@code bytes} is less than or equals to {@code 0}.
      * @throws IOException              if an I/O error occurs.
      */
     long align(int bytes) throws IOException;

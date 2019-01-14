@@ -15,7 +15,6 @@ abstract class ByteSourceParameterResolver<T> implements ParameterResolver {
         this.byteSourceClass = Objects.requireNonNull(byteSourceClass, "byteSourceClass is null");
     }
 
-
     @Override
     public boolean supportsParameter(ParameterContext parameterContext, ExtensionContext extensionContext)
             throws ParameterResolutionException {

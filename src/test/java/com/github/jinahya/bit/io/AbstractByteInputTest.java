@@ -19,7 +19,8 @@ abstract class AbstractByteInputTest<T extends AbstractByteInput<U>, U> extends 
     }
 
     @Test
-    void testSetSource(final U byteSource) {
+    void testSetSource(final T byteInput, final U byteSource) {
+        byteInput.setSource(byteSource);
     }
 
     // -----------------------------------------------------------------------------------------------------------------

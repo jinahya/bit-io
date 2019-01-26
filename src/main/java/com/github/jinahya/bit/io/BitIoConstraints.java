@@ -24,31 +24,48 @@ import static java.lang.Math.pow;
  */
 final class BitIoConstraints {
 
+    // -----------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Checks whether given size is valid for unsigned 8 bit integer. An {@code IllegalArgumentException} will be thrown
+     * if given value is not valid.
+     *
+     * @param size the size to check; must between {@code 1} and {@value Byte#SIZE}, both inclusive.
+     * @return given size.
+     */
     static int requireValidSizeUnsigned8(final int size) {
         if (size < 1) {
-            throw new IllegalArgumentException("unsigned8.size(" + size + ") < 1");
+            throw new IllegalArgumentException("size(" + size + ") < 1");
         }
         if (size > Byte.SIZE) {
-            throw new IllegalArgumentException("unsigned8.size(" + size + ") > " + Byte.SIZE);
+            throw new IllegalArgumentException("size(" + size + ") > " + Byte.SIZE);
         }
         return size;
     }
 
+    /**
+     * Checks whether given size is valid for unsigned 16 bit integer. An {@code IllegalArgumentException} will be
+     * thrown if given value is not valid.
+     *
+     * @param size the size to check; must between {@code 1} and {@value Short#SIZE}, both inclusive.
+     * @return given size.
+     */
     static int requireValidSizeUnsigned16(final int size) {
         if (size < 1) {
-            throw new IllegalArgumentException("unsigned16.size(" + size + ") < 1");
+            throw new IllegalArgumentException("size(" + size + ") < 1");
         }
         if (size > Short.SIZE) {
-            throw new IllegalArgumentException("unsigned16.size(" + size + ") > " + Short.SIZE);
+            throw new IllegalArgumentException("size(" + size + ") > " + Short.SIZE);
         }
         return size;
     }
 
-    private static final int MIN_EXPONENT = 3;
+    // -----------------------------------------------------------------------------------------------------------------
+    static final int MIN_EXPONENT = 3;
 
-    private static final int MAX_EXPONENT = 6;
+    static final int MAX_EXPONENT = 6;
 
-    private static final int MIN_SIZE = 1;
+    static final int MIN_SIZE = 1;
 
     private static final int[] MAX_SIZES = new int[MAX_EXPONENT - MIN_EXPONENT + 1];
 
@@ -58,20 +75,29 @@ final class BitIoConstraints {
         }
     }
 
-    static int requireValidSize(final boolean unsigned, final int exponent, final int size) {
+    static int requireValidExponent(final int exponent) {
         if (exponent < MIN_EXPONENT) {
             throw new IllegalArgumentException("exponent(" + exponent + ") < " + MIN_EXPONENT);
         }
         if (exponent > MAX_EXPONENT) {
             throw new IllegalArgumentException("exponent(" + exponent + ") > " + MAX_EXPONENT);
         }
+        return exponent;
+    }
+
+    static int maxSize(final boolean unsigned, final int exponent) {
+        return MAX_SIZES[requireValidExponent(exponent) - MIN_EXPONENT] - (unsigned ? 1 : 0);
+    }
+
+    static int requireValidSize(final boolean unsigned, final int exponent, final int size) {
+        requireValidExponent(exponent);
         if (size < MIN_SIZE) {
             throw new IllegalArgumentException("size(" + size + ") < " + MIN_SIZE);
         }
-        final int maxSize = MAX_SIZES[exponent - MIN_EXPONENT] - (unsigned ? 1 : 0);
+        final int maxSize = maxSize(unsigned, exponent);
         if (size > maxSize) {
-            throw new IllegalArgumentException("size(" + size + ") > " + maxSize + ";unsigned=" + unsigned
-                                               + ";exponent=" + exponent);
+            throw new IllegalArgumentException("size(" + size + ") > " + maxSize + "; unsigned=" + unsigned
+                                               + "; exponent=" + exponent);
         }
         return size;
     }

@@ -2,10 +2,11 @@ package com.github.jinahya.bit.io;
 
 import java.util.Objects;
 
-abstract class AbstractByteInputTest<T extends AbstractByteInput<U>, U> extends ByteInputTest<T> {
+abstract class AbstractByteInputParameterResolver<T extends AbstractByteInput<U>, U>
+        extends ByteInputParameterResolver<T> {
 
     // -----------------------------------------------------------------------------------------------------------------
-    AbstractByteInputTest(final Class<T> byteInputClass, final Class<U> sourceClass) {
+    AbstractByteInputParameterResolver(final Class<T> byteInputClass, final Class<U> sourceClass) {
         super(byteInputClass);
         this.sourceClass = Objects.requireNonNull(sourceClass, "sourceClass is null");
     }

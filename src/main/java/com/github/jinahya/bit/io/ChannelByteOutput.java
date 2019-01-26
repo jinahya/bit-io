@@ -24,7 +24,9 @@ import java.nio.channels.WritableByteChannel;
  *
  * @param <T> channel type parameter.
  * @author Jin Kwon &lt;onacit at gmail.com&gt;
+ * @deprecated Use {@link BufferByteOutput#of(WritableByteChannel, int)}
  */
+@Deprecated // forRemoval = true
 public class ChannelByteOutput<T extends WritableByteChannel> extends BufferByteOutput {
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -57,9 +59,11 @@ public class ChannelByteOutput<T extends WritableByteChannel> extends BufferByte
      */
     @Override
     public void write(final int value) throws IOException {
-        while (!target.hasRemaining()) {
+        if (!target.hasRemaining()) {
             target.flip(); // limit->position, position->zero
-            channel.write(target);
+            while (target.position() == 0) {
+                channel.write(target);
+            }
             target.compact(); // position->n+1, limit->capacity
         }
         super.write(value);

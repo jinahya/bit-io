@@ -15,7 +15,9 @@
  */
 package com.github.jinahya.bit.io;
 
+import java.io.EOFException;
 import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * A byte input reading bytes from an array of bytes.
@@ -27,7 +29,49 @@ public class ArrayByteInput extends AbstractByteInput<byte[]> {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * Creates a new instance with given parameters.
+     * Creates a new instance of {@link ArrayByteInput} which reads bytes from given input stream using an array of
+     * bytes whose length is equals to specified.
+     *
+     * @param stream the input stream from which bytes are read; must be not {@code null}.
+     * @param length the length of the byte array; must be positive.
+     * @return a new instance of {@link ArrayByteInput}.
+     */
+    @SuppressWarnings({"Duplicates"})
+    public static ArrayByteInput of(final InputStream stream, final int length) {
+        if (stream == null) {
+            throw new NullPointerException("stream is null");
+        }
+        if (length <= 0) {
+            throw new IllegalArgumentException("length(" + length + ") <= 0");
+        }
+        return new ArrayByteInput(null, -1, -1) {
+            @Override
+            public int read() throws IOException {
+                if (source == null) {
+                    source = new byte[length];
+                    index = source.length;
+                    limit = source.length;
+                }
+                if (index >= limit) {
+                    limit = stream.read(source);
+                    if (limit == -1) {
+                        throw new EOFException("the stream reached to an end");
+                    }
+                    if (limit == 0) {
+                        // source.length == 0?
+                    }
+                    assert limit > 0;
+                    index = 0;
+                }
+                return super.read();
+            }
+        };
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Creates a new instance with given arguments.
      *
      * @param source a byte array; {@code null} if it's supposed to be lazily initialized an set.
      * @param index  array index to read
@@ -51,12 +95,15 @@ public class ArrayByteInput extends AbstractByteInput<byte[]> {
      * @throws IllegalStateException if {@link #index} is equal to or greater than {@link #limit}
      */
     @Override
+    @SuppressWarnings({"Duplicates"})
     public int read() throws IOException {
-        if (getIndex() >= getLimit()) {
-            throw new IllegalStateException("index(" + getIndex() + ") >= limit(" + getLimit() + ")");
+        final int i = getIndex();
+        final int l = getLimit();
+        if (i >= l) {
+            throw new IllegalStateException("index(" + i + ") >= limit(" + l + ")");
         }
-        final int value = getSource()[getIndex()] & 0xFF;
-        setIndex(getIndex() + 1);
+        final int value = getSource()[i] & 0xFF;
+        setIndex(i + 1);
         return value;
     }
 

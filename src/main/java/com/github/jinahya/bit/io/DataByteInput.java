@@ -41,8 +41,8 @@ public class DataByteInput extends AbstractByteInput<DataInput> {
 
     /**
      * {@inheritDoc} The {@code read()} method of {@code DataByteInput} class invokes {@link
-     * DataInput#readUnsignedByte()} on {@link #source} and returns the result. Override this method if the {@link
-     * #source} is supposed to be lazily initialized and set.
+     * DataInput#readUnsignedByte()}, on what {@link #getSource()} gives, and returns the result. Override this method
+     * if the {@link #source} is supposed to be lazily initialized and set.
      *
      * @return {@inheritDoc }
      * @throws IOException {@inheritDoc }

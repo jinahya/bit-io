@@ -26,7 +26,9 @@ import java.nio.channels.ReadableByteChannel;
  * @param <T> channel type parameter
  * @author Jin Kwon &lt;onacit at gmail.com&gt;
  * @see ChannelByteOutput
+ * @deprecated Use {@link BufferByteInput#of(ReadableByteChannel, int)}
  */
+@Deprecated // forRemoval = true
 public class ChannelByteInput<T extends ReadableByteChannel> extends BufferByteInput {
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -62,8 +64,10 @@ public class ChannelByteInput<T extends ReadableByteChannel> extends BufferByteI
     public int read() throws IOException {
         while (!source.hasRemaining()) {
             source.clear(); // position->zero, limit->capacity
-            if (channel.read(source) == -1) {
-                throw new EOFException();
+            while (source.position() == 0) {
+                if (channel.read(source) == -1) {
+                    throw new EOFException();
+                }
             }
             source.flip(); // limit->position, position->zero
         }

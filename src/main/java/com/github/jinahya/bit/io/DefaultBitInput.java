@@ -18,7 +18,7 @@ package com.github.jinahya.bit.io;
 import java.io.IOException;
 
 /**
- * A default implementation read bytes from an instance of {@link ByteInput}.
+ * A default implementation of {@link ByteInput} which reads bytes from an instance of {@link ByteInput}.
  *
  * @param <T> byte input type parameter
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
@@ -41,9 +41,9 @@ public class DefaultBitInput<T extends ByteInput> extends AbstractBitInput {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * {@inheritDoc} The {@code read()} method of {@code DefaultBitInput} class invokes {@link ByteInput#read()} on what
-     * {@link #getDelegate()} returns and returns the result. Override this method if the {@link #delegate} is supposed
-     * to be lazily initialized and set.
+     * {@inheritDoc} The {@code read()} method of {@code DefaultBitInput} class invokes {@link ByteInput#read()} ,on
+     * what {@link #getDelegate()} gives, and returns the result. Override this method if the {@link #delegate} is
+     * supposed to be lazily initialized and set.
      *
      * @return {@inheritDoc}
      * @throws IOException {@inheritDoc}

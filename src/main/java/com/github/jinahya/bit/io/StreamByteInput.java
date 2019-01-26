@@ -42,8 +42,8 @@ public class StreamByteInput<T extends InputStream> extends AbstractByteInput<T>
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * {@inheritDoc} The {@code read()} method of {@code StreamByteInput} class invokes {@link InputStream#read()} on
-     * what {@link #getSource()} returns and returns the result. Override this method if the {@link #source} is supposed
+     * {@inheritDoc} The {@code read()} method of {@code StreamByteInput} class invokes {@link InputStream#read()}, on
+     * what {@link #getSource()} gives, and returns the result. Override this method if the {@link #source} is supposed
      * to be lazily initialized and set.
      *
      * @return {@inheritDoc}
@@ -55,7 +55,7 @@ public class StreamByteInput<T extends InputStream> extends AbstractByteInput<T>
     public int read() throws IOException {
         final int value = getSource().read();
         if (value == -1) {
-            throw new EOFException();
+            throw new EOFException("the stream reached to an end-of-stream");
         }
         return value;
     }

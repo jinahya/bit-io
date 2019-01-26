@@ -6,7 +6,11 @@
     </encoder>
   </appender>
 
-  <root level="debug">
+  <root level="DEBUG">
     <appender-ref ref="console"/>
   </root>
+
+  <logger name="com.github.jinahya" level="DEBUG"/>
+  <logger name="org.jboss.weld" level="INFO"/>
+
 </configuration>

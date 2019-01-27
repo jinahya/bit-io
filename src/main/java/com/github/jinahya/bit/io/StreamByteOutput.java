@@ -22,7 +22,6 @@ import java.io.OutputStream;
  * A {@link ByteOutput} writes bytes to an {@link OutputStream}.
  *
  * @param <T> stream type parameter
- * @author Jin Kwon &lt;onacit at gmail.com&gt;
  * @see StreamByteInput
  */
 public class StreamByteOutput<T extends OutputStream> extends AbstractByteOutput<T> {

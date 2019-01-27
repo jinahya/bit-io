@@ -11,6 +11,6 @@
   </root>
 
   <logger name="com.github.jinahya" level="DEBUG"/>
-  <logger name="org.jboss.weld" level="INFO"/>
+  <logger name="org.jboss.weld" level="WARN"/>
 
 </configuration>

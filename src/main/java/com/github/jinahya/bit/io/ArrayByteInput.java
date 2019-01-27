@@ -49,10 +49,10 @@ public class ArrayByteInput extends AbstractByteInput<byte[]> {
             public int read() throws IOException {
                 if (source == null) {
                     source = new byte[length];
-                    index = source.length;
                     limit = source.length;
+                    index = limit;
                 }
-                if (index >= limit) {
+                if (index == limit) {
                     limit = stream.read(source);
                     if (limit == -1) {
                         throw new EOFException("the stream reached to an end");
@@ -102,9 +102,9 @@ public class ArrayByteInput extends AbstractByteInput<byte[]> {
         if (i >= l) {
             throw new IllegalStateException("index(" + i + ") >= limit(" + l + ")");
         }
-        final int value = getSource()[i] & 0xFF;
+        final int result = getSource()[i] & 0xFF;
         setIndex(i + 1);
-        return value;
+        return result;
     }
 
     // ---------------------------------------------------------------------------------------------------------- source

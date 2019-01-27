@@ -32,7 +32,7 @@ The size(min) is `1` and the size(max) is `2^e - (unsigned ? 1 : 0)`.
 
 |type   |e  |size(min)|size(max)|notes
 |-------|---|---------|---------|-----
-|`byte` |3  |1        |7/8      |`readByte(unsigned, size)`, `readByte(unsigned, size, byte)`|
+|`byte` |3  |1        |7/8      |`readByte(unsigned, size)`, `writeByte(unsigned, size, byte)`|
 |`short`|4  |1        |15/16    |`readShort(unsigned, size)`, `writeShort(unsigned, size, short)`|
 |`int`  |5  |1        |31/32    |`readInt(unsigned, size)`, `writeInt(unsigned, size, int)`|
 |`long` |6  |1        |63/64    |`readLong(unsigned, size)`, `writeLong(unsigned, size, long)`|
@@ -41,15 +41,20 @@ The size(min) is `1` and the size(max) is `2^e - (unsigned ? 1 : 0)`.
 `float`s and `double`s can be read/written as`int`s and `long`s, respectively, using `xxxToRawYYYBits` and `yyyBitsToXXX`.
 
 ## Reading
+
 ### Preparing `ByteInput`
+
 Prepare an instance of `ByteInput` from various sources.
+
 ````java
 new ArrayByteInput(byte[], int, int);
 new BufferByteInput(java.nio.ByteBuffer);
 new DataByteInput(java.io.DataInput);
 new StreamByteInput(java.io.InputStream);
 ````
+
 Constructors of these classes don't check arguments which means you can lazily instantiate and set them.
+
 ```java
 final ByteInput input = new ArrayByteInput(null, -1, -1) {
     @Override
@@ -57,14 +62,17 @@ final ByteInput input = new ArrayByteInput(null, -1, -1) {
         // initialize the `source` field value
         if (source == null) {
             source = byte[16];
-            index = source.length;
             limit = source.length;
+            index = limit;
         }
         // read bytes from the stream if empty
-        if (index >= limit) {
+        if (index == limit) {
             limit = stream.read(source);
             if (limit == -1) {
                 throw new EOFException("unexpected end of stream");
+            }
+            if (limit == 0) {
+                // source.length == 0?
             }
             index = 0;
         }
@@ -72,14 +80,20 @@ final ByteInput input = new ArrayByteInput(null, -1, -1) {
     }
 };
 ```
+
 ### Creating `BitInput`
+
 #### Using `DefaultBitInput`
+
 Construct with an already existing `ByteInput`.
+
 ```java
 final ByteInput byteInput = createByteInput();
 final BitInput bitInput = new DefalutBitInput<>(byteInput);
 ```
+
 Or lazliy instantiate its `delegate` field.
+
 ```java
 new DefaultBitInput<StreamByteInput>(null) {
     @Override
@@ -90,8 +104,11 @@ new DefaultBitInput<StreamByteInput>(null) {
         return super.read();
     }
 };
+
 ```
+
 ### Reading values.
+
 ```java
 final BitInput input;
 
@@ -102,14 +119,21 @@ final long sl47 = input.readLong(false, 47);  // 47-bit signed long  47   54
 final long discarded = input.align(1);        // aligns to (1*8)-bit  2   56
 assert discarded == 2L;
 ```
+
 ```
 biiiiiil llllllll llllllll llllllll llllllll llllllll lllllldd
 ```
+
 ## Writing
+
 ### Preparing `ByteOutput`
+
 ### Creating `BitOutput`
+
 #### Using `DefalutBitOutput`
+
 ### Writing values.
+
 ```java
 final BitOutput output;
 
@@ -121,9 +145,11 @@ output.writeLong(true, 33, 99L);      // 33-bit unsigned long  33   44
 final long padded = output.align(4);  // aligns to (4*8)-bit   20   64
 assert padded == 20L;
 ```
+
 ```
 biiiiiii iiblllll llllllll llllllll llllllll llllpppp pppppppp pppppppp
 01101110 00100000 00000000 00000000 00000110 00110000 00000000 00000000
 ```
+
 ----
 [![Domate via Paypal](https://img.shields.io/badge/donate-paypal-blue.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_cart&business=A954LDFBW4B9N&lc=KR&item_name=GitHub&amount=5%2e00&currency_code=USD&button_subtype=products&add=1&bn=PP%2dShopCartBF%3adonate%2dpaypal%2dblue%2epng%3aNonHosted)

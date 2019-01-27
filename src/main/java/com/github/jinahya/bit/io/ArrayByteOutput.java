@@ -48,8 +48,8 @@ public class ArrayByteOutput extends AbstractByteOutput<byte[]> {
             public void write(final int value) throws IOException {
                 if (target == null) {
                     target = new byte[length];
-                    index = 0;
                     limit = target.length;
+                    index = 0;
                 }
                 super.write(value); // target[index++] = value;
                 if (index == limit) {

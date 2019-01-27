@@ -1,9 +1,9 @@
 package com.github.jinahya.bit.io;
 
-public class WhiteBitInput extends DefaultBitInput<WhiteByteInput> {
+class BlackStreamByteOutput extends StreamByteOutput<BlackOutputStream> {
 
     // -----------------------------------------------------------------------------------------------------------------
-    public WhiteBitInput() {
-        super(new WhiteByteInput());
+    BlackStreamByteOutput() {
+        super(new BlackOutputStream());
     }
 }

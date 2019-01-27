@@ -14,7 +14,7 @@ class WhiteByteInput implements ByteInput {
     /**
      * Creates a new instance.
      */
-    public WhiteByteInput() {
+    WhiteByteInput() {
         super();
     }
 

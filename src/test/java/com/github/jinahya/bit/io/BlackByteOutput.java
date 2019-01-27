@@ -7,6 +7,6 @@ class BlackByteOutput implements ByteOutput {
     // -----------------------------------------------------------------------------------------------------------------
     @Override
     public void write(int value) throws IOException {
-        // does nothing
+        // does nothing.
     }
 }

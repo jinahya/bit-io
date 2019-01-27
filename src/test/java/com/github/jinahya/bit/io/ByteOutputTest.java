@@ -13,38 +13,46 @@ import java.io.IOException;
 import java.lang.invoke.MethodHandles;
 import java.util.Objects;
 
+import static java.util.concurrent.ThreadLocalRandom.current;
+
 @ExtendWith({WeldJunit5Extension.class})
-public abstract class ByteInputTest<T extends ByteInput> {
+public abstract class ByteOutputTest<T extends ByteOutput> {
 
     // -----------------------------------------------------------------------------------------------------------------
     private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     // -----------------------------------------------------------------------------------------------------------------
-    public ByteInputTest(final Class<T> byteInputClass) {
+    public ByteOutputTest(final Class<T> byteOutputClass) {
         super();
-        this.byteInputClass = Objects.requireNonNull(byteInputClass, "byteOutputClass is null");
+        this.byteOutputClass = Objects.requireNonNull(byteOutputClass, "byteOutputClass is null");
     }
 
     // -----------------------------------------------------------------------------------------------------------------
     @BeforeEach
     //@BeforeAll // seems not work with PER_CLASS
     void selectByteInput() {
-        byteInput = byteInputInstance.select(byteInputClass).get();
-        logger.debug("byteOutput: {}", byteInput);
+        byteOutput = byteInputInstance.select(byteOutputClass).get();
+        logger.debug("byteOutput: {}", byteOutput);
     }
 
     // -----------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Tests {@link ByteOutput#write(int)} with a random value.
+     *
+     * @throws IOException if an I/O error occurs.
+     */
     @Test
-    public void testRead() throws IOException {
-        final int octet = byteInput.read();
+    public void testWrite() throws IOException {
+        byteOutput.write(current().nextInt(0, 256));
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    protected final Class<T> byteInputClass;
+    final Class<T> byteOutputClass;
 
     @Typed
     @Inject
-    private Instance<ByteInput> byteInputInstance;
+    private Instance<ByteOutput> byteInputInstance;
 
-    protected T byteInput;
+    T byteOutput;
 }

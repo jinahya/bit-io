@@ -22,7 +22,6 @@ import java.io.IOException;
  * A {@code ByteOutput} uses an instance of {@link DataOutput} as its {@link #target}.
  *
  * @param <T> data output type parameter.
- * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  * @see DataByteInput
  */
 public class DataByteOutput<T extends DataOutput> extends AbstractByteOutput<T> {

@@ -8,7 +8,7 @@ import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.spi.InjectionPoint;
 import java.lang.invoke.MethodHandles;
 
-public class ByteInputProducer {
+class ByteInputProducer {
 
     // -----------------------------------------------------------------------------------------------------------------
     private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
@@ -16,12 +16,12 @@ public class ByteInputProducer {
     // ----------------------------------------------------------------------------------------------------------- array
     @Typed
     @Produces
-    public ArrayByteInput produceArrayByteInput(final InjectionPoint injectionPoint) {
+    ArrayByteInput produceArrayByteInput(final InjectionPoint injectionPoint) {
         logger.debug("produceArrayByteInput({})", injectionPoint);
         return new WhiteArrayByteInput();
     }
 
-    public void disposeArrayByteInput(@Typed @Disposes final ArrayByteInput byteInput) {
+    void disposeArrayByteInput(@Typed @Disposes final ArrayByteInput byteInput) {
         logger.debug("disposeArrayByteInput({})", byteInput);
         // empty, so far.
     }
@@ -29,36 +29,36 @@ public class ByteInputProducer {
     // ---------------------------------------------------------------------------------------------------------- buffer
     @Typed
     @Produces
-    public WhiteBufferByteInput produceBufferByteInput(final InjectionPoint injectionPoint) {
+    WhiteBufferByteInput produceBufferByteInput(final InjectionPoint injectionPoint) {
         logger.debug("productBufferByteInput({})", injectionPoint);
         return new WhiteBufferByteInput();
     }
 
-    public void disposeBufferByteInput(@Disposes @Typed final WhiteBufferByteInput byteInput) {
+    void disposeBufferByteInput(@Disposes @Typed final WhiteBufferByteInput byteInput) {
         logger.debug("disposeBufferByteInput({})", byteInput);
     }
 
     // ------------------------------------------------------------------------------------------------------------ data
     @Typed
     @Produces
-    public WhiteDataByteInput produceDataByteInput(final InjectionPoint injectionPoint) {
+    WhiteDataByteInput produceDataByteInput(final InjectionPoint injectionPoint) {
         logger.debug("productBufferByteInput({})", injectionPoint);
         return new WhiteDataByteInput();
     }
 
-    public void disposeDataByteInput(@Disposes @Typed final WhiteDataByteInput byteInput) {
+    void disposeDataByteInput(@Disposes @Typed final WhiteDataByteInput byteInput) {
         logger.debug("disposeBufferByteInput({})", byteInput);
     }
 
     // ---------------------------------------------------------------------------------------------------------- stream
     @Typed
     @Produces
-    public WhiteStreamByteInput produceStreamByteInput(final InjectionPoint injectionPoint) {
+    WhiteStreamByteInput produceStreamByteInput(final InjectionPoint injectionPoint) {
         logger.debug("productBufferByteInput({})", injectionPoint);
         return new WhiteStreamByteInput();
     }
 
-    public void disposeStreamByteInput(@Disposes @Typed final WhiteStreamByteInput byteInput) {
+    void disposeStreamByteInput(@Disposes @Typed final WhiteStreamByteInput byteInput) {
         logger.debug("disposeBufferByteInput({})", byteInput);
     }
 }

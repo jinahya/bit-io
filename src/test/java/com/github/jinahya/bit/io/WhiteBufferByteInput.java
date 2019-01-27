@@ -1,27 +1,30 @@
 package com.github.jinahya.bit.io;
 
 import java.io.IOException;
+import java.nio.ByteBuffer;
 
-class WhiteArrayByteInput extends ArrayByteInput {
+import static java.util.concurrent.ThreadLocalRandom.current;
+
+class WhiteBufferByteInput extends BufferByteInput<ByteBuffer> {
 
     // -----------------------------------------------------------------------------------------------------------------
-    private static final int LENGTH = 1;
+    private static final int CAPACITY = 1;
 
     // -----------------------------------------------------------------------------------------------------------------
-    WhiteArrayByteInput() {
-        super(null, -1, -1);
+    WhiteBufferByteInput() {
+        super(null);
     }
 
     // -----------------------------------------------------------------------------------------------------------------
     @Override
     public int read() throws IOException {
         if (source == null) {
-            source = new byte[LENGTH];
-            limit = source.length;
-            index = limit;
+            source = ByteBuffer.allocate(CAPACITY).position(CAPACITY);
+            assert source.hasArray();
         }
-        if (index == limit) {
-            index(0);
+        if (!source.hasRemaining()) {
+            source.clear(); // position -> zero, limit -> capacity
+            current().nextBytes(source.array());
         }
         return super.read();
     }

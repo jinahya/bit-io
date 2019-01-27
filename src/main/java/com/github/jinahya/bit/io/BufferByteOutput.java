@@ -56,33 +56,6 @@ public class BufferByteOutput<T extends ByteBuffer> extends AbstractByteOutput<T
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    @SuppressWarnings({"Duplicates"})
-    public static BufferByteOutput of(final WritableByteChannel channel, final int capacity) {
-        if (channel == null) {
-            throw new NullPointerException("channel is null");
-        }
-        if (capacity <= 0) {
-            throw new IllegalArgumentException("capacity(" + capacity + ") <= 0");
-        }
-        return new BufferByteOutput(null) {
-            @Override
-            public void write(final int value) throws IOException {
-                if (target == null) {
-                    target = ByteBuffer.allocate(capacity); // position: zero, limit: capacity
-                }
-                super.write(value);
-                if (!target.hasRemaining()) { // no space to put
-                    target.flip(); // limit -> position, position -> zero
-                    do {
-                        channel.write(target);
-                    } while (target.position() == 0);
-                    target.compact();
-                }
-            }
-        };
-    }
-
-    // -----------------------------------------------------------------------------------------------------------------
 
     /**
      * Creates a new instance built on top of given {@code ByteBuffer}.

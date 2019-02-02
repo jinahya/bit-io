@@ -8,7 +8,8 @@ import java.io.OutputStream;
  *
  * @deprecated Use {@link OutputStream#nullOutputStream()}
  */
-@Deprecated // forRemoval = true
+@Deprecated
+        // forRemoval = true
 class BlackOutputStream extends OutputStream {
 
     // -----------------------------------------------------------------------------------------------------------------

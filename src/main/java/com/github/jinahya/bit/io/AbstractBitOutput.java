@@ -109,19 +109,19 @@ public abstract class AbstractBitOutput implements BitOutput {
 
     @Override
     public void writeByte(final boolean unsigned, final int size, final byte value) throws IOException {
-        BitIoConstraints.requireValidSize(unsigned, 3, size);
+        BitIoConstraints.requireValidSizeByte(unsigned, size);
         writeInt(unsigned, size, value);
     }
 
     @Override
     public void writeShort(final boolean unsigned, final int size, final short value) throws IOException {
-        BitIoConstraints.requireValidSize(unsigned, 4, size);
+        BitIoConstraints.requireValidSizeShort(unsigned, size);
         writeInt(unsigned, size, value);
     }
 
     @Override
     public void writeInt(final boolean unsigned, final int size, final int value) throws IOException {
-        BitIoConstraints.requireValidSize(unsigned, 5, size);
+        BitIoConstraints.requireValidSizeInt(unsigned, size);
         if (!unsigned) {
             final int usize = size - 1;
             writeInt(true, 1, value >> usize);
@@ -142,7 +142,7 @@ public abstract class AbstractBitOutput implements BitOutput {
 
     @Override
     public void writeLong(final boolean unsigned, final int size, final long value) throws IOException {
-        BitIoConstraints.requireValidSize(unsigned, 6, size);
+        BitIoConstraints.requireValidSizeLong(unsigned, size);
         if (!unsigned) {
             final int usize = size - 1;
             writeLong(true, 1, value >> usize);

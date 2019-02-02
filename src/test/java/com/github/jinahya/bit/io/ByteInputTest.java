@@ -30,7 +30,6 @@ public abstract class ByteInputTest<T extends ByteInput> {
     //@BeforeAll // seems not work with PER_CLASS
     void selectByteInput() {
         byteInput = byteInputInstance.select(byteInputClass).get();
-        logger.debug("byteOutput: {}", byteInput);
     }
 
     // -----------------------------------------------------------------------------------------------------------------

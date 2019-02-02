@@ -60,21 +60,17 @@ final class BitIoConstraints {
         return size;
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+    // -------------------------------------------------------------------------------------------------------- exponent
     static final int MIN_EXPONENT = 3;
 
     static final int MAX_EXPONENT = 6;
 
-    static final int MIN_SIZE = 1;
-
-    private static final int[] MAX_SIZES = new int[MAX_EXPONENT - MIN_EXPONENT + 1];
-
-    static {
-        for (int i = 0; i < MAX_SIZES.length; i++) {
-            MAX_SIZES[i] = (int) pow(2.0d, (double) i + MIN_EXPONENT);
-        }
-    }
-
+    /**
+     * Validates given exponent.
+     *
+     * @param exponent the exponent to validate.
+     * @return given exponent.
+     */
     static int requireValidExponent(final int exponent) {
         if (exponent < MIN_EXPONENT) {
             throw new IllegalArgumentException("exponent(" + exponent + ") < " + MIN_EXPONENT);
@@ -85,12 +81,30 @@ final class BitIoConstraints {
         return exponent;
     }
 
+    // ------------------------------------------------------------------------------------------------------------ size
+    static final int MIN_SIZE = 1;
+
+    private static final int[] MAX_SIZES = new int[MAX_EXPONENT - MIN_EXPONENT + 1];
+
+    static {
+        MAX_SIZES[0] = (int) pow(2, MIN_EXPONENT);
+        for (int i = 1; i < MAX_SIZES.length; i++) {
+            MAX_SIZES[i] = MAX_SIZES[i - 1] * 2;
+        }
+    }
+
+    /**
+     * Returns the maximum size for given arguments.
+     *
+     * @param unsigned the value for unsigned.
+     * @param exponent the value for exponent.
+     * @return the maximum size.
+     */
     static int maxSize(final boolean unsigned, final int exponent) {
         return MAX_SIZES[requireValidExponent(exponent) - MIN_EXPONENT] - (unsigned ? 1 : 0);
     }
 
     static int requireValidSize(final boolean unsigned, final int exponent, final int size) {
-        requireValidExponent(exponent);
         if (size < MIN_SIZE) {
             throw new IllegalArgumentException("size(" + size + ") < " + MIN_SIZE);
         }

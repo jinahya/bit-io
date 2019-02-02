@@ -1,6 +1,6 @@
 package com.github.jinahya.bit.io;
 
-import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 
 import static com.github.jinahya.bit.io.BitIoConstraints.MAX_EXPONENT;
@@ -21,21 +21,10 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class BitIoConstraintsTest {
 
     // -----------------------------------------------------------------------------------------------------------------
-
-    /**
-     * Generates a random valid value for {@code exponent}.
-     *
-     * @return a random valid value for {@code exponent}.
-     */
     private static int randomExponentValid() {
         return requireValidExponent(current().nextInt(MIN_EXPONENT, MAX_EXPONENT + 1));
     }
 
-    /**
-     * Generates a random invalid value for {@code exponent}.
-     *
-     * @return a random invalid value for {@code exponent}.
-     */
     private static int randomExponentInvalid() {
         int exponentInvalid;
         do {
@@ -44,25 +33,12 @@ class BitIoConstraintsTest {
         return exponentInvalid;
     }
 
-    /**
-     * Generates a random valid {@code size} for given arguments.
-     *
-     * @param unsigned the value for {@code unsigned} parameter.
-     * @param exponent the value for {@code exponent} parameter
-     * @return a random valid {@code size} for given arguments.
-     */
+    // -----------------------------------------------------------------------------------------------------------------
     private static int randomSizeValid(final boolean unsigned, final int exponent) {
         final int maxSize = maxSize(unsigned, requireValidExponent(exponent));
         return current().nextInt(MIN_SIZE, maxSize + 1);
     }
 
-    /**
-     * Generates a random invalid {@code size} for given arguments.
-     *
-     * @param unsigned the value for {@code unsigned} parameter.
-     * @param exponent the value for {@code exponent} parameter
-     * @return a random invalid {@code size} for given arguments.
-     */
     private static int randomSizeInvalid(final boolean unsigned, final int exponent) {
         final int maxSize = maxSize(unsigned, requireValidExponent(exponent));
         int sizeInvalid;
@@ -103,38 +79,33 @@ class BitIoConstraintsTest {
         assertEquals(size, requireValidSizeUnsigned16(size));
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
-    @Test
+    // -------------------------------------------------------------------------------------------- requireValidExponent
+    @RepeatedTest(128)
+    void testRequireValidExponentAssertThrowsIllegalArgumentExceptionWhenExponentIsInvalid() {
+        final int exponent = randomExponentInvalid();
+        assertThrows(IllegalArgumentException.class, () -> requireValidExponent(exponent));
+    }
+
+    @RepeatedTest(128)
+    void testRequireValidExponent() {
+        final int exponent = randomExponentValid();
+        requireValidExponent(exponent);
+    }
+
+    // ------------------------------------------------------------------------------------------------ requireValidSize
+    @RepeatedTest(128)
+    void testRequireValidSizeAssertThrowsIllegalArgumentExceptionWhenSizeIsInvalid() {
+        final boolean unsigned = current().nextBoolean();
+        final int exponent = randomExponentValid();
+        final int size = randomSizeInvalid(unsigned, exponent);
+        assertThrows(IllegalArgumentException.class, () -> requireValidSize(unsigned, exponent, size));
+    }
+
+    @RepeatedTest(128)
     void testRequireValidSize() {
-        // invalid exponent
-        {
-            final boolean unsigned = current().nextBoolean();
-            final int exponentInvalid = randomExponentInvalid();
-            final int size = randomSizeValid(unsigned, randomExponentValid());
-            assertThrows(IllegalArgumentException.class,
-                    () -> requireValidSize(current().nextBoolean(), exponentInvalid, size));
-        }
-        // valid exponent
-        {
-            final boolean unsigned = current().nextBoolean();
-            final int exponentValid = randomExponentValid();
-            final int size = randomSizeValid(unsigned, exponentValid);
-            Assertions.assertDoesNotThrow(() -> requireValidSize(current().nextBoolean(), exponentValid, size));
-        }
-        // invalid size
-        {
-            final boolean unsigned = current().nextBoolean();
-            final int exponent = randomExponentValid();
-            final int sizeInvalid = randomSizeInvalid(unsigned, exponent);
-            assertThrows(IllegalArgumentException.class,
-                    () -> requireValidSize(current().nextBoolean(), exponent, sizeInvalid));
-        }
-        // valid size
-        {
-            final boolean unsigned = current().nextBoolean();
-            final int exponent = randomExponentValid();
-            final int sizeVlid = randomSizeValid(unsigned, exponent);
-            Assertions.assertDoesNotThrow(() -> requireValidSize(current().nextBoolean(), exponent, sizeVlid));
-        }
+        final boolean unsigned = current().nextBoolean();
+        final int exponent = randomExponentValid();
+        final int size = randomSizeValid(unsigned, exponent);
+        requireValidSize(unsigned, exponent, size);
     }
 }

@@ -41,7 +41,7 @@ public class DefaultBitOutput<T extends ByteOutput> extends AbstractBitOutput {
 
     /**
      * {@inheritDoc} The {@code write(int)} method of {@code DefaultBitOutput} class invokes {@link
-     * ByteOutput#write(int)} on what {@link #getDelegate()} returns with given value. Override this method if the
+     * ByteOutput#write(int)}, on what {@link #getDelegate()} gives, with given value. Override this method if the
      * {@link #delegate} is supposed to be lazily initialized and set.
      *
      * @param value {@inheritDoc}

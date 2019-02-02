@@ -16,6 +16,7 @@
 package com.github.jinahya.bit.io;
 
 import java.io.IOException;
+import java.io.OutputStream;
 
 /**
  * A byte output writes byte to an array of bytes.
@@ -23,6 +24,41 @@ import java.io.IOException;
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
 public class ArrayByteOutput extends AbstractByteOutput<byte[]> {
+
+    // -----------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Creates a new instance byte output which writes bytes to given output stream using an array of bytes whose length
+     * is equals to specified.
+     *
+     * @param stream the output stream to which bytes are written; must be not {@code null}.
+     * @param length the length of byte array; must be positive.
+     * @return an instance byte output.
+     */
+    @SuppressWarnings({"Duplicates"})
+    public static ArrayByteOutput of(final OutputStream stream, final int length) {
+        if (stream == null) {
+            throw new NullPointerException("stream is null");
+        }
+        if (length <= 0) {
+            throw new IllegalArgumentException("length(" + length + ") <= 0");
+        }
+        return new ArrayByteOutput(null, -1, -1) {
+            @Override
+            public void write(final int value) throws IOException {
+                if (target == null) {
+                    target = new byte[length];
+                    limit = target.length;
+                    index = 0;
+                }
+                super.write(value); // target[index++] = value;
+                if (index == limit) {
+                    stream.write(target);
+                    index = 0;
+                }
+            }
+        };
+    }
 
     // -----------------------------------------------------------------------------------------------------------------
 
@@ -39,7 +75,7 @@ public class ArrayByteOutput extends AbstractByteOutput<byte[]> {
         this.limit = limit;
     }
 
-    // -------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
 
     /**
      * {@inheritDoc} The {@code write(int)} method of {@code ArrayByteOutput} class sets {@code getTarget[getIndex()]}
@@ -52,12 +88,15 @@ public class ArrayByteOutput extends AbstractByteOutput<byte[]> {
      *                               {@link #getLimit()} returns.
      */
     @Override
+    @SuppressWarnings({"Duplicates"})
     public void write(final int value) throws IOException {
-        if (getIndex() >= getLimit()) {
-            throw new IllegalStateException("index(" + getIndex() + ") >= limit(" + getLimit() + ")");
+        final int i = getIndex();
+        final int l = getLimit();
+        if (i >= l) {
+            throw new IllegalStateException("index(" + i + ") >= limit(" + l + ")");
         }
-        getTarget()[getIndex()] = (byte) value;
-        setIndex(getIndex() + 1);
+        getTarget()[i] = (byte) value;
+        setIndex(i + 1);
     }
 
     // ---------------------------------------------------------------------------------------------------------- target

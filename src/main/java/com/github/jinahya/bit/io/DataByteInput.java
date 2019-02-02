@@ -21,10 +21,11 @@ import java.io.IOException;
 /**
  * A {@link ByteInput} uses an instance of {@link DataInput} as its {@link #source}.
  *
+ * @param <T> data input type parameter.
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  * @see DataByteOutput
  */
-public class DataByteInput extends AbstractByteInput<DataInput> {
+public class DataByteInput<T extends DataInput> extends AbstractByteInput<T> {
 
     // -----------------------------------------------------------------------------------------------------------------
 
@@ -33,7 +34,7 @@ public class DataByteInput extends AbstractByteInput<DataInput> {
      *
      * @param source the byte source; {@code null} if it's supposed to be lazily initialized and set
      */
-    public DataByteInput(final DataInput source) {
+    public DataByteInput(final T source) {
         super(source);
     }
 
@@ -41,11 +42,11 @@ public class DataByteInput extends AbstractByteInput<DataInput> {
 
     /**
      * {@inheritDoc} The {@code read()} method of {@code DataByteInput} class invokes {@link
-     * DataInput#readUnsignedByte()} on {@link #source} and returns the result. Override this method if the {@link
-     * #source} is supposed to be lazily initialized and set.
+     * DataInput#readUnsignedByte()}, on what {@link #getSource()} gives, and returns the result. Override this method
+     * if the {@link #source} is supposed to be lazily initialized and set.
      *
-     * @return {@inheritDoc }
-     * @throws IOException {@inheritDoc }
+     * @return {@inheritDoc}
+     * @throws IOException {@inheritDoc}
      */
     @Override
     public int read() throws IOException {
@@ -61,7 +62,7 @@ public class DataByteInput extends AbstractByteInput<DataInput> {
      * @return {@inheritDoc}
      */
     @Override
-    public DataByteInput source(final DataInput source) {
-        return (DataByteInput) super.source(source);
+    public DataByteInput<T> source(final T source) {
+        return (DataByteInput<T>) super.source(source);
     }
 }

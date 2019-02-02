@@ -24,54 +24,94 @@ import static java.lang.Math.pow;
  */
 final class BitIoConstraints {
 
+    // -----------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Checks whether given size is valid for unsigned 8 bit integer. An {@code IllegalArgumentException} will be thrown
+     * if given value is not valid.
+     *
+     * @param size the size to check; must between {@code 1} and {@value Byte#SIZE}, both inclusive.
+     * @return given size.
+     */
     static int requireValidSizeUnsigned8(final int size) {
         if (size < 1) {
-            throw new IllegalArgumentException("unsigned8.size(" + size + ") < 1");
+            throw new IllegalArgumentException("size(" + size + ") < 1");
         }
         if (size > Byte.SIZE) {
-            throw new IllegalArgumentException("unsigned8.size(" + size + ") > " + Byte.SIZE);
+            throw new IllegalArgumentException("size(" + size + ") > " + Byte.SIZE);
         }
         return size;
     }
 
+    /**
+     * Checks whether given size is valid for unsigned 16 bit integer. An {@code IllegalArgumentException} will be
+     * thrown if given value is not valid.
+     *
+     * @param size the size to check; must between {@code 1} and {@value Short#SIZE}, both inclusive.
+     * @return given size.
+     */
     static int requireValidSizeUnsigned16(final int size) {
         if (size < 1) {
-            throw new IllegalArgumentException("unsigned16.size(" + size + ") < 1");
+            throw new IllegalArgumentException("size(" + size + ") < 1");
         }
         if (size > Short.SIZE) {
-            throw new IllegalArgumentException("unsigned16.size(" + size + ") > " + Short.SIZE);
+            throw new IllegalArgumentException("size(" + size + ") > " + Short.SIZE);
         }
         return size;
     }
 
-    private static final int MIN_EXPONENT = 3;
+    // -------------------------------------------------------------------------------------------------------- exponent
+    static final int MIN_EXPONENT = 3;
 
-    private static final int MAX_EXPONENT = 6;
+    static final int MAX_EXPONENT = 6;
 
-    private static final int MIN_SIZE = 1;
-
-    private static final int[] MAX_SIZES = new int[MAX_EXPONENT - MIN_EXPONENT + 1];
-
-    static {
-        for (int i = 0; i < MAX_SIZES.length; i++) {
-            MAX_SIZES[i] = (int) pow(2.0d, (double) i + MIN_EXPONENT);
-        }
-    }
-
-    static int requireValidSize(final boolean unsigned, final int exponent, final int size) {
+    /**
+     * Validates given exponent.
+     *
+     * @param exponent the exponent to validate.
+     * @return given exponent.
+     */
+    static int requireValidExponent(final int exponent) {
         if (exponent < MIN_EXPONENT) {
             throw new IllegalArgumentException("exponent(" + exponent + ") < " + MIN_EXPONENT);
         }
         if (exponent > MAX_EXPONENT) {
             throw new IllegalArgumentException("exponent(" + exponent + ") > " + MAX_EXPONENT);
         }
+        return exponent;
+    }
+
+    // ------------------------------------------------------------------------------------------------------------ size
+    static final int MIN_SIZE = 1;
+
+    private static final int[] MAX_SIZES = new int[MAX_EXPONENT - MIN_EXPONENT + 1];
+
+    static {
+        MAX_SIZES[0] = (int) pow(2, MIN_EXPONENT);
+        for (int i = 1; i < MAX_SIZES.length; i++) {
+            MAX_SIZES[i] = MAX_SIZES[i - 1] * 2;
+        }
+    }
+
+    /**
+     * Returns the maximum size for given arguments.
+     *
+     * @param unsigned the value for unsigned.
+     * @param exponent the value for exponent.
+     * @return the maximum size.
+     */
+    static int maxSize(final boolean unsigned, final int exponent) {
+        return MAX_SIZES[requireValidExponent(exponent) - MIN_EXPONENT] - (unsigned ? 1 : 0);
+    }
+
+    static int requireValidSize(final boolean unsigned, final int exponent, final int size) {
         if (size < MIN_SIZE) {
             throw new IllegalArgumentException("size(" + size + ") < " + MIN_SIZE);
         }
-        final int maxSize = MAX_SIZES[exponent - MIN_EXPONENT] - (unsigned ? 1 : 0);
+        final int maxSize = maxSize(unsigned, exponent);
         if (size > maxSize) {
-            throw new IllegalArgumentException("size(" + size + ") > " + maxSize + ";unsigned=" + unsigned
-                                               + ";exponent=" + exponent);
+            throw new IllegalArgumentException("size(" + size + ") > " + maxSize + "; unsigned=" + unsigned
+                                               + "; exponent=" + exponent);
         }
         return size;
     }

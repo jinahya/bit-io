@@ -24,6 +24,8 @@ import java.io.IOException;
  */
 public interface BitInput {
 
+    // -----------------------------------------------------------------------------------------------------------------
+
     /**
      * Reads a 1-bit boolean value. This method reads a 1-bit unsigned int and returns {@code true} for {@code 0b1} and
      * {@code false} for {@code 0b0}.
@@ -32,6 +34,8 @@ public interface BitInput {
      * @throws IOException if an I/O error occurs.
      */
     boolean readBoolean() throws IOException;
+
+    // -----------------------------------------------------------------------------------------------------------------
 
     /**
      * Reads a byte value.
@@ -74,6 +78,8 @@ public interface BitInput {
      */
     long readLong(boolean unsigned, int size) throws IOException;
 
+    // -----------------------------------------------------------------------------------------------------------------
+
     /**
      * Reads a char value.
      *
@@ -83,12 +89,14 @@ public interface BitInput {
      */
     char readChar(int size) throws IOException;
 
+    // -----------------------------------------------------------------------------------------------------------------
+
     /**
-     * Aligns to given number of bytes by discarding.
+     * Aligns to given number of bytes by discarding bits.
      *
      * @param bytes the number of bytes to align; must be positive.
      * @return the number of bits discarded while aligning
-     * @throws IllegalArgumentException if {@code bytes} is less than {@code 1}.
+     * @throws IllegalArgumentException if {@code bytes} is less than or equals to {@code 0}.
      * @throws IOException              if an I/O error occurs.
      */
     long align(int bytes) throws IOException;

@@ -22,7 +22,7 @@ import java.io.InputStream;
 /**
  * A {@link ByteInput} reads bytes from an {@link InputStream}.
  *
- * @param <T> stream type parameter
+ * @param <T> input stream type parameter
  * @author Jin Kwon &lt;onacit at gmail.com&gt;
  * @see StreamByteOutput
  */
@@ -42,8 +42,8 @@ public class StreamByteInput<T extends InputStream> extends AbstractByteInput<T>
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * {@inheritDoc} The {@code read()} method of {@code StreamByteInput} class invokes {@link InputStream#read()} on
-     * what {@link #getSource()} returns and returns the result. Override this method if the {@link #source} is supposed
+     * {@inheritDoc} The {@code read()} method of {@code StreamByteInput} class invokes {@link InputStream#read()}, on
+     * what {@link #getSource()} gives, and returns the result. Override this method if the {@link #source} is supposed
      * to be lazily initialized and set.
      *
      * @return {@inheritDoc}
@@ -53,11 +53,11 @@ public class StreamByteInput<T extends InputStream> extends AbstractByteInput<T>
      */
     @Override
     public int read() throws IOException {
-        final int value = getSource().read();
-        if (value == -1) {
-            throw new EOFException();
+        final int read = getSource().read();
+        if (read == -1) {
+            throw new EOFException("the stream reached to an end-of-stream");
         }
-        return value;
+        return read;
     }
 
     // ---------------------------------------------------------------------------------------------------------- source

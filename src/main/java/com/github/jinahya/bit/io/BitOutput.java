@@ -24,6 +24,8 @@ import java.io.IOException;
  */
 public interface BitOutput {
 
+    // -----------------------------------------------------------------------------------------------------------------
+
     /**
      * Writes a 1-bit boolean value. This method writes {@code 0b1} for {@code true} and {@code 0b0} for {@code false}.
      *
@@ -31,6 +33,8 @@ public interface BitOutput {
      * @throws IOException if an I/O error occurs
      */
     void writeBoolean(boolean value) throws IOException;
+
+    // -----------------------------------------------------------------------------------------------------------------
 
     /**
      * Writes a {@code byte} value.
@@ -76,6 +80,8 @@ public interface BitOutput {
      */
     void writeLong(boolean unsigned, int size, long value) throws IOException;
 
+    // -----------------------------------------------------------------------------------------------------------------
+
     /**
      * Writes a {@code char} value.
      *
@@ -85,12 +91,14 @@ public interface BitOutput {
      */
     void writeChar(int size, char value) throws IOException;
 
+    // -----------------------------------------------------------------------------------------------------------------
+
     /**
-     * Aligns to specified number of bytes by padding zeros.
+     * Aligns to specified number of bytes by padding zero bits.
      *
      * @param bytes the number of bytes to align; must be positive.
      * @return the number of zero bits padded while aligning.
-     * @throws IllegalArgumentException if {@code bytes} is less than {@code 1}.
+     * @throws IllegalArgumentException if {@code bytes} is less than or equals to {@code 0}.
      * @throws IOException              if an I/O error occurs.
      */
     long align(int bytes) throws IOException;

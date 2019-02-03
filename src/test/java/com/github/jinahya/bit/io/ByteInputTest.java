@@ -39,11 +39,18 @@ public abstract class ByteInputTest<T extends ByteInput> {
     }
 
     // -----------------------------------------------------------------------------------------------------------------
+
+    /**
+     * The type of {@link ByteInput} to test.
+     */
     protected final Class<T> byteInputClass;
 
     @Typed
     @Inject
     private Instance<ByteInput> byteInputInstance;
 
+    /**
+     * An instance of {@link #byteInputClass} to test with.
+     */
     protected T byteInput;
 }

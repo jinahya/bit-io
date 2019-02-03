@@ -32,17 +32,17 @@ public class ArrayByteInput extends AbstractByteInput<byte[]> {
      * Creates a new instance of {@link ArrayByteInput} which reads bytes from given input stream using an array of
      * bytes whose length is equals to specified.
      *
-     * @param stream the input stream from which bytes are read; must be not {@code null}.
      * @param length the length of the byte array; must be positive.
+     * @param stream the input stream from which bytes are read; must be not {@code null}.
      * @return a new instance of {@link ArrayByteInput}.
      */
     @SuppressWarnings({"Duplicates"})
-    public static ArrayByteInput of(final InputStream stream, final int length) {
-        if (stream == null) {
-            throw new NullPointerException("stream is null");
-        }
+    public static ArrayByteInput of(final int length, final InputStream stream) {
         if (length <= 0) {
             throw new IllegalArgumentException("length(" + length + ") <= 0");
+        }
+        if (stream == null) {
+            throw new NullPointerException("stream is null");
         }
         return new ArrayByteInput(null, -1, -1) {
             @Override
@@ -91,18 +91,35 @@ public class ArrayByteInput extends AbstractByteInput<byte[]> {
      * be lazily initialized or adjusted.
      *
      * @return {@inheritDoc}
-     * @throws IOException           {@inheritDoc}
-     * @throws IllegalStateException if {@link #index} is equal to or greater than {@link #limit}
+     * @throws IOException              {@inheritDoc}
+     * @throws IllegalStateException if {@link #source} is {@code null}.
+     * @throws IllegalArgumentException if {@link #index} is less than {@code zero}.
+     * @throws IllegalArgumentException if {@link #index} is greater than or equal to {@code source.length}.
+     * @throws IllegalArgumentException if {@link #limit} is less than or equal to {@link #index}.
+     * @throws IllegalStateException    if {@link #limit} is greater than {@code source.length}.
      */
     @Override
     @SuppressWarnings({"Duplicates"})
     public int read() throws IOException {
-        final int i = getIndex();
-        final int l = getLimit();
-        if (i >= l) {
-            throw new IllegalStateException("index(" + i + ") >= limit(" + l + ")");
+        final byte[] s = getSource();
+        if (s == null) {
+            throw new IllegalStateException("source is null");
         }
-        final int result = getSource()[i] & 0xFF;
+        final int i = getIndex();
+        if (i < 0) {
+            throw new IllegalStateException("index(" + i + ") < 0");
+        }
+        if (i >= source.length) {
+            throw new IllegalStateException("index(" + i + ") >= source.length(" + source.length + ")");
+        }
+        final int l = getLimit();
+        if (l <= i) {
+            throw new IllegalStateException("limit(" + l + ") <= index(" + i + ")");
+        }
+        if (l > s.length) {
+            throw new IllegalStateException("limit(" + l + ") > source.length(" + s.length + ")");
+        }
+        final int result = s[i] & 0xFF;
         setIndex(i + 1);
         return result;
     }

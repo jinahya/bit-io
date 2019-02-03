@@ -31,17 +31,17 @@ public class ArrayByteOutput extends AbstractByteOutput<byte[]> {
      * Creates a new instance byte output which writes bytes to given output stream using an array of bytes whose length
      * is equals to specified.
      *
-     * @param stream the output stream to which bytes are written; must be not {@code null}.
      * @param length the length of byte array; must be positive.
+     * @param stream the output stream to which bytes are written; must be not {@code null}.
      * @return an instance byte output.
      */
     @SuppressWarnings({"Duplicates"})
-    public static ArrayByteOutput of(final OutputStream stream, final int length) {
-        if (stream == null) {
-            throw new NullPointerException("stream is null");
-        }
+    public static ArrayByteOutput of(final int length, final OutputStream stream) {
         if (length <= 0) {
             throw new IllegalArgumentException("length(" + length + ") <= 0");
+        }
+        if (stream == null) {
+            throw new NullPointerException("stream is null");
         }
         return new ArrayByteOutput(null, -1, -1) {
             @Override

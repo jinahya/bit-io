@@ -3,12 +3,10 @@ package com.github.jinahya.bit.io;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
+import static java.nio.ByteBuffer.allocate;
 import static java.util.concurrent.ThreadLocalRandom.current;
 
 class WhiteBufferByteInput extends BufferByteInput<ByteBuffer> {
-
-    // -----------------------------------------------------------------------------------------------------------------
-    private static final int CAPACITY = 1;
 
     // -----------------------------------------------------------------------------------------------------------------
     WhiteBufferByteInput() {
@@ -19,8 +17,8 @@ class WhiteBufferByteInput extends BufferByteInput<ByteBuffer> {
     @Override
     public int read() throws IOException {
         if (source == null) {
-            source = ByteBuffer.allocate(CAPACITY).position(CAPACITY);
-            assert source.hasArray();
+            source = allocate(1);
+            source.position(source.limit());
         }
         if (!source.hasRemaining()) {
             source.clear(); // position -> zero, limit -> capacity

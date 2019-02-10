@@ -126,7 +126,7 @@ public abstract class BitOutputTest<T extends BitOutput> {
     private Instance<BitOutput> bitOutputInstance;
 
     /**
-     * An injected (and selected) instance of bit output.
+     * An injected instance of bit output.
      */
     protected T bitOutput;
 }

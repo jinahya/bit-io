@@ -14,9 +14,9 @@ abstract class BufferByteInputTest<T extends BufferByteInput<U>, U extends ByteB
      * Creates a new instance.
      *
      * @param byteInputClass a byte input class.
-     * @param sourceClass    a source class.
+     * @param byteSourceClass    a source class.
      */
-    BufferByteInputTest(final Class<T> byteInputClass, final Class<U> sourceClass) {
-        super(byteInputClass, sourceClass);
+    BufferByteInputTest(final Class<T> byteInputClass, final Class<U> byteSourceClass) {
+        super(byteInputClass, byteSourceClass);
     }
 }

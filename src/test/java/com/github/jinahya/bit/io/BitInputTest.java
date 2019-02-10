@@ -123,11 +123,16 @@ public abstract class BitInputTest<T extends BitInput> {
 
     // ----------------------------------------------------------------------------------------------------------- align
     @Test
-    public void testAlignAssertIllegalArgumentExceptionThrownWhenBytesIsLessThanOne() throws IOException {
+    public void testAlignAssertIllegalArgumentExceptionThrownWhenBytesIsLessThanOne() {
         assertThrows(IllegalArgumentException.class, () -> bitInput.align(0));
         assertThrows(IllegalArgumentException.class, () -> bitInput.align(current().nextInt() | Integer.MIN_VALUE));
     }
 
+    /**
+     * Tests {@link BitInput#align(int)}.
+     *
+     * @throws IOException if an I/O error occurs.
+     */
     @Test
     public void testAlign() throws IOException {
         final long bits = bitInput.align(current().nextInt(1, 128));
@@ -143,5 +148,8 @@ public abstract class BitInputTest<T extends BitInput> {
     @Inject
     private Instance<BitInput> bitInputInstance;
 
+    /**
+     * An injected instance of {@link #bitInputClass}.
+     */
     protected T bitInput;
 }

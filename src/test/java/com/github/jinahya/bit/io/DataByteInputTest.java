@@ -15,10 +15,10 @@ abstract class DataByteInputTest<T extends DataByteInput<U>, U extends DataInput
     /**
      * Creates a new instance.
      *
-     * @param byteInputClass data byte input class
-     * @param sourceClass    data input class
+     * @param byteInputClass  byte input class
+     * @param byteSourceClass byte source class of the byte input class.
      */
-    DataByteInputTest(final Class<T> byteInputClass, final Class<U> sourceClass) {
-        super(byteInputClass, sourceClass);
+    DataByteInputTest(final Class<T> byteInputClass, final Class<U> byteSourceClass) {
+        super(byteInputClass, byteSourceClass);
     }
 }

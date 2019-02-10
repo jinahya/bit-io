@@ -16,10 +16,10 @@ abstract class StreamByteInputTest<T extends StreamByteInput<U>, U extends Input
     /**
      * Creates a new instance.
      *
-     * @param byteInputClass byte input class.
-     * @param sourceClass    input stream class.
+     * @param byteInputClass  byte input class.
+     * @param byteSourceClass the byte source class of the byte input class.
      */
-    StreamByteInputTest(final Class<T> byteInputClass, final Class<U> sourceClass) {
-        super(byteInputClass, sourceClass);
+    StreamByteInputTest(final Class<T> byteInputClass, final Class<U> byteSourceClass) {
+        super(byteInputClass, byteSourceClass);
     }
 }

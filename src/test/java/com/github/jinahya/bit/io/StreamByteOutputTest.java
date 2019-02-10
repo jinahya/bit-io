@@ -12,7 +12,7 @@ abstract class StreamByteOutputTest<T extends StreamByteOutput<U>, U extends Out
         extends AbstractByteOutputTest<T, U> {
 
     // -----------------------------------------------------------------------------------------------------------------
-    StreamByteOutputTest(final Class<T> byteOutputClass, final Class<U> targetClass) {
-        super(byteOutputClass, targetClass);
+    StreamByteOutputTest(final Class<T> byteOutputClass, final Class<U> byteTargetClass) {
+        super(byteOutputClass, byteTargetClass);
     }
 }

@@ -21,7 +21,7 @@ public abstract class AbstractByteInputTest<T extends AbstractByteInput<U>, U> e
     /**
      * Creates a new instance.
      *
-     * @param byteInputClass a byte input class to test.
+     * @param byteInputClass  a byte input class to test.
      * @param byteSourceClass a byte source class of the byte input class.
      */
     public AbstractByteInputTest(final Class<T> byteInputClass, final Class<U> byteSourceClass) {

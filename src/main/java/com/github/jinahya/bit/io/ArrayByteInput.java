@@ -30,13 +30,12 @@ public class ArrayByteInput extends AbstractByteInput<byte[]> {
 
     /**
      * Creates a new instance of {@link ArrayByteInput} which reads bytes from given input stream using an array of
-     * bytes whose length is equals to specified.
+     * bytes whose {@code length} equals to specified.
      *
      * @param length the length of the byte array; must be positive.
      * @param stream the input stream from which bytes are read; must be not {@code null}.
      * @return a new instance of {@link ArrayByteInput}.
      */
-    @SuppressWarnings({"Duplicates"})
     public static ArrayByteInput of(final int length, final InputStream stream) {
         if (length <= 0) {
             throw new IllegalArgumentException("length(" + length + ") <= 0");
@@ -49,16 +48,13 @@ public class ArrayByteInput extends AbstractByteInput<byte[]> {
             public int read() throws IOException {
                 if (source == null) {
                     source = new byte[length];
+                    index = source.length;
                     limit = source.length;
-                    index = limit;
                 }
                 if (index == limit) {
                     limit = stream.read(source);
                     if (limit == -1) {
-                        throw new EOFException("the stream reached to an end");
-                    }
-                    if (limit == 0) {
-                        // source.length == 0?
+                        throw new EOFException("reached to an end; " + stream);
                     }
                     assert limit > 0;
                     index = 0;
@@ -86,31 +82,25 @@ public class ArrayByteInput extends AbstractByteInput<byte[]> {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * {@inheritDoc} The {@code read()} method of {@code ArrayByteInput} class returns {@code source[index++]} as an
-     * unsigned 8-bit value. Override this method if either {@link #source}, {@link #index}, or {@link #limit} needs to
-     * be lazily initialized or adjusted.
+     * {@inheritDoc} The {@code read()} method of {@code ArrayByteInput} class returns {@code source[index]} as an
+     * unsigned 8-bit value and increments the {@link #index}. Override this method if either {@link #source}, {@link
+     * #index}, or {@link #limit} needs to be lazily initialized or adjusted.
      *
      * @return {@inheritDoc}
-     * @throws IOException              {@inheritDoc}
-     * @throws IllegalStateException if {@link #source} is {@code null}.
-     * @throws IllegalArgumentException if {@link #index} is less than {@code zero}.
-     * @throws IllegalArgumentException if {@link #index} is greater than or equal to {@code source.length}.
-     * @throws IllegalArgumentException if {@link #limit} is less than or equal to {@link #index}.
-     * @throws IllegalStateException    if {@link #limit} is greater than {@code source.length}.
+     * @throws IOException {@inheritDoc}
      */
     @Override
-    @SuppressWarnings({"Duplicates"})
     public int read() throws IOException {
         final byte[] s = getSource();
         if (s == null) {
-            throw new IllegalStateException("source is null");
+            throw new IllegalStateException("source is currently null");
         }
         final int i = getIndex();
         if (i < 0) {
             throw new IllegalStateException("index(" + i + ") < 0");
         }
-        if (i >= source.length) {
-            throw new IllegalStateException("index(" + i + ") >= source.length(" + source.length + ")");
+        if (i >= s.length) {
+            throw new IllegalStateException("index(" + i + ") >= source.length(" + s.length + ")");
         }
         final int l = getLimit();
         if (l <= i) {
@@ -197,12 +187,12 @@ public class ArrayByteInput extends AbstractByteInput<byte[]> {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * The index in the {@link #source} to read.
-     */
-    protected int index;
-
-    /**
      * The index in the {@link #source} that {@link #index} can't exceeds.
      */
     protected int limit;
+
+    /**
+     * The index in the {@link #source} to read.
+     */
+    protected int index;
 }

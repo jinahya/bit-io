@@ -230,7 +230,6 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
-        <!--<version>2.22.1</version>-->
         <version>${version.maven-surefire}</version>
       </plugin>
       <plugin>
@@ -284,28 +283,6 @@
               <goal>report</goal>
             </goals>
           </execution>
-          <!--<execution>-->
-          <!--<id>default-check</id>-->
-          <!--<goals>-->
-          <!--<goal>check</goal>-->
-          <!--</goals>-->
-          <!--<configuration>-->
-          <!--&lt;!&ndash;<rules>&ndash;&gt;-->
-          <!--&lt;!&ndash;&lt;!&ndash; implementation is needed only for Maven 2 &ndash;&gt;&ndash;&gt;-->
-          <!--&lt;!&ndash;<rule implementation="org.jacoco.maven.RuleConfiguration">&ndash;&gt;-->
-          <!--&lt;!&ndash;<element>BUNDLE</element>&ndash;&gt;-->
-          <!--&lt;!&ndash;<limits>&ndash;&gt;-->
-          <!--&lt;!&ndash;&lt;!&ndash; implementation is needed only for Maven 2 &ndash;&gt;&ndash;&gt;-->
-          <!--&lt;!&ndash;<limit implementation="org.jacoco.report.check.Limit">&ndash;&gt;-->
-          <!--&lt;!&ndash;<counter>COMPLEXITY</counter>&ndash;&gt;-->
-          <!--&lt;!&ndash;<value>COVEREDRATIO</value>&ndash;&gt;-->
-          <!--&lt;!&ndash;<minimum>0.60</minimum>&ndash;&gt;-->
-          <!--&lt;!&ndash;</limit>&ndash;&gt;-->
-          <!--&lt;!&ndash;</limits>&ndash;&gt;-->
-          <!--&lt;!&ndash;</rule>&ndash;&gt;-->
-          <!--&lt;!&ndash;</rules>&ndash;&gt;-->
-          <!--</configuration>-->
-          <!--</execution>-->
         </executions>
       </plugin>
     </plugins>
@@ -341,7 +318,6 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-report-plugin</artifactId>
-        <!--<version>${version.maven-surefire}</version>-->
         <configuration>
           <showSuccess>false</showSuccess>
         </configuration>

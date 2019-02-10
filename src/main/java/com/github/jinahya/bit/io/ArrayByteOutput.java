@@ -28,30 +28,29 @@ public class ArrayByteOutput extends AbstractByteOutput<byte[]> {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * Creates a new instance byte output which writes bytes to given output stream using an array of bytes whose length
-     * is equals to specified.
+     * Creates a new instance of byte output which writes bytes to given output stream using an array of bytes whose
+     * {@code length} equals to specified.
      *
-     * @param stream the output stream to which bytes are written; must be not {@code null}.
      * @param length the length of byte array; must be positive.
+     * @param stream the output stream to which bytes are written; must be not {@code null}.
      * @return an instance byte output.
      */
-    @SuppressWarnings({"Duplicates"})
-    public static ArrayByteOutput of(final OutputStream stream, final int length) {
-        if (stream == null) {
-            throw new NullPointerException("stream is null");
-        }
+    public static ArrayByteOutput of(final int length, final OutputStream stream) {
         if (length <= 0) {
             throw new IllegalArgumentException("length(" + length + ") <= 0");
+        }
+        if (stream == null) {
+            throw new NullPointerException("stream is null");
         }
         return new ArrayByteOutput(null, -1, -1) {
             @Override
             public void write(final int value) throws IOException {
                 if (target == null) {
                     target = new byte[length];
-                    limit = target.length;
                     index = 0;
+                    limit = target.length;
                 }
-                super.write(value); // target[index++] = value;
+                super.write(value);
                 if (index == limit) {
                     stream.write(target);
                     index = 0;
@@ -79,23 +78,33 @@ public class ArrayByteOutput extends AbstractByteOutput<byte[]> {
 
     /**
      * {@inheritDoc} The {@code write(int)} method of {@code ArrayByteOutput} class sets {@code getTarget[getIndex()]}
-     * with given value and increments the value of {@link #index} via {@link #setIndex(int)}. Override this method if
+     * with given value and increments the {@link #index} using {@link #setIndex(int)} method. Override this method if
      * either {@link #target}, {@link #index}, or {@link #limit} needs to be lazily initialized and/or adjusted.
      *
      * @param value {@inheritDoc}
-     * @throws IOException           {@inheritDoc}
-     * @throws IllegalStateException if the value {@link #getIndex()} returns is equal to or greater than the value
-     *                               {@link #getLimit()} returns.
+     * @throws IOException {@inheritDoc}
      */
     @Override
-    @SuppressWarnings({"Duplicates"})
     public void write(final int value) throws IOException {
-        final int i = getIndex();
-        final int l = getLimit();
-        if (i >= l) {
-            throw new IllegalStateException("index(" + i + ") >= limit(" + l + ")");
+        final byte[] t = getTarget();
+        if (t == null) {
+            throw new IllegalStateException("target is currently null");
         }
-        getTarget()[i] = (byte) value;
+        final int i = getIndex();
+        if (i < 0) {
+            throw new IllegalStateException("index(" + i + ") < 0");
+        }
+        if (i >= t.length) {
+            throw new IllegalStateException("index(" + i + ") >= target.length(" + t.length + ")");
+        }
+        final int l = getLimit();
+        if (l <= i) {
+            throw new IllegalStateException("limit(" + l + ") <= index(" + i + ")");
+        }
+        if (l > t.length) {
+            throw new IllegalStateException("limit(" + l + ") > target.length(" + t.length + ")");
+        }
+        t[i] = (byte) value;
         setIndex(i + 1);
     }
 

@@ -35,17 +35,6 @@ public abstract class AbstractBitOutput implements BitOutput {
      */
     protected abstract void write(int value) throws IOException;
 
-    /**
-     * Writes given octet to {@link #write(int)} and increments the {@code count}.
-     *
-     * @param value the octet to write.
-     * @throws IOException if an I/O error occurs.
-     */
-    private void octet(final int value) throws IOException {
-        write(value);
-        count++;
-    }
-
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
@@ -57,38 +46,20 @@ public abstract class AbstractBitOutput implements BitOutput {
      */
     protected void unsigned8(final int size, int value) throws IOException {
         BitIoConstraints.requireValidSizeUnsigned8(size);
-        if (size == Byte.SIZE && index == 0) {
-            octet(value);
-            return;
-        }
         final int required = size - (Byte.SIZE - index);
         if (required > 0) {
             unsigned8(size - required, value >> required);
             unsigned8(required, value);
             return;
         }
-        if (false) {
-            o <<= size;
-            o |= ((1 << size) - 1) & value;
-            index += size;
-            if (index == Byte.SIZE) {
-                octet(o);
-                index = 0;
-            }
-            return;
-        }
-        for (int i = index + size - 1; i >= index; i--) {
-            flags[i] = (value & 0x01) == 0x01;
-            value >>= 1;
-        }
+        octet <<= size;
+        octet |= ((1 << size) - 1) & value;
         index += size;
         if (index == Byte.SIZE) {
-            int octet = 0x00;
-            for (int i = 0; i < Byte.SIZE; i++) {
-                octet <<= 1;
-                octet |= flags[i] ? 0x01 : 0x00;
-            }
-            octet(octet);
+            write(octet);
+            count++;
+            octet = 0x00;
+            //octet(octet);
             index = 0;
         }
     }
@@ -201,12 +172,12 @@ public abstract class AbstractBitOutput implements BitOutput {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * An array booleans for bit flags.
+     * The current value of written bits.
      */
-    private final boolean[] flags = new boolean[Byte.SIZE];
+    private int octet;
 
     /**
-     * The bit index in {@link #flags} to write.
+     * The bit index in {@link #octet} to write.
      */
     private int index = 0;
 
@@ -216,5 +187,4 @@ public abstract class AbstractBitOutput implements BitOutput {
     private long count = 0L;
 
     // -----------------------------------------------------------------------------------------------------------------
-    private int o;
 }

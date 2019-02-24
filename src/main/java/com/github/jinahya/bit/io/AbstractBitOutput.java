@@ -46,20 +46,24 @@ public abstract class AbstractBitOutput implements BitOutput {
      */
     protected void unsigned8(final int size, int value) throws IOException {
         BitIoConstraints.requireValidSizeUnsigned8(size);
-        final int required = size - (Byte.SIZE - index);
+        //final int required = size - (Byte.SIZE - index);
+        final int required = size - available;
         if (required > 0) {
             unsigned8(size - required, value >> required);
             unsigned8(required, value);
             return;
         }
         octet <<= size;
-        octet |= ((1 << size) - 1) & value;
-        index += size;
-        if (index == Byte.SIZE) {
+        octet |= (((1 << size) - 1) & value);
+        available -= size;
+        //index += size;
+        //if (index == Byte.SIZE) {
+        if (available == 0) {
             write(octet);
             count++;
             octet = 0x00;
-            index = 0;
+//            index = 0;
+            available = Byte.SIZE;
         }
     }
 
@@ -116,8 +120,8 @@ public abstract class AbstractBitOutput implements BitOutput {
         if (remainder > 0) {
             unsigned16(remainder, value >> (quotient * Short.SIZE));
         }
-        for (int i = quotient - 1; i >= 0; i--) {
-            unsigned16(Short.SIZE, value >> (Short.SIZE * i));
+        for (int i = Short.SIZE * (quotient - 1); i >= 0; i -= Short.SIZE) {
+            unsigned16(Short.SIZE, value >> i);
         }
     }
 
@@ -153,17 +157,13 @@ public abstract class AbstractBitOutput implements BitOutput {
         if (bytes <= 0) {
             throw new IllegalArgumentException("bytes(" + bytes + ") <= 0");
         }
-        long bits = 0; // number of bits to be padded
-        // pad remained bits into current octet
-        if (index > 0) {
-            bits += Byte.SIZE - index;
-            unsigned8((int) bits, 0x00); // count incremented
+        long bits = 0;
+        if (available < Byte.SIZE) {
+            bits += available;
+            unsigned8(available, 0x00);
         }
-        final long remainder = count % bytes;
-        long octets = (remainder > 0 ? bytes : 0) - remainder;
-        for (; octets > 0; octets--) {
+        for (; count % bytes > 0; bits += Byte.SIZE) {
             unsigned8(Byte.SIZE, 0x00);
-            bits += Byte.SIZE;
         }
         return bits;
     }
@@ -176,9 +176,9 @@ public abstract class AbstractBitOutput implements BitOutput {
     private int octet;
 
     /**
-     * The bit index in {@link #octet} to write.
+     * The number of bits available to write.
      */
-    private int index = 0;
+    private int available = Byte.SIZE;
 
     /**
      * The number of bytes written so far.

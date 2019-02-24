@@ -81,7 +81,7 @@ class BitIoTest {
     // -----------------------------------------------------------------------------------------------------------------
     @MethodSource({"source"})
     @ParameterizedTest
-    void test(final BitOutput output, final Supplier<BitInput> inputSupplier) throws IOException {
+    void random(final BitOutput output, final Supplier<BitInput> inputSupplier) throws IOException {
         final List<Object> list = new LinkedList<>();
         final int count = current().nextInt(BOUND_COUNT);
         for (int i = 0; i < count; i++) {
@@ -158,29 +158,29 @@ class BitIoTest {
                 case 0:
                     final byte bexpected = (Byte) list.remove(0);
                     final byte bactual = input.readByte(unsigned, size);
-                    log.debug("byte; unsigned: {}, size: {}, expected: {}, actual: {}", unsigned, size, bexpected,
-                              bactual);
+//                    log.debug("byte; unsigned: {}, size: {}, expected: {}, actual: {}", unsigned, size, bexpected,
+//                              bactual);
                     assertEquals(bexpected, bactual);
                     break;
                 case 1:
                     final short sexpected = (Short) list.remove(0);
                     final short sactual = input.readShort(unsigned, size);
-                    log.debug("short; unsigned: {}, size: {}, expected: {}, actual: {}", unsigned, size, sexpected,
-                              sactual);
+//                    log.debug("short; unsigned: {}, size: {}, expected: {}, actual: {}", unsigned, size, sexpected,
+//                              sactual);
                     assertEquals(sexpected, sactual);
                     break;
                 case 2:
                     final int iexpected = (Integer) list.remove(0);
                     final int iactual = input.readInt(unsigned, size);
-                    log.debug("int; unsigned: {}, size: {}, expected: {}, actual: {}", unsigned, size, iexpected,
-                              iactual);
+//                    log.debug("int; unsigned: {}, size: {}, expected: {}, actual: {}", unsigned, size, iexpected,
+//                              iactual);
                     assertEquals(iexpected, iactual);
                     break;
                 default:
                     final long lexpected = (Long) list.remove(0);
                     final long lactual = input.readLong(unsigned, size);
-                    log.debug("long; unsigned: {}, size: {}, expected: {}, actual: {}", unsigned, size, lexpected,
-                              lactual);
+//                    log.debug("long; unsigned: {}, size: {}, expected: {}, actual: {}", unsigned, size, lexpected,
+//                              lactual);
                     assertEquals(lexpected, lactual);
                     break;
             }

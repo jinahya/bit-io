@@ -31,7 +31,7 @@ final class BitIoTests {
                 value = (byte) (current().nextInt() >> (Integer.SIZE - size));
                 assertEquals(value >> size, value >= 0 ? 0 : -1);
             }
-            log.debug("byte; unsigned: {}, size: {}, value: {}", unsigned, size, value);
+            //log.debug("byte; unsigned: {}, size: {}, value: {}", unsigned, size, value);
             return function.apply(Pair.of(unsigned, size), value);
         });
     }
@@ -60,7 +60,7 @@ final class BitIoTests {
                 value = (short) (current().nextInt() >> (Integer.SIZE - size));
                 assertEquals(value >> size, value >= 0 ? 0 : -1);
             }
-            log.debug("short; unsigned: {}, size: {}, value: {}", unsigned, size, value);
+            //log.debug("short; unsigned: {}, size: {}, value: {}", unsigned, size, value);
             return function.apply(Pair.of(unsigned, size), value);
         });
     }
@@ -91,7 +91,7 @@ final class BitIoTests {
                     assertEquals(value >> size, value >= 0 ? 0 : -1);
                 }
             }
-            log.debug("int; unsigned: {}, size: {}, value: {}", unsigned, size, value);
+            //log.debug("int; unsigned: {}, size: {}, value: {}", unsigned, size, value);
             return function.apply(Pair.of(unsigned, size), value);
         });
     }
@@ -122,7 +122,7 @@ final class BitIoTests {
                     assertEquals(value >> size, value >= 0L ? 0L : -1L);
                 }
             }
-            log.debug("long; unsigned: {}, size: {}, value: {}", unsigned, size, value);
+            //log.debug("long; unsigned: {}, size: {}, value: {}", unsigned, size, value);
             return function.apply(Pair.of(unsigned, size), value);
         });
     }

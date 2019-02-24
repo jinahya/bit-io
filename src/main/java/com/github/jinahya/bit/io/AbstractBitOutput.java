@@ -30,7 +30,7 @@ public abstract class AbstractBitOutput implements BitOutput {
     /**
      * Writes given unsigned 8-bit integer.
      *
-     * @param value an unsigned 8-bit integer to write
+     * @param value the unsigned 8-bit integer to write
      * @throws IOException if an I/O error occurs.
      */
     protected abstract void write(int value) throws IOException;
@@ -59,7 +59,6 @@ public abstract class AbstractBitOutput implements BitOutput {
             write(octet);
             count++;
             octet = 0x00;
-            //octet(octet);
             index = 0;
         }
     }

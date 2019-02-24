@@ -172,6 +172,4 @@ public abstract class AbstractBitOutput implements BitOutput {
      * The number of bytes written so far.
      */
     private long count = 0L;
-
-    // -----------------------------------------------------------------------------------------------------------------
 }

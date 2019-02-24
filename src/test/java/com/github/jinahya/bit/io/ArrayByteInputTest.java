@@ -26,7 +26,7 @@ class ArrayByteInputTest extends AbstractByteInputTest<ArrayByteInput, byte[]> {
     public void testOfAssertThrowsIllegalArgumentExceptionWhenLengthIsLessThanOrEqualToZero() {
         assertThrows(IllegalArgumentException.class, () -> ArrayByteInput.of(0, mock(InputStream.class)));
         assertThrows(IllegalArgumentException.class,
-                () -> ArrayByteInput.of(current().nextInt() | Integer.MIN_VALUE, mock(InputStream.class)));
+                     () -> ArrayByteInput.of(current().nextInt() | Integer.MIN_VALUE, mock(InputStream.class)));
     }
 
     /**

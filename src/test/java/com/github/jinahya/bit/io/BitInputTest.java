@@ -68,7 +68,7 @@ public abstract class BitInputTest<T extends BitInput> {
     public void testReadByteAssertThrowsIllegalArgumentExceptionWhenSizeIsLessThanOne() {
         assertThrows(IllegalArgumentException.class, () -> bitInput.readByte(current().nextBoolean(), 0));
         assertThrows(IllegalArgumentException.class,
-                () -> bitInput.readByte(current().nextBoolean(), current().nextInt() | Integer.MIN_VALUE));
+                     () -> bitInput.readByte(current().nextBoolean(), current().nextInt() | Integer.MIN_VALUE));
     }
 
     @RepeatedTest(8)

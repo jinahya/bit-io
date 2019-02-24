@@ -26,7 +26,7 @@ public class ArrayByteOutputTest extends AbstractByteOutputTest<ArrayByteOutput,
     public void testOfAssertThrowsIllegalArgumentExceptionWhenLengthIsNotPositive() {
         assertThrows(IllegalArgumentException.class, () -> ArrayByteOutput.of(0, mock(OutputStream.class)));
         assertThrows(IllegalArgumentException.class,
-                () -> ArrayByteOutput.of(current().nextInt() | Integer.MIN_VALUE, mock(OutputStream.class)));
+                     () -> ArrayByteOutput.of(current().nextInt() | Integer.MIN_VALUE, mock(OutputStream.class)));
     }
 
     /**

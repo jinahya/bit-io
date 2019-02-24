@@ -1,9 +1,9 @@
 package com.github.jinahya.bit.io;
 
-public class BlackBitOutputTest extends DefaultBitOutputTest<BlackBitOutput, BlackByteOutput> {
+class BlackBitOutputTest extends DefaultBitOutputTest<BlackBitOutput, BlackByteOutput> {
 
     // -----------------------------------------------------------------------------------------------------------------
-    public BlackBitOutputTest() {
+    BlackBitOutputTest() {
         super(BlackBitOutput.class, BlackByteOutput.class);
     }
 }

@@ -6,11 +6,11 @@ import java.io.OutputStream;
 /**
  * An output stream whose {@link OutputStream#write(int)} does nothing.
  *
+ * @see WhiteInputStream
  * @deprecated Use {@link OutputStream#nullOutputStream()}
  */
 @Deprecated
-        // forRemoval = true
-class BlackOutputStream extends OutputStream {
+final class BlackOutputStream extends OutputStream {
 
     // -----------------------------------------------------------------------------------------------------------------
     @Override

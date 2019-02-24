@@ -80,20 +80,20 @@ class BitIoConstraintsTest {
     }
 
     // -------------------------------------------------------------------------------------------- requireValidExponent
-    @RepeatedTest(128)
+    @RepeatedTest(8)
     void testRequireValidExponentAssertThrowsIllegalArgumentExceptionWhenExponentIsInvalid() {
         final int exponent = randomExponentInvalid();
         assertThrows(IllegalArgumentException.class, () -> requireValidExponent(exponent));
     }
 
-    @RepeatedTest(128)
+    @RepeatedTest(8)
     void testRequireValidExponent() {
         final int exponent = randomExponentValid();
         requireValidExponent(exponent);
     }
 
     // ------------------------------------------------------------------------------------------------ requireValidSize
-    @RepeatedTest(128)
+    @RepeatedTest(8)
     void testRequireValidSizeAssertThrowsIllegalArgumentExceptionWhenSizeIsInvalid() {
         final boolean unsigned = current().nextBoolean();
         final int exponent = randomExponentValid();
@@ -101,7 +101,7 @@ class BitIoConstraintsTest {
         assertThrows(IllegalArgumentException.class, () -> requireValidSize(unsigned, exponent, size));
     }
 
-    @RepeatedTest(128)
+    @RepeatedTest(8)
     void testRequireValidSize() {
         final boolean unsigned = current().nextBoolean();
         final int exponent = randomExponentValid();

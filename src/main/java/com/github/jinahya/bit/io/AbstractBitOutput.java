@@ -17,10 +17,19 @@ package com.github.jinahya.bit.io;
 
 import java.io.IOException;
 
+import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeByte;
+import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeChar;
+import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeInt;
+import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeLong;
+import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeShort;
+import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeUnsigned16;
+import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeUnsigned8;
+
 /**
  * An abstract class for implementing {@link BitInput}.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
+ * @see AbstractBitInput
  */
 public abstract class AbstractBitOutput implements BitOutput {
 
@@ -29,21 +38,10 @@ public abstract class AbstractBitOutput implements BitOutput {
     /**
      * Writes given unsigned 8-bit integer.
      *
-     * @param value an unsigned 8-bit integer to write
+     * @param value the unsigned 8-bit integer to write
      * @throws IOException if an I/O error occurs.
      */
     protected abstract void write(int value) throws IOException;
-
-    /**
-     * Writes given octet to {@link #write(int)} and increments the {@code count}.
-     *
-     * @param value the octet to write.
-     * @throws IOException if an I/O error occurs.
-     */
-    private void octet(final int value) throws IOException {
-        write(value);
-        count++;
-    }
 
     // -----------------------------------------------------------------------------------------------------------------
 
@@ -55,30 +53,21 @@ public abstract class AbstractBitOutput implements BitOutput {
      * @throws IOException if an I/O error occurs.
      */
     protected void unsigned8(final int size, int value) throws IOException {
-        BitIoConstraints.requireValidSizeUnsigned8(size);
-        if (size == Byte.SIZE && index == 0) {
-            octet(value);
-            return;
-        }
-        final int required = size - (Byte.SIZE - index);
+        requireValidSizeUnsigned8(size);
+        final int required = size - available;
         if (required > 0) {
             unsigned8(size - required, value >> required);
             unsigned8(required, value);
             return;
         }
-        for (int i = index + size - 1; i >= index; i--) {
-            flags[i] = (value & 0x01) == 0x01;
-            value >>= 1;
-        }
-        index += size;
-        if (index == Byte.SIZE) {
-            int octet = 0x00;
-            for (int i = 0; i < Byte.SIZE; i++) {
-                octet <<= 1;
-                octet |= flags[i] ? 0x01 : 0x00;
-            }
-            octet(octet);
-            index = 0;
+        octet <<= size;
+        octet |= (((1 << size) - 1) & value);
+        available -= size;
+        if (available == 0) {
+            write(octet);
+            count++;
+            octet = 0x00;
+            available = Byte.SIZE;
         }
     }
 
@@ -90,7 +79,7 @@ public abstract class AbstractBitOutput implements BitOutput {
      * @throws IOException if an I/O error occurs
      */
     protected void unsigned16(final int size, final int value) throws IOException {
-        BitIoConstraints.requireValidSizeUnsigned16(size);
+        requireValidSizeUnsigned16(size);
         final int quotient = size / Byte.SIZE;
         final int remainder = size % Byte.SIZE;
         if (remainder > 0) {
@@ -109,20 +98,20 @@ public abstract class AbstractBitOutput implements BitOutput {
 
     @Override
     public void writeByte(final boolean unsigned, final int size, final byte value) throws IOException {
-        BitIoConstraints.requireValidSizeByte(unsigned, size);
+        requireValidSizeByte(unsigned, size);
         writeInt(unsigned, size, value);
     }
 
     @Override
     public void writeShort(final boolean unsigned, final int size, final short value) throws IOException {
-        BitIoConstraints.requireValidSizeShort(unsigned, size);
+        requireValidSizeShort(unsigned, size);
         writeInt(unsigned, size, value);
     }
 
     @Override
     public void writeInt(final boolean unsigned, final int size, final int value) throws IOException {
-        BitIoConstraints.requireValidSizeInt(unsigned, size);
-        if (!unsigned) {
+        requireValidSizeInt(unsigned, size);
+        if (false && !unsigned) {
             final int usize = size - 1;
             writeInt(true, 1, value >> usize);
             if (usize > 0) {
@@ -135,36 +124,28 @@ public abstract class AbstractBitOutput implements BitOutput {
         if (remainder > 0) {
             unsigned16(remainder, value >> (quotient * Short.SIZE));
         }
-        for (int i = quotient - 1; i >= 0; i--) {
-            unsigned16(Short.SIZE, value >> (Short.SIZE * i));
+        for (int i = Short.SIZE * (quotient - 1); i >= 0; i -= Short.SIZE) {
+            unsigned16(Short.SIZE, value >> i);
         }
     }
 
     @Override
     public void writeLong(final boolean unsigned, final int size, final long value) throws IOException {
-        BitIoConstraints.requireValidSizeLong(unsigned, size);
-        if (!unsigned) {
-            final int usize = size - 1;
-            writeLong(true, 1, value >> usize);
-            if (usize > 0) {
-                writeLong(true, usize, value);
-            }
-            return;
-        }
-        final int quotient = size / 31;
-        final int remainder = size % 31;
+        requireValidSizeLong(unsigned, size);
+        final int quotient = size / Integer.SIZE;
+        final int remainder = size % Integer.SIZE;
         if (remainder > 0) {
-            writeInt(true, remainder, (int) (value >> (quotient * 31)));
+            writeInt(false, remainder, (int) (value >> (quotient * Integer.SIZE)));
         }
-        for (int i = quotient - 1; i >= 0; i--) {
-            writeInt(true, 31, (int) (value >> (i * 31)));
+        for (int i = Integer.SIZE * (quotient - 1); i >= 0; i -= Integer.SIZE) {
+            writeInt(false, Integer.SIZE, (int) (value >> i));
         }
     }
 
     @Override
     public void writeChar(final int size, final char value) throws IOException {
-        BitIoConstraints.requireValidSizeChar(size);
-        unsigned16(size, value);
+        requireValidSizeChar(size);
+        writeInt(true, size, value);
     }
 
     @Override
@@ -172,17 +153,13 @@ public abstract class AbstractBitOutput implements BitOutput {
         if (bytes <= 0) {
             throw new IllegalArgumentException("bytes(" + bytes + ") <= 0");
         }
-        long bits = 0; // number of bits to be padded
-        // pad remained bits into current octet
-        if (index > 0) {
-            bits += Byte.SIZE - index;
-            unsigned8((int) bits, 0x00); // count incremented
+        long bits = 0;
+        if (available < Byte.SIZE) {
+            bits += available;
+            writeInt(true, available, 0x00);
         }
-        final long remainder = count % bytes;
-        long octets = (remainder > 0 ? bytes : 0) - remainder;
-        for (; octets > 0; octets--) {
-            unsigned8(Byte.SIZE, 0x00);
-            bits += Byte.SIZE;
+        for (; count % bytes > 0; bits += Byte.SIZE) {
+            writeInt(true, Byte.SIZE, 0x00);
         }
         return bits;
     }
@@ -190,17 +167,19 @@ public abstract class AbstractBitOutput implements BitOutput {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * An array booleans for bit flags.
+     * The current value of written bits.
      */
-    private final boolean[] flags = new boolean[Byte.SIZE];
+    private int octet;
 
     /**
-     * The bit index in {@link #flags} to write.
+     * The number of bits available to write.
      */
-    private int index = 0;
+    private int available = Byte.SIZE;
 
     /**
      * The number of bytes written so far.
      */
     private long count = 0L;
+
+    // -----------------------------------------------------------------------------------------------------------------
 }

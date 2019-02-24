@@ -2,12 +2,18 @@ package com.github.jinahya.bit.io;
 
 import java.io.IOException;
 
+/**
+ * A class of {@link ArrayByteOutput} which discards bytes.
+ *
+ * @see WhiteArrayByteInput
+ */
 class BlackArrayByteOutput extends ArrayByteOutput {
 
     // -----------------------------------------------------------------------------------------------------------------
-    private static final int LENGTH = 1;
 
-    // -----------------------------------------------------------------------------------------------------------------
+    /**
+     * Creates a new instance.
+     */
     BlackArrayByteOutput() {
         super(null, -1, -1);
     }
@@ -16,13 +22,13 @@ class BlackArrayByteOutput extends ArrayByteOutput {
     @Override
     public void write(int value) throws IOException {
         if (target == null) {
-            target = new byte[LENGTH];
+            target = new byte[1];
+            index = 0;
             limit = target.length;
-            index = limit;
-        }
-        if (index == limit) {
-            setIndex(0);
         }
         super.write(value);
+        if (index == limit) {
+            index = 0;
+        }
     }
 }

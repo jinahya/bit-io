@@ -166,7 +166,7 @@ public abstract class AbstractBitInput implements BitInput {
     @Override
     public char readChar(final int size) throws IOException {
         requireValidSizeChar(size);
-        return (char) unsigned16(size);
+        return (char) readInt(true, size);
     }
 
     // -----------------------------------------------------------------------------------------------------------------

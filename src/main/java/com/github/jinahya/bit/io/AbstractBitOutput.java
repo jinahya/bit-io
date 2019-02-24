@@ -132,22 +132,6 @@ public abstract class AbstractBitOutput implements BitOutput {
     @Override
     public void writeLong(final boolean unsigned, final int size, final long value) throws IOException {
         requireValidSizeLong(unsigned, size);
-        if (false && !unsigned) {
-            final int usize = size - 1;
-            writeLong(true, 1, value >> usize);
-            if (usize > 0) {
-                writeLong(true, usize, value);
-            }
-            return;
-        }
-//        final int quotient = size / 31;
-//        final int remainder = size % 31;
-//        if (remainder > 0) {
-//            writeInt(true, remainder, (int) (value >> (quotient * 31)));
-//        }
-//        for (int i = quotient - 1; i >= 0; i--) {
-//            writeInt(true, 31, (int) (value >> (i * 31)));
-//        }
         final int quotient = size / Integer.SIZE;
         final int remainder = size % Integer.SIZE;
         if (remainder > 0) {
@@ -172,11 +156,9 @@ public abstract class AbstractBitOutput implements BitOutput {
         long bits = 0;
         if (available < Byte.SIZE) {
             bits += available;
-            //unsigned8(available, 0x00);
             writeInt(true, available, 0x00);
         }
         for (; count % bytes > 0; bits += Byte.SIZE) {
-            //unsigned8(Byte.SIZE, 0x00);
             writeInt(true, Byte.SIZE, 0x00);
         }
         return bits;

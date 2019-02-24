@@ -21,6 +21,7 @@ import java.io.IOException;
  * An abstract class for implementing {@link BitInput}.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
+ * @see AbstractBitInput
  */
 public abstract class AbstractBitOutput implements BitOutput {
 
@@ -64,6 +65,16 @@ public abstract class AbstractBitOutput implements BitOutput {
         if (required > 0) {
             unsigned8(size - required, value >> required);
             unsigned8(required, value);
+            return;
+        }
+        if (false) {
+            o <<= size;
+            o |= ((1 << size) - 1) & value;
+            index += size;
+            if (index == Byte.SIZE) {
+                octet(o);
+                index = 0;
+            }
             return;
         }
         for (int i = index + size - 1; i >= index; i--) {
@@ -203,4 +214,7 @@ public abstract class AbstractBitOutput implements BitOutput {
      * The number of bytes written so far.
      */
     private long count = 0L;
+
+    // -----------------------------------------------------------------------------------------------------------------
+    private int o;
 }

@@ -60,13 +60,13 @@ public abstract class BitOutputTest<T extends BitOutput> {
      *
      * @throws IOException if an I/O error occurs.
      */
-    @RepeatedTest(128)
+    @RepeatedTest(8)
     public void testWriteBoolean() throws IOException {
         bitOutput.writeBoolean(current().nextBoolean());
     }
 
     // ------------------------------------------------------------------------------------------------------------ byte
-    @RepeatedTest(128)
+    @RepeatedTest(8)
     public void testWriteByte() throws IOException {
         final boolean unsigned = current().nextBoolean();
         final int size = current().nextInt(1, Byte.SIZE + (unsigned ? 0 : 1));
@@ -75,7 +75,7 @@ public abstract class BitOutputTest<T extends BitOutput> {
     }
 
     // ----------------------------------------------------------------------------------------------------------- short
-    @RepeatedTest(128)
+    @RepeatedTest(8)
     public void testWriteShort() throws IOException {
         final boolean unsigned = current().nextBoolean();
         final int size = current().nextInt(1, Short.SIZE + (unsigned ? 0 : 1));
@@ -84,7 +84,7 @@ public abstract class BitOutputTest<T extends BitOutput> {
     }
 
     // ------------------------------------------------------------------------------------------------------------- int
-    @RepeatedTest(128)
+    @RepeatedTest(8)
     public void testWriteInt() throws IOException {
         final boolean unsigned = current().nextBoolean();
         final int size = current().nextInt(1, Integer.SIZE + (unsigned ? 0 : 1));
@@ -93,7 +93,7 @@ public abstract class BitOutputTest<T extends BitOutput> {
     }
 
     // ------------------------------------------------------------------------------------------------------------ long
-    @RepeatedTest(128)
+    @RepeatedTest(8)
     public void testWriteLong() throws IOException {
         final boolean unsigned = current().nextBoolean();
         final int size = current().nextInt(1, Long.SIZE + (unsigned ? 0 : 1));
@@ -102,7 +102,7 @@ public abstract class BitOutputTest<T extends BitOutput> {
     }
 
     // ------------------------------------------------------------------------------------------------------------ char
-    @RepeatedTest(128)
+    @RepeatedTest(8)
     public void testWriteChar() throws IOException {
         final int size = current().nextInt(1, Character.SIZE + 1);
         bitOutput.writeChar(size, (char) current().nextInt());

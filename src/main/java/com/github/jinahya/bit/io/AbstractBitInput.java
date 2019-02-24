@@ -21,6 +21,7 @@ import java.io.IOException;
  * An abstract class for implementing {@link BitInput}.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
+ * @see AbstractBitOutput
  */
 public abstract class AbstractBitInput implements BitInput {
 
@@ -29,15 +30,15 @@ public abstract class AbstractBitInput implements BitInput {
     /**
      * Reads an unsigned 8-bit integer.
      *
-     * @return an unsigned 8-bit integer read
+     * @return an unsigned 8-bit integer.
      * @throws IOException if an I/O error occurs.
      */
     protected abstract int read() throws IOException;
 
     /**
-     * Reads an octet from {@link #read()}.
+     * Returns the value from {@link #read()} and increments {@link #index}.
      *
-     * @return an octet read.
+     * @return an octet.
      * @throws IOException if an I/O error occurs.
      */
     private int octet() throws IOException {
@@ -49,9 +50,9 @@ public abstract class AbstractBitInput implements BitInput {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * Reads an unsigned value whose maximum size is {@code 8}.
+     * Reads an unsigned value whose maximum size is {@value Byte#SIZE}.
      *
-     * @param size the number of bits for the value; between {@code 1} and {@code 8}, both inclusive.
+     * @param size the number of bits for the value; between {@code 1} and {@value Byte#SIZE}, both inclusive.
      * @return an unsigned byte value.
      * @throws IOException if an I/O error occurs.
      */
@@ -82,9 +83,9 @@ public abstract class AbstractBitInput implements BitInput {
     }
 
     /**
-     * Reads an unsigned value whose maximum size is {@code 16}.
+     * Reads an unsigned value whose maximum size is {@value Short#SIZE}.
      *
-     * @param size the number of bits for the value; between {@code 1} and {@code 16}, both inclusive.
+     * @param size the number of bits for the value; between {@code 1} and {@value Short#SIZE}, both inclusive.
      * @return an unsigned short value.
      * @throws IOException if an I/O error occurs.
      */
@@ -94,7 +95,7 @@ public abstract class AbstractBitInput implements BitInput {
         final int quotient = size / Byte.SIZE;
         final int remainder = size % Byte.SIZE;
         for (int i = 0; i < quotient; i++) {
-            value <<= 8;
+            value <<= Byte.SIZE;
             value |= unsigned8(Byte.SIZE);
         }
         if (remainder > 0) {

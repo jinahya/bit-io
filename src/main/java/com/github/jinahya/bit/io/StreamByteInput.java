@@ -53,11 +53,11 @@ public class StreamByteInput<T extends InputStream> extends AbstractByteInput<T>
      */
     @Override
     public int read() throws IOException {
-        final int read = getSource().read();
-        if (read == -1) {
-            throw new EOFException("the stream reached to an end-of-stream");
+        final int value = getSource().read();
+        if (value == -1) {
+            throw new EOFException("reached to an end");
         }
-        return read;
+        return value;
     }
 
     // ---------------------------------------------------------------------------------------------------------- source

@@ -30,12 +30,12 @@ public class BufferByteOutput<T extends ByteBuffer> extends AbstractByteOutput<T
 
     // -----------------------------------------------------------------------------------------------------------------
     @SuppressWarnings({"Duplicates"})
-    public static BufferByteOutput<ByteBuffer> of(final WritableByteChannel channel, final int capacity) {
-        if (channel == null) {
-            throw new NullPointerException("channel is null");
-        }
+    public static BufferByteOutput<ByteBuffer> of(final int capacity, final WritableByteChannel channel) {
         if (capacity <= 0) {
             throw new IllegalArgumentException("capacity(" + capacity + ") <= 0");
+        }
+        if (channel == null) {
+            throw new NullPointerException("channel is null");
         }
         return new BufferByteOutput<ByteBuffer>(null) {
             @Override

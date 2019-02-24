@@ -10,7 +10,7 @@
 
   <groupId>com.github.jinahya</groupId>
   <artifactId>bit-io</artifactId>
-  <version>1.4.0</version>
+  <version>1.4.1</version>
   <packaging>jar</packaging>
 
   <name>${project.artifactId}</name>
@@ -25,7 +25,7 @@
     <connection>scm:git:git@github.com:jinahya/${project.artifactId}.git</connection>
     <developerConnection>scm:git:git@github.com:jinahya/${project.artifactId}.git</developerConnection>
     <url>https://github.com/jinahya/${project.artifactId}</url>
-    <tag>1.4.0</tag>
+    <tag>1.4.1</tag>
   </scm>
   <issueManagement>
     <system>GitHub Issues</system>
@@ -37,8 +37,7 @@
     <maven.compiler.target>1.6</maven.compiler.target>
     <maven.compiler.testSource>1.8</maven.compiler.testSource>
     <maven.compiler.testTarget>1.8</maven.compiler.testTarget>
-    <version.org.junit.jupiter>5.3.2</version.org.junit.jupiter>
-    <!--<version.org.junit.jupiter>5.4.0-RC1</version.org.junit.jupiter>-->
+    <version.org.junit.jupiter>5.4.0</version.org.junit.jupiter>
     <version.org.mockito>2.24.0</version.org.mockito>
     <version.maven-surefire>3.0.0-M3</version.maven-surefire>
     <project.build.outputDirectory.retrotranslated13>${project.build.directory}/classes-retrotranslated13</project.build.outputDirectory.retrotranslated13>
@@ -104,6 +103,12 @@
       <groupId>org.mockito</groupId>
       <artifactId>mockito-junit-jupiter</artifactId>
       <version>${version.org.mockito}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <version>1.18.6</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
@@ -231,7 +236,6 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
-        <!--<version>2.22.1</version>-->
         <version>${version.maven-surefire}</version>
       </plugin>
       <plugin>
@@ -285,28 +289,6 @@
               <goal>report</goal>
             </goals>
           </execution>
-          <!--<execution>-->
-          <!--<id>default-check</id>-->
-          <!--<goals>-->
-          <!--<goal>check</goal>-->
-          <!--</goals>-->
-          <!--<configuration>-->
-          <!--&lt;!&ndash;<rules>&ndash;&gt;-->
-          <!--&lt;!&ndash;&lt;!&ndash; implementation is needed only for Maven 2 &ndash;&gt;&ndash;&gt;-->
-          <!--&lt;!&ndash;<rule implementation="org.jacoco.maven.RuleConfiguration">&ndash;&gt;-->
-          <!--&lt;!&ndash;<element>BUNDLE</element>&ndash;&gt;-->
-          <!--&lt;!&ndash;<limits>&ndash;&gt;-->
-          <!--&lt;!&ndash;&lt;!&ndash; implementation is needed only for Maven 2 &ndash;&gt;&ndash;&gt;-->
-          <!--&lt;!&ndash;<limit implementation="org.jacoco.report.check.Limit">&ndash;&gt;-->
-          <!--&lt;!&ndash;<counter>COMPLEXITY</counter>&ndash;&gt;-->
-          <!--&lt;!&ndash;<value>COVEREDRATIO</value>&ndash;&gt;-->
-          <!--&lt;!&ndash;<minimum>0.60</minimum>&ndash;&gt;-->
-          <!--&lt;!&ndash;</limit>&ndash;&gt;-->
-          <!--&lt;!&ndash;</limits>&ndash;&gt;-->
-          <!--&lt;!&ndash;</rule>&ndash;&gt;-->
-          <!--&lt;!&ndash;</rules>&ndash;&gt;-->
-          <!--</configuration>-->
-          <!--</execution>-->
         </executions>
       </plugin>
     </plugins>
@@ -317,7 +299,7 @@
       <plugin>
         <groupId>com.github.spotbugs</groupId>
         <artifactId>spotbugs-maven-plugin</artifactId>
-        <version>3.1.10</version>
+        <version>3.1.11</version>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -342,7 +324,6 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-report-plugin</artifactId>
-        <!--<version>${version.maven-surefire}</version>-->
         <configuration>
           <showSuccess>false</showSuccess>
         </configuration>

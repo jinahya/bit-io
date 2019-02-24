@@ -4,46 +4,43 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.function.IntSupplier;
 
 import static java.util.concurrent.ThreadLocalRandom.current;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 
 /**
  * A class for testing {@link ArrayByteOutput}.
+ *
+ * @see ArrayByteInputTest
  */
 public class ArrayByteOutputTest extends AbstractByteOutputTest<ArrayByteOutput, byte[]> {
 
-    // -----------------------------------------------------------------------------------------------------------------
-    @Test
-    public void testOfAssertThrowsIllegalArgumentExceptionWhenStreamIsNull() {
-        final OutputStream stream = null;
-        final int length = ((IntSupplier) () -> {
-            int value = current().nextInt() & Integer.MAX_VALUE;
-            if (value == 0) {
-                value = 1;
-            }
-            return value;
-        }).getAsInt();
-        assertThrows(NullPointerException.class, () -> ArrayByteOutput.of(stream, length));
-    }
+    // -------------------------------------------------------------------------------------------------------------- of
 
+    /**
+     * Asserts {@link ArrayByteOutput#of(int, OutputStream)} throws {@code IllegalArgumentException} when {@code length}
+     * argument is less than or equal to {@code zero}.
+     */
     @Test
     public void testOfAssertThrowsIllegalArgumentExceptionWhenLengthIsNotPositive() {
-        final OutputStream stream = mock(OutputStream.class);
-        final int length = current().nextBoolean() ? 0 : (current().nextInt() | Integer.MIN_VALUE);
-        assertThrows(IllegalArgumentException.class, () -> ArrayByteOutput.of(stream, length));
+        assertThrows(IllegalArgumentException.class, () -> ArrayByteOutput.of(0, mock(OutputStream.class)));
+        assertThrows(IllegalArgumentException.class,
+                     () -> ArrayByteOutput.of(current().nextInt() | Integer.MIN_VALUE, mock(OutputStream.class)));
+    }
+
+    /**
+     * Asserts {@link ArrayByteOutput#of(int, OutputStream)} throws {@code NullPointerException} when {@code stream}
+     * argument is {@code null}.
+     */
+    @Test
+    public void testOfAssertThrowsNullPointerExceptionWhenStreamIsNull() {
+        assertThrows(NullPointerException.class, () -> ArrayByteOutput.of(current().nextInt() >>> 1, null));
     }
 
     @Test
     public void testOf() throws IOException {
-        final OutputStream stream = mock(OutputStream.class);
-        doNothing().when(stream).write(anyInt());
-        final int length = current().nextInt(1, 128);
-        final ByteOutput byteOutput = ArrayByteOutput.of(stream, length);
+        final ArrayByteOutput byteOutput = ArrayByteOutput.of(1, new BlackOutputStream());
         byteOutput.write(current().nextInt() & 0xFF);
     }
 

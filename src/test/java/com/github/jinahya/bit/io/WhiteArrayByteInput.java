@@ -2,10 +2,12 @@ package com.github.jinahya.bit.io;
 
 import java.io.IOException;
 
-class WhiteArrayByteInput extends ArrayByteInput {
-
-    // -----------------------------------------------------------------------------------------------------------------
-    private static final int LENGTH = 1;
+/**
+ * A class of {@link ArrayByteInput} which never reaches to an end-of-stream.
+ *
+ * @see BlackArrayByteOutput
+ */
+final class WhiteArrayByteInput extends ArrayByteInput {
 
     // -----------------------------------------------------------------------------------------------------------------
     WhiteArrayByteInput() {
@@ -16,12 +18,12 @@ class WhiteArrayByteInput extends ArrayByteInput {
     @Override
     public int read() throws IOException {
         if (source == null) {
-            source = new byte[LENGTH];
+            source = new byte[1];
+            index = source.length;
             limit = source.length;
-            index = limit;
         }
         if (index == limit) {
-            index(0);
+            index = 0;
         }
         return super.read();
     }

@@ -53,12 +53,12 @@ class BitIoConstraintsTest {
     void testRequireValidSizeUnsigned8() {
         // negative
         assertThrows(IllegalArgumentException.class,
-                () -> requireValidSizeUnsigned8(current().nextInt() | Integer.MIN_VALUE));
+                     () -> requireValidSizeUnsigned8(current().nextInt() | Integer.MIN_VALUE));
         // zero
         assertThrows(IllegalArgumentException.class, () -> requireValidSizeUnsigned8(0));
         // size > Byte.SIZE
         assertThrows(IllegalArgumentException.class,
-                () -> requireValidSizeUnsigned8((current().nextInt() << (Byte.SIZE + 1) >>> 1)));
+                     () -> requireValidSizeUnsigned8((current().nextInt() << (Byte.SIZE + 1) >>> 1)));
         // valid
         final int size = current().nextInt(1, Byte.SIZE + 1);
         assertEquals(size, requireValidSizeUnsigned8(size));
@@ -68,32 +68,32 @@ class BitIoConstraintsTest {
     void testRequireValidSizeUnsigned16() {
         // negative
         assertThrows(IllegalArgumentException.class,
-                () -> requireValidSizeUnsigned16(current().nextInt() | Integer.MIN_VALUE));
+                     () -> requireValidSizeUnsigned16(current().nextInt() | Integer.MIN_VALUE));
         // zero
         assertThrows(IllegalArgumentException.class, () -> requireValidSizeUnsigned16(0));
         // size > Short.SIZE
         assertThrows(IllegalArgumentException.class,
-                () -> requireValidSizeUnsigned16((current().nextInt() << (Short.SIZE + 1) >>> 1)));
+                     () -> requireValidSizeUnsigned16((current().nextInt() << (Short.SIZE + 1) >>> 1)));
         // valid
         final int size = current().nextInt(1, Short.SIZE + 1);
         assertEquals(size, requireValidSizeUnsigned16(size));
     }
 
     // -------------------------------------------------------------------------------------------- requireValidExponent
-    @RepeatedTest(128)
+    @RepeatedTest(8)
     void testRequireValidExponentAssertThrowsIllegalArgumentExceptionWhenExponentIsInvalid() {
         final int exponent = randomExponentInvalid();
         assertThrows(IllegalArgumentException.class, () -> requireValidExponent(exponent));
     }
 
-    @RepeatedTest(128)
+    @RepeatedTest(8)
     void testRequireValidExponent() {
         final int exponent = randomExponentValid();
         requireValidExponent(exponent);
     }
 
     // ------------------------------------------------------------------------------------------------ requireValidSize
-    @RepeatedTest(128)
+    @RepeatedTest(8)
     void testRequireValidSizeAssertThrowsIllegalArgumentExceptionWhenSizeIsInvalid() {
         final boolean unsigned = current().nextBoolean();
         final int exponent = randomExponentValid();
@@ -101,7 +101,7 @@ class BitIoConstraintsTest {
         assertThrows(IllegalArgumentException.class, () -> requireValidSize(unsigned, exponent, size));
     }
 
-    @RepeatedTest(128)
+    @RepeatedTest(8)
     void testRequireValidSize() {
         final boolean unsigned = current().nextBoolean();
         final int exponent = randomExponentValid();

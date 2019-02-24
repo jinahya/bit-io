@@ -16,12 +16,12 @@ public class BufferByteInput<T extends ByteBuffer> extends AbstractByteInput<T> 
 
     // -----------------------------------------------------------------------------------------------------------------
     @SuppressWarnings({"Duplicates"})
-    public static BufferByteInput<ByteBuffer> of(final ReadableByteChannel channel, final int capacity) {
-        if (channel == null) {
-            throw new NullPointerException("channel is null");
-        }
+    public static BufferByteInput<ByteBuffer> of(final int capacity, final ReadableByteChannel channel) {
         if (capacity <= 0) {
             throw new IllegalArgumentException("capacity(" + capacity + ") <= 0");
+        }
+        if (channel == null) {
+            throw new NullPointerException("channel is null");
         }
         return new BufferByteInput<ByteBuffer>(null) {
             @Override

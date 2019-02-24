@@ -1,9 +1,18 @@
 package com.github.jinahya.bit.io;
 
-public class WhiteBitInput extends DefaultBitInput<WhiteByteInput> {
+/**
+ * A class of {@link DefaultBitInput} whose {@link DefaultBitInput#delegate} is an instance of {@link WhiteByteInput}.
+ *
+ * @see BlackBitOutput
+ */
+class WhiteBitInput extends DefaultBitInput<WhiteByteInput> {
 
     // -----------------------------------------------------------------------------------------------------------------
-    public WhiteBitInput() {
+
+    /**
+     * Creates a new instance.
+     */
+    WhiteBitInput() {
         super(new WhiteByteInput());
     }
 }

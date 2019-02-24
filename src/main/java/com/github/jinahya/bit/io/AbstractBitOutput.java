@@ -17,6 +17,14 @@ package com.github.jinahya.bit.io;
 
 import java.io.IOException;
 
+import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeByte;
+import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeChar;
+import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeInt;
+import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeLong;
+import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeShort;
+import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeUnsigned16;
+import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeUnsigned8;
+
 /**
  * An abstract class for implementing {@link BitInput}.
  *
@@ -45,8 +53,7 @@ public abstract class AbstractBitOutput implements BitOutput {
      * @throws IOException if an I/O error occurs.
      */
     protected void unsigned8(final int size, int value) throws IOException {
-        BitIoConstraints.requireValidSizeUnsigned8(size);
-        //final int required = size - (Byte.SIZE - index);
+        requireValidSizeUnsigned8(size);
         final int required = size - available;
         if (required > 0) {
             unsigned8(size - required, value >> required);
@@ -56,13 +63,10 @@ public abstract class AbstractBitOutput implements BitOutput {
         octet <<= size;
         octet |= (((1 << size) - 1) & value);
         available -= size;
-        //index += size;
-        //if (index == Byte.SIZE) {
         if (available == 0) {
             write(octet);
             count++;
             octet = 0x00;
-//            index = 0;
             available = Byte.SIZE;
         }
     }
@@ -75,7 +79,7 @@ public abstract class AbstractBitOutput implements BitOutput {
      * @throws IOException if an I/O error occurs
      */
     protected void unsigned16(final int size, final int value) throws IOException {
-        BitIoConstraints.requireValidSizeUnsigned16(size);
+        requireValidSizeUnsigned16(size);
         final int quotient = size / Byte.SIZE;
         final int remainder = size % Byte.SIZE;
         if (remainder > 0) {
@@ -94,20 +98,20 @@ public abstract class AbstractBitOutput implements BitOutput {
 
     @Override
     public void writeByte(final boolean unsigned, final int size, final byte value) throws IOException {
-        BitIoConstraints.requireValidSizeByte(unsigned, size);
+        requireValidSizeByte(unsigned, size);
         writeInt(unsigned, size, value);
     }
 
     @Override
     public void writeShort(final boolean unsigned, final int size, final short value) throws IOException {
-        BitIoConstraints.requireValidSizeShort(unsigned, size);
+        requireValidSizeShort(unsigned, size);
         writeInt(unsigned, size, value);
     }
 
     @Override
     public void writeInt(final boolean unsigned, final int size, final int value) throws IOException {
-        BitIoConstraints.requireValidSizeInt(unsigned, size);
-        if (!unsigned) {
+        requireValidSizeInt(unsigned, size);
+        if (false && !unsigned) {
             final int usize = size - 1;
             writeInt(true, 1, value >> usize);
             if (usize > 0) {
@@ -127,8 +131,8 @@ public abstract class AbstractBitOutput implements BitOutput {
 
     @Override
     public void writeLong(final boolean unsigned, final int size, final long value) throws IOException {
-        BitIoConstraints.requireValidSizeLong(unsigned, size);
-        if (!unsigned) {
+        requireValidSizeLong(unsigned, size);
+        if (false && !unsigned) {
             final int usize = size - 1;
             writeLong(true, 1, value >> usize);
             if (usize > 0) {
@@ -136,20 +140,28 @@ public abstract class AbstractBitOutput implements BitOutput {
             }
             return;
         }
-        final int quotient = size / 31;
-        final int remainder = size % 31;
+//        final int quotient = size / 31;
+//        final int remainder = size % 31;
+//        if (remainder > 0) {
+//            writeInt(true, remainder, (int) (value >> (quotient * 31)));
+//        }
+//        for (int i = quotient - 1; i >= 0; i--) {
+//            writeInt(true, 31, (int) (value >> (i * 31)));
+//        }
+        final int quotient = size / Integer.SIZE;
+        final int remainder = size % Integer.SIZE;
         if (remainder > 0) {
-            writeInt(true, remainder, (int) (value >> (quotient * 31)));
+            writeInt(false, remainder, (int) (value >> (quotient * Integer.SIZE)));
         }
-        for (int i = quotient - 1; i >= 0; i--) {
-            writeInt(true, 31, (int) (value >> (i * 31)));
+        for (int i = Integer.SIZE * (quotient - 1); i >= 0; i -= Integer.SIZE) {
+            writeInt(false, Integer.SIZE, (int) (value >> i));
         }
     }
 
     @Override
     public void writeChar(final int size, final char value) throws IOException {
-        BitIoConstraints.requireValidSizeChar(size);
-        unsigned16(size, value);
+        requireValidSizeChar(size);
+        writeInt(true, size, value);
     }
 
     @Override
@@ -160,10 +172,12 @@ public abstract class AbstractBitOutput implements BitOutput {
         long bits = 0;
         if (available < Byte.SIZE) {
             bits += available;
-            unsigned8(available, 0x00);
+            //unsigned8(available, 0x00);
+            writeInt(true, available, 0x00);
         }
         for (; count % bytes > 0; bits += Byte.SIZE) {
-            unsigned8(Byte.SIZE, 0x00);
+            //unsigned8(Byte.SIZE, 0x00);
+            writeInt(true, Byte.SIZE, 0x00);
         }
         return bits;
     }

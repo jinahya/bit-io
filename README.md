@@ -14,8 +14,6 @@ bit-io
 [![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=com.github.jinahya%3Abit-io%3Adevelop&metric=sqale_index)](https://sonarcloud.io/component_measures?id=com.github.jinahya%3Abit-io%3Adevelop&metric=Maintainability)
 [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=com.github.jinahya%3Abit-io%3Adevelop&metric=vulnerabilities)](https://sonarcloud.io/component_measures?id=com.github.jinahya%3Abit-io%3Adevelop&metric=vulnerabilities)
 
-[![Sputnik](https://sputnik.ci/conf/badge)](https://sputnik.ci/app#/builds/jinahya/bit-io)
-
 [![Maven Central](https://img.shields.io/maven-central/v/com.github.jinahya/bit-io.svg)](http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22bit-io%22)
 [![Javadocs](http://www.javadoc.io/badge/com.github.jinahya/bit-io.svg)](http://www.javadoc.io/doc/com.github.jinahya/bit-io)
 

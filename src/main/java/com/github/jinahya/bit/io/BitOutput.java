@@ -85,7 +85,7 @@ public interface BitOutput {
     /**
      * Writes a {@code char} value.
      *
-     * @param size  the number of bits for value; between {@code 1} and {@code 16}, both inclusive.
+     * @param size  the number of bits for value; between {@code 1} and {@value Character#SIZE}, both inclusive.
      * @param value the value to write
      * @throws IOException if an I/O error occurs.
      */

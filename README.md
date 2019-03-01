@@ -14,20 +14,23 @@ bit-io
 [![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=com.github.jinahya%3Abit-io%3Adevelop&metric=sqale_index)](https://sonarcloud.io/component_measures?id=com.github.jinahya%3Abit-io%3Adevelop&metric=Maintainability)
 [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=com.github.jinahya%3Abit-io%3Adevelop&metric=vulnerabilities)](https://sonarcloud.io/component_measures?id=com.github.jinahya%3Abit-io%3Adevelop&metric=vulnerabilities)
 
-[![Sputnik](https://sputnik.ci/conf/badge)](https://sputnik.ci/app#/builds/jinahya/bit-io)
-
 [![Maven Central](https://img.shields.io/maven-central/v/com.github.jinahya/bit-io.svg)](http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22bit-io%22)
 [![Javadocs](http://www.javadoc.io/badge/com.github.jinahya/bit-io.svg)](http://www.javadoc.io/doc/com.github.jinahya/bit-io)
 
 A library for reading/writing non octet aligned values such as `1-bit boolean` or `17-bit unsigned int`.
 
 ## Specifications
+
 #### boolean
+
 |type     |size(min)|size(max)|notes|
 |---------|---------|---------|-----|
 |`boolean`|1        |1        |`readBoolean()`, `writeBoolean(boolean)`|
+
 ### numeric
+
 #### integral
+
 The size(min) is `1` and the size(max) is `2^e - (unsigned ? 1 : 0)`.
 
 |type   |e  |size(min)|size(max)|notes
@@ -37,10 +40,15 @@ The size(min) is `1` and the size(max) is `2^e - (unsigned ? 1 : 0)`.
 |`int`  |5  |1        |31/32    |`readInt(unsigned, size)`, `writeInt(unsigned, size, int)`|
 |`long` |6  |1        |63/64    |`readLong(unsigned, size)`, `writeLong(unsigned, size, long)`|
 |`char` |   |1        |16       |`readChar(size)`, `writeChar(size, char)`|
+
 #### floating-point
-`float`s and `double`s can be read/written as`int`s and `long`s, respectively, using `xxxToRawYYYBits` and `yyyBitsToXXX`.
+
+No methods supplied for floating-point types.
 
 ## Reading
+
+* You need to prepare an instance of `ByteInput` for reading octets.
+* You can read bits from an instance of `BitInput` which uses the `ByteInput` instance.
 
 ### Preparing `ByteInput`
 
@@ -126,9 +134,16 @@ biiiiiil llllllll llllllll llllllll llllllll llllllll lllllldd
 
 ## Writing
 
+* You need to prepare an instance of `ByteOutput` for writing octets.
+* You can write bits to an instance of `BitInput` which uses the `ByteOutput` instance.
+
 ### Preparing `ByteOutput`
 
+There are counter classes and contructors to `ByteInput`.
+
 ### Creating `BitOutput`
+
+There are also counter classes and constructors to `BitInput`.
 
 #### Using `DefalutBitOutput`
 

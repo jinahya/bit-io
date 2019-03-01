@@ -26,7 +26,7 @@ public final class ByteOutputs {
     }
 
     /**
-     * Returns a new {@link ByteOutput} whose {@link ByteOutput#write(int)} } method simply discards given value.
+     * Returns a new {@link ByteOutput} whose {@link ByteOutput#write(int)} method simply discards given value.
      *
      * @return a {@link ByteOutput} does nothing.
      */

@@ -12,6 +12,7 @@ import java.util.Objects;
  *
  * @param <T> byte input type parameter
  * @param <U> byte source type parameter
+ * @see AbstractByteOutputTest
  */
 @ExtendWith({MockitoExtension.class})
 public abstract class AbstractByteInputTest<T extends AbstractByteInput<U>, U> extends ByteInputTest<T> {

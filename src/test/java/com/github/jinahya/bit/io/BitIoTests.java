@@ -27,7 +27,7 @@ final class BitIoTests {
      * Applies a unsigned flag and a bit size to given function.
      *
      * @param function the function.
-     * @param <R> result type parameter.
+     * @param <R>      result type parameter.
      * @return the value the function results.
      */
     static <R> R randomSizeByte(final BiFunction<Boolean, Integer, R> function) {

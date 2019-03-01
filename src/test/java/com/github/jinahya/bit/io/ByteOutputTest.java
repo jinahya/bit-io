@@ -34,7 +34,7 @@ public abstract class ByteOutputTest<T extends ByteOutput> {
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-g
+
     /**
      * Tests {@link ByteOutput#write(int)} with a random value.
      *

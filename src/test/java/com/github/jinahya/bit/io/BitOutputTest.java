@@ -15,7 +15,6 @@ import java.io.IOException;
 import java.lang.invoke.MethodHandles;
 
 import static com.github.jinahya.bit.io.BitIoTests.randomSizeValueByte;
-import static com.github.jinahya.bit.io.BitIoTests.randomSizeValueInt;
 import static java.util.Objects.requireNonNull;
 import static java.util.concurrent.ThreadLocalRandom.current;
 import static org.junit.jupiter.api.Assertions.assertThrows;

@@ -16,7 +16,7 @@
 package com.github.jinahya.bit.io;
 
 /**
- * An abstract class for implementing {@code ByteInput}.
+ * An abstract class for implementing {@link ByteInput}.
  *
  * @param <T> byte source type parameter
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;

@@ -16,7 +16,7 @@
 package com.github.jinahya.bit.io;
 
 /**
- * An abstract class for implementing {@code ByteOutput}.
+ * An abstract class for implementing {@link ByteOutput}.
  *
  * @param <T> byte target type parameter
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;

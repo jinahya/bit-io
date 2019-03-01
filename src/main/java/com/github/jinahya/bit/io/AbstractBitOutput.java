@@ -36,9 +36,9 @@ public abstract class AbstractBitOutput implements BitOutput {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * Writes given unsigned 8-bit integer.
+     * Consumes given unsigned 8-bit integer.
      *
-     * @param value the unsigned 8-bit integer to write
+     * @param value the unsigned 8-bit integer to consume.
      * @throws IOException if an I/O error occurs.
      */
     protected abstract void write(int value) throws IOException;
@@ -56,12 +56,12 @@ public abstract class AbstractBitOutput implements BitOutput {
         requireValidSizeUnsigned8(size);
         final int required = size - available;
         if (required > 0) {
-            unsigned8(size - required, value >> required);
+            unsigned8(available, value >> required);
             unsigned8(required, value);
             return;
         }
         octet <<= size;
-        octet |= (((1 << size) - 1) & value);
+        octet |= (value & ((1 << size) - 1));
         available -= size;
         if (available == 0) {
             write(octet);
@@ -72,7 +72,7 @@ public abstract class AbstractBitOutput implements BitOutput {
     }
 
     /**
-     * Writes an unsigned value whose size is max {@value Short#SIZE}.
+     * Writes an unsigned value whose size is {@value Short#SIZE} in maximum.
      *
      * @param size  the number of lower bits to write; between {@code 1} and {@value Short#SIZE}, both inclusive.
      * @param value the value to write
@@ -98,14 +98,12 @@ public abstract class AbstractBitOutput implements BitOutput {
 
     @Override
     public void writeByte(final boolean unsigned, final int size, final byte value) throws IOException {
-        requireValidSizeByte(unsigned, size);
-        writeInt(unsigned, size, value);
+        writeInt(unsigned, requireValidSizeByte(unsigned, size), value);
     }
 
     @Override
     public void writeShort(final boolean unsigned, final int size, final short value) throws IOException {
-        requireValidSizeShort(unsigned, size);
-        writeInt(unsigned, size, value);
+        writeInt(unsigned, requireValidSizeShort(unsigned, size), value);
     }
 
     @Override
@@ -136,8 +134,7 @@ public abstract class AbstractBitOutput implements BitOutput {
 
     @Override
     public void writeChar(final int size, final char value) throws IOException {
-        requireValidSizeChar(size);
-        writeInt(true, size, value);
+        writeInt(true, requireValidSizeChar(size), value);
     }
 
     @Override
@@ -171,5 +168,5 @@ public abstract class AbstractBitOutput implements BitOutput {
     /**
      * The number of bytes written so far.
      */
-    private long count = 0L;
+    private long count;
 }

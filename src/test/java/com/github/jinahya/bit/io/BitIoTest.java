@@ -1,9 +1,10 @@
 package com.github.jinahya.bit.io;
 
-import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -12,6 +13,7 @@ import java.io.DataInputStream;
 import java.io.DataOutput;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.lang.invoke.MethodHandles;
 import java.nio.ByteBuffer;
 import java.util.LinkedList;
 import java.util.List;
@@ -25,9 +27,12 @@ import static java.util.concurrent.ThreadLocalRandom.current;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
-@Slf4j
 class BitIoTest {
 
+    // -----------------------------------------------------------------------------------------------------------------
+    private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+
+    // -----------------------------------------------------------------------------------------------------------------
     static final int BOUND_COUNT = 1024;
 
     static {
@@ -166,34 +171,30 @@ class BitIoTest {
             final boolean unsigned = (Boolean) list.remove(0);
             final int size = (Integer) list.remove(0);
             switch (type) {
-                case 0:
-                    final byte bexpected = (Byte) list.remove(0);
-                    final byte bactual = input.readByte(unsigned, size);
-//                    log.debug("byte; unsigned: {}, size: {}, expected: {}, actual: {}", unsigned, size, bexpected,
-//                              bactual);
-                    assertEquals(bexpected, bactual);
-                    break;
-                case 1:
-                    final short sexpected = (Short) list.remove(0);
-                    final short sactual = input.readShort(unsigned, size);
-//                    log.debug("short; unsigned: {}, size: {}, expected: {}, actual: {}", unsigned, size, sexpected,
-//                              sactual);
-                    assertEquals(sexpected, sactual);
-                    break;
-                case 2:
-                    final int iexpected = (Integer) list.remove(0);
-                    final int iactual = input.readInt(unsigned, size);
-//                    log.debug("int; unsigned: {}, size: {}, expected: {}, actual: {}", unsigned, size, iexpected,
-//                              iactual);
-                    assertEquals(iexpected, iactual);
-                    break;
-                default:
-                    final long lexpected = (Long) list.remove(0);
-                    final long lactual = input.readLong(unsigned, size);
-//                    log.debug("long; unsigned: {}, size: {}, expected: {}, actual: {}", unsigned, size, lexpected,
-//                              lactual);
-                    assertEquals(lexpected, lactual);
-                    break;
+                case 0: {
+                    final byte expected = (Byte) list.remove(0);
+                    final byte actual = input.readByte(unsigned, size);
+                    assertEquals(expected, actual);
+                }
+                break;
+                case 1: {
+                    final short expected = (Short) list.remove(0);
+                    final short actual = input.readShort(unsigned, size);
+                    assertEquals(expected, actual);
+                }
+                break;
+                case 2: {
+                    final int expected = (Integer) list.remove(0);
+                    final int actual = input.readInt(unsigned, size);
+                    assertEquals(expected, actual);
+                }
+                break;
+                default: {
+                    final long expected = (Long) list.remove(0);
+                    final long actual = input.readLong(unsigned, size);
+                    assertEquals(expected, actual);
+                }
+                break;
             }
         }
         input.align(1);
@@ -205,17 +206,17 @@ class BitIoTest {
         output.writeInt(true, Integer.SIZE - 1, 0);
         output.writeInt(true, Integer.SIZE - 1, 1);
         output.writeInt(true, Integer.SIZE - 1, Integer.MAX_VALUE);
-        output.writeInt(false, Integer.SIZE, 0);
         output.writeInt(false, Integer.SIZE, -1);
+        output.writeInt(false, Integer.SIZE, 0);
         output.writeInt(false, Integer.SIZE, Integer.MIN_VALUE);
         output.align(1);
         final BitInput input = inputSupplier.get();
-        assertEquals(input.readInt(true, Integer.SIZE - 1), 0);
-        assertEquals(input.readInt(true, Integer.SIZE - 1), 1);
-        assertEquals(input.readInt(true, Integer.SIZE - 1), Integer.MAX_VALUE);
-        assertEquals(input.readInt(false, Integer.SIZE), 0);
-        assertEquals(input.readInt(false, Integer.SIZE), -1);
-        assertEquals(input.readInt(false, Integer.SIZE), Integer.MIN_VALUE);
+        assertEquals(0, input.readInt(true, Integer.SIZE - 1));
+        assertEquals(1, input.readInt(true, Integer.SIZE - 1));
+        assertEquals(Integer.MAX_VALUE, input.readInt(true, Integer.SIZE - 1));
+        assertEquals(-1, input.readInt(false, Integer.SIZE));
+        assertEquals(0, input.readInt(false, Integer.SIZE));
+        assertEquals(Integer.MIN_VALUE, input.readInt(false, Integer.SIZE));
         input.align(1);
     }
 
@@ -245,7 +246,6 @@ class BitIoTest {
             final int size = (Integer) list.remove(0);
             final int expected = (Integer) list.remove(0);
             final int actual = input.readInt(unsigned, size);
-//            log.debug("int; unsigned: {}, size: {}, expected: {}, actual: {}", unsigned, size, expected, actual);
             assertEquals(expected, actual);
         }
         input.align(1);
@@ -257,17 +257,17 @@ class BitIoTest {
         output.writeLong(true, Long.SIZE - 1, 0L);
         output.writeLong(true, Long.SIZE - 1, 1L);
         output.writeLong(true, Long.SIZE - 1, Long.MAX_VALUE);
-        output.writeLong(false, Long.SIZE, 0L);
         output.writeLong(false, Long.SIZE, -1L);
+        output.writeLong(false, Long.SIZE, 0L);
         output.writeLong(false, Long.SIZE, Long.MIN_VALUE);
         output.align(1);
         final BitInput input = inputSupplier.get();
-        assertEquals(input.readLong(true, Long.SIZE - 1), 0L);
-        assertEquals(input.readLong(true, Long.SIZE - 1), 1L);
-        assertEquals(input.readLong(true, Long.SIZE - 1), Long.MAX_VALUE);
-        assertEquals(input.readLong(false, Long.SIZE), 0L);
-        assertEquals(input.readLong(false, Long.SIZE), -1L);
-        assertEquals(input.readLong(false, Long.SIZE), Long.MIN_VALUE);
+        assertEquals(0L, input.readLong(true, Long.SIZE - 1));
+        assertEquals(1L, input.readLong(true, Long.SIZE - 1));
+        assertEquals(Long.MAX_VALUE, input.readLong(true, Long.SIZE - 1));
+        assertEquals(-1L, input.readLong(false, Long.SIZE));
+        assertEquals(0L, input.readLong(false, Long.SIZE));
+        assertEquals(Long.MIN_VALUE, input.readLong(false, Long.SIZE));
         input.align(1);
     }
 

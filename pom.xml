@@ -17,6 +17,18 @@
   <name>${project.artifactId}</name>
   <description>library for reading/writing non-octet aligned values</description>
   <url>https://github.com/jinahya/${project.artifactId}</url>
+  <inceptionYear>2014</inceptionYear>
+  <organization>
+    <name>Jinahya, Inc.</name>
+    <url>https://jinahya.com</url>
+  </organization>
+  <licenses>
+    <license>
+      <name>Apache License, Version 2.0</name>
+      <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
 
   <prerequisites>
     <maven>3.3.9</maven>
@@ -265,6 +277,14 @@
             </configuration>
           </execution>
         </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>license-maven-plugin</artifactId>
+        <version>1.19</version>
+        <configuration>
+          <licenseName>apache_v2</licenseName>
+        </configuration>
       </plugin>
       <plugin>
         <groupId>org.jacoco</groupId>

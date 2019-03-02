@@ -33,18 +33,28 @@ public abstract class DefaultBitOutputTest<T extends DefaultBitOutput<U>, U exte
 
     // -----------------------------------------------------------------------------------------------------------------
 
+    /**
+     * Tests {@link DefaultBitOutput#getDelegate()}.
+     */
     @Test
     public void testGetDelegate() {
         final U delegate = bitOutput.getDelegate();
     }
 
     // -----------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Tests {@link DefaultBitOutput#setDelegate(ByteOutput)}.
+     */
     @Test
     public void testSetDelegate() {
         bitOutput.setDelegate(null);
         bitOutput.setDelegate(byteOutputMock);
     }
 
+    /**
+     * Tests {@link DefaultBitOutput#delegate(ByteOutput)}.
+     */
     @Test
     public void testDelegate() {
         assertEquals(bitOutput, bitOutput.delegate(null));

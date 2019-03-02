@@ -25,18 +25,29 @@ public abstract class DefaultBitInputTest<T extends DefaultBitInput<U>, U extend
     }
 
     // -----------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Tests {@link DefaultBitInput#getDelegate()}.
+     */
     @Test
     public void testGetDelegate() {
         final U delegate = bitInput.getDelegate();
     }
 
     // -----------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Tests {@link DefaultBitInput#setDelegate(ByteInput)}.
+     */
     @Test
     public void testSetDelegate() {
         bitInput.setDelegate(null);
         bitInput.setDelegate(byteInputMock);
     }
 
+    /**
+     * Tests {@link DefaultBitInput#delegate(ByteInput)}.
+     */
     @Test
     public void testDelegate() {
         assertEquals(bitInput, bitInput.delegate(null));

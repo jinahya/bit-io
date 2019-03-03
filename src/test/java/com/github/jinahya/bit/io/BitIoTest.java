@@ -76,7 +76,7 @@ class BitIoTest {
         final ByteOutput delegate = new BufferByteOutput<>(buffer);
         final BitOutput output = new DefaultBitOutput<>(delegate);
         final Supplier<BitInput> inputSupplier = () -> {
-            final ByteInput source = new BufferByteInput<>(buffer.flip());
+            final ByteInput source = new BufferByteInput<>((ByteBuffer) buffer.flip());
             return new DefaultBitInput<>(source);
         };
         return Arguments.of(output, inputSupplier);

@@ -1,6 +1,11 @@
-/*
- * Copyright 2013 Jin Kwon.
- *
+package com.github.jinahya.bit.io;
+
+/*-
+ * #%L
+ * bit-io
+ * %%
+ * Copyright (C) 2014 - 2019 Jinahya, Inc.
+ * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -12,8 +17,8 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ * #L%
  */
-package com.github.jinahya.bit.io;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -43,7 +48,6 @@ public class BufferByteOutput<T extends ByteBuffer> extends AbstractByteOutput<T
                 if (target == null) {
                     target = ByteBuffer.allocate(capacity); // position: zero, limit: capacity
                 }
-                super.write(value);
                 if (!target.hasRemaining()) { // no space to put
                     target.flip(); // limit -> position, position -> zero
                     do {
@@ -51,6 +55,7 @@ public class BufferByteOutput<T extends ByteBuffer> extends AbstractByteOutput<T
                     } while (target.position() == 0);
                     target.compact();
                 }
+                super.write(value);
             }
         };
     }

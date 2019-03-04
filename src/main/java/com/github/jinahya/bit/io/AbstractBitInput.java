@@ -1,29 +1,28 @@
-/*
- *  Copyright 2010 Jin Kwon.
- *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
- *
- *       http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
- */
 package com.github.jinahya.bit.io;
+
+/*-
+ * #%L
+ * bit-io
+ * %%
+ * Copyright (C) 2014 - 2019 Jinahya, Inc.
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
 
 import java.io.IOException;
 
-import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeByte;
-import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeChar;
-import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeInt;
-import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeLong;
-import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeShort;
-import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeUnsigned16;
-import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeUnsigned8;
+import static com.github.jinahya.bit.io.BitIoConstraints.*;
 
 /**
  * An abstract class for implementing {@link BitInput}.
@@ -145,12 +144,12 @@ public abstract class AbstractBitInput implements BitInput {
             return value;
         }
         long value = 0x00L;
-        final int quotient = size / 31;
+        final int quotient = size / Integer.SIZE;
         for (int i = 0; i < quotient; i++) {
-            value <<= 31;
-            value |= readInt(true, 31);
+            value <<= Integer.SIZE;
+            value |= readInt(false, Integer.SIZE) & 0xFFFFFFFFL;
         }
-        final int remainder = size % 31;
+        final int remainder = size % Integer.SIZE;
         if (remainder > 0) {
             value <<= remainder;
             value |= readInt(true, remainder);
@@ -184,17 +183,17 @@ public abstract class AbstractBitInput implements BitInput {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * The current octet.
+     * The current octet of read bits.
      */
-    private int octet;
+    int octet;
 
     /**
-     * The number of available bits in {@link #octet}.
+     * The number of available bits in {@link #octet} for reading..
      */
-    private int available;
+    int available;
 
     /**
-     * The number of bytes read so far.
+     * The number of octets read so far.
      */
-    private long count;
+    long count;
 }

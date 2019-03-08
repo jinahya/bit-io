@@ -41,6 +41,7 @@ public class ArrayByteInput extends AbstractByteInput<byte[]> {
      * @param stream the input stream from which bytes are read; must be not {@code null}.
      * @return a new instance of {@link ArrayByteInput}.
      */
+    @SuppressWarnings({"Duplicates"})
     public static ArrayByteInput of(final int length, final InputStream stream) {
         if (length <= 0) {
             throw new IllegalArgumentException("length(" + length + ") <= 0");

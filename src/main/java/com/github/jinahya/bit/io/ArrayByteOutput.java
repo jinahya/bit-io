@@ -40,6 +40,7 @@ public class ArrayByteOutput extends AbstractByteOutput<byte[]> {
      * @param stream the output stream to which bytes are written; must be not {@code null}.
      * @return an instance byte output.
      */
+    @SuppressWarnings({"Duplicates"})
     public static ArrayByteOutput of(final int length, final OutputStream stream) {
         if (length <= 0) {
             throw new IllegalArgumentException("length(" + length + ") <= 0");
@@ -63,6 +64,18 @@ public class ArrayByteOutput extends AbstractByteOutput<byte[]> {
             }
         };
     }
+
+//    public static int flush(final ArrayByteOutput byteOutput, final OutputStream outputStream) throws IOException {
+//        if (byteOutput == null) {
+//            throw new NullPointerException("byteOutput is null");
+//        }
+//        if (outputStream == null) {
+//            throw new NullPointerException("outputStream is null");
+//        }
+//        int written = 0;
+//
+//        return written;
+//    }
 
     // -----------------------------------------------------------------------------------------------------------------
 

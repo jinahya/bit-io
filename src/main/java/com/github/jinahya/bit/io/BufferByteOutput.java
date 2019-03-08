@@ -60,6 +60,25 @@ public class BufferByteOutput<T extends ByteBuffer> extends AbstractByteOutput<T
         };
     }
 
+    public static int flush(final BufferByteOutput<?> output, final WritableByteChannel channel) throws IOException {
+        if (output == null) {
+            throw new NullPointerException("output is null");
+        }
+        if (channel == null) {
+            throw new NullPointerException("channel is null");
+        }
+        // @todo: should we check channel.isOpen?
+        int written = 0;
+        final ByteBuffer target = output.target;
+        if (target != null) {
+            for (target.flip(); target.hasRemaining(); ) {
+                written += channel.write(target);
+            }
+            target.clear(); // position -> zero, limit -> capacity
+        }
+        return written;
+    }
+
     // -----------------------------------------------------------------------------------------------------------------
 
     /**

@@ -44,14 +44,14 @@ public final class ByteInputs {
          */
         @Override
         public int read() throws IOException {
-            throw new EOFException("an instance of " + getClass());
+            throw new EOFException();
         }
     }
 
     /**
      * Returns a new {@link ByteInput} whose {@link ByteInput#read()} method always throws an {@link EOFException}.
      *
-     * @return a {@link ByteInput} reached to the EOF.
+     * @return a {@link ByteInput} reached to and end.
      */
     public static ByteInput nullByteInput() {
         return new NullByteInput();

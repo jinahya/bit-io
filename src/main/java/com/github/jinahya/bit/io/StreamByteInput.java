@@ -48,8 +48,7 @@ public class StreamByteInput<T extends InputStream> extends AbstractByteInput<T>
 
     /**
      * {@inheritDoc} The {@code read()} method of {@code StreamByteInput} class invokes {@link InputStream#read()}, on
-     * what {@link #getSource()} gives, and returns the result. Override this method if the {@link #source} is supposed
-     * to be lazily initialized and set.
+     * what {@link #getSource()} gives, and returns the result.
      *
      * @return {@inheritDoc}
      * @throws IOException {@inheritDoc}

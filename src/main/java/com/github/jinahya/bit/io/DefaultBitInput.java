@@ -47,8 +47,7 @@ public class DefaultBitInput<T extends ByteInput> extends AbstractBitInput {
 
     /**
      * {@inheritDoc} The {@code read()} method of {@code DefaultBitInput} class invokes {@link ByteInput#read()} ,on
-     * what {@link #getDelegate()} gives, and returns the result. Override this method if the {@link #delegate} is
-     * supposed to be lazily initialized and set.
+     * what {@link #getDelegate()} gives, and returns the result.
      *
      * @return {@inheritDoc}
      * @throws IOException {@inheritDoc}

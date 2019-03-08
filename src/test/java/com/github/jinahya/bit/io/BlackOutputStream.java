@@ -27,10 +27,8 @@ import java.io.OutputStream;
  * An output stream whose {@link OutputStream#write(int)} does nothing.
  *
  * @see WhiteInputStream
- * @deprecated Use {@link OutputStream#nullOutputStream()}
  */
-@Deprecated
-final class BlackOutputStream extends OutputStream {
+class BlackOutputStream extends OutputStream {
 
     // -----------------------------------------------------------------------------------------------------------------
     @Override

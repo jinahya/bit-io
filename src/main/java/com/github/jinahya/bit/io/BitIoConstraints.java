@@ -116,7 +116,7 @@ final class BitIoConstraints {
         final int maxSize = maxSize(unsigned, exponent);
         if (size > maxSize) {
             throw new IllegalArgumentException("size(" + size + ") > " + maxSize + "; unsigned=" + unsigned
-                    + "; exponent=" + exponent);
+                                               + "; exponent=" + exponent);
         }
         return size;
     }

@@ -26,14 +26,23 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.DataInput;
+import java.io.DataInputStream;
+import java.io.DataOutput;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.lang.invoke.MethodHandles;
 import java.nio.ByteBuffer;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Supplier;
 
-import static com.github.jinahya.bit.io.BitIoTests.*;
+import static com.github.jinahya.bit.io.BitIoTests.randomSizeValueByte;
+import static com.github.jinahya.bit.io.BitIoTests.randomSizeValueInt;
+import static com.github.jinahya.bit.io.BitIoTests.randomSizeValueLong;
+import static com.github.jinahya.bit.io.BitIoTests.randomSizeValueShort;
 import static java.util.concurrent.ThreadLocalRandom.current;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -53,10 +62,10 @@ class BitIoTest {
     // -----------------------------------------------------------------------------------------------------------------
     private static Arguments array() {
         final byte[] array = new byte[BOUND_COUNT * Long.BYTES];
-        final ByteOutput target = new ArrayByteOutput(array, 0, array.length);
+        final ByteOutput target = new ArrayByteOutput(array);
         final BitOutput output = new DefaultBitOutput<>(target);
         final Supplier<BitInput> inputSupplier = () -> {
-            final ByteInput source = new ArrayByteInput(array, 0, array.length);
+            final ByteInput source = new ArrayByteInput(array);
             return new DefaultBitInput<>(source);
         };
         return Arguments.of(output, inputSupplier);
@@ -97,7 +106,7 @@ class BitIoTest {
 
     // -----------------------------------------------------------------------------------------------------------------
     static Object[] source() {
-        return new Object[]{
+        return new Object[] {
                 array(),
                 buffer(),
                 data(),

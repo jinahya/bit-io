@@ -40,6 +40,7 @@ public class ArrayByteOutput extends AbstractByteOutput<byte[]> {
      * @param stream the output stream to which bytes are written; must be not {@code null}.
      * @return an instance byte output.
      */
+    @SuppressWarnings({"Duplicates"})
     public static ArrayByteOutput of(final int length, final OutputStream stream) {
         if (length <= 0) {
             throw new IllegalArgumentException("length(" + length + ") <= 0");
@@ -47,19 +48,29 @@ public class ArrayByteOutput extends AbstractByteOutput<byte[]> {
         if (stream == null) {
             throw new NullPointerException("stream is null");
         }
-        return new ArrayByteOutput(null, -1, -1) {
+        return new ArrayByteOutput(null) {
+
             @Override
             public void write(final int value) throws IOException {
                 if (target == null) {
                     target = new byte[length];
                     index = 0;
-                    limit = target.length;
                 }
                 super.write(value);
-                if (index == limit) {
+                if (index == target.length) {
                     stream.write(target);
                     index = 0;
                 }
+            }
+
+            @Override
+            public void setTarget(final byte[] target) {
+                throw new UnsupportedOperationException();
+            }
+
+            @Override
+            public void setIndex(final int index) {
+                throw new UnsupportedOperationException();
             }
         };
     }
@@ -70,55 +81,32 @@ public class ArrayByteOutput extends AbstractByteOutput<byte[]> {
      * Creates a new instance with given parameters.
      *
      * @param target a byte array
-     * @param index  the index in array to write
-     * @param limit  the index in array that {@link #index} can exceed
      */
-    public ArrayByteOutput(final byte[] target, final int index, final int limit) {
+    public ArrayByteOutput(final byte[] target) {
         super(target);
-        this.index = index;
-        this.limit = limit;
+        this.index = target == null || target.length == 0 ? -1 : 0;
     }
 
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * {@inheritDoc} The {@code write(int)} method of {@code ArrayByteOutput} class sets {@code getTarget[getIndex()]}
-     * with given value and increments the {@link #index} using {@link #setIndex(int)} method. Override this method if
-     * either {@link #target}, {@link #index}, or {@link #limit} needs to be lazily initialized and/or adjusted.
+     * {@inheritDoc} The {@code write(int)} method of {@code ArrayByteOutput} class sets {@code target[index++]} with
+     * given value.
      *
      * @param value {@inheritDoc}
      * @throws IOException {@inheritDoc}
      */
     @Override
     public void write(final int value) throws IOException {
-        final byte[] t = getTarget();
-        if (t == null) {
-            throw new IllegalStateException("target is currently null");
-        }
-        final int i = getIndex();
-        if (i < 0) {
-            throw new IllegalStateException("index(" + i + ") < 0");
-        }
-        if (i >= t.length) {
-            throw new IllegalStateException("index(" + i + ") >= target.length(" + t.length + ")");
-        }
-        final int l = getLimit();
-        if (l <= i) {
-            throw new IllegalStateException("limit(" + l + ") <= index(" + i + ")");
-        }
-        if (l > t.length) {
-            throw new IllegalStateException("limit(" + l + ") > target.length(" + t.length + ")");
-        }
-        t[i] = (byte) value;
-        setIndex(i + 1);
+        target[index++] = (byte) value;
     }
 
     // ---------------------------------------------------------------------------------------------------------- target
 
     /**
-     * Replaces the {@link #target} with given and returns self.
+     * Replaces the {@code target} with given and returns self.
      *
-     * @param target new value for {@link #target}
+     * @param target new value for {@code target}
      * @return this instance.
      */
     @Override
@@ -129,27 +117,27 @@ public class ArrayByteOutput extends AbstractByteOutput<byte[]> {
     // ----------------------------------------------------------------------------------------------------------- index
 
     /**
-     * Returns the current value of {@link #index}
+     * Returns the current value of {@code index}.
      *
-     * @return the current value of {@link #index}.
+     * @return the current value of {@code index}.
      */
     public int getIndex() {
         return index;
     }
 
     /**
-     * Replaces the {@link #index} with given.
+     * Replaces the {@code index} with given.
      *
-     * @param index new value for {@link #index}
+     * @param index new value for {@code index}
      */
     public void setIndex(final int index) {
         this.index = index;
     }
 
     /**
-     * Replaces the {@link #index} with given and returns self.
+     * Replaces the {@code index} with given and returns self.
      *
-     * @param index new value for {@link #index}
+     * @param index new value for {@code index}
      * @return this instance.
      */
     public ArrayByteOutput index(final int index) {
@@ -157,46 +145,10 @@ public class ArrayByteOutput extends AbstractByteOutput<byte[]> {
         return this;
     }
 
-    // ----------------------------------------------------------------------------------------------------------- limit
-
-    /**
-     * Returns the current value of {@link #limit}.
-     *
-     * @return the current value of {@link #limit}
-     */
-    public int getLimit() {
-        return limit;
-    }
-
-    /**
-     * Replaces the current value of {@link #limit} with given.
-     *
-     * @param limit new value for {@link #limit}
-     */
-    public void setLimit(int limit) {
-        this.limit = limit;
-    }
-
-    /**
-     * Replaces the current value of {@link #limit} with given and returns this instance.
-     *
-     * @param limit new value for {@link #limit}
-     * @return this instance.
-     */
-    public ArrayByteOutput limit(final int limit) {
-        setLimit(limit);
-        return this;
-    }
-
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * The index in the {@link #target} to write.
+     * The index in the {@code target} to write.
      */
-    protected int index;
-
-    /**
-     * The index in the {@link #target} that {@link #index} can't exceed.
-     */
-    protected int limit;
+    int index;
 }

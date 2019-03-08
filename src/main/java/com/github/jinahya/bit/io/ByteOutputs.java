@@ -30,7 +30,7 @@ public final class ByteOutputs {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * An implementation of {@link ByteOutput} whose {@link ByteOutput#write(int)} simply discard given value.
+     * An implementation of {@link ByteOutput} whose {@link ByteOutput#write(int)} method simply discards given value.
      */
     private static final class NullByteOutput implements ByteOutput {
 

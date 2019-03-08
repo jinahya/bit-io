@@ -31,7 +31,7 @@ final class WhiteArrayByteInput extends ArrayByteInput {
 
     // -----------------------------------------------------------------------------------------------------------------
     WhiteArrayByteInput() {
-        super(null, -1, -1);
+        super(null);
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -40,9 +40,8 @@ final class WhiteArrayByteInput extends ArrayByteInput {
         if (source == null) {
             source = new byte[1];
             index = source.length;
-            limit = source.length;
         }
-        if (index == limit) {
+        if (index == source.length) {
             index = 0;
         }
         return super.read();

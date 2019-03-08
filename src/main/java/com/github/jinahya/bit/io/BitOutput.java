@@ -97,6 +97,9 @@ public interface BitOutput {
     void writeChar(int size, char value) throws IOException;
 
     // -----------------------------------------------------------------------------------------------------------------
+    <T extends BitWritable<T>> T writeNullable(T value) throws IOException;
+
+    // -----------------------------------------------------------------------------------------------------------------
 
     /**
      * Aligns to specified number of bytes by padding zero bits.

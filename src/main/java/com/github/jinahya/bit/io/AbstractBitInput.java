@@ -21,6 +21,8 @@ package com.github.jinahya.bit.io;
  */
 
 import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 
 import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeByte;
 import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeChar;
@@ -184,6 +186,43 @@ public abstract class AbstractBitInput implements BitInput {
             readInt(true, Byte.SIZE);
         }
         return bits;
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    //@Override
+    public <T extends BitReadable<T>> T readObject(final T value) throws IOException {
+        if (value == null) {
+            throw new NullPointerException("value is null");
+        }
+        value.read(this);
+        return value;
+    }
+
+    @Override
+    public <T extends BitReadable<T>> T readNullable(final Class<T> type) throws IOException {
+        if (type == null) {
+            throw new NullPointerException("type is null");
+        }
+        if (!readBoolean()) {
+            return null;
+        }
+        try {
+            final Constructor<T> constructor = type.getDeclaredConstructor();
+            if (constructor.isAccessible()) {
+                constructor.setAccessible(true);
+            }
+            try {
+                return readObject(constructor.newInstance()).read(this);
+            } catch (final InstantiationException ie) {
+                throw new RuntimeException(ie);
+            } catch (final IllegalAccessException iae) {
+                throw new RuntimeException(iae);
+            } catch (final InvocationTargetException ite) {
+                throw new RuntimeException(ite);
+            }
+        } catch (final NoSuchMethodException nsme) {
+            throw new RuntimeException(nsme);
+        }
     }
 
     // -----------------------------------------------------------------------------------------------------------------

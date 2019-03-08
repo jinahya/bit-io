@@ -95,6 +95,9 @@ public interface BitInput {
     char readChar(int size) throws IOException;
 
     // -----------------------------------------------------------------------------------------------------------------
+    <T extends BitReadable<T>> T readNullable(Class<T> type) throws IOException;
+
+    // -----------------------------------------------------------------------------------------------------------------
 
     /**
      * Aligns to given number of bytes by discarding bits.

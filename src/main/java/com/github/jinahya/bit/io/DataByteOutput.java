@@ -24,7 +24,7 @@ import java.io.DataOutput;
 import java.io.IOException;
 
 /**
- * A {@code ByteOutput} uses an instance of {@link DataOutput} as its {@link #target}.
+ * A {@code ByteOutput} uses an instance of {@link DataOutput} as its {@code target}.
  *
  * @param <T> data output type parameter.
  * @see DataByteInput
@@ -46,8 +46,7 @@ public class DataByteOutput<T extends DataOutput> extends AbstractByteOutput<T> 
 
     /**
      * {@inheritDoc} The {@code write(int)} method of {@code DataByteOutput} class invokes {@link
-     * DataOutput#writeByte(int)}, on what {@link #getTarget()} gives, with specified {@code value}. Override this
-     * method if the {@link #target} is supposed to be lazily initialized and set.
+     * DataOutput#writeByte(int)}, on what {@link #getTarget()} gives, with specified {@code value}.
      *
      * @param value {@inheritDoc }
      * @throws IOException {@inheritDoc }

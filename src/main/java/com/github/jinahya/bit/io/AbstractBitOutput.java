@@ -22,7 +22,13 @@ package com.github.jinahya.bit.io;
 
 import java.io.IOException;
 
-import static com.github.jinahya.bit.io.BitIoConstraints.*;
+import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeByte;
+import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeChar;
+import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeInt;
+import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeLong;
+import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeShort;
+import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeUnsigned16;
+import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeUnsigned8;
 
 /**
  * An abstract class for implementing {@link BitInput}.

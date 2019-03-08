@@ -24,6 +24,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 
 import static java.util.Objects.requireNonNull;
+import static org.mockito.Mockito.mock;
 
 /**
  * An abstract class for testing subclasses of {@link AbstractByteOutput}.
@@ -37,10 +38,10 @@ public abstract class AbstractByteOutputTest<T extends AbstractByteOutput<U>, U>
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * Creates a new instance.
+     * Creates a new instance with given arguments.
      *
-     * @param byteOutputClass a byte output class.
-     * @param byteTargetClass a byte target class of the byte output class.
+     * @param byteOutputClass a class of byte output to test.
+     * @param byteTargetClass a class of byte target of the byte output class.
      */
     public AbstractByteOutputTest(final Class<T> byteOutputClass, final Class<U> byteTargetClass) {
         super(byteOutputClass);
@@ -66,9 +67,6 @@ public abstract class AbstractByteOutputTest<T extends AbstractByteOutput<U>, U>
      */
     protected final Class<U> byteTargetClass;
 
-    /**
-     * A mock of {@link #byteTargetClass}.
-     */
     @Mock
-    protected U byteTargetMock;
+    private U byteTargetMock;
 }

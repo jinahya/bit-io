@@ -35,7 +35,10 @@ import java.io.IOException;
 import java.lang.invoke.MethodHandles;
 import java.util.Objects;
 
-import static com.github.jinahya.bit.io.BitIoTests.*;
+import static com.github.jinahya.bit.io.BitIoTests.randomSizeByte;
+import static com.github.jinahya.bit.io.BitIoTests.randomSizeInt;
+import static com.github.jinahya.bit.io.BitIoTests.randomSizeLong;
+import static com.github.jinahya.bit.io.BitIoTests.randomSizeShort;
 import static java.util.concurrent.ThreadLocalRandom.current;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -91,7 +94,7 @@ public abstract class BitInputTest<T extends BitInput> {
     public void assertReadByteThrowsIllegalArgumentExceptionWhenSizeIsLessThanOne() {
         assertThrows(IllegalArgumentException.class, () -> bitInput.readByte(current().nextBoolean(), 0));
         assertThrows(IllegalArgumentException.class,
-                () -> bitInput.readByte(current().nextBoolean(), current().nextInt() | Integer.MIN_VALUE));
+                     () -> bitInput.readByte(current().nextBoolean(), current().nextInt() | Integer.MIN_VALUE));
     }
 
     @RepeatedTest(128)

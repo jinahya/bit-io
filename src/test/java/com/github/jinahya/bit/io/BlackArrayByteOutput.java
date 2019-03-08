@@ -35,7 +35,7 @@ class BlackArrayByteOutput extends ArrayByteOutput {
      * Creates a new instance.
      */
     BlackArrayByteOutput() {
-        super(null, -1, -1);
+        super(null);
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -44,11 +44,9 @@ class BlackArrayByteOutput extends ArrayByteOutput {
         if (target == null) {
             target = new byte[1];
             index = 0;
-            limit = target.length;
         }
         super.write(value);
-        if (index == limit) {
-            index = 0;
-        }
+        assert index == target.length;
+        index = 0;
     }
 }

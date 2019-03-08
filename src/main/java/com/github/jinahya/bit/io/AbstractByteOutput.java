@@ -43,27 +43,27 @@ public abstract class AbstractByteOutput<T> implements ByteOutput {
     // ---------------------------------------------------------------------------------------------------------- target
 
     /**
-     * Returns the current value of {@link #target}.
+     * Returns the current value of {@code target}.
      *
-     * @return the current value of {@link #target}.
+     * @return the current value of {@code target}.
      */
     public T getTarget() {
         return target;
     }
 
     /**
-     * Replaces the value of {@link #target} with given.
+     * Replaces the value of {@code target} with given.
      *
-     * @param target new value for {@link #target}.
+     * @param target new value for {@code target}.
      */
     public void setTarget(final T target) {
         this.target = target;
     }
 
     /**
-     * Replaces the value of {@link #target} with given and returns this instance.
+     * Replaces the value of {@code target} with given and returns this instance.
      *
-     * @param target new value for {@link #target}.
+     * @param target new value for {@code target}.
      * @return this instance.
      * @see #setTarget(java.lang.Object)
      */
@@ -77,5 +77,5 @@ public abstract class AbstractByteOutput<T> implements ByteOutput {
     /**
      * The underlying byte target.
      */
-    protected T target;
+    T target;
 }

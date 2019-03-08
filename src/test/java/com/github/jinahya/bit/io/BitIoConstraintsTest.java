@@ -23,7 +23,14 @@ package com.github.jinahya.bit.io;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 
-import static com.github.jinahya.bit.io.BitIoConstraints.*;
+import static com.github.jinahya.bit.io.BitIoConstraints.MAX_EXPONENT;
+import static com.github.jinahya.bit.io.BitIoConstraints.MIN_EXPONENT;
+import static com.github.jinahya.bit.io.BitIoConstraints.MIN_SIZE;
+import static com.github.jinahya.bit.io.BitIoConstraints.maxSize;
+import static com.github.jinahya.bit.io.BitIoConstraints.requireValidExponent;
+import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSize;
+import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeUnsigned16;
+import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeUnsigned8;
 import static java.util.concurrent.ThreadLocalRandom.current;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -66,12 +73,12 @@ class BitIoConstraintsTest {
     void testRequireValidSizeUnsigned8() {
         // negative
         assertThrows(IllegalArgumentException.class,
-                () -> requireValidSizeUnsigned8(current().nextInt() | Integer.MIN_VALUE));
+                     () -> requireValidSizeUnsigned8(current().nextInt() | Integer.MIN_VALUE));
         // zero
         assertThrows(IllegalArgumentException.class, () -> requireValidSizeUnsigned8(0));
         // size > Byte.SIZE
         assertThrows(IllegalArgumentException.class,
-                () -> requireValidSizeUnsigned8((current().nextInt() << (Byte.SIZE + 1) >>> 1)));
+                     () -> requireValidSizeUnsigned8((current().nextInt() << (Byte.SIZE + 1) >>> 1)));
         // valid
         final int size = current().nextInt(1, Byte.SIZE + 1);
         assertEquals(size, requireValidSizeUnsigned8(size));
@@ -81,12 +88,12 @@ class BitIoConstraintsTest {
     void testRequireValidSizeUnsigned16() {
         // negative
         assertThrows(IllegalArgumentException.class,
-                () -> requireValidSizeUnsigned16(current().nextInt() | Integer.MIN_VALUE));
+                     () -> requireValidSizeUnsigned16(current().nextInt() | Integer.MIN_VALUE));
         // zero
         assertThrows(IllegalArgumentException.class, () -> requireValidSizeUnsigned16(0));
         // size > Short.SIZE
         assertThrows(IllegalArgumentException.class,
-                () -> requireValidSizeUnsigned16((current().nextInt() << (Short.SIZE + 1) >>> 1)));
+                     () -> requireValidSizeUnsigned16((current().nextInt() << (Short.SIZE + 1) >>> 1)));
         // valid
         final int size = current().nextInt(1, Short.SIZE + 1);
         assertEquals(size, requireValidSizeUnsigned16(size));

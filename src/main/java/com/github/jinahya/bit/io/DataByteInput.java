@@ -24,7 +24,7 @@ import java.io.DataInput;
 import java.io.IOException;
 
 /**
- * A {@link ByteInput} uses an instance of {@link DataInput} as its {@link #source}.
+ * A {@link ByteInput} uses an instance of {@link DataInput} as its {@code source}.
  *
  * @param <T> data input type parameter.
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
@@ -47,8 +47,7 @@ public class DataByteInput<T extends DataInput> extends AbstractByteInput<T> {
 
     /**
      * {@inheritDoc} The {@code read()} method of {@code DataByteInput} class invokes {@link
-     * DataInput#readUnsignedByte()}, on what {@link #getSource()} gives, and returns the result. Override this method
-     * if the {@link #source} is supposed to be lazily initialized and set.
+     * DataInput#readUnsignedByte()}, on what {@link #getSource()} gives, and returns the result.
      *
      * @return {@inheritDoc}
      * @throws IOException {@inheritDoc}

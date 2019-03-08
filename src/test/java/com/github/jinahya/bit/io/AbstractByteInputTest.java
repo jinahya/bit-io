@@ -26,6 +26,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static java.util.Objects.requireNonNull;
+import static org.mockito.Mockito.mock;
 
 /**
  * An abstract class for testing subclasses of {@link AbstractByteInput}.
@@ -40,10 +41,10 @@ public abstract class AbstractByteInputTest<T extends AbstractByteInput<U>, U> e
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * Creates a new instance.
+     * Creates a new instance with specified byte input class and byte source class.
      *
-     * @param byteInputClass  a byte input class to test.
-     * @param byteSourceClass a byte source class of the byte input class.
+     * @param byteInputClass  the byte input class to test.
+     * @param byteSourceClass the byte source class of the byte input class.
      */
     public AbstractByteInputTest(final Class<T> byteInputClass, final Class<U> byteSourceClass) {
         super(byteInputClass);
@@ -61,7 +62,9 @@ public abstract class AbstractByteInputTest<T extends AbstractByteInput<U>, U> e
     }
 
     /**
-     * Tests {@link AbstractByteInput#setSource(Object)}.
+     * Tests {@link AbstractByteInput#setSource(Object)}. The {@code testSetSource} method of {@code
+     * AbstractByteInputTest} class invokes {@link AbstractByteInput#setSource(Object)} twice, with {@code null} and a
+     * {@code mock}, respectively.
      */
     @Test
     public void testSetSource() {
@@ -76,9 +79,6 @@ public abstract class AbstractByteInputTest<T extends AbstractByteInput<U>, U> e
      */
     protected final Class<U> byteSourceClass;
 
-    /**
-     * A mock of {@link #byteSourceClass}.
-     */
     @Mock
-    protected U byteSourceMock;
+    private U byteSourceMock;
 }

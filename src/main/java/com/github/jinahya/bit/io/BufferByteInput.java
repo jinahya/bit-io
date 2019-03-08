@@ -26,7 +26,7 @@ import java.nio.ByteBuffer;
 import java.nio.channels.ReadableByteChannel;
 
 /**
- * A {@link ByteInput} uses an instance of {@link ByteBuffer} as its {@link #source}.
+ * A {@link ByteInput} uses an instance of {@link ByteBuffer} as its {@code source}.
  *
  * @param <T> byte buffer type parameter.
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
@@ -35,6 +35,15 @@ import java.nio.channels.ReadableByteChannel;
 public class BufferByteInput<T extends ByteBuffer> extends AbstractByteInput<T> {
 
     // -----------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Creates a new instance of {@link BufferByteInput} which reads bytes from specified channel using a byte buffer of
+     * specified capacity.
+     *
+     * @param capacity the capcity of byte buffer.
+     * @param channel  the chanel from which bytes are read.
+     * @return an instance buffer byte input.
+     */
     @SuppressWarnings({"Duplicates"})
     public static BufferByteInput<ByteBuffer> of(final int capacity, final ReadableByteChannel channel) {
         if (capacity <= 0) {
@@ -44,6 +53,7 @@ public class BufferByteInput<T extends ByteBuffer> extends AbstractByteInput<T> 
             throw new NullPointerException("channel is null");
         }
         return new BufferByteInput<ByteBuffer>(null) {
+
             @Override
             public int read() throws IOException {
                 if (source == null) {
@@ -60,6 +70,11 @@ public class BufferByteInput<T extends ByteBuffer> extends AbstractByteInput<T> 
                     source.flip(); // limit -> position, position -> zero
                 }
                 return super.read();
+            }
+
+            @Override
+            public void setSource(final ByteBuffer source) {
+                throw new UnsupportedOperationException();
             }
         };
     }
@@ -79,8 +94,7 @@ public class BufferByteInput<T extends ByteBuffer> extends AbstractByteInput<T> 
 
     /**
      * {@inheritDoc} The {@code read()} method of {@code BufferByteInput} invokes {@link ByteBuffer#get()}, on what
-     * {@link #getSource()} gives, and returns the result as an unsigned 8-bit {@code int}. Override this method if
-     * {@link #source} is supposed to be lazily initialized or adjusted.
+     * {@link #getSource()} gives, and returns the result as an unsigned 8-bit {@code int}.
      *
      * @return {@inheritDoc }
      * @throws IOException {@inheritDoc}

@@ -43,27 +43,27 @@ public abstract class AbstractByteInput<T> implements ByteInput {
     // ---------------------------------------------------------------------------------------------------------- source
 
     /**
-     * Returns the current value of {@link #source}.
+     * Returns the current value of {@code source}.
      *
-     * @return the current value of {@link #source}
+     * @return the current value of {@code source}
      */
     public T getSource() {
         return source;
     }
 
     /**
-     * Replaces the current value of {@link #source} with given.
+     * Replaces the current value of {@code source} with given.
      *
-     * @param source new value for {@link #source}
+     * @param source new value for {@code source}
      */
     public void setSource(final T source) {
         this.source = source;
     }
 
     /**
-     * Replaces the current value of {@link #source} with given and returns this instance.
+     * Replaces the current value of {@code source} with given and returns this instance.
      *
-     * @param source new value for {@link #source}
+     * @param source new value for {@code source}
      * @return this instance
      * @see #setSource(java.lang.Object)
      */
@@ -77,5 +77,5 @@ public abstract class AbstractByteInput<T> implements ByteInput {
     /**
      * The underlying byte source.
      */
-    protected T source;
+    T source;
 }

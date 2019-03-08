@@ -25,7 +25,7 @@ import java.nio.ByteBuffer;
 import java.nio.channels.WritableByteChannel;
 
 /**
- * A {@link ByteOutput} uses an instance of {@link ByteBuffer} as its {@link #target}.
+ * A {@link ByteOutput} uses an instance of {@link ByteBuffer} as its {@code target}.
  *
  * @param <T> byte buffer type parameter.
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
@@ -43,6 +43,7 @@ public class BufferByteOutput<T extends ByteBuffer> extends AbstractByteOutput<T
             throw new NullPointerException("channel is null");
         }
         return new BufferByteOutput<ByteBuffer>(null) {
+
             @Override
             public void write(final int value) throws IOException {
                 if (target == null) {
@@ -57,26 +58,12 @@ public class BufferByteOutput<T extends ByteBuffer> extends AbstractByteOutput<T
                 }
                 super.write(value);
             }
-        };
-    }
 
-    public static int flush(final BufferByteOutput<?> output, final WritableByteChannel channel) throws IOException {
-        if (output == null) {
-            throw new NullPointerException("output is null");
-        }
-        if (channel == null) {
-            throw new NullPointerException("channel is null");
-        }
-        // @todo: should we check channel.isOpen?
-        int written = 0;
-        final ByteBuffer target = output.target;
-        if (target != null) {
-            for (target.flip(); target.hasRemaining(); ) {
-                written += channel.write(target);
+            @Override
+            public void setTarget(final ByteBuffer target) {
+                throw new UnsupportedOperationException();
             }
-            target.clear(); // position -> zero, limit -> capacity
-        }
-        return written;
+        };
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -95,8 +82,7 @@ public class BufferByteOutput<T extends ByteBuffer> extends AbstractByteOutput<T
 
     /**
      * {@inheritDoc} The {@code write(int)} method of {@code BufferByteOutput} class invokes {@link
-     * ByteBuffer#put(byte)}, on what {@link #getTarget()} gives, with given {@code value}. Override this method if the
-     * {@link #target} is supposed to be lazily initialized or adjusted.
+     * ByteBuffer#put(byte)}, on what {@link #getTarget()} gives, with given {@code value}.
      *
      * @param value {@inheritDoc}
      * @throws IOException {@inheritDoc}

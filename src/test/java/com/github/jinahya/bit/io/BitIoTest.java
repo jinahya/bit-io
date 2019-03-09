@@ -61,7 +61,7 @@ class BitIoTest {
 
     // -----------------------------------------------------------------------------------------------------------------
     private static Arguments array() {
-        final byte[] array = new byte[BOUND_COUNT * Long.BYTES];
+        final byte[] array = new byte[1048576];
         final ByteOutput target = new ArrayByteOutput(array);
         final BitOutput output = new DefaultBitOutput<>(target);
         final Supplier<BitInput> inputSupplier = () -> {
@@ -72,7 +72,7 @@ class BitIoTest {
     }
 
     private static Arguments buffer() {
-        final ByteBuffer buffer = ByteBuffer.allocate(BOUND_COUNT * Long.BYTES);
+        final ByteBuffer buffer = ByteBuffer.allocate(1048576);
         final ByteOutput delegate = new BufferByteOutput<>(buffer);
         final BitOutput output = new DefaultBitOutput<>(delegate);
         final Supplier<BitInput> inputSupplier = () -> {
@@ -83,7 +83,7 @@ class BitIoTest {
     }
 
     private static Arguments data() {
-        final ByteArrayOutputStream baos = new ByteArrayOutputStream(BOUND_COUNT * Long.BYTES);
+        final ByteArrayOutputStream baos = new ByteArrayOutputStream(1048576);
         final DataOutput target = new DataOutputStream(baos);
         final BitOutput output = new DefaultBitOutput<>(new DataByteOutput<DataOutput>(target));
         final Supplier<BitInput> inputSupplier = () -> {
@@ -95,7 +95,7 @@ class BitIoTest {
     }
 
     private static Arguments stream() {
-        final ByteArrayOutputStream target = new ByteArrayOutputStream(BOUND_COUNT * Long.BYTES);
+        final ByteArrayOutputStream target = new ByteArrayOutputStream(1048576);
         final BitOutput output = new DefaultBitOutput<ByteOutput>(new StreamByteOutput<>(target));
         final Supplier<BitInput> inputSupplier = () -> {
             final ByteArrayInputStream source = new ByteArrayInputStream(target.toByteArray());
@@ -318,6 +318,27 @@ class BitIoTest {
             final int size = (Integer) list.remove(0);
             final long expected = (Long) list.remove(0);
             final long actual = input.readLong(unsigned, size);
+            assertEquals(expected, actual);
+        }
+        input.align(1);
+    }
+
+    @MethodSource({"source"})
+    @ParameterizedTest
+    void testObject(final BitOutput output, final Supplier<BitInput> inputSupplier) throws IOException {
+        final List<Profile> list = new LinkedList<>();
+        final int count = current().nextInt(4);
+        for (int i = 0; i < count; i++) {
+            final Profile profile = Profile.newInstance();
+            list.add(profile);
+            profile.write(output);
+        }
+        output.align(1);
+        final BitInput input = inputSupplier.get();
+        for (int i = 0; i < count; i++) {
+            final Profile expected = list.remove(0);
+            final Profile actual = new Profile();
+            actual.read(input);
             assertEquals(expected, actual);
         }
         input.align(1);

@@ -159,26 +159,6 @@ public abstract class AbstractBitOutput implements BitOutput {
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    //@Override
-    public <T extends BitWritable<T>> T writeObject(T value) throws IOException {
-        if (value == null) {
-            throw new NullPointerException("value is null");
-        }
-        value.write(this);
-        return value;
-    }
-
-    @Override
-    public <T extends BitWritable<T>> T writeNullable(final T value) throws IOException {
-        if (value == null) {
-            writeBoolean(false);
-            return null;
-        }
-        writeBoolean(true);
-        return value.write(this);
-    }
-
-    // -----------------------------------------------------------------------------------------------------------------
 
     /**
      * The current octet of written bits.

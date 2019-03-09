@@ -2,8 +2,18 @@ package com.github.jinahya.bit.io;
 
 import java.io.IOException;
 
-public interface BitWritable<T extends BitWritable<T>> {
+/**
+ * An interface for objects which each can write value to a bit output.
+ */
+public interface BitWritable {
 
     // -----------------------------------------------------------------------------------------------------------------
-    T write(BitOutput bitOutput) throws IOException;
+
+    /**
+     * Writes values to given bit output.
+     *
+     * @param bitOutput the bit output to which values are written.
+     * @throws IOException if an I/O error occurs.
+     */
+    void write(BitOutput bitOutput) throws IOException;
 }

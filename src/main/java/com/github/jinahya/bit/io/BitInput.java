@@ -21,6 +21,7 @@ package com.github.jinahya.bit.io;
  */
 
 import java.io.IOException;
+import java.nio.charset.Charset;
 
 /**
  * An interface for reading arbitrary length of bits.
@@ -93,9 +94,6 @@ public interface BitInput {
      * @throws IOException if an I/O error occurs.
      */
     char readChar(int size) throws IOException;
-
-    // -----------------------------------------------------------------------------------------------------------------
-    <T extends BitReadable<T>> T readNullable(Class<T> type) throws IOException;
 
     // -----------------------------------------------------------------------------------------------------------------
 

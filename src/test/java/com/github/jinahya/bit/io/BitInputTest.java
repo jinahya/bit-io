@@ -35,10 +35,10 @@ import java.io.IOException;
 import java.lang.invoke.MethodHandles;
 import java.util.Objects;
 
-import static com.github.jinahya.bit.io.BitIoTests.randomSizeByte;
-import static com.github.jinahya.bit.io.BitIoTests.randomSizeInt;
-import static com.github.jinahya.bit.io.BitIoTests.randomSizeLong;
-import static com.github.jinahya.bit.io.BitIoTests.randomSizeShort;
+import static com.github.jinahya.bit.io.BitIoTests.acceptRandomSizeByte;
+import static com.github.jinahya.bit.io.BitIoTests.acceptRandomSizeInt;
+import static com.github.jinahya.bit.io.BitIoTests.acceptRandomSizeLong;
+import static com.github.jinahya.bit.io.BitIoTests.acceptRandomSizeShort;
 import static java.util.concurrent.ThreadLocalRandom.current;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -99,7 +99,7 @@ public abstract class BitInputTest<T extends BitInput> {
 
     @RepeatedTest(128)
     public void testReadByte() {
-        randomSizeByte((unsigned, size) -> {
+        acceptRandomSizeByte((unsigned, size) -> {
             final byte value;
             try {
                 value = bitInput.readByte(unsigned, size);
@@ -113,7 +113,7 @@ public abstract class BitInputTest<T extends BitInput> {
     // ----------------------------------------------------------------------------------------------------------- short
     @RepeatedTest(128)
     public void testReadShort() {
-        randomSizeShort((unsigned, size) -> {
+        acceptRandomSizeShort((unsigned, size) -> {
             final short value;
             try {
                 value = bitInput.readShort(unsigned, size);
@@ -131,7 +131,7 @@ public abstract class BitInputTest<T extends BitInput> {
      */
     @RepeatedTest(128)
     public void testReadInt() {
-        randomSizeInt((unsigned, size) -> {
+        acceptRandomSizeInt((unsigned, size) -> {
             final int value;
             try {
                 value = bitInput.readInt(unsigned, size);
@@ -145,7 +145,7 @@ public abstract class BitInputTest<T extends BitInput> {
     // ------------------------------------------------------------------------------------------------------------ long
     @RepeatedTest(128)
     public void testReadLong() {
-        randomSizeLong((unsigned, size) -> {
+        acceptRandomSizeLong((unsigned, size) -> {
             final long value;
             try {
                 value = bitInput.readLong(unsigned, size);

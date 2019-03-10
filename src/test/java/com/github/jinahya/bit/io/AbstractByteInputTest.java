@@ -26,7 +26,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static java.util.Objects.requireNonNull;
-import static org.mockito.Mockito.mock;
 
 /**
  * An abstract class for testing subclasses of {@link AbstractByteInput}.

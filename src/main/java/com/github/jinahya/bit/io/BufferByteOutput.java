@@ -69,6 +69,30 @@ public class BufferByteOutput<T extends ByteBuffer> extends AbstractByteOutput<T
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
+     * Flushes the internal byte buffer of given byte output to specified channel and returns the number of bytes
+     * written.
+     *
+     * @param output  the output whose buffer is flushed.
+     * @param channel the channel to which the buffer is flushed.
+     * @return the number of bytes written while flushing; {@code 0} if there is no inter buffer.
+     * @throws IOException if an I/O error occurs.
+     */
+    public static int flush(final BufferByteOutput<?> output, final WritableByteChannel channel) throws IOException {
+        final ByteBuffer buffer = output.getTarget();
+        if (buffer == null) {
+            return 0;
+        }
+        int written = 0;
+        for (buffer.flip(); buffer.hasRemaining(); ) {
+            written += channel.write(buffer);
+        }
+        buffer.clear(); // position -> zero; limit -> capacity
+        return written;
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+
+    /**
      * Creates a new instance built on top of given {@code ByteBuffer}.
      *
      * @param target the {@code ByteBuffer} to which bytes are written; {@code null} if it's supposed to be lazily

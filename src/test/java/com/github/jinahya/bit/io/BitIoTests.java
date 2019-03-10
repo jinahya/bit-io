@@ -27,7 +27,13 @@ import org.slf4j.LoggerFactory;
 import java.lang.invoke.MethodHandles;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
+import java.util.function.IntConsumer;
+import java.util.function.IntFunction;
 
+import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeByte;
+import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeInt;
+import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeLong;
+import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeShort;
 import static java.util.concurrent.ThreadLocalRandom.current;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -41,7 +47,33 @@ final class BitIoTests {
     // -----------------------------------------------------------------------------------------------------------------
     private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
-    // -----------------------------------------------------------------------------------------------------------------
+    // ------------------------------------------------------------------------------------------------------------ byte
+
+    /**
+     * Applies a random {@code size}, based on given {@code unsigned} flag, to speicifed {@code function}.
+     *
+     * @param unsigned the flag for {@code unsigned}.
+     * @param function the function to which the {@code size} is applied.
+     * @param <R> function result type parameter
+     * @return the value the function results.
+     */
+    static <R> R applyRandomSizeByte(final boolean unsigned, final IntFunction<R> function) {
+        if (function == null) {
+            throw new NullPointerException("function is null");
+        }
+        final int size = current().nextInt(1, Byte.SIZE + (unsigned ? 0 : 1));
+        return function.apply(requireValidSizeByte(unsigned, size));
+    }
+
+    static void acceptRandomSizeByte(final boolean unsigned, final IntConsumer consumer) {
+        if (consumer == null) {
+            throw new NullPointerException("consumer is null");
+        }
+        applyRandomSizeByte(unsigned, size -> {
+            consumer.accept(size);
+            return null;
+        });
+    }
 
     /**
      * Applies a unsigned flag and a bit size to given function.
@@ -55,8 +87,7 @@ final class BitIoTests {
             throw new NullPointerException("function is null");
         }
         final boolean unsigned = current().nextBoolean();
-        final int size = current().nextInt(1, Byte.SIZE + (unsigned ? 0 : 1));
-        return function.apply(unsigned, size);
+        return applyRandomSizeByte(unsigned, size -> function.apply(unsigned, size));
     }
 
     static void randomSizeByte(final BiConsumer<Boolean, Integer> consumer) {
@@ -97,14 +128,31 @@ final class BitIoTests {
         }));
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+    // ----------------------------------------------------------------------------------------------------------- short
+    static <R> R applyRandomSizeShort(final boolean unsigned, final IntFunction<R> function) {
+        if (function == null) {
+            throw new NullPointerException("function is null");
+        }
+        final int size = current().nextInt(1, Short.SIZE + (unsigned ? 0 : 1));
+        return function.apply(requireValidSizeShort(unsigned, size));
+    }
+
+    static void acceptRandomSizeShort(final boolean unsigned, final IntConsumer consumer) {
+        if (consumer == null) {
+            throw new NullPointerException("consumer is null");
+        }
+        assertNull(applyRandomSizeShort(unsigned, size -> {
+            consumer.accept(size);
+            return null;
+        }));
+    }
+
     static <R> R randomSizeShort(final BiFunction<Boolean, Integer, R> function) {
         if (function == null) {
             throw new NullPointerException("function is null");
         }
         final boolean unsigned = current().nextBoolean();
-        final int size = current().nextInt(1, Short.SIZE + (unsigned ? 0 : 1));
-        return function.apply(unsigned, size);
+        return applyRandomSizeShort(unsigned, size -> function.apply(unsigned, size));
     }
 
     static void randomSizeShort(final BiConsumer<Boolean, Integer> consumer) {
@@ -149,7 +197,24 @@ final class BitIoTests {
         }));
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+    // ------------------------------------------------------------------------------------------------------------- int
+    static <R> R applyRandomSizeInt(final boolean unsigned, final IntFunction<R> function) {
+        if (function == null) {
+            throw new NullPointerException("function is null");
+        }
+        final int size = current().nextInt(1, Integer.SIZE + (unsigned ? 0 : 1));
+        return function.apply(requireValidSizeInt(unsigned, size));
+    }
+
+    static void acceptRandomSizeInt(final boolean unsigned, final IntConsumer consumer) {
+        if (consumer == null) {
+            throw new NullPointerException("consumer is null");
+        }
+        assertNull(applyRandomSizeInt(unsigned, size -> {
+            consumer.accept(size);
+            return null;
+        }));
+    }
 
     /**
      * Applies randomly generated {@code unsigned} and {@code size} to specified function and returns the result.
@@ -163,8 +228,7 @@ final class BitIoTests {
             throw new NullPointerException("function is null");
         }
         final boolean unsigned = current().nextBoolean();
-        final int size = current().nextInt(1, Integer.SIZE + (unsigned ? 0 : 1));
-        return function.apply(unsigned, size);
+        return applyRandomSizeInt(unsigned, size -> function.apply(unsigned, size));
     }
 
     /**
@@ -233,14 +297,31 @@ final class BitIoTests {
         }));
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+    // ------------------------------------------------------------------------------------------------------------ long
+    static <R> R applyRandomSizeLong(final boolean unsigned, final IntFunction<R> function) {
+        if (function == null) {
+            throw new NullPointerException("function is null");
+        }
+        final int size = current().nextInt(1, Long.SIZE + (unsigned ? 0 : 1));
+        return function.apply(requireValidSizeLong(unsigned, size));
+    }
+
+    static void acceptRandomSizeLong(final boolean unsigned, final IntConsumer consumer) {
+        if (consumer == null) {
+            throw new NullPointerException("consumer is null");
+        }
+        assertNull(applyRandomSizeLong(unsigned, size -> {
+            consumer.accept(size);
+            return null;
+        }));
+    }
+
     static <R> R randomSizeLong(final BiFunction<Boolean, Integer, R> function) {
         if (function == null) {
             throw new NullPointerException("function is null");
         }
         final boolean unsigned = current().nextBoolean();
-        final int size = current().nextInt(1, Long.SIZE + (unsigned ? 0 : 1));
-        return function.apply(unsigned, size);
+        return applyRandomSizeLong(unsigned, size -> function.apply(unsigned, size));
     }
 
     static void randomSizeLong(final BiConsumer<Boolean, Integer> consumer) {

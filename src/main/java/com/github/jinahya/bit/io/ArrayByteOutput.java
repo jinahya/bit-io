@@ -75,6 +75,35 @@ public class ArrayByteOutput extends AbstractByteOutput<byte[]> {
         };
     }
 
+    /**
+     * Flushes bytes on {@link ArrayByteOutput#getTarget()} between {@code 0} and {@link ArrayByteOutput#getIndex()} to
+     * specified stream and returns the number of bytes written.
+     *
+     * @param output the byte output whose {@code target} is flushed.
+     * @param stream the output stream to which bytes are flushed.
+     * @return the number of bytes written; {@code 0} if internal state of the byte output is not valid.
+     * @throws IOException if an I/O error occurs.
+     */
+    public static int flush(final ArrayByteOutput output, final OutputStream stream) throws IOException {
+        if (output == null) {
+            throw new NullPointerException("output is null");
+        }
+        if (stream == null) {
+            throw new NullPointerException("stream is null");
+        }
+        final byte[] target = output.getTarget();
+        if (target == null || target.length == 0) {
+            return 0;
+        }
+        final int index = output.index;
+        if (index < 0 || index >= target.length) {
+            return 0;
+        }
+        stream.write(target, 0, index);
+        output.index = 0;
+        return index;
+    }
+
     // -----------------------------------------------------------------------------------------------------------------
 
     /**

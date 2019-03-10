@@ -55,7 +55,7 @@ No methods supplied for floating-point types.
 Prepare an instance of `ByteInput` from various sources.
 
 ````java
-new ArrayByteInput(byte[], int, int);
+new ArrayByteInput(byte[], int);
 new BufferByteInput(java.nio.ByteBuffer);
 new DataByteInput(java.io.DataInput);
 new StreamByteInput(java.io.InputStream);
@@ -64,23 +64,18 @@ new StreamByteInput(java.io.InputStream);
 Constructors of these classes don't check arguments which means you can lazily instantiate and set them.
 
 ```java
-final ByteInput input = new ArrayByteInput(null, -1, -1) {
+final ByteInput input = new ArrayByteInput(null, -1) {
     @Override
     public int read() throws IOException {
         // initialize the `source` field value
         if (source == null) {
             source = byte[16];
-            limit = source.length;
-            index = limit;
+            index = source.length;
         }
         // read bytes from the stream if empty
-        if (index == limit) {
-            limit = stream.read(source);
-            if (limit == -1) {
+        if (index == source.length) {
+            if (stream.read(source) == -1) {
                 throw new EOFException("unexpected end of stream");
-            }
-            if (limit == 0) {
-                // source.length == 0?
             }
             index = 0;
         }
@@ -100,7 +95,7 @@ final ByteInput byteInput = createByteInput();
 final BitInput bitInput = new DefalutBitInput<>(byteInput);
 ```
 
-Or lazliy instantiate its `delegate` field.
+Or lazily instantiate its `delegate` field.
 
 ```java
 new DefaultBitInput<StreamByteInput>(null) {

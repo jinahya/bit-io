@@ -21,7 +21,6 @@ package com.github.jinahya.bit.io;
  */
 
 import java.io.IOException;
-import java.nio.charset.Charset;
 
 /**
  * An interface for reading arbitrary length of bits.

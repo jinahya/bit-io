@@ -24,7 +24,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 
 import static java.util.Objects.requireNonNull;
-import static org.mockito.Mockito.mock;
 
 /**
  * An abstract class for testing subclasses of {@link AbstractByteOutput}.

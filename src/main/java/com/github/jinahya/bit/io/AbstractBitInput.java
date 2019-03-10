@@ -21,8 +21,6 @@ package com.github.jinahya.bit.io;
  */
 
 import java.io.IOException;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 
 import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeByte;
 import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeChar;

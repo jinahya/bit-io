@@ -21,9 +21,6 @@ package com.github.jinahya.bit.io;
  */
 
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentMatcher;
-import org.mockito.ArgumentMatchers;
-import org.mockito.Mockito;
 
 import java.io.IOException;
 import java.io.OutputStream;

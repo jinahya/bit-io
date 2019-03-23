@@ -34,6 +34,15 @@ import java.nio.channels.WritableByteChannel;
 public class BufferByteOutput<T extends ByteBuffer> extends AbstractByteOutput<T> {
 
     // -----------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Creates a new instance which writes bytes to specified channel using a byte buffer of given capacity.
+     *
+     * @param capacity the capacity for the byte buffer.
+     * @param channel the channel to which bytes are written.
+     * @return a new instance of byte buffer.
+     * @see #flush(BufferByteOutput, WritableByteChannel)
+     */
     @SuppressWarnings({"Duplicates"})
     public static BufferByteOutput<ByteBuffer> of(final int capacity, final WritableByteChannel channel) {
         if (capacity <= 0) {

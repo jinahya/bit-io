@@ -96,7 +96,7 @@ public class BufferByteInput<T extends ByteBuffer> extends AbstractByteInput<T> 
      * {@inheritDoc} The {@code read()} method of {@code BufferByteInput} invokes {@link ByteBuffer#get()}, on what
      * {@link #getSource()} gives, and returns the result as an unsigned 8-bit {@code int}.
      *
-     * @return {@inheritDoc }
+     * @return {@inheritDoc}
      * @throws IOException {@inheritDoc}
      * @see #source
      * @see ByteBuffer#get()

@@ -1,5 +1,7 @@
 package com.github.jinahya.bit.io;
 
+import org.jeasy.random.EasyRandom;
+
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import javax.validation.Validation;
@@ -12,7 +14,6 @@ import java.io.IOException;
 import java.util.Objects;
 import java.util.Set;
 
-import static io.github.benas.randombeans.api.EnhancedRandom.random;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.concurrent.ThreadLocalRandom.current;
 
@@ -55,7 +56,7 @@ class Profile implements BitReadable, BitWritable {
 
     // -----------------------------------------------------------------------------------------------------------------
     static Profile newInstance() {
-        final Profile instance = random(Profile.class);
+        final Profile instance = new EasyRandom().nextObject(Profile.class);
         if (current().nextBoolean()) {
             instance.name = null;
         }

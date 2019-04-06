@@ -51,7 +51,7 @@
     <maven.compiler.testSource>1.8</maven.compiler.testSource>
     <maven.compiler.testTarget>1.8</maven.compiler.testTarget>
     <version.org.junit.jupiter>5.4.0</version.org.junit.jupiter>
-    <version.org.mockito>2.25.0</version.org.mockito>
+    <version.org.mockito>2.26.0</version.org.mockito>
     <version.maven-surefire>3.0.0-M3</version.maven-surefire>
     <project.build.outputDirectory.retrotranslated13>${project.build.directory}/classes-retrotranslated13</project.build.outputDirectory.retrotranslated13>
     <project.build.outputDirectory.retrotranslated14>${project.build.directory}/classes-retrotranslated14</project.build.outputDirectory.retrotranslated14>
@@ -64,12 +64,12 @@
       <version>1.2.3</version>
       <scope>test</scope>
     </dependency>
-    <dependency>
-      <groupId>io.github.benas</groupId>
-      <artifactId>random-beans-validation</artifactId>
-      <version>3.8.0</version>
-      <scope>test</scope>
-    </dependency>
+    <!--<dependency>-->
+      <!--<groupId>io.github.benas</groupId>-->
+      <!--<artifactId>random-beans-validation</artifactId>-->
+      <!--<version>3.9.0</version>-->
+      <!--<scope>test</scope>-->
+    <!--</dependency>-->
     <dependency>
       <groupId>javax.validation</groupId>
       <artifactId>validation-api</artifactId>
@@ -86,6 +86,12 @@
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-text</artifactId>
       <version>1.6</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.jeasy</groupId>
+      <artifactId>easy-random-bean-validation</artifactId>
+      <version>4.0.0.RC1</version>
       <scope>test</scope>
     </dependency>
     <dependency> <!-- required by hibernate-validator -->

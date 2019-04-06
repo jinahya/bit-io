@@ -71,6 +71,12 @@ class ArrayByteInputTest extends AbstractByteInputTest<ArrayByteInput, byte[]> {
         final InputStream stream = mock(InputStream.class);
         when(stream.read(any(byte[].class))).thenAnswer(invocation -> {
             final byte[] array = invocation.getArgument(0);
+            if (array.length == 0) {
+                return 0;
+            }
+            if (array.length == 1) {
+                return 1;
+            }
             return current().nextInt(1, array.length);
         });
         final ArrayByteInput byteInput = ArrayByteInput.of(length, stream);

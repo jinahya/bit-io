@@ -1,6 +1,11 @@
-/*
- * Copyright 2013 <a href="mailto:onacit@gmail.com">Jin Kwon</a>.
- *
+package com.github.jinahya.bit.io;
+
+/*-
+ * #%L
+ * bit-io
+ * %%
+ * Copyright (C) 2014 - 2019 Jinahya, Inc.
+ * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -12,11 +17,11 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ * #L%
  */
-package com.github.jinahya.bit.io;
 
 /**
- * An abstract class for implementing {@code ByteOutput}.
+ * An abstract class for implementing {@link ByteOutput}.
  *
  * @param <T> byte target type parameter
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
@@ -38,27 +43,27 @@ public abstract class AbstractByteOutput<T> implements ByteOutput {
     // ---------------------------------------------------------------------------------------------------------- target
 
     /**
-     * Returns the current value of {@link #target}.
+     * Returns the current value of {@code target}.
      *
-     * @return the current value of {@link #target}.
+     * @return the current value of {@code target}.
      */
     public T getTarget() {
         return target;
     }
 
     /**
-     * Replaces the value of {@link #target} with given.
+     * Replaces the value of {@code target} with given.
      *
-     * @param target new value for {@link #target}.
+     * @param target new value for {@code target}.
      */
     public void setTarget(final T target) {
         this.target = target;
     }
 
     /**
-     * Replaces the value of {@link #target} with given and returns this instance.
+     * Replaces the value of {@code target} with given and returns this instance.
      *
-     * @param target new value for {@link #target}.
+     * @param target new value for {@code target}.
      * @return this instance.
      * @see #setTarget(java.lang.Object)
      */
@@ -72,5 +77,5 @@ public abstract class AbstractByteOutput<T> implements ByteOutput {
     /**
      * The underlying byte target.
      */
-    protected T target;
+    T target;
 }

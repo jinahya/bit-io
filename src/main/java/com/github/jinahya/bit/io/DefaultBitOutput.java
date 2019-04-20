@@ -1,6 +1,11 @@
-/*
- * Copyright 2015 Jin Kwon &lt;jinahya_at_gmail.com&gt;.
- *
+package com.github.jinahya.bit.io;
+
+/*-
+ * #%L
+ * bit-io
+ * %%
+ * Copyright (C) 2014 - 2019 Jinahya, Inc.
+ * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -12,8 +17,8 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ * #L%
  */
-package com.github.jinahya.bit.io;
 
 import java.io.IOException;
 
@@ -41,8 +46,7 @@ public class DefaultBitOutput<T extends ByteOutput> extends AbstractBitOutput {
 
     /**
      * {@inheritDoc} The {@code write(int)} method of {@code DefaultBitOutput} class invokes {@link
-     * ByteOutput#write(int)}, on what {@link #getDelegate()} gives, with given value. Override this method if the
-     * {@link #delegate} is supposed to be lazily initialized and set.
+     * ByteOutput#write(int)}, on what {@link #getDelegate()} method returns, with given value.
      *
      * @param value {@inheritDoc}
      * @throws IOException {@inheritDoc}
@@ -86,7 +90,7 @@ public class DefaultBitOutput<T extends ByteOutput> extends AbstractBitOutput {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * The delegate on which {@link #write(int)} is invoked.
+     * The delegate whose {@link ByteOutput#write(int)} method is invoked via {@link #write(int)} method.
      */
     protected T delegate;
 }

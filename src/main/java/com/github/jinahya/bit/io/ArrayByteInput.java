@@ -1,6 +1,11 @@
-/*
- * Copyright 2015 Jin Kwon &lt;jinahya_at_gmail.com&gt;.
- *
+package com.github.jinahya.bit.io;
+
+/*-
+ * #%L
+ * bit-io
+ * %%
+ * Copyright (C) 2014 - 2019 Jinahya, Inc.
+ * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -12,8 +17,8 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ * #L%
  */
-package com.github.jinahya.bit.io;
 
 import java.io.EOFException;
 import java.io.IOException;
@@ -36,6 +41,7 @@ public class ArrayByteInput extends AbstractByteInput<byte[]> {
      * @param stream the input stream from which bytes are read; must be not {@code null}.
      * @return a new instance of {@link ArrayByteInput}.
      */
+    @SuppressWarnings({"Duplicates"})
     public static ArrayByteInput of(final int length, final InputStream stream) {
         if (length <= 0) {
             throw new IllegalArgumentException("length(" + length + ") <= 0");
@@ -43,23 +49,33 @@ public class ArrayByteInput extends AbstractByteInput<byte[]> {
         if (stream == null) {
             throw new NullPointerException("stream is null");
         }
-        return new ArrayByteInput(null, -1, -1) {
+        return new ArrayByteInput(null) {
+
             @Override
             public int read() throws IOException {
                 if (source == null) {
                     source = new byte[length];
                     index = source.length;
-                    limit = source.length;
                 }
-                if (index == limit) {
-                    limit = stream.read(source);
-                    if (limit == -1) {
-                        throw new EOFException("reached to an end; " + stream);
+                if (index == source.length) {
+                    final int read = stream.read(source);
+                    if (read == -1) {
+                        throw new EOFException();
                     }
-                    assert limit > 0;
+                    assert read > 0; // source.length > 0
                     index = 0;
                 }
                 return super.read();
+            }
+
+            @Override
+            public void setSource(final byte[] source) {
+                throw new UnsupportedOperationException();
+            }
+
+            @Override
+            public void setIndex(final int index) {
+                throw new UnsupportedOperationException();
             }
         };
     }
@@ -70,48 +86,24 @@ public class ArrayByteInput extends AbstractByteInput<byte[]> {
      * Creates a new instance with given arguments.
      *
      * @param source a byte array; {@code null} if it's supposed to be lazily initialized an set.
-     * @param index  array index to read
-     * @param limit  array index to limit
      */
-    public ArrayByteInput(final byte[] source, final int index, final int limit) {
+    public ArrayByteInput(final byte[] source) {
         super(source);
-        this.index = index;
-        this.limit = limit;
+        this.index = source == null || source.length == 0 ? -1 : 0;
     }
 
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * {@inheritDoc} The {@code read()} method of {@code ArrayByteInput} class returns {@code source[index]} as an
-     * unsigned 8-bit value and increments the {@link #index}. Override this method if either {@link #source}, {@link
-     * #index}, or {@link #limit} needs to be lazily initialized or adjusted.
+     * {@inheritDoc} The {@code read()} method of {@code ArrayByteInput} class returns {@code source[index++]} as an
+     * unsigned 8-bit value.
      *
      * @return {@inheritDoc}
      * @throws IOException {@inheritDoc}
      */
     @Override
     public int read() throws IOException {
-        final byte[] s = getSource();
-        if (s == null) {
-            throw new IllegalStateException("source is currently null");
-        }
-        final int i = getIndex();
-        if (i < 0) {
-            throw new IllegalStateException("index(" + i + ") < 0");
-        }
-        if (i >= s.length) {
-            throw new IllegalStateException("index(" + i + ") >= source.length(" + s.length + ")");
-        }
-        final int l = getLimit();
-        if (l <= i) {
-            throw new IllegalStateException("limit(" + l + ") <= index(" + i + ")");
-        }
-        if (l > s.length) {
-            throw new IllegalStateException("limit(" + l + ") > source.length(" + s.length + ")");
-        }
-        final int result = s[i] & 0xFF;
-        setIndex(i + 1);
-        return result;
+        return source[index++] & 0xFF;
     }
 
     // ---------------------------------------------------------------------------------------------------------- source
@@ -123,27 +115,27 @@ public class ArrayByteInput extends AbstractByteInput<byte[]> {
     // ----------------------------------------------------------------------------------------------------------- index
 
     /**
-     * Returns the current value of {@link #index}.
+     * Returns the current value of {@code index}.
      *
-     * @return current value of {@link #index}.
+     * @return current value of {@code index}.
      */
     public int getIndex() {
         return index;
     }
 
     /**
-     * Replaces the current value of {@link #index} with given.
+     * Replaces the current value of {@code index} with given.
      *
-     * @param index new value for {@link #index}
+     * @param index new value for {@code index}
      */
     public void setIndex(final int index) {
         this.index = index;
     }
 
     /**
-     * Replaces the current value of {@link #index} with given and returns this instance.
+     * Replaces the current value of {@code index} with given and returns this instance.
      *
-     * @param index new value for {@link #index}
+     * @param index new value for {@code index}
      * @return this instance.
      * @see #setIndex(int)
      */
@@ -152,47 +144,10 @@ public class ArrayByteInput extends AbstractByteInput<byte[]> {
         return this;
     }
 
-    // ----------------------------------------------------------------------------------------------------------- limit
-
-    /**
-     * Returns the value of {@link #limit}
-     *
-     * @return the value of {@link #limit}
-     */
-    public int getLimit() {
-        return limit;
-    }
-
-    /**
-     * Replaces the value of {@link #limit} with given.
-     *
-     * @param limit new value of {@link #limit}
-     */
-    public void setLimit(final int limit) {
-        this.limit = limit;
-    }
-
-    /**
-     * Replaces the value of {@link #limit} with given and returns this instance.
-     *
-     * @param limit new value of {@link #limit}
-     * @return this instance
-     * @see #setLimit(int)
-     */
-    public ArrayByteInput limit(final int limit) {
-        this.limit = limit;
-        return this;
-    }
-
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * The index in the {@link #source} that {@link #index} can't exceeds.
+     * The index in the {@code source} to read.
      */
-    protected int limit;
-
-    /**
-     * The index in the {@link #source} to read.
-     */
-    protected int index;
+    int index;
 }

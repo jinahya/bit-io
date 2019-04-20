@@ -1,6 +1,11 @@
-/*
- * Copyright 2013 <a href="mailto:onacit@gmail.com">Jin Kwon</a>.
- *
+package com.github.jinahya.bit.io;
+
+/*-
+ * #%L
+ * bit-io
+ * %%
+ * Copyright (C) 2014 - 2019 Jinahya, Inc.
+ * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -12,11 +17,11 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ * #L%
  */
-package com.github.jinahya.bit.io;
 
 /**
- * An abstract class for implementing {@code ByteInput}.
+ * An abstract class for implementing {@link ByteInput}.
  *
  * @param <T> byte source type parameter
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
@@ -38,27 +43,27 @@ public abstract class AbstractByteInput<T> implements ByteInput {
     // ---------------------------------------------------------------------------------------------------------- source
 
     /**
-     * Returns the current value of {@link #source}.
+     * Returns the current value of {@code source}.
      *
-     * @return the current value of {@link #source}
+     * @return the current value of {@code source}
      */
     public T getSource() {
         return source;
     }
 
     /**
-     * Replaces the current value of {@link #source} with given.
+     * Replaces the current value of {@code source} with given.
      *
-     * @param source new value for {@link #source}
+     * @param source new value for {@code source}
      */
     public void setSource(final T source) {
         this.source = source;
     }
 
     /**
-     * Replaces the current value of {@link #source} with given and returns this instance.
+     * Replaces the current value of {@code source} with given and returns this instance.
      *
-     * @param source new value for {@link #source}
+     * @param source new value for {@code source}
      * @return this instance
      * @see #setSource(java.lang.Object)
      */
@@ -72,5 +77,5 @@ public abstract class AbstractByteInput<T> implements ByteInput {
     /**
      * The underlying byte source.
      */
-    protected T source;
+    T source;
 }

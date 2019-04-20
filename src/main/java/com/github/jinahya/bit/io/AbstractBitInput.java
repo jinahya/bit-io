@@ -1,19 +1,24 @@
-/*
- *  Copyright 2010 Jin Kwon.
- *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
- *
- *       http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
- */
 package com.github.jinahya.bit.io;
+
+/*-
+ * #%L
+ * bit-io
+ * %%
+ * Copyright (C) 2014 - 2019 Jinahya, Inc.
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
 
 import java.io.IOException;
 
@@ -63,9 +68,7 @@ public abstract class AbstractBitInput implements BitInput {
         if (required > 0) {
             return (unsigned8(available) << required) | unsigned8(required);
         }
-        final int value = (octet >> (available - size)) & ((1 << size) - 1);
-        available -= size;
-        return value;
+        return (octet >> (available -= size)) & ((1 << size) - 1);
     }
 
     /**
@@ -79,11 +82,11 @@ public abstract class AbstractBitInput implements BitInput {
         requireValidSizeUnsigned16(size);
         int value = 0x00;
         final int quotient = size / Byte.SIZE;
-        final int remainder = size % Byte.SIZE;
         for (int i = 0; i < quotient; i++) {
             value <<= Byte.SIZE;
             value |= unsigned8(Byte.SIZE);
         }
+        final int remainder = size % Byte.SIZE;
         if (remainder > 0) {
             value <<= remainder;
             value |= unsigned8(remainder);
@@ -100,14 +103,12 @@ public abstract class AbstractBitInput implements BitInput {
     // -----------------------------------------------------------------------------------------------------------------
     @Override
     public byte readByte(final boolean unsigned, final int size) throws IOException {
-        requireValidSizeByte(unsigned, size);
-        return (byte) readInt(unsigned, size);
+        return (byte) readInt(unsigned, requireValidSizeByte(unsigned, size));
     }
 
     @Override
     public short readShort(final boolean unsigned, final int size) throws IOException {
-        requireValidSizeShort(unsigned, size);
-        return (short) readInt(unsigned, size);
+        return (short) readInt(unsigned, requireValidSizeShort(unsigned, size));
     }
 
     @Override
@@ -149,12 +150,12 @@ public abstract class AbstractBitInput implements BitInput {
             return value;
         }
         long value = 0x00L;
-        final int quotient = size / 31;
+        final int quotient = size / Integer.SIZE;
         for (int i = 0; i < quotient; i++) {
-            value <<= 31;
-            value |= readInt(true, 31);
+            value <<= Integer.SIZE;
+            value |= readInt(false, Integer.SIZE) & 0xFFFFFFFFL;
         }
-        final int remainder = size % 31;
+        final int remainder = size % Integer.SIZE;
         if (remainder > 0) {
             value <<= remainder;
             value |= readInt(true, remainder);
@@ -165,8 +166,7 @@ public abstract class AbstractBitInput implements BitInput {
     // -----------------------------------------------------------------------------------------------------------------
     @Override
     public char readChar(final int size) throws IOException {
-        requireValidSizeChar(size);
-        return (char) readInt(true, size);
+        return (char) readInt(true, requireValidSizeChar(size));
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -189,17 +189,17 @@ public abstract class AbstractBitInput implements BitInput {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * The current octet.
+     * The current octet of read bits.
      */
-    private int octet;
+    int octet;
 
     /**
-     * The number of available bits in {@link #octet}.
+     * The number of available bits in {@link #octet} for reading..
      */
-    private int available = 0;
+    int available;
 
     /**
-     * The number of bytes read so far.
+     * The number of octets read so far.
      */
-    private long count = 0L;
+    long count;
 }

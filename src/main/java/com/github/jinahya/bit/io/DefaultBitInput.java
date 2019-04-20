@@ -1,6 +1,11 @@
-/*
- * Copyright 2015 Jin Kwon &lt;jinahya_at_gmail.com&gt;.
- *
+package com.github.jinahya.bit.io;
+
+/*-
+ * #%L
+ * bit-io
+ * %%
+ * Copyright (C) 2014 - 2019 Jinahya, Inc.
+ * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -12,8 +17,8 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ * #L%
  */
-package com.github.jinahya.bit.io;
 
 import java.io.IOException;
 
@@ -42,8 +47,7 @@ public class DefaultBitInput<T extends ByteInput> extends AbstractBitInput {
 
     /**
      * {@inheritDoc} The {@code read()} method of {@code DefaultBitInput} class invokes {@link ByteInput#read()} ,on
-     * what {@link #getDelegate()} gives, and returns the result. Override this method if the {@link #delegate} is
-     * supposed to be lazily initialized and set.
+     * what {@link #getDelegate()} gives, and returns the result.
      *
      * @return {@inheritDoc}
      * @throws IOException {@inheritDoc}
@@ -87,7 +91,7 @@ public class DefaultBitInput<T extends ByteInput> extends AbstractBitInput {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * The delegate on which {@link #read()} is invoked.
+     * The delegate whose {@link ByteInput#read()} method is invoked via {@link #read()} method.
      */
     protected T delegate;
 }

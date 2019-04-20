@@ -1,5 +1,25 @@
 package com.github.jinahya.bit.io;
 
+/*-
+ * #%L
+ * bit-io
+ * %%
+ * Copyright (C) 2014 - 2019 Jinahya, Inc.
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
+
 import org.jboss.weld.junit5.WeldJunit5Extension;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,8 +35,13 @@ import java.io.IOException;
 import java.lang.invoke.MethodHandles;
 import java.util.Objects;
 
+import static com.github.jinahya.bit.io.BitIoTests.acceptRandomSizeByte;
+import static com.github.jinahya.bit.io.BitIoTests.acceptRandomSizeInt;
+import static com.github.jinahya.bit.io.BitIoTests.acceptRandomSizeLong;
+import static com.github.jinahya.bit.io.BitIoTests.acceptRandomSizeShort;
 import static java.util.concurrent.ThreadLocalRandom.current;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * An abstract class for testing subclasses of {@link BitInput}.
@@ -50,6 +75,7 @@ public abstract class BitInputTest<T extends BitInput> {
     @AfterEach
     void dotAlign() throws IOException {
         final long bits = bitInput.align(current().nextInt(1, 16));
+        assertTrue(bits >= 0L);
     }
 
     // --------------------------------------------------------------------------------------------------------- boolean
@@ -61,51 +87,73 @@ public abstract class BitInputTest<T extends BitInput> {
     // ------------------------------------------------------------------------------------------------------------ byte
 
     /**
-     * Tests {@link BitInput#readByte(boolean, int)} asserting an {@link IllegalArgumentException} is thrown when {@code
-     * size} is less than {@code one}.
+     * Asserts {@link BitInput#readByte(boolean, int)} throws an {@link IllegalArgumentException} when {@code size} is
+     * less than {@code 1}.
      */
     @Test
-    public void testReadByteAssertThrowsIllegalArgumentExceptionWhenSizeIsLessThanOne() {
+    public void assertReadByteThrowsIllegalArgumentExceptionWhenSizeIsLessThanOne() {
         assertThrows(IllegalArgumentException.class, () -> bitInput.readByte(current().nextBoolean(), 0));
         assertThrows(IllegalArgumentException.class,
                      () -> bitInput.readByte(current().nextBoolean(), current().nextInt() | Integer.MIN_VALUE));
     }
 
-    @RepeatedTest(8)
-    public void testReadByte() throws IOException {
-        final boolean unsigned = current().nextBoolean();
-        final int size = current().nextInt(1, Byte.SIZE - 1) + (unsigned ? 0 : 1);
-        final byte value = bitInput.readByte(unsigned, size);
+    @RepeatedTest(128)
+    public void testReadByte() {
+        acceptRandomSizeByte((unsigned, size) -> {
+            final byte value;
+            try {
+                value = bitInput.readByte(unsigned, size);
+            } catch (final IOException ioe) {
+                throw new RuntimeException(ioe);
+            }
+            BitIoTests.assertValidValueInt(unsigned, size, value);
+        });
     }
 
     // ----------------------------------------------------------------------------------------------------------- short
-    @RepeatedTest(8)
-    public void testReadShort() throws IOException {
-        final boolean unsigned = current().nextBoolean();
-        final int size = current().nextInt(1, Short.SIZE - 1) + (unsigned ? 0 : 1);
-        final short value = bitInput.readShort(unsigned, size);
+    @RepeatedTest(128)
+    public void testReadShort() {
+        acceptRandomSizeShort((unsigned, size) -> {
+            final short value;
+            try {
+                value = bitInput.readShort(unsigned, size);
+            } catch (final IOException ioe) {
+                throw new RuntimeException(ioe);
+            }
+            BitIoTests.assertValidValueInt(unsigned, size, value);
+        });
     }
 
     // ------------------------------------------------------------------------------------------------------------- int
 
     /**
      * Tests {@link BitInput#readInt(boolean, int)}.
-     *
-     * @throws IOException if an I/O error occurs.
      */
-    @RepeatedTest(8)
-    public void testReadInt() throws IOException {
-        final boolean unsigned = current().nextBoolean();
-        final int size = current().nextInt(1, Integer.SIZE - 1) + (unsigned ? 0 : 1);
-        final int value = bitInput.readInt(unsigned, size);
+    @RepeatedTest(128)
+    public void testReadInt() {
+        acceptRandomSizeInt((unsigned, size) -> {
+            final int value;
+            try {
+                value = bitInput.readInt(unsigned, size);
+            } catch (final IOException ioe) {
+                throw new RuntimeException(ioe);
+            }
+            BitIoTests.assertValidValueInt(unsigned, size, value);
+        });
     }
 
     // ------------------------------------------------------------------------------------------------------------ long
-    @RepeatedTest(8)
-    public void testReadLong() throws IOException {
-        final boolean unsigned = current().nextBoolean();
-        final int size = current().nextInt(1, Long.SIZE - 1) + (unsigned ? 0 : 1);
-        final long value = bitInput.readLong(unsigned, size);
+    @RepeatedTest(128)
+    public void testReadLong() {
+        acceptRandomSizeLong((unsigned, size) -> {
+            final long value;
+            try {
+                value = bitInput.readLong(unsigned, size);
+            } catch (final IOException ioe) {
+                throw new RuntimeException(ioe);
+            }
+            BitIoTests.assertValidValueLong(unsigned, size, value);
+        });
     }
 
     // ------------------------------------------------------------------------------------------------------------ char
@@ -124,11 +172,11 @@ public abstract class BitInputTest<T extends BitInput> {
     // ----------------------------------------------------------------------------------------------------------- align
 
     /**
-     * Tests {@link BitInput#align(int)} asserting throws {@link IllegalArgumentException} when {@code bytes} is less
-     * than {@code one}.
+     * Asserts {@link BitInput#align(int)} throws {@link IllegalArgumentException} when {@code bytes} is less than
+     * {@code 1}.
      */
     @Test
-    public void testAlignAssertIllegalArgumentExceptionThrownWhenBytesIsLessThanOne() {
+    public void assertIllegalArgumentExceptionThrownWhenBytesIsLessThanOne() {
         assertThrows(IllegalArgumentException.class, () -> bitInput.align(0));
         assertThrows(IllegalArgumentException.class, () -> bitInput.align(current().nextInt() | Integer.MIN_VALUE));
     }
@@ -141,6 +189,7 @@ public abstract class BitInputTest<T extends BitInput> {
     @Test
     public void testAlign() throws IOException {
         final long bits = bitInput.align(current().nextInt(1, 128));
+        assert bits >= 0L;
     }
 
     // -----------------------------------------------------------------------------------------------------------------

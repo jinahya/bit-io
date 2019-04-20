@@ -1,6 +1,11 @@
-/*
- * Copyright 2015 Jin Kwon &lt;jinahya_at_gmail.com&gt;.
- *
+package com.github.jinahya.bit.io;
+
+/*-
+ * #%L
+ * bit-io
+ * %%
+ * Copyright (C) 2014 - 2019 Jinahya, Inc.
+ * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -12,14 +17,14 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ * #L%
  */
-package com.github.jinahya.bit.io;
 
 import java.io.DataInput;
 import java.io.IOException;
 
 /**
- * A {@link ByteInput} uses an instance of {@link DataInput} as its {@link #source}.
+ * A {@link ByteInput} uses an instance of {@link DataInput} as its {@code source}.
  *
  * @param <T> data input type parameter.
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
@@ -42,8 +47,7 @@ public class DataByteInput<T extends DataInput> extends AbstractByteInput<T> {
 
     /**
      * {@inheritDoc} The {@code read()} method of {@code DataByteInput} class invokes {@link
-     * DataInput#readUnsignedByte()}, on what {@link #getSource()} gives, and returns the result. Override this method
-     * if the {@link #source} is supposed to be lazily initialized and set.
+     * DataInput#readUnsignedByte()}, on what {@link #getSource()} gives, and returns the result.
      *
      * @return {@inheritDoc}
      * @throws IOException {@inheritDoc}

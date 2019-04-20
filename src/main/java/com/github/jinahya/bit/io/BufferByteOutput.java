@@ -1,6 +1,11 @@
-/*
- * Copyright 2013 Jin Kwon.
- *
+package com.github.jinahya.bit.io;
+
+/*-
+ * #%L
+ * bit-io
+ * %%
+ * Copyright (C) 2014 - 2019 Jinahya, Inc.
+ * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -12,15 +17,15 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ * #L%
  */
-package com.github.jinahya.bit.io;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.WritableByteChannel;
 
 /**
- * A {@link ByteOutput} uses an instance of {@link ByteBuffer} as its {@link #target}.
+ * A {@link ByteOutput} uses an instance of {@link ByteBuffer} as its {@code target}.
  *
  * @param <T> byte buffer type parameter.
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
@@ -29,6 +34,15 @@ import java.nio.channels.WritableByteChannel;
 public class BufferByteOutput<T extends ByteBuffer> extends AbstractByteOutput<T> {
 
     // -----------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Creates a new instance which writes bytes to specified channel using a byte buffer of given capacity.
+     *
+     * @param capacity the capacity for the byte buffer.
+     * @param channel  the channel to which bytes are written.
+     * @return a new instance of byte buffer.
+     * @see #flush(BufferByteOutput, WritableByteChannel)
+     */
     @SuppressWarnings({"Duplicates"})
     public static BufferByteOutput<ByteBuffer> of(final int capacity, final WritableByteChannel channel) {
         if (capacity <= 0) {
@@ -38,12 +52,12 @@ public class BufferByteOutput<T extends ByteBuffer> extends AbstractByteOutput<T
             throw new NullPointerException("channel is null");
         }
         return new BufferByteOutput<ByteBuffer>(null) {
+
             @Override
             public void write(final int value) throws IOException {
                 if (target == null) {
                     target = ByteBuffer.allocate(capacity); // position: zero, limit: capacity
                 }
-                super.write(value);
                 if (!target.hasRemaining()) { // no space to put
                     target.flip(); // limit -> position, position -> zero
                     do {
@@ -51,8 +65,38 @@ public class BufferByteOutput<T extends ByteBuffer> extends AbstractByteOutput<T
                     } while (target.position() == 0);
                     target.compact();
                 }
+                super.write(value);
+            }
+
+            @Override
+            public void setTarget(final ByteBuffer target) {
+                throw new UnsupportedOperationException();
             }
         };
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Flushes the internal byte buffer of given byte output to specified channel and returns the number of bytes
+     * written.
+     *
+     * @param output  the output whose buffer is flushed.
+     * @param channel the channel to which the buffer is flushed.
+     * @return the number of bytes written while flushing; {@code 0} if there is no inter buffer.
+     * @throws IOException if an I/O error occurs.
+     */
+    public static int flush(final BufferByteOutput<?> output, final WritableByteChannel channel) throws IOException {
+        final ByteBuffer buffer = output.getTarget();
+        if (buffer == null) {
+            return 0;
+        }
+        int written = 0;
+        for (buffer.flip(); buffer.hasRemaining(); ) {
+            written += channel.write(buffer);
+        }
+        buffer.clear(); // position -> zero; limit -> capacity
+        return written;
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -71,8 +115,7 @@ public class BufferByteOutput<T extends ByteBuffer> extends AbstractByteOutput<T
 
     /**
      * {@inheritDoc} The {@code write(int)} method of {@code BufferByteOutput} class invokes {@link
-     * ByteBuffer#put(byte)}, on what {@link #getTarget()} gives, with given {@code value}. Override this method if the
-     * {@link #target} is supposed to be lazily initialized or adjusted.
+     * ByteBuffer#put(byte)}, on what {@link #getTarget()} gives, with given {@code value}.
      *
      * @param value {@inheritDoc}
      * @throws IOException {@inheritDoc}

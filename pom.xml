@@ -8,7 +8,6 @@
     <version>0.8.1</version>
   </parent>
 
-  <groupId>com.github.jinahya</groupId>
   <artifactId>bit-io</artifactId>
   <version>1.4.3-SNAPSHOT</version>
   <packaging>jar</packaging>

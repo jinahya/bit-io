@@ -13,3 +13,6 @@ buildNumber.properties
 *.iml
 .idea
 !.idea/codeStyles
+.classpath
+.project
+.settings/

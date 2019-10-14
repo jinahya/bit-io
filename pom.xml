@@ -5,7 +5,7 @@
   <parent>
     <groupId>com.github.jinahya</groupId>
     <artifactId>jinahya-parent</artifactId>
-    <version>0.8.1</version>
+    <version>0.8.4</version>
   </parent>
 
   <artifactId>bit-io</artifactId>
@@ -48,9 +48,10 @@
     <maven.compiler.target>1.6</maven.compiler.target>
     <maven.compiler.testSource>1.8</maven.compiler.testSource>
     <maven.compiler.testTarget>1.8</maven.compiler.testTarget>
-    <version.org.junit.jupiter>5.5.1</version.org.junit.jupiter>
-    <version.org.mockito>3.0.0</version.org.mockito>
+    <version.org.junit.jupiter>5.5.2</version.org.junit.jupiter>
+    <version.maven-javadoc-plugin>3.1.0</version.maven-javadoc-plugin>
     <version.maven-surefire>3.0.0-M3</version.maven-surefire>
+    <version.org.mockito>3.1.0</version.org.mockito>
     <project.build.outputDirectory.retrotranslated13>${project.build.directory}/classes-retrotranslated13</project.build.outputDirectory.retrotranslated13>
     <project.build.outputDirectory.retrotranslated14>${project.build.directory}/classes-retrotranslated14</project.build.outputDirectory.retrotranslated14>
   </properties>
@@ -77,7 +78,7 @@
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-text</artifactId>
-      <version>1.7</version>
+      <version>1.8</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -101,7 +102,7 @@
     <dependency>
       <groupId>org.jboss.weld</groupId>
       <artifactId>weld-junit5</artifactId>
-      <version>2.0.0.Final</version>
+      <version>2.0.1.Final</version>
       <scope>test</scope>
     </dependency>
     <dependency>

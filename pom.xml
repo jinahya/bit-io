@@ -86,7 +86,7 @@
       <version>4.0.0</version>
       <scope>test</scope>
     </dependency>
-    <dependency> <!-- required by hibernate-validator -->
+    <dependency><!-- required by hibernate-validator -->
       <groupId>org.glassfish</groupId>
       <artifactId>javax.el</artifactId>
       <version>3.0.1-b11</version>
@@ -168,6 +168,26 @@
     </pluginManagement>
     <plugins>
       <plugin>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
+        <version>4.2.1</version>
+        <executions>
+          <execution>
+            <id>bundle-manifest</id>
+            <phase>process-classes</phase>
+            <goals>
+              <goal>manifest</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <exportScr>true</exportScr>
+          <instructions>
+            <_include>-bnd.bnd</_include>
+          </instructions>
+        </configuration>
+      </plugin>
+      <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-antrun-plugin</artifactId>
         <version>1.8</version>
@@ -180,11 +200,16 @@
             </goals>
             <configuration>
               <target>
-                <taskdef name="retrotranslator" classname="net.sf.retrotranslator.transformer.RetrotranslatorTask" classpathref="maven.plugin.classpath" />
-                <mkdir dir="${project.build.outputDirectory.retrotranslated13}" />
-                <retrotranslator srcdir="${project.build.outputDirectory}" destdir="${project.build.outputDirectory.retrotranslated13}" embed="com.github.jinahya.bit.io.retrotranslated13" failonwarning="false" smart="true" stripannot="true" stripsign="true" syncvolatile="true" target="1.3" verbose="false" verify="false">
+                <taskdef name="retrotranslator" classname="net.sf.retrotranslator.transformer.RetrotranslatorTask"
+                         classpathref="maven.plugin.classpath"/>
+                <mkdir dir="${project.build.outputDirectory.retrotranslated13}"/>
+                <retrotranslator srcdir="${project.build.outputDirectory}"
+                                 destdir="${project.build.outputDirectory.retrotranslated13}"
+                                 embed="com.github.jinahya.bit.io.retrotranslated13" failonwarning="false" smart="true"
+                                 stripannot="true" stripsign="true" syncvolatile="true" target="1.3" verbose="false"
+                                 verify="false">
                   <classpath>
-                    <fileset dir="${basedir}/ext/retrotranslated13" includes="**/*.jar" />
+                    <fileset dir="${basedir}/ext/retrotranslated13" includes="**/*.jar"/>
                   </classpath>
                 </retrotranslator>
               </target>
@@ -198,11 +223,16 @@
             </goals>
             <configuration>
               <target>
-                <taskdef name="retrotranslator" classname="net.sf.retrotranslator.transformer.RetrotranslatorTask" classpathref="maven.plugin.classpath" />
-                <mkdir dir="${project.build.outputDirectory.retrotranslated14}" />
-                <retrotranslator srcdir="${project.build.outputDirectory}" destdir="${project.build.outputDirectory.retrotranslated14}" embed="com.github.jinahya.bit.io.retrotranslated14" failonwarning="false" smart="true" stripannot="true" stripsign="true" syncvolatile="true" target="1.4" verbose="false" verify="false">
+                <taskdef name="retrotranslator" classname="net.sf.retrotranslator.transformer.RetrotranslatorTask"
+                         classpathref="maven.plugin.classpath"/>
+                <mkdir dir="${project.build.outputDirectory.retrotranslated14}"/>
+                <retrotranslator srcdir="${project.build.outputDirectory}"
+                                 destdir="${project.build.outputDirectory.retrotranslated14}"
+                                 embed="com.github.jinahya.bit.io.retrotranslated14" failonwarning="false" smart="true"
+                                 stripannot="true" stripsign="true" syncvolatile="true" target="1.4" verbose="false"
+                                 verify="false">
                   <classpath>
-                    <fileset dir="${basedir}/ext/retrotranslated14" includes="**/*.jar" />
+                    <fileset dir="${basedir}/ext/retrotranslated14" includes="**/*.jar"/>
                   </classpath>
                 </retrotranslator>
               </target>
@@ -231,6 +261,11 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
         <version>3.1.1</version>
+        <configuration>
+          <archive>
+            <manifestFile>${project.build.outputDirectory}/META-INF/MANIFEST.MF</manifestFile>
+          </archive>
+        </configuration>
         <executions>
           <execution>
             <id>retrotranslated13</id>
@@ -321,33 +356,6 @@
             </goals>
           </execution>
         </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.felix</groupId>
-        <artifactId>maven-bundle-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>bundle-manifest</id>
-            <phase>process-classes</phase>
-            <goals>
-              <goal>manifest</goal>
-            </goals>
-          </execution>
-        </executions>
-        <configuration>
-            <exportScr>true</exportScr>
-            <instructions>
-              <_include>-bnd.bnd</_include>
-            </instructions>
-        </configuration>
-      </plugin>
-      <plugin>
-        <artifactId>maven-jar-plugin</artifactId>
-        <configuration>
-          <archive>
-            <manifestFile>${project.build.outputDirectory}/META-INF/MANIFEST.MF</manifestFile>
-          </archive>
-        </configuration>
       </plugin>
     </plugins>
   </build>

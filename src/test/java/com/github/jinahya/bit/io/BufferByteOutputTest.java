@@ -52,8 +52,8 @@ public abstract class BufferByteOutputTest<T extends BufferByteOutput<U>, U exte
     public void assertOfThrowsIllegalArgumentExceptionWhenCapacityIsLessThanOrEqualToZero() {
         final WritableByteChannel channel = mock(WritableByteChannel.class);
         assertThrows(IllegalArgumentException.class, () -> BufferByteOutput.of(0, channel));
-        assertThrows(IllegalArgumentException.class, () -> BufferByteOutput.of(
-                current().nextInt() | Integer.MIN_VALUE, channel));
+        assertThrows(IllegalArgumentException.class,
+                     () -> BufferByteOutput.of(current().nextInt() | Integer.MIN_VALUE, channel));
     }
 
     /**
@@ -68,6 +68,8 @@ public abstract class BufferByteOutputTest<T extends BufferByteOutput<U>, U exte
 
     /**
      * Tests {@link BufferByteOutput#of(int, WritableByteChannel)}.
+     *
+     * @throws IOException if an I/O error occurs.
      */
     @Test
     public void testOf() throws IOException {

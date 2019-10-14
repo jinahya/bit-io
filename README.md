@@ -1,19 +1,10 @@
-bit-io
-======
+# bit-io
+
+[![GitHub Action](https://github.com/jinahya/bit-io/workflows/Java%20CI/badge.svg)](https://github.com/jinahya/bit-io/actions?workflow=Java+CI)
 [![CircleCI](https://circleci.com/gh/jinahya/bit-io/tree/develop.svg?style=svg)](https://circleci.com/gh/jinahya/bit-io/tree/develop)
 [![Build Status](https://travis-ci.org/jinahya/bit-io.svg?branch=develop)](https://travis-ci.org/jinahya/bit-io)
-
-[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=com.github.jinahya%3Abit-io%3Adevelop&metric=bugs)](https://sonarcloud.io/component_measures?id=com.github.jinahya%3Abit-io%3Adevelop&metric=bugs)
-[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=com.github.jinahya%3Abit-io%3Adevelop&metric=code_smells)](https://sonarcloud.io/component_measures?id=com.github.jinahya%3Abit-io%3Adevelop&metric=code_smells)
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=com.github.jinahya%3Abit-io%3Adevelop&metric=coverage)](https://sonarcloud.io/component_measures?id=com.github.jinahya%3Abit-io%3Adevelop&metric=Coverage)
-[![Duplicate Lines](https://sonarcloud.io/api/project_badges/measure?project=com.github.jinahya%3Abit-io%3Adevelop&metric=duplicated_lines_density)](https://sonarcloud.io/component_measures?id=com.github.jinahya%3Abit-io%3Adevelop&metric=Duplications)
-[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=com.github.jinahya%3Abit-io%3Adevelop&metric=ncloc)](https://sonarcloud.io/component_measures?id=com.github.jinahya%3Abit-io%3Adevelop&metric=ncloc)
-[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=com.github.jinahya%3Abit-io%3Adevelop&metric=sqale_rating)](https://sonarcloud.io/component_measures?id=com.github.jinahya%3Abit-io%3Adevelop&metric=sqale_rating)
-[![Redability Rate](https://sonarcloud.io/api/project_badges/measure?project=com.github.jinahya%3Abit-io%3Adevelop&metric=reliability_rating)](https://sonarcloud.io/component_measures?id=com.github.jinahya%3Abit-io%3Adevelop&metric=Reliability)
-[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=com.github.jinahya%3Abit-io%3Adevelop&metric=security_rating)](https://sonarcloud.io/component_measures?id=com.github.jinahya%3Abit-io%3Adevelop&metric=Security)
-[![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=com.github.jinahya%3Abit-io%3Adevelop&metric=sqale_index)](https://sonarcloud.io/component_measures?id=com.github.jinahya%3Abit-io%3Adevelop&metric=Maintainability)
-[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=com.github.jinahya%3Abit-io%3Adevelop&metric=vulnerabilities)](https://sonarcloud.io/component_measures?id=com.github.jinahya%3Abit-io%3Adevelop&metric=vulnerabilities)
-
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=com.github.jinahya%3Abit-io%3Adevelop&metric=alert_status)](https://sonarcloud.io/dashboard?id=com.github.jinahya%3Abit-io%3Adevelop)
+[![Known Vulnerabilities](https://snyk.io//test/github/jinahya/bit-io/badge.svg?targetFile=pom.xml)](https://snyk.io//test/github/jinahya/bit-io?targetFile=pom.xml)
 [![Maven Central](https://img.shields.io/maven-central/v/com.github.jinahya/bit-io.svg)](http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22bit-io%22)
 [![Javadocs](http://www.javadoc.io/badge/com.github.jinahya/bit-io.svg)](http://www.javadoc.io/doc/com.github.jinahya/bit-io)
 

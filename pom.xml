@@ -9,7 +9,7 @@
   </parent>
 
   <artifactId>bit-io</artifactId>
-  <version>1.4.3-SNAPSHOT</version>
+  <version>1.4.3</version>
   <packaging>jar</packaging>
 
   <name>${project.artifactId}</name>
@@ -36,7 +36,7 @@
     <connection>scm:git:git@github.com:jinahya/${project.artifactId}.git</connection>
     <developerConnection>scm:git:git@github.com:jinahya/${project.artifactId}.git</developerConnection>
     <url>https://github.com/jinahya/${project.artifactId}</url>
-    <tag>HEAD</tag>
+    <tag>1.4.3</tag>
   </scm>
   <issueManagement>
     <system>GitHub Issues</system>
@@ -201,16 +201,11 @@
             </goals>
             <configuration>
               <target>
-                <taskdef name="retrotranslator" classname="net.sf.retrotranslator.transformer.RetrotranslatorTask"
-                         classpathref="maven.plugin.classpath"/>
-                <mkdir dir="${project.build.outputDirectory.retrotranslated13}"/>
-                <retrotranslator srcdir="${project.build.outputDirectory}"
-                                 destdir="${project.build.outputDirectory.retrotranslated13}"
-                                 embed="com.github.jinahya.bit.io.retrotranslated13" failonwarning="false" smart="true"
-                                 stripannot="true" stripsign="true" syncvolatile="true" target="1.3" verbose="false"
-                                 verify="false">
+                <taskdef name="retrotranslator" classname="net.sf.retrotranslator.transformer.RetrotranslatorTask" classpathref="maven.plugin.classpath" />
+                <mkdir dir="${project.build.outputDirectory.retrotranslated13}" />
+                <retrotranslator srcdir="${project.build.outputDirectory}" destdir="${project.build.outputDirectory.retrotranslated13}" embed="com.github.jinahya.bit.io.retrotranslated13" failonwarning="false" smart="true" stripannot="true" stripsign="true" syncvolatile="true" target="1.3" verbose="false" verify="false">
                   <classpath>
-                    <fileset dir="${basedir}/ext/retrotranslated13" includes="**/*.jar"/>
+                    <fileset dir="${basedir}/ext/retrotranslated13" includes="**/*.jar" />
                   </classpath>
                 </retrotranslator>
               </target>
@@ -224,16 +219,11 @@
             </goals>
             <configuration>
               <target>
-                <taskdef name="retrotranslator" classname="net.sf.retrotranslator.transformer.RetrotranslatorTask"
-                         classpathref="maven.plugin.classpath"/>
-                <mkdir dir="${project.build.outputDirectory.retrotranslated14}"/>
-                <retrotranslator srcdir="${project.build.outputDirectory}"
-                                 destdir="${project.build.outputDirectory.retrotranslated14}"
-                                 embed="com.github.jinahya.bit.io.retrotranslated14" failonwarning="false" smart="true"
-                                 stripannot="true" stripsign="true" syncvolatile="true" target="1.4" verbose="false"
-                                 verify="false">
+                <taskdef name="retrotranslator" classname="net.sf.retrotranslator.transformer.RetrotranslatorTask" classpathref="maven.plugin.classpath" />
+                <mkdir dir="${project.build.outputDirectory.retrotranslated14}" />
+                <retrotranslator srcdir="${project.build.outputDirectory}" destdir="${project.build.outputDirectory.retrotranslated14}" embed="com.github.jinahya.bit.io.retrotranslated14" failonwarning="false" smart="true" stripannot="true" stripsign="true" syncvolatile="true" target="1.4" verbose="false" verify="false">
                   <classpath>
-                    <fileset dir="${basedir}/ext/retrotranslated14" includes="**/*.jar"/>
+                    <fileset dir="${basedir}/ext/retrotranslated14" includes="**/*.jar" />
                   </classpath>
                 </retrotranslator>
               </target>

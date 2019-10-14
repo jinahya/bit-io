@@ -20,9 +20,7 @@ package com.github.jinahya.bit.io;
  * #L%
  */
 
-import java.io.EOFException;
 import java.io.IOException;
-import java.io.InputStream;
 
 /**
  * A byte input reading bytes from an array of bytes.
@@ -30,55 +28,6 @@ import java.io.InputStream;
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
 public class ArrayByteInput extends AbstractByteInput<byte[]> {
-
-    // -----------------------------------------------------------------------------------------------------------------
-
-    /**
-     * Creates a new instance of {@link ArrayByteInput} which reads bytes from given input stream using an array of
-     * bytes whose {@code length} equals to specified.
-     *
-     * @param length the length of the byte array; must be positive.
-     * @param stream the input stream from which bytes are read; must be not {@code null}.
-     * @return a new instance of {@link ArrayByteInput}.
-     */
-    @SuppressWarnings({"Duplicates"})
-    public static ArrayByteInput of(final int length, final InputStream stream) {
-        if (length <= 0) {
-            throw new IllegalArgumentException("length(" + length + ") <= 0");
-        }
-        if (stream == null) {
-            throw new NullPointerException("stream is null");
-        }
-        return new ArrayByteInput(null) {
-
-            @Override
-            public int read() throws IOException {
-                if (source == null) {
-                    source = new byte[length];
-                    index = source.length;
-                }
-                if (index == source.length) {
-                    final int read = stream.read(source);
-                    if (read == -1) {
-                        throw new EOFException();
-                    }
-                    assert read > 0; // source.length > 0
-                    index = 0;
-                }
-                return super.read();
-            }
-
-            @Override
-            public void setSource(final byte[] source) {
-                throw new UnsupportedOperationException();
-            }
-
-            @Override
-            public void setIndex(final int index) {
-                throw new UnsupportedOperationException();
-            }
-        };
-    }
 
     // -----------------------------------------------------------------------------------------------------------------
 

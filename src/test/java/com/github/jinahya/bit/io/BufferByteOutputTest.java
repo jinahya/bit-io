@@ -20,17 +20,7 @@ package com.github.jinahya.bit.io;
  * #L%
  */
 
-import org.junit.jupiter.api.Test;
-
-import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.nio.channels.WritableByteChannel;
-
-import static java.util.concurrent.ThreadLocalRandom.current;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 /**
  * An abstract class for testing subclasses of {@link BufferByteOutput}.
@@ -41,51 +31,6 @@ import static org.mockito.Mockito.when;
  */
 public abstract class BufferByteOutputTest<T extends BufferByteOutput<U>, U extends ByteBuffer>
         extends AbstractByteOutputTest<T, U> {
-
-    // -------------------------------------------------------------------------------------------------------------- of
-
-    /**
-     * Asserts {@link BufferByteOutput#of(int, WritableByteChannel)} method throws an {@code IllegalArgumentException}
-     * when {@code capacity} is les than or equal to {@code zero}.
-     */
-    @Test
-    public void assertOfThrowsIllegalArgumentExceptionWhenCapacityIsLessThanOrEqualToZero() {
-        final WritableByteChannel channel = mock(WritableByteChannel.class);
-        assertThrows(IllegalArgumentException.class, () -> BufferByteOutput.of(0, channel));
-        assertThrows(IllegalArgumentException.class,
-                     () -> BufferByteOutput.of(current().nextInt() | Integer.MIN_VALUE, channel));
-    }
-
-    /**
-     * Asserts {@link BufferByteOutput#of(int, WritableByteChannel)} throws a {@code NullPointerException} when {@code
-     * channel} is {@code null}.
-     */
-    @Test
-    public void assertOfThrowsNullPointerExceptionWhenChannelIsNull() {
-        final int capacity = current().nextInt() >>> 1;
-        assertThrows(NullPointerException.class, () -> BufferByteOutput.of(capacity, null));
-    }
-
-    /**
-     * Tests {@link BufferByteOutput#of(int, WritableByteChannel)}.
-     *
-     * @throws IOException if an I/O error occurs.
-     */
-    @Test
-    public void testOf() throws IOException {
-        final int capacity = current().nextInt(1, 256);
-        final WritableByteChannel channel = mock(WritableByteChannel.class);
-        when(channel.write(any(ByteBuffer.class))).thenAnswer(invocation -> {
-            final ByteBuffer buffer = invocation.getArgument(0);
-            final int delta = current().nextInt(0, buffer.remaining());
-            buffer.position(buffer.position() + delta);
-            return delta;
-        });
-        final ByteOutput output = BufferByteOutput.of(capacity, channel);
-        for (int i = 0; i < 1024; i++) {
-            output.write(current().nextInt(0, 256));
-        }
-    }
 
     // -----------------------------------------------------------------------------------------------------------------
 

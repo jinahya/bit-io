@@ -36,48 +36,6 @@ public class BufferByteOutput<T extends ByteBuffer> extends AbstractByteOutput<T
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * Creates a new instance which writes bytes to specified channel using a byte buffer of given capacity.
-     *
-     * @param capacity the capacity for the byte buffer.
-     * @param channel  the channel to which bytes are written.
-     * @return a new instance of byte buffer.
-     * @see #flush(BufferByteOutput, WritableByteChannel)
-     */
-    @SuppressWarnings({"Duplicates"})
-    public static BufferByteOutput<ByteBuffer> of(final int capacity, final WritableByteChannel channel) {
-        if (capacity <= 0) {
-            throw new IllegalArgumentException("capacity(" + capacity + ") <= 0");
-        }
-        if (channel == null) {
-            throw new NullPointerException("channel is null");
-        }
-        return new BufferByteOutput<ByteBuffer>(null) {
-
-            @Override
-            public void write(final int value) throws IOException {
-                if (target == null) {
-                    target = ByteBuffer.allocate(capacity); // position: zero, limit: capacity
-                }
-                if (!target.hasRemaining()) { // no space to put
-                    target.flip(); // limit -> position, position -> zero
-                    do {
-                        channel.write(target);
-                    } while (target.position() == 0);
-                    target.compact();
-                }
-                super.write(value);
-            }
-
-            @Override
-            public void setTarget(final ByteBuffer target) {
-                throw new UnsupportedOperationException();
-            }
-        };
-    }
-
-    // -----------------------------------------------------------------------------------------------------------------
-
-    /**
      * Flushes the internal byte buffer of given byte output to specified channel and returns the number of bytes
      * written.
      *

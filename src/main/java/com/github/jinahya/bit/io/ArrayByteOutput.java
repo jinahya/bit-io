@@ -21,7 +21,6 @@ package com.github.jinahya.bit.io;
  */
 
 import java.io.IOException;
-import java.io.OutputStream;
 
 /**
  * A byte output writes byte to an array of bytes.
@@ -29,80 +28,6 @@ import java.io.OutputStream;
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
 public class ArrayByteOutput extends AbstractByteOutput<byte[]> {
-
-    // -----------------------------------------------------------------------------------------------------------------
-
-    /**
-     * Creates a new instance of byte output which writes bytes to given output stream using an array of bytes whose
-     * {@code length} equals to specified.
-     *
-     * @param length the length of byte array; must be positive.
-     * @param stream the output stream to which bytes are written; must be not {@code null}.
-     * @return an instance byte output.
-     */
-    @SuppressWarnings({"Duplicates"})
-    public static ArrayByteOutput of(final int length, final OutputStream stream) {
-        if (length <= 0) {
-            throw new IllegalArgumentException("length(" + length + ") <= 0");
-        }
-        if (stream == null) {
-            throw new NullPointerException("stream is null");
-        }
-        return new ArrayByteOutput(null) {
-
-            @Override
-            public void write(final int value) throws IOException {
-                if (target == null) {
-                    target = new byte[length];
-                    index = 0;
-                }
-                super.write(value);
-                if (index == target.length) {
-                    stream.write(target);
-                    index = 0;
-                }
-            }
-
-            @Override
-            public void setTarget(final byte[] target) {
-                throw new UnsupportedOperationException();
-            }
-
-            @Override
-            public void setIndex(final int index) {
-                throw new UnsupportedOperationException();
-            }
-        };
-    }
-
-    /**
-     * Flushes bytes on {@link ArrayByteOutput#getTarget()} between {@code 0} and {@link ArrayByteOutput#getIndex()} to
-     * specified stream and returns the number of bytes written.
-     *
-     * @param output the byte output whose {@code target} is flushed.
-     * @param stream the output stream to which bytes are flushed.
-     * @return the number of bytes written; {@code 0} if internal state of the byte output is not valid.
-     * @throws IOException if an I/O error occurs.
-     */
-    public static int flush(final ArrayByteOutput output, final OutputStream stream) throws IOException {
-        if (output == null) {
-            throw new NullPointerException("output is null");
-        }
-        if (stream == null) {
-            throw new NullPointerException("stream is null");
-        }
-        final byte[] target = output.getTarget();
-        if (target == null || target.length == 0) {
-            return 0;
-        }
-        final int index = output.index;
-        if (index < 0 || index >= target.length) {
-            return 0;
-        }
-        stream.write(target, 0, index);
-        output.index = 0;
-        return index;
-    }
 
     // -----------------------------------------------------------------------------------------------------------------
 

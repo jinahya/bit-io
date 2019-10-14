@@ -20,63 +20,12 @@ package com.github.jinahya.bit.io;
  * #L%
  */
 
-import org.junit.jupiter.api.Test;
-
-import java.io.IOException;
-import java.io.OutputStream;
-
-import static java.util.concurrent.ThreadLocalRandom.current;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.mock;
-
 /**
  * A class for testing {@link ArrayByteOutput}.
  *
  * @see ArrayByteInputTest
  */
 public class ArrayByteOutputTest extends AbstractByteOutputTest<ArrayByteOutput, byte[]> {
-
-    // -------------------------------------------------------------------------------------------------------------- of
-
-    /**
-     * Asserts {@link ArrayByteOutput#of(int, OutputStream)} throws {@code IllegalArgumentException} when {@code length}
-     * argument is less than or equal to {@code zero}.
-     */
-    @Test
-    public void assertOfThrowsIllegalArgumentExceptionWhenLengthIsLessThanOrEqualToZero() {
-        assertThrows(IllegalArgumentException.class, () -> ArrayByteOutput.of(0, mock(OutputStream.class)));
-        assertThrows(IllegalArgumentException.class,
-                     () -> ArrayByteOutput.of(current().nextInt() | Integer.MIN_VALUE, mock(OutputStream.class)));
-    }
-
-    /**
-     * Asserts {@link ArrayByteOutput#of(int, OutputStream)} throws {@code NullPointerException} when {@code stream}
-     * argument is {@code null}.
-     */
-    @Test
-    public void assertOfThrowsNullPointerExceptionWhenStreamIsNull() {
-        assertThrows(NullPointerException.class, () -> ArrayByteOutput.of(current().nextInt() >>> 1, null));
-    }
-
-    /**
-     * Tests {@link ArrayByteOutput#of(int, OutputStream)}. The {@code testOf} method of {@code ArrayByteOutputTest}
-     * class invokes {@link ArrayByteOutput#of(int, OutputStream)} with a random for {@code length} parameter and a mock
-     * of {@link OutputStream} for {@code stream} parameter and then invokes {@link ByteOutput#write(int)} a few times.
-     *
-     * @throws IOException if an I/O error occurs.
-     */
-    @Test
-    public void testOf() throws IOException {
-        final int length = current().nextInt(1, 256);
-        final OutputStream stream = mock(OutputStream.class);
-        doNothing().when(stream).write(any(byte[].class));
-        final ArrayByteOutput byteOutput = ArrayByteOutput.of(length, stream);
-        for (int i = 0; i < 1024; i++) {
-            byteOutput.write(current().nextInt() & 0xFF);
-        }
-    }
 
     // -----------------------------------------------------------------------------------------------------------------
 

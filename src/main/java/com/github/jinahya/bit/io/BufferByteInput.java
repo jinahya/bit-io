@@ -20,10 +20,8 @@ package com.github.jinahya.bit.io;
  * #L%
  */
 
-import java.io.EOFException;
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.nio.channels.ReadableByteChannel;
 
 /**
  * A {@link ByteInput} uses an instance of {@link ByteBuffer} as its {@code source}.
@@ -33,51 +31,6 @@ import java.nio.channels.ReadableByteChannel;
  * @see BufferByteOutput
  */
 public class BufferByteInput<T extends ByteBuffer> extends AbstractByteInput<T> {
-
-    // -----------------------------------------------------------------------------------------------------------------
-
-    /**
-     * Creates a new instance of {@link BufferByteInput} which reads bytes from specified channel using a byte buffer of
-     * specified capacity.
-     *
-     * @param capacity the capcity of byte buffer.
-     * @param channel  the chanel from which bytes are read.
-     * @return an instance buffer byte input.
-     */
-    @SuppressWarnings({"Duplicates"})
-    public static BufferByteInput<ByteBuffer> of(final int capacity, final ReadableByteChannel channel) {
-        if (capacity <= 0) {
-            throw new IllegalArgumentException("capacity(" + capacity + ") <= 0");
-        }
-        if (channel == null) {
-            throw new NullPointerException("channel is null");
-        }
-        return new BufferByteInput<ByteBuffer>(null) {
-
-            @Override
-            public int read() throws IOException {
-                if (source == null) {
-                    source = ByteBuffer.allocate(capacity); // position: zero, limit: capacity
-                    source.position(source.limit());
-                }
-                if (!source.hasRemaining()) { // no bytes to read
-                    source.clear(); // position -> zero, limit -> capacity
-                    do {
-                        if (channel.read(source) == -1) {
-                            throw new EOFException("the channel has reached end-of-stream");
-                        }
-                    } while (source.position() == 0);
-                    source.flip(); // limit -> position, position -> zero
-                }
-                return super.read();
-            }
-
-            @Override
-            public void setSource(final ByteBuffer source) {
-                throw new UnsupportedOperationException();
-            }
-        };
-    }
 
     // -----------------------------------------------------------------------------------------------------------------
 

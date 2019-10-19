@@ -24,19 +24,28 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.IOException;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import static java.util.concurrent.ThreadLocalRandom.current;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
 @ExtendWith({MockitoExtension.class})
 @Slf4j
 public class AbstractBitInputSpyTest {
+
+    // -----------------------------------------------------------------------------------------------------------------
+    private static Stream<Arguments> sourceUnsigned() {
+        return IntStream.range(0, 16).mapToObj(i -> Arguments.of(current().nextBoolean()));
+    }
 
     // -----------------------------------------------------------------------------------------------------------------
     @BeforeEach
@@ -71,6 +80,22 @@ public class AbstractBitInputSpyTest {
         final boolean unsigned = current().nextBoolean();
         final int size = current().nextInt(1, Short.SIZE + (unsigned ? 0 : 1));
         final short value = bitInput.readShort(unsigned, size);
+        if (unsigned) {
+            assertTrue(value >= 0);
+        }
+    }
+
+    /**
+     * Tests {@link BitInput#readShort(boolean, int)} method.
+     *
+     * @param unsigned a flag for unsigned.
+     * @throws IOException if an I/O error occurs.
+     */
+    @MethodSource({"sourceUnsigned"})
+    @ParameterizedTest
+    public void testReadInt(final boolean unsigned) throws IOException {
+        final int size = current().nextInt(1, Integer.SIZE + (unsigned ? 0 : 1));
+        final int value = bitInput.readInt(unsigned, size);
         if (unsigned) {
             assertTrue(value >= 0);
         }

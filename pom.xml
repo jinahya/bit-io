@@ -45,9 +45,9 @@
 
   <properties>
     <maven.compiler.source>1.6</maven.compiler.source>
-    <maven.compiler.target>1.6</maven.compiler.target>
+    <maven.compiler.target>${maven.compiler.source}</maven.compiler.target>
     <maven.compiler.testSource>1.8</maven.compiler.testSource>
-    <maven.compiler.testTarget>1.8</maven.compiler.testTarget>
+    <maven.compiler.testTarget>${maven.compiler.testSource}</maven.compiler.testTarget>
     <version.org.junit.jupiter>5.5.2</version.org.junit.jupiter>
     <version.maven-javadoc-plugin>3.1.0</version.maven-javadoc-plugin>
     <version.maven-surefire>3.0.0-M3</version.maven-surefire>
@@ -133,6 +133,12 @@
       <groupId>org.mockito</groupId>
       <artifactId>mockito-junit-jupiter</artifactId>
       <version>${version.org.mockito}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <version>1.18.10</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
@@ -325,7 +331,7 @@
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>license-maven-plugin</artifactId>
-        <version>1.20</version>
+        <version>2.0.0</version>
         <configuration>
           <licenseName>apache_v2</licenseName>
         </configuration>

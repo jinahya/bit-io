@@ -71,6 +71,17 @@ public abstract class AbstractBitInput implements BitInput {
         return (octet >> (available -= size)) & ((1 << size) - 1);
     }
 
+    @Override
+    public byte readByte(int size) throws IOException {
+        return readByte(false, size);
+    }
+
+    @Override
+    public byte readUnsignedByte(int size) throws IOException {
+        return readByte(true, size);
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
     /**
      * Reads an unsigned value whose maximum size is {@value Short#SIZE}.
      *

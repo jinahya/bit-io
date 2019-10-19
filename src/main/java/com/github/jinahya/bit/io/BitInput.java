@@ -43,21 +43,47 @@ public interface BitInput {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * Reads a byte value.
+     * Reads a {@code byte} value of given size.
      *
      * @param unsigned a flag for indicating unsigned value; {@code true} for unsigned, {@code false} for signed.
-     * @param size     number of bits for value; between {@code 1} and {@code 7 + (unsigned ? 0 : 1)}, both inclusive.
-     * @return a byte value
+     * @param size     number of bits for value; between {@code 1} and ({@code 7 + (unsigned ? 0 : 1)}), both
+     *                 inclusive.
+     * @return a {@code byte} value of given {@code size}.
      * @throws IOException if an I/O error occurs.
      */
     byte readByte(boolean unsigned, int size) throws IOException;
 
     /**
-     * Reads a short value.
+     * Reads a signed {@code byte} value of given size.
+     *
+     * @param size number of bits for value; between {@code 1} and {@value Byte#SIZE}, both inclusive.
+     * @return a signed {@code byte} value of given {@code size}.
+     * @throws IOException if an I/O error occurs.
+     * @see #readUnsignedByte(int)
+     * @see #readByte(boolean, int)
+     */
+    byte readByte(int size) throws IOException;
+
+    /**
+     * Reads an unsigned {@code byte} value of given size.
+     *
+     * @param size number of bits for value; between {@code 1} and {@code 7}, both inclusive.
+     * @return an unsigned {@code byte} value of given {@code size}.
+     * @throws IOException if an I/O error occurs.
+     * @see #readByte(int)
+     * @see #readByte(boolean, int)
+     */
+    byte readUnsignedByte(int size) throws IOException;
+
+    // -----------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Reads a {@code short} value of given size.
      *
      * @param unsigned a flag for indicating unsigned value; {@code true} for unsigned, {@code false} for signed.
-     * @param size     number of bits for value; between {@code 1} and {@code 15 + (unsigned ? 0 : 1)}, both inclusive.
-     * @return a short value
+     * @param size     number of bits for value; between {@code 1} and ({@code 15 + (unsigned ? 0 : 1)}), both
+     *                 inclusive.
+     * @return a {@code short} value of given {@code size}.
      * @throws IOException if an I/O error occurs.
      */
     short readShort(boolean unsigned, int size) throws IOException;

@@ -71,17 +71,8 @@ public abstract class AbstractBitInput implements BitInput {
         return (octet >> (available -= size)) & ((1 << size) - 1);
     }
 
-    @Override
-    public byte readByte(int size) throws IOException {
-        return readByte(false, size);
-    }
-
-    @Override
-    public byte readUnsignedByte(int size) throws IOException {
-        return readByte(true, size);
-    }
-
     // -----------------------------------------------------------------------------------------------------------------
+
     /**
      * Reads an unsigned value whose maximum size is {@value Short#SIZE}.
      *
@@ -118,10 +109,32 @@ public abstract class AbstractBitInput implements BitInput {
     }
 
     @Override
+    public byte readSignedByte(int size) throws IOException {
+        return readByte(false, size);
+    }
+
+    @Override
+    public byte readUnsignedByte(int size) throws IOException {
+        return readByte(true, size);
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    @Override
     public short readShort(final boolean unsigned, final int size) throws IOException {
         return (short) readInt(unsigned, requireValidSizeShort(unsigned, size));
     }
 
+    @Override
+    public short readSignedShort(final int size) throws IOException {
+        return readShort(false, size);
+    }
+
+    @Override
+    public short readUnsignedShort(final int size) throws IOException {
+        return readShort(true, size);
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
     @Override
     public int readInt(final boolean unsigned, final int size) throws IOException {
         requireValidSizeInt(unsigned, size);

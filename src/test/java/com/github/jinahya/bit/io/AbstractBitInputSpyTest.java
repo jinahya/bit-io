@@ -35,6 +35,7 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import static java.util.concurrent.ThreadLocalRandom.current;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
@@ -56,41 +57,66 @@ public class AbstractBitInputSpyTest {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * Tests {@link BitInput#readByte(boolean, int)} method.
+     * Tests {@link AbstractBitInput#readSignedByte(int)} method.
      *
      * @throws IOException if an I/O error occurs.
      */
     @RepeatedTest(8)
-    public void testReadByte() throws IOException {
-        final boolean unsigned = current().nextBoolean();
-        final int size = current().nextInt(1, Byte.SIZE + (unsigned ? 0 : 1));
-        final byte value = bitInput.readByte(unsigned, size);
-        if (unsigned) {
-            assertTrue(value >= 0);
+    public void testReadSignedByte() throws IOException {
+        final int size = current().nextInt(1, Byte.SIZE + 1);
+        final byte value = bitInput.readSignedByte(size);
+        if (value >= 0) {
+            assertEquals(0, value >> size);
+        } else {
+            assertEquals(-1, value >> (size - 1));
         }
     }
 
     /**
-     * Tests {@link BitInput#readShort(boolean, int)} method.
+     * Tests {@link AbstractBitInput#readUnsignedByte(int)} method.
      *
      * @throws IOException if an I/O error occurs.
      */
     @RepeatedTest(8)
-    public void testReadShort() throws IOException {
-        final boolean unsigned = current().nextBoolean();
-        final int size = current().nextInt(1, Short.SIZE + (unsigned ? 0 : 1));
-        final short value = bitInput.readShort(unsigned, size);
-        if (unsigned) {
-            assertTrue(value >= 0);
+    public void testReadUnsignedByte() throws IOException {
+        final int size = current().nextInt(1, Byte.SIZE);
+        final byte value = bitInput.readUnsignedByte(size);
+        assertTrue(value >= 0);
+        assertEquals(0, value >> size);
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Tests {@link AbstractBitInput#readSignedShort(int)} method.
+     *
+     * @throws IOException if an I/O error occurs.
+     */
+    @RepeatedTest(8)
+    public void testReadSignedShort() throws IOException {
+        final int size = current().nextInt(1, Short.SIZE + 1);
+        final short value = bitInput.readSignedShort(size);
+        if (value >= 0) {
+            assertEquals(0, value >> size);
+        } else {
+            assertEquals(-1, value >> (size - 1));
         }
     }
 
     /**
-     * Tests {@link BitInput#readShort(boolean, int)} method.
+     * Tests {@link AbstractBitInput#readUnsignedShort(int)} method.
      *
-     * @param unsigned a flag for unsigned.
      * @throws IOException if an I/O error occurs.
      */
+    @RepeatedTest(8)
+    public void testReadUnsignedShort() throws IOException {
+        final int size = current().nextInt(1, Short.SIZE);
+        final short value = bitInput.readUnsignedShort(size);
+        assertTrue(value >= 0);
+        assertEquals(0, value >> size);
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
     @MethodSource({"sourceUnsigned"})
     @ParameterizedTest
     public void testReadInt(final boolean unsigned) throws IOException {

@@ -59,10 +59,10 @@ public interface BitInput {
      * @param size number of bits for value; between {@code 1} and {@value Byte#SIZE}, both inclusive.
      * @return a signed {@code byte} value of given {@code size}.
      * @throws IOException if an I/O error occurs.
-     * @see #readUnsignedByte(int)
      * @see #readByte(boolean, int)
+     * @see #readUnsignedByte(int)
      */
-    byte readByte(int size) throws IOException;
+    byte readSignedByte(int size) throws IOException;
 
     /**
      * Reads an unsigned {@code byte} value of given size.
@@ -70,8 +70,8 @@ public interface BitInput {
      * @param size number of bits for value; between {@code 1} and {@code 7}, both inclusive.
      * @return an unsigned {@code byte} value of given {@code size}.
      * @throws IOException if an I/O error occurs.
-     * @see #readByte(int)
      * @see #readByte(boolean, int)
+     * @see #readSignedByte(int)
      */
     byte readUnsignedByte(int size) throws IOException;
 
@@ -87,6 +87,30 @@ public interface BitInput {
      * @throws IOException if an I/O error occurs.
      */
     short readShort(boolean unsigned, int size) throws IOException;
+
+    /**
+     * Reads a signed {@code short} value of given size.
+     *
+     * @param size number of bits for value; between {@code 1} and {@value Short#SIZE}, both inclusive.
+     * @return a signed {@code short} value of given {@code size}.
+     * @throws IOException if an I/O error occurs.
+     * @see #readShort(boolean, int)
+     * @see #readUnsignedShort(int)
+     */
+    short readSignedShort(int size) throws IOException;
+
+    /**
+     * Reads an unsigned {@code short} value of given size.
+     *
+     * @param size number of bits for value; between {@code 1} and {@code 15}, both inclusive.
+     * @return a {@code short} value of given {@code size}.
+     * @throws IOException if an I/O error occurs.
+     * @see #readShort(boolean, int)
+     * @see #readSignedShort(int)
+     */
+    short readUnsignedShort(int size) throws IOException;
+
+    // -----------------------------------------------------------------------------------------------------------------
 
     /**
      * Reads an int value.

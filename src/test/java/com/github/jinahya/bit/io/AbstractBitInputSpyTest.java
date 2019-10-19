@@ -20,26 +20,23 @@ package com.github.jinahya.bit.io;
  * #L%
  */
 
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.lang.invoke.MethodHandles;
 
 import static java.util.concurrent.ThreadLocalRandom.current;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
 @ExtendWith({MockitoExtension.class})
+@Slf4j
 public class AbstractBitInputSpyTest {
-
-    // -----------------------------------------------------------------------------------------------------------------
-    private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     // -----------------------------------------------------------------------------------------------------------------
     @BeforeEach
@@ -50,15 +47,30 @@ public class AbstractBitInputSpyTest {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * Tests {@link BitInput#readByte(boolean, int)}.
+     * Tests {@link BitInput#readByte(boolean, int)} method.
      *
      * @throws IOException if an I/O error occurs.
      */
-    @Test
+    @RepeatedTest(8)
     public void testReadByte() throws IOException {
         final boolean unsigned = current().nextBoolean();
         final int size = current().nextInt(1, Byte.SIZE + (unsigned ? 0 : 1));
         final byte value = bitInput.readByte(unsigned, size);
+        if (unsigned) {
+            assertTrue(value >= 0);
+        }
+    }
+
+    /**
+     * Tests {@link BitInput#readShort(boolean, int)} method.
+     *
+     * @throws IOException if an I/O error occurs.
+     */
+    @RepeatedTest(8)
+    public void testReadShort() throws IOException {
+        final boolean unsigned = current().nextBoolean();
+        final int size = current().nextInt(1, Short.SIZE + (unsigned ? 0 : 1));
+        final short value = bitInput.readShort(unsigned, size);
         if (unsigned) {
             assertTrue(value >= 0);
         }

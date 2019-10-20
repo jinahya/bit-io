@@ -26,11 +26,9 @@ import java.nio.ByteBuffer;
  * An abstract class for testing subclasses of {@link BufferByteOutput}.
  *
  * @param <T> byte output type parameter
- * @param <U> byte buffer type parameter
  * @see BufferByteInputTest
  */
-public abstract class BufferByteOutputTest<T extends BufferByteOutput<U>, U extends ByteBuffer>
-        extends AbstractByteOutputTest<T, U> {
+public abstract class BufferByteOutputTest<T extends BufferByteOutput> extends AbstractByteOutputTest<T, ByteBuffer> {
 
     // -----------------------------------------------------------------------------------------------------------------
 
@@ -38,9 +36,8 @@ public abstract class BufferByteOutputTest<T extends BufferByteOutput<U>, U exte
      * Creates a new instance with given arguments.
      *
      * @param byteOutputClass the class of byte output to test.
-     * @param byteTargetClass the class of byte target to test.
      */
-    public BufferByteOutputTest(final Class<T> byteOutputClass, final Class<U> byteTargetClass) {
-        super(byteOutputClass, byteTargetClass);
+    public BufferByteOutputTest(final Class<T> byteOutputClass) {
+        super(byteOutputClass, ByteBuffer.class);
     }
 }

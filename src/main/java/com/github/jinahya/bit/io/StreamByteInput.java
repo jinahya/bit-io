@@ -27,11 +27,10 @@ import java.io.InputStream;
 /**
  * A {@link ByteInput} reads bytes from an {@link InputStream}.
  *
- * @param <T> input stream type parameter
  * @author Jin Kwon &lt;onacit at gmail.com&gt;
  * @see StreamByteOutput
  */
-public class StreamByteInput<T extends InputStream> extends AbstractByteInput<T> {
+public class StreamByteInput extends AbstractByteInput<InputStream> {
 
     // -----------------------------------------------------------------------------------------------------------------
 
@@ -40,7 +39,7 @@ public class StreamByteInput<T extends InputStream> extends AbstractByteInput<T>
      *
      * @param source the input stream; {@code null} if it's supposed to be lazily initialized and set
      */
-    public StreamByteInput(final T source) {
+    public StreamByteInput(final InputStream source) {
         super(source);
     }
 
@@ -73,7 +72,7 @@ public class StreamByteInput<T extends InputStream> extends AbstractByteInput<T>
      * @return {@inheritDoc}
      */
     @Override
-    public StreamByteInput<T> source(final T source) {
-        return (StreamByteInput<T>) super.source(source);
+    public StreamByteInput source(final InputStream source) {
+        return (StreamByteInput) super.source(source);
     }
 }

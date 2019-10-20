@@ -25,7 +25,7 @@ package com.github.jinahya.bit.io;
  *
  * @see BlackBitOutput
  */
-class WhiteBitInput extends DefaultBitInput<WhiteByteInput> {
+class WhiteBitInput extends DefaultBitInput {
 
     // -----------------------------------------------------------------------------------------------------------------
 

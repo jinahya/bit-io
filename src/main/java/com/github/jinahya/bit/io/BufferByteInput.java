@@ -26,11 +26,10 @@ import java.nio.ByteBuffer;
 /**
  * A {@link ByteInput} uses an instance of {@link ByteBuffer} as its {@code source}.
  *
- * @param <T> byte buffer type parameter.
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  * @see BufferByteOutput
  */
-public class BufferByteInput<T extends ByteBuffer> extends AbstractByteInput<T> {
+public class BufferByteInput extends AbstractByteInput<ByteBuffer> {
 
     // -----------------------------------------------------------------------------------------------------------------
 
@@ -39,7 +38,7 @@ public class BufferByteInput<T extends ByteBuffer> extends AbstractByteInput<T> 
      *
      * @param source the byte buffer; {@code null} if it's supposed to be lazily initialized and set.
      */
-    public BufferByteInput(final T source) {
+    public BufferByteInput(final ByteBuffer source) {
         super(source);
     }
 
@@ -68,7 +67,7 @@ public class BufferByteInput<T extends ByteBuffer> extends AbstractByteInput<T> 
      * @return {@inheritDoc}
      */
     @Override
-    public BufferByteInput<T> source(final T source) {
-        return (BufferByteInput<T>) super.source(source);
+    public BufferByteInput source(final ByteBuffer source) {
+        return (BufferByteInput) super.source(source);
     }
 }

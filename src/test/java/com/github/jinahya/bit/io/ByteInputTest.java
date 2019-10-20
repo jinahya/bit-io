@@ -32,11 +32,23 @@ import java.io.IOException;
 
 import static java.util.Objects.requireNonNull;
 
+/**
+ * An abstract class for unit-testing subclasses of {@link ByteInput} interface.
+ *
+ * @param <T> subclass type paramter
+ * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
+ */
 @ExtendWith({WeldJunit5Extension.class})
 @Slf4j
 public abstract class ByteInputTest<T extends ByteInput> {
 
     // -----------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Create s new instance with specified byte input class.
+     *
+     * @param byteInputClass the byte input class to test.
+     */
     public ByteInputTest(final Class<T> byteInputClass) {
         super();
         this.byteInputClass = requireNonNull(byteInputClass, "byteOutputClass is null");
@@ -44,12 +56,17 @@ public abstract class ByteInputTest<T extends ByteInput> {
 
     // -----------------------------------------------------------------------------------------------------------------
     @BeforeEach
-    //@BeforeAll // seems not work with PER_CLASS
     void selectByteInput() {
         byteInput = byteInputInstance.select(byteInputClass).get();
     }
 
     // -----------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Tests {@link ByteInput#read()} method.
+     *
+     * @throws IOException if an I/O error occurs.
+     */
     @Test
     public void testRead() throws IOException {
         final int octet = byteInput.read();
@@ -69,5 +86,5 @@ public abstract class ByteInputTest<T extends ByteInput> {
     /**
      * An instance of {@link #byteInputClass} to test with.
      */
-    protected T byteInput;
+    protected transient T byteInput;
 }

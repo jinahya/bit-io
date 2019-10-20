@@ -25,10 +25,9 @@ import java.io.IOException;
 /**
  * A default implementation writes bytes to an instance of {@link ByteOutput}.
  *
- * @param <T> byte output type parameter
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
-public class DefaultBitOutput<T extends ByteOutput> extends AbstractBitOutput {
+public class DefaultBitOutput extends AbstractBitOutput {
 
     // -----------------------------------------------------------------------------------------------------------------
 
@@ -37,7 +36,7 @@ public class DefaultBitOutput<T extends ByteOutput> extends AbstractBitOutput {
      *
      * @param delegate the delegate; {@code null} if if is supposed to be lazily initialized and set.
      */
-    public DefaultBitOutput(final T delegate) {
+    public DefaultBitOutput(final ByteOutput delegate) {
         super();
         this.delegate = delegate;
     }
@@ -63,7 +62,7 @@ public class DefaultBitOutput<T extends ByteOutput> extends AbstractBitOutput {
      *
      * @return current value of {@link #delegate}
      */
-    public T getDelegate() {
+    public ByteOutput getDelegate() {
         return delegate;
     }
 
@@ -72,19 +71,8 @@ public class DefaultBitOutput<T extends ByteOutput> extends AbstractBitOutput {
      *
      * @param delegate new value of {@link #delegate}.
      */
-    public void setDelegate(final T delegate) {
+    public void setDelegate(final ByteOutput delegate) {
         this.delegate = delegate;
-    }
-
-    /**
-     * Replaces {@link #delegate} with given and returns self.
-     *
-     * @param delegate new value for {@link #delegate}
-     * @return this instance
-     */
-    public DefaultBitOutput<T> delegate(final T delegate) {
-        setDelegate(delegate);
-        return this;
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -92,5 +80,5 @@ public class DefaultBitOutput<T extends ByteOutput> extends AbstractBitOutput {
     /**
      * The delegate whose {@link ByteOutput#write(int)} method is invoked via {@link #write(int)} method.
      */
-    protected T delegate;
+    protected ByteOutput delegate;
 }

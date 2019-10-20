@@ -20,18 +20,18 @@ package com.github.jinahya.bit.io;
  * #L%
  */
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.enterprise.inject.Disposes;
 import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.spi.InjectionPoint;
-import java.lang.invoke.MethodHandles;
+import java.io.DataOutputStream;
+import java.io.IOException;
 
+import static java.nio.ByteBuffer.allocate;
+
+@Slf4j
 class ByteOutputProducer {
-
-    // -----------------------------------------------------------------------------------------------------------------
-    private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     // ----------------------------------------------------------------------------------------------------------- array
 
@@ -44,7 +44,18 @@ class ByteOutputProducer {
     @Typed
     @Produces
     ArrayByteOutput produceArrayByteOutput(final InjectionPoint injectionPoint) {
-        return new BlackArrayByteOutput();
+        return new ArrayByteOutput(null) {
+            @Override
+            public void write(final int value) throws IOException {
+                if (target == null) {
+                    target = new byte[1];
+                    index = 0;
+                }
+                super.write(value);
+                assert index == target.length;
+                index = 0;
+            }
+        };
     }
 
     /**
@@ -58,30 +69,41 @@ class ByteOutputProducer {
     // -----------------------------------------------------------------------------------------------------------buffer
     @Typed
     @Produces
-    BlackBufferByteOutput produceBufferByteOutput(final InjectionPoint injectionPoint) {
-        return new BlackBufferByteOutput();
+    BufferByteOutput produceBufferByteOutput(final InjectionPoint injectionPoint) {
+        return new BufferByteOutput(null) {
+            @Override
+            public void write(final int value) throws IOException {
+                if (target == null) {
+                    target = allocate(1); // position: zero, limit: capacity
+                }
+                super.write(value);
+                if (!target.hasRemaining()) {
+                    target.position(0);
+                }
+            }
+        };
     }
 
-    void disposeBufferByteOutput(@Typed @Disposes final BlackBufferByteOutput byteOutput) {
+    void disposeBufferByteOutput(@Typed @Disposes final BufferByteOutput byteOutput) {
     }
 
     // ------------------------------------------------------------------------------------------------------------ data
     @Typed
     @Produces
-    BlackDataByteOutput produceDataByteOutput(final InjectionPoint injectionPoint) {
-        return new BlackDataByteOutput();
+    DataByteOutput produceDataByteOutput(final InjectionPoint injectionPoint) {
+        return new DataByteOutput(new DataOutputStream(new BlackOutputStream()));
     }
 
-    void disposeDataByteOutput(@Typed @Disposes final BlackDataByteOutput byteOutput) {
+    void disposeDataByteOutput(@Typed @Disposes final DataByteOutput byteOutput) {
     }
 
     // ---------------------------------------------------------------------------------------------------------- stream
     @Typed
     @Produces
-    BlackStreamByteOutput produceStreamByteOutput(final InjectionPoint injectionPoint) {
-        return new BlackStreamByteOutput();
+    StreamByteOutput produceStreamByteOutput(final InjectionPoint injectionPoint) {
+        return new StreamByteOutput(new BlackOutputStream());
     }
 
-    void disposeStreamByteOutput(@Typed @Disposes final BlackStreamByteOutput byteOutput) {
+    void disposeStreamByteOutput(@Typed @Disposes final StreamByteOutput byteOutput) {
     }
 }

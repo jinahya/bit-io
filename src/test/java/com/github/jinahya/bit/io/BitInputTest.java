@@ -20,19 +20,17 @@ package com.github.jinahya.bit.io;
  * #L%
  */
 
+import lombok.extern.slf4j.Slf4j;
 import org.jboss.weld.junit5.WeldJunit5Extension;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import java.io.IOException;
-import java.lang.invoke.MethodHandles;
 import java.util.Objects;
 
 import static com.github.jinahya.bit.io.BitIoTests.acceptRandomSizeByte;
@@ -49,10 +47,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * @param <T> bit input type parameter.
  */
 @ExtendWith({WeldJunit5Extension.class})
+@Slf4j
 public abstract class BitInputTest<T extends BitInput> {
-
-    // -----------------------------------------------------------------------------------------------------------------
-    private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     // -----------------------------------------------------------------------------------------------------------------
 

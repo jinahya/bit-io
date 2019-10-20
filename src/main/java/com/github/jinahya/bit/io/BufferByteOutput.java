@@ -22,40 +22,14 @@ package com.github.jinahya.bit.io;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.nio.channels.WritableByteChannel;
 
 /**
  * A {@link ByteOutput} uses an instance of {@link ByteBuffer} as its {@code target}.
  *
- * @param <T> byte buffer type parameter.
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  * @see BufferByteInput
  */
-public class BufferByteOutput<T extends ByteBuffer> extends AbstractByteOutput<T> {
-
-    // -----------------------------------------------------------------------------------------------------------------
-
-    /**
-     * Flushes the internal byte buffer of given byte output to specified channel and returns the number of bytes
-     * written.
-     *
-     * @param output  the output whose buffer is flushed.
-     * @param channel the channel to which the buffer is flushed.
-     * @return the number of bytes written while flushing; {@code 0} if there is no inter buffer.
-     * @throws IOException if an I/O error occurs.
-     */
-    public static int flush(final BufferByteOutput<?> output, final WritableByteChannel channel) throws IOException {
-        final ByteBuffer buffer = output.getTarget();
-        if (buffer == null) {
-            return 0;
-        }
-        int written = 0;
-        for (buffer.flip(); buffer.hasRemaining(); ) {
-            written += channel.write(buffer);
-        }
-        buffer.clear(); // position -> zero; limit -> capacity
-        return written;
-    }
+public class BufferByteOutput extends AbstractByteOutput<ByteBuffer> {
 
     // -----------------------------------------------------------------------------------------------------------------
 
@@ -65,7 +39,7 @@ public class BufferByteOutput<T extends ByteBuffer> extends AbstractByteOutput<T
      * @param target the {@code ByteBuffer} to which bytes are written; {@code null} if it's supposed to be lazily
      *               initialized and set.
      */
-    public BufferByteOutput(final T target) {
+    public BufferByteOutput(final ByteBuffer target) {
         super(target);
     }
 
@@ -94,7 +68,7 @@ public class BufferByteOutput<T extends ByteBuffer> extends AbstractByteOutput<T
      * @return {@inheritDoc}
      */
     @Override
-    public BufferByteOutput<T> target(final T target) {
-        return (BufferByteOutput<T>) super.target(target);
+    public BufferByteOutput target(final ByteBuffer target) {
+        return (BufferByteOutput) super.target(target);
     }
 }

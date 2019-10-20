@@ -20,9 +20,21 @@ package com.github.jinahya.bit.io;
  * #L%
  */
 
+/**
+ * An abstract class for testing subclasses of {@link AbstractBitOutput} class.
+ *
+ * @param <T> subclass type parameter
+ * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
+ */
 public abstract class AbstractBitOutputTest<T extends AbstractBitOutput> extends BitOutputTest<T> {
 
     // -----------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Creates a new instance with specified subclass.
+     *
+     * @param bitOutputClass the subclass to test.
+     */
     public AbstractBitOutputTest(final Class<T> bitOutputClass) {
         super(bitOutputClass);
     }

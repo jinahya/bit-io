@@ -26,11 +26,10 @@ import java.io.IOException;
 /**
  * A {@link ByteInput} uses an instance of {@link DataInput} as its {@code source}.
  *
- * @param <T> data input type parameter.
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  * @see DataByteOutput
  */
-public class DataByteInput<T extends DataInput> extends AbstractByteInput<T> {
+public class DataByteInput extends AbstractByteInput<DataInput> {
 
     // -----------------------------------------------------------------------------------------------------------------
 
@@ -39,7 +38,7 @@ public class DataByteInput<T extends DataInput> extends AbstractByteInput<T> {
      *
      * @param source the byte source; {@code null} if it's supposed to be lazily initialized and set
      */
-    public DataByteInput(final T source) {
+    public DataByteInput(final DataInput source) {
         super(source);
     }
 
@@ -66,7 +65,7 @@ public class DataByteInput<T extends DataInput> extends AbstractByteInput<T> {
      * @return {@inheritDoc}
      */
     @Override
-    public DataByteInput<T> source(final T source) {
-        return (DataByteInput<T>) super.source(source);
+    public DataByteInput source(final DataInput source) {
+        return (DataByteInput) super.source(source);
     }
 }

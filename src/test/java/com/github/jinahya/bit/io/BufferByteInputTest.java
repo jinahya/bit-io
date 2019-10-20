@@ -26,21 +26,18 @@ import java.nio.ByteBuffer;
  * An abstract class for testing subclasses of {@link BufferByteInput}.
  *
  * @param <T> byte input type parameter
- * @param <U> byte buffer type parameter
  * @see BufferByteOutputTest
  */
-abstract class BufferByteInputTest<T extends BufferByteInput<U>, U extends ByteBuffer>
-        extends AbstractByteInputTest<T, U> {
+abstract class BufferByteInputTest<T extends BufferByteInput> extends AbstractByteInputTest<T, ByteBuffer> {
 
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
      * Creates a new instance.
      *
-     * @param byteInputClass  a byte input class.
-     * @param byteSourceClass a source class.
+     * @param byteInputClass a byte input class.
      */
-    BufferByteInputTest(final Class<T> byteInputClass, final Class<U> byteSourceClass) {
-        super(byteInputClass, byteSourceClass);
+    BufferByteInputTest(final Class<T> byteInputClass) {
+        super(byteInputClass, ByteBuffer.class);
     }
 }

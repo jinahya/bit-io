@@ -22,11 +22,10 @@ package com.github.jinahya.bit.io;
 
 import java.io.DataOutput;
 
-abstract class DataByteOutputTest<T extends DataByteOutput<U>, U extends DataOutput>
-        extends AbstractByteOutputTest<T, U> {
+abstract class DataByteOutputTest<T extends DataByteOutput> extends AbstractByteOutputTest<T, DataOutput> {
 
     // -----------------------------------------------------------------------------------------------------------------
-    DataByteOutputTest(final Class<T> byteOutputClass, final Class<U> byteTargetClass) {
-        super(byteOutputClass, byteTargetClass);
+    DataByteOutputTest(final Class<T> byteOutputClass) {
+        super(byteOutputClass, DataOutput.class);
     }
 }

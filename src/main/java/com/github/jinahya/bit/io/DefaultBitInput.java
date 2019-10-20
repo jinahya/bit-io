@@ -25,10 +25,9 @@ import java.io.IOException;
 /**
  * A default implementation of {@link ByteInput} which reads bytes from an instance of {@link ByteInput}.
  *
- * @param <T> byte input type parameter
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */
-public class DefaultBitInput<T extends ByteInput> extends AbstractBitInput {
+public class DefaultBitInput extends AbstractBitInput {
 
     // -----------------------------------------------------------------------------------------------------------------
 
@@ -38,7 +37,7 @@ public class DefaultBitInput<T extends ByteInput> extends AbstractBitInput {
      * @param delegate the delegate on which {@link #read()} is invoked; may be {@code null} if it is intended to be
      *                 lazily initialized and set.
      */
-    public DefaultBitInput(final T delegate) {
+    public DefaultBitInput(final ByteInput delegate) {
         super();
         this.delegate = delegate;
     }
@@ -64,7 +63,7 @@ public class DefaultBitInput<T extends ByteInput> extends AbstractBitInput {
      *
      * @return current value of {@link #delegate}
      */
-    public T getDelegate() {
+    public ByteInput getDelegate() {
         return delegate;
     }
 
@@ -73,19 +72,8 @@ public class DefaultBitInput<T extends ByteInput> extends AbstractBitInput {
      *
      * @param delegate new value of {@link #delegate}.
      */
-    public void setDelegate(final T delegate) {
+    public void setDelegate(final ByteInput delegate) {
         this.delegate = delegate;
-    }
-
-    /**
-     * Replaces {@link #delegate} with given and returns self.
-     *
-     * @param delegate new value for {@link #delegate}
-     * @return this instance
-     */
-    public DefaultBitInput<T> delegate(final T delegate) {
-        setDelegate(delegate);
-        return this;
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -93,5 +81,5 @@ public class DefaultBitInput<T extends ByteInput> extends AbstractBitInput {
     /**
      * The delegate whose {@link ByteInput#read()} method is invoked via {@link #read()} method.
      */
-    protected T delegate;
+    protected ByteInput delegate;
 }

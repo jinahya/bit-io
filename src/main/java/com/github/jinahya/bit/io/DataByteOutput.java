@@ -26,10 +26,9 @@ import java.io.IOException;
 /**
  * A {@code ByteOutput} uses an instance of {@link DataOutput} as its {@code target}.
  *
- * @param <T> data output type parameter.
  * @see DataByteInput
  */
-public class DataByteOutput<T extends DataOutput> extends AbstractByteOutput<T> {
+public class DataByteOutput extends AbstractByteOutput<DataOutput> {
 
     // -----------------------------------------------------------------------------------------------------------------
 
@@ -38,7 +37,7 @@ public class DataByteOutput<T extends DataOutput> extends AbstractByteOutput<T> 
      *
      * @param target the byte target; {@code null} if it is supposed to be lazily initialized and set.
      */
-    public DataByteOutput(final T target) {
+    public DataByteOutput(final DataOutput target) {
         super(target);
     }
 
@@ -65,7 +64,7 @@ public class DataByteOutput<T extends DataOutput> extends AbstractByteOutput<T> 
      * @return {@inheritDoc}
      */
     @Override
-    public DataByteOutput<T> target(final T target) {
-        return (DataByteOutput<T>) super.target(target);
+    public DataByteOutput target(final DataOutput target) {
+        return (DataByteOutput) super.target(target);
     }
 }

@@ -21,8 +21,9 @@ package com.github.jinahya.bit.io;
  */
 
 /**
- * A class for testing {@link ArrayByteInput}.
+ * A class for testing {@link ArrayByteInput} class.
  *
+ * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  * @see ArrayByteOutputTest
  */
 class ArrayByteInputTest extends AbstractByteInputTest<ArrayByteInput, byte[]> {

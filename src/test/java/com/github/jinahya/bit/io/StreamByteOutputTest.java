@@ -26,14 +26,12 @@ import java.io.OutputStream;
  * An abstract class for testing subclasses of {@link StreamByteOutput}.
  *
  * @param <T> byte output type parameter
- * @param <U> output stream type parameter
  * @see StreamByteInputTest
  */
-abstract class StreamByteOutputTest<T extends StreamByteOutput<U>, U extends OutputStream>
-        extends AbstractByteOutputTest<T, U> {
+abstract class StreamByteOutputTest<T extends StreamByteOutput> extends AbstractByteOutputTest<T, OutputStream> {
 
     // -----------------------------------------------------------------------------------------------------------------
-    StreamByteOutputTest(final Class<T> byteOutputClass, final Class<U> byteTargetClass) {
-        super(byteOutputClass, byteTargetClass);
+    StreamByteOutputTest(final Class<T> byteOutputClass) {
+        super(byteOutputClass, OutputStream.class);
     }
 }

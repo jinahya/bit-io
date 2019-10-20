@@ -20,11 +20,9 @@ package com.github.jinahya.bit.io;
  * #L%
  */
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.tuple.Pair;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import java.lang.invoke.MethodHandles;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.IntConsumer;
@@ -42,10 +40,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 /**
  * Utilities for testing classes.
  */
+@Slf4j
 final class BitIoTests {
-
-    // -----------------------------------------------------------------------------------------------------------------
-    private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     // ------------------------------------------------------------------------------------------------------------ byte
 

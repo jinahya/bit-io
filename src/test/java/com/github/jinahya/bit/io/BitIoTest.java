@@ -20,11 +20,10 @@ package com.github.jinahya.bit.io;
  * #L%
  */
 
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.ArgumentsSource;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -33,7 +32,6 @@ import java.io.DataInputStream;
 import java.io.DataOutput;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.lang.invoke.MethodHandles;
 import java.nio.ByteBuffer;
 import java.util.LinkedList;
 import java.util.List;
@@ -47,10 +45,8 @@ import static java.util.concurrent.ThreadLocalRandom.current;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
+@Slf4j
 class BitIoTest {
-
-    // -----------------------------------------------------------------------------------------------------------------
-    private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     // -----------------------------------------------------------------------------------------------------------------
     static final int BOUND_COUNT = 1024;
@@ -63,21 +59,21 @@ class BitIoTest {
     private static Arguments array() {
         final byte[] array = new byte[1048576];
         final ByteOutput target = new ArrayByteOutput(array);
-        final BitOutput output = new DefaultBitOutput<>(target);
+        final BitOutput output = new DefaultBitOutput(target);
         final Supplier<BitInput> inputSupplier = () -> {
             final ByteInput source = new ArrayByteInput(array);
-            return new DefaultBitInput<>(source);
+            return new DefaultBitInput(source);
         };
         return Arguments.of(output, inputSupplier);
     }
 
     private static Arguments buffer() {
         final ByteBuffer buffer = ByteBuffer.allocate(1048576);
-        final ByteOutput delegate = new BufferByteOutput<>(buffer);
-        final BitOutput output = new DefaultBitOutput<>(delegate);
+        final ByteOutput delegate = new BufferByteOutput(buffer);
+        final BitOutput output = new DefaultBitOutput(delegate);
         final Supplier<BitInput> inputSupplier = () -> {
-            final ByteInput source = new BufferByteInput<>((ByteBuffer) buffer.flip());
-            return new DefaultBitInput<>(source);
+            final ByteInput source = new BufferByteInput((ByteBuffer) buffer.flip());
+            return new DefaultBitInput(source);
         };
         return Arguments.of(output, inputSupplier);
     }
@@ -85,21 +81,21 @@ class BitIoTest {
     private static Arguments data() {
         final ByteArrayOutputStream baos = new ByteArrayOutputStream(1048576);
         final DataOutput target = new DataOutputStream(baos);
-        final BitOutput output = new DefaultBitOutput<>(new DataByteOutput<DataOutput>(target));
+        final BitOutput output = new DefaultBitOutput(new DataByteOutput(target));
         final Supplier<BitInput> inputSupplier = () -> {
             final ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
             final DataInput source = new DataInputStream(bais);
-            return new DefaultBitInput<ByteInput>(new DataByteInput<>(source));
+            return new DefaultBitInput(new DataByteInput(source));
         };
         return Arguments.of(output, inputSupplier);
     }
 
     private static Arguments stream() {
         final ByteArrayOutputStream target = new ByteArrayOutputStream(1048576);
-        final BitOutput output = new DefaultBitOutput<ByteOutput>(new StreamByteOutput<>(target));
+        final BitOutput output = new DefaultBitOutput(new StreamByteOutput(target));
         final Supplier<BitInput> inputSupplier = () -> {
             final ByteArrayInputStream source = new ByteArrayInputStream(target.toByteArray());
-            return new DefaultBitInput<ByteInput>(new StreamByteInput<>(source));
+            return new DefaultBitInput(new StreamByteInput(source));
         };
         return Arguments.of(output, inputSupplier);
     }

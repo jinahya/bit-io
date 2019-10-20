@@ -26,10 +26,9 @@ import java.io.OutputStream;
 /**
  * A {@link ByteOutput} writes bytes to an {@link OutputStream}.
  *
- * @param <T> stream type parameter
  * @see StreamByteInput
  */
-public class StreamByteOutput<T extends OutputStream> extends AbstractByteOutput<T> {
+public class StreamByteOutput extends AbstractByteOutput<OutputStream> {
 
     // -----------------------------------------------------------------------------------------------------------------
 
@@ -38,7 +37,7 @@ public class StreamByteOutput<T extends OutputStream> extends AbstractByteOutput
      *
      * @param target the output stream; {@code null} if it's supposed to be lazily initialized and set.
      */
-    public StreamByteOutput(final T target) {
+    public StreamByteOutput(final OutputStream target) {
         super(target);
     }
 
@@ -67,7 +66,7 @@ public class StreamByteOutput<T extends OutputStream> extends AbstractByteOutput
      * @return {@inheritDoc}
      */
     @Override
-    public StreamByteOutput<T> target(final T target) {
-        return (StreamByteOutput<T>) super.target(target);
+    public StreamByteOutput target(final OutputStream target) {
+        return (StreamByteOutput) super.target(target);
     }
 }

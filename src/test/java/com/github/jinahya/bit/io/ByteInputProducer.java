@@ -20,56 +20,86 @@ package com.github.jinahya.bit.io;
  * #L%
  */
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.enterprise.inject.Disposes;
 import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.spi.InjectionPoint;
-import java.lang.invoke.MethodHandles;
+import java.io.DataInputStream;
+import java.io.IOException;
 
+import static java.nio.ByteBuffer.allocate;
+import static java.util.concurrent.ThreadLocalRandom.current;
+
+@Slf4j
 class ByteInputProducer {
-
-    // -----------------------------------------------------------------------------------------------------------------
-    private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     // ----------------------------------------------------------------------------------------------------------- array
     @Typed
     @Produces
     ArrayByteInput produceArrayByteInput(final InjectionPoint injectionPoint) {
-        return new WhiteArrayByteInput();
+        return new ArrayByteInput(null) {
+            @Override
+            public int read() throws IOException {
+                if (source == null) {
+                    source = new byte[1];
+                    index = source.length;
+                }
+                if (index == source.length) {
+                    index = 0;
+                }
+                return super.read();
+            }
+        };
     }
 
     void disposeArrayByteInput(@Typed @Disposes final ArrayByteInput byteInput) {
+        // does nothing.
     }
 
     // ---------------------------------------------------------------------------------------------------------- buffer
     @Typed
     @Produces
-    WhiteBufferByteInput produceBufferByteInput(final InjectionPoint injectionPoint) {
-        return new WhiteBufferByteInput();
+    BufferByteInput produceBufferByteInput(final InjectionPoint injectionPoint) {
+        return new BufferByteInput(null) {
+            @Override
+            public int read() throws IOException {
+                if (source == null) {
+                    source = allocate(1);
+                    source.position(source.limit());
+                }
+                if (!source.hasRemaining()) {
+                    source.clear(); // position -> zero, limit -> capacity
+                    current().nextBytes(source.array());
+                }
+                return super.read();
+            }
+        };
     }
 
-    void disposeBufferByteInput(@Disposes @Typed final WhiteBufferByteInput byteInput) {
+    void disposeBufferByteInput(@Disposes @Typed final BufferByteInput byteInput) {
+        // does nothing.
     }
 
     // ------------------------------------------------------------------------------------------------------------ data
     @Typed
     @Produces
-    WhiteDataByteInput produceDataByteInput(final InjectionPoint injectionPoint) {
-        return new WhiteDataByteInput();
+    DataByteInput produceDataByteInput(final InjectionPoint injectionPoint) {
+        return new DataByteInput(new DataInputStream(new WhiteInputStream()));
     }
 
-    void disposeDataByteInput(@Disposes @Typed final WhiteDataByteInput byteInput) {
+    void disposeDataByteInput(@Disposes @Typed final DataByteInput byteInput) {
+        // does nothing.
     }
 
     // ---------------------------------------------------------------------------------------------------------- stream
     @Typed
     @Produces
-    WhiteStreamByteInput produceStreamByteInput(final InjectionPoint injectionPoint) {
-        return new WhiteStreamByteInput();
+    StreamByteInput produceStreamByteInput(final InjectionPoint injectionPoint) {
+        return new StreamByteInput(new WhiteInputStream());
     }
 
-    void disposeStreamByteInput(@Disposes @Typed final WhiteStreamByteInput byteInput) {
+    void disposeStreamByteInput(@Disposes @Typed final StreamByteInput byteInput) {
+        // does nothing.
     }
 }

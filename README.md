@@ -115,7 +115,8 @@ assert discarded == 2L;
 ```
 
 ```
-biiiiiil llllllll llllllll llllllll llllllll llllllll lllllldd
+b        llllllll llllllll llllllll llllllll llllllll llllll
+ iiiiiil                                                    dd
 ```
 
 ## Writing
@@ -148,7 +149,8 @@ assert padded == 20L;
 ```
 
 ```
-biiiiiii iiblllll llllllll llllllll llllllll llllpppp pppppppp pppppppp
+b          b                                     pppp pppppppp pppppppp
+ iiiiiii ii lllll llllllll llllllll llllllll llll
 01101110 00100000 00000000 00000000 00000110 00110000 00000000 00000000
 ```
 

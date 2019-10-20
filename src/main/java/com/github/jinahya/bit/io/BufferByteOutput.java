@@ -58,17 +58,4 @@ public class BufferByteOutput extends AbstractByteOutput<ByteBuffer> {
     public void write(final int value) throws IOException {
         getTarget().put((byte) value);
     }
-
-    // ---------------------------------------------------------------------------------------------------------- target
-
-    /**
-     * {@inheritDoc}
-     *
-     * @param target {@inheritDoc}
-     * @return {@inheritDoc}
-     */
-    @Override
-    public BufferByteOutput target(final ByteBuffer target) {
-        return (BufferByteOutput) super.target(target);
-    }
 }

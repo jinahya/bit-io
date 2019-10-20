@@ -20,27 +20,22 @@ package com.github.jinahya.bit.io;
  * #L%
  */
 
-import java.io.IOException;
+import lombok.extern.slf4j.Slf4j;
 
-import static java.util.concurrent.ThreadLocalRandom.current;
+import javax.enterprise.inject.Disposes;
+import javax.enterprise.inject.Produces;
+import javax.enterprise.inject.spi.InjectionPoint;
 
-/**
- * A byte input whose {@link ByteInput#read()} method returns a random value.
- */
-class WhiteByteInput implements ByteInput {
+@Slf4j
+class BitOutputProducer {
 
     // -----------------------------------------------------------------------------------------------------------------
-
-    /**
-     * Creates a new instance.
-     */
-    WhiteByteInput() {
-        super();
+    @Produces
+    DefaultBitOutput produceArrayByteInput(final InjectionPoint injectionPoint) {
+        return new DefaultBitOutput(new StreamByteOutput(new BlackOutputStream()));
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
-    @Override
-    public int read() throws IOException {
-        return current().nextInt(0, 256);
+    void disposeArrayByteInput(@Disposes final DefaultBitOutput defaultBitOutput) {
+        // does nothing.
     }
 }

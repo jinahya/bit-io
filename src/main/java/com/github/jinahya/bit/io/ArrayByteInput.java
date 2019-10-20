@@ -81,18 +81,6 @@ public class ArrayByteInput extends AbstractByteInput<byte[]> {
         this.index = index;
     }
 
-    /**
-     * Replaces the current value of {@code index} with given and returns this instance.
-     *
-     * @param index new value for {@code index}
-     * @return this instance.
-     * @see #setIndex(int)
-     */
-    public ArrayByteInput index(final int index) {
-        setIndex(index);
-        return this;
-    }
-
     // -----------------------------------------------------------------------------------------------------------------
 
     /**

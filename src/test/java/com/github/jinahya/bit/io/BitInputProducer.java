@@ -20,18 +20,22 @@ package com.github.jinahya.bit.io;
  * #L%
  */
 
-/**
- * A class of {@link DefaultBitOutput} whose {@link DefaultBitOutput#delegate} is an instance of {@link
- * BlackByteOutput}.
- */
-class BlackBitOutput extends DefaultBitOutput {
+import lombok.extern.slf4j.Slf4j;
+
+import javax.enterprise.inject.Disposes;
+import javax.enterprise.inject.Produces;
+import javax.enterprise.inject.spi.InjectionPoint;
+
+@Slf4j
+class BitInputProducer {
 
     // -----------------------------------------------------------------------------------------------------------------
+    @Produces
+    DefaultBitInput produceArrayByteInput(final InjectionPoint injectionPoint) {
+        return new DefaultBitInput(new StreamByteInput(new WhiteInputStream()));
+    }
 
-    /**
-     * Creates a new instance.
-     */
-    BlackBitOutput() {
-        super(new BlackByteOutput());
+    void disposeArrayByteInput(@Disposes final DefaultBitInput defaultBitInput) {
+        // does nothing.
     }
 }

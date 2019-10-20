@@ -128,7 +128,7 @@ public class AbstractBitOutputSpyTest {
     @RepeatedTest(8)
     public void testWriteUnsignedLong() throws IOException {
         final int size = current().nextInt(1, Long.SIZE);
-        final long value = current().nextLong() >>> (Integer.SIZE - size);
+        final long value = current().nextLong() >>> (Long.SIZE - size);
         assertTrue(value >= 0L);
         bitOutput.writeUnsignedLong(size, value);
     }

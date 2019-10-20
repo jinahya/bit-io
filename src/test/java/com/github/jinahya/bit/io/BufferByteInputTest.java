@@ -23,21 +23,19 @@ package com.github.jinahya.bit.io;
 import java.nio.ByteBuffer;
 
 /**
- * An abstract class for testing subclasses of {@link BufferByteInput}.
+ * A class for unit-testing {@link BufferByteInput} class.
  *
- * @param <T> byte input type parameter
+ * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  * @see BufferByteOutputTest
  */
-abstract class BufferByteInputTest<T extends BufferByteInput> extends AbstractByteInputTest<T, ByteBuffer> {
+class BufferByteInputTest extends AbstractByteInputTest<BufferByteInput, ByteBuffer> {
 
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
      * Creates a new instance.
-     *
-     * @param byteInputClass a byte input class.
      */
-    BufferByteInputTest(final Class<T> byteInputClass) {
-        super(byteInputClass, ByteBuffer.class);
+    BufferByteInputTest() {
+        super(BufferByteInput.class, ByteBuffer.class);
     }
 }

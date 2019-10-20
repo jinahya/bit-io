@@ -31,12 +31,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import java.io.IOException;
-import java.util.Objects;
 
 import static com.github.jinahya.bit.io.BitIoTests.acceptRandomSizeByte;
 import static com.github.jinahya.bit.io.BitIoTests.acceptRandomSizeInt;
 import static com.github.jinahya.bit.io.BitIoTests.acceptRandomSizeLong;
 import static com.github.jinahya.bit.io.BitIoTests.acceptRandomSizeShort;
+import static java.util.Objects.requireNonNull;
 import static java.util.concurrent.ThreadLocalRandom.current;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -59,17 +59,17 @@ public abstract class BitInputTest<T extends BitInput> {
      */
     public BitInputTest(final Class<T> bitInputClass) {
         super();
-        this.bitInputClass = Objects.requireNonNull(bitInputClass, "bitInputClass is null");
+        this.bitInputClass = requireNonNull(bitInputClass, "bitInputClass is null");
     }
 
     // -----------------------------------------------------------------------------------------------------------------
     @BeforeEach
-    void selectBitInput() {
+    void select() {
         bitInput = bitInputInstance.select(bitInputClass).get();
     }
 
     @AfterEach
-    void dotAlign() throws IOException {
+    void align() throws IOException {
         final long bits = bitInput.align(current().nextInt(1, 16));
         assertTrue(bits >= 0L);
     }
@@ -193,7 +193,7 @@ public abstract class BitInputTest<T extends BitInput> {
     /**
      * The bit input class to test.
      */
-    protected final Class<T> bitInputClass;
+    final Class<T> bitInputClass;
 
     @Inject
     private Instance<BitInput> bitInputInstance;

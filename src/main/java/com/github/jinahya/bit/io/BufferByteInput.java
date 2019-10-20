@@ -57,17 +57,4 @@ public class BufferByteInput extends AbstractByteInput<ByteBuffer> {
     public int read() throws IOException {
         return getSource().get() & 0xFF;
     }
-
-    // ---------------------------------------------------------------------------------------------------------- source
-
-    /**
-     * {@inheritDoc}
-     *
-     * @param source {@inheritDoc}
-     * @return {@inheritDoc}
-     */
-    @Override
-    public BufferByteInput source(final ByteBuffer source) {
-        return (BufferByteInput) super.source(source);
-    }
 }

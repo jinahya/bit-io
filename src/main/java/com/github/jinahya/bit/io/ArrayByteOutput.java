@@ -88,17 +88,6 @@ public class ArrayByteOutput extends AbstractByteOutput<byte[]> {
         this.index = index;
     }
 
-    /**
-     * Replaces the {@code index} with given and returns self.
-     *
-     * @param index new value for {@code index}
-     * @return this instance.
-     */
-    public ArrayByteOutput index(final int index) {
-        setIndex(index);
-        return this;
-    }
-
     // -----------------------------------------------------------------------------------------------------------------
 
     /**

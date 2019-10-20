@@ -26,12 +26,19 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 /**
- * An abstract class for testing subclasses of {@link DefaultBitInput}.
+ * A class for unit-testing {@link DefaultBitInput} class.
+ *
+ * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
+ * @see DefaultBitOutputTest
  */
 @ExtendWith({MockitoExtension.class})
 public class DefaultBitInputTest extends AbstractBitInputTest<DefaultBitInput> {
 
     // -----------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Creates a new instance.
+     */
     public DefaultBitInputTest() {
         super(DefaultBitInput.class);
     }

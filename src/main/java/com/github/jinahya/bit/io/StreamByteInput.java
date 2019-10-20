@@ -62,17 +62,4 @@ public class StreamByteInput extends AbstractByteInput<InputStream> {
         }
         return value;
     }
-
-    // ---------------------------------------------------------------------------------------------------------- source
-
-    /**
-     * {@inheritDoc}
-     *
-     * @param source {@inheritDoc}
-     * @return {@inheritDoc}
-     */
-    @Override
-    public StreamByteInput source(final InputStream source) {
-        return (StreamByteInput) super.source(source);
-    }
 }

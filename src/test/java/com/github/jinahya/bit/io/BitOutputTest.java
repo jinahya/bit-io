@@ -62,12 +62,12 @@ public abstract class BitOutputTest<T extends BitOutput> {
 
     // -----------------------------------------------------------------------------------------------------------------
     @BeforeEach
-    void selectBitInput() {
+    void select() {
         bitOutput = bitOutputInstance.select(bitOutputClass).get();
     }
 
     @AfterEach
-    void dotAlign() throws IOException {
+    void align() throws IOException {
         final long bits = bitOutput.align(current().nextInt(1, 16));
         assertTrue(bits >= 0L);
     }

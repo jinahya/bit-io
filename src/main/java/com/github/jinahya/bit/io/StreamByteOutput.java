@@ -56,17 +56,4 @@ public class StreamByteOutput extends AbstractByteOutput<OutputStream> {
     public void write(final int value) throws IOException {
         getTarget().write(value);
     }
-
-    // ---------------------------------------------------------------------------------------------------------- target
-
-    /**
-     * {@inheritDoc}
-     *
-     * @param target {@inheritDoc}
-     * @return {@inheritDoc}
-     */
-    @Override
-    public StreamByteOutput target(final OutputStream target) {
-        return (StreamByteOutput) super.target(target);
-    }
 }

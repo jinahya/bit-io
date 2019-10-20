@@ -18,9 +18,6 @@ public class BitInputs {
         if (input == null) {
             throw new NullPointerException("input is null");
         }
-        if (input.readBoolean()) {
-            return 0;
-        }
         final int size = input.readInt(true, 5);
         return input.readInt(true, size);
     }

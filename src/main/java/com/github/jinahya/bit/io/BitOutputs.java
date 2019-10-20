@@ -3,9 +3,7 @@ package com.github.jinahya.bit.io;
 import java.io.IOException;
 
 import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeByte;
-import static java.lang.Math.ceil;
-import static java.lang.Math.log;
-import static java.lang.Math.ulp;
+import static java.lang.Math.*;
 
 public class BitOutputs {
 
@@ -39,8 +37,7 @@ public class BitOutputs {
             output.writeBoolean(true);
             return;
         }
-        final int size = (int) ceil(log(length) / log(2.0d) + ulp(1.0d));
-        assert size < 32;
+        final int size = length <= 1 ? 1 : (int) ceil(log(length) / log(2.0d) + ulp(1.0d));
         output.writeUnsignedInt(5, size);
         output.writeUnsignedInt(size, length);
     }
@@ -82,7 +79,38 @@ public class BitOutputs {
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    public static void writeString(final boolean nullable, final BitOutput output, final String value, final String charset) {
+    public static void writeString(final boolean nullable, final BitOutput output, final String value,
+                                   final String charset)
+            throws IOException {
+        if (output == null) {
+            throw new NullPointerException("bitOutput is null");
+        }
+        if (nullable && writeBooleanIsNextNull(output, value)) {
+            return;
+        }
+        if (value == null) {
+            throw new NullPointerException("value is null");
+        }
+        if (charset == null) {
+            throw new NullPointerException("charset is null");
+        }
+        final byte[] bytes = value.getBytes(charset);
+        writeBytes(false, output, false, 8, bytes);
+    }
+
+    public static void writeAsciiString(final boolean nullable, final BitOutput output, final String value)
+            throws IOException {
+        if (output == null) {
+            throw new NullPointerException("bitOutput is null");
+        }
+        if (nullable && writeBooleanIsNextNull(output, value)) {
+            return;
+        }
+        if (value == null) {
+            throw new NullPointerException("value is null");
+        }
+        final byte[] bytes = value.getBytes("US-ASCII");
+        writeBytes(false, output, true, 7, bytes);
     }
 
     // -----------------------------------------------------------------------------------------------------------------

@@ -55,7 +55,7 @@ new StreamByteInput(java.io.InputStream);
 Constructors of these classes don't check arguments which means you can lazily instantiate and set them.
 
 ```java
-final ByteInput input = new ArrayByteInput(null, -1) {
+final ByteInput input = new ArrayByteInput(null) {
     @Override
     public int read() throws IOException {
         // initialize the `source` field value
@@ -65,7 +65,7 @@ final ByteInput input = new ArrayByteInput(null, -1) {
         }
         // read bytes from the stream if empty
         if (getIndex() == getSource().length) {
-            if (stream.read(getSource(source)) == -1) {
+            if (stream.read(getSource()) == -1) {
                 throw new EOFException("unexpected end of stream");
             }
             setIndex(0);

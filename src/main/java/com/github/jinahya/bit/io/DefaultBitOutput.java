@@ -80,5 +80,5 @@ public class DefaultBitOutput extends AbstractBitOutput {
     /**
      * The delegate whose {@link ByteOutput#write(int)} method is invoked via {@link #write(int)} method.
      */
-    protected ByteOutput delegate;
+    private ByteOutput delegate;
 }

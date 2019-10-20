@@ -59,16 +59,16 @@ final ByteInput input = new ArrayByteInput(null, -1) {
     @Override
     public int read() throws IOException {
         // initialize the `source` field value
-        if (source == null) {
-            source = byte[16];
-            index = source.length;
+        if (getSource() == null) {
+            setSource(byte[16]);
+            setIndex(getSource().length);
         }
         // read bytes from the stream if empty
-        if (index == source.length) {
-            if (stream.read(source) == -1) {
+        if (getIndex() == getSource().length) {
+            if (stream.read(getSource(source)) == -1) {
                 throw new EOFException("unexpected end of stream");
             }
-            index = 0;
+            setIndex(0);
         }
         return super.read();
     }
@@ -83,17 +83,17 @@ Construct with an already existing `ByteInput`.
 
 ```java
 final ByteInput byteInput = createByteInput();
-final BitInput bitInput = new DefalutBitInput<>(byteInput);
+final BitInput bitInput = new DefalutBitInput(byteInput);
 ```
 
 Or lazily instantiate its `delegate` field.
 
 ```java
-new DefaultBitInput<StreamByteInput>(null) {
+new DefaultBitInput(null) {
     @Override
     public int read() throws IOException {
-        if (delegate == null) {
-            delegate = new StreamByteInput(openFile());
+        if (getDelegate() == null) {
+            setDelegate(new StreamByteInput(openFile()));
         }
         return super.read();
     }

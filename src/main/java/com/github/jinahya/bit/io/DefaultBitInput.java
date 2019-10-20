@@ -81,5 +81,5 @@ public class DefaultBitInput extends AbstractBitInput {
     /**
      * The delegate whose {@link ByteInput#read()} method is invoked via {@link #read()} method.
      */
-    protected ByteInput delegate;
+    private ByteInput delegate;
 }

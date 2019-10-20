@@ -162,6 +162,17 @@ public abstract class AbstractBitInput implements BitInput {
     }
 
     @Override
+    public int readSignedInt(final int size) throws IOException {
+        return readInt(false, size);
+    }
+
+    @Override
+    public int readUnsignedInt(final int size) throws IOException {
+        return readInt(true, size);
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    @Override
     public long readLong(final boolean unsigned, final int size) throws IOException {
         requireValidSizeLong(unsigned, size);
         if (!unsigned) {
@@ -185,6 +196,16 @@ public abstract class AbstractBitInput implements BitInput {
             value |= readInt(true, remainder);
         }
         return value;
+    }
+
+    @Override
+    public long readSignedLong(final int size) throws IOException {
+        return readLong(false, size);
+    }
+
+    @Override
+    public long readUnsignedLong(final int size) throws IOException {
+        return readLong(true, size);
     }
 
     // -----------------------------------------------------------------------------------------------------------------

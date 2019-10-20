@@ -113,25 +113,64 @@ public interface BitInput {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * Reads an int value.
+     * Reads an {@code int} value of specified bit size.
      *
      * @param unsigned a flag for indicating unsigned value; {@code true} for unsigned, {@code false} for signed.
-     * @param size     number of bits for value; between {@code 1} and {@code 31 + (unsigned ? 0 : 1)}, both inclusive.
-     * @return an int value
+     * @param size     number of bits for value; between {@code 1} and ({@code 31 + (unsigned ? 0 : 1)}), both
+     *                 inclusive.
+     * @return an int value.
      * @throws IOException if an I/O error occurs.
      */
     int readInt(boolean unsigned, int size) throws IOException;
 
     /**
-     * Reads a long value.
+     * Reads a signed {@code int} value of specified bit size.
+     *
+     * @param size number of bits for value; between {@code 1} and {@value Integer#SIZE}, both inclusive.
+     * @return a signed {@code int} value of specified bit size.
+     * @throws IOException if an I/O error occurs.
+     */
+    int readSignedInt(int size) throws IOException;
+
+    /**
+     * Reads an unsigned {@code int} value of specified bit size.
+     *
+     * @param size number of bits for value; between {@code 1} and {@code 31}, both inclusive.
+     * @return an unsigned {@code int} value of specified bit size.
+     * @throws IOException if an I/O error occurs.
+     */
+    int readUnsignedInt(int size) throws IOException;
+
+    // -----------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Reads a {@code long} value of specified bit size.
      *
      * @param unsigned a flag for indicating unsigned value; {@code true} for unsigned, {@code false} for signed.
-     * @param size     number of valid bits for value between {@code 1} and {@code 63 + (unsigned ? 0 : 1)}, both
+     * @param size     the number of bits to read; between {@code 1} and ({@code 63 + (unsigned ? 0 : 1)}), both
      *                 inclusive.
-     * @return a long value
+     * @return a {@code long} value of specified bit size.
      * @throws IOException if an I/O error occurs.
      */
     long readLong(boolean unsigned, int size) throws IOException;
+
+    /**
+     * Reads a signed {@code long} value of specified bit size.
+     *
+     * @param size the number of bits to read; between {@code 1} and {@value Long#SIZE}, both inclusive.
+     * @return an unsigned {@code long} value of specified bit size.
+     * @throws IOException if an I/O error occurs.
+     */
+    long readSignedLong(int size) throws IOException;
+
+    /**
+     * Reads a signed {@code long} value of specified bit size.
+     *
+     * @param size the number of bits to read; between {@code 1} and {@code 63}, both inclusive.
+     * @return a {@code long} value of specified bit size.
+     * @throws IOException if an I/O error occurs.
+     */
+    long readUnsignedLong(int size) throws IOException;
 
     // -----------------------------------------------------------------------------------------------------------------
 

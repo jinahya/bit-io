@@ -30,152 +30,125 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.io.IOException;
 
 import static java.util.concurrent.ThreadLocalRandom.current;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+/**
+ * A class for unit-testing {@link AbstractBitOutput} class.
+ *
+ * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
+ */
 @ExtendWith({MockitoExtension.class})
 @Slf4j
-public class AbstractBitInputSpyTest {
+public class AbstractBitOutputSpyTest {
 
     // -----------------------------------------------------------------------------------------------------------------
     @BeforeEach
-    void stubRead() throws IOException {
-        //when(bitInput.read()).thenReturn(current().nextInt(0, 256));
+    void stubWrite() throws IOException {
+        //doNothing().when(bitOutput).write(anyInt());
     }
 
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * Tests {@link AbstractBitInput#readSignedByte(int)} method.
+     * Tests {@link AbstractBitOutput#writeSignedByte(int, byte)} method.
      *
      * @throws IOException if an I/O error occurs.
      */
     @RepeatedTest(8)
-    public void testReadSignedByte() throws IOException {
+    public void testWriteSignedByte() throws IOException {
         final int size = current().nextInt(1, Byte.SIZE + 1);
-        final byte value = bitInput.readSignedByte(size);
-        if (value >= 0) {
-            assertEquals(0, value >> size);
-        } else {
-            assertEquals(-1, value >> (size - 1));
-        }
+        final byte value = (byte) (current().nextInt() >> (Integer.SIZE - size));
+        bitOutput.writeSignedByte(size, value);
     }
 
     /**
-     * Tests {@link AbstractBitInput#readUnsignedByte(int)} method.
+     * Tests {@link AbstractBitOutput#writeUnsignedByte(int, byte)} method.
      *
      * @throws IOException if an I/O error occurs.
      */
     @RepeatedTest(8)
-    public void testReadUnsignedByte() throws IOException {
+    public void testWriteUnsignedByte() throws IOException {
         final int size = current().nextInt(1, Byte.SIZE);
-        final byte value = bitInput.readUnsignedByte(size);
+        final byte value = (byte) (current().nextInt() >>> (Integer.SIZE - size));
         assertTrue(value >= 0);
-        assertEquals(0, value >> size);
+        bitOutput.writeUnsignedByte(size, value);
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-
-    /**
-     * Tests {@link AbstractBitInput#readSignedShort(int)} method.
-     *
-     * @throws IOException if an I/O error occurs.
-     */
     @RepeatedTest(8)
-    public void testReadSignedShort() throws IOException {
+    public void testWriteSignedShort() throws IOException {
         final int size = current().nextInt(1, Short.SIZE + 1);
-        final short value = bitInput.readSignedShort(size);
-        if (value >= 0) {
-            assertEquals(0, value >> size);
-        } else {
-            assertEquals(-1, value >> (size - 1));
-        }
+        final short value = (short) (current().nextInt() >> (Integer.SIZE - size));
+        bitOutput.writeSignedShort(size, value);
     }
 
-    /**
-     * Tests {@link AbstractBitInput#readUnsignedShort(int)} method.
-     *
-     * @throws IOException if an I/O error occurs.
-     */
     @RepeatedTest(8)
-    public void testReadUnsignedShort() throws IOException {
+    public void testWriteUnsignedShort() throws IOException {
         final int size = current().nextInt(1, Short.SIZE);
-        final short value = bitInput.readUnsignedShort(size);
+        final short value = (short) (current().nextInt() >>> (Integer.SIZE - size));
         assertTrue(value >= 0);
-        assertEquals(0, value >> size);
+        bitOutput.writeUnsignedShort(size, value);
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-
-    /**
-     * Tests {@link AbstractBitInput#readSignedInt(int)} method.
-     *
-     * @throws IOException if an I/O error occurs.
-     */
     @RepeatedTest(8)
-    public void testReadSignedInt() throws IOException {
+    public void testWriteSignedInt() throws IOException {
         final int size = current().nextInt(1, Integer.SIZE + 1);
-        final int value = bitInput.readSignedInt(size);
-        if (value >= 0) {
-            assertEquals(0, value >> size);
-        } else {
-            assertEquals(-1, value >> (size - 1));
-        }
+        final int value = current().nextInt() >> (Integer.SIZE - size);
+        bitOutput.writeSignedInt(size, value);
     }
 
-    /**
-     * Tests {@link AbstractBitInput#readUnsignedInt(int)} method.
-     *
-     * @throws IOException if an I/O error occurs.
-     */
     @RepeatedTest(8)
-    public void testReadUnsignedInt() throws IOException {
+    public void testWriteUnsignedInt() throws IOException {
         final int size = current().nextInt(1, Integer.SIZE);
-        final int value = bitInput.readUnsignedInt(size);
+        final int value = current().nextInt() >>> (Integer.SIZE - size);
         assertTrue(value >= 0);
-        assertEquals(0, value >> size);
+        bitOutput.writeUnsignedInt(size, value);
     }
 
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * Tests {@link AbstractBitInput#readSignedLong(int)} method.
+     * Test {@link AbstractBitOutput#writeSignedLong(int, long)} method.
      *
      * @throws IOException if an I/O error occurs.
      */
     @RepeatedTest(8)
-    public void testReadSignedLong() throws IOException {
-        final int size = current().nextInt(1, Integer.SIZE + 1);
-        final int value = bitInput.readSignedInt(size);
-        if (value >= 0) {
-            assertEquals(0, value >> size);
-        } else {
-            assertEquals(-1, value >> (size - 1));
-        }
+    public void testWriteSignedLong() throws IOException {
+        final int size = current().nextInt(1, Long.SIZE + 1);
+        final long value = current().nextLong() >> (Long.SIZE - size);
+        bitOutput.writeSignedLong(size, value);
     }
 
     /**
-     * Tests {@link AbstractBitInput#readUnsignedLong(int)} method.
+     * Tests {@link AbstractBitOutput#writeUnsignedLong(int, long)} method.
      *
      * @throws IOException if an I/O error occurs.
      */
     @RepeatedTest(8)
-    public void testReadUnsignedLong() throws IOException {
-        final int size = current().nextInt(1, Integer.SIZE);
-        final int value = bitInput.readUnsignedInt(size);
-        assertTrue(value >= 0);
-        assertEquals(0, value >> size);
+    public void testWriteUnsignedLong() throws IOException {
+        final int size = current().nextInt(1, Long.SIZE);
+        final long value = current().nextLong() >>> (Integer.SIZE - size);
+        assertTrue(value >= 0L);
+        bitOutput.writeUnsignedLong(size, value);
     }
 
     // -----------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Tests {@link AbstractBitOutput#writeChar(int, char)} method.
+     *
+     * @throws IOException if an I/O error occurs.
+     */
     @RepeatedTest(8)
-    public void testReadChar() throws IOException {
+    public void testWriteChar() throws IOException {
         final int size = current().nextInt(1, Character.SIZE + 1);
-        final char value = bitInput.readChar(size);
+        final char value = (char) (current().nextInt() >>> (Integer.SIZE - size));
+        bitOutput.writeChar(size, value);
     }
 
     // -----------------------------------------------------------------------------------------------------------------
 
     @Spy
-    private AbstractBitInput bitInput;
+    private AbstractBitOutput bitOutput;
 }

@@ -97,7 +97,7 @@ public abstract class BitInputTest<T extends BitInput> {
                      () -> bitInput.readByte(current().nextBoolean(), current().nextInt() | Integer.MIN_VALUE));
     }
 
-    @RepeatedTest(128)
+    @RepeatedTest(8)
     public void testReadByte() {
         acceptRandomSizeByte((unsigned, size) -> {
             final byte value;
@@ -111,7 +111,7 @@ public abstract class BitInputTest<T extends BitInput> {
     }
 
     // ----------------------------------------------------------------------------------------------------------- short
-    @RepeatedTest(128)
+    @RepeatedTest(8)
     public void testReadShort() {
         acceptRandomSizeShort((unsigned, size) -> {
             final short value;
@@ -129,7 +129,7 @@ public abstract class BitInputTest<T extends BitInput> {
     /**
      * Tests {@link BitInput#readInt(boolean, int)}.
      */
-    @RepeatedTest(128)
+    @RepeatedTest(8)
     public void testReadInt() {
         acceptRandomSizeInt((unsigned, size) -> {
             final int value;
@@ -143,7 +143,7 @@ public abstract class BitInputTest<T extends BitInput> {
     }
 
     // ------------------------------------------------------------------------------------------------------------ long
-    @RepeatedTest(128)
+    @RepeatedTest(8)
     public void testReadLong() {
         acceptRandomSizeLong((unsigned, size) -> {
             final long value;

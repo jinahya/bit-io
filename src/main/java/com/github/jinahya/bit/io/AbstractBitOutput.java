@@ -101,16 +101,40 @@ public abstract class AbstractBitOutput implements BitOutput {
         writeInt(true, 1, value ? 1 : 0);
     }
 
+    // -----------------------------------------------------------------------------------------------------------------
     @Override
     public void writeByte(final boolean unsigned, final int size, final byte value) throws IOException {
         writeInt(unsigned, requireValidSizeByte(unsigned, size), value);
     }
 
     @Override
+    public void writeSignedByte(final int size, final byte value) throws IOException {
+        writeByte(false, size, value);
+    }
+
+    @Override
+    public void writeUnsignedByte(final int size, final byte value) throws IOException {
+        writeByte(true, size, value);
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+
+    @Override
     public void writeShort(final boolean unsigned, final int size, final short value) throws IOException {
         writeInt(unsigned, requireValidSizeShort(unsigned, size), value);
     }
 
+    @Override
+    public void writeSignedShort(final int size, final short value) throws IOException {
+        writeShort(false, size, value);
+    }
+
+    @Override
+    public void writeUnsignedShort(final int size, final short value) throws IOException {
+        writeShort(true, size, value);
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
     @Override
     public void writeInt(final boolean unsigned, final int size, final int value) throws IOException {
         requireValidSizeInt(unsigned, size);
@@ -125,6 +149,17 @@ public abstract class AbstractBitOutput implements BitOutput {
     }
 
     @Override
+    public void writeSignedInt(final int size, final int value) throws IOException {
+        writeInt(false, size, value);
+    }
+
+    @Override
+    public void writeUnsignedInt(final int size, final int value) throws IOException {
+        writeInt(true, size, value);
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    @Override
     public void writeLong(final boolean unsigned, final int size, final long value) throws IOException {
         requireValidSizeLong(unsigned, size);
         final int quotient = size / Integer.SIZE;
@@ -138,10 +173,22 @@ public abstract class AbstractBitOutput implements BitOutput {
     }
 
     @Override
+    public void writeSignedLong(final int size, final long value) throws IOException {
+        writeLong(false, size, value);
+    }
+
+    @Override
+    public void writeUnsignedLong(final int size, final long value) throws IOException {
+        writeLong(true, size, value);
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    @Override
     public void writeChar(final int size, final char value) throws IOException {
         writeInt(true, requireValidSizeChar(size), value);
     }
 
+    // -----------------------------------------------------------------------------------------------------------------
     @Override
     public long align(final int bytes) throws IOException {
         if (bytes <= 0) {

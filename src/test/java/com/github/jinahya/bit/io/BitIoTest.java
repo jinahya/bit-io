@@ -23,7 +23,6 @@ package com.github.jinahya.bit.io;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.ArgumentsSource;
-import org.junit.jupiter.params.provider.MethodSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -319,27 +318,6 @@ class BitIoTest {
             final int size = (Integer) list.remove(0);
             final long expected = (Long) list.remove(0);
             final long actual = input.readLong(unsigned, size);
-            assertEquals(expected, actual);
-        }
-        input.align(1);
-    }
-
-    @MethodSource({"source"})
-    @ParameterizedTest
-    void testObject(final BitOutput output, final Supplier<BitInput> inputSupplier) throws IOException {
-        final List<Profile> list = new LinkedList<>();
-        final int count = current().nextInt(4);
-        for (int i = 0; i < count; i++) {
-            final Profile profile = Profile.newInstance();
-            list.add(profile);
-            profile.write(output);
-        }
-        output.align(1);
-        final BitInput input = inputSupplier.get();
-        for (int i = 0; i < count; i++) {
-            final Profile expected = list.remove(0);
-            final Profile actual = new Profile();
-            actual.read(input);
             assertEquals(expected, actual);
         }
         input.align(1);

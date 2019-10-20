@@ -42,48 +42,127 @@ public interface BitOutput {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * Writes a {@code byte} value.
+     * Writes a {@code byte} value of specified bit size.
      *
      * @param unsigned a flag for indicating unsigned value; {@code true} for unsigned, {@code false} for signed.
      * @param size     the number of bits for value; between {@code 1} and {@code 7 + (unsigned ? 0 : 1)}, both
      *                 inclusive.
-     * @param value    the value to write
+     * @param value    the value to write.
      * @throws IOException if an I/O error occurs.
      */
     void writeByte(boolean unsigned, int size, byte value) throws IOException;
 
     /**
-     * Writes a {@code short} value.
+     * Writes a signed {@code byte} value of specified bit size.
+     *
+     * @param size  the number of bits for value; between {@code 1} and {@value Byte#SIZE}, both inclusive.
+     * @param value the value to write.
+     * @throws IOException if an I/O error occurs.
+     */
+    void writeSignedByte(int size, byte value) throws IOException;
+
+    /**
+     * Writes an unsigned {@code byte} value of specified bit size.
+     *
+     * @param size  the number of bits for value; between {@code 1} and {@code 7}, both inclusive.
+     * @param value the value to write.
+     * @throws IOException if an I/O error occurs.
+     */
+    void writeUnsignedByte(int size, byte value) throws IOException;
+
+    // -----------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Writes a {@code short} value of specified bit size.
      *
      * @param unsigned a flag for indicating unsigned value; {@code true} for unsigned, {@code false} for signed.
      * @param size     the number of bits for value; between {@code 1} and {@code 15 + (unsigned ? 0 : 1)}, both
      *                 inclusive.
-     * @param value    the value to write
+     * @param value    the value to write.
      * @throws IOException if an I/O error occurs.
      */
     void writeShort(boolean unsigned, int size, short value) throws IOException;
 
     /**
-     * Writes an {@code int} value. Only the lower specified number of bits are written.
+     * Writes a signed {@code short} value of specified bit size.
+     *
+     * @param size  the number of bits for value; between {@code 1} and {@value Short#SIZE}, both inclusive.
+     * @param value the value to write.
+     * @throws IOException if an I/O error occurs.
+     */
+    void writeSignedShort(int size, short value) throws IOException;
+
+    /**
+     * Writes an unsigned {@code short} value of specified bit size.
+     *
+     * @param size  the number of bits for value; between {@code 1} and {@code 15}, both inclusive.
+     * @param value the value to write.
+     * @throws IOException if an I/O error occurs.
+     */
+    void writeUnsignedShort(int size, short value) throws IOException;
+
+    // -----------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Writes an {@code int} value of specified bit size. Only the lower number of specified bits are written.
      *
      * @param unsigned a flag for indicating unsigned value; {@code true} for unsigned, {@code false} for signed.
      * @param size     the number of bits for value; between {@code 1} and {@code 31 + (unsigned ? 0 : 1)}, both
      *                 inclusive.
-     * @param value    the value to write
+     * @param value    the value to write.
      * @throws IOException if an I/O error occurs.
      */
     void writeInt(boolean unsigned, int size, int value) throws IOException;
 
     /**
-     * Writes a {@code long} value. Only the lower specified number of bits are written.
+     * Writes a signed {@code int} value of specified bit size. Only the lower number of specified bits are written.
+     *
+     * @param size  the number of bits for value; between {@code 1} and {@value Integer#SIZE}, both inclusive.
+     * @param value the value to write.
+     * @throws IOException if an I/O error occurs.
+     */
+    void writeSignedInt(int size, int value) throws IOException;
+
+    /**
+     * Writes an unsigned {@code int} value of specified bit size. Only the lower number of specified bits are written.
+     *
+     * @param size  the number of bits for value; between {@code 1} and {@code 31}, both inclusive.
+     * @param value the value to write.
+     * @throws IOException if an I/O error occurs.
+     */
+    void writeUnsignedInt(int size, int value) throws IOException;
+
+    // -----------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Writes a {@code long} value of specified bit size. Only the lower number of specified bits are written.
      *
      * @param unsigned a flag for indicating unsigned value; {@code true} for unsigned, {@code false} for signed.
      * @param size     the number of valid bits for value; between {@code 1} and {@code 63 + (unsigned ? 0 : 1)}, both
      *                 inclusive.
-     * @param value    the value to write
+     * @param value    the value to write.
      * @throws IOException if an I/O error occurs.
      */
     void writeLong(boolean unsigned, int size, long value) throws IOException;
+
+    /**
+     * Writes a signed {@code long} value of specified bit size. Only the lower number of specified bits are written.
+     *
+     * @param size  the number of valid bits for value; between {@code 1} and {@value Long#SIZE}, both inclusive.
+     * @param value the value to write.
+     * @throws IOException if an I/O error occurs.
+     */
+    void writeSignedLong(int size, long value) throws IOException;
+
+    /**
+     * Writes an unsigned {@code long} value of specified bit size. Only the lower number of specified bits are
+     * written.
+     *
+     * @param size  the number of valid bits for value; between {@code 1} and {@code 63}, both inclusive.
+     * @param value the value to write.
+     * @throws IOException if an I/O error occurs.
+     */
+    void writeUnsignedLong(int size, long value) throws IOException;
 
     // -----------------------------------------------------------------------------------------------------------------
 

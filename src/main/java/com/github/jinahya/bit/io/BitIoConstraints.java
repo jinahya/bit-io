@@ -142,6 +142,10 @@ final class BitIoConstraints {
     }
 
     // -----------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Creates a new instance.
+     */
     private BitIoConstraints() {
         super();
     }

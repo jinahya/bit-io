@@ -26,6 +26,7 @@ import java.io.OutputStream;
 /**
  * An output stream whose {@link OutputStream#write(int)} does nothing.
  *
+ * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  * @see WhiteInputStream
  */
 class BlackOutputStream extends OutputStream {

@@ -26,6 +26,7 @@ import java.io.IOException;
  * A byte input reading bytes from an array of bytes.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
+ * @see ArrayByteOutput
  */
 public class ArrayByteInput extends AbstractByteInput<byte[]> {
 
@@ -52,13 +53,7 @@ public class ArrayByteInput extends AbstractByteInput<byte[]> {
      */
     @Override
     public int read() throws IOException {
-        return source[index++] & 0xFF;
-    }
-
-    // ---------------------------------------------------------------------------------------------------------- source
-    @Override
-    public ArrayByteInput source(final byte[] target) {
-        return (ArrayByteInput) super.source(target);
+        return getSource()[index++] & 0xFF;
     }
 
     // ----------------------------------------------------------------------------------------------------------- index
@@ -86,5 +81,5 @@ public class ArrayByteInput extends AbstractByteInput<byte[]> {
     /**
      * The index in the {@code source} to read.
      */
-    int index;
+    private int index;
 }

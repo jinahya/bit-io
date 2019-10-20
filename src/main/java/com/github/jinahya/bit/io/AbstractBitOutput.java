@@ -34,7 +34,7 @@ import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeUnsigne
  * An abstract class for implementing {@link BitInput}.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
- * @see AbstractBitInput
+ * @see AbstractByteInput
  */
 public abstract class AbstractBitOutput implements BitOutput {
 

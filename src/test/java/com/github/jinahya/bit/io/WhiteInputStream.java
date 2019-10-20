@@ -23,10 +23,11 @@ package com.github.jinahya.bit.io;
 import java.io.IOException;
 import java.io.InputStream;
 
-import static java.util.concurrent.ThreadLocalRandom.current;
-
 /**
- * A class of {@link InputStream} whose {@link InputStream#read()} returns a random value.
+ * An input stream whose {@link InputStream#read()} returns zero.
+ *
+ * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
+ * @see BlackOutputStream
  */
 class WhiteInputStream extends InputStream {
 
@@ -40,6 +41,6 @@ class WhiteInputStream extends InputStream {
      */
     @Override
     public int read() throws IOException {
-        return current().nextInt(0, 256);
+        return 0;
     }
 }

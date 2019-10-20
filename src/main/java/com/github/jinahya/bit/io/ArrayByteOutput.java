@@ -26,6 +26,7 @@ import java.io.IOException;
  * A byte output writes byte to an array of bytes.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
+ * @see ArrayByteInput
  */
 public class ArrayByteOutput extends AbstractByteOutput<byte[]> {
 
@@ -52,20 +53,7 @@ public class ArrayByteOutput extends AbstractByteOutput<byte[]> {
      */
     @Override
     public void write(final int value) throws IOException {
-        target[index++] = (byte) value;
-    }
-
-    // ---------------------------------------------------------------------------------------------------------- target
-
-    /**
-     * Replaces the {@code target} with given and returns self.
-     *
-     * @param target new value for {@code target}
-     * @return this instance.
-     */
-    @Override
-    public ArrayByteOutput target(final byte[] target) {
-        return (ArrayByteOutput) super.target(target);
+        getTarget()[index++] = (byte) value;
     }
 
     // ----------------------------------------------------------------------------------------------------------- index
@@ -93,5 +81,5 @@ public class ArrayByteOutput extends AbstractByteOutput<byte[]> {
     /**
      * The index in the {@code target} to write.
      */
-    int index;
+    private int index;
 }

@@ -25,6 +25,7 @@ package com.github.jinahya.bit.io;
  *
  * @param <T> byte target type parameter
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
+ * @see ArrayByteInput
  */
 public abstract class AbstractByteOutput<T> implements ByteOutput {
 
@@ -60,22 +61,10 @@ public abstract class AbstractByteOutput<T> implements ByteOutput {
         this.target = target;
     }
 
-    /**
-     * Replaces the value of {@code target} with given and returns this instance.
-     *
-     * @param target new value for {@code target}.
-     * @return this instance.
-     * @see #setTarget(java.lang.Object)
-     */
-    public AbstractByteOutput<T> target(final T target) {
-        setTarget(target);
-        return this;
-    }
-
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
      * The underlying byte target.
      */
-    T target;
+    private T target;
 }

@@ -14,12 +14,20 @@ public class BitInputs {
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    protected static int readLength(final BitInput input) throws IOException {
+    protected static int readUnsignedIntVariable(final BitInput input) throws IOException {
         if (input == null) {
             throw new NullPointerException("input is null");
         }
-        final int size = input.readInt(true, 5);
-        return input.readInt(true, size);
+        final int size = input.readUnsignedInt(5);
+        return input.readUnsignedInt(size);
+    }
+
+    protected static long readUnsignedLongVariable(final BitInput input) throws IOException {
+        if (input == null) {
+            throw new NullPointerException("input is null");
+        }
+        final int size = input.readUnsignedInt(6);
+        return input.readUnsignedLong(size);
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -80,7 +88,7 @@ public class BitInputs {
         if (nullable && readBooleanIsNextNull(input)) {
             return null;
         }
-        final byte[] bytes = new byte[readLength(input)];
+        final byte[] bytes = new byte[readUnsignedIntVariable(input)];
         for (int i = 0; i < bytes.length; i++) {
             bytes[i] = input.readByte(unsigned, size);
         }

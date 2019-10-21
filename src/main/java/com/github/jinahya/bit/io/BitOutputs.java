@@ -3,7 +3,9 @@ package com.github.jinahya.bit.io;
 import java.io.IOException;
 
 import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeByte;
-import static java.lang.Math.*;
+import static java.lang.Math.ceil;
+import static java.lang.Math.log;
+import static java.lang.Math.ulp;
 
 public class BitOutputs {
 
@@ -26,20 +28,28 @@ public class BitOutputs {
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    protected static void writeLength(final BitOutput output, final int length) throws IOException {
+    public static void writeUnsignedIntVariable(final BitOutput output, final int value) throws IOException {
         if (output == null) {
             throw new NullPointerException("output is null");
         }
-        if (length < 0) {
-            throw new IllegalArgumentException("length(" + length + ") < 0");
+        if (value < 0) {
+            throw new IllegalArgumentException("length(" + value + ") < 0");
         }
-        if (length == 0) {
-            output.writeBoolean(true);
-            return;
-        }
-        final int size = length <= 1 ? 1 : (int) ceil(log(length) / log(2.0d) + ulp(1.0d));
+        final int size = value < 2 ? 1 : (int) ceil(log(value) / log(2.0d) + ulp(1.0d));
         output.writeUnsignedInt(5, size);
-        output.writeUnsignedInt(size, length);
+        output.writeUnsignedInt(size, value);
+    }
+
+    public static void writeUnsignedLongVariable(final BitOutput output, final long value) throws IOException {
+        if (output == null) {
+            throw new NullPointerException("output is null");
+        }
+        if (value < 0L) {
+            throw new IllegalArgumentException("length(" + value + ") < 0L");
+        }
+        final int size = value < 2L ? 1 : (int) ceil(log(value) / log(2.0d) + ulp(1.0d));
+        output.writeUnsignedLong(6, size);
+        output.writeUnsignedLong(size, value);
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -72,7 +82,7 @@ public class BitOutputs {
         if (value == null) {
             throw new NullPointerException("value is null");
         }
-        writeLength(output, value.length);
+        writeUnsignedIntVariable(output, value.length);
         for (final byte v : value) {
             output.writeByte(unsigned, size, v);
         }

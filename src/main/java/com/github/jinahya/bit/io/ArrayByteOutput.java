@@ -45,6 +45,20 @@ public class ArrayByteOutput extends AbstractByteOutput<byte[]> {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
+     * Returns a string representation of the object.
+     *
+     * @return a string representation of the object.
+     */
+    @Override
+    public String toString() {
+        return super.toString() + "{"
+               + "index=" + index
+               + "}";
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+
+    /**
      * {@inheritDoc} The {@code write(int)} method of {@code ArrayByteOutput} class sets {@code target[index++]} with
      * given value.
      *

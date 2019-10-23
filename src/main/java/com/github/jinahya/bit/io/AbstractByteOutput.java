@@ -40,6 +40,19 @@ public abstract class AbstractByteOutput<T> implements ByteOutput {
         super();
         this.target = target;
     }
+    // -----------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Returns a string representation of the object.
+     *
+     * @return a string representation of the object.
+     */
+    @Override
+    public String toString() {
+        return super.toString() + "{"
+               + "target=" + target
+               + "}";
+    }
 
     // ---------------------------------------------------------------------------------------------------------- target
 

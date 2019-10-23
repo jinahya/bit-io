@@ -44,6 +44,20 @@ public class DefaultBitOutput extends AbstractBitOutput {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
+     * Returns a string representation of the object.
+     *
+     * @return a string representation of the object.
+     */
+    @Override
+    public String toString() {
+        return super.toString() + "{"
+               + "delegate=" + delegate
+               + "}";
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+
+    /**
      * {@inheritDoc} The {@code write(int)} method of {@code DefaultBitOutput} class invokes {@link
      * ByteOutput#write(int)}, on what {@link #getDelegate()} method returns, with given value.
      *

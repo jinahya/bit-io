@@ -2,11 +2,11 @@ package com.github.jinahya.bit.io;
 
 import java.io.IOException;
 
+import static com.github.jinahya.bit.io.BitIoConstants.EXPONENT_INTEGER;
+import static com.github.jinahya.bit.io.BitIoConstants.EXPONENT_LONG;
 import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeByte;
 import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeInt;
-import static java.lang.Math.ceil;
-import static java.lang.Math.log;
-import static java.lang.Math.ulp;
+import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeLong;
 
 public class ExtendedBitOutput {
 
@@ -36,9 +36,15 @@ public class ExtendedBitOutput {
         if (value < 0) {
             throw new IllegalArgumentException("length(" + value + ") < 0");
         }
-        final int size = value < 2 ? 1 : (int) ceil(log(value) / log(2.0d) + ulp(1.0d));
-        output.writeUnsignedInt(5, size);
-        output.writeUnsignedInt(size, value);
+        final int size = Integer.SIZE - Integer.numberOfLeadingZeros(value);
+        final boolean extended = size > EXPONENT_INTEGER;
+        output.writeBoolean(extended);
+        if (!extended) {
+            output.writeInt(true, EXPONENT_INTEGER, value);
+            return;
+        }
+        output.writeInt(true, EXPONENT_INTEGER, size);
+        output.writeInt(true, size, value);
     }
 
     public static void writeUnsignedLongVariable(final BitOutput output, final long value) throws IOException {
@@ -48,9 +54,15 @@ public class ExtendedBitOutput {
         if (value < 0L) {
             throw new IllegalArgumentException("length(" + value + ") < 0L");
         }
-        final int size = value < 2L ? 1 : (int) ceil(log(value) / log(2.0d) + ulp(1.0d));
-        output.writeUnsignedLong(6, size);
-        output.writeUnsignedLong(size, value);
+        final int size = Long.SIZE - Long.numberOfLeadingZeros(value);
+        final boolean extended = size > EXPONENT_LONG;
+        output.writeBoolean(extended);
+        if (!extended) {
+            output.writeLong(true, EXPONENT_LONG, value);
+            return;
+        }
+        output.writeInt(true, EXPONENT_LONG, size);
+        output.writeLong(true, size, value);
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -125,6 +137,15 @@ public class ExtendedBitOutput {
     }
 
     // -----------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Writes a VLQ of an {@code int}.
+     *
+     * @param output a bit output to write values.
+     * @param size   a number of bits for a group.
+     * @param value  a value to write.
+     * @throws IOException if an I/O error occurs.
+     */
     public static void writeVariableLengthQuantityInt(final BitOutput output, final int size, final int value)
             throws IOException {
         if (output == null) {
@@ -149,8 +170,28 @@ public class ExtendedBitOutput {
         output.writeInt(true, size, value & mask);
     }
 
-    public static void writeVariableLengthQuantityInt7(final BitOutput output, final int value) throws IOException {
-        writeVariableLengthQuantityInt(output, 7, value);
+    public static void writeVariableLengthQuantityLong(final BitOutput output, final int size, final long value)
+            throws IOException {
+        if (output == null) {
+            throw new NullPointerException("output is null");
+        }
+        requireValidSizeLong(true, size);
+        if (value < 0L) {
+            throw new IllegalArgumentException("value(" + value + ") < 0L");
+        }
+        final long mask = -1L >>> (Long.SIZE - size);
+        final int ones = Long.SIZE - Long.numberOfLeadingZeros(value);
+        int quotient = ones / size;
+        final int remainder = ones % size;
+        if (remainder > 0) {
+            quotient++;
+        }
+        for (int i = quotient - 1; i > 0; i--) {
+            output.writeInt(true, 1, 1);
+            output.writeLong(true, size, (value >> (i * size)) & mask);
+        }
+        output.writeInt(true, 1, 0);
+        output.writeLong(true, size, value & mask);
     }
 
     // -----------------------------------------------------------------------------------------------------------------

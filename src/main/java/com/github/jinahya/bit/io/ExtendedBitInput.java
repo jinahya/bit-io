@@ -1,11 +1,10 @@
 package com.github.jinahya.bit.io;
 
 import java.io.IOException;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 
 import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeByte;
 import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeInt;
+import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeLong;
 
 public class ExtendedBitInput {
 
@@ -19,16 +18,24 @@ public class ExtendedBitInput {
         if (input == null) {
             throw new NullPointerException("input is null");
         }
-        final int size = input.readUnsignedInt(5);
-        return input.readUnsignedInt(size);
+        final boolean extended = input.readBoolean();
+        final int size = input.readInt(true, 5);
+        if (!extended) {
+            return size;
+        }
+        return input.readInt(true, size);
     }
 
     protected static long readUnsignedLongVariable(final BitInput input) throws IOException {
         if (input == null) {
             throw new NullPointerException("input is null");
         }
-        final int size = input.readUnsignedInt(6);
-        return input.readUnsignedLong(size);
+        final boolean extended = input.readBoolean();
+        final int size = input.readInt(true, 6);
+        if (!extended) {
+            return size;
+        }
+        return input.readLong(true, size);
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -46,37 +53,6 @@ public class ExtendedBitInput {
         }
         object.read(input);
         return object;
-    }
-
-    public static <T extends BitReadable> T readObject(final boolean nullable, final BitInput input,
-                                                       final Class<? extends T> type)
-            throws IOException {
-        if (input == null) {
-            throw new NullPointerException("input is null");
-        }
-        if (type == null) {
-            throw new NullPointerException("type is null");
-        }
-        if (nullable && readBooleanIsNextNull(input)) {
-            return null;
-        }
-        try {
-            final Constructor<? extends T> constructor = type.getDeclaredConstructor();
-            if (!constructor.isSynthetic()) {
-                constructor.setAccessible(true);
-            }
-            try {
-                return readObject(false, input, constructor.newInstance());
-            } catch (final IllegalAccessException iae) {
-                throw new RuntimeException(iae);
-            } catch (final InstantiationException ie) {
-                throw new RuntimeException(ie);
-            } catch (final InvocationTargetException ite) {
-                throw new RuntimeException(ite);
-            }
-        } catch (final NoSuchMethodException nsme) {
-            throw new RuntimeException(nsme);
-        }
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -116,6 +92,15 @@ public class ExtendedBitInput {
     }
 
     // -----------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Reads a VLQ of an {@code int}.
+     *
+     * @param input a byte input to read value.
+     * @param size  number of bits for a single group.
+     * @return an {@code int} value of VLQ.
+     * @throws IOException if an I/O error occurs.
+     */
     public static int readVariableLengthQuantityInt(final BitInput input, final int size) throws IOException {
         if (input == null) {
             throw new NullPointerException("input is null");
@@ -142,11 +127,45 @@ public class ExtendedBitInput {
         return value;
     }
 
-    public static int readVariableLengthQuantityInt7(final BitInput input) throws IOException {
-        return readVariableLengthQuantityInt(input, 7);
+    /**
+     * Reads a VLQ of a {@code long}.
+     *
+     * @param input a byte input to read value.
+     * @param size  number of bits for a single group.
+     * @return a {@code long} value of VLQ.
+     * @throws IOException if an I/O error occurs.
+     */
+    public static long readVariableLengthQuantityLong(final BitInput input, final int size) throws IOException {
+        if (input == null) {
+            throw new NullPointerException("input is null");
+        }
+        requireValidSizeLong(true, size);
+        long value = 0x00L;
+        boolean last = false;
+        int quotient = Long.SIZE / size;
+        final int remainder = Long.SIZE % size;
+        if (remainder > 0) {
+            quotient++;
+        }
+        for (int i = 0; i < quotient; i++) {
+            last = input.readInt(true, 1) == 0;
+            value <<= size;
+            value |= input.readLong(true, size);
+            if (last) {
+                break;
+            }
+        }
+        if (!last) {
+            throw new IOException("no signal for last group");
+        }
+        return value;
     }
 
     // -----------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Creates a new instance.
+     */
     protected ExtendedBitInput() {
         super();
     }

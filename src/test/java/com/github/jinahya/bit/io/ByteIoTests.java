@@ -29,9 +29,6 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.BiFunction;
 import java.util.stream.Stream;
 
 import static java.lang.System.arraycopy;
@@ -42,9 +39,9 @@ import static java.util.Arrays.copyOf;
 final class ByteIoTests {
 
     // -----------------------------------------------------------------------------------------------------------------
-    static <R> R applyByteIoArray(final BiFunction<? super ByteOutput, ? super ByteInput, ? extends R> function) {
+    static Stream<Arguments> sourceByteIoArray() {
         final byte[][] holder = new byte[][] {
-                new byte[16]
+                new byte[1]
         };
         final ByteOutput output = new ArrayByteOutput(holder[0]) {
             @Override
@@ -66,50 +63,50 @@ final class ByteIoTests {
                 return super.read();
             }
         };
-        return function.apply(output, input);
+        return Stream.of(Arguments.of(output, input));
     }
 
-    static Stream<Arguments> sourceBitIoBuffer() {
-        final List<ByteBuffer> list = new ArrayList<>();
-        list.add(allocate(16));
-        final BitOutput bo = new DefaultBitOutput(new BufferByteOutput(null) {
+    static Stream<Arguments> sourceByteIoBuffer() {
+        final ByteBuffer[] holder = new ByteBuffer[] {allocate(1)};
+        final ByteOutput output = new BufferByteOutput(null) {
             @Override
             public void write(int value) throws IOException {
                 if (target == null) {
-                    target = list.get(0);
+                    target = holder[0];
                 }
                 if (!target.hasRemaining()) {
                     final ByteBuffer bigger = allocate(target.capacity() << 1);
                     if (target.hasArray() && bigger.hasArray()) {
                         arraycopy(target.array(), target.arrayOffset(), bigger.array(), target.arrayOffset(),
                                   target.position());
+                        bigger.position(target.position());
                     } else {
                         for (target.flip(); target.hasRemaining(); ) {
                             bigger.put(target.get());
                         }
                     }
                     target = bigger;
-                    list.set(0, bigger);
+                    holder[0] = bigger;
                 }
                 super.write(value);
             }
-        });
-        final BitInput bi = new DefaultBitInput(new BufferByteInput(null) {
+        };
+        final ByteInput input = new BufferByteInput(null) {
             @Override
             public int read() throws IOException {
                 if (source == null) {
-                    source = list.get(0);
+                    source = holder[0];
                     source.flip();
                 }
                 return super.read();
             }
-        });
-        return Stream.of(Arguments.of(bo, bi));
+        };
+        return Stream.of(Arguments.of(output, input));
     }
 
-    static Stream<Arguments> sourceBitIoData() {
+    static Stream<Arguments> sourceByteIoData() {
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        final BitOutput bo = new DefaultBitOutput(new DataByteOutput(null) {
+        final ByteOutput output = new DataByteOutput(null) {
             @Override
             public void write(final int value) throws IOException {
                 if (target == null) {
@@ -117,8 +114,8 @@ final class ByteIoTests {
                 }
                 super.write(value);
             }
-        });
-        final BitInput bi = new DefaultBitInput(new DataByteInput(null) {
+        };
+        final ByteInput input = new DataByteInput(null) {
             @Override
             public int read() throws IOException {
                 if (source == null) {
@@ -126,27 +123,27 @@ final class ByteIoTests {
                 }
                 return super.read();
             }
-        });
-        return Stream.of(Arguments.of(bo, bi));
+        };
+        return Stream.of(Arguments.of(output, input));
     }
 
-    static Stream<Arguments> sourceBitIoStream() {
+    static Stream<Arguments> sourceByteIoStream() {
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        final BitOutput bo = new DefaultBitOutput(new StreamByteOutput(baos));
-        final BitInput bi = new DefaultBitInput(new StreamByteInput(null) {
+        final ByteOutput output = new StreamByteOutput(baos);
+        final ByteInput input = new StreamByteInput(null) {
             @Override
             public int read() throws IOException {
-                if (getSource() == null) {
-                    setSource(new ByteArrayInputStream(baos.toByteArray()));
+                if (source == null) {
+                    source = new ByteArrayInputStream(baos.toByteArray());
                 }
                 return super.read();
             }
-        });
-        return Stream.of(Arguments.of(bo, bi));
+        };
+        return Stream.of(Arguments.of(output, input));
     }
 
     static Stream<Arguments> sourceBitIo() {
-        return Stream.of(sourceBitIoArray(), sourceBitIoBuffer(), sourceBitIoData(), sourceBitIoStream())
+        return Stream.of(sourceByteIoArray(), sourceByteIoBuffer(), sourceByteIoData(), sourceByteIoStream())
                 .flatMap(s -> s);
     }
 

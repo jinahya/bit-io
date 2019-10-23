@@ -11,10 +11,14 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.github.jinahya.bit.io.ExtendedBitInput.readUnsignedIntVariable;
+import static com.github.jinahya.bit.io.ExtendedBitInput.readUnsignedLongVariable;
 import static com.github.jinahya.bit.io.ExtendedBitInput.readVariableLengthQuantityInt;
-import static com.github.jinahya.bit.io.ExtendedBitInput.readVariableLengthQuantityInt7;
+import static com.github.jinahya.bit.io.ExtendedBitInput.readVariableLengthQuantityLong;
+import static com.github.jinahya.bit.io.ExtendedBitOutput.writeUnsignedIntVariable;
+import static com.github.jinahya.bit.io.ExtendedBitOutput.writeUnsignedLongVariable;
 import static com.github.jinahya.bit.io.ExtendedBitOutput.writeVariableLengthQuantityInt;
-import static com.github.jinahya.bit.io.ExtendedBitOutput.writeVariableLengthQuantityInt7;
+import static com.github.jinahya.bit.io.ExtendedBitOutput.writeVariableLengthQuantityLong;
 import static java.util.concurrent.ThreadLocalRandom.current;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -25,9 +29,78 @@ public class ExtendedBitIoTest {
     // -----------------------------------------------------------------------------------------------------------------
     @MethodSource({"com.github.jinahya.bit.io.DefaultBitIoTests#sourceBitIo"})
     @ParameterizedTest
-    public void testVariableLengthQuantityInt(final BitOutput output, final BitInput input) throws IOException {
+    public void testUnsignedIntVariable_Zero(final BitOutput output, final BitInput input) throws IOException {
+        final int expected = 0;
+        writeUnsignedIntVariable(output, expected);
+        output.align(1);
+        final int actual = readUnsignedIntVariable(input);
+        input.align(1);
+        assertEquals(expected, actual);
+    }
+
+    @MethodSource({"com.github.jinahya.bit.io.DefaultBitIoTests#sourceBitIo"})
+    @ParameterizedTest
+    public void testUnsignedIntVariable_Max(final BitOutput output, final BitInput input) throws IOException {
+        final int expected = Integer.MAX_VALUE;
+        writeUnsignedIntVariable(output, expected);
+        output.align(1);
+        final int actual = readUnsignedIntVariable(input);
+        input.align(1);
+        assertEquals(expected, actual);
+    }
+
+    @MethodSource({"com.github.jinahya.bit.io.DefaultBitIoTests#sourceBitIo"})
+    @ParameterizedTest
+    public void testUnsignedIntVariable(final BitOutput output, final BitInput input) throws IOException {
+
         final int expected = current().nextInt() >>> 1;
-        final int size = current().nextInt(1, Byte.SIZE);
+        writeUnsignedIntVariable(output, expected);
+        output.align(1);
+        final int actual = readUnsignedIntVariable(input);
+        input.align(1);
+        assertEquals(expected, actual);
+    }
+
+    @MethodSource({"com.github.jinahya.bit.io.DefaultBitIoTests#sourceBitIo"})
+    @ParameterizedTest
+    public void testUnsignedLongVariable_Zero(final BitOutput output, final BitInput input) throws IOException {
+        final long expected = 0L;
+        writeUnsignedLongVariable(output, expected);
+        output.align(1);
+        final long actual = readUnsignedLongVariable(input);
+        input.align(1);
+        assertEquals(expected, actual);
+    }
+
+    @MethodSource({"com.github.jinahya.bit.io.DefaultBitIoTests#sourceBitIo"})
+    @ParameterizedTest
+    public void testUnsignedLongVariable_Max(final BitOutput output, final BitInput input) throws IOException {
+        final long expected = Long.MAX_VALUE;
+        writeUnsignedLongVariable(output, expected);
+        output.align(1);
+        final long actual = readUnsignedLongVariable(input);
+        input.align(1);
+        assertEquals(expected, actual);
+    }
+
+    @MethodSource({"com.github.jinahya.bit.io.DefaultBitIoTests#sourceBitIo"})
+    @ParameterizedTest
+    public void testUnsignedLongVariable(final BitOutput output, final BitInput input) throws IOException {
+
+        final long expected = current().nextLong() >>> 1;
+        writeUnsignedLongVariable(output, expected);
+        output.align(1);
+        final long actual = readUnsignedLongVariable(input);
+        input.align(1);
+        assertEquals(expected, actual);
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    @MethodSource({"com.github.jinahya.bit.io.DefaultBitIoTests#sourceBitIo"})
+    @ParameterizedTest
+    public void testVariableLengthQuantityInt_Zero(final BitOutput output, final BitInput input) throws IOException {
+        final int expected = 0;
+        final int size = current().nextInt(1, Integer.SIZE);
         writeVariableLengthQuantityInt(output, size, expected);
         output.align(1);
         final int actual = readVariableLengthQuantityInt(input, size);
@@ -37,17 +110,30 @@ public class ExtendedBitIoTest {
 
     @MethodSource({"com.github.jinahya.bit.io.DefaultBitIoTests#sourceBitIo"})
     @ParameterizedTest
-    public void testVariableLengthQuantityInt7(final BitOutput output, final BitInput input) throws IOException {
+    public void testVariableLengthQuantityInt_Max(final BitOutput output, final BitInput input) throws IOException {
         final int expected = current().nextInt() >>> 1;
-        writeVariableLengthQuantityInt7(output, expected);
+        final int size = current().nextInt(1, Integer.SIZE);
+        writeVariableLengthQuantityInt(output, size, expected);
         output.align(1);
-        final int actual = readVariableLengthQuantityInt7(input);
+        final int actual = readVariableLengthQuantityInt(input, size);
+        input.align(1);
+        assertEquals(expected, actual);
+    }
+
+    @MethodSource({"com.github.jinahya.bit.io.DefaultBitIoTests#sourceBitIo"})
+    @ParameterizedTest
+    public void testVariableLengthQuantityInt(final BitOutput output, final BitInput input) throws IOException {
+        final int expected = current().nextInt() >>> 1;
+        final int size = current().nextInt(1, Integer.SIZE);
+        writeVariableLengthQuantityInt(output, size, expected);
+        output.align(1);
+        final int actual = readVariableLengthQuantityInt(input, size);
         input.align(1);
         assertEquals(expected, actual);
     }
 
     @Test
-    public void testVariableLengthQuantityInt7Tv() {
+    public void testVariableLengthQuantityInt_7() {
         // https://en.wikipedia.org/wiki/Variable-length_quantity#Examples
         final Map<Integer, byte[]> map = new HashMap<>();
         map.put(0x00000000, new byte[] {0b00000000});
@@ -73,9 +159,9 @@ public class ExtendedBitIoTest {
                 }
             });
             try {
-                writeVariableLengthQuantityInt7(output, k);
+                writeVariableLengthQuantityInt(output, 7, k);
                 output.align(1);
-                final int actual = readVariableLengthQuantityInt7(input);
+                final int actual = readVariableLengthQuantityInt(input, 7);
                 input.align(1);
                 assertEquals(k, actual);
                 assertArrayEquals(v, baos.toByteArray());
@@ -83,5 +169,42 @@ public class ExtendedBitIoTest {
                 throw new RuntimeException(ioe);
             }
         });
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    @MethodSource({"com.github.jinahya.bit.io.DefaultBitIoTests#sourceBitIo"})
+    @ParameterizedTest
+    public void testVariableLengthQuantityLong_Zero(final BitOutput output, final BitInput input) throws IOException {
+        final long expected = 0L;
+        final int size = current().nextInt(1, Long.SIZE);
+        writeVariableLengthQuantityLong(output, size, expected);
+        output.align(1);
+        final long actual = readVariableLengthQuantityLong(input, size);
+        input.align(1);
+        assertEquals(expected, actual);
+    }
+
+    @MethodSource({"com.github.jinahya.bit.io.DefaultBitIoTests#sourceBitIo"})
+    @ParameterizedTest
+    public void testVariableLengthQuantityLong_Max(final BitOutput output, final BitInput input) throws IOException {
+        final long expected = Long.MAX_VALUE;
+        final int size = current().nextInt(1, Long.SIZE);
+        writeVariableLengthQuantityLong(output, size, expected);
+        output.align(1);
+        final long actual = readVariableLengthQuantityLong(input, size);
+        input.align(1);
+        assertEquals(expected, actual);
+    }
+
+    @MethodSource({"com.github.jinahya.bit.io.DefaultBitIoTests#sourceBitIo"})
+    @ParameterizedTest
+    public void testVariableLengthQuantityLong(final BitOutput output, final BitInput input) throws IOException {
+        final long expected = current().nextLong() >>> 1;
+        final int size = current().nextInt(1, Long.SIZE);
+        writeVariableLengthQuantityLong(output, size, expected);
+        output.align(1);
+        final long actual = readVariableLengthQuantityLong(input, size);
+        input.align(1);
+        assertEquals(expected, actual);
     }
 }

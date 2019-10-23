@@ -22,11 +22,16 @@ package com.github.jinahya.bit.io;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.tuple.Pair;
+import org.junit.jupiter.params.provider.Arguments;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.IntConsumer;
 import java.util.function.IntFunction;
+import java.util.stream.Stream;
 
 import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeByte;
 import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeInt;
@@ -42,6 +47,22 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 @Slf4j
 final class BitIoTests {
+
+    // -----------------------------------------------------------------------------------------------------------------
+    static Stream<Arguments> sourceBitIo() {
+        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        final BitOutput bo = new DefaultBitOutput(new StreamByteOutput(baos));
+        final BitInput bi = new DefaultBitInput(new StreamByteInput(null) {
+            @Override
+            public int read() throws IOException {
+                if (getSource() == null) {
+                    setSource(new ByteArrayInputStream(baos.toByteArray()));
+                }
+                return super.read();
+            }
+        });
+        return Stream.of(Arguments.of(bo, bi));
+    }
 
     // ------------------------------------------------------------------------------------------------------------ byte
 

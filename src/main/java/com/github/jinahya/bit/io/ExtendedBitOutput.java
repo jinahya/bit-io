@@ -3,11 +3,12 @@ package com.github.jinahya.bit.io;
 import java.io.IOException;
 
 import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeByte;
+import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeInt;
 import static java.lang.Math.ceil;
 import static java.lang.Math.log;
 import static java.lang.Math.ulp;
 
-public class BitOutputs {
+public class ExtendedBitOutput {
 
     // -----------------------------------------------------------------------------------------------------------------
 
@@ -124,7 +125,36 @@ public class BitOutputs {
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    protected BitOutputs() {
+    public static void writeVariableLengthQuantityInt(final BitOutput output, final int size, final int value)
+            throws IOException {
+        if (output == null) {
+            throw new NullPointerException("output is null");
+        }
+        requireValidSizeInt(true, size);
+        if (value < 0) {
+            throw new IllegalArgumentException("value(" + value + ") < 0");
+        }
+        final int mask = -1 >>> (Integer.SIZE - size);
+        final int ones = Integer.SIZE - Integer.numberOfLeadingZeros(value);
+        int quotient = ones / size;
+        final int remainder = ones % size;
+        if (remainder > 0) {
+            quotient++;
+        }
+        for (int i = quotient - 1; i > 0; i--) {
+            output.writeInt(true, 1, 1);
+            output.writeInt(true, size, (value >> (i * size)) & mask);
+        }
+        output.writeInt(true, 1, 0);
+        output.writeInt(true, size, value & mask);
+    }
+
+    public static void writeVariableLengthQuantityInt7(final BitOutput output, final int value) throws IOException {
+        writeVariableLengthQuantityInt(output, 7, value);
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    protected ExtendedBitOutput() {
         super();
     }
 }

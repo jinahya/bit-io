@@ -5,8 +5,9 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
 import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeByte;
+import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeInt;
 
-public class BitInputs {
+public class ExtendedBitInput {
 
     // -----------------------------------------------------------------------------------------------------------------
     public static boolean readBooleanIsNextNull(final BitInput input) throws IOException {
@@ -115,7 +116,38 @@ public class BitInputs {
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    protected BitInputs() {
+    public static int readVariableLengthQuantityInt(final BitInput input, final int size) throws IOException {
+        if (input == null) {
+            throw new NullPointerException("input is null");
+        }
+        requireValidSizeInt(true, size);
+        int value = 0x00;
+        boolean last = false;
+        int quotient = Integer.SIZE / size;
+        final int remainder = Integer.SIZE % size;
+        if (remainder > 0) {
+            quotient++;
+        }
+        for (int i = 0; i < quotient; i++) {
+            last = input.readInt(true, 1) == 0;
+            value <<= size;
+            value |= input.readInt(true, size);
+            if (last) {
+                break;
+            }
+        }
+        if (!last) {
+            throw new IOException("no signal for last group");
+        }
+        return value;
+    }
+
+    public static int readVariableLengthQuantityInt7(final BitInput input) throws IOException {
+        return readVariableLengthQuantityInt(input, 7);
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    protected ExtendedBitInput() {
         super();
     }
 }

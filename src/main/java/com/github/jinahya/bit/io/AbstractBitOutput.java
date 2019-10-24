@@ -222,6 +222,17 @@ public abstract class AbstractBitOutput implements BitOutput {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
+     * Returns the number of bytes written so far.
+     *
+     * @return the number of bytes written so far.
+     */
+    public long getCount() {
+        return count;
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+
+    /**
      * The current octet of written bits.
      */
     private int octet;

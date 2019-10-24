@@ -43,7 +43,7 @@ final class ByteIoTests {
         final byte[][] holder = new byte[][] {
                 new byte[1]
         };
-        final ByteOutput output = new ArrayByteOutput(holder[0]) {
+        final ArrayByteOutput output = new ArrayByteOutput(holder[0]) {
             @Override
             public void write(int value) throws IOException {
                 if (index == target.length) {
@@ -53,12 +53,13 @@ final class ByteIoTests {
                 super.write(value);
             }
         };
-        final ByteInput input = new ArrayByteInput(null) {
+        final ArrayByteInput input = new ArrayByteInput(null) {
             @Override
             public int read() throws IOException {
                 if (source == null) {
                     source = holder[0];
                     index = 0;
+                    output.target = null;
                 }
                 return super.read();
             }
@@ -68,7 +69,7 @@ final class ByteIoTests {
 
     static Stream<Arguments> sourceByteIoBuffer() {
         final ByteBuffer[] holder = new ByteBuffer[] {allocate(1)};
-        final ByteOutput output = new BufferByteOutput(null) {
+        final BufferByteOutput output = new BufferByteOutput(null) {
             @Override
             public void write(int value) throws IOException {
                 if (target == null) {
@@ -91,12 +92,13 @@ final class ByteIoTests {
                 super.write(value);
             }
         };
-        final ByteInput input = new BufferByteInput(null) {
+        final BufferByteInput input = new BufferByteInput(null) {
             @Override
             public int read() throws IOException {
                 if (source == null) {
                     source = holder[0];
                     source.flip();
+                    output.target = null;
                 }
                 return super.read();
             }
@@ -106,7 +108,7 @@ final class ByteIoTests {
 
     static Stream<Arguments> sourceByteIoData() {
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        final ByteOutput output = new DataByteOutput(null) {
+        final DataByteOutput output = new DataByteOutput(null) {
             @Override
             public void write(final int value) throws IOException {
                 if (target == null) {
@@ -115,11 +117,12 @@ final class ByteIoTests {
                 super.write(value);
             }
         };
-        final ByteInput input = new DataByteInput(null) {
+        final DataByteInput input = new DataByteInput(null) {
             @Override
             public int read() throws IOException {
                 if (source == null) {
                     source = new DataInputStream(new ByteArrayInputStream(baos.toByteArray()));
+                    output.target = null;
                 }
                 return super.read();
             }
@@ -129,12 +132,21 @@ final class ByteIoTests {
 
     static Stream<Arguments> sourceByteIoStream() {
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        final ByteOutput output = new StreamByteOutput(baos);
-        final ByteInput input = new StreamByteInput(null) {
+        final StreamByteOutput output = new StreamByteOutput(null) {
+            @Override
+            public void write(final int value) throws IOException {
+                if (target == null) {
+                    target = baos;
+                }
+                super.write(value);
+            }
+        };
+        final StreamByteInput input = new StreamByteInput(null) {
             @Override
             public int read() throws IOException {
                 if (source == null) {
                     source = new ByteArrayInputStream(baos.toByteArray());
+                    output.target = null;
                 }
                 return super.read();
             }

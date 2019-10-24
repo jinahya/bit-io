@@ -1,6 +1,27 @@
 package com.github.jinahya.bit.io;
 
+/*-
+ * #%L
+ * bit-io
+ * %%
+ * Copyright (C) 2014 - 2019 Jinahya, Inc.
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
+
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.text.RandomStringGenerator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -8,13 +29,18 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.github.jinahya.bit.io.ExtendedBitInput.readAscii;
 import static com.github.jinahya.bit.io.ExtendedBitInput.readUnsignedIntVariable;
 import static com.github.jinahya.bit.io.ExtendedBitInput.readUnsignedLongVariable;
 import static com.github.jinahya.bit.io.ExtendedBitInput.readVariableLengthQuantityInt;
 import static com.github.jinahya.bit.io.ExtendedBitInput.readVariableLengthQuantityLong;
+import static com.github.jinahya.bit.io.ExtendedBitOutput.writeAscii;
+import static com.github.jinahya.bit.io.ExtendedBitOutput.writeString;
 import static com.github.jinahya.bit.io.ExtendedBitOutput.writeUnsignedIntVariable;
 import static com.github.jinahya.bit.io.ExtendedBitOutput.writeUnsignedLongVariable;
 import static com.github.jinahya.bit.io.ExtendedBitOutput.writeVariableLengthQuantityInt;
@@ -23,10 +49,24 @@ import static java.util.concurrent.ThreadLocalRandom.current;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/**
+ * A class for unit-testing {@link ExtendedBitInput} class and {@link ExtendedBitOutput} class.
+ *
+ * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
+ */
 @Slf4j
 public class ExtendedBitIoTest {
 
-    // -----------------------------------------------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------- unsignedIntVariable
+
+    /**
+     * Tests {@link ExtendedBitOutput#writeUnsignedIntVariable(BitOutput, int)} method and {@link
+     * ExtendedBitInput#readUnsignedIntVariable(BitInput)} method.
+     *
+     * @param output a bit output.
+     * @param input  a bit input.
+     * @throws IOException if an I/O error occurs.
+     */
     @MethodSource({"com.github.jinahya.bit.io.DefaultBitIoTests#sourceBitIo"})
     @ParameterizedTest
     public void testUnsignedIntVariable_Zero(final BitOutput output, final BitInput input) throws IOException {
@@ -61,6 +101,7 @@ public class ExtendedBitIoTest {
         assertEquals(expected, actual);
     }
 
+    // -------------------------------------------------------------------------------------------- unsignedLongVariable
     @MethodSource({"com.github.jinahya.bit.io.DefaultBitIoTests#sourceBitIo"})
     @ParameterizedTest
     public void testUnsignedLongVariable_Zero(final BitOutput output, final BitInput input) throws IOException {
@@ -169,6 +210,35 @@ public class ExtendedBitIoTest {
                 throw new RuntimeException(ioe);
             }
         });
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    @MethodSource({"com.github.jinahya.bit.io.DefaultBitIoTests#sourceBitIo"})
+    @ParameterizedTest
+    public void testString(final BitOutput output, final BitInput input) throws IOException {
+        final boolean nullable = current().nextBoolean();
+        final String expected = nullable && current().nextBoolean()
+                                ? null : new RandomStringGenerator.Builder().build().generate(current().nextInt(128));
+        final Charset charset = StandardCharsets.UTF_8;
+        writeString(nullable, output, expected, charset);
+        output.align(1);
+        final String actual = ExtendedBitInput.readString(nullable, input, charset);
+        input.align(1);
+        assertEquals(expected, actual);
+    }
+
+    @MethodSource({"com.github.jinahya.bit.io.DefaultBitIoTests#sourceBitIo"})
+    @ParameterizedTest
+    public void testAscii(final BitOutput output, final BitInput input) throws IOException {
+        final boolean nullable = current().nextBoolean();
+        final String expected = nullable && current().nextBoolean()
+                                ? null : new RandomStringGenerator.Builder().withinRange(0, 127).build()
+                                        .generate(current().nextInt(128));
+        writeAscii(nullable, output, expected);
+        output.align(1);
+        final String actual = readAscii(nullable, input);
+        input.align(1);
+        assertEquals(expected, actual);
     }
 
     // -----------------------------------------------------------------------------------------------------------------

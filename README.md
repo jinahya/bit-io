@@ -14,8 +14,8 @@ A library for reading/writing non octet aligned values such as `1-bit boolean` o
 
 #### boolean
 
-|type     |size(min)|size(max)|notes|
-|---------|---------|---------|-----|
+|type     |size(min)|size(max)|notes                                   |
+|---------|---------|---------|----------------------------------------|
 |`boolean`|1        |1        |`readBoolean()`, `writeBoolean(boolean)`|
 
 ### numeric
@@ -24,13 +24,13 @@ A library for reading/writing non octet aligned values such as `1-bit boolean` o
 
 The size(min) is `1` and the size(max) is `2^e - (unsigned ? 1 : 0)`.
 
-|type   |e  |size(min)|size(max)|notes
-|-------|---|---------|---------|-----
-|`byte` |3  |1        |7/8      |`readByte(unsigned, size)`, `writeByte(unsigned, size, byte)`|
+|type   |e  |size(min)|size(max)|notes                                                           |
+|-------|---|---------|---------|----------------------------------------------------------------|
+|`byte` |3  |1        |7/8      |`readByte(unsigned, size)`, `writeByte(unsigned, size, byte)`   |
 |`short`|4  |1        |15/16    |`readShort(unsigned, size)`, `writeShort(unsigned, size, short)`|
-|`int`  |5  |1        |31/32    |`readInt(unsigned, size)`, `writeInt(unsigned, size, int)`|
-|`long` |6  |1        |63/64    |`readLong(unsigned, size)`, `writeLong(unsigned, size, long)`|
-|`char` |   |1        |16       |`readChar(size)`, `writeChar(size, char)`|
+|`int`  |5  |1        |31/32    |`readInt(unsigned, size)`, `writeInt(unsigned, size, int)`      |
+|`long` |6  |1        |63/64    |`readLong(unsigned, size)`, `writeLong(unsigned, size, long)`   |
+|`char` |   |1        |16       |`readChar(size)`, `writeChar(size, char)`                       |
 
 #### floating-point
 
@@ -59,16 +59,16 @@ final ByteInput input = new ArrayByteInput(null) {
     @Override
     public int read() throws IOException {
         // initialize the `source` field value
-        if (getSource() == null) {
-            setSource(byte[16]);
-            setIndex(getSource().length);
+        if (source == null) {
+            source = byte[16];
+            index = source.length;
         }
-        // read bytes from the stream if empty
-        if (getIndex() == getSource().length) {
-            if (stream.read(getSource()) == -1) {
+        // read bytes from the original stream if empty
+        if (index == source.length) {
+            if (stream.read(source) == -1) {
                 throw new EOFException("unexpected end of stream");
             }
-            setIndex(0);
+            index = 0;
         }
         return super.read();
     }
@@ -92,8 +92,8 @@ Or lazily instantiate its `delegate` field.
 new DefaultBitInput(null) {
     @Override
     public int read() throws IOException {
-        if (getDelegate() == null) {
-            setDelegate(new StreamByteInput(openFile()));
+        if (delegate == null) {
+            delegate = new StreamByteInput(openFile());
         }
         return super.read();
     }

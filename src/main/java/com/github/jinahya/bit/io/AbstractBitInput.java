@@ -41,6 +41,20 @@ public abstract class AbstractBitInput implements BitInput {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
+     * Returns a string representation of the object.
+     *
+     * @return a string representation of the object.
+     */
+    @Override
+    public String toString() {
+        return super.toString() + "{"
+               + "count=" + count
+               + "}";
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+
+    /**
      * Reads an unsigned 8-bit integer.
      *
      * @return an unsigned 8-bit integer.
@@ -234,17 +248,28 @@ public abstract class AbstractBitInput implements BitInput {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
+     * Returns the number bytes read so far.
+     *
+     * @return the number of bytes read so far.
+     */
+    public long getCount() {
+        return count;
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+
+    /**
      * The current octet of read bits.
      */
-    int octet;
+    private int octet;
 
     /**
      * The number of available bits in {@link #octet} for reading..
      */
-    int available;
+    private int available;
 
     /**
      * The number of octets read so far.
      */
-    long count;
+    private long count;
 }

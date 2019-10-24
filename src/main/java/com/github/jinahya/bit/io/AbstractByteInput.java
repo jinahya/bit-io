@@ -41,6 +41,20 @@ public abstract class AbstractByteInput<T> implements ByteInput {
         this.source = source;
     }
 
+    // -----------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Returns a string representation of the object.
+     *
+     * @return a string representation of the object.
+     */
+    @Override
+    public String toString() {
+        return super.toString() + "{"
+               + "source=" + source
+               + "}";
+    }
+
     // ---------------------------------------------------------------------------------------------------------- source
 
     /**
@@ -66,5 +80,5 @@ public abstract class AbstractByteInput<T> implements ByteInput {
     /**
      * The underlying byte source.
      */
-    private T source;
+    protected T source;
 }

@@ -41,6 +41,20 @@ public abstract class AbstractBitOutput implements BitOutput {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
+     * Returns a string representation of the object.
+     *
+     * @return a string representation of the object.
+     */
+    @Override
+    public String toString() {
+        return super.toString() + "{"
+               + "count=" + count
+               + "}";
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+
+    /**
      * Consumes given unsigned 8-bit integer.
      *
      * @param value the unsigned 8-bit integer to consume.

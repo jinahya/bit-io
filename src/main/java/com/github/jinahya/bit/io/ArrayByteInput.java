@@ -45,6 +45,20 @@ public class ArrayByteInput extends AbstractByteInput<byte[]> {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
+     * Returns a string representation of the object.
+     *
+     * @return a string representation of the object.
+     */
+    @Override
+    public String toString() {
+        return super.toString() + "{"
+               + "index=" + index
+               + "}";
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+
+    /**
      * {@inheritDoc} The {@code read()} method of {@code ArrayByteInput} class returns {@code source[index++]} as an
      * unsigned 8-bit value.
      *
@@ -81,5 +95,5 @@ public class ArrayByteInput extends AbstractByteInput<byte[]> {
     /**
      * The index in the {@code source} to read.
      */
-    private int index;
+    protected int index;
 }

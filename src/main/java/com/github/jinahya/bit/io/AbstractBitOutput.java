@@ -31,7 +31,7 @@ import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeUnsigne
 import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeUnsigned8;
 
 /**
- * An abstract class for implementing {@link BitInput}.
+ * An abstract class for implementing {@link BitInput} interface.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  * @see AbstractByteInput
@@ -55,9 +55,9 @@ public abstract class AbstractBitOutput implements BitOutput {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * Consumes given unsigned 8-bit integer.
+     * Writes given unsigned 8-bit integer.
      *
-     * @param value the unsigned 8-bit integer to consume.
+     * @param value the unsigned 8-bit integer to write.
      * @throws IOException if an I/O error occurs.
      */
     protected abstract void write(int value) throws IOException;
@@ -109,13 +109,13 @@ public abstract class AbstractBitOutput implements BitOutput {
         }
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------------------- boolean
     @Override
     public void writeBoolean(final boolean value) throws IOException {
         writeInt(true, 1, value ? 1 : 0);
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+    // ------------------------------------------------------------------------------------------------------------ byte
     @Override
     public void writeByte(final boolean unsigned, final int size, final byte value) throws IOException {
         writeInt(unsigned, requireValidSizeByte(unsigned, size), value);
@@ -131,8 +131,7 @@ public abstract class AbstractBitOutput implements BitOutput {
         writeByte(true, size, value);
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
-
+    // ----------------------------------------------------------------------------------------------------------- short
     @Override
     public void writeShort(final boolean unsigned, final int size, final short value) throws IOException {
         writeInt(unsigned, requireValidSizeShort(unsigned, size), value);
@@ -148,7 +147,7 @@ public abstract class AbstractBitOutput implements BitOutput {
         writeShort(true, size, value);
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+    // ------------------------------------------------------------------------------------------------------------- int
     @Override
     public void writeInt(final boolean unsigned, final int size, final int value) throws IOException {
         requireValidSizeInt(unsigned, size);
@@ -172,7 +171,7 @@ public abstract class AbstractBitOutput implements BitOutput {
         writeInt(true, size, value);
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+    // ------------------------------------------------------------------------------------------------------------ long
     @Override
     public void writeLong(final boolean unsigned, final int size, final long value) throws IOException {
         requireValidSizeLong(unsigned, size);
@@ -196,7 +195,7 @@ public abstract class AbstractBitOutput implements BitOutput {
         writeLong(true, size, value);
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+    // ------------------------------------------------------------------------------------------------------------ char
     @Override
     public void writeChar(final int size, final char value) throws IOException {
         writeInt(true, requireValidSizeChar(size), value);
@@ -233,7 +232,7 @@ public abstract class AbstractBitOutput implements BitOutput {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * The current octet of written bits.
+     * The current octet.
      */
     private int octet;
 
@@ -243,7 +242,7 @@ public abstract class AbstractBitOutput implements BitOutput {
     private int available = Byte.SIZE;
 
     /**
-     * The number of octets written so far.
+     * The number of bytes written so far.
      */
     private long count;
 }

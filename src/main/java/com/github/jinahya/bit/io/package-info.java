@@ -1,5 +1,7 @@
 /**
- * Library for reading/writing non-octet aligned values.
+ * Defines interfaces and classes for reading/writing non-octet aligned values.
+ *
+ * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
 package com.github.jinahya.bit.io;
 

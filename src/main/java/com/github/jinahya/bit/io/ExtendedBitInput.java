@@ -58,7 +58,7 @@ public class ExtendedBitInput {
      * <li>when {@code extended} flag is {@code false}, this value is the original value.</li>
      * <li>when {@code extended} flag is {@code true}, this value is the number of bits of the following unsigned {@code int}.</li>
      * </ul>
-     * <li>(optionally) a {@code size}-bit {@code int} of origin value.</li>
+     * <li>(optionally) a {@code size}-bit {@code int} of original value.</li>
      * </ul>
      *
      * @param input a bit input.
@@ -89,7 +89,7 @@ public class ExtendedBitInput {
      * <li>when {@code extended} flag is {@code false}, this value is the original value.</li>
      * <li>when {@code extended} flag is {@code true}, this value is the number of bits of the following unsigned {@code long}.</li>
      * </ul>
-     * <li>(optionally) a {@code size}-bit {@code long} of origin value.</li>
+     * <li>(optionally) a {@code size}-bit {@code long} of original value.</li>
      * </ul>
      *
      * @param input a bit input.

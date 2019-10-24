@@ -36,7 +36,7 @@ import static java.nio.ByteBuffer.allocate;
 import static java.util.Arrays.copyOf;
 
 @Slf4j
-final class ByteIoTests {
+final class ByteIoSource {
 
     // -----------------------------------------------------------------------------------------------------------------
     static Stream<Arguments> sourceByteIoArray() {
@@ -160,7 +160,7 @@ final class ByteIoTests {
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    private ByteIoTests() {
+    private ByteIoSource() {
         super();
     }
 }

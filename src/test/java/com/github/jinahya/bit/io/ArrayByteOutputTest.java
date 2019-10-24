@@ -25,14 +25,14 @@ package com.github.jinahya.bit.io;
  *
  * @see ArrayByteInputTest
  */
-public class ArrayByteOutputTest extends AbstractByteOutputTest<ArrayByteOutput, byte[]> {
+class ArrayByteOutputTest extends AbstractByteOutputTest<ArrayByteOutput, byte[]> {
 
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
      * Creates a new instance.
      */
-    public ArrayByteOutputTest() {
+    ArrayByteOutputTest() {
         super(ArrayByteOutput.class, byte[].class);
     }
 }

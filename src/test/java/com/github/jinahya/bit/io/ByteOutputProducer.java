@@ -47,13 +47,14 @@ class ByteOutputProducer {
         return new ArrayByteOutput(null) {
             @Override
             public void write(final int value) throws IOException {
-                if (getTarget() == null) {
-                    setTarget(new byte[1]);
-                    setIndex(0);
+                if (target == null) {
+                    target = new byte[1];
+                    index = 0;
                 }
                 super.write(value);
-                assert getIndex() == getTarget().length;
-                setIndex(0);
+                if (index == target.length) {
+                    index = 0;
+                }
             }
         };
     }
@@ -73,12 +74,12 @@ class ByteOutputProducer {
         return new BufferByteOutput(null) {
             @Override
             public void write(final int value) throws IOException {
-                if (getTarget() == null) {
-                    setTarget(allocate(1)); // position: zero, limit: capacity
+                if (target == null) {
+                    target = allocate(1); // position: zero, limit: capacity
                 }
                 super.write(value);
-                if (!getTarget().hasRemaining()) {
-                    getTarget().position(0);
+                if (!target.hasRemaining()) {
+                    target.clear();
                 }
             }
         };

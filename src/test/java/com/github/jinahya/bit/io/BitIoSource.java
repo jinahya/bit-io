@@ -26,32 +26,34 @@ import org.junit.jupiter.params.provider.Arguments;
 import java.util.stream.Stream;
 
 /**
- * Utilities for testing classes.
+ * A class for sourcing {@link BitInput} and {@link BitOutput}.
+ *
+ * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
 @Slf4j
-final class DefaultBitIoTests {
+final class BitIoSource {
 
     // -----------------------------------------------------------------------------------------------------------------
     static Stream<Arguments> sourceBitIoArray() {
-        final Stream<Arguments> byteIo = ByteIoTests.sourceByteIoArray();
+        final Stream<Arguments> byteIo = ByteIoSource.sourceByteIoArray();
         return byteIo.map(a -> Arguments.of(new DefaultBitOutput((ByteOutput) a.get()[0]),
                                             new DefaultBitInput((ByteInput) a.get()[1])));
     }
 
     static Stream<Arguments> sourceBitIoBuffer() {
-        final Stream<Arguments> byteIo = ByteIoTests.sourceByteIoBuffer();
+        final Stream<Arguments> byteIo = ByteIoSource.sourceByteIoBuffer();
         return byteIo.map(a -> Arguments.of(new DefaultBitOutput((ByteOutput) a.get()[0]),
                                             new DefaultBitInput((ByteInput) a.get()[1])));
     }
 
     static Stream<Arguments> sourceBitIoData() {
-        final Stream<Arguments> byteIo = ByteIoTests.sourceByteIoData();
+        final Stream<Arguments> byteIo = ByteIoSource.sourceByteIoData();
         return byteIo.map(a -> Arguments.of(new DefaultBitOutput((ByteOutput) a.get()[0]),
                                             new DefaultBitInput((ByteInput) a.get()[1])));
     }
 
     static Stream<Arguments> sourceBitIoStream() {
-        final Stream<Arguments> byteIo = ByteIoTests.sourceByteIoStream();
+        final Stream<Arguments> byteIo = ByteIoSource.sourceByteIoStream();
         return byteIo.map(a -> Arguments.of(new DefaultBitOutput((ByteOutput) a.get()[0]),
                                             new DefaultBitInput((ByteInput) a.get()[1])));
     }
@@ -62,7 +64,7 @@ final class DefaultBitIoTests {
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    private DefaultBitIoTests() {
+    private BitIoSource() {
         super();
     }
 }

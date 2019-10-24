@@ -40,7 +40,7 @@ import static java.util.Objects.requireNonNull;
  */
 @ExtendWith({WeldJunit5Extension.class})
 @Slf4j
-public abstract class ByteInputTest<T extends ByteInput> {
+abstract class ByteInputTest<T extends ByteInput> {
 
     // -----------------------------------------------------------------------------------------------------------------
 
@@ -49,7 +49,7 @@ public abstract class ByteInputTest<T extends ByteInput> {
      *
      * @param byteInputClass the byte input class to test.
      */
-    public ByteInputTest(final Class<T> byteInputClass) {
+    ByteInputTest(final Class<T> byteInputClass) {
         super();
         this.byteInputClass = requireNonNull(byteInputClass, "byteOutputClass is null");
     }
@@ -77,7 +77,7 @@ public abstract class ByteInputTest<T extends ByteInput> {
     /**
      * The type of {@link ByteInput} to test.
      */
-    protected final Class<T> byteInputClass;
+    final Class<T> byteInputClass;
 
     @Typed
     @Inject
@@ -86,5 +86,5 @@ public abstract class ByteInputTest<T extends ByteInput> {
     /**
      * An instance of {@link #byteInputClass} to test with.
      */
-    protected transient T byteInput;
+    transient T byteInput;
 }

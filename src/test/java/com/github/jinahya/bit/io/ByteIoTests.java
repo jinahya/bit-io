@@ -142,7 +142,7 @@ final class ByteIoTests {
         return Stream.of(Arguments.of(output, input));
     }
 
-    static Stream<Arguments> sourceBitIo() {
+    static Stream<Arguments> sourceByteIo() {
         return Stream.of(sourceByteIoArray(), sourceByteIoBuffer(), sourceByteIoData(), sourceByteIoStream())
                 .flatMap(s -> s);
     }

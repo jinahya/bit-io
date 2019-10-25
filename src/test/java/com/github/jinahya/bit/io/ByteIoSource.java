@@ -121,7 +121,8 @@ final class ByteIoSource {
             @Override
             public int read() throws IOException {
                 if (source == null) {
-                    source = new DataInputStream(new ByteArrayInputStream(baos.toByteArray()));
+                    final byte[] bytes = baos.toByteArray();
+                    source = new DataInputStream(new ByteArrayInputStream(bytes));
                     output.target = null;
                 }
                 return super.read();
@@ -145,7 +146,8 @@ final class ByteIoSource {
             @Override
             public int read() throws IOException {
                 if (source == null) {
-                    source = new ByteArrayInputStream(baos.toByteArray());
+                    final byte[] bytes = baos.toByteArray();
+                    source = new ByteArrayInputStream(bytes);
                     output.target = null;
                 }
                 return super.read();

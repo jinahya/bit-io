@@ -22,9 +22,12 @@ package com.github.jinahya.bit.io;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.util.List;
 
+import static com.github.jinahya.bit.io.BitIoConstants.MAX_EXPONENT_BYTE;
 import static com.github.jinahya.bit.io.BitIoConstants.MAX_EXPONENT_INTEGER;
 import static com.github.jinahya.bit.io.BitIoConstants.MAX_EXPONENT_LONG;
+import static com.github.jinahya.bit.io.BitIoConstants.MAX_EXPONENT_SHORT;
 import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeByte;
 import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeInt;
 import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeLong;
@@ -51,12 +54,87 @@ public class ExtendedBitOutput {
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    public static void writeUnsignedIntVariable(final BitOutput output, final int value) throws IOException {
+    static void writeUnsignedVariableInt(final BitOutput output, int value) throws IOException {
         if (output == null) {
             throw new NullPointerException("output is null");
         }
         if (value < 0) {
-            throw new IllegalArgumentException("length(" + value + ") < 0");
+            throw new IllegalArgumentException("value(" + value + ") < 0");
+        }
+        int size = 1;
+        int mask = 1;
+        do {
+            final int v = value & mask;
+            value >>= size;
+            output.writeBoolean(value > 0);
+            output.writeInt(true, size, v);
+            size++;
+            mask = (mask << 1) + 1;
+        } while (value > 0);
+    }
+
+    static void writeUnsignedVariableLong(final BitOutput output, long value) throws IOException {
+        if (output == null) {
+            throw new NullPointerException("output is null");
+        }
+        if (value < 0L) {
+            throw new IllegalArgumentException("value(" + value + ") < 0L");
+        }
+        int size = 1;
+        int mask = 1;
+        do {
+            final long v = value & mask;
+            value >>= size;
+            output.writeBoolean(value > 0L);
+            output.writeLong(true, size, v);
+            size++;
+            mask = (mask << 1) + 1;
+        } while (value > 0L);
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    static void writeUnsignedVariable3(final BitOutput output, final byte value) throws IOException {
+        if (output == null) {
+            throw new NullPointerException("output is null");
+        }
+        if (value < 0) {
+            throw new IllegalArgumentException("value(" + value + ") < 0");
+        }
+        final int size = Byte.SIZE - (Integer.numberOfLeadingZeros(value) - 24);
+        final boolean extended = size > MAX_EXPONENT_BYTE;
+        output.writeBoolean(extended);
+        if (!extended) {
+            output.writeByte(true, MAX_EXPONENT_BYTE, value);
+            return;
+        }
+        output.writeInt(true, MAX_EXPONENT_BYTE, size);
+        output.writeByte(true, size, value);
+    }
+
+    static void writeUnsignedVariable4(final BitOutput output, final short value) throws IOException {
+        if (output == null) {
+            throw new NullPointerException("output is null");
+        }
+        if (value < 0) {
+            throw new IllegalArgumentException("value(" + value + ") < 0");
+        }
+        final int size = Short.SIZE - (Integer.numberOfLeadingZeros(value) - 16);
+        final boolean extended = size > MAX_EXPONENT_SHORT;
+        output.writeBoolean(extended);
+        if (!extended) {
+            output.writeShort(true, MAX_EXPONENT_SHORT, value);
+            return;
+        }
+        output.writeInt(true, MAX_EXPONENT_SHORT, size);
+        output.writeShort(true, size, value);
+    }
+
+    static void writeUnsignedVariable5(final BitOutput output, final int value) throws IOException {
+        if (output == null) {
+            throw new NullPointerException("output is null");
+        }
+        if (value < 0) {
+            throw new IllegalArgumentException("value(" + value + ") < 0");
         }
         final int size = Integer.SIZE - Integer.numberOfLeadingZeros(value);
         final boolean extended = size > MAX_EXPONENT_INTEGER;
@@ -69,12 +147,12 @@ public class ExtendedBitOutput {
         output.writeInt(true, size, value);
     }
 
-    public static void writeUnsignedLongVariable(final BitOutput output, final long value) throws IOException {
+    static void writeUnsignedVariable6(final BitOutput output, final long value) throws IOException {
         if (output == null) {
             throw new NullPointerException("output is null");
         }
         if (value < 0L) {
-            throw new IllegalArgumentException("length(" + value + ") < 0L");
+            throw new IllegalArgumentException("value(" + value + ") < 0L");
         }
         final int size = Long.SIZE - Long.numberOfLeadingZeros(value);
         final boolean extended = size > MAX_EXPONENT_LONG;
@@ -85,6 +163,12 @@ public class ExtendedBitOutput {
         }
         output.writeInt(true, MAX_EXPONENT_LONG, size);
         output.writeLong(true, size, value);
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+
+    static void writeLengthInt(final BitOutput output, final int length) throws IOException {
+        writeUnsignedVariable5(output, length);
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -113,7 +197,7 @@ public class ExtendedBitOutput {
         if (value == null) {
             throw new NullPointerException("value is null");
         }
-        writeUnsignedIntVariable(output, value.length);
+        writeLengthInt(output, value.length);
         for (final byte v : value) {
             output.writeByte(unsigned, size, v);
         }
@@ -163,8 +247,9 @@ public class ExtendedBitOutput {
      * @param size   a number of bits for a group.
      * @param value  a value to write.
      * @throws IOException if an I/O error occurs.
+     * @see ExtendedBitInput#readVariableLengthQuantityInt(BitInput, int)
      */
-    public static void writeVariableLengthQuantityInt(final BitOutput output, final int size, final int value)
+    static void writeVariableLengthQuantityInt(final BitOutput output, final int size, final int value)
             throws IOException {
         if (output == null) {
             throw new NullPointerException("output is null");
@@ -188,7 +273,7 @@ public class ExtendedBitOutput {
         output.writeInt(true, size, value & mask);
     }
 
-    public static void writeVariableLengthQuantityLong(final BitOutput output, final int size, final long value)
+    static void writeVariableLengthQuantityLong(final BitOutput output, final int size, final long value)
             throws IOException {
         if (output == null) {
             throw new NullPointerException("output is null");
@@ -210,6 +295,39 @@ public class ExtendedBitOutput {
         }
         output.writeInt(true, 1, 0);
         output.writeLong(true, size, value & mask);
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    static <T extends BitWritable> void writeObject(final boolean nullable, final BitOutput output, final T value)
+            throws IOException {
+        if (output == null) {
+            throw new NullPointerException("bitOutput is null");
+        }
+        if (!nullable && value == null) {
+            throw new NullPointerException("value is null");
+        }
+        if (nullable && writeBooleanIsNextNull(output, value)) {
+            return;
+        }
+        value.write(output);
+    }
+
+    static <T extends BitWritable> void writeObjects(final boolean nullable, final BitOutput output,
+                                                     final List<? extends T> value)
+            throws IOException {
+        if (output == null) {
+            throw new NullPointerException("bitOutput is null");
+        }
+        if (!nullable && value == null) {
+            throw new NullPointerException("value is null");
+        }
+        if (nullable && writeBooleanIsNextNull(output, value)) {
+            return;
+        }
+        writeLengthInt(output, value.size());
+        for (final T v : value) {
+            writeObject(true, output, v);
+        }
     }
 
     // -----------------------------------------------------------------------------------------------------------------

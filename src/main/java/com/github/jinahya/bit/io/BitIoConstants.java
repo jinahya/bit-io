@@ -27,6 +27,12 @@ final class BitIoConstants {
     static final int SIZE_UNSIGNED_INTEGER = Integer.SIZE - 1;
 
     // -----------------------------------------------------------------------------------------------------------------
+    static final int MAX_EXPONENT_BYTE = 3;
+
+    // -----------------------------------------------------------------------------------------------------------------
+    static final int MAX_EXPONENT_SHORT = 4;
+
+    // -----------------------------------------------------------------------------------------------------------------
     @Deprecated
     static final int BYTES_INTEGER = Integer.SIZE / Byte.SIZE;
 

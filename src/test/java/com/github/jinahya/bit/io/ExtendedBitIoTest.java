@@ -22,29 +22,43 @@ package com.github.jinahya.bit.io;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.text.RandomStringGenerator;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Writer;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.IntStream;
 
 import static com.github.jinahya.bit.io.ExtendedBitInput.readAscii;
-import static com.github.jinahya.bit.io.ExtendedBitInput.readUnsignedIntVariable;
-import static com.github.jinahya.bit.io.ExtendedBitInput.readUnsignedLongVariable;
+import static com.github.jinahya.bit.io.ExtendedBitInput.readUnsignedVariable3;
+import static com.github.jinahya.bit.io.ExtendedBitInput.readUnsignedVariable4;
+import static com.github.jinahya.bit.io.ExtendedBitInput.readUnsignedVariable5;
+import static com.github.jinahya.bit.io.ExtendedBitInput.readUnsignedVariable6;
+import static com.github.jinahya.bit.io.ExtendedBitInput.readUnsignedVariableInt;
+import static com.github.jinahya.bit.io.ExtendedBitInput.readUnsignedVariableLong;
 import static com.github.jinahya.bit.io.ExtendedBitInput.readVariableLengthQuantityInt;
 import static com.github.jinahya.bit.io.ExtendedBitInput.readVariableLengthQuantityLong;
 import static com.github.jinahya.bit.io.ExtendedBitOutput.writeAscii;
 import static com.github.jinahya.bit.io.ExtendedBitOutput.writeString;
-import static com.github.jinahya.bit.io.ExtendedBitOutput.writeUnsignedIntVariable;
-import static com.github.jinahya.bit.io.ExtendedBitOutput.writeUnsignedLongVariable;
+import static com.github.jinahya.bit.io.ExtendedBitOutput.writeUnsignedVariable3;
+import static com.github.jinahya.bit.io.ExtendedBitOutput.writeUnsignedVariable4;
+import static com.github.jinahya.bit.io.ExtendedBitOutput.writeUnsignedVariable5;
+import static com.github.jinahya.bit.io.ExtendedBitOutput.writeUnsignedVariable6;
+import static com.github.jinahya.bit.io.ExtendedBitOutput.writeUnsignedVariableInt;
+import static com.github.jinahya.bit.io.ExtendedBitOutput.writeUnsignedVariableLong;
 import static com.github.jinahya.bit.io.ExtendedBitOutput.writeVariableLengthQuantityInt;
 import static com.github.jinahya.bit.io.ExtendedBitOutput.writeVariableLengthQuantityLong;
+import static java.lang.StrictMath.pow;
 import static java.util.concurrent.ThreadLocalRandom.current;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -57,11 +71,35 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @Slf4j
 class ExtendedBitIoTest {
 
-    // --------------------------------------------------------------------------------------------- unsignedIntVariable
+    // --------------------------------------------------------------------------------------------- unsignedVariableInt
+    @MethodSource({"com.github.jinahya.bit.io.BitIoSource#sourceBitIo"})
+    @ParameterizedTest
+    void testUnsignedVariableInt(final BitOutput output, final BitInput input) throws IOException {
+        final int expected = current().nextInt() >>> 1;
+        writeUnsignedVariableInt(output, expected);
+        output.align(1);
+        final int actual = readUnsignedVariableInt(input);
+        input.align(1);
+        assertEquals(expected, actual);
+    }
+
+    // --------------------------------------------------------------------------------------------- unsignedVariableInt
+    @MethodSource({"com.github.jinahya.bit.io.BitIoSource#sourceBitIo"})
+    @ParameterizedTest
+    void testUnsignedVariableLong(final BitOutput output, final BitInput input) throws IOException {
+        final long expected = current().nextLong() >>> 1;
+        writeUnsignedVariableLong(output, expected);
+        output.align(1);
+        final long actual = readUnsignedVariableLong(input);
+        input.align(1);
+        assertEquals(expected, actual);
+    }
+
+    // ----------------------------------------------------------------------------------------------- unsignedVariable3
 
     /**
-     * Tests {@link ExtendedBitOutput#writeUnsignedIntVariable(BitOutput, int)} method and {@link
-     * ExtendedBitInput#readUnsignedIntVariable(BitInput)} method.
+     * Tests {@link ExtendedBitOutput#writeUnsignedVariable3(BitOutput, byte)} method and {@link
+     * ExtendedBitInput#readUnsignedVariable3(BitInput)} method.
      *
      * @param output a bit output.
      * @param input  a bit input.
@@ -69,69 +107,183 @@ class ExtendedBitIoTest {
      */
     @MethodSource({"com.github.jinahya.bit.io.BitIoSource#sourceBitIo"})
     @ParameterizedTest
-    void testUnsignedIntVariable_Zero(final BitOutput output, final BitInput input) throws IOException {
+    void testUnsignedVariable3_Zero(final BitOutput output, final BitInput input) throws IOException {
+        final byte expected = 0;
+        writeUnsignedVariable3(output, expected);
+        output.align(1);
+        final byte actual = readUnsignedVariable3(input);
+        input.align(1);
+        assertEquals(expected, actual);
+    }
+
+    @MethodSource({"com.github.jinahya.bit.io.BitIoSource#sourceBitIo"})
+    @ParameterizedTest
+    void testUnsignedVariable3_Max(final BitOutput output, final BitInput input) throws IOException {
+        final byte expected = Byte.MAX_VALUE;
+        writeUnsignedVariable3(output, expected);
+        output.align(1);
+        final byte actual = readUnsignedVariable3(input);
+        input.align(1);
+        assertEquals(expected, actual);
+    }
+
+    @MethodSource({"com.github.jinahya.bit.io.BitIoSource#sourceBitIo"})
+    @ParameterizedTest
+    void testUnsignedVariable3(final BitOutput output, final BitInput input) throws IOException {
+        final byte expected = (byte) (current().nextInt() >>> 25);
+        writeUnsignedVariable3(output, expected);
+        output.align(1);
+        final byte actual = readUnsignedVariable3(input);
+        input.align(1);
+        assertEquals(expected, actual);
+    }
+
+    // -------------------------------------------------------------------------------------------- unsignedIntVariable4
+
+    /**
+     * Tests {@link ExtendedBitOutput#writeUnsignedVariable4(BitOutput, short)} method and {@link
+     * ExtendedBitInput#readUnsignedVariable4(BitInput)} method.
+     *
+     * @param output a bit output.
+     * @param input  a bit input.
+     * @throws IOException if an I/O error occurs.
+     */
+    @MethodSource({"com.github.jinahya.bit.io.BitIoSource#sourceBitIo"})
+    @ParameterizedTest
+    void testUnsignedVariable4_Zero(final BitOutput output, final BitInput input) throws IOException {
+        final short expected = 0;
+        writeUnsignedVariable4(output, expected);
+        output.align(1);
+        final short actual = readUnsignedVariable4(input);
+        input.align(1);
+        assertEquals(expected, actual);
+    }
+
+    @MethodSource({"com.github.jinahya.bit.io.BitIoSource#sourceBitIo"})
+    @ParameterizedTest
+    void testUnsignedVariable4_Max(final BitOutput output, final BitInput input) throws IOException {
+        final short expected = Short.MAX_VALUE;
+        writeUnsignedVariable4(output, expected);
+        output.align(1);
+        final short actual = readUnsignedVariable4(input);
+        input.align(1);
+        assertEquals(expected, actual);
+    }
+
+    @MethodSource({"com.github.jinahya.bit.io.BitIoSource#sourceBitIo"})
+    @ParameterizedTest
+    void testUnsignedVariable4(final BitOutput output, final BitInput input) throws IOException {
+        final short expected = (short) (current().nextInt() >>> 17);
+        writeUnsignedVariable4(output, expected);
+        output.align(1);
+        final short actual = readUnsignedVariable4(input);
+        input.align(1);
+        assertEquals(expected, actual);
+    }
+
+    // ----------------------------------------------------------------------------------------------- unsignedVariable5
+
+    /**
+     * Tests {@link ExtendedBitOutput#writeUnsignedVariable5(BitOutput, int)} method and {@link
+     * ExtendedBitInput#readUnsignedVariable5(BitInput)} method.
+     *
+     * @param output a bit output.
+     * @param input  a bit input.
+     * @throws IOException if an I/O error occurs.
+     */
+    @MethodSource({"com.github.jinahya.bit.io.BitIoSource#sourceBitIo"})
+    @ParameterizedTest
+    void testUnsignedVariable5_Zero(final BitOutput output, final BitInput input) throws IOException {
         final int expected = 0;
-        writeUnsignedIntVariable(output, expected);
+        writeUnsignedVariable5(output, expected);
         output.align(1);
-        final int actual = readUnsignedIntVariable(input);
+        final int actual = readUnsignedVariable5(input);
         input.align(1);
         assertEquals(expected, actual);
     }
 
     @MethodSource({"com.github.jinahya.bit.io.BitIoSource#sourceBitIo"})
     @ParameterizedTest
-    void testUnsignedIntVariable_Max(final BitOutput output, final BitInput input) throws IOException {
+    void testUnsignedVariable5_Max(final BitOutput output, final BitInput input) throws IOException {
         final int expected = Integer.MAX_VALUE;
-        writeUnsignedIntVariable(output, expected);
+        writeUnsignedVariable5(output, expected);
         output.align(1);
-        final int actual = readUnsignedIntVariable(input);
+        final int actual = readUnsignedVariable5(input);
         input.align(1);
         assertEquals(expected, actual);
     }
 
     @MethodSource({"com.github.jinahya.bit.io.BitIoSource#sourceBitIo"})
     @ParameterizedTest
-    void testUnsignedIntVariable(final BitOutput output, final BitInput input) throws IOException {
+    void testUnsignedVariable5(final BitOutput output, final BitInput input) throws IOException {
 
         final int expected = current().nextInt() >>> 1;
-        writeUnsignedIntVariable(output, expected);
+        writeUnsignedVariable5(output, expected);
         output.align(1);
-        final int actual = readUnsignedIntVariable(input);
+        final int actual = readUnsignedVariable5(input);
         input.align(1);
         assertEquals(expected, actual);
     }
 
-    // -------------------------------------------------------------------------------------------- unsignedLongVariable
+    // ----------------------------------------------------------------------------------------------- unsignedVariable6
     @MethodSource({"com.github.jinahya.bit.io.BitIoSource#sourceBitIo"})
     @ParameterizedTest
-    void testUnsignedLongVariable_Zero(final BitOutput output, final BitInput input) throws IOException {
+    void testUnsignedVariable6_Zero(final BitOutput output, final BitInput input) throws IOException {
         final long expected = 0L;
-        writeUnsignedLongVariable(output, expected);
+        writeUnsignedVariable6(output, expected);
         output.align(1);
-        final long actual = readUnsignedLongVariable(input);
+        final long actual = readUnsignedVariable6(input);
         input.align(1);
         assertEquals(expected, actual);
     }
 
     @MethodSource({"com.github.jinahya.bit.io.BitIoSource#sourceBitIo"})
     @ParameterizedTest
-    void testUnsignedLongVariable_Max(final BitOutput output, final BitInput input) throws IOException {
+    void testUnsignedVariable6_Max(final BitOutput output, final BitInput input) throws IOException {
         final long expected = Long.MAX_VALUE;
-        writeUnsignedLongVariable(output, expected);
+        writeUnsignedVariable6(output, expected);
         output.align(1);
-        final long actual = readUnsignedLongVariable(input);
+        final long actual = readUnsignedVariable6(input);
         input.align(1);
         assertEquals(expected, actual);
     }
 
     @MethodSource({"com.github.jinahya.bit.io.BitIoSource#sourceBitIo"})
     @ParameterizedTest
-    void testUnsignedLongVariable(final BitOutput output, final BitInput input) throws IOException {
-
+    void testUnsignedVariable6(final BitOutput output, final BitInput input) throws IOException {
         final long expected = current().nextLong() >>> 1;
-        writeUnsignedLongVariable(output, expected);
+        writeUnsignedVariable6(output, expected);
         output.align(1);
-        final long actual = readUnsignedLongVariable(input);
+        final long actual = readUnsignedVariable6(input);
+        input.align(1);
+        assertEquals(expected, actual);
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    @MethodSource({"com.github.jinahya.bit.io.BitIoSource#sourceBitIo"})
+    @ParameterizedTest
+    void testString(final BitOutput output, final BitInput input) throws IOException {
+        final boolean nullable = current().nextBoolean();
+        final String expected = nullable && current().nextBoolean()
+                                ? null : new RandomStringGenerator.Builder().build().generate(current().nextInt(128));
+        final Charset charset = StandardCharsets.UTF_8;
+        writeString(nullable, output, expected, charset);
+        output.align(1);
+        final String actual = ExtendedBitInput.readString(nullable, input, charset);
+        input.align(1);
+        assertEquals(expected, actual);
+    }
+
+    @MethodSource({"com.github.jinahya.bit.io.BitIoSource#sourceBitIo"})
+    @ParameterizedTest
+    void testAscii(final BitOutput output, final BitInput input) throws IOException {
+        final boolean nullable = current().nextBoolean();
+        final String expected = nullable && current().nextBoolean()
+                                ? null : new RandomStringGenerator.Builder().withinRange(0, 127).build()
+                                        .generate(current().nextInt(128));
+        writeAscii(nullable, output, expected);
+        output.align(1);
+        final String actual = readAscii(nullable, input);
         input.align(1);
         assertEquals(expected, actual);
     }
@@ -215,35 +367,6 @@ class ExtendedBitIoTest {
     // -----------------------------------------------------------------------------------------------------------------
     @MethodSource({"com.github.jinahya.bit.io.BitIoSource#sourceBitIo"})
     @ParameterizedTest
-    void testString(final BitOutput output, final BitInput input) throws IOException {
-        final boolean nullable = current().nextBoolean();
-        final String expected = nullable && current().nextBoolean()
-                                ? null : new RandomStringGenerator.Builder().build().generate(current().nextInt(128));
-        final Charset charset = StandardCharsets.UTF_8;
-        writeString(nullable, output, expected, charset);
-        output.align(1);
-        final String actual = ExtendedBitInput.readString(nullable, input, charset);
-        input.align(1);
-        assertEquals(expected, actual);
-    }
-
-    @MethodSource({"com.github.jinahya.bit.io.BitIoSource#sourceBitIo"})
-    @ParameterizedTest
-    void testAscii(final BitOutput output, final BitInput input) throws IOException {
-        final boolean nullable = current().nextBoolean();
-        final String expected = nullable && current().nextBoolean()
-                                ? null : new RandomStringGenerator.Builder().withinRange(0, 127).build()
-                                        .generate(current().nextInt(128));
-        writeAscii(nullable, output, expected);
-        output.align(1);
-        final String actual = readAscii(nullable, input);
-        input.align(1);
-        assertEquals(expected, actual);
-    }
-
-    // -----------------------------------------------------------------------------------------------------------------
-    @MethodSource({"com.github.jinahya.bit.io.BitIoSource#sourceBitIo"})
-    @ParameterizedTest
     void testVariableLengthQuantityLong_Zero(final BitOutput output, final BitInput input) throws IOException {
         final long expected = 0L;
         final int size = current().nextInt(1, Long.SIZE);
@@ -276,5 +399,45 @@ class ExtendedBitIoTest {
         final long actual = readVariableLengthQuantityLong(input, size);
         input.align(1);
         assertEquals(expected, actual);
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    @Disabled
+    @Test
+    void write() throws IOException {
+        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        final BitOutput output = new DefaultBitOutput(new StreamByteOutput(baos));
+        final File file = new File("/users/onacit/Documents/test.csv");
+        try (Writer os = new FileWriter(file)) {
+            os.write("e, UVI,UVI5,VQL\r\n");
+//            IntStream.iterate(0, i -> i + (int) pow(2, i)).limit(1000).filter(i -> i >= 0).forEach(i -> {
+            IntStream.range(0, Integer.MAX_VALUE).map(i -> (int) pow(2, i)).limit(1000).filter(i -> i >= 0).forEach(i -> {
+                try {
+                    os.write(i + ",");
+                    {
+                        writeUnsignedVariableInt(output, i);
+                        final long d = output.align(1);
+                        os.write(baos.size() * Byte.SIZE - d + ",");
+                        baos.reset();
+                    }
+                    {
+                        writeUnsignedVariable5(output, i);
+                        final long d = output.align(1);
+                        os.write(baos.size() * Byte.SIZE - d + ",");
+                        baos.reset();
+                    }
+                    {
+                        writeVariableLengthQuantityInt(output, 7, i);
+                        final long d = output.align(1);
+                        os.write(baos.size() * Byte.SIZE - d + ",");
+                        baos.reset();
+                    }
+                    os.write("\r\n");
+                } catch (final IOException ioe) {
+                    throw new RuntimeException(ioe);
+                }
+            });
+            os.flush();
+        }
     }
 }

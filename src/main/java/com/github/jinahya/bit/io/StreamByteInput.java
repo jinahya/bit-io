@@ -47,7 +47,7 @@ public class StreamByteInput extends AbstractByteInput<InputStream> {
 
     /**
      * {@inheritDoc} The {@code read()} method of {@code StreamByteInput} class invokes {@link InputStream#read()}, on
-     * what {@link #getSource()} gives, and returns the result.
+     * what {@link #getSource() getSource()} method returns, and returns the result.
      *
      * @return {@inheritDoc}
      * @throws IOException {@inheritDoc}

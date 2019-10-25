@@ -45,7 +45,8 @@ public class DataByteOutput extends AbstractByteOutput<DataOutput> {
 
     /**
      * {@inheritDoc} The {@code write(int)} method of {@code DataByteOutput} class invokes {@link
-     * DataOutput#writeByte(int)}, on what {@link #getTarget()} gives, with specified {@code value}.
+     * DataOutput#writeByte(int)}, on what {@link #getTarget() getTarget()} method returns, with specified {@code
+     * value}.
      *
      * @param value {@inheritDoc}
      * @throws IOException {@inheritDoc}

@@ -32,7 +32,7 @@ import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeByte;
 import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeInt;
 import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeLong;
 
-public class ExtendedBitOutput {
+class ExtendedBitOutput {
 
     // -----------------------------------------------------------------------------------------------------------------
 
@@ -323,6 +323,9 @@ public class ExtendedBitOutput {
         }
         if (nullable && writeBooleanIsNextNull(output, value)) {
             return;
+        }
+        if (value == null) {
+            throw new NullPointerException("value is null");
         }
         writeLengthInt(output, value.size());
         for (final T v : value) {

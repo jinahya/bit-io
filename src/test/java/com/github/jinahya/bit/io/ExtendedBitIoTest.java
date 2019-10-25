@@ -39,9 +39,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.IntStream;
 
 import static com.github.jinahya.bit.io.ExtendedBitInput.readAscii;
+import static com.github.jinahya.bit.io.ExtendedBitInput.readObjects;
 import static com.github.jinahya.bit.io.ExtendedBitInput.readString;
 import static com.github.jinahya.bit.io.ExtendedBitInput.readUnsignedVariable3;
 import static com.github.jinahya.bit.io.ExtendedBitInput.readUnsignedVariable4;
@@ -65,6 +65,7 @@ import static com.github.jinahya.bit.io.ExtendedBitOutput.writeVariableLengthQua
 import static java.lang.StrictMath.pow;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.concurrent.ThreadLocalRandom.current;
+import static java.util.stream.IntStream.range;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -406,32 +407,35 @@ class ExtendedBitIoTest {
         assertEquals(expected, actual);
     }
 
+    @Data
+    static final class User implements BitReadable, BitWritable {
+
+        @Override
+        public void read(BitInput input) throws IOException {
+            name = readString(true, input, UTF_8);
+            age = input.readInt(true, 7);
+        }
+
+        @Override
+        public void write(BitOutput output) throws IOException {
+            writeString(true, output, name, UTF_8);
+            output.writeInt(true, 7, age);
+        }
+
+        String name;
+
+        int age;
+    }
+
     // -----------------------------------------------------------------------------------------------------------------
     @MethodSource({"com.github.jinahya.bit.io.BitIoSource#sourceBitIo"})
     @ParameterizedTest
     void testObjects(final BitOutput output, final BitInput input) throws IOException {
-        @Data
-        final class User implements BitReadable, BitWritable {
-
-            @Override
-            public void read(BitInput input) throws IOException {
-                name = readString(true, input, UTF_8);
-                age = input.readInt(true, 7);
-            }
-
-            @Override
-            public void write(BitOutput output) throws IOException {
-                writeString(true, output, name, UTF_8);
-                output.writeInt(true, 7, age);
-            }
-
-            String name;
-
-            int age;
-        }
         final boolean nullable = current().nextBoolean();
         List<User> expected = null;
-        if (nullable && current().nextBoolean()) {
+        if (!nullable) {
+            expected = new ArrayList<>();
+        } else if (current().nextBoolean()) {
             final RandomStringGenerator generator = new RandomStringGenerator.Builder().build();
             final int size = current().nextInt(128);
             expected = new ArrayList<>(size);
@@ -444,7 +448,8 @@ class ExtendedBitIoTest {
         }
         writeObjects(nullable, output, expected);
         output.align(1);
-        final List<User> actual = ExtendedBitInput.readObjects(nullable, input, User.class);
+        final List<User> actual = readObjects(nullable, input, User.class);
+        input.align(1);
         assertEquals(expected, actual);
     }
 
@@ -457,8 +462,7 @@ class ExtendedBitIoTest {
         final File file = new File("/users/onacit/Documents/test.csv");
         try (Writer os = new FileWriter(file)) {
             os.write("e, UVI,UVI5,VQL\r\n");
-//            IntStream.iterate(0, i -> i + (int) pow(2, i)).limit(1000).filter(i -> i >= 0).forEach(i -> {
-            IntStream.range(0, Integer.MAX_VALUE).map(i -> (int) pow(2, i)).limit(1000).filter(i -> i >= 0).forEach(i -> {
+            range(0, Integer.MAX_VALUE).map(i -> (int) pow(2, i)).limit(1000).filter(i -> i >= 0).forEach(i -> {
                 try {
                     os.write(i + ",");
                     {

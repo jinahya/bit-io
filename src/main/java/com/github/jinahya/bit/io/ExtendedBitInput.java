@@ -35,7 +35,7 @@ import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeByte;
 import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeInt;
 import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeLong;
 
-public class ExtendedBitInput {
+class ExtendedBitInput {
 
     // -----------------------------------------------------------------------------------------------------------------
 

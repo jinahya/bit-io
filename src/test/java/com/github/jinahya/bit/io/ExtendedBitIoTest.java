@@ -20,6 +20,7 @@ package com.github.jinahya.bit.io;
  * #L%
  */
 
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.text.RandomStringGenerator;
 import org.junit.jupiter.api.Disabled;
@@ -34,12 +35,14 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
 import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.IntStream;
 
 import static com.github.jinahya.bit.io.ExtendedBitInput.readAscii;
+import static com.github.jinahya.bit.io.ExtendedBitInput.readString;
 import static com.github.jinahya.bit.io.ExtendedBitInput.readUnsignedVariable3;
 import static com.github.jinahya.bit.io.ExtendedBitInput.readUnsignedVariable4;
 import static com.github.jinahya.bit.io.ExtendedBitInput.readUnsignedVariable5;
@@ -49,6 +52,7 @@ import static com.github.jinahya.bit.io.ExtendedBitInput.readUnsignedVariableLon
 import static com.github.jinahya.bit.io.ExtendedBitInput.readVariableLengthQuantityInt;
 import static com.github.jinahya.bit.io.ExtendedBitInput.readVariableLengthQuantityLong;
 import static com.github.jinahya.bit.io.ExtendedBitOutput.writeAscii;
+import static com.github.jinahya.bit.io.ExtendedBitOutput.writeObjects;
 import static com.github.jinahya.bit.io.ExtendedBitOutput.writeString;
 import static com.github.jinahya.bit.io.ExtendedBitOutput.writeUnsignedVariable3;
 import static com.github.jinahya.bit.io.ExtendedBitOutput.writeUnsignedVariable4;
@@ -59,6 +63,7 @@ import static com.github.jinahya.bit.io.ExtendedBitOutput.writeUnsignedVariableL
 import static com.github.jinahya.bit.io.ExtendedBitOutput.writeVariableLengthQuantityInt;
 import static com.github.jinahya.bit.io.ExtendedBitOutput.writeVariableLengthQuantityLong;
 import static java.lang.StrictMath.pow;
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.concurrent.ThreadLocalRandom.current;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -266,10 +271,10 @@ class ExtendedBitIoTest {
         final boolean nullable = current().nextBoolean();
         final String expected = nullable && current().nextBoolean()
                                 ? null : new RandomStringGenerator.Builder().build().generate(current().nextInt(128));
-        final Charset charset = StandardCharsets.UTF_8;
+        final Charset charset = UTF_8;
         writeString(nullable, output, expected, charset);
         output.align(1);
-        final String actual = ExtendedBitInput.readString(nullable, input, charset);
+        final String actual = readString(nullable, input, charset);
         input.align(1);
         assertEquals(expected, actual);
     }
@@ -398,6 +403,48 @@ class ExtendedBitIoTest {
         output.align(1);
         final long actual = readVariableLengthQuantityLong(input, size);
         input.align(1);
+        assertEquals(expected, actual);
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    @MethodSource({"com.github.jinahya.bit.io.BitIoSource#sourceBitIo"})
+    @ParameterizedTest
+    void testObjects(final BitOutput output, final BitInput input) throws IOException {
+        @Data
+        final class User implements BitReadable, BitWritable {
+
+            @Override
+            public void read(BitInput input) throws IOException {
+                name = readString(true, input, UTF_8);
+                age = input.readInt(true, 7);
+            }
+
+            @Override
+            public void write(BitOutput output) throws IOException {
+                writeString(true, output, name, UTF_8);
+                output.writeInt(true, 7, age);
+            }
+
+            String name;
+
+            int age;
+        }
+        final boolean nullable = current().nextBoolean();
+        List<User> expected = null;
+        if (nullable && current().nextBoolean()) {
+            final RandomStringGenerator generator = new RandomStringGenerator.Builder().build();
+            final int size = current().nextInt(128);
+            expected = new ArrayList<>(size);
+            for (int i = 0; i < size; i++) {
+                final User user = new User();
+                user.name = generator.generate(current().nextInt(128));
+                user.age = current().nextInt(128);
+                expected.add(user);
+            }
+        }
+        writeObjects(nullable, output, expected);
+        output.align(1);
+        final List<User> actual = ExtendedBitInput.readObjects(nullable, input, User.class);
         assertEquals(expected, actual);
     }
 

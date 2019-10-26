@@ -400,7 +400,6 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
-        <!--<version>${version.maven-javadoc-plugin}</version>-->
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>

@@ -32,10 +32,10 @@ import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import java.io.IOException;
 
-import static com.github.jinahya.bit.io.BitIoTests.acceptRandomSizeByte;
-import static com.github.jinahya.bit.io.BitIoTests.acceptRandomSizeInt;
-import static com.github.jinahya.bit.io.BitIoTests.acceptRandomSizeLong;
-import static com.github.jinahya.bit.io.BitIoTests.acceptRandomSizeShort;
+import static com.github.jinahya.bit.io.BitIoTests.randomSizeForByte;
+import static com.github.jinahya.bit.io.BitIoTests.randomSizeForInt;
+import static com.github.jinahya.bit.io.BitIoTests.randomSizeForLong;
+import static com.github.jinahya.bit.io.BitIoTests.randomSizeForShort;
 import static java.util.Objects.requireNonNull;
 import static java.util.concurrent.ThreadLocalRandom.current;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -96,62 +96,34 @@ abstract class BitInputTest<T extends BitInput> {
     }
 
     @RepeatedTest(8)
-    void testReadByte() {
-        acceptRandomSizeByte((unsigned, size) -> {
-            final byte value;
-            try {
-                value = bitInput.readByte(unsigned, size);
-            } catch (final IOException ioe) {
-                throw new RuntimeException(ioe);
-            }
-            BitIoTests.assertValidValueInt(unsigned, size, value);
-        });
+    void testReadByte() throws IOException {
+        final boolean unsigned = current().nextBoolean();
+        final int size = randomSizeForByte(unsigned);
+        final byte value = bitInput.readByte(unsigned, size);
     }
 
     // ----------------------------------------------------------------------------------------------------------- short
     @RepeatedTest(8)
-    void testReadShort() {
-        acceptRandomSizeShort((unsigned, size) -> {
-            final short value;
-            try {
-                value = bitInput.readShort(unsigned, size);
-            } catch (final IOException ioe) {
-                throw new RuntimeException(ioe);
-            }
-            BitIoTests.assertValidValueInt(unsigned, size, value);
-        });
+    void testReadShort() throws IOException {
+        final boolean unsigned = current().nextBoolean();
+        final int size = randomSizeForShort(unsigned);
+        final short value = bitInput.readShort(unsigned, size);
     }
 
     // ------------------------------------------------------------------------------------------------------------- int
-
-    /**
-     * Tests {@link BitInput#readInt(boolean, int)}.
-     */
     @RepeatedTest(8)
-    void testReadInt() {
-        acceptRandomSizeInt((unsigned, size) -> {
-            final int value;
-            try {
-                value = bitInput.readInt(unsigned, size);
-            } catch (final IOException ioe) {
-                throw new RuntimeException(ioe);
-            }
-            BitIoTests.assertValidValueInt(unsigned, size, value);
-        });
+    void testReadInt() throws IOException {
+        final boolean unsigned = current().nextBoolean();
+        final int size = randomSizeForInt(unsigned);
+        final int value = bitInput.readInt(unsigned, size);
     }
 
     // ------------------------------------------------------------------------------------------------------------ long
     @RepeatedTest(8)
-    void testReadLong() {
-        acceptRandomSizeLong((unsigned, size) -> {
-            final long value;
-            try {
-                value = bitInput.readLong(unsigned, size);
-            } catch (final IOException ioe) {
-                throw new RuntimeException(ioe);
-            }
-            BitIoTests.assertValidValueLong(unsigned, size, value);
-        });
+    void testReadLong() throws IOException {
+        final boolean unsigned = current().nextBoolean();
+        final int size = randomSizeForLong(unsigned);
+        final long value = bitInput.readLong(unsigned, size);
     }
 
     // ------------------------------------------------------------------------------------------------------------ char

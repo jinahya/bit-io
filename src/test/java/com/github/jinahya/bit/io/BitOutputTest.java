@@ -32,7 +32,8 @@ import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import java.io.IOException;
 
-import static com.github.jinahya.bit.io.BitIoTests.acceptRandomSizeValueByte;
+import static com.github.jinahya.bit.io.BitIoTests.randomSizeForByte;
+import static com.github.jinahya.bit.io.BitIoTests.randomValueForByte;
 import static java.util.Objects.requireNonNull;
 import static java.util.concurrent.ThreadLocalRandom.current;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -88,14 +89,11 @@ abstract class BitOutputTest<T extends BitOutput> {
 
     // ------------------------------------------------------------------------------------------------------------ byte
     @RepeatedTest(8)
-    void testWriteByte() {
-        acceptRandomSizeValueByte((pair, value) -> {
-            try {
-                bitOutput.writeByte(pair.getKey(), pair.getValue(), value);
-            } catch (final IOException ioe) {
-                throw new RuntimeException(ioe);
-            }
-        });
+    void testWriteByte() throws IOException {
+        final boolean unsigned = current().nextBoolean();
+        final int size = randomSizeForByte(unsigned);
+        final byte value = randomValueForByte(unsigned, size);
+        bitOutput.writeByte(unsigned, size, value);
     }
 
     // ----------------------------------------------------------------------------------------------------------- short

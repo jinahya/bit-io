@@ -34,21 +34,23 @@ import java.util.stream.Stream;
 import static java.lang.System.arraycopy;
 import static java.nio.ByteBuffer.allocate;
 import static java.util.Arrays.copyOf;
+import static java.util.Optional.ofNullable;
 
 @Slf4j
 final class ByteIoSource {
 
     // -----------------------------------------------------------------------------------------------------------------
     static Stream<Arguments> sourceByteIoArray() {
-        final byte[][] holder = new byte[][] {
-                new byte[1]
-        };
-        final ArrayByteOutput output = new ArrayByteOutput(holder[0]) {
+        final byte[][] holder = new byte[1][];
+        final ArrayByteOutput output = new ArrayByteOutput(null) {
             @Override
             public void write(int value) throws IOException {
+                if (target == null) {
+                    target = holder[0] = new byte[1];
+                    index = 0;
+                }
                 if (index == target.length) {
-                    target = copyOf(target, target.length << 1);
-                    holder[0] = target;
+                    holder[0] = target = copyOf(target, target.length << 1);
                 }
                 super.write(value);
             }
@@ -57,7 +59,7 @@ final class ByteIoSource {
             @Override
             public int read() throws IOException {
                 if (source == null) {
-                    source = holder[0];
+                    source = ofNullable(holder[0]).orElseGet(() -> new byte[0]);
                     index = 0;
                     output.target = null;
                 }
@@ -68,12 +70,12 @@ final class ByteIoSource {
     }
 
     static Stream<Arguments> sourceByteIoBuffer() {
-        final ByteBuffer[] holder = new ByteBuffer[] {allocate(1)};
+        final ByteBuffer[] holder = new ByteBuffer[1];
         final BufferByteOutput output = new BufferByteOutput(null) {
             @Override
             public void write(int value) throws IOException {
                 if (target == null) {
-                    target = holder[0];
+                    target = holder[0] = allocate(1);
                 }
                 if (!target.hasRemaining()) {
                     final ByteBuffer bigger = allocate(target.capacity() << 1);
@@ -86,8 +88,7 @@ final class ByteIoSource {
                             bigger.put(target.get());
                         }
                     }
-                    target = bigger;
-                    holder[0] = bigger;
+                    holder[0] = target = bigger;
                 }
                 super.write(value);
             }
@@ -96,8 +97,8 @@ final class ByteIoSource {
             @Override
             public int read() throws IOException {
                 if (source == null) {
-                    source = holder[0];
-                    source.flip();
+                    source = ofNullable(holder[0]).orElseGet(() -> allocate(0));
+                    source.flip(); // limit -> position, position -> zero
                     output.target = null;
                 }
                 return super.read();
@@ -121,8 +122,7 @@ final class ByteIoSource {
             @Override
             public int read() throws IOException {
                 if (source == null) {
-                    final byte[] bytes = baos.toByteArray();
-                    source = new DataInputStream(new ByteArrayInputStream(bytes));
+                    source = new DataInputStream(new ByteArrayInputStream(baos.toByteArray()));
                     output.target = null;
                 }
                 return super.read();
@@ -146,8 +146,7 @@ final class ByteIoSource {
             @Override
             public int read() throws IOException {
                 if (source == null) {
-                    final byte[] bytes = baos.toByteArray();
-                    source = new ByteArrayInputStream(bytes);
+                    source = new ByteArrayInputStream(baos.toByteArray());
                     output.target = null;
                 }
                 return super.read();

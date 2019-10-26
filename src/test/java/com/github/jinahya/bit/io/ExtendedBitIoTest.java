@@ -26,7 +26,6 @@ import org.apache.commons.text.RandomStringGenerator;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.converter.ConvertWith;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.io.ByteArrayInputStream;
@@ -441,40 +440,17 @@ class ExtendedBitIoTest {
             final int size = current().nextInt(128);
             expected = new ArrayList<>(size);
             for (int i = 0; i < size; i++) {
+                if (current().nextBoolean()) {
+                    expected.add(null);
+                    continue;
+                }
                 final User user = new User();
                 user.name = generator.generate(current().nextInt(128));
                 user.age = current().nextInt(128);
                 expected.add(user);
             }
         }
-        writeObjects(nullable, output, expected);
-        output.align(1);
-        final List<User> actual = readObjects(nullable, input, User.class);
-        input.align(1);
-        assertEquals(expected, actual);
-    }
-
-    @MethodSource({"com.github.jinahya.bit.io.ByteIoSource#sourceByteIo"})
-    @ParameterizedTest
-    void testObjects2(@ConvertWith(BitOutputConverter.class) final BitOutput output,
-                      @ConvertWith(BitInputConverter.class) final BitInput input)
-            throws IOException {
-        final boolean nullable = current().nextBoolean();
-        List<User> expected = null;
-        if (!nullable) {
-            expected = new ArrayList<>();
-        } else if (current().nextBoolean()) {
-            final RandomStringGenerator generator = new RandomStringGenerator.Builder().build();
-            final int size = current().nextInt(128);
-            expected = new ArrayList<>(size);
-            for (int i = 0; i < size; i++) {
-                final User user = new User();
-                user.name = generator.generate(current().nextInt(128));
-                user.age = current().nextInt(128);
-                expected.add(user);
-            }
-        }
-        writeObjects(nullable, output, expected);
+        writeObjects(nullable, output, User.class, expected);
         output.align(1);
         final List<User> actual = readObjects(nullable, input, User.class);
         input.align(1);

@@ -21,15 +21,21 @@ package com.github.jinahya.bit.io;
  */
 
 import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.List;
 
+import static com.github.jinahya.bit.io.BitIoConstants.MAX_EXPONENT_BYTE;
 import static com.github.jinahya.bit.io.BitIoConstants.MAX_EXPONENT_INTEGER;
 import static com.github.jinahya.bit.io.BitIoConstants.MAX_EXPONENT_LONG;
+import static com.github.jinahya.bit.io.BitIoConstants.MAX_EXPONENT_SHORT;
 import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeByte;
 import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeInt;
 import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeLong;
 
-public class ExtendedBitInput {
+class ExtendedBitInput {
 
     // -----------------------------------------------------------------------------------------------------------------
 
@@ -46,6 +52,66 @@ public class ExtendedBitInput {
     }
 
     // -----------------------------------------------------------------------------------------------------------------
+    static int readUnsignedVariableInt(final BitInput input) throws IOException {
+        if (input == null) {
+            throw new NullPointerException("input is null");
+        }
+        int value = 0;
+        boolean next = true;
+        for (int size = 1, shift = 0; size < 9 && next; size++) {
+            next = input.readBoolean();
+            value = (input.readInt(true, size) << shift) | value;
+            shift += size;
+        }
+        if (next) {
+            throw new IOException("no signal for the last group");
+        }
+        assert value >= 0;
+        return value;
+    }
+
+    static long readUnsignedVariableLong(final BitInput input) throws IOException {
+        if (input == null) {
+            throw new NullPointerException("input is null");
+        }
+        long value = 0L;
+        boolean next = true;
+        for (int size = 1, shift = 0; size < 12 && next; size++) {
+            next = input.readBoolean();
+            value = (input.readLong(true, size) << shift) | value;
+            shift += size;
+        }
+        if (next) {
+            throw new IOException("no signal for the last group");
+        }
+        assert value >= 0L;
+        return value;
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    static byte readUnsignedVariable3(final BitInput input) throws IOException {
+        if (input == null) {
+            throw new NullPointerException("input is null");
+        }
+        final boolean extended = input.readBoolean();
+        final int size = input.readInt(true, MAX_EXPONENT_BYTE);
+        if (!extended) {
+            return (byte) size;
+        }
+        return input.readByte(true, size);
+    }
+
+    static short readUnsignedVariable4(final BitInput input) throws IOException {
+        if (input == null) {
+            throw new NullPointerException("input is null");
+        }
+        final boolean extended = input.readBoolean();
+        final int size = input.readInt(true, MAX_EXPONENT_SHORT);
+        if (!extended) {
+            return (short) size;
+        }
+        return input.readShort(true, size);
+    }
 
     /**
      * Reads an unsigned {@code int} as a variable format.
@@ -58,15 +124,15 @@ public class ExtendedBitInput {
      * <li>when {@code extended} flag is {@code false}, this value is the original value.</li>
      * <li>when {@code extended} flag is {@code true}, this value is the number of bits of the following unsigned {@code int}.</li>
      * </ul>
-     * <li>(optionally) a {@code size}-bit {@code int} of origin value.</li>
+     * <li>(optionally) a {@code size}-bit {@code int} of original value.</li>
      * </ul>
      *
      * @param input a bit input.
      * @return an unsigned {@code int} value.
      * @throws IOException if an I/O error occurs.
-     * @see ExtendedBitOutput#writeUnsignedIntVariable(BitOutput, int)
+     * @see ExtendedBitOutput#writeUnsignedVariable5(BitOutput, int)
      */
-    protected static int readUnsignedIntVariable(final BitInput input) throws IOException {
+    static int readUnsignedVariable5(final BitInput input) throws IOException {
         if (input == null) {
             throw new NullPointerException("input is null");
         }
@@ -89,15 +155,15 @@ public class ExtendedBitInput {
      * <li>when {@code extended} flag is {@code false}, this value is the original value.</li>
      * <li>when {@code extended} flag is {@code true}, this value is the number of bits of the following unsigned {@code long}.</li>
      * </ul>
-     * <li>(optionally) a {@code size}-bit {@code long} of origin value.</li>
+     * <li>(optionally) a {@code size}-bit {@code long} of original value.</li>
      * </ul>
      *
      * @param input a bit input.
      * @return an unsigned {@code long} value.
      * @throws IOException if an I/O error occurs.
-     * @see ExtendedBitOutput#writeUnsignedLongVariable(BitOutput, long)
+     * @see ExtendedBitOutput#writeUnsignedVariable6(BitOutput, long)
      */
-    protected static long readUnsignedLongVariable(final BitInput input) throws IOException {
+    static long readUnsignedVariable6(final BitInput input) throws IOException {
         if (input == null) {
             throw new NullPointerException("input is null");
         }
@@ -110,6 +176,11 @@ public class ExtendedBitInput {
     }
 
     // -----------------------------------------------------------------------------------------------------------------
+    static int readLengthInt(final BitInput input) throws IOException {
+        return readUnsignedVariable5(input);
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
     public static byte[] readBytes(final boolean nullable, final BitInput input, final boolean unsigned, final int size)
             throws IOException {
         if (input == null) {
@@ -119,7 +190,7 @@ public class ExtendedBitInput {
         if (nullable && readBooleanIsNextNull(input)) {
             return null;
         }
-        final byte[] bytes = new byte[readUnsignedIntVariable(input)];
+        final byte[] bytes = new byte[readLengthInt(input)];
         for (int i = 0; i < bytes.length; i++) {
             bytes[i] = input.readByte(unsigned, size);
         }
@@ -167,8 +238,9 @@ public class ExtendedBitInput {
      * @param size  a value for the number of bits for a single group without the continuation-signal bit.
      * @return an {@code int} value of VLQ.
      * @throws IOException if an I/O error occurs.
+     * @see ExtendedBitOutput#writeVariableLengthQuantityInt(BitOutput, int, int)
      */
-    public static int readVariableLengthQuantityInt(final BitInput input, final int size) throws IOException {
+    static int readVariableLengthQuantityInt(final BitInput input, final int size) throws IOException {
         if (input == null) {
             throw new NullPointerException("input is null");
         }
@@ -202,7 +274,7 @@ public class ExtendedBitInput {
      * @return a {@code long} value of VLQ.
      * @throws IOException if an I/O error occurs.
      */
-    public static long readVariableLengthQuantityLong(final BitInput input, final int size) throws IOException {
+    static long readVariableLengthQuantityLong(final BitInput input, final int size) throws IOException {
         if (input == null) {
             throw new NullPointerException("input is null");
         }
@@ -224,6 +296,77 @@ public class ExtendedBitInput {
         }
         if (!last) {
             throw new IOException("no signal for last group");
+        }
+        return value;
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    static <T extends BitReadable> T readObject(final boolean nullable, final BitInput input, final T value)
+            throws IOException {
+        if (input == null) {
+            throw new NullPointerException("input is null");
+        }
+        if (!nullable && value == null) {
+            throw new NullPointerException("value is null");
+        }
+        if (nullable && readBooleanIsNextNull(input)) {
+            return null;
+        }
+        if (value == null) {
+            throw new NullPointerException("value is null");
+        }
+        value.read(input);
+        return value;
+    }
+
+    static <T extends BitReadable> T readObject(final boolean nullable, final BitInput input,
+                                                final Class<? extends T> type)
+            throws IOException {
+        if (input == null) {
+            throw new NullPointerException("input is null");
+        }
+        if (type == null) {
+            throw new NullPointerException("type is null");
+        }
+        if (nullable && readBooleanIsNextNull(input)) {
+            return null;
+        }
+        try {
+            final Constructor<? extends T> constructor = type.getDeclaredConstructor();
+            if (!constructor.isAccessible()) {
+                constructor.setAccessible(true);
+            }
+            try {
+                final T value = constructor.newInstance();
+                return readObject(false, input, value);
+            } catch (final InstantiationException ie) {
+                throw new RuntimeException(ie);
+            } catch (final IllegalAccessException iae) {
+                throw new RuntimeException(iae);
+            } catch (final InvocationTargetException ite) {
+                throw new RuntimeException(ite);
+            }
+        } catch (final NoSuchMethodException nsme) {
+            throw new RuntimeException(nsme);
+        }
+    }
+
+    static <T extends BitReadable> List<T> readObjects(final boolean nullable, final BitInput input,
+                                                       final Class<? extends T> type)
+            throws IOException {
+        if (input == null) {
+            throw new NullPointerException("input is null");
+        }
+        if (type == null) {
+            throw new NullPointerException("type is null");
+        }
+        if (nullable && readBooleanIsNextNull(input)) {
+            return null;
+        }
+        final int size = readLengthInt(input);
+        final List<T> value = new ArrayList<T>(size);
+        for (int i = 0; i < size; i++) {
+            value.add(readObject(true, input, type));
         }
         return value;
     }

@@ -32,7 +32,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
  * @see DefaultBitOutputTest
  */
 @ExtendWith({MockitoExtension.class})
-public class DefaultBitInputTest extends AbstractBitInputTest<DefaultBitInput> {
+class DefaultBitInputTest extends AbstractBitInputTest<DefaultBitInput> {
 
     // -----------------------------------------------------------------------------------------------------------------
 
@@ -49,7 +49,7 @@ public class DefaultBitInputTest extends AbstractBitInputTest<DefaultBitInput> {
      * Tests {@link DefaultBitInput#getDelegate()}.
      */
     @Test
-    public void testGetDelegate() {
+    void testGetDelegate() {
         final ByteInput delegate = bitInput.getDelegate();
     }
 
@@ -59,12 +59,12 @@ public class DefaultBitInputTest extends AbstractBitInputTest<DefaultBitInput> {
      * Tests {@link DefaultBitInput#setDelegate(ByteInput)}.
      */
     @Test
-    public void testSetDelegate() {
+    void testSetDelegate() {
         bitInput.setDelegate(null);
         bitInput.setDelegate(byteInputMock);
     }
 
     // -----------------------------------------------------------------------------------------------------------------
     @Mock
-    protected ByteInput byteInputMock;
+    private ByteInput byteInputMock;
 }

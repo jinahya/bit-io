@@ -29,18 +29,18 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import java.io.IOException;
-import java.util.Objects;
 
+import static java.util.Objects.requireNonNull;
 import static java.util.concurrent.ThreadLocalRandom.current;
 
 @ExtendWith({WeldJunit5Extension.class})
 @Slf4j
-public abstract class ByteOutputTest<T extends ByteOutput> {
+abstract class ByteOutputTest<T extends ByteOutput> {
 
     // -----------------------------------------------------------------------------------------------------------------
-    public ByteOutputTest(final Class<T> byteOutputClass) {
+    ByteOutputTest(final Class<T> byteOutputClass) {
         super();
-        this.byteOutputClass = Objects.requireNonNull(byteOutputClass, "byteOutputClass is null");
+        this.byteOutputClass = requireNonNull(byteOutputClass, "byteOutputClass is null");
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -57,7 +57,7 @@ public abstract class ByteOutputTest<T extends ByteOutput> {
      * @throws IOException if an I/O error occurs.
      */
     @Test
-    public void testWrite() throws IOException {
+    void testWrite() throws IOException {
         byteOutput.write(current().nextInt(0, 256));
     }
 

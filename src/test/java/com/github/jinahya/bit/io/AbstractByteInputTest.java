@@ -35,7 +35,7 @@ import static java.util.Objects.requireNonNull;
  * @see AbstractByteOutputTest
  */
 @ExtendWith({MockitoExtension.class})
-public abstract class AbstractByteInputTest<T extends AbstractByteInput<U>, U> extends ByteInputTest<T> {
+abstract class AbstractByteInputTest<T extends AbstractByteInput<U>, U> extends ByteInputTest<T> {
 
     // -----------------------------------------------------------------------------------------------------------------
 
@@ -45,7 +45,7 @@ public abstract class AbstractByteInputTest<T extends AbstractByteInput<U>, U> e
      * @param byteInputClass  the byte input class to test.
      * @param byteSourceClass the byte source class of the byte input class.
      */
-    public AbstractByteInputTest(final Class<T> byteInputClass, final Class<U> byteSourceClass) {
+    AbstractByteInputTest(final Class<T> byteInputClass, final Class<U> byteSourceClass) {
         super(byteInputClass);
         this.byteSourceClass = requireNonNull(byteSourceClass, "byteSourceClass is null");
     }
@@ -56,7 +56,7 @@ public abstract class AbstractByteInputTest<T extends AbstractByteInput<U>, U> e
      * Tests {@link AbstractByteInput#getSource()}.
      */
     @Test
-    public void testGetSource() {
+    void testGetSource() {
         final U source = byteInput.getSource();
     }
 
@@ -66,7 +66,7 @@ public abstract class AbstractByteInputTest<T extends AbstractByteInput<U>, U> e
      * {@code mock}, respectively.
      */
     @Test
-    public void testSetSource() {
+    void testSetSource() {
         byteInput.setSource(null);
         byteInput.setSource(byteSourceMock);
     }
@@ -76,8 +76,8 @@ public abstract class AbstractByteInputTest<T extends AbstractByteInput<U>, U> e
     /**
      * The type of byte source.
      */
-    protected final Class<U> byteSourceClass;
+    final Class<U> byteSourceClass;
 
     @Mock
-    private U byteSourceMock;
+    private transient U byteSourceMock;
 }

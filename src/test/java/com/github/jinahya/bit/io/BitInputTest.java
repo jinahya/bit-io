@@ -45,10 +45,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * An abstract class for testing subclasses of {@link BitInput}.
  *
  * @param <T> bit input type parameter.
+ * @see BitOutputTest
+ * @see AbstractBitInputTest
  */
 @ExtendWith({WeldJunit5Extension.class})
 @Slf4j
-public abstract class BitInputTest<T extends BitInput> {
+abstract class BitInputTest<T extends BitInput> {
 
     // -----------------------------------------------------------------------------------------------------------------
 
@@ -57,7 +59,7 @@ public abstract class BitInputTest<T extends BitInput> {
      *
      * @param bitInputClass the bit input class.
      */
-    public BitInputTest(final Class<T> bitInputClass) {
+    BitInputTest(final Class<T> bitInputClass) {
         super();
         this.bitInputClass = requireNonNull(bitInputClass, "bitInputClass is null");
     }
@@ -76,7 +78,7 @@ public abstract class BitInputTest<T extends BitInput> {
 
     // --------------------------------------------------------------------------------------------------------- boolean
     @RepeatedTest(8)
-    public void testReadBoolean() throws IOException {
+    void testReadBoolean() throws IOException {
         final boolean value = bitInput.readBoolean();
     }
 
@@ -87,14 +89,14 @@ public abstract class BitInputTest<T extends BitInput> {
      * less than {@code 1}.
      */
     @Test
-    public void assertReadByteThrowsIllegalArgumentExceptionWhenSizeIsLessThanOne() {
+    void assertReadByteThrowsIllegalArgumentExceptionWhenSizeIsLessThanOne() {
         assertThrows(IllegalArgumentException.class, () -> bitInput.readByte(current().nextBoolean(), 0));
         assertThrows(IllegalArgumentException.class,
                      () -> bitInput.readByte(current().nextBoolean(), current().nextInt() | Integer.MIN_VALUE));
     }
 
     @RepeatedTest(8)
-    public void testReadByte() {
+    void testReadByte() {
         acceptRandomSizeByte((unsigned, size) -> {
             final byte value;
             try {
@@ -108,7 +110,7 @@ public abstract class BitInputTest<T extends BitInput> {
 
     // ----------------------------------------------------------------------------------------------------------- short
     @RepeatedTest(8)
-    public void testReadShort() {
+    void testReadShort() {
         acceptRandomSizeShort((unsigned, size) -> {
             final short value;
             try {
@@ -126,7 +128,7 @@ public abstract class BitInputTest<T extends BitInput> {
      * Tests {@link BitInput#readInt(boolean, int)}.
      */
     @RepeatedTest(8)
-    public void testReadInt() {
+    void testReadInt() {
         acceptRandomSizeInt((unsigned, size) -> {
             final int value;
             try {
@@ -140,7 +142,7 @@ public abstract class BitInputTest<T extends BitInput> {
 
     // ------------------------------------------------------------------------------------------------------------ long
     @RepeatedTest(8)
-    public void testReadLong() {
+    void testReadLong() {
         acceptRandomSizeLong((unsigned, size) -> {
             final long value;
             try {
@@ -154,13 +156,13 @@ public abstract class BitInputTest<T extends BitInput> {
 
     // ------------------------------------------------------------------------------------------------------------ char
     @Test
-    public void testReadCharAssertThrowsIllegalArgumentExceptionWhenSizeIsLessThanOne() {
+    void testReadCharAssertThrowsIllegalArgumentExceptionWhenSizeIsLessThanOne() {
         assertThrows(IllegalArgumentException.class, () -> bitInput.readChar(0));
         assertThrows(IllegalArgumentException.class, () -> bitInput.readChar(current().nextInt() | Integer.MIN_VALUE));
     }
 
     @RepeatedTest(8)
-    public void testReadChar() throws IOException {
+    void testReadChar() throws IOException {
         final int size = current().nextInt(1, Character.SIZE + 1);
         final char value = bitInput.readChar(size);
     }
@@ -172,7 +174,7 @@ public abstract class BitInputTest<T extends BitInput> {
      * {@code 1}.
      */
     @Test
-    public void assertIllegalArgumentExceptionThrownWhenBytesIsLessThanOne() {
+    void assertIllegalArgumentExceptionThrownWhenBytesIsLessThanOne() {
         assertThrows(IllegalArgumentException.class, () -> bitInput.align(0));
         assertThrows(IllegalArgumentException.class, () -> bitInput.align(current().nextInt() | Integer.MIN_VALUE));
     }
@@ -183,7 +185,7 @@ public abstract class BitInputTest<T extends BitInput> {
      * @throws IOException if an I/O error occurs.
      */
     @Test
-    public void testAlign() throws IOException {
+    void testAlign() throws IOException {
         final long bits = bitInput.align(current().nextInt(1, 128));
         assert bits >= 0L;
     }
@@ -201,5 +203,5 @@ public abstract class BitInputTest<T extends BitInput> {
     /**
      * An injected instance of {@link #bitInputClass}.
      */
-    protected T bitInput;
+    transient T bitInput;
 }

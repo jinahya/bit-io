@@ -36,7 +36,7 @@ import static java.nio.ByteBuffer.allocate;
 import static java.util.Arrays.copyOf;
 
 @Slf4j
-final class ByteIoTests {
+final class ByteIoSource {
 
     // -----------------------------------------------------------------------------------------------------------------
     static Stream<Arguments> sourceByteIoArray() {
@@ -121,7 +121,8 @@ final class ByteIoTests {
             @Override
             public int read() throws IOException {
                 if (source == null) {
-                    source = new DataInputStream(new ByteArrayInputStream(baos.toByteArray()));
+                    final byte[] bytes = baos.toByteArray();
+                    source = new DataInputStream(new ByteArrayInputStream(bytes));
                     output.target = null;
                 }
                 return super.read();
@@ -145,7 +146,8 @@ final class ByteIoTests {
             @Override
             public int read() throws IOException {
                 if (source == null) {
-                    source = new ByteArrayInputStream(baos.toByteArray());
+                    final byte[] bytes = baos.toByteArray();
+                    source = new ByteArrayInputStream(bytes);
                     output.target = null;
                 }
                 return super.read();
@@ -160,7 +162,7 @@ final class ByteIoTests {
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    private ByteIoTests() {
+    private ByteIoSource() {
         super();
     }
 }

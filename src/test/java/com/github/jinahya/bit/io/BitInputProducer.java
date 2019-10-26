@@ -26,16 +26,22 @@ import javax.enterprise.inject.Disposes;
 import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.spi.InjectionPoint;
 
+/**
+ * A class for producing instances of {@link BitInput} interface.
+ *
+ * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
+ * @see BitOutputProducer
+ */
 @Slf4j
 class BitInputProducer {
 
     // -----------------------------------------------------------------------------------------------------------------
     @Produces
-    DefaultBitInput produceArrayByteInput(final InjectionPoint injectionPoint) {
-        return new DefaultBitInput(new StreamByteInput(new WhiteInputStream()));
+    DefaultBitInput productDefaultBitInput(final InjectionPoint injectionPoint) {
+        return new DefaultBitInput(() -> 0);
     }
 
-    void disposeArrayByteInput(@Disposes final DefaultBitInput defaultBitInput) {
+    void disposeDefaultBitInput(@Disposes final DefaultBitInput defaultBitInput) {
         // does nothing.
     }
 }

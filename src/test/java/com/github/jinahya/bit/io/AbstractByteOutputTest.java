@@ -32,7 +32,7 @@ import static java.util.Objects.requireNonNull;
  * @param <U> byte target type parameter.
  * @see AbstractByteInputTest
  */
-public abstract class AbstractByteOutputTest<T extends AbstractByteOutput<U>, U> extends ByteOutputTest<T> {
+abstract class AbstractByteOutputTest<T extends AbstractByteOutput<U>, U> extends ByteOutputTest<T> {
 
     // -----------------------------------------------------------------------------------------------------------------
 
@@ -42,19 +42,19 @@ public abstract class AbstractByteOutputTest<T extends AbstractByteOutput<U>, U>
      * @param byteOutputClass a class of byte output to test.
      * @param byteTargetClass a class of byte target of the byte output class.
      */
-    public AbstractByteOutputTest(final Class<T> byteOutputClass, final Class<U> byteTargetClass) {
+    AbstractByteOutputTest(final Class<T> byteOutputClass, final Class<U> byteTargetClass) {
         super(byteOutputClass);
         this.byteTargetClass = requireNonNull(byteTargetClass, "byteTargetClass is null");
     }
 
     // -----------------------------------------------------------------------------------------------------------------
     @Test
-    public void testGetTarget() {
+    void testGetTarget() {
         final U target = byteOutput.getTarget();
     }
 
     @Test
-    public void testSetTarget() {
+    void testSetTarget() {
         byteOutput.setTarget(null);
         byteOutput.setTarget(byteTargetMock);
     }
@@ -64,8 +64,8 @@ public abstract class AbstractByteOutputTest<T extends AbstractByteOutput<U>, U>
     /**
      * The byte target class.
      */
-    protected final Class<U> byteTargetClass;
+    final Class<U> byteTargetClass;
 
     @Mock
-    private U byteTargetMock;
+    private transient U byteTargetMock;
 }

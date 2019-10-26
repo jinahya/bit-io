@@ -24,7 +24,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 
 /**
- * A {@link ByteInput} uses an instance of {@link ByteBuffer} as its {@code source}.
+ * A byte input uses an instance of {@link ByteBuffer} as its {@link #source}.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  * @see BufferByteOutput
@@ -34,9 +34,10 @@ public class BufferByteInput extends AbstractByteInput<ByteBuffer> {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * Creates a new instance built on top of the specified byte buffer.
+     * Creates a new instance with specified byte buffer as a byte source.
      *
-     * @param source the byte buffer; {@code null} if it's supposed to be lazily initialized and set.
+     * @param source the byte buffer to be assigned to {@link #source}; {@code null} if it's supposed to be lazily
+     *               initialized and set.
      */
     public BufferByteInput(final ByteBuffer source) {
         super(source);
@@ -46,7 +47,7 @@ public class BufferByteInput extends AbstractByteInput<ByteBuffer> {
 
     /**
      * {@inheritDoc} The {@code read()} method of {@code BufferByteInput} invokes {@link ByteBuffer#get()}, on what
-     * {@link #getSource()} gives, and returns the result as an unsigned 8-bit {@code int}.
+     * {@link #getSource() getSource()} method returns, and returns the result as an unsigned 8-bit {@code int}.
      *
      * @return {@inheritDoc}
      * @throws IOException {@inheritDoc}

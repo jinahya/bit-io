@@ -31,7 +31,7 @@ import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeUnsigne
 import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeUnsigned8;
 
 /**
- * An abstract class for implementing {@link BitInput}.
+ * An abstract class for implementing {@link BitInput} interface.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  * @see AbstractBitOutput
@@ -110,13 +110,13 @@ public abstract class AbstractBitInput implements BitInput {
         return value;
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------------------- boolean
     @Override
     public boolean readBoolean() throws IOException {
         return readInt(true, 1) == 1;
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+    // ------------------------------------------------------------------------------------------------------------ byte
     @Override
     public byte readByte(final boolean unsigned, final int size) throws IOException {
         return (byte) readInt(unsigned, requireValidSizeByte(unsigned, size));
@@ -132,7 +132,7 @@ public abstract class AbstractBitInput implements BitInput {
         return readByte(true, size);
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+    // ----------------------------------------------------------------------------------------------------------- short
     @Override
     public short readShort(final boolean unsigned, final int size) throws IOException {
         return (short) readInt(unsigned, requireValidSizeShort(unsigned, size));
@@ -148,7 +148,7 @@ public abstract class AbstractBitInput implements BitInput {
         return readShort(true, size);
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+    // ------------------------------------------------------------------------------------------------------------- int
     @Override
     public int readInt(final boolean unsigned, final int size) throws IOException {
         requireValidSizeInt(unsigned, size);
@@ -185,7 +185,7 @@ public abstract class AbstractBitInput implements BitInput {
         return readInt(true, size);
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+    // ------------------------------------------------------------------------------------------------------------ long
     @Override
     public long readLong(final boolean unsigned, final int size) throws IOException {
         requireValidSizeLong(unsigned, size);
@@ -222,7 +222,7 @@ public abstract class AbstractBitInput implements BitInput {
         return readLong(true, size);
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+    // ------------------------------------------------------------------------------------------------------------ char
     @Override
     public char readChar(final int size) throws IOException {
         return (char) readInt(true, requireValidSizeChar(size));
@@ -259,7 +259,7 @@ public abstract class AbstractBitInput implements BitInput {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * The current octet of read bits.
+     * The current octet.
      */
     private int octet;
 
@@ -269,7 +269,7 @@ public abstract class AbstractBitInput implements BitInput {
     private int available;
 
     /**
-     * The number of octets read so far.
+     * The number of bytes read so far.
      */
     private long count;
 }

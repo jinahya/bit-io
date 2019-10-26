@@ -42,10 +42,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * An abstract class for testing subclasses of {@link BitOutput}.
  *
  * @param <T> bit output type parameter.
+ * @see BitInputTest
+ * @see AbstractBitOutputTest
  */
 @ExtendWith({WeldJunit5Extension.class})
 @Slf4j
-public abstract class BitOutputTest<T extends BitOutput> {
+abstract class BitOutputTest<T extends BitOutput> {
 
     // -----------------------------------------------------------------------------------------------------------------
 
@@ -55,7 +57,7 @@ public abstract class BitOutputTest<T extends BitOutput> {
      * @param bitOutputClass the bit output class to test.
      * @see #bitOutputClass
      */
-    public BitOutputTest(final Class<T> bitOutputClass) {
+    BitOutputTest(final Class<T> bitOutputClass) {
         super();
         this.bitOutputClass = requireNonNull(bitOutputClass, "bitOutputClass is null");
     }
@@ -80,13 +82,13 @@ public abstract class BitOutputTest<T extends BitOutput> {
      * @throws IOException if an I/O error occurs.
      */
     @RepeatedTest(8)
-    public void testWriteBoolean() throws IOException {
+    void testWriteBoolean() throws IOException {
         bitOutput.writeBoolean(current().nextBoolean());
     }
 
     // ------------------------------------------------------------------------------------------------------------ byte
     @RepeatedTest(8)
-    public void testWriteByte() {
+    void testWriteByte() {
         acceptRandomSizeValueByte((pair, value) -> {
             try {
                 bitOutput.writeByte(pair.getKey(), pair.getValue(), value);
@@ -98,7 +100,7 @@ public abstract class BitOutputTest<T extends BitOutput> {
 
     // ----------------------------------------------------------------------------------------------------------- short
     @RepeatedTest(8)
-    public void testWriteShort() throws IOException {
+    void testWriteShort() throws IOException {
         final boolean unsigned = current().nextBoolean();
         final int size = current().nextInt(1, Short.SIZE + (unsigned ? 0 : 1));
         final short value = (byte) (current().nextInt() >>> (Integer.SIZE - size));
@@ -107,7 +109,7 @@ public abstract class BitOutputTest<T extends BitOutput> {
 
     // ------------------------------------------------------------------------------------------------------------- int
     @RepeatedTest(8)
-    public void testWriteInt() throws IOException {
+    void testWriteInt() throws IOException {
         final boolean unsigned = current().nextBoolean();
         final int size = current().nextInt(1, Integer.SIZE + (unsigned ? 0 : 1));
         final int value = current().nextInt() >>> (Integer.SIZE - size);
@@ -116,7 +118,7 @@ public abstract class BitOutputTest<T extends BitOutput> {
 
     // ------------------------------------------------------------------------------------------------------------ long
     @RepeatedTest(8)
-    public void testWriteLong() throws IOException {
+    void testWriteLong() throws IOException {
         final boolean unsigned = current().nextBoolean();
         final int size = current().nextInt(1, Long.SIZE + (unsigned ? 0 : 1));
         final long value = current().nextLong() >>> (Long.SIZE - size);
@@ -125,14 +127,14 @@ public abstract class BitOutputTest<T extends BitOutput> {
 
     // ------------------------------------------------------------------------------------------------------------ char
     @RepeatedTest(8)
-    public void testWriteChar() throws IOException {
+    void testWriteChar() throws IOException {
         final int size = current().nextInt(1, Character.SIZE + 1);
         bitOutput.writeChar(size, (char) current().nextInt());
     }
 
     // -----------------------------------------------------------------------------------------------------------------
     @Test
-    public void testAlignAssertThrowsIllegalArgumentExceptionWhenBytesIsLessThanOrEqualsToZero() {
+    void testAlignAssertThrowsIllegalArgumentExceptionWhenBytesIsLessThanOrEqualsToZero() {
         assertThrows(IllegalArgumentException.class, () -> bitOutput.align(0));
         assertThrows(IllegalArgumentException.class, () -> bitOutput.align(current().nextInt() | -1));
     }
@@ -142,7 +144,7 @@ public abstract class BitOutputTest<T extends BitOutput> {
     /**
      * The class of bit output to test.
      */
-    protected final Class<T> bitOutputClass;
+    final Class<T> bitOutputClass;
 
     @Inject
     private Instance<BitOutput> bitOutputInstance;
@@ -150,5 +152,5 @@ public abstract class BitOutputTest<T extends BitOutput> {
     /**
      * An injected instance of bit output.
      */
-    protected T bitOutput;
+    T bitOutput;
 }

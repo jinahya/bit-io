@@ -122,15 +122,15 @@ public abstract class AbstractBitInput implements BitInput {
         return (byte) readInt(unsigned, requireValidSizeByte(unsigned, size));
     }
 
-    @Override
-    public byte readSignedByte(int size) throws IOException {
-        return readByte(false, size);
-    }
-
-    @Override
-    public byte readUnsignedByte(int size) throws IOException {
-        return readByte(true, size);
-    }
+//    @Override
+//    public byte readSignedByte(final int size) throws IOException {
+//        return readByte(false, size);
+//    }
+//
+//    @Override
+//    public byte readUnsignedByte(final int size) throws IOException {
+//        return readByte(true, size);
+//    }
 
     // ----------------------------------------------------------------------------------------------------------- short
     @Override
@@ -138,15 +138,15 @@ public abstract class AbstractBitInput implements BitInput {
         return (short) readInt(unsigned, requireValidSizeShort(unsigned, size));
     }
 
-    @Override
-    public short readSignedShort(final int size) throws IOException {
-        return readShort(false, size);
-    }
-
-    @Override
-    public short readUnsignedShort(final int size) throws IOException {
-        return readShort(true, size);
-    }
+//    @Override
+//    public short readSignedShort(final int size) throws IOException {
+//        return readShort(false, size);
+//    }
+//
+//    @Override
+//    public short readUnsignedShort(final int size) throws IOException {
+//        return readShort(true, size);
+//    }
 
     // ------------------------------------------------------------------------------------------------------------- int
     @Override
@@ -175,15 +175,15 @@ public abstract class AbstractBitInput implements BitInput {
         return value;
     }
 
-    @Override
-    public int readSignedInt(final int size) throws IOException {
-        return readInt(false, size);
-    }
-
-    @Override
-    public int readUnsignedInt(final int size) throws IOException {
-        return readInt(true, size);
-    }
+//    @Override
+//    public int readSignedInt(final int size) throws IOException {
+//        return readInt(false, size);
+//    }
+//
+//    @Override
+//    public int readUnsignedInt(final int size) throws IOException {
+//        return readInt(true, size);
+//    }
 
     // ------------------------------------------------------------------------------------------------------------ long
     @Override
@@ -212,15 +212,15 @@ public abstract class AbstractBitInput implements BitInput {
         return value;
     }
 
-    @Override
-    public long readSignedLong(final int size) throws IOException {
-        return readLong(false, size);
-    }
-
-    @Override
-    public long readUnsignedLong(final int size) throws IOException {
-        return readLong(true, size);
-    }
+//    @Override
+//    public long readSignedLong(final int size) throws IOException {
+//        return readLong(false, size);
+//    }
+//
+//    @Override
+//    public long readUnsignedLong(final int size) throws IOException {
+//        return readLong(true, size);
+//    }
 
     // ------------------------------------------------------------------------------------------------------------ char
     @Override

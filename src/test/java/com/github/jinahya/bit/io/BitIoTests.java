@@ -21,8 +21,18 @@ package com.github.jinahya.bit.io;
  */
 
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.params.provider.Arguments;
 
+import java.util.function.BiFunction;
+import java.util.stream.Stream;
+
+import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeByte;
+import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeChar;
+import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeInt;
+import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeLong;
+import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeShort;
 import static java.util.concurrent.ThreadLocalRandom.current;
+import static java.util.stream.IntStream.range;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -34,7 +44,7 @@ final class BitIoTests {
 
     // ------------------------------------------------------------------------------------------------------------ byte
     static int randomSizeForByte(final boolean unsigned) {
-        return current().nextInt(1, Byte.SIZE + (unsigned ? 0 : 1));
+        return requireValidSizeByte(unsigned, current().nextInt(1, Byte.SIZE + (unsigned ? 0 : 1)));
     }
 
     static byte randomValueForByte(final boolean unsigned, final int size) {
@@ -49,9 +59,44 @@ final class BitIoTests {
         return value;
     }
 
+    static <R> R applyRandomSizeForByte(final boolean unsigned,
+                                        final BiFunction<? super Boolean, ? super Integer, ? extends R> function) {
+        return function.apply(unsigned, randomSizeForByte(unsigned));
+    }
+
+    static <R> R applyRandomSizeValueForByte(final boolean unsigned,
+                                             final BiFunction<? super Integer, ? super Byte, ? extends R> function) {
+        return applyRandomSizeForByte(unsigned, (u, s) -> function.apply(s, randomValueForByte(u, s)));
+    }
+
+    static Stream<Arguments> sourceSizeAndValueForByteSigned() {
+        final Stream.Builder<Arguments> builder = Stream.builder();
+        builder.add(Arguments.of(1, (byte) -1));
+        builder.add(Arguments.of(1, (byte) 0));
+        builder.add(Arguments.of(2, (byte) 1));
+        builder.add(Arguments.of(Byte.SIZE, Byte.MIN_VALUE));
+        builder.add(Arguments.of(Byte.SIZE, (byte) -1));
+        builder.add(Arguments.of(Byte.SIZE, (byte) 0));
+        builder.add(Arguments.of(Byte.SIZE, (byte) 1));
+        builder.add(Arguments.of(Byte.SIZE, Byte.MAX_VALUE));
+        range(0, 128).forEach(i -> applyRandomSizeValueForByte(false, (s, v) -> builder.add(Arguments.of(s, v))));
+        return builder.build();
+    }
+
+    static Stream<Arguments> sourceSizeAndValueForByteUnsigned() {
+        final Stream.Builder<Arguments> builder = Stream.builder();
+        builder.add(Arguments.of(1, (byte) 0));
+        builder.add(Arguments.of(1, (byte) 1));
+        builder.add(Arguments.of(Byte.SIZE - 1, (byte) 0));
+        builder.add(Arguments.of(Byte.SIZE - 1, (byte) 1));
+        builder.add(Arguments.of(Byte.SIZE - 1, Byte.MAX_VALUE));
+        range(0, 128).forEach(i -> applyRandomSizeValueForByte(true, (s, v) -> builder.add(Arguments.of(s, v))));
+        return builder.build();
+    }
+
     // ----------------------------------------------------------------------------------------------------------- short
     static int randomSizeForShort(final boolean unsigned) {
-        return current().nextInt(1, Short.SIZE + (unsigned ? 0 : 1));
+        return requireValidSizeShort(unsigned, current().nextInt(1, Short.SIZE + (unsigned ? 0 : 1)));
     }
 
     static short randomValueForShort(final boolean unsigned, final int size) {
@@ -68,7 +113,7 @@ final class BitIoTests {
 
     // ------------------------------------------------------------------------------------------------------------- int
     static int randomSizeForInt(final boolean unsigned) {
-        return current().nextInt(1, Integer.SIZE + (unsigned ? 0 : 1));
+        return requireValidSizeInt(unsigned, current().nextInt(1, Integer.SIZE + (unsigned ? 0 : 1)));
     }
 
     static int randomValueForInt(final boolean unsigned, final int size) {
@@ -85,7 +130,7 @@ final class BitIoTests {
 
     // ------------------------------------------------------------------------------------------------------------ long
     static int randomSizeForLong(final boolean unsigned) {
-        return current().nextInt(1, Long.SIZE + (unsigned ? 0 : 1));
+        return requireValidSizeLong(unsigned, current().nextInt(1, Long.SIZE + (unsigned ? 0 : 1)));
     }
 
     static long randomValueForLong(final boolean unsigned, final int size) {
@@ -102,7 +147,7 @@ final class BitIoTests {
 
     // ------------------------------------------------------------------------------------------------------------ char
     static int randomSizeForChar() {
-        return current().nextInt(1, Character.SIZE);
+        return requireValidSizeChar(current().nextInt(1, Character.SIZE));
     }
 
     static char randomValueForChar(final int size) {

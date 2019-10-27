@@ -29,8 +29,15 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.IOException;
 
+import static com.github.jinahya.bit.io.BitIoTests.randomSizeForChar;
+import static com.github.jinahya.bit.io.BitIoTests.randomSizeForInt;
+import static com.github.jinahya.bit.io.BitIoTests.randomSizeForLong;
+import static com.github.jinahya.bit.io.BitIoTests.randomSizeForShort;
+import static com.github.jinahya.bit.io.BitIoTests.randomValueForChar;
+import static com.github.jinahya.bit.io.BitIoTests.randomValueForInt;
+import static com.github.jinahya.bit.io.BitIoTests.randomValueForLong;
+import static com.github.jinahya.bit.io.BitIoTests.randomValueForShort;
 import static java.util.concurrent.ThreadLocalRandom.current;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * A class for unit-testing {@link AbstractBitOutput} class.
@@ -47,103 +54,54 @@ public class AbstractBitOutputSpyTest {
         //doNothing().when(bitOutput).write(anyInt());
     }
 
-    // ------------------------------------------------------------------------------------------------------------ byte
-
-    /**
-     * Tests {@link AbstractBitOutput#writeSignedByte(int, byte)} method.
-     *
-     * @throws IOException if an I/O error occurs.
-     */
+    // --------------------------------------------------------------------------------------------------------- boolean
     @RepeatedTest(8)
-    void testWriteSignedByte() throws IOException {
-        final int size = current().nextInt(1, Byte.SIZE + 1);
-        final byte value = (byte) (current().nextInt() >> (Integer.SIZE - size));
-        bitOutput.writeSignedByte(size, value);
+    void testWriteBoolean() throws IOException {
+        final boolean value = current().nextBoolean();
+        bitOutput.writeBoolean(value);
     }
 
-    /**
-     * Tests {@link AbstractBitOutput#writeUnsignedByte(int, byte)} method.
-     *
-     * @throws IOException if an I/O error occurs.
-     */
+    // ------------------------------------------------------------------------------------------------------------ byte
     @RepeatedTest(8)
-    void testWriteUnsignedByte() throws IOException {
-        final int size = current().nextInt(1, Byte.SIZE);
-        final byte value = (byte) (current().nextInt() >>> (Integer.SIZE - size));
-        assertTrue(value >= 0);
-        bitOutput.writeUnsignedByte(size, value);
+    void testWriteByte() throws IOException {
+        final boolean unsigned = current().nextBoolean();
+        final int size = BitIoTests.randomSizeForByte(unsigned);
+        final byte value = BitIoTests.randomValueForByte(unsigned, size);
+        bitOutput.writeByte(unsigned, size, value);
     }
 
     // ----------------------------------------------------------------------------------------------------------- short
     @RepeatedTest(8)
-    void testWriteSignedShort() throws IOException {
-        final int size = current().nextInt(1, Short.SIZE + 1);
-        final short value = (short) (current().nextInt() >> (Integer.SIZE - size));
-        bitOutput.writeSignedShort(size, value);
-    }
-
-    @RepeatedTest(8)
-    void testWriteUnsignedShort() throws IOException {
-        final int size = current().nextInt(1, Short.SIZE);
-        final short value = (short) (current().nextInt() >>> (Integer.SIZE - size));
-        assertTrue(value >= 0);
-        bitOutput.writeUnsignedShort(size, value);
+    void testWriteShort() throws IOException {
+        final boolean unsigned = current().nextBoolean();
+        final int size = randomSizeForShort(unsigned);
+        final short value = randomValueForShort(unsigned, size);
+        bitOutput.writeShort(unsigned, size, value);
     }
 
     // ------------------------------------------------------------------------------------------------------------- int
     @RepeatedTest(8)
-    void testWriteSignedInt() throws IOException {
-        final int size = current().nextInt(1, Integer.SIZE + 1);
-        final int value = current().nextInt() >> (Integer.SIZE - size);
-        bitOutput.writeSignedInt(size, value);
-    }
-
-    @RepeatedTest(8)
-    void testWriteUnsignedInt() throws IOException {
-        final int size = current().nextInt(1, Integer.SIZE);
-        final int value = current().nextInt() >>> (Integer.SIZE - size);
-        assertTrue(value >= 0);
-        bitOutput.writeUnsignedInt(size, value);
+    void testWriteInt() throws IOException {
+        final boolean unsigned = current().nextBoolean();
+        final int size = randomSizeForInt(unsigned);
+        final int value = randomValueForInt(unsigned, size);
+        bitOutput.writeInt(unsigned, size, value);
     }
 
     // ------------------------------------------------------------------------------------------------------------ long
-
-    /**
-     * Test {@link AbstractBitOutput#writeSignedLong(int, long)} method.
-     *
-     * @throws IOException if an I/O error occurs.
-     */
     @RepeatedTest(8)
-    void testWriteSignedLong() throws IOException {
-        final int size = current().nextInt(1, Long.SIZE + 1);
-        final long value = current().nextLong() >> (Long.SIZE - size);
-        bitOutput.writeSignedLong(size, value);
-    }
-
-    /**
-     * Tests {@link AbstractBitOutput#writeUnsignedLong(int, long)} method.
-     *
-     * @throws IOException if an I/O error occurs.
-     */
-    @RepeatedTest(8)
-    void testWriteUnsignedLong() throws IOException {
-        final int size = current().nextInt(1, Long.SIZE);
-        final long value = current().nextLong() >>> (Long.SIZE - size);
-        assertTrue(value >= 0L);
-        bitOutput.writeUnsignedLong(size, value);
+    void testWriteLong() throws IOException {
+        final boolean unsigned = current().nextBoolean();
+        final int size = randomSizeForLong(unsigned);
+        final long value = randomValueForLong(unsigned, size);
+        bitOutput.writeLong(unsigned, size, value);
     }
 
     // ------------------------------------------------------------------------------------------------------------ char
-
-    /**
-     * Tests {@link AbstractBitOutput#writeChar(int, char)} method.
-     *
-     * @throws IOException if an I/O error occurs.
-     */
     @RepeatedTest(8)
     void testWriteChar() throws IOException {
-        final int size = current().nextInt(1, Character.SIZE + 1);
-        final char value = (char) (current().nextInt() >>> (Integer.SIZE - size));
+        final int size = randomSizeForChar();
+        final char value = randomValueForChar(size);
         bitOutput.writeChar(size, value);
     }
 

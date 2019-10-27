@@ -65,30 +65,14 @@ class BitIoTest {
     // ------------------------------------------------------------------------------------------------------------ byte
     @MethodSource({"com.github.jinahya.bit.io.ByteIoSource#sourceByteIo"})
     @ParameterizedTest
-    void testSignedByte(@ConvertWith(BitOutputConverter.class) final BitOutput output,
-                        @ConvertWith(BitInputConverter.class) final BitInput input)
-            throws IOException {
-        final boolean unsigned = false;
+    void testByte(@ConvertWith(BitOutputConverter.class) final BitOutput output,
+                  @ConvertWith(BitInputConverter.class) final BitInput input) throws IOException {
+        final boolean unsigned = current().nextBoolean();
         final int size = randomSizeForByte(unsigned);
         final byte expected = randomValueForByte(unsigned, size);
-        output.writeSignedByte(size, expected);
+        output.writeByte(unsigned, size, expected);
         output.align(1);
-        final byte actual = input.readSignedByte(size);
-        input.align(1);
-        assertEquals(expected, actual);
-    }
-
-    @MethodSource({"com.github.jinahya.bit.io.ByteIoSource#sourceByteIo"})
-    @ParameterizedTest
-    void testUnsignedByte(@ConvertWith(BitOutputConverter.class) final BitOutput output,
-                          @ConvertWith(BitInputConverter.class) final BitInput input)
-            throws IOException {
-        final boolean unsigned = true;
-        final int size = randomSizeForByte(unsigned);
-        final byte expected = randomValueForByte(unsigned, size);
-        output.writeUnsignedByte(size, expected);
-        output.align(1);
-        final byte actual = input.readUnsignedByte(size);
+        final byte actual = input.readByte(unsigned, size);
         input.align(1);
         assertEquals(expected, actual);
     }
@@ -96,30 +80,14 @@ class BitIoTest {
     // ----------------------------------------------------------------------------------------------------------- short
     @MethodSource({"com.github.jinahya.bit.io.ByteIoSource#sourceByteIo"})
     @ParameterizedTest
-    void testSignedShort(@ConvertWith(BitOutputConverter.class) final BitOutput output,
-                         @ConvertWith(BitInputConverter.class) final BitInput input)
-            throws IOException {
-        final boolean unsigned = false;
+    void testShort(@ConvertWith(BitOutputConverter.class) final BitOutput output,
+                   @ConvertWith(BitInputConverter.class) final BitInput input) throws IOException {
+        final boolean unsigned = current().nextBoolean();
         final int size = randomSizeForShort(unsigned);
         final short expected = randomValueForShort(unsigned, size);
-        output.writeSignedShort(size, expected);
+        output.writeShort(unsigned, size, expected);
         output.align(1);
-        final short actual = input.readSignedShort(size);
-        input.align(1);
-        assertEquals(expected, actual);
-    }
-
-    @MethodSource({"com.github.jinahya.bit.io.ByteIoSource#sourceByteIo"})
-    @ParameterizedTest
-    void testUnsignedShort(@ConvertWith(BitOutputConverter.class) final BitOutput output,
-                           @ConvertWith(BitInputConverter.class) final BitInput input)
-            throws IOException {
-        final boolean unsigned = true;
-        final int size = randomSizeForShort(unsigned);
-        final short expected = randomValueForShort(unsigned, size);
-        output.writeUnsignedShort(size, expected);
-        output.align(1);
-        final short actual = input.readUnsignedShort(size);
+        final short actual = input.readShort(unsigned, size);
         input.align(1);
         assertEquals(expected, actual);
     }
@@ -127,30 +95,14 @@ class BitIoTest {
     // ------------------------------------------------------------------------------------------------------------- int
     @MethodSource({"com.github.jinahya.bit.io.ByteIoSource#sourceByteIo"})
     @ParameterizedTest
-    void testSignedInt(@ConvertWith(BitOutputConverter.class) final BitOutput output,
-                       @ConvertWith(BitInputConverter.class) final BitInput input)
-            throws IOException {
-        final boolean unsigned = false;
+    void testInt(@ConvertWith(BitOutputConverter.class) final BitOutput output,
+                 @ConvertWith(BitInputConverter.class) final BitInput input) throws IOException {
+        final boolean unsigned = current().nextBoolean();
         final int size = randomSizeForInt(unsigned);
         final int expected = randomValueForInt(unsigned, size);
-        output.writeSignedInt(size, expected);
+        output.writeInt(unsigned, size, expected);
         output.align(1);
-        final int actual = input.readSignedInt(size);
-        input.align(1);
-        assertEquals(expected, actual);
-    }
-
-    @MethodSource({"com.github.jinahya.bit.io.ByteIoSource#sourceByteIo"})
-    @ParameterizedTest
-    void testUnsignedInt(@ConvertWith(BitOutputConverter.class) final BitOutput output,
-                         @ConvertWith(BitInputConverter.class) final BitInput input)
-            throws IOException {
-        final boolean unsigned = true;
-        final int size = randomSizeForInt(unsigned);
-        final int expected = randomValueForInt(unsigned, size);
-        output.writeUnsignedInt(size, expected);
-        output.align(1);
-        final int actual = input.readUnsignedInt(size);
+        final int actual = input.readInt(unsigned, size);
         input.align(1);
         assertEquals(expected, actual);
     }
@@ -161,27 +113,12 @@ class BitIoTest {
     void testSignedLong(@ConvertWith(BitOutputConverter.class) final BitOutput output,
                         @ConvertWith(BitInputConverter.class) final BitInput input)
             throws IOException {
-        final boolean unsigned = false;
+        final boolean unsigned = current().nextBoolean();
         final int size = randomSizeForLong(unsigned);
         final long expected = randomValueForLong(unsigned, size);
-        output.writeSignedLong(size, expected);
+        output.writeLong(unsigned, size, expected);
         output.align(1);
-        final long actual = input.readSignedLong(size);
-        input.align(1);
-        assertEquals(expected, actual);
-    }
-
-    @MethodSource({"com.github.jinahya.bit.io.ByteIoSource#sourceByteIo"})
-    @ParameterizedTest
-    void testUnsignedLong(@ConvertWith(BitOutputConverter.class) final BitOutput output,
-                          @ConvertWith(BitInputConverter.class) final BitInput input)
-            throws IOException {
-        final boolean unsigned = true;
-        final int size = randomSizeForLong(unsigned);
-        final long expected = randomValueForLong(unsigned, size);
-        output.writeUnsignedLong(size, expected);
-        output.align(1);
-        final long actual = input.readUnsignedLong(size);
+        final long actual = input.readLong(unsigned, size);
         input.align(1);
         assertEquals(expected, actual);
     }

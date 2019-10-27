@@ -38,6 +38,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class ByteIoTest {
 
     // -----------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Tests {@link ByteOutput#write(int)} method and {@link ByteInput#read()} method.
+     *
+     * @param output a byte output.
+     * @param input  a byte input.
+     * @throws IOException if an I/O error occurs.
+     */
     @MethodSource({"com.github.jinahya.bit.io.ByteIoSource#sourceByteIo"})
     @ParameterizedTest
     void test(final ByteOutput output, final ByteInput input) throws IOException {

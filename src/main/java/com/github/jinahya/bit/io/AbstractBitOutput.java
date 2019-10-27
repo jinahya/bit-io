@@ -121,15 +121,15 @@ public abstract class AbstractBitOutput implements BitOutput {
         writeInt(unsigned, requireValidSizeByte(unsigned, size), value);
     }
 
-    @Override
-    public void writeSignedByte(final int size, final byte value) throws IOException {
-        writeByte(false, size, value);
-    }
-
-    @Override
-    public void writeUnsignedByte(final int size, final byte value) throws IOException {
-        writeByte(true, size, value);
-    }
+//    @Override
+//    public void writeSignedByte(final int size, final byte value) throws IOException {
+//        writeByte(false, size, value);
+//    }
+//
+//    @Override
+//    public void writeUnsignedByte(final int size, final byte value) throws IOException {
+//        writeByte(true, size, value);
+//    }
 
     // ----------------------------------------------------------------------------------------------------------- short
     @Override
@@ -137,15 +137,15 @@ public abstract class AbstractBitOutput implements BitOutput {
         writeInt(unsigned, requireValidSizeShort(unsigned, size), value);
     }
 
-    @Override
-    public void writeSignedShort(final int size, final short value) throws IOException {
-        writeShort(false, size, value);
-    }
-
-    @Override
-    public void writeUnsignedShort(final int size, final short value) throws IOException {
-        writeShort(true, size, value);
-    }
+//    @Override
+//    public void writeSignedShort(final int size, final short value) throws IOException {
+//        writeShort(false, size, value);
+//    }
+//
+//    @Override
+//    public void writeUnsignedShort(final int size, final short value) throws IOException {
+//        writeShort(true, size, value);
+//    }
 
     // ------------------------------------------------------------------------------------------------------------- int
     @Override
@@ -161,15 +161,15 @@ public abstract class AbstractBitOutput implements BitOutput {
         }
     }
 
-    @Override
-    public void writeSignedInt(final int size, final int value) throws IOException {
-        writeInt(false, size, value);
-    }
-
-    @Override
-    public void writeUnsignedInt(final int size, final int value) throws IOException {
-        writeInt(true, size, value);
-    }
+//    @Override
+//    public void writeSignedInt(final int size, final int value) throws IOException {
+//        writeInt(false, size, value);
+//    }
+//
+//    @Override
+//    public void writeUnsignedInt(final int size, final int value) throws IOException {
+//        writeInt(true, size, value);
+//    }
 
     // ------------------------------------------------------------------------------------------------------------ long
     @Override
@@ -185,15 +185,15 @@ public abstract class AbstractBitOutput implements BitOutput {
         }
     }
 
-    @Override
-    public void writeSignedLong(final int size, final long value) throws IOException {
-        writeLong(false, size, value);
-    }
-
-    @Override
-    public void writeUnsignedLong(final int size, final long value) throws IOException {
-        writeLong(true, size, value);
-    }
+//    @Override
+//    public void writeSignedLong(final int size, final long value) throws IOException {
+//        writeLong(false, size, value);
+//    }
+//
+//    @Override
+//    public void writeUnsignedLong(final int size, final long value) throws IOException {
+//        writeLong(true, size, value);
+//    }
 
     // ------------------------------------------------------------------------------------------------------------ char
     @Override

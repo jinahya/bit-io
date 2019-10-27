@@ -31,6 +31,7 @@ import static com.github.jinahya.bit.io.BitIoConstants.MAX_EXPONENT_SHORT;
 import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeByte;
 import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeInt;
 import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeLong;
+import static com.github.jinahya.bit.io.BitWriters.bitWriterFor;
 
 class ExtendedBitOutput {
 
@@ -298,10 +299,14 @@ class ExtendedBitOutput {
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    static <T extends BitWritable> void writeObject(final boolean nullable, final BitOutput output, final T value)
+    static <T> void writeObject(final boolean nullable, final BitOutput output, final T value,
+                                final BitWriter<? super T> writer)
             throws IOException {
         if (output == null) {
             throw new NullPointerException("bitOutput is null");
+        }
+        if (writer == null) {
+            throw new NullPointerException("writer is null");
         }
         if (!nullable && value == null) {
             throw new NullPointerException("value is null");
@@ -309,11 +314,22 @@ class ExtendedBitOutput {
         if (nullable && writeBooleanIsNextNull(output, value)) {
             return;
         }
-        value.write(output);
+        writer.write(value, output);
+    }
+
+    static <T extends BitWritable> void writeObject(final boolean nullable, final BitOutput output,
+                                                    final Class<? extends T> type, final T value)
+            throws IOException {
+        writeObject(nullable, output, value, bitWriterFor(type));
+    }
+
+    static <T extends BitWritable> void writeObject(final boolean nullable, final BitOutput output, final T value)
+            throws IOException {
+        writeObject(nullable, output, value.getClass(), value);
     }
 
     static <T extends BitWritable> void writeObjects(final boolean nullable, final BitOutput output,
-                                                     final List<? extends T> value)
+                                                     final Class<? extends T> type, final List<? extends T> value)
             throws IOException {
         if (output == null) {
             throw new NullPointerException("bitOutput is null");
@@ -328,8 +344,9 @@ class ExtendedBitOutput {
             throw new NullPointerException("value is null");
         }
         writeLengthInt(output, value.size());
+        final BitWriter<T> writer = bitWriterFor(type);
         for (final T v : value) {
-            writeObject(true, output, v);
+            writeObject(true, output, v, writer);
         }
     }
 

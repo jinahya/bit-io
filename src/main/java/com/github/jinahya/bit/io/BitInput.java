@@ -51,36 +51,11 @@ public interface BitInput {
      * @param size     the number of bits for value; between {@code 1} and ({@code 7 + (unsigned ? 0 : 1)}), both
      *                 inclusive.
      * @return a {@code byte} value of given {@code size}.
-     * @throws IOException if an I/O error occurs.
-     * @see #readSignedByte(int)
-     * @see #readUnsignedByte(int)
+     * @throws IOException if an I/O error occurs. //     * @see #readSignedByte(int) //     * @see
+     *                     #readUnsignedByte(int)
      * @see BitOutput#writeByte(boolean, int, byte)
      */
     byte readByte(boolean unsigned, int size) throws IOException;
-
-    /**
-     * Reads a signed {@code byte} value of specified number of bits.
-     *
-     * @param size the number of bits for value; between {@code 1} and {@value Byte#SIZE}, both inclusive.
-     * @return a signed {@code byte} value of given {@code size}.
-     * @throws IOException if an I/O error occurs.
-     * @see #readByte(boolean, int)
-     * @see #readUnsignedByte(int)
-     * @see BitOutput#writeSignedByte(int, byte)
-     */
-    byte readSignedByte(int size) throws IOException;
-
-    /**
-     * Reads an unsigned {@code byte} value of specified number of bits.
-     *
-     * @param size the number of bits for value; between {@code 1} and {@code 7}, both inclusive.
-     * @return an unsigned {@code byte} value of given {@code size}.
-     * @throws IOException if an I/O error occurs.
-     * @see #readByte(boolean, int)
-     * @see #readSignedByte(int)
-     * @see BitOutput#writeUnsignedByte(int, byte)
-     */
-    byte readUnsignedByte(int size) throws IOException;
 
     // -----------------------------------------------------------------------------------------------------------------
 
@@ -91,36 +66,11 @@ public interface BitInput {
      * @param size     the number of bits for value; between {@code 1} and ({@code 15 + (unsigned ? 0 : 1)}), both
      *                 inclusive.
      * @return a {@code short} value of given {@code size}.
-     * @throws IOException if an I/O error occurs.
-     * @see #readSignedShort(int)
-     * @see #readUnsignedShort(int)
+     * @throws IOException if an I/O error occurs. //     * @see #readSignedShort(int) //     * @see
+     *                     #readUnsignedShort(int)
      * @see BitOutput#writeShort(boolean, int, short)
      */
     short readShort(boolean unsigned, int size) throws IOException;
-
-    /**
-     * Reads a signed {@code short} value of specified number of bits.
-     *
-     * @param size the number of bits for value; between {@code 1} and {@value Short#SIZE}, both inclusive.
-     * @return a signed {@code short} value of given {@code size}.
-     * @throws IOException if an I/O error occurs.
-     * @see #readShort(boolean, int)
-     * @see #readUnsignedShort(int)
-     * @see BitOutput#writeSignedShort(int, short)
-     */
-    short readSignedShort(int size) throws IOException;
-
-    /**
-     * Reads an unsigned {@code short} value of specified number of bits.
-     *
-     * @param size the number of bits for value; between {@code 1} and {@code 15}, both inclusive.
-     * @return a {@code short} value of given {@code size}.
-     * @throws IOException if an I/O error occurs.
-     * @see #readShort(boolean, int)
-     * @see #readSignedShort(int)
-     * @see BitOutput#writeUnsignedShort(int, short)
-     */
-    short readUnsignedShort(int size) throws IOException;
 
     // -----------------------------------------------------------------------------------------------------------------
 
@@ -131,36 +81,11 @@ public interface BitInput {
      * @param size     the number of bits for value; between {@code 1} and ({@code 31 + (unsigned ? 0 : 1)}), both
      *                 inclusive.
      * @return an int value.
-     * @throws IOException if an I/O error occurs.
-     * @see #readSignedInt(int)
-     * @see #readUnsignedInt(int)
+     * @throws IOException if an I/O error occurs. //     * @see #readSignedInt(int) //     * @see
+     *                     #readUnsignedInt(int)
      * @see BitOutput#writeInt(boolean, int, int)
      */
     int readInt(boolean unsigned, int size) throws IOException;
-
-    /**
-     * Reads a signed {@code int} value of specified number of bits.
-     *
-     * @param size the number of bits for value; between {@code 1} and {@value Integer#SIZE}, both inclusive.
-     * @return a signed {@code int} value of specified bit size.
-     * @throws IOException if an I/O error occurs.
-     * @see #readInt(boolean, int)
-     * @see #readUnsignedInt(int)
-     * @see BitOutput#writeSignedInt(int, int)
-     */
-    int readSignedInt(int size) throws IOException;
-
-    /**
-     * Reads an unsigned {@code int} value of specified bit size.
-     *
-     * @param size number of bits for value; between {@code 1} and {@code 31}, both inclusive.
-     * @return an unsigned {@code int} value of specified bit size.
-     * @throws IOException if an I/O error occurs.
-     * @see #readInt(boolean, int)
-     * @see #readSignedInt(int)
-     * @see BitOutput#writeUnsignedInt(int, int)
-     */
-    int readUnsignedInt(int size) throws IOException;
 
     // -----------------------------------------------------------------------------------------------------------------
 
@@ -171,36 +96,11 @@ public interface BitInput {
      * @param size     the number of bits to read; between {@code 1} and ({@code 63 + (unsigned ? 0 : 1)}), both
      *                 inclusive.
      * @return a {@code long} value of specified bit size.
-     * @throws IOException if an I/O error occurs.
-     * @see #readSignedLong(int)
-     * @see #readUnsignedLong(int)
+     * @throws IOException if an I/O error occurs. //     * @see #readSignedLong(int) //     * @see
+     *                     #readUnsignedLong(int)
      * @see BitOutput#writeLong(boolean, int, long)
      */
     long readLong(boolean unsigned, int size) throws IOException;
-
-    /**
-     * Reads a signed {@code long} value of specified number of bits.
-     *
-     * @param size the number of bits to read; between {@code 1} and {@value Long#SIZE}, both inclusive.
-     * @return an unsigned {@code long} value of specified bit size.
-     * @throws IOException if an I/O error occurs.
-     * @see #readLong(boolean, int)
-     * @see #readUnsignedLong(int)
-     * @see BitOutput#writeSignedLong(int, long)
-     */
-    long readSignedLong(int size) throws IOException;
-
-    /**
-     * Reads an unsigned {@code long} value of specified number of bits.
-     *
-     * @param size the number of bits to read; between {@code 1} and {@code 63}, both inclusive.
-     * @return a {@code long} value of specified bit size.
-     * @throws IOException if an I/O error occurs.
-     * @see #readLong(boolean, int)
-     * @see #readSignedLong(int)
-     * @see BitOutput#writeUnsignedLong(int, long)
-     */
-    long readUnsignedLong(int size) throws IOException;
 
     // -----------------------------------------------------------------------------------------------------------------
 
@@ -210,7 +110,7 @@ public interface BitInput {
      * @param size the number of bits for value; between {@code 1} and {@value Character#SIZE}, both inclusive.
      * @return a {@code char} value
      * @throws IOException if an I/O error occurs.
-     * @see #readUnsignedInt(int)
+     * @see #readInt(boolean, int)
      * @see BitOutput#writeChar(int, char)
      */
     char readChar(int size) throws IOException;

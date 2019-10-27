@@ -21,8 +21,6 @@ package com.github.jinahya.bit.io;
  */
 
 import java.io.IOException;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +32,7 @@ import static com.github.jinahya.bit.io.BitIoConstants.MAX_EXPONENT_SHORT;
 import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeByte;
 import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeInt;
 import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeLong;
+import static com.github.jinahya.bit.io.BitReaders.bitReaderFor;
 
 class ExtendedBitInput {
 
@@ -300,23 +299,19 @@ class ExtendedBitInput {
         return value;
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
-    static <T extends BitReadable> T readObject(final boolean nullable, final BitInput input, final T value)
+    // ---------------------------------------------------------------------------------------------------------- object
+    static <T> T readObject(final boolean nullable, final BitInput input, final BitReader<? extends T> reader)
             throws IOException {
         if (input == null) {
             throw new NullPointerException("input is null");
         }
-        if (!nullable && value == null) {
-            throw new NullPointerException("value is null");
+        if (reader == null) {
+            throw new NullPointerException("reader is null");
         }
         if (nullable && readBooleanIsNextNull(input)) {
             return null;
         }
-        if (value == null) {
-            throw new NullPointerException("value is null");
-        }
-        value.read(input);
-        return value;
+        return reader.read(input);
     }
 
     static <T extends BitReadable> T readObject(final boolean nullable, final BitInput input,
@@ -328,27 +323,7 @@ class ExtendedBitInput {
         if (type == null) {
             throw new NullPointerException("type is null");
         }
-        if (nullable && readBooleanIsNextNull(input)) {
-            return null;
-        }
-        try {
-            final Constructor<? extends T> constructor = type.getDeclaredConstructor();
-            if (!constructor.isAccessible()) {
-                constructor.setAccessible(true);
-            }
-            try {
-                final T value = constructor.newInstance();
-                return readObject(false, input, value);
-            } catch (final InstantiationException ie) {
-                throw new RuntimeException(ie);
-            } catch (final IllegalAccessException iae) {
-                throw new RuntimeException(iae);
-            } catch (final InvocationTargetException ite) {
-                throw new RuntimeException(ite);
-            }
-        } catch (final NoSuchMethodException nsme) {
-            throw new RuntimeException(nsme);
-        }
+        return readObject(nullable, input, bitReaderFor(type));
     }
 
     static <T extends BitReadable> List<T> readObjects(final boolean nullable, final BitInput input,
@@ -365,8 +340,9 @@ class ExtendedBitInput {
         }
         final int size = readLengthInt(input);
         final List<T> value = new ArrayList<T>(size);
+        final BitReader<T> reader = bitReaderFor(type);
         for (int i = 0; i < size; i++) {
-            value.add(readObject(true, input, type));
+            value.add(readObject(true, input, reader));
         }
         return value;
     }

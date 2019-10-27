@@ -51,36 +51,11 @@ public interface BitOutput {
      * @param size     the number of bits for value; between {@code 1} and {@code 7 + (unsigned ? 0 : 1)}, both
      *                 inclusive.
      * @param value    the value to write.
-     * @throws IOException if an I/O error occurs.
-     * @see #writeSignedByte(int, byte)
-     * @see #writeUnsignedByte(int, byte)
+     * @throws IOException if an I/O error occurs. //     * @see #writeSignedByte(int, byte) //     * @see
+     *                     #writeUnsignedByte(int, byte)
      * @see BitInput#readByte(boolean, int)
      */
     void writeByte(boolean unsigned, int size, byte value) throws IOException;
-
-    /**
-     * Writes a signed {@code byte} value of specified number of bits.
-     *
-     * @param size  the number of bits for value; between {@code 1} and {@value Byte#SIZE}, both inclusive.
-     * @param value the value to write.
-     * @throws IOException if an I/O error occurs.
-     * @see #writeByte(boolean, int, byte)
-     * @see #writeUnsignedByte(int, byte)
-     * @see BitInput#readSignedByte(int)
-     */
-    void writeSignedByte(int size, byte value) throws IOException;
-
-    /**
-     * Writes an unsigned {@code byte} value of specified number of bits.
-     *
-     * @param size  the number of bits for value; between {@code 1} and {@code 7}, both inclusive.
-     * @param value the value to write.
-     * @throws IOException if an I/O error occurs.
-     * @see #writeByte(boolean, int, byte)
-     * @see #writeUnsignedByte(int, byte)
-     * @see BitInput#readUnsignedByte(int)
-     */
-    void writeUnsignedByte(int size, byte value) throws IOException;
 
     // -----------------------------------------------------------------------------------------------------------------
 
@@ -91,36 +66,11 @@ public interface BitOutput {
      * @param size     the number of bits for value; between {@code 1} and {@code 15 + (unsigned ? 0 : 1)}, both
      *                 inclusive.
      * @param value    the value to write.
-     * @throws IOException if an I/O error occurs.
-     * @see #writeSignedShort(int, short)
-     * @see #writeUnsignedShort(int, short)
+     * @throws IOException if an I/O error occurs. //     * @see #writeSignedShort(int, short) //     * @see
+     *                     #writeUnsignedShort(int, short)
      * @see BitInput#readShort(boolean, int)
      */
     void writeShort(boolean unsigned, int size, short value) throws IOException;
-
-    /**
-     * Writes a signed {@code short} value of specified number of bits.
-     *
-     * @param size  the number of bits for value; between {@code 1} and {@value Short#SIZE}, both inclusive.
-     * @param value the value to write.
-     * @throws IOException if an I/O error occurs.
-     * @see #writeShort(boolean, int, short)
-     * @see #writeUnsignedShort(int, short)
-     * @see BitInput#readSignedShort(int)
-     */
-    void writeSignedShort(int size, short value) throws IOException;
-
-    /**
-     * Writes an unsigned {@code short} value of specified number of bits.
-     *
-     * @param size  the number of bits for value; between {@code 1} and {@code 15}, both inclusive.
-     * @param value the value to write.
-     * @throws IOException if an I/O error occurs.
-     * @see #writeShort(boolean, int, short)
-     * @see #writeSignedShort(int, short)
-     * @see BitInput#readUnsignedShort(int)
-     */
-    void writeUnsignedShort(int size, short value) throws IOException;
 
     // -----------------------------------------------------------------------------------------------------------------
 
@@ -131,38 +81,11 @@ public interface BitOutput {
      * @param size     the number of bits for value; between {@code 1} and {@code 31 + (unsigned ? 0 : 1)}, both
      *                 inclusive.
      * @param value    the value to write.
-     * @throws IOException if an I/O error occurs.
-     * @see #writeSignedInt(int, int)
-     * @see #writeUnsignedInt(int, int)
+     * @throws IOException if an I/O error occurs. //     * @see #writeSignedInt(int, int) //     * @see
+     *                     #writeUnsignedInt(int, int)
      * @see BitInput#readInt(boolean, int)
      */
     void writeInt(boolean unsigned, int size, int value) throws IOException;
-
-    /**
-     * Writes a signed {@code int} value of specified number of bits. Only the lower number of specified bits are
-     * written.
-     *
-     * @param size  the number of bits for value; between {@code 1} and {@value Integer#SIZE}, both inclusive.
-     * @param value the value to write.
-     * @throws IOException if an I/O error occurs.
-     * @see #writeInt(boolean, int, int)
-     * @see #writeUnsignedInt(int, int)
-     * @see BitInput#readSignedInt(int)
-     */
-    void writeSignedInt(int size, int value) throws IOException;
-
-    /**
-     * Writes an unsigned {@code int} value of specified number of bits. Only the lower number of specified bits are
-     * written.
-     *
-     * @param size  the number of bits for value; between {@code 1} and {@code 31}, both inclusive.
-     * @param value the value to write.
-     * @throws IOException if an I/O error occurs.
-     * @see #writeInt(boolean, int, int)
-     * @see #writeSignedInt(int, int)
-     * @see BitInput#readUnsignedInt(int)
-     */
-    void writeUnsignedInt(int size, int value) throws IOException;
 
     // -----------------------------------------------------------------------------------------------------------------
 
@@ -173,38 +96,11 @@ public interface BitOutput {
      * @param size     the number of valid bits for value; between {@code 1} and {@code 63 + (unsigned ? 0 : 1)}, both
      *                 inclusive.
      * @param value    the value to write.
-     * @throws IOException if an I/O error occurs.
-     * @see #writeSignedLong(int, long)
-     * @see #writeUnsignedLong(int, long)
+     * @throws IOException if an I/O error occurs. //     * @see #writeSignedLong(int, long) //     * @see
+     *                     #writeUnsignedLong(int, long)
      * @see BitInput#readLong(boolean, int)
      */
     void writeLong(boolean unsigned, int size, long value) throws IOException;
-
-    /**
-     * Writes a signed {@code long} value of specified number of bits. Only the lower number of specified bits are
-     * written.
-     *
-     * @param size  the number of valid bits for value; between {@code 1} and {@value Long#SIZE}, both inclusive.
-     * @param value the value to write.
-     * @throws IOException if an I/O error occurs.
-     * @see #writeLong(boolean, int, long)
-     * @see #writeUnsignedLong(int, long)
-     * @see BitInput#readSignedLong(int)
-     */
-    void writeSignedLong(int size, long value) throws IOException;
-
-    /**
-     * Writes an unsigned {@code long} value of specified number of bits. Only the lower number of specified bits are
-     * written.
-     *
-     * @param size  the number of valid bits for value; between {@code 1} and {@code 63}, both inclusive.
-     * @param value the value to write.
-     * @throws IOException if an I/O error occurs.
-     * @see #writeLong(boolean, int, long)
-     * @see #writeSignedLong(int, long)
-     * @see BitInput#readUnsignedLong(int)
-     */
-    void writeUnsignedLong(int size, long value) throws IOException;
 
     // -----------------------------------------------------------------------------------------------------------------
 
@@ -214,7 +110,7 @@ public interface BitOutput {
      * @param size  the number of bits for value; between {@code 1} and {@value Character#SIZE}, both inclusive.
      * @param value the value to write
      * @throws IOException if an I/O error occurs.
-     * @see #writeUnsignedInt(int, int)
+     * @see #writeInt(boolean, int, int)
      * @see BitInput#readChar(int)
      */
     void writeChar(int size, char value) throws IOException;

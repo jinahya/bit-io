@@ -31,7 +31,7 @@ final class BitWriters {
 
     private static Map<Class<?>, BitWriter<?>> bitWriters() {
         if (BIT_WRITERS == null) {
-            BIT_WRITERS = new WeakHashMap<>();
+            BIT_WRITERS = new WeakHashMap<Class<?>, BitWriter<?>>();
         }
         return BIT_WRITERS;
     }

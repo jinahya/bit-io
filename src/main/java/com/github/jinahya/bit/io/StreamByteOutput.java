@@ -24,7 +24,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 /**
- * A {@link ByteOutput} writes bytes to an {@link OutputStream}.
+ * A byte output writes bytes to an {@link OutputStream}.
  *
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  * @see StreamByteInput

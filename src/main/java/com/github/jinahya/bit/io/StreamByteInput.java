@@ -25,7 +25,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * A {@link ByteInput} reads bytes from an {@link InputStream}.
+ * A byte input reads bytes from an {@link InputStream}.
  *
  * @author Jin Kwon &lt;onacit at gmail.com&gt;
  * @see StreamByteOutput

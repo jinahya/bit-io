@@ -90,7 +90,7 @@ public class AbstractBitOutputSpyTest {
 
     // ------------------------------------------------------------------------------------------------------------ long
     @RepeatedTest(8)
-    void testWriteSignedLong() throws IOException {
+    void testWriteLong() throws IOException {
         final boolean unsigned = current().nextBoolean();
         final int size = randomSizeForLong(unsigned);
         final long value = randomValueForLong(unsigned, size);

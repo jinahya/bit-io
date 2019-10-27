@@ -134,7 +134,7 @@ abstract class BitOutputTest<T extends BitOutput> {
     @Test
     void testAlignAssertThrowsIllegalArgumentExceptionWhenBytesIsLessThanOrEqualsToZero() {
         assertThrows(IllegalArgumentException.class, () -> bitOutput.align(0));
-        assertThrows(IllegalArgumentException.class, () -> bitOutput.align(current().nextInt() | -1));
+        assertThrows(IllegalArgumentException.class, () -> bitOutput.align(current().nextInt() | Integer.MIN_VALUE));
     }
 
     // -----------------------------------------------------------------------------------------------------------------

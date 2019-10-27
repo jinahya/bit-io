@@ -24,7 +24,7 @@ import java.io.DataOutput;
 import java.io.IOException;
 
 /**
- * A {@code ByteOutput} uses an instance of {@link DataOutput} as its {@code target}.
+ * A byte output uses an instance of {@link DataOutput} as its {@code target}.
  *
  * @see DataByteInput
  */

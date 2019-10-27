@@ -21,10 +21,6 @@ package com.github.jinahya.bit.io;
  */
 
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.params.provider.Arguments;
-
-import java.util.function.BiFunction;
-import java.util.stream.Stream;
 
 import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeByte;
 import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeChar;
@@ -32,7 +28,6 @@ import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeInt;
 import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeLong;
 import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeShort;
 import static java.util.concurrent.ThreadLocalRandom.current;
-import static java.util.stream.IntStream.range;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -57,41 +52,6 @@ final class BitIoTests {
             assertEquals(value >> size, value >= 0 ? 0 : -1);
         }
         return value;
-    }
-
-    static <R> R applyRandomSizeForByte(final boolean unsigned,
-                                        final BiFunction<? super Boolean, ? super Integer, ? extends R> function) {
-        return function.apply(unsigned, randomSizeForByte(unsigned));
-    }
-
-    static <R> R applyRandomSizeValueForByte(final boolean unsigned,
-                                             final BiFunction<? super Integer, ? super Byte, ? extends R> function) {
-        return applyRandomSizeForByte(unsigned, (u, s) -> function.apply(s, randomValueForByte(u, s)));
-    }
-
-    static Stream<Arguments> sourceSizeAndValueForByteSigned() {
-        final Stream.Builder<Arguments> builder = Stream.builder();
-        builder.add(Arguments.of(1, (byte) -1));
-        builder.add(Arguments.of(1, (byte) 0));
-        builder.add(Arguments.of(2, (byte) 1));
-        builder.add(Arguments.of(Byte.SIZE, Byte.MIN_VALUE));
-        builder.add(Arguments.of(Byte.SIZE, (byte) -1));
-        builder.add(Arguments.of(Byte.SIZE, (byte) 0));
-        builder.add(Arguments.of(Byte.SIZE, (byte) 1));
-        builder.add(Arguments.of(Byte.SIZE, Byte.MAX_VALUE));
-        range(0, 128).forEach(i -> applyRandomSizeValueForByte(false, (s, v) -> builder.add(Arguments.of(s, v))));
-        return builder.build();
-    }
-
-    static Stream<Arguments> sourceSizeAndValueForByteUnsigned() {
-        final Stream.Builder<Arguments> builder = Stream.builder();
-        builder.add(Arguments.of(1, (byte) 0));
-        builder.add(Arguments.of(1, (byte) 1));
-        builder.add(Arguments.of(Byte.SIZE - 1, (byte) 0));
-        builder.add(Arguments.of(Byte.SIZE - 1, (byte) 1));
-        builder.add(Arguments.of(Byte.SIZE - 1, Byte.MAX_VALUE));
-        range(0, 128).forEach(i -> applyRandomSizeValueForByte(true, (s, v) -> builder.add(Arguments.of(s, v))));
-        return builder.build();
     }
 
     // ----------------------------------------------------------------------------------------------------------- short
@@ -123,7 +83,9 @@ final class BitIoTests {
             assertTrue(value >= 0);
         } else {
             value = current().nextInt() >> (Integer.SIZE - size);
-            assertEquals(value >> size, value >= 0 ? 0 : -1);
+            if (size < Integer.SIZE) {
+                assertEquals(value >> size, value >= 0 ? 0 : -1);
+            }
         }
         return value;
     }
@@ -140,7 +102,9 @@ final class BitIoTests {
             assertTrue(value >= 0);
         } else {
             value = current().nextLong() >> (Long.SIZE - size);
-            assertEquals(value >> size, value >= 0L ? 0L : -1L);
+            if (size < Long.SIZE) {
+                assertEquals(value >> size, value >= 0L ? 0L : -1L);
+            }
         }
         return value;
     }

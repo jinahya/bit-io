@@ -24,6 +24,12 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.ReadableByteChannel;
 
+/**
+ * A readable byte channel whose {@link ReadableByteChannel#read(ByteBuffer)} method just fully fills up given buffer.
+ *
+ * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
+ * @see BlackByteChannel
+ */
 class WhiteByteChannel implements ReadableByteChannel {
 
     // -----------------------------------------------------------------------------------------------------------------

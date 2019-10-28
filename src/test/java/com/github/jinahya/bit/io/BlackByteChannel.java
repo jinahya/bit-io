@@ -24,6 +24,12 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.WritableByteChannel;
 
+/**
+ * A writable byte channel whose {@link WritableByteChannel#write(ByteBuffer)} method just fully drains given buffer.
+ *
+ * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
+ * @see WhiteByteChannel
+ */
 class BlackByteChannel implements WritableByteChannel {
 
     // -----------------------------------------------------------------------------------------------------------------

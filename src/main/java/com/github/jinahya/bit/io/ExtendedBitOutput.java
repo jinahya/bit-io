@@ -21,7 +21,6 @@ package com.github.jinahya.bit.io;
  */
 
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.util.List;
 
 import static com.github.jinahya.bit.io.BitIoConstants.MAX_EXPONENT_BYTE;
@@ -314,7 +313,7 @@ class ExtendedBitOutput {
         if (nullable && writeBooleanIsNextNull(output, value)) {
             return;
         }
-        writer.write(value, output);
+        writer.write(output, value);
     }
 
     static <T extends BitWritable> void writeObject(final boolean nullable, final BitOutput output,

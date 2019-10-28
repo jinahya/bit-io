@@ -20,7 +20,6 @@ package com.github.jinahya.bit.io;
  * #L%
  */
 
-import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.text.RandomStringGenerator;
 import org.junit.jupiter.api.Disabled;
@@ -34,7 +33,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -405,26 +403,6 @@ class ExtendedBitIoTest {
         final long actual = readVariableLengthQuantityLong(input, size);
         input.align(1);
         assertEquals(expected, actual);
-    }
-
-    @Data
-    static final class User implements BitReadable, BitWritable {
-
-        @Override
-        public void read(BitInput input) throws IOException {
-            name = readString(true, input, UTF_8.name());
-            age = input.readInt(true, 7);
-        }
-
-        @Override
-        public void write(BitOutput output) throws IOException {
-            writeString(true, output, name, UTF_8.name());
-            output.writeInt(true, 7, age);
-        }
-
-        String name;
-
-        int age;
     }
 
     // -----------------------------------------------------------------------------------------------------------------

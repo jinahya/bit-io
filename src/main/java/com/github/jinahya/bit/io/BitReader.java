@@ -22,8 +22,23 @@ package com.github.jinahya.bit.io;
 
 import java.io.IOException;
 
+/**
+ * An interface for reading objects from a bit input.
+ *
+ * @param <T> object type parameter
+ * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
+ * @see BitReadable
+ */
 interface BitReader<T> {
 
     // -----------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Reads an instance from specified bit input.
+     *
+     * @param input the bit input from which the object is read.
+     * @return an object.
+     * @throws IOException if an I/O error occurs.
+     */
     T read(BitInput input) throws IOException;
 }

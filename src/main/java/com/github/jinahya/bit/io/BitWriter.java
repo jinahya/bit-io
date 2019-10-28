@@ -22,7 +22,23 @@ package com.github.jinahya.bit.io;
 
 import java.io.IOException;
 
+/**
+ * An interface for writing objects to a bit output.
+ *
+ * @param <T> object type parameter
+ * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
+ * @see BitWritable
+ */
 interface BitWriter<T> {
 
-    void write(T value, BitOutput output) throws IOException;
+    // -----------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Writes specified object to specified output.
+     *
+     * @param output the bit output to which the object is written.
+     * @param value  the object to be written.
+     * @throws IOException if an I/O error occurs.
+     */
+    void write(BitOutput output, T value) throws IOException;
 }

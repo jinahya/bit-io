@@ -35,7 +35,8 @@ public class DefaultBitOutput extends AbstractBitOutput {
     /**
      * Creates new instance with specified delegate.
      *
-     * @param delegate the delegate; {@code null} if if is supposed to be lazily initialized and set.
+     * @param delegate the delegate to which bytes are written; {@code null} if if is supposed to be lazily initialized
+     *                 and set.
      */
     public DefaultBitOutput(final ByteOutput delegate) {
         super();

@@ -29,12 +29,16 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.nio.channels.WritableByteChannel;
 import java.util.stream.Stream;
 
 import static java.lang.System.arraycopy;
 import static java.nio.ByteBuffer.allocate;
+import static java.nio.channels.Channels.newChannel;
 import static java.util.Arrays.copyOf;
 import static java.util.Optional.ofNullable;
+import static java.util.concurrent.ThreadLocalRandom.current;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @Slf4j
 final class ByteIoSource {
@@ -42,26 +46,25 @@ final class ByteIoSource {
     // -----------------------------------------------------------------------------------------------------------------
     static Stream<Arguments> sourceByteIoArray() {
         final byte[][] holder = new byte[1][];
-        final ArrayByteOutput output = new ArrayByteOutput(null) {
+        final ByteOutput output = new ArrayByteOutput(null) {
             @Override
             public void write(int value) throws IOException {
                 if (target == null) {
                     target = holder[0] = new byte[1];
-                    index = 0;
+                    setIndex(0);
                 }
-                if (index == target.length) {
+                if (getIndex() == target.length) {
                     holder[0] = target = copyOf(target, target.length << 1);
                 }
                 super.write(value);
             }
         };
-        final ArrayByteInput input = new ArrayByteInput(null) {
+        final ByteInput input = new ArrayByteInput(null) {
             @Override
             public int read() throws IOException {
                 if (source == null) {
                     source = ofNullable(holder[0]).orElseGet(() -> new byte[0]);
-                    index = 0;
-                    output.target = null;
+                    setIndex(0);
                 }
                 return super.read();
             }
@@ -71,7 +74,7 @@ final class ByteIoSource {
 
     static Stream<Arguments> sourceByteIoBuffer() {
         final ByteBuffer[] holder = new ByteBuffer[1];
-        final BufferByteOutput output = new BufferByteOutput(null) {
+        final ByteOutput output = new BufferByteOutput(null) {
             @Override
             public void write(int value) throws IOException {
                 if (target == null) {
@@ -93,13 +96,12 @@ final class ByteIoSource {
                 super.write(value);
             }
         };
-        final BufferByteInput input = new BufferByteInput(null) {
+        final ByteInput input = new BufferByteInput(null) {
             @Override
             public int read() throws IOException {
                 if (source == null) {
                     source = ofNullable(holder[0]).orElseGet(() -> allocate(0));
                     source.flip(); // limit -> position, position -> zero
-                    output.target = null;
                 }
                 return super.read();
             }
@@ -109,7 +111,7 @@ final class ByteIoSource {
 
     static Stream<Arguments> sourceByteIoData() {
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        final DataByteOutput output = new DataByteOutput(null) {
+        final ByteOutput output = new DataByteOutput(null) {
             @Override
             public void write(final int value) throws IOException {
                 if (target == null) {
@@ -118,12 +120,11 @@ final class ByteIoSource {
                 super.write(value);
             }
         };
-        final DataByteInput input = new DataByteInput(null) {
+        final ByteInput input = new DataByteInput(null) {
             @Override
             public int read() throws IOException {
                 if (source == null) {
                     source = new DataInputStream(new ByteArrayInputStream(baos.toByteArray()));
-                    output.target = null;
                 }
                 return super.read();
             }
@@ -133,7 +134,7 @@ final class ByteIoSource {
 
     static Stream<Arguments> sourceByteIoStream() {
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        final StreamByteOutput output = new StreamByteOutput(null) {
+        final ByteOutput output = new StreamByteOutput(null) {
             @Override
             public void write(final int value) throws IOException {
                 if (target == null) {
@@ -142,12 +143,52 @@ final class ByteIoSource {
                 super.write(value);
             }
         };
-        final StreamByteInput input = new StreamByteInput(null) {
+        final ByteInput input = new StreamByteInput(null) {
             @Override
             public int read() throws IOException {
                 if (source == null) {
                     source = new ByteArrayInputStream(baos.toByteArray());
-                    output.target = null;
+                }
+                return super.read();
+            }
+        };
+        return Stream.of(Arguments.of(output, input));
+    }
+
+    static Stream<Arguments> sourceByteIoChannel() {
+        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        final ChannelByteOutput output = new ChannelByteOutput(null, null) {
+            @Override
+            public void write(final int value) throws IOException {
+                log.debug("write({})", value);
+                if (getChannel() == null) {
+                    setChannel(newChannel(baos));
+                }
+                if (getTarget() == null) {
+                    setTarget(allocate(current().nextInt(1, 8)));
+                }
+                super.write(value);
+            }
+        };
+        final ByteInput input = new ChannelByteInput(null, null) {
+            @Override
+            public int read() throws IOException {
+                if (getChannel() == null) {
+                    {
+                        final WritableByteChannel channel = output.getChannel();
+                        final ByteBuffer target = output.getTarget();
+                        assertNotNull(channel);
+                        assertNotNull(target);
+                        for (target.flip(); (target.hasRemaining()); ) {
+                            channel.write(target);
+                        }
+                    }
+                    log.debug("byteArray.length: {}", baos.toByteArray().length);
+                    setChannel(newChannel(new ByteArrayInputStream(baos.toByteArray())));
+                }
+                if (getSource() == null) {
+                    final int capacity = current().nextInt(1, 8);
+                    setSource((ByteBuffer) allocate(capacity).position(capacity));
                 }
                 return super.read();
             }
@@ -156,7 +197,9 @@ final class ByteIoSource {
     }
 
     static Stream<Arguments> sourceByteIo() {
-        return Stream.of(sourceByteIoArray(), sourceByteIoBuffer(), sourceByteIoData(), sourceByteIoStream())
+        return Stream.of(sourceByteIoArray(), sourceByteIoBuffer(), sourceByteIoData(), sourceByteIoStream(),
+                         sourceByteIoChannel()
+        )
                 .flatMap(s -> s);
     }
 

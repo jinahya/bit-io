@@ -21,6 +21,7 @@ package com.github.jinahya.bit.io;
  */
 
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.nio.channels.WritableByteChannel;
 
 import static java.nio.ByteBuffer.allocate;
@@ -28,19 +29,26 @@ import static java.nio.ByteBuffer.allocate;
 class ChannelByteOutput extends BufferByteOutput {
 
     // -----------------------------------------------------------------------------------------------------------------
-    public ChannelByteOutput(final WritableByteChannel channel) {
-        super(allocate(1));
+    public ChannelByteOutput(final ByteBuffer target, final WritableByteChannel channel) {
+        super(target);
         this.channel = channel;
+    }
+
+    public ChannelByteOutput(final WritableByteChannel channel) {
+        this(allocate(1), channel);
     }
 
     // -----------------------------------------------------------------------------------------------------------------
     @Override
     public void write(final int value) throws IOException {
         super.write(value);
-        for (getTarget().flip(); getTarget().hasRemaining(); ) {
-            getChannel().write(getTarget());
+        final ByteBuffer target = getTarget();
+        final WritableByteChannel channel = getChannel();
+        while (!target.hasRemaining()) {
+            target.flip(); // limit -> position, position -> zero
+            final int written = channel.write(target);
+            target.compact();
         }
-        getTarget().clear();
     }
 
     // --------------------------------------------------------------------------------------------------------- channel

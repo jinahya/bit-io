@@ -20,7 +20,9 @@ package com.github.jinahya.bit.io;
  * #L%
  */
 
+import java.io.EOFException;
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.nio.channels.ReadableByteChannel;
 
 import static java.nio.ByteBuffer.allocate;
@@ -28,19 +30,28 @@ import static java.nio.ByteBuffer.allocate;
 class ChannelByteInput extends BufferByteInput {
 
     // -----------------------------------------------------------------------------------------------------------------
-    public ChannelByteInput(final ReadableByteChannel channel) {
-        super(allocate(1));
+    public ChannelByteInput(final ByteBuffer source, final ReadableByteChannel channel) {
+        super(source);
         this.channel = channel;
+    }
+
+    public ChannelByteInput(final ReadableByteChannel channel) {
+        this((ByteBuffer) allocate(1).position(1), channel);
     }
 
     // -----------------------------------------------------------------------------------------------------------------
 
     @Override
     public int read() throws IOException {
-        while (getSource().hasRemaining()) {
-            channel.read(getSource());
+        final ByteBuffer source = getSource();
+        final ReadableByteChannel channel = getChannel();
+        while (!source.hasRemaining()) {
+            source.clear(); // position -> zero, limit -> capacity
+            if (channel.read(source) == -1) {
+                throw new EOFException("reached to an end");
+            }
+            source.flip(); // limit -> position, position -> zero
         }
-        getSource().flip();
         return super.read();
     }
 

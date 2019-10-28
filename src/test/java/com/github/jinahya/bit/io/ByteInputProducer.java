@@ -42,10 +42,10 @@ class ByteInputProducer {
             public int read() throws IOException {
                 if (source == null) {
                     source = new byte[1];
-                    index = source.length;
+                    setIndex(source.length);
                 }
-                if (index == source.length) {
-                    index = 0;
+                if (getIndex() == source.length) {
+                    setIndex(0);
                 }
                 return super.read();
             }

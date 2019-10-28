@@ -49,11 +49,11 @@ class ByteOutputProducer {
             public void write(final int value) throws IOException {
                 if (target == null) {
                     target = new byte[1];
-                    index = 0;
+                    setIndex(0);
                 }
                 super.write(value);
-                if (index == target.length) {
-                    index = 0;
+                if (getIndex() == target.length) {
+                    setIndex(0);
                 }
             }
         };

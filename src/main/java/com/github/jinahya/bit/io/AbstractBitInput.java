@@ -65,7 +65,7 @@ public abstract class AbstractBitInput implements BitInput {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * Reads an unsigned value whose maximum size is {@value Byte#SIZE}.
+     * Reads an unsigned value whose size is, in maximum, {@value Byte#SIZE}.
      *
      * @param size the number of bits for the value; between {@code 1} and {@value Byte#SIZE}, both inclusive.
      * @return an unsigned byte value.
@@ -88,7 +88,7 @@ public abstract class AbstractBitInput implements BitInput {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * Reads an unsigned value whose maximum size is {@value Short#SIZE}.
+     * Reads an unsigned value whose size is, in maximum, {@value Short#SIZE}.
      *
      * @param size the number of bits for the value; between {@code 1} and {@value Short#SIZE}, both inclusive.
      * @return an unsigned short value.

@@ -25,7 +25,7 @@ package com.github.jinahya.bit.io;
  *
  * @param <T> byte target type parameter
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
- * @see ArrayByteInput
+ * @see AbstractByteInput
  */
 public abstract class AbstractByteOutput<T> implements ByteOutput {
 

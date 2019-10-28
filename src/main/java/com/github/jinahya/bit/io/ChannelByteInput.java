@@ -20,35 +20,41 @@ package com.github.jinahya.bit.io;
  * #L%
  */
 
-import lombok.Data;
-
 import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.channels.ReadableByteChannel;
 
-import static com.github.jinahya.bit.io.ExtendedBitInput.readString;
-import static com.github.jinahya.bit.io.ExtendedBitOutput.writeString;
-import static java.nio.charset.StandardCharsets.UTF_8;
-
-@Data
-class User implements BitReadable, BitWritable {
+class ChannelByteInput extends BufferByteInput {
 
     // -----------------------------------------------------------------------------------------------------------------
-    private static final int SIZE_AGE = 7;
-
-    // -----------------------------------------------------------------------------------------------------------------
-    @Override
-    public void read(BitInput input) throws IOException {
-        name = readString(true, input, UTF_8.name());
-        age = input.readInt(true, SIZE_AGE);
-    }
-
-    @Override
-    public void write(BitOutput output) throws IOException {
-        writeString(true, output, name, UTF_8.name());
-        output.writeInt(true, SIZE_AGE, age);
+    public ChannelByteInput(final ByteBuffer source, final ReadableByteChannel channel) {
+        super(source);
+        this.channel = channel;
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    String name;
 
-    int age;
+    @Override
+    public int read() throws IOException {
+        if (!getSource().hasRemaining()) {
+            getSource().clear(); // position -> zero, limit -> capacity
+            while (getChannel().read(getSource()) == 0) {
+                // empty
+            }
+            getSource().flip(); // limit -> position, position -> zero
+        }
+        return super.read();
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    public ReadableByteChannel getChannel() {
+        return channel;
+    }
+
+    public void setChannel(final ReadableByteChannel channel) {
+        this.channel = channel;
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    private ReadableByteChannel channel;
 }

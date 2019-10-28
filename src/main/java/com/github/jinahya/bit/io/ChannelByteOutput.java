@@ -20,35 +20,46 @@ package com.github.jinahya.bit.io;
  * #L%
  */
 
-import lombok.Data;
-
 import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.channels.WritableByteChannel;
 
-import static com.github.jinahya.bit.io.ExtendedBitInput.readString;
-import static com.github.jinahya.bit.io.ExtendedBitOutput.writeString;
-import static java.nio.charset.StandardCharsets.UTF_8;
-
-@Data
-class User implements BitReadable, BitWritable {
+class ChannelByteOutput extends BufferByteOutput {
 
     // -----------------------------------------------------------------------------------------------------------------
-    private static final int SIZE_AGE = 7;
-
-    // -----------------------------------------------------------------------------------------------------------------
-    @Override
-    public void read(BitInput input) throws IOException {
-        name = readString(true, input, UTF_8.name());
-        age = input.readInt(true, SIZE_AGE);
-    }
-
-    @Override
-    public void write(BitOutput output) throws IOException {
-        writeString(true, output, name, UTF_8.name());
-        output.writeInt(true, SIZE_AGE, age);
+    public ChannelByteOutput(final ByteBuffer target, final WritableByteChannel channel) {
+        super(target);
+        this.channel = channel;
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    String name;
+    @Override
+    public void write(final int value) throws IOException {
+        super.write(value);
+        if (!getTarget().hasRemaining()) { // no more space to write
+            getTarget().flip(); // limit -> position, position -> zero
+            while (getChannel().write(getTarget()) == 0) {
+                // empty
+            }
+            getTarget().compact();
+            assert getTarget().hasRemaining();
+        }
+    }
 
-    int age;
+    // --------------------------------------------------------------------------------------------------------- channel
+
+    public WritableByteChannel getChannel() {
+        return channel;
+    }
+
+    public void setChannel(final WritableByteChannel channel) {
+        this.channel = channel;
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+
+    /**
+     * The channel to which bytes are written.
+     */
+    private WritableByteChannel channel;
 }

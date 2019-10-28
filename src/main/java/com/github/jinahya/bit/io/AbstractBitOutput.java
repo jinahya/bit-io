@@ -35,6 +35,7 @@ import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeUnsigne
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  * @see AbstractByteInput
+ * @see DefaultBitInput
  */
 public abstract class AbstractBitOutput implements BitOutput {
 
@@ -68,7 +69,7 @@ public abstract class AbstractBitOutput implements BitOutput {
      * Writes an unsigned value whose size is, in maximum, {@value Byte#SIZE}.
      *
      * @param size  the number of lower bits to write; between {@code 1} and {@value Byte#SIZE}, both inclusive.
-     * @param value the value to write
+     * @param value the value to write.
      * @throws IOException if an I/O error occurs.
      */
     protected void unsigned8(final int size, int value) throws IOException {
@@ -94,7 +95,7 @@ public abstract class AbstractBitOutput implements BitOutput {
      * Writes an unsigned value whose size is, in maximum, {@value Short#SIZE}.
      *
      * @param size  the number of lower bits to write; between {@code 1} and {@value Short#SIZE}, both inclusive.
-     * @param value the value to write
+     * @param value the value to write.
      * @throws IOException if an I/O error occurs
      */
     protected void unsigned16(final int size, final int value) throws IOException {

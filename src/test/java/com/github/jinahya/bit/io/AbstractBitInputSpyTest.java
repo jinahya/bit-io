@@ -21,8 +21,10 @@ package com.github.jinahya.bit.io;
  */
 
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.RepeatedTest;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -37,6 +39,12 @@ import static com.github.jinahya.bit.io.BitIoTests.randomSizeForShort;
 import static java.util.concurrent.ThreadLocalRandom.current;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/**
+ * A class for unit-testing {@link AbstractBitInput} with a spy.
+ *
+ * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
+ * @see AbstractBitOutputSpyTest
+ */
 @ExtendWith({MockitoExtension.class})
 @Slf4j
 public class AbstractBitInputSpyTest {
@@ -45,6 +53,12 @@ public class AbstractBitInputSpyTest {
     @BeforeEach
     void stubRead() throws IOException {
         //when(bitInput.read()).thenReturn(current().nextInt(0, 256));
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    @AfterEach
+    void alignAfterEach() throws IOException {
+        bitInput.align(current().nextInt(1, 8));
     }
 
     // ------------------------------------------------------------------------------------------------------------ byte
@@ -121,6 +135,18 @@ public class AbstractBitInputSpyTest {
         final int size = randomSizeForChar();
         final char value = bitInput.readChar(size);
         assertEquals(0, value >> size);
+    }
+
+    // ----------------------------------------------------------------------------------------------------------- align
+    @Test
+    void testAlign() throws IOException {
+        bitInput.align(1);
+    }
+
+    // ----------------------------------------------------------------------------------------------------------- count
+    @Test
+    void testCount() throws IOException {
+        final long count = bitInput.getCount();
     }
 
     // -----------------------------------------------------------------------------------------------------------------

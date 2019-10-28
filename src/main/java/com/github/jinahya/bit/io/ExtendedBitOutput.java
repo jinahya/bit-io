@@ -206,7 +206,7 @@ class ExtendedBitOutput {
 
     // -----------------------------------------------------------------------------------------------------------------
     public static void writeString(final boolean nullable, final BitOutput output, final String value,
-                                   final Charset charset)
+                                   final String charset)
             throws IOException {
         if (output == null) {
             throw new NullPointerException("bitOutput is null");
@@ -235,7 +235,7 @@ class ExtendedBitOutput {
         if (value == null) {
             throw new NullPointerException("value is null");
         }
-        final byte[] bytes = value.getBytes(Charset.forName("US-ASCII"));
+        final byte[] bytes = value.getBytes("US-ASCII");
         writeBytes(false, output, true, 7, bytes);
     }
 

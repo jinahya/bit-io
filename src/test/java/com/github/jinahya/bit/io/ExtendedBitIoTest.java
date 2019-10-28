@@ -272,7 +272,7 @@ class ExtendedBitIoTest {
         final boolean nullable = current().nextBoolean();
         final String expected = nullable && current().nextBoolean()
                                 ? null : new RandomStringGenerator.Builder().build().generate(current().nextInt(128));
-        final Charset charset = UTF_8;
+        final String charset = UTF_8.name();
         writeString(nullable, output, expected, charset);
         output.align(1);
         final String actual = readString(nullable, input, charset);
@@ -412,13 +412,13 @@ class ExtendedBitIoTest {
 
         @Override
         public void read(BitInput input) throws IOException {
-            name = readString(true, input, UTF_8);
+            name = readString(true, input, UTF_8.name());
             age = input.readInt(true, 7);
         }
 
         @Override
         public void write(BitOutput output) throws IOException {
-            writeString(true, output, name, UTF_8);
+            writeString(true, output, name, UTF_8.name());
             output.writeInt(true, 7, age);
         }
 

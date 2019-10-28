@@ -21,26 +21,26 @@ package com.github.jinahya.bit.io;
  */
 
 import java.io.IOException;
-import java.io.InputStream;
+import java.nio.ByteBuffer;
+import java.nio.channels.WritableByteChannel;
 
-/**
- * An input stream whose {@link InputStream#read()} returns zero.
- *
- * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
- * @see BlackOutputStream
- */
-class WhiteInputStream extends InputStream {
+class BlackByteChannel implements WritableByteChannel {
 
     // -----------------------------------------------------------------------------------------------------------------
-
-    /**
-     * Returns {@code 0}.
-     *
-     * @return {@code 0}.
-     * @throws IOException if an I/O error occurs.
-     */
     @Override
-    public int read() throws IOException {
-        return 0;
+    public int write(final ByteBuffer src) throws IOException {
+        final int w = src.remaining();
+        src.position(src.limit());
+        return w;
+    }
+
+    @Override
+    public boolean isOpen() {
+        return true;
+    }
+
+    @Override
+    public void close() throws IOException {
+        // does nothing
     }
 }

@@ -21,14 +21,15 @@ package com.github.jinahya.bit.io;
  */
 
 import java.io.IOException;
-import java.nio.ByteBuffer;
 import java.nio.channels.ReadableByteChannel;
+
+import static java.nio.ByteBuffer.allocate;
 
 class ChannelByteInput extends BufferByteInput {
 
     // -----------------------------------------------------------------------------------------------------------------
-    public ChannelByteInput(final ByteBuffer source, final ReadableByteChannel channel) {
-        super(source);
+    public ChannelByteInput(final ReadableByteChannel channel) {
+        super(allocate(1));
         this.channel = channel;
     }
 
@@ -36,13 +37,10 @@ class ChannelByteInput extends BufferByteInput {
 
     @Override
     public int read() throws IOException {
-        if (!getSource().hasRemaining()) {
-            getSource().clear(); // position -> zero, limit -> capacity
-            while (getChannel().read(getSource()) == 0) {
-                // empty
-            }
-            getSource().flip(); // limit -> position, position -> zero
+        while (getSource().hasRemaining()) {
+            channel.read(getSource());
         }
+        getSource().flip();
         return super.read();
     }
 

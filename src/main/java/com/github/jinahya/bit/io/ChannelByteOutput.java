@@ -21,14 +21,15 @@ package com.github.jinahya.bit.io;
  */
 
 import java.io.IOException;
-import java.nio.ByteBuffer;
 import java.nio.channels.WritableByteChannel;
+
+import static java.nio.ByteBuffer.allocate;
 
 class ChannelByteOutput extends BufferByteOutput {
 
     // -----------------------------------------------------------------------------------------------------------------
-    public ChannelByteOutput(final ByteBuffer target, final WritableByteChannel channel) {
-        super(target);
+    public ChannelByteOutput(final WritableByteChannel channel) {
+        super(allocate(1));
         this.channel = channel;
     }
 
@@ -36,14 +37,10 @@ class ChannelByteOutput extends BufferByteOutput {
     @Override
     public void write(final int value) throws IOException {
         super.write(value);
-        if (!getTarget().hasRemaining()) { // no more space to write
-            getTarget().flip(); // limit -> position, position -> zero
-            while (getChannel().write(getTarget()) == 0) {
-                // empty
-            }
-            getTarget().compact();
-            assert getTarget().hasRemaining();
+        for (getTarget().flip(); getTarget().hasRemaining(); ) {
+            getChannel().write(getTarget());
         }
+        getTarget().clear();
     }
 
     // --------------------------------------------------------------------------------------------------------- channel

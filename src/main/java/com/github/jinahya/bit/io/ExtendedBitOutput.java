@@ -190,11 +190,11 @@ class ExtendedBitOutput {
             throw new NullPointerException("bitOutput is null");
         }
         requireValidSizeByte(unsigned, size);
+        if (!nullable && value == null) {
+            throw new NullPointerException("value is null");
+        }
         if (nullable && writeBooleanIsNextNull(output, value)) {
             return;
-        }
-        if (value == null) {
-            throw new NullPointerException("value is null");
         }
         writeLengthInt(output, value.length);
         for (final byte v : value) {
@@ -209,11 +209,11 @@ class ExtendedBitOutput {
         if (output == null) {
             throw new NullPointerException("bitOutput is null");
         }
+        if (!nullable && value == null) {
+            throw new NullPointerException("value is null");
+        }
         if (nullable && writeBooleanIsNextNull(output, value)) {
             return;
-        }
-        if (value == null) {
-            throw new NullPointerException("value is null");
         }
         if (charset == null) {
             throw new NullPointerException("charset is null");
@@ -227,11 +227,11 @@ class ExtendedBitOutput {
         if (output == null) {
             throw new NullPointerException("bitOutput is null");
         }
+        if (!nullable && value == null) {
+            throw new NullPointerException("value is null");
+        }
         if (nullable && writeBooleanIsNextNull(output, value)) {
             return;
-        }
-        if (value == null) {
-            throw new NullPointerException("value is null");
         }
         final byte[] bytes = value.getBytes("US-ASCII");
         writeBytes(false, output, true, 7, bytes);

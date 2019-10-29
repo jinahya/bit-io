@@ -50,13 +50,13 @@ abstract class AbstractByteOutputTest<T extends AbstractByteOutput<U>, U> extend
     // -----------------------------------------------------------------------------------------------------------------
     @Test
     void testGetTarget() {
-        final U target = byteOutput.getTarget();
+        final U target = byteOutput().getTarget();
     }
 
     @Test
     void testSetTarget() {
-        byteOutput.setTarget(null);
-        byteOutput.setTarget(byteTargetMock);
+        byteOutput().setTarget(null);
+        byteOutput().setTarget(byteTargetMock);
     }
 
     // -----------------------------------------------------------------------------------------------------------------

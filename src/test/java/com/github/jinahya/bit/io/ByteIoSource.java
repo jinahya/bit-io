@@ -164,7 +164,6 @@ final class ByteIoSource {
         final ChannelByteOutput output = new ChannelByteOutput(null, null) {
             @Override
             public void write(final int value) throws IOException {
-                log.debug("write({})", value);
                 if (getChannel() == null) {
                     setChannel(newChannel(baos));
                 }

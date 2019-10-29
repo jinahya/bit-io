@@ -42,12 +42,12 @@ class ArrayByteInputTest extends AbstractByteInputTest<ArrayByteInput, byte[]> {
     // ----------------------------------------------------------------------------------------------------- getindex()I
     @Test
     void testGetIndex() {
-        final int index = byteInput.getIndex();
+        final int index = byteInput().getIndex();
     }
 
     // ---------------------------------------------------------------------------------------------------- setIndex(I)V
     @Test
     void testSetIndex() {
-        byteInput.setIndex(0);
+        byteInput().setIndex(0);
     }
 }

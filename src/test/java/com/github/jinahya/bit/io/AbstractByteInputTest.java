@@ -57,7 +57,7 @@ abstract class AbstractByteInputTest<T extends AbstractByteInput<U>, U> extends 
      */
     @Test
     void testGetSource() {
-        final U source = byteInput.getSource();
+        final U source = byteInput().getSource();
     }
 
     /**
@@ -67,8 +67,8 @@ abstract class AbstractByteInputTest<T extends AbstractByteInput<U>, U> extends 
      */
     @Test
     void testSetSource() {
-        byteInput.setSource(null);
-        byteInput.setSource(byteSourceMock);
+        byteInput().setSource(null);
+        byteInput().setSource(byteSourceMock);
     }
 
     // -----------------------------------------------------------------------------------------------------------------

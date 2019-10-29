@@ -41,12 +41,12 @@ class ArrayByteOutputTest extends AbstractByteOutputTest<ArrayByteOutput, byte[]
     // ----------------------------------------------------------------------------------------------------- getindex()I
     @Test
     void testGetIndex() {
-        final int index = byteOutput.getIndex();
+        final int index = byteOutput().getIndex();
     }
 
     // ---------------------------------------------------------------------------------------------------- setIndex(I)V
     @Test
     void testSetIndex() {
-        byteOutput.setIndex(0);
+        byteOutput().setIndex(0);
     }
 }

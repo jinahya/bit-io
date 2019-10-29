@@ -22,7 +22,6 @@ package com.github.jinahya.bit.io;
 
 import lombok.extern.slf4j.Slf4j;
 import org.jboss.weld.junit5.WeldJunit5Extension;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -33,6 +32,13 @@ import java.io.IOException;
 import static java.util.Objects.requireNonNull;
 import static java.util.concurrent.ThreadLocalRandom.current;
 
+/**
+ * An abstract class for unit-testing subclasses of {@link ByteOutput} interface.
+ *
+ * @param <T> subclass type parameter
+ * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
+ * @see ByteInputTest
+ */
 @ExtendWith({WeldJunit5Extension.class})
 @Slf4j
 abstract class ByteOutputTest<T extends ByteOutput> {
@@ -44,12 +50,6 @@ abstract class ByteOutputTest<T extends ByteOutput> {
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    @BeforeEach
-    void selectByteInput() {
-        byteOutput = byteInputInstance.select(byteOutputClass).get();
-    }
-
-    // -----------------------------------------------------------------------------------------------------------------
 
     /**
      * Tests {@link ByteOutput#write(int)} with a random value.
@@ -58,7 +58,12 @@ abstract class ByteOutputTest<T extends ByteOutput> {
      */
     @Test
     void testWrite() throws IOException {
-        byteOutput.write(current().nextInt(0, 256));
+        byteOutput().write(current().nextInt(0, 256));
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    protected T byteOutput() {
+        return byteInputInstance.select(byteOutputClass).get();
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -67,6 +72,4 @@ abstract class ByteOutputTest<T extends ByteOutput> {
     @Typed
     @Inject
     private Instance<ByteOutput> byteInputInstance;
-
-    T byteOutput;
 }

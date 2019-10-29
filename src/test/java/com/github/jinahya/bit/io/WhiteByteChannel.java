@@ -21,24 +21,32 @@ package com.github.jinahya.bit.io;
  */
 
 import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.channels.ReadableByteChannel;
 
 /**
- * An interface for reading objects from a bit input.
+ * A readable byte channel whose {@link ReadableByteChannel#read(ByteBuffer)} method just fully fills up given buffer.
  *
- * @param <T> object type parameter
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
- * @see BitReadable
+ * @see BlackByteChannel
  */
-interface BitReader<T> {
+class WhiteByteChannel implements ReadableByteChannel {
 
     // -----------------------------------------------------------------------------------------------------------------
+    @Override
+    public int read(final ByteBuffer dst) throws IOException {
+        final int r = dst.remaining();
+        dst.position(dst.limit());
+        return r;
+    }
 
-    /**
-     * Reads an instance from specified bit input.
-     *
-     * @param input the bit input from which the object is read.
-     * @return an object.
-     * @throws IOException if an I/O error occurs.
-     */
-    T read(BitInput input) throws IOException;
+    @Override
+    public boolean isOpen() {
+        return true;
+    }
+
+    @Override
+    public void close() throws IOException {
+        // empty
+    }
 }

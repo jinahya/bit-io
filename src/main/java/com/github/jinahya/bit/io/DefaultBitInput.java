@@ -26,6 +26,7 @@ import java.io.IOException;
  * A default implementation of {@link ByteInput} which reads bytes from an instance of {@link ByteInput}.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
+ * @see DefaultBitOutput
  */
 public class DefaultBitInput extends AbstractBitInput {
 
@@ -34,8 +35,8 @@ public class DefaultBitInput extends AbstractBitInput {
     /**
      * Create a new instance with specified delegate.
      *
-     * @param delegate the delegate on which {@link #read()} is invoked; may be {@code null} if it is intended to be
-     *                 lazily initialized and set.
+     * @param delegate the delegate from which bytes are read; may be {@code null} if it is intended to be lazily
+     *                 initialized and set.
      */
     public DefaultBitInput(final ByteInput delegate) {
         super();

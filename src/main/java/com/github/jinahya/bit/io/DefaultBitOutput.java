@@ -26,6 +26,7 @@ import java.io.IOException;
  * A default implementation of {@link BitInput} writes bytes to an instance of {@link ByteOutput}.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
+ * @see DefaultBitInput
  */
 public class DefaultBitOutput extends AbstractBitOutput {
 
@@ -34,7 +35,8 @@ public class DefaultBitOutput extends AbstractBitOutput {
     /**
      * Creates new instance with specified delegate.
      *
-     * @param delegate the delegate; {@code null} if if is supposed to be lazily initialized and set.
+     * @param delegate the delegate to which bytes are written; {@code null} if if is supposed to be lazily initialized
+     *                 and set.
      */
     public DefaultBitOutput(final ByteOutput delegate) {
         super();

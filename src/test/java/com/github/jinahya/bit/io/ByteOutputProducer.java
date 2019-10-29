@@ -41,19 +41,18 @@ class ByteOutputProducer {
      * @param injectionPoint the injection point
      * @return an instance of {@link ArrayByteOutput}.
      */
-    @Typed
     @Produces
     ArrayByteOutput produceArrayByteOutput(final InjectionPoint injectionPoint) {
         return new ArrayByteOutput(null) {
             @Override
             public void write(final int value) throws IOException {
-                if (target == null) {
-                    target = new byte[1];
-                    index = 0;
+                if (getTarget() == null) {
+                    setTarget(new byte[1]);
+                    setIndex(0);
                 }
                 super.write(value);
-                if (index == target.length) {
-                    index = 0;
+                if (getIndex() == getTarget().length) {
+                    setIndex(0);
                 }
             }
         };
@@ -64,47 +63,44 @@ class ByteOutputProducer {
      *
      * @param byteOutput the instance of {@link ArrayByteOutput} to dispose.
      */
-    void disposeArrayByteOutput(@Typed @Disposes final ArrayByteOutput byteOutput) {
+    void disposeArrayByteOutput(@Disposes final ArrayByteOutput byteOutput) {
     }
 
     // -----------------------------------------------------------------------------------------------------------buffer
-    @Typed
     @Produces
     BufferByteOutput produceBufferByteOutput(final InjectionPoint injectionPoint) {
         return new BufferByteOutput(null) {
             @Override
             public void write(final int value) throws IOException {
-                if (target == null) {
-                    target = allocate(1); // position: zero, limit: capacity
+                if (getTarget() == null) {
+                    setTarget(allocate(1)); // position: zero, limit: capacity
                 }
                 super.write(value);
-                if (!target.hasRemaining()) {
-                    target.clear();
+                if (!getTarget().hasRemaining()) {
+                    getTarget().clear();
                 }
             }
         };
     }
 
-    void disposeBufferByteOutput(@Typed @Disposes final BufferByteOutput byteOutput) {
+    void disposeBufferByteOutput(@Disposes final BufferByteOutput byteOutput) {
     }
 
     // ------------------------------------------------------------------------------------------------------------ data
-    @Typed
     @Produces
     DataByteOutput produceDataByteOutput(final InjectionPoint injectionPoint) {
         return new DataByteOutput(new DataOutputStream(new BlackOutputStream()));
     }
 
-    void disposeDataByteOutput(@Typed @Disposes final DataByteOutput byteOutput) {
+    void disposeDataByteOutput(@Disposes final DataByteOutput byteOutput) {
     }
 
     // ---------------------------------------------------------------------------------------------------------- stream
-    @Typed
     @Produces
     StreamByteOutput produceStreamByteOutput(final InjectionPoint injectionPoint) {
         return new StreamByteOutput(new BlackOutputStream());
     }
 
-    void disposeStreamByteOutput(@Typed @Disposes final StreamByteOutput byteOutput) {
+    void disposeStreamByteOutput(@Disposes final StreamByteOutput byteOutput) {
     }
 }

@@ -95,5 +95,5 @@ public class ArrayByteOutput extends AbstractByteOutput<byte[]> {
     /**
      * The index in the {@code target} to write.
      */
-    protected int index;
+    private int index;
 }

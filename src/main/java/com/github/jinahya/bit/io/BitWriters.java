@@ -42,7 +42,7 @@ final class BitWriters {
         if (value == null) {
             value = new BitWriter<T>() {
                 @Override
-                public void write(final T value, final BitOutput output) throws IOException {
+                public void write(final BitOutput output, final T value) throws IOException {
                     value.write(output);
                 }
             };

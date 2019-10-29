@@ -25,20 +25,20 @@ package com.github.jinahya.bit.io;
  *
  * @param <T> byte target type parameter
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
- * @see ArrayByteInput
+ * @see AbstractByteInput
  */
 public abstract class AbstractByteOutput<T> implements ByteOutput {
 
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * Creates a new instance on top of given byte target.
+     * Creates a new instance with specified byte target.
      *
-     * @param target the underlying byte target; {@code null} if it is supposed to be lazily initialized and set.
+     * @param target the byte target; {@code null} if it is supposed to be lazily initialized and set.
      */
     public AbstractByteOutput(final T target) {
         super();
-        this.target = target;
+        this.setTarget(target);
     }
     // -----------------------------------------------------------------------------------------------------------------
 
@@ -57,9 +57,9 @@ public abstract class AbstractByteOutput<T> implements ByteOutput {
     // ---------------------------------------------------------------------------------------------------------- target
 
     /**
-     * Returns the current value of {@link #target}.
+     * Returns the current value of byte target.
      *
-     * @return the current value of {@link #target}.
+     * @return the current value of byte target.
      */
     public T getTarget() {
         return target;
@@ -76,8 +76,5 @@ public abstract class AbstractByteOutput<T> implements ByteOutput {
 
     // -----------------------------------------------------------------------------------------------------------------
 
-    /**
-     * The underlying byte target.
-     */
-    protected T target;
+    private T target;
 }

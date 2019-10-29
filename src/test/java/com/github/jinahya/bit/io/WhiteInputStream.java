@@ -34,9 +34,9 @@ class WhiteInputStream extends InputStream {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * Returns a random value between {@code 0} and {@code 255}, both inclusive.
+     * Returns {@code 0}.
      *
-     * @return a random byte value.
+     * @return {@code 0}.
      * @throws IOException if an I/O error occurs.
      */
     @Override

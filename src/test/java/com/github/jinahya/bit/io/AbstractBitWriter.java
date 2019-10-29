@@ -22,23 +22,23 @@ package com.github.jinahya.bit.io;
 
 import java.io.IOException;
 
-/**
- * An interface for reading objects from a bit input.
- *
- * @param <T> object type parameter
- * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
- * @see BitReadable
- */
-interface BitReader<T> {
+class AbstractBitWriter<T extends BitWritable> implements BitWriter<T> {
 
     // -----------------------------------------------------------------------------------------------------------------
+    public AbstractBitWriter(final Class<T> type) {
+        super();
+        if (type == null) {
+            throw new NullPointerException("type is null");
+        }
+        this.type = type;
+    }
 
-    /**
-     * Reads an instance from specified bit input.
-     *
-     * @param input the bit input from which the object is read.
-     * @return an object.
-     * @throws IOException if an I/O error occurs.
-     */
-    T read(BitInput input) throws IOException;
+    // -----------------------------------------------------------------------------------------------------------------
+    @Override
+    public void write(final BitOutput output, final T value) throws IOException {
+        value.write(output);
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    protected final Class<T> type;
 }

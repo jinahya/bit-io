@@ -21,7 +21,6 @@ package com.github.jinahya.bit.io;
  */
 
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -197,7 +196,7 @@ class ExtendedBitInput {
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    public static String readString(final boolean nullable, final BitInput input, final Charset charset)
+    public static String readString(final boolean nullable, final BitInput input, final String charset)
             throws IOException {
         if (input == null) {
             throw new NullPointerException("input is null");
@@ -225,7 +224,7 @@ class ExtendedBitInput {
         if (bytes == null) {
             return null;
         }
-        return new String(bytes, Charset.forName("US-ASCII"));
+        return new String(bytes, "US-ASCII");
     }
 
     // -----------------------------------------------------------------------------------------------------------------

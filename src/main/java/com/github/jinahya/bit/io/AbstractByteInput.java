@@ -25,7 +25,7 @@ package com.github.jinahya.bit.io;
  *
  * @param <T> byte source type parameter
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
- * @see AbstractBitOutput
+ * @see AbstractByteOutput
  */
 public abstract class AbstractByteInput<T> implements ByteInput {
 
@@ -38,7 +38,7 @@ public abstract class AbstractByteInput<T> implements ByteInput {
      */
     public AbstractByteInput(final T source) {
         super();
-        this.source = source;
+        this.setSource(source);
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -77,8 +77,5 @@ public abstract class AbstractByteInput<T> implements ByteInput {
 
     // -----------------------------------------------------------------------------------------------------------------
 
-    /**
-     * The underlying byte source.
-     */
-    protected T source;
+    private T source;
 }

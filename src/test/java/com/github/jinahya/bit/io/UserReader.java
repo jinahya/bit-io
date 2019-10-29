@@ -20,19 +20,15 @@ package com.github.jinahya.bit.io;
  * #L%
  */
 
-import javax.inject.Qualifier;
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
+import java.io.IOException;
 
-import static java.lang.annotation.ElementType.FIELD;
-import static java.lang.annotation.ElementType.METHOD;
-import static java.lang.annotation.ElementType.PARAMETER;
-import static java.lang.annotation.ElementType.TYPE;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
+class UserReader implements BitReader<User> {
 
-@Qualifier
-@Retention(RUNTIME)
-@Target({TYPE, METHOD, FIELD, PARAMETER})
-@interface Typed {
-
+    // -----------------------------------------------------------------------------------------------------------------
+    @Override
+    public User read(final BitInput input) throws IOException {
+        final User value = new User();
+        value.read(input);
+        return value;
+    }
 }

@@ -20,6 +20,8 @@ package com.github.jinahya.bit.io;
  * #L%
  */
 
+import org.junit.jupiter.api.Test;
+
 /**
  * A class for testing {@link ArrayByteOutput}.
  *
@@ -34,5 +36,17 @@ class ArrayByteOutputTest extends AbstractByteOutputTest<ArrayByteOutput, byte[]
      */
     ArrayByteOutputTest() {
         super(ArrayByteOutput.class, byte[].class);
+    }
+
+    // ----------------------------------------------------------------------------------------------------- getindex()I
+    @Test
+    void testGetIndex() {
+        final int index = byteOutput().getIndex();
+    }
+
+    // ---------------------------------------------------------------------------------------------------- setIndex(I)V
+    @Test
+    void testSetIndex() {
+        byteOutput().setIndex(0);
     }
 }

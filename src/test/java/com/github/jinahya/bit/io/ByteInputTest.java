@@ -22,7 +22,6 @@ package com.github.jinahya.bit.io;
 
 import lombok.extern.slf4j.Slf4j;
 import org.jboss.weld.junit5.WeldJunit5Extension;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -35,8 +34,9 @@ import static java.util.Objects.requireNonNull;
 /**
  * An abstract class for unit-testing subclasses of {@link ByteInput} interface.
  *
- * @param <T> subclass type paramter
+ * @param <T> subclass type parameter
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
+ * @see ByteOutputTest
  */
 @ExtendWith({WeldJunit5Extension.class})
 @Slf4j
@@ -55,12 +55,6 @@ abstract class ByteInputTest<T extends ByteInput> {
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    @BeforeEach
-    void selectByteInput() {
-        byteInput = byteInputInstance.select(byteInputClass).get();
-    }
-
-    // -----------------------------------------------------------------------------------------------------------------
 
     /**
      * Tests {@link ByteInput#read()} method.
@@ -69,9 +63,17 @@ abstract class ByteInputTest<T extends ByteInput> {
      */
     @Test
     public void testRead() throws IOException {
-        final int octet = byteInput.read();
+        final int octet = byteInput().read();
     }
 
+    // -----------------------------------------------------------------------------------------------------------------
+
+    /**
+     * An instance of {@link #byteInputClass} to test with.
+     */
+    protected T byteInput() {
+        return byteInputInstance.select(byteInputClass).get();
+    }
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
@@ -79,12 +81,6 @@ abstract class ByteInputTest<T extends ByteInput> {
      */
     final Class<T> byteInputClass;
 
-    @Typed
     @Inject
     private Instance<ByteInput> byteInputInstance;
-
-    /**
-     * An instance of {@link #byteInputClass} to test with.
-     */
-    transient T byteInput;
 }

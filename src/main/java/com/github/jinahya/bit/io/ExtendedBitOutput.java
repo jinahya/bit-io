@@ -21,7 +21,6 @@ package com.github.jinahya.bit.io;
  */
 
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.util.List;
 
 import static com.github.jinahya.bit.io.BitIoConstants.MAX_EXPONENT_BYTE;
@@ -206,7 +205,7 @@ class ExtendedBitOutput {
 
     // -----------------------------------------------------------------------------------------------------------------
     public static void writeString(final boolean nullable, final BitOutput output, final String value,
-                                   final Charset charset)
+                                   final String charset)
             throws IOException {
         if (output == null) {
             throw new NullPointerException("bitOutput is null");
@@ -235,7 +234,7 @@ class ExtendedBitOutput {
         if (value == null) {
             throw new NullPointerException("value is null");
         }
-        final byte[] bytes = value.getBytes(Charset.forName("US-ASCII"));
+        final byte[] bytes = value.getBytes("US-ASCII");
         writeBytes(false, output, true, 7, bytes);
     }
 
@@ -314,7 +313,7 @@ class ExtendedBitOutput {
         if (nullable && writeBooleanIsNextNull(output, value)) {
             return;
         }
-        writer.write(value, output);
+        writer.write(output, value);
     }
 
     static <T extends BitWritable> void writeObject(final boolean nullable, final BitOutput output,

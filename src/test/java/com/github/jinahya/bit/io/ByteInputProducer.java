@@ -34,70 +34,66 @@ import static java.nio.ByteBuffer.allocate;
 class ByteInputProducer {
 
     // ----------------------------------------------------------------------------------------------------------- array
-    @Typed
     @Produces
     ArrayByteInput produceArrayByteInput(final InjectionPoint injectionPoint) {
         return new ArrayByteInput(null) {
             @Override
             public int read() throws IOException {
-                if (source == null) {
-                    source = new byte[1];
-                    index = source.length;
+                if (getSource() == null) {
+                    setSource(new byte[1]);
+                    setIndex(getSource().length);
                 }
-                if (index == source.length) {
-                    index = 0;
+                if (getIndex() == getSource().length) {
+                    setIndex(0);
                 }
                 return super.read();
             }
         };
     }
 
-    void disposeArrayByteInput(@Typed @Disposes final ArrayByteInput byteInput) {
+    void disposeArrayByteInput(@Disposes final ArrayByteInput byteInput) {
         // does nothing.
     }
 
     // ---------------------------------------------------------------------------------------------------------- buffer
-    @Typed
     @Produces
     BufferByteInput produceBufferByteInput(final InjectionPoint injectionPoint) {
         return new BufferByteInput(null) {
             @Override
             public int read() throws IOException {
-                if (source == null) {
-                    source = allocate(1);
-                    source.position(source.limit());
+                if (getSource() == null) {
+                    setSource(allocate(1));
+                    getSource().position(getSource().limit());
                 }
-                if (!source.hasRemaining()) {
-                    source.clear(); // position -> zero, limit -> capacity
+                if (!getSource().hasRemaining()) {
+                    getSource().clear(); // position -> zero, limit -> capacity
                 }
                 return super.read();
             }
         };
     }
 
-    void disposeBufferByteInput(@Disposes @Typed final BufferByteInput byteInput) {
+    void disposeBufferByteInput(@Disposes final BufferByteInput byteInput) {
         // does nothing.
     }
 
     // ------------------------------------------------------------------------------------------------------------ data
-    @Typed
     @Produces
     DataByteInput produceDataByteInput(final InjectionPoint injectionPoint) {
         return new DataByteInput(new DataInputStream(new WhiteInputStream()));
     }
 
-    void disposeDataByteInput(@Disposes @Typed final DataByteInput byteInput) {
+    void disposeDataByteInput(@Disposes final DataByteInput byteInput) {
         // does nothing.
     }
 
     // ---------------------------------------------------------------------------------------------------------- stream
-    @Typed
     @Produces
     StreamByteInput produceStreamByteInput(final InjectionPoint injectionPoint) {
         return new StreamByteInput(new WhiteInputStream());
     }
 
-    void disposeStreamByteInput(@Disposes @Typed final StreamByteInput byteInput) {
+    void disposeStreamByteInput(@Disposes final StreamByteInput byteInput) {
         // does nothing.
     }
 }

@@ -95,5 +95,5 @@ public class ArrayByteInput extends AbstractByteInput<byte[]> {
     /**
      * The index in the {@code source} to read.
      */
-    protected int index;
+    private int index;
 }

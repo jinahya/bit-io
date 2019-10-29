@@ -21,8 +21,10 @@ package com.github.jinahya.bit.io;
  */
 
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.RepeatedTest;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -43,6 +45,7 @@ import static java.util.concurrent.ThreadLocalRandom.current;
  * A class for unit-testing {@link AbstractBitOutput} class.
  *
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
+ * @see AbstractBitInputSpyTest
  */
 @ExtendWith({MockitoExtension.class})
 @Slf4j
@@ -52,6 +55,12 @@ public class AbstractBitOutputSpyTest {
     @BeforeEach
     void stubWrite() throws IOException {
         //doNothing().when(bitOutput).write(anyInt());
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    @AfterEach
+    void alignAfterEach() throws IOException {
+        bitOutput.align(current().nextInt(1, 8));
     }
 
     // --------------------------------------------------------------------------------------------------------- boolean
@@ -103,6 +112,18 @@ public class AbstractBitOutputSpyTest {
         final int size = randomSizeForChar();
         final char value = randomValueForChar(size);
         bitOutput.writeChar(size, value);
+    }
+
+    // ----------------------------------------------------------------------------------------------------------- align
+    @Test
+    void testAlign() throws IOException {
+        bitOutput.align(1);
+    }
+
+    // ----------------------------------------------------------------------------------------------------------- count
+    @Test
+    void testCount() throws IOException {
+        final long count = bitOutput.getCount();
     }
 
     // -----------------------------------------------------------------------------------------------------------------

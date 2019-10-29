@@ -39,7 +39,7 @@ class ArrayByteInputTest extends AbstractByteInputTest<ArrayByteInput, byte[]> {
         super(ArrayByteInput.class, byte[].class);
     }
 
-    // ----------------------------------------------------------------------------------------------------- getindex()I
+    // ----------------------------------------------------------------------------------------------------- getIndex()I
     @Test
     void testGetIndex() {
         final int index = byteInput().getIndex();

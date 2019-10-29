@@ -81,8 +81,7 @@ public interface BitInput {
      * @param size     the number of bits for value; between {@code 1} and ({@code 31 + (unsigned ? 0 : 1)}), both
      *                 inclusive.
      * @return an int value.
-     * @throws IOException if an I/O error occurs. //     * @see #readSignedInt(int) //     * @see
-     *                     #readUnsignedInt(int)
+     * @throws IOException if an I/O error occurs.
      * @see BitOutput#writeInt(boolean, int, int)
      */
     int readInt(boolean unsigned, int size) throws IOException;
@@ -96,8 +95,7 @@ public interface BitInput {
      * @param size     the number of bits to read; between {@code 1} and ({@code 63 + (unsigned ? 0 : 1)}), both
      *                 inclusive.
      * @return a {@code long} value of specified bit size.
-     * @throws IOException if an I/O error occurs. //     * @see #readSignedLong(int) //     * @see
-     *                     #readUnsignedLong(int)
+     * @throws IOException if an I/O error occurs.
      * @see BitOutput#writeLong(boolean, int, long)
      */
     long readLong(boolean unsigned, int size) throws IOException;

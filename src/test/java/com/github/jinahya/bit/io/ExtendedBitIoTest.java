@@ -413,7 +413,6 @@ class ExtendedBitIoTest {
         List<User> expected = null;
         if (!nullable) {
             expected = new ArrayList<>();
-        } else if (current().nextBoolean()) {
             final RandomStringGenerator generator = new RandomStringGenerator.Builder().build();
             final int size = current().nextInt(128);
             expected = new ArrayList<>(size);
@@ -428,9 +427,10 @@ class ExtendedBitIoTest {
                 expected.add(user);
             }
         }
-        writeObjects(nullable, output, User.class, expected);
+        log.debug("expected: {}", expected);
+        writeObjects(nullable, output, new UserWriter(), expected);
         output.align(1);
-        final List<User> actual = readObjects(nullable, input, User.class);
+        final List<User> actual = readObjects(nullable, input, new UserReader());
         input.align(1);
         assertEquals(expected, actual);
     }

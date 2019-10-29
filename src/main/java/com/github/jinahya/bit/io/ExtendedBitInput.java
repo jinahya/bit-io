@@ -31,7 +31,6 @@ import static com.github.jinahya.bit.io.BitIoConstants.MAX_EXPONENT_SHORT;
 import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeByte;
 import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeInt;
 import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeLong;
-import static com.github.jinahya.bit.io.BitReaders.bitReaderFor;
 
 class ExtendedBitInput {
 
@@ -313,33 +312,19 @@ class ExtendedBitInput {
         return reader.read(input);
     }
 
-    static <T extends BitReadable> T readObject(final boolean nullable, final BitInput input,
-                                                final Class<? extends T> type)
+    static <T> List<T> readObjects(final boolean nullable, final BitInput input, final BitReader<? extends T> reader)
             throws IOException {
         if (input == null) {
             throw new NullPointerException("input is null");
         }
-        if (type == null) {
-            throw new NullPointerException("type is null");
-        }
-        return readObject(nullable, input, bitReaderFor(type));
-    }
-
-    static <T extends BitReadable> List<T> readObjects(final boolean nullable, final BitInput input,
-                                                       final Class<? extends T> type)
-            throws IOException {
-        if (input == null) {
-            throw new NullPointerException("input is null");
-        }
-        if (type == null) {
-            throw new NullPointerException("type is null");
+        if (reader == null) {
+            throw new NullPointerException("reader is null");
         }
         if (nullable && readBooleanIsNextNull(input)) {
             return null;
         }
         final int size = readLengthInt(input);
         final List<T> value = new ArrayList<T>(size);
-        final BitReader<T> reader = bitReaderFor(type);
         for (int i = 0; i < size; i++) {
             value.add(readObject(true, input, reader));
         }

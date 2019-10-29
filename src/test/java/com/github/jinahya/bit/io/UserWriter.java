@@ -22,7 +22,7 @@ package com.github.jinahya.bit.io;
 
 import java.io.IOException;
 
-class UserBitWriter implements BitWriter<User> {
+class UserWriter implements BitWriter<User> {
 
     // -----------------------------------------------------------------------------------------------------------------
     @Override

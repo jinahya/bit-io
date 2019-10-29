@@ -49,12 +49,14 @@ final class ByteIoSource {
         final ByteOutput output = new ArrayByteOutput(null) {
             @Override
             public void write(int value) throws IOException {
-                if (target == null) {
-                    target = holder[0] = new byte[1];
+                if (getTarget() == null) {
+                    setTarget(holder[0] = new byte[1]);
                     setIndex(0);
                 }
+                final byte[] target = getTarget();
                 if (getIndex() == target.length) {
-                    holder[0] = target = copyOf(target, target.length << 1);
+                    setTarget(copyOf(target, target.length << 1));
+                    holder[0] = getTarget();
                 }
                 super.write(value);
             }
@@ -62,8 +64,8 @@ final class ByteIoSource {
         final ByteInput input = new ArrayByteInput(null) {
             @Override
             public int read() throws IOException {
-                if (source == null) {
-                    source = ofNullable(holder[0]).orElseGet(() -> new byte[0]);
+                if (getSource() == null) {
+                    setSource(ofNullable(holder[0]).orElseGet(() -> new byte[0]));
                     setIndex(0);
                 }
                 return super.read();
@@ -77,9 +79,10 @@ final class ByteIoSource {
         final ByteOutput output = new BufferByteOutput(null) {
             @Override
             public void write(int value) throws IOException {
-                if (target == null) {
-                    target = holder[0] = allocate(1);
+                if (getTarget() == null) {
+                    setTarget(holder[0] = allocate(1));
                 }
+                final ByteBuffer target = getTarget();
                 if (!target.hasRemaining()) {
                     final ByteBuffer bigger = allocate(target.capacity() << 1);
                     if (target.hasArray() && bigger.hasArray()) {
@@ -91,7 +94,8 @@ final class ByteIoSource {
                             bigger.put(target.get());
                         }
                     }
-                    holder[0] = target = bigger;
+                    setTarget(bigger);
+                    holder[0] = getTarget();
                 }
                 super.write(value);
             }
@@ -99,9 +103,9 @@ final class ByteIoSource {
         final ByteInput input = new BufferByteInput(null) {
             @Override
             public int read() throws IOException {
-                if (source == null) {
-                    source = ofNullable(holder[0]).orElseGet(() -> allocate(0));
-                    source.flip(); // limit -> position, position -> zero
+                if (getSource() == null) {
+                    setSource(ofNullable(holder[0]).orElseGet(() -> allocate(0)));
+                    getSource().flip(); // limit -> position, position -> zero
                 }
                 return super.read();
             }
@@ -114,8 +118,8 @@ final class ByteIoSource {
         final ByteOutput output = new DataByteOutput(null) {
             @Override
             public void write(final int value) throws IOException {
-                if (target == null) {
-                    target = new DataOutputStream(baos);
+                if (getTarget() == null) {
+                    setTarget(new DataOutputStream(baos));
                 }
                 super.write(value);
             }
@@ -123,8 +127,8 @@ final class ByteIoSource {
         final ByteInput input = new DataByteInput(null) {
             @Override
             public int read() throws IOException {
-                if (source == null) {
-                    source = new DataInputStream(new ByteArrayInputStream(baos.toByteArray()));
+                if (getSource() == null) {
+                    setSource(new DataInputStream(new ByteArrayInputStream(baos.toByteArray())));
                 }
                 return super.read();
             }
@@ -137,8 +141,8 @@ final class ByteIoSource {
         final ByteOutput output = new StreamByteOutput(null) {
             @Override
             public void write(final int value) throws IOException {
-                if (target == null) {
-                    target = baos;
+                if (getTarget() == null) {
+                    setTarget(baos);
                 }
                 super.write(value);
             }
@@ -146,8 +150,8 @@ final class ByteIoSource {
         final ByteInput input = new StreamByteInput(null) {
             @Override
             public int read() throws IOException {
-                if (source == null) {
-                    source = new ByteArrayInputStream(baos.toByteArray());
+                if (getSource() == null) {
+                    setSource(new ByteArrayInputStream(baos.toByteArray()));
                 }
                 return super.read();
             }
@@ -179,11 +183,10 @@ final class ByteIoSource {
                         final ByteBuffer target = output.getTarget();
                         assertNotNull(channel);
                         assertNotNull(target);
-                        for (target.flip(); (target.hasRemaining()); ) {
+                        for (target.flip(); target.hasRemaining(); ) {
                             channel.write(target);
                         }
                     }
-                    log.debug("byteArray.length: {}", baos.toByteArray().length);
                     setChannel(newChannel(new ByteArrayInputStream(baos.toByteArray())));
                 }
                 if (getSource() == null) {
@@ -198,8 +201,7 @@ final class ByteIoSource {
 
     static Stream<Arguments> sourceByteIo() {
         return Stream.of(sourceByteIoArray(), sourceByteIoBuffer(), sourceByteIoData(), sourceByteIoStream(),
-                         sourceByteIoChannel()
-        )
+                         sourceByteIoChannel())
                 .flatMap(s -> s);
     }
 

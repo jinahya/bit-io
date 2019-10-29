@@ -38,7 +38,7 @@ public abstract class AbstractByteInput<T> implements ByteInput {
      */
     public AbstractByteInput(final T source) {
         super();
-        this.source = source;
+        this.setSource(source);
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -77,8 +77,5 @@ public abstract class AbstractByteInput<T> implements ByteInput {
 
     // -----------------------------------------------------------------------------------------------------------------
 
-    /**
-     * The underlying byte source.
-     */
-    protected T source;
+    private T source;
 }

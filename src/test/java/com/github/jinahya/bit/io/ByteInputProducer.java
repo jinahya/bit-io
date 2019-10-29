@@ -40,11 +40,11 @@ class ByteInputProducer {
         return new ArrayByteInput(null) {
             @Override
             public int read() throws IOException {
-                if (source == null) {
-                    source = new byte[1];
-                    setIndex(source.length);
+                if (getSource() == null) {
+                    setSource(new byte[1]);
+                    setIndex(getSource().length);
                 }
-                if (getIndex() == source.length) {
+                if (getIndex() == getSource().length) {
                     setIndex(0);
                 }
                 return super.read();
@@ -63,12 +63,12 @@ class ByteInputProducer {
         return new BufferByteInput(null) {
             @Override
             public int read() throws IOException {
-                if (source == null) {
-                    source = allocate(1);
-                    source.position(source.limit());
+                if (getSource() == null) {
+                    setSource(allocate(1));
+                    getSource().position(getSource().limit());
                 }
-                if (!source.hasRemaining()) {
-                    source.clear(); // position -> zero, limit -> capacity
+                if (!getSource().hasRemaining()) {
+                    getSource().clear(); // position -> zero, limit -> capacity
                 }
                 return super.read();
             }

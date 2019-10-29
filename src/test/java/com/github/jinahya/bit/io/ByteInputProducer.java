@@ -34,7 +34,6 @@ import static java.nio.ByteBuffer.allocate;
 class ByteInputProducer {
 
     // ----------------------------------------------------------------------------------------------------------- array
-    @Typed
     @Produces
     ArrayByteInput produceArrayByteInput(final InjectionPoint injectionPoint) {
         return new ArrayByteInput(null) {
@@ -52,12 +51,11 @@ class ByteInputProducer {
         };
     }
 
-    void disposeArrayByteInput(@Typed @Disposes final ArrayByteInput byteInput) {
+    void disposeArrayByteInput(@Disposes final ArrayByteInput byteInput) {
         // does nothing.
     }
 
     // ---------------------------------------------------------------------------------------------------------- buffer
-    @Typed
     @Produces
     BufferByteInput produceBufferByteInput(final InjectionPoint injectionPoint) {
         return new BufferByteInput(null) {
@@ -75,29 +73,27 @@ class ByteInputProducer {
         };
     }
 
-    void disposeBufferByteInput(@Disposes @Typed final BufferByteInput byteInput) {
+    void disposeBufferByteInput(@Disposes final BufferByteInput byteInput) {
         // does nothing.
     }
 
     // ------------------------------------------------------------------------------------------------------------ data
-    @Typed
     @Produces
     DataByteInput produceDataByteInput(final InjectionPoint injectionPoint) {
         return new DataByteInput(new DataInputStream(new WhiteInputStream()));
     }
 
-    void disposeDataByteInput(@Disposes @Typed final DataByteInput byteInput) {
+    void disposeDataByteInput(@Disposes final DataByteInput byteInput) {
         // does nothing.
     }
 
     // ---------------------------------------------------------------------------------------------------------- stream
-    @Typed
     @Produces
     StreamByteInput produceStreamByteInput(final InjectionPoint injectionPoint) {
         return new StreamByteInput(new WhiteInputStream());
     }
 
-    void disposeStreamByteInput(@Disposes @Typed final StreamByteInput byteInput) {
+    void disposeStreamByteInput(@Disposes final StreamByteInput byteInput) {
         // does nothing.
     }
 }

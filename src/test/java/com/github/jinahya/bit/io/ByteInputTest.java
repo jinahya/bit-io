@@ -81,7 +81,6 @@ abstract class ByteInputTest<T extends ByteInput> {
      */
     final Class<T> byteInputClass;
 
-    @Typed
     @Inject
     private Instance<ByteInput> byteInputInstance;
 }

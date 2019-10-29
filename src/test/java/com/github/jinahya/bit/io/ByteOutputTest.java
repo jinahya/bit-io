@@ -69,7 +69,6 @@ abstract class ByteOutputTest<T extends ByteOutput> {
     // -----------------------------------------------------------------------------------------------------------------
     final Class<T> byteOutputClass;
 
-    @Typed
     @Inject
     private Instance<ByteOutput> byteInputInstance;
 }

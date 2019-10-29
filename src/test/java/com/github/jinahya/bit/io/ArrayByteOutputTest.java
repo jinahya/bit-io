@@ -38,7 +38,7 @@ class ArrayByteOutputTest extends AbstractByteOutputTest<ArrayByteOutput, byte[]
         super(ArrayByteOutput.class, byte[].class);
     }
 
-    // ----------------------------------------------------------------------------------------------------- getindex()I
+    // ----------------------------------------------------------------------------------------------------- getIndex()I
     @Test
     void testGetIndex() {
         final int index = byteOutput().getIndex();

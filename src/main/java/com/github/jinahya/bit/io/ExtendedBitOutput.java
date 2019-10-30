@@ -315,18 +315,6 @@ class ExtendedBitOutput {
         writer.write(output, value);
     }
 
-    static <T extends BitWritable> void writeObjects(final BitOutput output, final BitWriter<? super T> writer,
-                                                     final Collection<? extends T> value)
-            throws IOException {
-        if (output == null) {
-            throw new NullPointerException("bitOutput is null");
-        }
-        writeLengthInt(output, value.size());
-        for (final T v : value) {
-            writeObject(true, output, writer, v);
-        }
-    }
-
     static <T extends BitWritable> void writeObjects(final boolean nullable, final BitOutput output,
                                                      final BitWriter<? super T> writer,
                                                      final Collection<? extends T> value)
@@ -341,10 +329,6 @@ class ExtendedBitOutput {
             return;
         }
         assert value != null;
-        if (true) {
-            writeObjects(output, writer, value);
-            return;
-        }
         writeLengthInt(output, value.size());
         for (final T v : value) {
             writeObject(true, output, writer, v);

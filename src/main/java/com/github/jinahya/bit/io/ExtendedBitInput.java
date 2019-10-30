@@ -22,7 +22,6 @@ package com.github.jinahya.bit.io;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import static com.github.jinahya.bit.io.BitIoConstants.MAX_EXPONENT_BYTE;
@@ -313,25 +312,6 @@ class ExtendedBitInput {
         return reader.read(input);
     }
 
-    static <T, U extends Collection<? super T>> U readObjects(final BitInput input, final BitReader<? extends T> reader,
-                                                              final U collection)
-            throws IOException {
-        if (input == null) {
-            throw new NullPointerException("input is null");
-        }
-        if (reader == null) {
-            throw new NullPointerException("reader is null");
-        }
-        if (collection == null) {
-            throw new NullPointerException("collection is null");
-        }
-        final int size = readLengthInt(input);
-        for (int i = 0; i < size; i++) {
-            collection.add(readObject(true, input, reader));
-        }
-        return collection;
-    }
-
     static <T> List<T> readObjects(final boolean nullable, final BitInput input, final BitReader<? extends T> reader)
             throws IOException {
         if (input == null) {
@@ -342,9 +322,6 @@ class ExtendedBitInput {
         }
         if (nullable && readBooleanIsNextNull(input)) {
             return null;
-        }
-        if (true) {
-            return readObjects(input, reader, new ArrayList<T>());
         }
         final int size = readLengthInt(input);
         final List<T> value = new ArrayList<T>(size);

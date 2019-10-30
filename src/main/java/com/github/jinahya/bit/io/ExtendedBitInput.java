@@ -298,6 +298,17 @@ class ExtendedBitInput {
     }
 
     // ---------------------------------------------------------------------------------------------------------- object
+
+    /**
+     * Reads an object.
+     *
+     * @param nullable a flag for nullability.
+     * @param input a bit input.
+     * @param reader a bit reader.
+     * @param <T> object type parameter
+     * @return an object.
+     * @throws IOException if an I/O error occurs.
+     */
     static <T> T readObject(final boolean nullable, final BitInput input, final BitReader<? extends T> reader)
             throws IOException {
         if (input == null) {

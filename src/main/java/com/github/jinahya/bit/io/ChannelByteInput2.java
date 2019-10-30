@@ -27,19 +27,18 @@ import java.nio.channels.ReadableByteChannel;
 
 import static java.nio.ByteBuffer.allocate;
 
-@Deprecated
-class ChannelByteInput extends BufferByteInput {
+class ChannelByteInput2 extends AbstractByteInput<ReadableByteChannel> {
 
     // -----------------------------------------------------------------------------------------------------------------
-    public static ChannelByteInput of(final ReadableByteChannel channel) {
+    public static ChannelByteInput2 of(final ReadableByteChannel channel) {
         if (channel == null) {
             throw new NullPointerException("channel is null");
         }
-        return new ChannelByteInput(null, channel) {
+        return new ChannelByteInput2(channel, null) {
             @Override
             public int read() throws IOException {
-                if (getSource() == null) {
-                    setSource((ByteBuffer) allocate(1).position(1));
+                if (getBuffer() == null) {
+                    setBuffer((ByteBuffer) allocate(1).position(1));
                 }
                 return super.read();
             }
@@ -47,46 +46,46 @@ class ChannelByteInput extends BufferByteInput {
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    public ChannelByteInput(final ByteBuffer source, final ReadableByteChannel channel) {
+    public ChannelByteInput2(final ReadableByteChannel source, final ByteBuffer buffer) {
         super(source);
-        this.channel = channel;
+        this.buffer = buffer;
     }
 
     // -----------------------------------------------------------------------------------------------------------------
     @Override
     public int read() throws IOException {
-        final ByteBuffer source = getSource();
-        final ReadableByteChannel channel = getChannel();
-        while (!source.hasRemaining()) {
-            source.clear(); // position -> zero, limit -> capacity
-            if (channel.read(source) == -1) {
+        final ReadableByteChannel source = getSource();
+        final ByteBuffer buffer = getBuffer();
+        while (!buffer.hasRemaining()) {
+            buffer.clear(); // position -> zero, limit -> capacity
+            if (source.read(buffer) == -1) {
                 throw new EOFException("reached to an end");
             }
-            source.flip(); // limit -> position, position -> zero
+            buffer.flip(); // limit -> position, position -> zero
         }
-        return super.read();
+        return buffer.get() & 0xFF;
+    }
+
+    // ---------------------------------------------------------------------------------------------------------- buffer
+
+    /**
+     * Returns the current value of {@code buffer} attribute.
+     *
+     * @returnp the current value of {@code buffer} attribute.
+     */
+    public ByteBuffer getBuffer() {
+        return buffer;
+    }
+
+    /**
+     * Replaces the current value of {@code buffer} attribute with specified value.
+     *
+     * @param buffer new value for {@code buffer} attribute.
+     */
+    public void setBuffer(final ByteBuffer buffer) {
+        this.buffer = buffer;
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-
-    /**
-     * Returns the current value of {@code channel} attribute.
-     *
-     * @returnp the current value of {@code channel} attribute.
-     */
-    public ReadableByteChannel getChannel() {
-        return channel;
-    }
-
-    /**
-     * Replaces the current value of {@code channel} attribute with specified value.
-     *
-     * @param channel new value for {@code channel} attribute.
-     */
-    public void setChannel(final ReadableByteChannel channel) {
-        this.channel = channel;
-    }
-
-    // -----------------------------------------------------------------------------------------------------------------
-    private ReadableByteChannel channel;
+    private ByteBuffer buffer;
 }

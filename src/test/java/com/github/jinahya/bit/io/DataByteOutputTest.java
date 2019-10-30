@@ -22,10 +22,20 @@ package com.github.jinahya.bit.io;
 
 import java.io.DataOutput;
 
-abstract class DataByteOutputTest<T extends DataByteOutput> extends AbstractByteOutputTest<T, DataOutput> {
+/**
+ * A class for unit-testing {@link DataByteOutput} class.
+ *
+ * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
+ * @see DataByteInputTest
+ */
+class DataByteOutputTest extends AbstractByteOutputTest<DataByteOutput, DataOutput> {
 
     // -----------------------------------------------------------------------------------------------------------------
-    DataByteOutputTest(final Class<T> byteOutputClass) {
-        super(byteOutputClass, DataOutput.class);
+
+    /**
+     * Creates a new instance.
+     */
+    DataByteOutputTest() {
+        super(DataByteOutput.class, DataOutput.class);
     }
 }

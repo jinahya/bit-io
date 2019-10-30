@@ -23,15 +23,19 @@ package com.github.jinahya.bit.io;
 import java.io.OutputStream;
 
 /**
- * An abstract class for testing subclasses of {@link StreamByteOutput}.
+ * A class for unit-testing {@link StreamByteOutput} class.
  *
- * @param <T> byte output type parameter
+ * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  * @see StreamByteInputTest
  */
-abstract class StreamByteOutputTest<T extends StreamByteOutput> extends AbstractByteOutputTest<T, OutputStream> {
+class StreamByteOutputTest extends AbstractByteOutputTest<StreamByteOutput, OutputStream> {
 
     // -----------------------------------------------------------------------------------------------------------------
-    StreamByteOutputTest(final Class<T> byteOutputClass) {
-        super(byteOutputClass, OutputStream.class);
+
+    /**
+     * Creates a new instance.
+     */
+    StreamByteOutputTest() {
+        super(StreamByteOutput.class, OutputStream.class);
     }
 }

@@ -24,6 +24,10 @@ import java.io.IOException;
 
 /**
  * A byte output writes byte to an array of bytes.
+ * <p>
+ * Note that this implementation only tracks a single {@code index} for the next position to write in backing array
+ * which means there is no way to limit the maximum value of the {@code index} in backing array. Use {@link
+ * BufferByteOutput} or {@link StreamByteOutput} for continuously consuming bytes.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  * @see ArrayByteInput
@@ -33,7 +37,25 @@ public class ArrayByteOutput extends AbstractByteOutput<byte[]> {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * Creates a new instance with given parameters.
+     * Creates a new instance with given parameters.  The {@code index} attribute will be set as {@code 0}, or {@code
+     * -1} when {@code target} argument is {@code null} or its {@code length} attribute is {@code 0}. It's crucial to
+     * set the {@code index} attribute when the {@code target} attribute is lazily initialized.
+     * <blockquote><pre>{@code
+     * final ByteOutput byteOutput = new ArrayByteOutput(null) { // index = -1
+     *     @Override
+     *     public void write(final int value) throws IOException {
+     *         if (getTarget() == null) {
+     *             setTarget(new byte[16]);
+     *             setIndex(0);
+     *         }
+     *         if (getIndex() == getTarget().length) { // no more to write; drain it.
+     *             writeFully(getTarget());
+     *             setIndex(0);
+     *         }
+     *         super.write(value);
+     *     }
+     * }
+     * }</pre></blockquote>
      *
      * @param target a byte array
      */
@@ -59,15 +81,17 @@ public class ArrayByteOutput extends AbstractByteOutput<byte[]> {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * {@inheritDoc} The {@code write(int)} method of {@code ArrayByteOutput} class sets {@code target[index++]} with
-     * given value.
+     * {@inheritDoc} The {@code write(int)} method of {@code ArrayByteOutput} class sets {@code getTarget()[getIndex()]}
+     * with given value and increases the {@code index} attribute.
      *
      * @param value {@inheritDoc}
      * @throws IOException {@inheritDoc}
      */
     @Override
     public void write(final int value) throws IOException {
-        getTarget()[index++] = (byte) value;
+        final int index = getIndex();
+        getTarget()[index] = (byte) value;
+        setIndex(index + 1);
     }
 
     // ----------------------------------------------------------------------------------------------------------- index

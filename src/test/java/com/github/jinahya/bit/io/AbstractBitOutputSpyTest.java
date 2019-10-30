@@ -40,6 +40,7 @@ import static com.github.jinahya.bit.io.BitIoTests.randomValueForInt;
 import static com.github.jinahya.bit.io.BitIoTests.randomValueForLong;
 import static com.github.jinahya.bit.io.BitIoTests.randomValueForShort;
 import static java.util.concurrent.ThreadLocalRandom.current;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * A class for unit-testing {@link AbstractBitOutput} class.
@@ -117,13 +118,15 @@ public class AbstractBitOutputSpyTest {
     // ----------------------------------------------------------------------------------------------------------- align
     @Test
     void testAlign() throws IOException {
-        bitOutput.align(1);
+        final long padded = bitOutput.align(1);
+        assertTrue(padded >= 0L);
     }
 
     // ----------------------------------------------------------------------------------------------------------- count
     @Test
-    void testCount() throws IOException {
+    void testCount() {
         final long count = bitOutput.getCount();
+        assertTrue(count >= 0L);
     }
 
     // -----------------------------------------------------------------------------------------------------------------

@@ -38,7 +38,6 @@ import static java.nio.channels.Channels.newChannel;
 import static java.util.Arrays.copyOf;
 import static java.util.Optional.ofNullable;
 import static java.util.concurrent.ThreadLocalRandom.current;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @Slf4j
 final class ByteIoSource {
@@ -161,36 +160,34 @@ final class ByteIoSource {
 
     static Stream<Arguments> sourceByteIoChannel() {
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        final ChannelByteOutput output = new ChannelByteOutput(null, null) {
+        final ChannelByteOutput2 output = new ChannelByteOutput2(null, null) {
             @Override
             public void write(final int value) throws IOException {
-                if (getChannel() == null) {
-                    setChannel(newChannel(baos));
-                }
                 if (getTarget() == null) {
-                    setTarget(allocate(current().nextInt(1, 8)));
+                    setTarget(newChannel(baos));
+                }
+                if (getBuffer() == null) {
+                    setBuffer(allocate(current().nextInt(1, 8)));
                 }
                 super.write(value);
             }
         };
-        final ByteInput input = new ChannelByteInput(null, null) {
+        final ByteInput input = new ChannelByteInput2(null, null) {
             @Override
             public int read() throws IOException {
-                if (getChannel() == null) {
+                if (getSource() == null) {
                     {
-                        final WritableByteChannel channel = output.getChannel();
-                        final ByteBuffer target = output.getTarget();
-                        assertNotNull(channel);
-                        assertNotNull(target);
-                        for (target.flip(); target.hasRemaining(); ) {
-                            channel.write(target);
+                        final WritableByteChannel target = output.getTarget();
+                        final ByteBuffer buffer = output.getBuffer();
+                        for (buffer.flip(); buffer.hasRemaining(); ) {
+                            target.write(buffer);
                         }
                     }
-                    setChannel(newChannel(new ByteArrayInputStream(baos.toByteArray())));
+                    setSource(newChannel(new ByteArrayInputStream(baos.toByteArray())));
                 }
-                if (getSource() == null) {
+                if (getBuffer() == null) {
                     final int capacity = current().nextInt(1, 8);
-                    setSource((ByteBuffer) allocate(capacity).position(capacity));
+                    setBuffer((ByteBuffer) allocate(capacity).position(capacity));
                 }
                 return super.read();
             }

@@ -103,4 +103,13 @@ class ByteOutputProducer {
 
     void disposeStreamByteOutput(@Disposes final StreamByteOutput byteOutput) {
     }
+
+    // --------------------------------------------------------------------------------------------------------- channel
+    @Produces
+    ChannelByteOutput2 produceChannelByteOutput(final InjectionPoint injectionPoint) {
+        return ChannelByteOutput2.of(new BlackByteChannel());
+    }
+
+    void disposeChannelByteOutput(@Disposes final ChannelByteOutput2 byteOutput) {
+    }
 }

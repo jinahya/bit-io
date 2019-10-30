@@ -22,6 +22,7 @@ package com.github.jinahya.bit.io;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import static com.github.jinahya.bit.io.BitIoConstants.MAX_EXPONENT_BYTE;
@@ -42,9 +43,9 @@ class ExtendedBitInput {
      * @param input a bit input.
      * @return {@code true} when determined following object is {@code null}; {@code false} otherwise.
      * @throws IOException if an I/O error occurs.
-     * @see ExtendedBitOutput#writeBooleanIsNextNull(BitOutput, Object)
+     * @see ExtendedBitOutput#writeNullFlag(BitOutput, Object)
      */
-    public static boolean readBooleanIsNextNull(final BitInput input) throws IOException {
+    public static boolean readNullFlag(final BitInput input) throws IOException {
         return !input.readBoolean(); // 0b0 -> null
     }
 
@@ -173,8 +174,23 @@ class ExtendedBitInput {
     }
 
     // -----------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Reads an unsigned {@code int} for a length from specified bit input.
+     *
+     * @param input the bit input.
+     * @return an unsigned {@code int} for a length.
+     * @throws IOException if an I/O error occurs.
+     * @see #readUnsignedVariable5(BitInput)
+     * @see #readLengthLong(BitInput)
+     * @see ExtendedBitOutput#writeLengthInt(BitOutput, int)
+     */
     static int readLengthInt(final BitInput input) throws IOException {
         return readUnsignedVariable5(input);
+    }
+
+    static long readLengthLong(final BitInput input) throws IOException {
+        return readUnsignedVariable6(input);
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -184,7 +200,7 @@ class ExtendedBitInput {
             throw new NullPointerException("input is null");
         }
         requireValidSizeByte(unsigned, size);
-        if (nullable && readBooleanIsNextNull(input)) {
+        if (nullable && readNullFlag(input)) {
             return null;
         }
         final byte[] bytes = new byte[readLengthInt(input)];
@@ -303,11 +319,13 @@ class ExtendedBitInput {
      * Reads an object.
      *
      * @param nullable a flag for nullability.
-     * @param input a bit input.
-     * @param reader a bit reader.
-     * @param <T> object type parameter
+     * @param input    a bit input.
+     * @param reader   a bit reader.
+     * @param <T>      object type parameter
      * @return an object.
      * @throws IOException if an I/O error occurs.
+     * @see #readObjects(boolean, BitInput, BitReader)
+     * @see ExtendedBitOutput#writeObject(boolean, BitOutput, BitWriter, Object)
      */
     static <T> T readObject(final boolean nullable, final BitInput input, final BitReader<? extends T> reader)
             throws IOException {
@@ -317,12 +335,56 @@ class ExtendedBitInput {
         if (reader == null) {
             throw new NullPointerException("reader is null");
         }
-        if (nullable && readBooleanIsNextNull(input)) {
+        if (nullable && readNullFlag(input)) {
             return null;
         }
         return reader.read(input);
     }
 
+    /**
+     * Reads multiple objects and add them to specified collection.
+     *
+     * @param input      a bit input.
+     * @param reader     a bit reader for reading each object.
+     * @param collection the collection to which objects are added.
+     * @param <T>        object type parameter
+     * @param <U>        collection type parameter
+     * @return given collection.
+     * @throws IOException if an I/O error occurs.
+     * @see #readObject(boolean, BitInput, BitReader)
+     * @see #readObjects(boolean, BitInput, BitReader)
+     * @see ExtendedBitOutput#writeObjects(BitOutput, BitWriter, Collection)
+     */
+    static <T, U extends Collection<? super T>> U readObjects(final BitInput input, final BitReader<? extends T> reader,
+                                                              final U collection)
+            throws IOException {
+        if (input == null) {
+            throw new NullPointerException("input is null");
+        }
+        if (reader == null) {
+            throw new NullPointerException("reader is null");
+        }
+        if (collection == null) {
+            throw new NullPointerException("value is null");
+        }
+        final int size = readLengthInt(input);
+        for (int i = 0; i < size; i++) {
+            collection.add(readObject(true, input, reader));
+        }
+        return collection;
+    }
+
+    /**
+     * Reads objects.
+     *
+     * @param nullable a flag for nullability.
+     * @param input    a bit input.
+     * @param reader   a bit reader.
+     * @param <T>      object type parameter
+     * @return a list of objects.
+     * @throws IOException if an I/O error occurs.
+     * @see ExtendedBitOutput#writeObjects(boolean, BitOutput, BitWriter, List)
+     */
     static <T> List<T> readObjects(final boolean nullable, final BitInput input, final BitReader<? extends T> reader)
             throws IOException {
         if (input == null) {
@@ -331,8 +393,11 @@ class ExtendedBitInput {
         if (reader == null) {
             throw new NullPointerException("reader is null");
         }
-        if (nullable && readBooleanIsNextNull(input)) {
+        if (nullable && readNullFlag(input)) {
             return null;
+        }
+        if (true) {
+            return readObjects(input, reader, new ArrayList<T>());
         }
         final int size = readLengthInt(input);
         final List<T> value = new ArrayList<T>(size);

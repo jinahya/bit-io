@@ -26,20 +26,19 @@ import java.nio.channels.WritableByteChannel;
 
 import static java.nio.ByteBuffer.allocate;
 
-@Deprecated
-class ChannelByteOutput extends BufferByteOutput {
+class ChannelByteOutput2 extends AbstractByteOutput<WritableByteChannel> {
 
     // -----------------------------------------------------------------------------------------------------------------
-    public static ChannelByteOutput of(final WritableByteChannel channel) {
+    public static ChannelByteOutput2 of(final WritableByteChannel channel) {
         if (channel == null) {
             throw new NullPointerException("channel is null");
         }
-        return new ChannelByteOutput(null, channel) {
+        return new ChannelByteOutput2(channel, null) {
             @Override
             public void write(final int value) throws IOException {
-                final ByteBuffer target = getTarget();
-                if (target == null) {
-                    setTarget(allocate(1));
+                final ByteBuffer buffer = getBuffer();
+                if (buffer == null) {
+                    setBuffer(allocate(1));
                 }
                 super.write(value);
             }
@@ -47,47 +46,48 @@ class ChannelByteOutput extends BufferByteOutput {
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    public ChannelByteOutput(final ByteBuffer target, final WritableByteChannel channel) {
+    public ChannelByteOutput2(final WritableByteChannel target, final ByteBuffer buffer) {
         super(target);
-        this.channel = channel;
+        this.buffer = buffer;
     }
 
     // -----------------------------------------------------------------------------------------------------------------
     @Override
     public void write(final int value) throws IOException {
-        super.write(value);
-        final ByteBuffer target = getTarget();
-        final WritableByteChannel channel = getChannel();
-        while (!target.hasRemaining()) {
-            target.flip(); // limit -> position, position -> zero
-            final int written = channel.write(target);
-            target.compact();
+        final WritableByteChannel target = getTarget();
+        final ByteBuffer buffer = getBuffer();
+        while (!buffer.hasRemaining()) {
+            buffer.flip(); // limit -> position, position -> zero
+            final int written = target.write(buffer);
+            buffer.compact();
         }
+        buffer.put((byte) value);
     }
 
-    // --------------------------------------------------------------------------------------------------------- channel
+    // ---------------------------------------------------------------------------------------------------------- buffer
+
     /**
-     * Returns the current value of {@code channel} attribute.
+     * Returns the current value of {@code buffer} attribute.
      *
-     * @returnp the current value of {@code channel} attribute.
+     * @returnp the current value of {@code buffer} attribute.
      */
-    public WritableByteChannel getChannel() {
-        return channel;
+    public ByteBuffer getBuffer() {
+        return buffer;
     }
 
     /**
-     * Replaces the current value of {@code channel} attribute with specified value.
+     * Replaces the current value of {@code buffer} attribute with specified value.
      *
-     * @param channel new value for {@code channel} attribute.
+     * @param buffer new value for {@code buffer} attribute.
      */
-    public void setChannel(final WritableByteChannel channel) {
-        this.channel = channel;
+    public void setBuffer(final ByteBuffer buffer) {
+        this.buffer = buffer;
     }
 
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * The channel to which bytes are written.
+     * The buffer to which bytes are written.
      */
-    private WritableByteChannel channel;
+    private ByteBuffer buffer;
 }

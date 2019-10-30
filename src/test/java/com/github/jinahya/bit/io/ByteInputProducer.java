@@ -96,4 +96,14 @@ class ByteInputProducer {
     void disposeStreamByteInput(@Disposes final StreamByteInput byteInput) {
         // does nothing.
     }
+
+    // --------------------------------------------------------------------------------------------------------- channel
+    @Produces
+    ChannelByteInput2 produceChannelByteInput(final InjectionPoint injectionPoint) {
+        return ChannelByteInput2.of(new WhiteByteChannel());
+    }
+
+    void disposeChannelByteInput(@Disposes final ChannelByteInput2 byteInput) {
+        // does nothing.
+    }
 }

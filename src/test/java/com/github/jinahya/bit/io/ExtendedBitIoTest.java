@@ -427,7 +427,6 @@ class ExtendedBitIoTest {
                 expected.add(user);
             }
         }
-        log.debug("expected: {}", expected);
         writeObjects(nullable, output, new UserWriter(), expected);
         output.align(1);
         final List<User> actual = readObjects(nullable, input, new UserReader());

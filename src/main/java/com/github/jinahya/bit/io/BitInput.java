@@ -23,7 +23,7 @@ package com.github.jinahya.bit.io;
 import java.io.IOException;
 
 /**
- * An interface for reading values of arbitrary number of bits.
+ * An interface for reading values of an arbitrary number of bits.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  * @see BitOutput

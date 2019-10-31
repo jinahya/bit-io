@@ -25,9 +25,9 @@ import java.io.IOException;
 /**
  * A byte input reading bytes from an array of bytes.
  * <p>
- * Note that this implementation only tracks a single {@code index} for the next position to read in backing array which
- * means there is no way to limit the maximum value of the {@code index} in the backing array. Use {@link
- * BufferByteInput} or {@link StreamByteInput} for continuously supplying bytes.
+ * Note that this implementation only tracks a single {@code index} for the next position to read in the backing array
+ * which means there is no way to limit the maximum value of the {@code index} in the backing array. Use {@link
+ * BufferByteInput} or {@link StreamByteInput} for a way of continuously supplying bytes.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  * @see ArrayByteOutput
@@ -46,9 +46,9 @@ public class ArrayByteInput extends AbstractByteInput<byte[]> {
      *     public int read() throws IOException {
      *         if (getSource() == null) {
      *             setSource(new byte[16);
-     *             setIndex(getSource().length);
+     *             setIndex(getSource().length); // set as if already drained
      *         }
-     *         if (getIndex() == getSource().length) { // no more to read; charge it.
+     *         if (getIndex() == getSource().length) { // no more space to read; charge it.
      *             readFully(getSource());
      *             setIndex(0);
      *         }
@@ -57,7 +57,8 @@ public class ArrayByteInput extends AbstractByteInput<byte[]> {
      * }
      * }</pre></blockquote>
      *
-     * @param source a byte array; {@code null} if it's supposed to be lazily initialized an set.
+     * @param source a byte array from which bytes are read; {@code null} if it's supposed to be lazily initialized an
+     *               set.
      */
     public ArrayByteInput(final byte[] source) {
         super(source);

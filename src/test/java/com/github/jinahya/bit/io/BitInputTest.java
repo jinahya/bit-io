@@ -21,12 +21,10 @@ package com.github.jinahya.bit.io;
  */
 
 import lombok.extern.slf4j.Slf4j;
-import org.jboss.weld.junit5.WeldJunit5Extension;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
@@ -48,7 +46,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * @see BitOutputTest
  * @see AbstractBitInputTest
  */
-@ExtendWith({WeldJunit5Extension.class})
 @Slf4j
 abstract class BitInputTest<T extends BitInput> {
 

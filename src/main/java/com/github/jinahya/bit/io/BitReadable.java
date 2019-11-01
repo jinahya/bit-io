@@ -26,6 +26,8 @@ import java.io.IOException;
  * An interface for reading contents from a bit input.
  *
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
+ * @see BitWritables
+ * @see BitWritable
  */
 interface BitReadable {
 

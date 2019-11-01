@@ -20,7 +20,10 @@ package com.github.jinahya.bit.io;
  * #L%
  */
 
+import org.jboss.weld.junit5.WeldJunit5Extension;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 /**
  * A class for testing {@link ArrayByteInput} class.
@@ -28,6 +31,7 @@ import org.junit.jupiter.api.Test;
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  * @see ArrayByteOutputTest
  */
+@ExtendWith({MockitoExtension.class, WeldJunit5Extension.class})
 class ArrayByteInputTest extends AbstractByteInputTest<ArrayByteInput, byte[]> {
 
     // -----------------------------------------------------------------------------------------------------------------

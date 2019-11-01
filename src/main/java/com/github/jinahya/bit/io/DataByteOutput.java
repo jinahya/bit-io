@@ -24,7 +24,7 @@ import java.io.DataOutput;
 import java.io.IOException;
 
 /**
- * A byte output uses an instance of {@link DataOutput} as its {@code target}.
+ * A byte output writes bytes to an instance of {@link DataOutput}.
  *
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  * @see DataByteInput
@@ -36,7 +36,7 @@ public class DataByteOutput extends AbstractByteOutput<DataOutput> {
     /**
      * Creates a new instance which writes bytes to specified data output.
      *
-     * @param target the byte target to which bytes are written; {@code null} if it is supposed to be lazily initialized
+     * @param target the data output to which bytes are written; {@code null} if it is supposed to be lazily initialized
      *               and set.
      */
     public DataByteOutput(final DataOutput target) {

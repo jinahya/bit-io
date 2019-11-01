@@ -24,7 +24,7 @@ import java.io.DataInput;
 import java.io.IOException;
 
 /**
- * A byte input uses an instance of {@link DataInput} as its {@code source}.
+ * A byte input reads bytes from an instance of {@link DataInput}.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  * @see DataByteOutput
@@ -36,7 +36,7 @@ public class DataByteInput extends AbstractByteInput<DataInput> {
     /**
      * Creates a new instance which reads bytes from specified data input.
      *
-     * @param source the byte source from which bytes are read; {@code null} if it's supposed to be lazily initialized
+     * @param source the data input from which bytes are read; {@code null} if it's supposed to be lazily initialized
      *               and set
      */
     public DataByteInput(final DataInput source) {

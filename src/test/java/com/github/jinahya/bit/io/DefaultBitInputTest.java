@@ -20,6 +20,7 @@ package com.github.jinahya.bit.io;
  * #L%
  */
 
+import org.jboss.weld.junit5.WeldJunit5Extension;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -31,7 +32,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  * @see DefaultBitOutputTest
  */
-@ExtendWith({MockitoExtension.class})
+@ExtendWith({MockitoExtension.class, WeldJunit5Extension.class})
 class DefaultBitInputTest extends AbstractBitInputTest<DefaultBitInput> {
 
     // -----------------------------------------------------------------------------------------------------------------

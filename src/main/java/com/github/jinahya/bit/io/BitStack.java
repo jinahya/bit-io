@@ -37,7 +37,7 @@ final class BitStack {
         if (top == Integer.MAX_VALUE) {
             throw new RuntimeException("stack overflow");
         }
-        set.set(top++, value);
+        set().set(top++, value);
     }
 
     void push(final int size, long value) {
@@ -56,7 +56,7 @@ final class BitStack {
         if (top == 0) {
             throw new RuntimeException("stack underflow");
         }
-        return set.get(--top);
+        return set().get(--top);
     }
 
     long pop(final int size) {
@@ -70,7 +70,15 @@ final class BitStack {
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    private final BitSet set = new BitSet(Long.SIZE);
+    private BitSet set() {
+        if (set == null) {
+            set = new BitSet();
+        }
+        return set;
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    private BitSet set;
 
     private int top = 0;
 }

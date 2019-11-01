@@ -415,7 +415,6 @@ class ExtendedBitIoTest {
             expected = new ArrayList<>();
             final RandomStringGenerator generator = new RandomStringGenerator.Builder().build();
             final int size = current().nextInt(128);
-            expected = new ArrayList<>(size);
             for (int i = 0; i < size; i++) {
                 if (current().nextBoolean()) {
                     expected.add(null);

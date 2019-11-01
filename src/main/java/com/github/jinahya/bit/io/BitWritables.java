@@ -51,7 +51,7 @@ final class BitWritables {
     }
 
     /**
-     * Creates a new bit writer for specified type of bit writable.
+     * Creates a new bit writer for instances of specified type.
      *
      * @param type the type of bit writable.
      * @param <T>  bit writable type parameter

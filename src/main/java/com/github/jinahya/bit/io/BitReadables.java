@@ -55,7 +55,7 @@ final class BitReadables {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * Returns a new bit reader for reading instances of specified type.
+     * Returns a new bit reader for instances of specified type.
      *
      * @param type the type of bit readable to read.
      * @param <T>  bit readable type parameter

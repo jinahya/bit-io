@@ -20,6 +20,10 @@ package com.github.jinahya.bit.io;
  * #L%
  */
 
+import org.jboss.weld.junit5.WeldJunit5Extension;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+
 import java.io.InputStream;
 
 /**
@@ -28,6 +32,7 @@ import java.io.InputStream;
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  * @see StreamByteOutputTest
  */
+@ExtendWith({MockitoExtension.class, WeldJunit5Extension.class})
 class StreamByteInputTest extends AbstractByteInputTest<StreamByteInput, InputStream> {
 
     // -----------------------------------------------------------------------------------------------------------------

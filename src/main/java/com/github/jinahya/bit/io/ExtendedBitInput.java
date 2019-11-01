@@ -43,9 +43,9 @@ class ExtendedBitInput {
      * @param input a bit input.
      * @return {@code true} when determined following object is {@code null}; {@code false} otherwise.
      * @throws IOException if an I/O error occurs.
-     * @see ExtendedBitOutput#writeNullFlag(BitOutput, Object)
+     * @see ExtendedBitOutput#writeBooleanIsNextNull(BitOutput, Object)
      */
-    public static boolean readNullFlag(final BitInput input) throws IOException {
+    public static boolean readBooleanIsNextNull(final BitInput input) throws IOException {
         return !input.readBoolean(); // 0b0 -> null
     }
 
@@ -200,7 +200,7 @@ class ExtendedBitInput {
             throw new NullPointerException("input is null");
         }
         requireValidSizeByte(unsigned, size);
-        if (nullable && readNullFlag(input)) {
+        if (nullable && readBooleanIsNextNull(input)) {
             return null;
         }
         final byte[] bytes = new byte[readLengthInt(input)];
@@ -216,6 +216,9 @@ class ExtendedBitInput {
         if (input == null) {
             throw new NullPointerException("input is null");
         }
+        if (charset == null) {
+            throw new NullPointerException("charset is null");
+        }
         final byte[] bytes = readBytes(nullable, input, false, 8);
         if (bytes == null) {
             return null;
@@ -226,11 +229,11 @@ class ExtendedBitInput {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * Reads an ascii string from specified bit input.
+     * Reads an ASCII string, which each byte is a {@code 7}-bit unsigned integer, from specified bit input.
      *
      * @param nullable a flag for nullability.
      * @param input    the bit input.
-     * @return an ascii string.
+     * @return an ASCII string.
      * @throws IOException if an I/O error occurs.
      * @see ExtendedBitOutput#writeAscii(boolean, BitOutput, String)
      */
@@ -274,7 +277,7 @@ class ExtendedBitInput {
             }
         }
         if (!last) {
-            throw new IOException("no signal for last group");
+            throw new IOException("no signal for the last group");
         }
         return value;
     }
@@ -286,6 +289,7 @@ class ExtendedBitInput {
      * @param size  a value for the number of bits for a single group without the continuation-signal bit.
      * @return a {@code long} value of VLQ.
      * @throws IOException if an I/O error occurs.
+     * @see ExtendedBitOutput#writeVariableLengthQuantityLong(BitOutput, int, long)
      */
     static long readVariableLengthQuantityLong(final BitInput input, final int size) throws IOException {
         if (input == null) {
@@ -308,7 +312,7 @@ class ExtendedBitInput {
             }
         }
         if (!last) {
-            throw new IOException("no signal for last group");
+            throw new IOException("no signal for the last group");
         }
         return value;
     }
@@ -335,7 +339,7 @@ class ExtendedBitInput {
         if (reader == null) {
             throw new NullPointerException("reader is null");
         }
-        if (nullable && readNullFlag(input)) {
+        if (nullable && readBooleanIsNextNull(input)) {
             return null;
         }
         return reader.read(input);
@@ -393,7 +397,7 @@ class ExtendedBitInput {
         if (reader == null) {
             throw new NullPointerException("reader is null");
         }
-        if (nullable && readNullFlag(input)) {
+        if (nullable && readBooleanIsNextNull(input)) {
             return null;
         }
         if (true) {

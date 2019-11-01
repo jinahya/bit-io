@@ -37,15 +37,17 @@ class ExtendedBitOutput {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * .
+     * Writes a {@code 1}-bit {@code boolean} value representing the nullability of specified value to specified bit
+     * output. This method writes {@code true} if specified value is {@code null} and writes {@code false} if specified
+     * value is not {@code null}.
      *
      * @param output the bit output.
      * @param value  the value to be checked.
      * @return {@code true} if the {@code value} is {@code null}; {@code false} otherwise.
      * @throws IOException if an I/O error occurs.
-     * @see ExtendedBitInput#readNullFlag(BitInput)
+     * @see ExtendedBitInput#readBooleanIsNextNull(BitInput)
      */
-    protected static boolean writeNullFlag(final BitOutput output, final Object value) throws IOException {
+    protected static boolean writeBooleanIsNextNull(final BitOutput output, final Object value) throws IOException {
         if (output == null) {
             throw new NullPointerException("output is null");
         }
@@ -210,7 +212,7 @@ class ExtendedBitOutput {
         if (!nullable && value == null) {
             throw new NullPointerException("value is null");
         }
-        if (nullable && writeNullFlag(output, value)) {
+        if (nullable && writeBooleanIsNextNull(output, value)) {
             return;
         }
         writeLengthInt(output, value.length);
@@ -229,7 +231,7 @@ class ExtendedBitOutput {
         if (!nullable && value == null) {
             throw new NullPointerException("value is null");
         }
-        if (nullable && writeNullFlag(output, value)) {
+        if (nullable && writeBooleanIsNextNull(output, value)) {
             return;
         }
         if (charset == null) {
@@ -247,7 +249,7 @@ class ExtendedBitOutput {
         if (!nullable && value == null) {
             throw new NullPointerException("value is null");
         }
-        if (nullable && writeNullFlag(output, value)) {
+        if (nullable && writeBooleanIsNextNull(output, value)) {
             return;
         }
         final byte[] bytes = value.getBytes("US-ASCII");
@@ -337,7 +339,7 @@ class ExtendedBitOutput {
         if (!nullable && value == null) {
             throw new NullPointerException("value is null");
         }
-        if (nullable && writeNullFlag(output, value)) {
+        if (nullable && writeBooleanIsNextNull(output, value)) {
             return;
         }
         writer.write(output, value);
@@ -380,7 +382,7 @@ class ExtendedBitOutput {
         if (!nullable && value == null) {
             throw new NullPointerException("value is null");
         }
-        if (nullable && writeNullFlag(output, value)) {
+        if (nullable && writeBooleanIsNextNull(output, value)) {
             return;
         }
         if (true) {

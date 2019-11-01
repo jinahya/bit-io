@@ -72,7 +72,7 @@ class ChannelByteOutput extends BufferByteOutput {
     /**
      * Returns the current value of {@code channel} attribute.
      *
-     * @returnp the current value of {@code channel} attribute.
+     * @return the current value of {@code channel} attribute.
      */
     public WritableByteChannel getChannel() {
         return channel;

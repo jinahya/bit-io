@@ -101,18 +101,18 @@ public class ArrayByteInput extends AbstractByteInput<byte[]> {
     // ----------------------------------------------------------------------------------------------------------- index
 
     /**
-     * Returns the current value of {@code index}.
+     * Returns the current value of {@code index} attribute.
      *
-     * @return current value of {@code index}.
+     * @return current value of {@code index} attribute.
      */
     public int getIndex() {
         return index;
     }
 
     /**
-     * Replaces the current value of {@code index} with given.
+     * Replaces the current value of {@code index} attribute with given.
      *
-     * @param index new value for {@code index}
+     * @param index new value for {@code index} attribute.
      */
     public void setIndex(final int index) {
         this.index = index;

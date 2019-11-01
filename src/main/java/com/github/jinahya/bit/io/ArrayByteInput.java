@@ -39,7 +39,7 @@ public class ArrayByteInput extends AbstractByteInput<byte[]> {
     /**
      * Creates a new instance with given arguments. The {@link #getIndex() index} attribute will be set as {@code 0}, or
      * {@code -1} when {@code source} is {@code null} or its {@code length} is {@code 0}. It's crucial to set the {@link
-     * #setIndex(int) index} attribute when the {@link #setSource(Object) source} attribute is lazily initialized.
+     * #setIndex(int) index} attribute when the {@link #setSource(byte[]) source} attribute is lazily initialized.
      *
      * <blockquote><pre>{@code
      * final ByteInput byteInput = new ArrayByteInput(null) { // index = -1

@@ -27,6 +27,21 @@ import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeLong;
 final class BitStack {
 
     // -----------------------------------------------------------------------------------------------------------------
+    static long reverse_(final int size, long value) {
+        long result = 0L;
+        for (; value > 0L; value >>= 1) {
+            result |= value & 0x01;
+        }
+        return result;
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    public long reverse(final int size, final long value) {
+        push(size, value);
+        return pop(size);
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
 
     /**
      * Pushes given bit flag.

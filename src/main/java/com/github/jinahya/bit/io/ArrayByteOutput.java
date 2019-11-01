@@ -100,18 +100,18 @@ public class ArrayByteOutput extends AbstractByteOutput<byte[]> {
     // ----------------------------------------------------------------------------------------------------------- index
 
     /**
-     * Returns the current value of {@code index}.
+     * Returns the current value of {@code index} attribute.
      *
-     * @return the current value of {@code index}.
+     * @return the current value of {@code index} attribute.
      */
     public int getIndex() {
         return index;
     }
 
     /**
-     * Replaces the {@code index} with given.
+     * Replaces the {@code index} attribute with given value.
      *
-     * @param index new value for {@code index}
+     * @param index new value for {@code index} attribute.
      */
     public void setIndex(final int index) {
         this.index = index;

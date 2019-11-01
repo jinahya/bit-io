@@ -24,7 +24,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 
 /**
- * A byte output uses an instance of {@link ByteBuffer} as its byte target.
+ * A byte output writes bytes to a {@link ByteBuffer}.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  * @see BufferByteInput

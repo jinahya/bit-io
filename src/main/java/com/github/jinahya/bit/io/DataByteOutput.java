@@ -47,11 +47,12 @@ public class DataByteOutput extends AbstractByteOutput<DataOutput> {
 
     /**
      * {@inheritDoc} The {@code write(int)} method of {@code DataByteOutput} class invokes {@link
-     * DataOutput#writeByte(int)}, on what {@link #getTarget() getTarget()} method returns, with specified {@code
-     * value}.
+     * DataOutput#writeByte(int) writeByte(int)} method on the {@link #getTarget() target} with specified value.
      *
      * @param value {@inheritDoc}
      * @throws IOException {@inheritDoc}
+     * @see #getTarget()
+     * @see DataOutput#writeByte(int)
      */
     @Override
     public void write(final int value) throws IOException {

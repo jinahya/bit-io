@@ -24,7 +24,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 
 /**
- * A byte input uses an instance of {@link ByteBuffer} as its byte source.
+ * A byte input reads bytes from a {@link ByteBuffer}.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  * @see BufferByteOutput

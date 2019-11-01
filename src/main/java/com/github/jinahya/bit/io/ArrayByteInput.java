@@ -25,9 +25,9 @@ import java.io.IOException;
 /**
  * A byte input reading bytes from an array of bytes.
  * <p>
- * Note that this implementation only tracks a single {@code index} for the next position to read in the backing array
- * which means there is no way to limit the maximum value of the {@code index} in the backing array. Use {@link
- * BufferByteInput} or {@link StreamByteInput} for a way of continuously supplying bytes.
+ * Note that this implementation only tracks a single {@link #getIndex() index} as a next position to read in the
+ * backing array which means there is no way to limit the maximum value of the {@code index} in the backing array. Use
+ * {@link BufferByteInput} or {@link StreamByteInput} for a way of continuously supplying bytes.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  * @see ArrayByteOutput
@@ -37,12 +37,13 @@ public class ArrayByteInput extends AbstractByteInput<byte[]> {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * Creates a new instance with given arguments. The {@code index} attribute will be set as {@code 0}, or {@code -1}
-     * when {@code source} is {@code null} or its {@code length} is {@code 0}. It's crucial to set the {@code index}
-     * attribute when the {@code source} attribute is lazily initialized.
+     * Creates a new instance with given arguments. The {@link #getIndex() index} attribute will be set as {@code 0}, or
+     * {@code -1} when {@code source} is {@code null} or its {@code length} is {@code 0}. It's crucial to set the {@link
+     * #setIndex(int) index} attribute when the {@link #setSource(Object) source} attribute is lazily initialized.
+     *
      * <blockquote><pre>{@code
      * final ByteInput byteInput = new ArrayByteInput(null) { // index = -1
-     *     {@literal @}Override
+     *     //_at_Override
      *     public int read() throws IOException {
      *         if (getSource() == null) {
      *             setSource(new byte[16]);
@@ -82,8 +83,9 @@ public class ArrayByteInput extends AbstractByteInput<byte[]> {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * {@inheritDoc} The {@code read()} method of {@code ArrayByteInput} class returns the value of {@code
-     * getSource()[getIndex()]} as an unsigned 8-bit value and increases the {@code index} attribute.
+     * {@inheritDoc} The {@code read()} method of {@code ArrayByteInput} class returns the value at {@link #getIndex()
+     * index} in {@link #getSource() source} as an unsigned 8-bit value. The {@link #setIndex(int) index} attribute,
+     * when successfully returns, is increased by {@code 1}.
      *
      * @return {@inheritDoc}
      * @throws IOException {@inheritDoc}

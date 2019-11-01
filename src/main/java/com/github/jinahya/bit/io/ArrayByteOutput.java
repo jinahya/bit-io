@@ -25,9 +25,9 @@ import java.io.IOException;
 /**
  * A byte output writes byte to an array of bytes.
  * <p>
- * Note that this implementation only tracks a single {@code index} attribute for the next position to write in the
- * backing array which means there is no way to limit the maximum value of the {@code index} in backing array. Use
- * {@link BufferByteOutput} or {@link StreamByteOutput} for a way of continuously consuming bytes.
+ * Note that this implementation only tracks a single {@link #getIndex() index} attribute for the next position to write
+ * in the backing array which means there is no way to limit the maximum value of the {@code index} in backing array.
+ * Use {@link BufferByteOutput} or {@link StreamByteOutput} for a way of continuously consuming bytes.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  * @see ArrayByteInput
@@ -43,7 +43,7 @@ public class ArrayByteOutput extends AbstractByteOutput<byte[]> {
      *
      * <blockquote><pre>{@code
      * final ByteOutput byteOutput = new ArrayByteOutput(null) { // index = -1
-     *     {@literal @}Override
+     *     //_at_Override
      *     public void write(final int value) throws IOException {
      *         if (getTarget() == null) {
      *             setTarget(new byte[16]);
@@ -83,8 +83,9 @@ public class ArrayByteOutput extends AbstractByteOutput<byte[]> {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * {@inheritDoc} The {@code write(int)} method of {@code ArrayByteOutput} class sets {@code getTarget()[getIndex()]}
-     * with given value and increases the {@code index} attribute.
+     * {@inheritDoc} The {@code write(int)} method of {@code ArrayByteOutput} class sets at {@link #getIndex() index} in
+     * {@link #getTarget() target} with specified {@code value}. The {@link #setIndex(int) index} attribute, when
+     * successfully returns, is increased by {@code 1}.
      *
      * @param value {@inheritDoc}
      * @throws IOException {@inheritDoc}

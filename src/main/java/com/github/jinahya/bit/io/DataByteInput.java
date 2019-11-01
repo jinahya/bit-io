@@ -34,7 +34,7 @@ public class DataByteInput extends AbstractByteInput<DataInput> {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * Creates a new instance which reads bytes from specified data input as a byte source.
+     * Creates a new instance which reads bytes from specified data input.
      *
      * @param source the byte source from which bytes are read; {@code null} if it's supposed to be lazily initialized
      *               and set
@@ -47,10 +47,13 @@ public class DataByteInput extends AbstractByteInput<DataInput> {
 
     /**
      * {@inheritDoc} The {@code read()} method of {@code DataByteInput} class invokes {@link
-     * DataInput#readUnsignedByte()}, on what {@link #getSource() getSource()} method returns, and returns the result.
+     * DataInput#readUnsignedByte() readUnsignedByte()} method on the {@link #getSource() source} and returns the
+     * result.
      *
      * @return {@inheritDoc}
      * @throws IOException {@inheritDoc}
+     * @see #getSource()
+     * @see DataInput#readUnsignedByte()
      */
     @Override
     public int read() throws IOException {

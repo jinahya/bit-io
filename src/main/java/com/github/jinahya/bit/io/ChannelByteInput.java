@@ -74,7 +74,7 @@ class ChannelByteInput extends BufferByteInput {
     /**
      * Returns the current value of {@code channel} attribute.
      *
-     * @returnp the current value of {@code channel} attribute.
+     * @return the current value of {@code channel} attribute.
      */
     public ReadableByteChannel getChannel() {
         return channel;

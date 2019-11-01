@@ -34,10 +34,10 @@ public class BufferByteOutput extends AbstractByteOutput<ByteBuffer> {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * Creates a new instance with specified byte buffer as a byte target.
+     * Creates a new instance which writes bytes to specified byte buffer.
      *
-     * @param target the byte buffer to be assigned to {@code target} attribute; {@code null} if it's supposed to be
-     *               lazily initialized and set.
+     * @param target the byte buffer to which bytes are written; {@code null} if it's supposed to be lazily initialized
+     *               and set.
      */
     public BufferByteOutput(final ByteBuffer target) {
         super(target);

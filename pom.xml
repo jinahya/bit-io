@@ -463,10 +463,12 @@
       <id>umlgraph</id>
       <properties>
         <additionalparam>
-          -all -hide java.*
+          -all
+          -hide java.*
+          -hide javax.*
           -collapsible -horizontal
           -inferdep -inferdepinpackage -inferrel
-          -outputencoding UTF-8
+          -outputencoding ${project.reporting.outputEncoding}
         </additionalparam>
       </properties>
     </profile>

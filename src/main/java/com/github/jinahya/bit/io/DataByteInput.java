@@ -34,9 +34,10 @@ public class DataByteInput extends AbstractByteInput<DataInput> {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * Creates a new instance built on top of given {@code source}.
+     * Creates a new instance which reads bytes from specified data input as a byte source.
      *
-     * @param source the byte source; {@code null} if it's supposed to be lazily initialized and set
+     * @param source the byte source from which bytes are read; {@code null} if it's supposed to be lazily initialized
+     *               and set
      */
     public DataByteInput(final DataInput source) {
         super(source);

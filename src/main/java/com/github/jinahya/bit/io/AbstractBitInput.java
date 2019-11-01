@@ -66,11 +66,14 @@ public abstract class AbstractBitInput implements BitInput {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * Reads an unsigned value whose size is, in maximum, {@value Byte#SIZE}.
+     * Reads an unsigned {@code int} value of specified bit size which is, in maximum, {@value java.lang.Byte#SIZE}.
      *
-     * @param size the number of bits for the value; between {@code 1} and {@value Byte#SIZE}, both inclusive.
+     * @param size the number of bits for the value; between {@code 1} and {@value java.lang.Byte#SIZE}, both
+     *             inclusive.
      * @return an unsigned byte value.
      * @throws IOException if an I/O error occurs.
+     * @see #unsigned16(int)
+     * @see #read()
      */
     protected int unsigned8(final int size) throws IOException {
         requireValidSizeUnsigned8(size);
@@ -89,11 +92,13 @@ public abstract class AbstractBitInput implements BitInput {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * Reads an unsigned value whose size is, in maximum, {@value Short#SIZE}.
+     * Reads an unsigned {@code int} value of specified bit size which is, in maximum, {@value java.lang.Short#SIZE}.
      *
-     * @param size the number of bits for the value; between {@code 1} and {@value Short#SIZE}, both inclusive.
+     * @param size the number of bits for the value; between {@code 1} and {@value java.lang.Short#SIZE}, both
+     *             inclusive.
      * @return an unsigned short value.
      * @throws IOException if an I/O error occurs.
+     * @see #unsigned8(int)
      */
     protected int unsigned16(final int size) throws IOException {
         requireValidSizeUnsigned16(size);

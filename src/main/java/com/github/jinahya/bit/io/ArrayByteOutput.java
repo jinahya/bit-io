@@ -37,12 +37,13 @@ public class ArrayByteOutput extends AbstractByteOutput<byte[]> {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * Creates a new instance with given parameters.  The {@code index} attribute will be set as {@code 0}, or {@code
-     * -1} when {@code target} argument is {@code null} or its {@code length} is {@code 0}. It's crucial to set the
-     * {@code index} attribute when the {@code target} attribute is lazily initialized.
+     * Creates a new instance with given parameters. The {@code index} attribute will be set as {@code 0}, or {@code -1}
+     * when {@code target} argument is {@code null} or its {@code length} is {@code 0}. It's crucial to set the {@code
+     * index} attribute when the {@code target} attribute is lazily initialized.
+     *
      * <blockquote><pre>{@code
      * final ByteOutput byteOutput = new ArrayByteOutput(null) { // index = -1
-     *     @Override
+     *     {@literal @}Override
      *     public void write(final int value) throws IOException {
      *         if (getTarget() == null) {
      *             setTarget(new byte[16]);

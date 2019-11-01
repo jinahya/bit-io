@@ -34,9 +34,10 @@ public class StreamByteOutput extends AbstractByteOutput<OutputStream> {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * Creates a new instance built on top of the specified output stream.
+     * Creates a new instance which writes bytes to specified output stream.
      *
-     * @param target the output stream; {@code null} if it's supposed to be lazily initialized and set.
+     * @param target the output stream to which bytes are written; {@code null} if it's supposed to be lazily
+     *               initialized and set.
      */
     public StreamByteOutput(final OutputStream target) {
         super(target);

@@ -27,9 +27,23 @@ import java.nio.channels.ReadableByteChannel;
 
 import static java.nio.ByteBuffer.allocate;
 
+/**
+ * A byte input which reads bytes from a readable byte channel.
+ *
+ * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
+ * @see ChannelByteInput
+ * @see ChannelByteOutput2
+ */
 class ChannelByteInput2 extends AbstractByteInput<ReadableByteChannel> {
 
     // -----------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Creates a new instance which writes bytes to specified channel.
+     *
+     * @param channel the channel to which bytes are written; must be not {@code null}.
+     * @return a new instance.
+     */
     public static ChannelByteInput2 of(final ReadableByteChannel channel) {
         if (channel == null) {
             throw new NullPointerException("channel is null");
@@ -46,19 +60,38 @@ class ChannelByteInput2 extends AbstractByteInput<ReadableByteChannel> {
     }
 
     // -----------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Creates a new instance with specified channel and buffer.
+     *
+     * @param source the channel from which bytes are read; {@code null} if it's supposed to be lazily initialized and
+     *               set.
+     * @param buffer a byte buffer for reading bytes from the {@code channel}; {@code null} if it's supposed to be
+     *               lazily initialized and set.
+     */
     public ChannelByteInput2(final ReadableByteChannel source, final ByteBuffer buffer) {
         super(source);
         this.buffer = buffer;
     }
 
     // -----------------------------------------------------------------------------------------------------------------
+
+    /**
+     * {@inheritDoc} The {@code read()} method of {@code ChannelByteInput2} class, if required, charges the {@link
+     * #getBuffer() buffer} from the {@link #getSource() channel} and returns the value from the {@code buffer}.
+     *
+     * @return {@inheritDoc}
+     * @throws IOException {@inheritDoc}
+     */
     @Override
     public int read() throws IOException {
-        final ReadableByteChannel source = getSource();
         final ByteBuffer buffer = getBuffer();
+        if (buffer.capacity() == 0) {
+            throw new IllegalStateException("buffer.capacity == 0");
+        }
         while (!buffer.hasRemaining()) {
             buffer.clear(); // position -> zero, limit -> capacity
-            if (source.read(buffer) == -1) {
+            if (getSource().read(buffer) == -1) {
                 throw new EOFException("reached to an end");
             }
             buffer.flip(); // limit -> position, position -> zero
@@ -71,7 +104,7 @@ class ChannelByteInput2 extends AbstractByteInput<ReadableByteChannel> {
     /**
      * Returns the current value of {@code buffer} attribute.
      *
-     * @returnp the current value of {@code buffer} attribute.
+     * @return the current value of {@code buffer} attribute.
      */
     public ByteBuffer getBuffer() {
         return buffer;

@@ -34,10 +34,10 @@ public class BufferByteInput extends AbstractByteInput<ByteBuffer> {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * Creates a new instance with specified byte buffer as a byte source.
+     * Creates a new instance which reads bytes from specified byte buffer.
      *
-     * @param source the byte buffer to be assigned to {@code source} attribute; {@code null} if it's supposed to be
-     *               lazily initialized and set.
+     * @param source the byte buffer from which bytes are read; {@code null} if it's supposed to be lazily initialized
+     *               and set.
      */
     public BufferByteInput(final ByteBuffer source) {
         super(source);

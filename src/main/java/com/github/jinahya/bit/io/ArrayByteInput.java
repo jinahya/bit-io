@@ -42,11 +42,11 @@ public class ArrayByteInput extends AbstractByteInput<byte[]> {
      * attribute when the {@code source} attribute is lazily initialized.
      * <blockquote><pre>{@code
      * final ByteInput byteInput = new ArrayByteInput(null) { // index = -1
-     *     @Override
+     *     {@literal @}Override
      *     public int read() throws IOException {
      *         if (getSource() == null) {
-     *             setSource(new byte[16);
-     *             setIndex(getSource().length); // set as if already drained
+     *             setSource(new byte[16]);
+     *             setIndex(getSource().length); // set as if it's already drained
      *         }
      *         if (getIndex() == getSource().length) { // no more space to read; charge it.
      *             readFully(getSource());

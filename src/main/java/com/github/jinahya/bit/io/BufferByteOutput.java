@@ -24,7 +24,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 
 /**
- * A byte output uses an instance of {@link ByteBuffer} as its byte target.
+ * A byte output writes bytes to a {@link ByteBuffer}.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  * @see BufferByteInput
@@ -34,10 +34,10 @@ public class BufferByteOutput extends AbstractByteOutput<ByteBuffer> {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * Creates a new instance with specified byte buffer as a byte target.
+     * Creates a new instance which writes bytes to specified byte buffer.
      *
-     * @param target the byte buffer to be assigned to {@code target} attribute; {@code null} if it's supposed to be
-     *               lazily initialized and set.
+     * @param target the byte buffer to which bytes are written; {@code null} if it's supposed to be lazily initialized
+     *               and set.
      */
     public BufferByteOutput(final ByteBuffer target) {
         super(target);

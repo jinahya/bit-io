@@ -23,7 +23,7 @@ package com.github.jinahya.bit.io;
 import java.io.IOException;
 
 /**
- * An interface for reading values of arbitrary number of bits.
+ * An interface for reading values of an arbitrary number of bits.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  * @see BitOutput
@@ -48,8 +48,8 @@ public interface BitInput {
      * Reads a {@code byte} value of specified number of bits.
      *
      * @param unsigned a flag for indicating unsigned value; {@code true} for unsigned, {@code false} for signed.
-     * @param size     the number of bits for value; between {@code 1} and ({@code 7 + (unsigned ? 0 : 1)}), both
-     *                 inclusive.
+     * @param size     the number of bits for value; between {@code 1} and ({@value java.lang.Byte#SIZE} + (unsigned ? 1
+     *                 : 0)}), both inclusive.
      * @return a {@code byte} value of given {@code size}.
      * @throws IOException if an I/O error occurs. //     * @see #readSignedByte(int) //     * @see
      *                     #readUnsignedByte(int)
@@ -63,8 +63,8 @@ public interface BitInput {
      * Reads a {@code short} value of specified number of bits.
      *
      * @param unsigned a flag for indicating unsigned value; {@code true} for unsigned, {@code false} for signed.
-     * @param size     the number of bits for value; between {@code 1} and ({@code 15 + (unsigned ? 0 : 1)}), both
-     *                 inclusive.
+     * @param size     the number of bits for value; between {@code 1} and ({@value java.lang.Short#SIZE} - (unsigned ?
+     *                 1 : 0)}), both inclusive.
      * @return a {@code short} value of given {@code size}.
      * @throws IOException if an I/O error occurs. //     * @see #readSignedShort(int) //     * @see
      *                     #readUnsignedShort(int)
@@ -78,11 +78,10 @@ public interface BitInput {
      * Reads an {@code int} value of specified number of bits.
      *
      * @param unsigned a flag for indicating unsigned value; {@code true} for unsigned, {@code false} for signed.
-     * @param size     the number of bits for value; between {@code 1} and ({@code 31 + (unsigned ? 0 : 1)}), both
-     *                 inclusive.
+     * @param size     the number of bits for value; between {@code 1} and ({@value java.lang.Integer#SIZE} - (unsigned
+     *                 ? 1 : 0)), both inclusive.
      * @return an int value.
-     * @throws IOException if an I/O error occurs. //     * @see #readSignedInt(int) //     * @see
-     *                     #readUnsignedInt(int)
+     * @throws IOException if an I/O error occurs.
      * @see BitOutput#writeInt(boolean, int, int)
      */
     int readInt(boolean unsigned, int size) throws IOException;
@@ -93,11 +92,10 @@ public interface BitInput {
      * Reads a {@code long} value of specified number of bits.
      *
      * @param unsigned a flag for indicating unsigned value; {@code true} for unsigned, {@code false} for signed.
-     * @param size     the number of bits to read; between {@code 1} and ({@code 63 + (unsigned ? 0 : 1)}), both
-     *                 inclusive.
+     * @param size     the number of bits to read; between {@code 1} and ({@value java.lang.Long#SIZE} - (unsigned ? 1 :
+     *                 0)), both inclusive.
      * @return a {@code long} value of specified bit size.
-     * @throws IOException if an I/O error occurs. //     * @see #readSignedLong(int) //     * @see
-     *                     #readUnsignedLong(int)
+     * @throws IOException if an I/O error occurs.
      * @see BitOutput#writeLong(boolean, int, long)
      */
     long readLong(boolean unsigned, int size) throws IOException;
@@ -107,7 +105,8 @@ public interface BitInput {
     /**
      * Reads a {@code char} value of specified bit size.
      *
-     * @param size the number of bits for value; between {@code 1} and {@value Character#SIZE}, both inclusive.
+     * @param size the number of bits for value; between {@code 1} and {@value java.lang.Character#SIZE}, both
+     *             inclusive.
      * @return a {@code char} value
      * @throws IOException if an I/O error occurs.
      * @see #readInt(boolean, int)

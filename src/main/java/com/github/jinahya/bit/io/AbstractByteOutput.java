@@ -21,7 +21,7 @@ package com.github.jinahya.bit.io;
  */
 
 /**
- * An abstract class for implementing {@link ByteOutput}.
+ * An abstract class for implementing {@link ByteOutput} interface.
  *
  * @param <T> byte target type parameter
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
@@ -34,7 +34,7 @@ public abstract class AbstractByteOutput<T> implements ByteOutput {
     /**
      * Creates a new instance with specified byte target.
      *
-     * @param target the byte target; {@code null} if it is supposed to be lazily initialized and set.
+     * @param target the underlying byte target; {@code null} if it is supposed to be lazily initialized and set.
      */
     public AbstractByteOutput(final T target) {
         super();
@@ -57,18 +57,18 @@ public abstract class AbstractByteOutput<T> implements ByteOutput {
     // ---------------------------------------------------------------------------------------------------------- target
 
     /**
-     * Returns the current value of byte target.
+     * Returns the current value of {@code target} attribute.
      *
-     * @return the current value of byte target.
+     * @return the current value of {@code target} attribute.
      */
     public T getTarget() {
         return target;
     }
 
     /**
-     * Replaces the value of {@link #target} with given.
+     * Replaces the value of {@code target} attribute with given.
      *
-     * @param target new value for {@link #target}.
+     * @param target new value for {@code target} attribute.
      */
     public void setTarget(final T target) {
         this.target = target;
@@ -76,5 +76,8 @@ public abstract class AbstractByteOutput<T> implements ByteOutput {
 
     // -----------------------------------------------------------------------------------------------------------------
 
+    /**
+     * The target to which bytes are written.
+     */
     private T target;
 }

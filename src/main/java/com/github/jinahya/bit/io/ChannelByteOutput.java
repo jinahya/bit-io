@@ -26,7 +26,25 @@ import java.nio.channels.WritableByteChannel;
 
 import static java.nio.ByteBuffer.allocate;
 
+@Deprecated
 class ChannelByteOutput extends BufferByteOutput {
+
+    // -----------------------------------------------------------------------------------------------------------------
+    public static ChannelByteOutput of(final WritableByteChannel channel) {
+        if (channel == null) {
+            throw new NullPointerException("channel is null");
+        }
+        return new ChannelByteOutput(null, channel) {
+            @Override
+            public void write(final int value) throws IOException {
+                final ByteBuffer target = getTarget();
+                if (target == null) {
+                    setTarget(allocate(1));
+                }
+                super.write(value);
+            }
+        };
+    }
 
     // -----------------------------------------------------------------------------------------------------------------
     public ChannelByteOutput(final ByteBuffer target, final WritableByteChannel channel) {
@@ -34,29 +52,37 @@ class ChannelByteOutput extends BufferByteOutput {
         this.channel = channel;
     }
 
-    public ChannelByteOutput(final WritableByteChannel channel) {
-        this(allocate(1), channel);
-    }
-
     // -----------------------------------------------------------------------------------------------------------------
     @Override
     public void write(final int value) throws IOException {
-        super.write(value);
         final ByteBuffer target = getTarget();
-        final WritableByteChannel channel = getChannel();
+        if (target.capacity() == 0) {
+            throw new IllegalStateException("target.capacity == 0");
+        }
         while (!target.hasRemaining()) {
             target.flip(); // limit -> position, position -> zero
-            final int written = channel.write(target);
+            final int written = getChannel().write(target);
             target.compact();
         }
+        super.write(value);
     }
 
     // --------------------------------------------------------------------------------------------------------- channel
 
+    /**
+     * Returns the current value of {@code channel} attribute.
+     *
+     * @returnp the current value of {@code channel} attribute.
+     */
     public WritableByteChannel getChannel() {
         return channel;
     }
 
+    /**
+     * Replaces the current value of {@code channel} attribute with specified value.
+     *
+     * @param channel new value for {@code channel} attribute.
+     */
     public void setChannel(final WritableByteChannel channel) {
         this.channel = channel;
     }

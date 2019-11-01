@@ -66,11 +66,14 @@ public abstract class AbstractBitOutput implements BitOutput {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * Writes an unsigned value whose size is, in maximum, {@value Byte#SIZE}.
+     * Writes an unsigned {@code int} value of specified bit size which is, in maximum, {@value java.lang.Byte#SIZE}.
      *
-     * @param size  the number of lower bits to write; between {@code 1} and {@value Byte#SIZE}, both inclusive.
+     * @param size  the number of lower bits to write; between {@code 1} and {@value java.lang.Byte#SIZE}, both
+     *              inclusive.
      * @param value the value to write.
      * @throws IOException if an I/O error occurs.
+     * @see #unsigned16(int, int)
+     * @see #write(int)
      */
     protected void unsigned8(final int size, int value) throws IOException {
         requireValidSizeUnsigned8(size);
@@ -92,11 +95,13 @@ public abstract class AbstractBitOutput implements BitOutput {
     }
 
     /**
-     * Writes an unsigned value whose size is, in maximum, {@value Short#SIZE}.
+     * Writes an unsigned {@code int} value of specified bit size which is, in maximum, {@value java.lang.Short#SIZE}.
      *
-     * @param size  the number of lower bits to write; between {@code 1} and {@value Short#SIZE}, both inclusive.
+     * @param size  the number of lower bits to write; between {@code 1} and {@value java.lang.Short#SIZE}, both
+     *              inclusive.
      * @param value the value to write.
      * @throws IOException if an I/O error occurs
+     * @see #unsigned8(int, int)
      */
     protected void unsigned16(final int size, final int value) throws IOException {
         requireValidSizeUnsigned16(size);

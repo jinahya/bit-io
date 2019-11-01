@@ -23,11 +23,45 @@ package com.github.jinahya.bit.io;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Map;
+import java.util.WeakHashMap;
 
-final class BitReaders {
+import static java.util.Collections.synchronizedMap;
+
+final class BitReadables {
 
     // -----------------------------------------------------------------------------------------------------------------
-    public static <T extends BitReadable> BitReader<T> bitReaderFor(final Class<? extends T> type) {
+    private static final Map<Class<?>, BitReader<?>> BIT_READERS;
+
+    static {
+        BIT_READERS = synchronizedMap(new WeakHashMap<Class<?>, BitReader<?>>());
+    }
+
+    public static <T extends BitReadable> BitReader<T> bitReader(final Class<? extends T> type) {
+        if (type == null) {
+            throw new NullPointerException("type is null");
+        }
+        synchronized (BIT_READERS) {
+            @SuppressWarnings({"unchecked"})
+            BitReader<T> value = (BitReader<T>) BIT_READERS.get(type);
+            if (value == null) {
+                value = newBitReader(type);
+                BIT_READERS.put(type, value);
+            }
+            return value;
+        }
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Returns a new bit reader for reading instances of specified type.
+     *
+     * @param type the type of bit readable to read.
+     * @param <T>  bit readable type parameter
+     * @return a new bit reader.
+     */
+    public static <T extends BitReadable> BitReader<T> newBitReader(final Class<? extends T> type) {
         if (type == null) {
             throw new NullPointerException("type is null");
         }
@@ -58,6 +92,6 @@ final class BitReaders {
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    private BitReaders() {
+    private BitReadables() {
     }
 }

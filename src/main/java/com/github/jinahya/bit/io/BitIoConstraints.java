@@ -35,7 +35,7 @@ final class BitIoConstraints {
      * Checks whether given size is valid for unsigned 8 bit integer. An {@code IllegalArgumentException} will be thrown
      * if given value is not valid.
      *
-     * @param size the size to check; must between {@code 1} and {@value Byte#SIZE}, both inclusive.
+     * @param size the size to check; must between {@code 1} and {@value java.lang.Byte#SIZE}, both inclusive.
      * @return given size.
      */
     static int requireValidSizeUnsigned8(final int size) {
@@ -52,7 +52,7 @@ final class BitIoConstraints {
      * Checks whether given size is valid for unsigned 16 bit integer. An {@code IllegalArgumentException} will be
      * thrown if given value is not valid.
      *
-     * @param size the size to check; must between {@code 1} and {@value Short#SIZE}, both inclusive.
+     * @param size the size to check; must between {@code 1} and {@value java.lang.Short#SIZE}, both inclusive.
      * @return given size.
      */
     static int requireValidSizeUnsigned16(final int size) {

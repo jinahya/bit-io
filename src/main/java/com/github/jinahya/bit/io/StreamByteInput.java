@@ -35,9 +35,10 @@ public class StreamByteInput extends AbstractByteInput<InputStream> {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * Creates a new instance built on top of the specified input stream.
+     * Creates a new instance which read bytes from specified input stream.
      *
-     * @param source the input stream; {@code null} if it's supposed to be lazily initialized and set
+     * @param source the input stream from which bytes are read; {@code null} if it's supposed to be lazily initialized
+     *               and set
      */
     public StreamByteInput(final InputStream source) {
         super(source);

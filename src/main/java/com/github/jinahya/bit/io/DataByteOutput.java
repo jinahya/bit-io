@@ -26,6 +26,7 @@ import java.io.IOException;
 /**
  * A byte output uses an instance of {@link DataOutput} as its {@code target}.
  *
+ * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  * @see DataByteInput
  */
 public class DataByteOutput extends AbstractByteOutput<DataOutput> {
@@ -33,9 +34,10 @@ public class DataByteOutput extends AbstractByteOutput<DataOutput> {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * Creates a new instance built on to of given byte target.
+     * Creates a new instance which writes bytes to specified data output.
      *
-     * @param target the byte target; {@code null} if it is supposed to be lazily initialized and set.
+     * @param target the byte target to which bytes are written; {@code null} if it is supposed to be lazily initialized
+     *               and set.
      */
     public DataByteOutput(final DataOutput target) {
         super(target);
@@ -45,11 +47,12 @@ public class DataByteOutput extends AbstractByteOutput<DataOutput> {
 
     /**
      * {@inheritDoc} The {@code write(int)} method of {@code DataByteOutput} class invokes {@link
-     * DataOutput#writeByte(int)}, on what {@link #getTarget() getTarget()} method returns, with specified {@code
-     * value}.
+     * DataOutput#writeByte(int) writeByte(int)} method on the {@link #getTarget() target} with specified value.
      *
      * @param value {@inheritDoc}
      * @throws IOException {@inheritDoc}
+     * @see #getTarget()
+     * @see DataOutput#writeByte(int)
      */
     @Override
     public void write(final int value) throws IOException {

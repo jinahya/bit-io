@@ -60,11 +60,13 @@ public class DefaultBitInput extends AbstractBitInput {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * {@inheritDoc} The {@code read()} method of {@code DefaultBitInput} class invokes {@link ByteInput#read()} ,on
-     * what {@link #getDelegate()} method returns, and returns the result.
+     * {@inheritDoc} The {@code read()} method of {@code DefaultBitInput} class invokes {@link ByteInput#read() read()}
+     * method on {@link #getDelegate() delegate} and returns the result.
      *
      * @return {@inheritDoc}
      * @throws IOException {@inheritDoc}
+     * @see #getDelegate()
+     * @see ByteInput#read()
      */
     @Override
     protected int read() throws IOException {

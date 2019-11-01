@@ -23,23 +23,19 @@ package com.github.jinahya.bit.io;
 import java.io.InputStream;
 
 /**
- * An abstract class for testing subclasses of {@link StreamByteInput}.
+ * A class for unit-testing {@link StreamByteInput} class.
  *
- * @param <T> byte input type parameter
+ * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  * @see StreamByteOutputTest
  */
-abstract class StreamByteInputTest<T extends StreamByteInput> extends AbstractByteInputTest<T, InputStream> {
+class StreamByteInputTest extends AbstractByteInputTest<StreamByteInput, InputStream> {
 
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
      * Creates a new instance.
-     *
-     * @param byteInputClass byte input class.
-     * @see #byteInputClass
-     * @see #byteSourceClass
      */
-    StreamByteInputTest(final Class<T> byteInputClass) {
-        super(byteInputClass, InputStream.class);
+    StreamByteInputTest() {
+        super(StreamByteInput.class, InputStream.class);
     }
 }

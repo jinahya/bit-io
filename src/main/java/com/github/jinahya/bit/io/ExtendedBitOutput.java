@@ -21,6 +21,7 @@ package com.github.jinahya.bit.io;
  */
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.List;
 
 import static com.github.jinahya.bit.io.BitIoConstants.MAX_EXPONENT_BYTE;
@@ -30,7 +31,6 @@ import static com.github.jinahya.bit.io.BitIoConstants.MAX_EXPONENT_SHORT;
 import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeByte;
 import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeInt;
 import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeLong;
-import static com.github.jinahya.bit.io.BitWriters.bitWriterFor;
 
 class ExtendedBitOutput {
 
@@ -43,9 +43,9 @@ class ExtendedBitOutput {
      * @param value  the value to be checked.
      * @return {@code true} if the {@code value} is {@code null}; {@code false} otherwise.
      * @throws IOException if an I/O error occurs.
-     * @see ExtendedBitInput#readBooleanIsNextNull(BitInput)
+     * @see ExtendedBitInput#readNullFlag(BitInput)
      */
-    protected static boolean writeBooleanIsNextNull(final BitOutput output, final Object value) throws IOException {
+    protected static boolean writeNullFlag(final BitOutput output, final Object value) throws IOException {
         if (output == null) {
             throw new NullPointerException("output is null");
         }
@@ -63,14 +63,15 @@ class ExtendedBitOutput {
         }
         int size = 1;
         int mask = 1;
+        boolean next;
         do {
             final int v = value & mask;
             value >>= size;
-            output.writeBoolean(value > 0);
-            output.writeInt(true, size, v);
-            size++;
+            next = value > 0;
+            output.writeBoolean(next);
+            output.writeInt(true, size++, v);
             mask = (mask << 1) + 1;
-        } while (value > 0);
+        } while (next);
     }
 
     static void writeUnsignedVariableLong(final BitOutput output, long value) throws IOException {
@@ -81,15 +82,16 @@ class ExtendedBitOutput {
             throw new IllegalArgumentException("value(" + value + ") < 0L");
         }
         int size = 1;
-        int mask = 1;
+        long mask = 1L;
+        boolean next;
         do {
             final long v = value & mask;
             value >>= size;
-            output.writeBoolean(value > 0L);
-            output.writeLong(true, size, v);
-            size++;
-            mask = (mask << 1) + 1;
-        } while (value > 0L);
+            next = value > 0L;
+            output.writeBoolean(next);
+            output.writeLong(true, size++, v);
+            mask = (mask << 1) + 1L;
+        } while (next);
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -167,8 +169,22 @@ class ExtendedBitOutput {
 
     // -----------------------------------------------------------------------------------------------------------------
 
+    /**
+     * Writes an unsigned {@code int} for a length to specified bit output.
+     *
+     * @param output the bit output.
+     * @param length the length value to write.
+     * @throws IOException if an I/O error occurs.
+     * @see #writeUnsignedVariable5(BitOutput, int)
+     * @see #writeLengthLong(BitOutput, long)
+     * @see ExtendedBitInput#readLengthInt(BitInput)
+     */
     static void writeLengthInt(final BitOutput output, final int length) throws IOException {
         writeUnsignedVariable5(output, length);
+    }
+
+    static void writeLengthLong(final BitOutput output, final long length) throws IOException {
+        writeUnsignedVariable6(output, length);
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -191,11 +207,11 @@ class ExtendedBitOutput {
             throw new NullPointerException("bitOutput is null");
         }
         requireValidSizeByte(unsigned, size);
-        if (nullable && writeBooleanIsNextNull(output, value)) {
-            return;
-        }
-        if (value == null) {
+        if (!nullable && value == null) {
             throw new NullPointerException("value is null");
+        }
+        if (nullable && writeNullFlag(output, value)) {
+            return;
         }
         writeLengthInt(output, value.length);
         for (final byte v : value) {
@@ -210,11 +226,11 @@ class ExtendedBitOutput {
         if (output == null) {
             throw new NullPointerException("bitOutput is null");
         }
-        if (nullable && writeBooleanIsNextNull(output, value)) {
-            return;
-        }
-        if (value == null) {
+        if (!nullable && value == null) {
             throw new NullPointerException("value is null");
+        }
+        if (nullable && writeNullFlag(output, value)) {
+            return;
         }
         if (charset == null) {
             throw new NullPointerException("charset is null");
@@ -228,11 +244,11 @@ class ExtendedBitOutput {
         if (output == null) {
             throw new NullPointerException("bitOutput is null");
         }
-        if (nullable && writeBooleanIsNextNull(output, value)) {
-            return;
-        }
-        if (value == null) {
+        if (!nullable && value == null) {
             throw new NullPointerException("value is null");
+        }
+        if (nullable && writeNullFlag(output, value)) {
+            return;
         }
         final byte[] bytes = value.getBytes("US-ASCII");
         writeBytes(false, output, true, 7, bytes);
@@ -298,11 +314,22 @@ class ExtendedBitOutput {
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    static <T> void writeObject(final boolean nullable, final BitOutput output, final T value,
-                                final BitWriter<? super T> writer)
+
+    /**
+     * Writes specified object to specified bit output.
+     *
+     * @param nullable a flag for nullability.
+     * @param output   the bit output.
+     * @param writer   a bit writer.
+     * @param value    the object to write.
+     * @param <T>      object type parameter
+     * @throws IOException if an I/O error occurs.
+     */
+    static <T> void writeObject(final boolean nullable, final BitOutput output, final BitWriter<? super T> writer,
+                                final T value)
             throws IOException {
         if (output == null) {
-            throw new NullPointerException("bitOutput is null");
+            throw new NullPointerException("output is null");
         }
         if (writer == null) {
             throw new NullPointerException("writer is null");
@@ -310,42 +337,60 @@ class ExtendedBitOutput {
         if (!nullable && value == null) {
             throw new NullPointerException("value is null");
         }
-        if (nullable && writeBooleanIsNextNull(output, value)) {
+        if (nullable && writeNullFlag(output, value)) {
             return;
         }
         writer.write(output, value);
     }
 
-    static <T extends BitWritable> void writeObject(final boolean nullable, final BitOutput output,
-                                                    final Class<? extends T> type, final T value)
+    /**
+     * Writes all elements in specified collection to specified bit output using specified bit writer.
+     *
+     * @param output     the bit output to which values are written.
+     * @param writer     the bit writer.
+     * @param collection the collection whose elements are written.
+     * @param <T>        object type parameter
+     * @throws IOException if an I/O error occurs.
+     * @see #writeObject(boolean, BitOutput, BitWriter, Object)
+     * @see #writeObjects(boolean, BitOutput, BitWriter, List)
+     * @see ExtendedBitInput#readObjects(BitInput, BitReader, Collection)
+     */
+    static <T extends BitWritable> void writeObjects(final BitOutput output, final BitWriter<? super T> writer,
+                                                     final Collection<? extends T> collection)
             throws IOException {
-        writeObject(nullable, output, value, bitWriterFor(type));
-    }
-
-    static <T extends BitWritable> void writeObject(final boolean nullable, final BitOutput output, final T value)
-            throws IOException {
-        writeObject(nullable, output, value.getClass(), value);
+        if (output == null) {
+            throw new NullPointerException("output is null");
+        }
+        if (collection == null) {
+            throw new NullPointerException("value is null");
+        }
+        writeLengthInt(output, collection.size());
+        for (final T value : collection) {
+            writeObject(true, output, writer, value);
+        }
     }
 
     static <T extends BitWritable> void writeObjects(final boolean nullable, final BitOutput output,
-                                                     final Class<? extends T> type, final List<? extends T> value)
+                                                     final BitWriter<? super T> writer,
+                                                     final List<? extends T> value)
             throws IOException {
         if (output == null) {
-            throw new NullPointerException("bitOutput is null");
+            throw new NullPointerException("output is null");
         }
         if (!nullable && value == null) {
             throw new NullPointerException("value is null");
         }
-        if (nullable && writeBooleanIsNextNull(output, value)) {
+        if (nullable && writeNullFlag(output, value)) {
             return;
         }
-        if (value == null) {
-            throw new NullPointerException("value is null");
+        if (true) {
+            writeObjects(output, writer, value);
+            return;
         }
+        assert value != null;
         writeLengthInt(output, value.size());
-        final BitWriter<T> writer = bitWriterFor(type);
         for (final T v : value) {
-            writeObject(true, output, v, writer);
+            writeObject(true, output, writer, v);
         }
     }
 

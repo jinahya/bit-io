@@ -27,7 +27,24 @@ import java.nio.channels.ReadableByteChannel;
 
 import static java.nio.ByteBuffer.allocate;
 
+@Deprecated
 class ChannelByteInput extends BufferByteInput {
+
+    // -----------------------------------------------------------------------------------------------------------------
+    public static ChannelByteInput of(final ReadableByteChannel channel) {
+        if (channel == null) {
+            throw new NullPointerException("channel is null");
+        }
+        return new ChannelByteInput(null, channel) {
+            @Override
+            public int read() throws IOException {
+                if (getSource() == null) {
+                    setSource((ByteBuffer) allocate(1).position(1));
+                }
+                return super.read();
+            }
+        };
+    }
 
     // -----------------------------------------------------------------------------------------------------------------
     public ChannelByteInput(final ByteBuffer source, final ReadableByteChannel channel) {
@@ -35,19 +52,16 @@ class ChannelByteInput extends BufferByteInput {
         this.channel = channel;
     }
 
-    public ChannelByteInput(final ReadableByteChannel channel) {
-        this((ByteBuffer) allocate(1).position(1), channel);
-    }
-
     // -----------------------------------------------------------------------------------------------------------------
-
     @Override
     public int read() throws IOException {
         final ByteBuffer source = getSource();
-        final ReadableByteChannel channel = getChannel();
+        if (source.capacity() == 0) {
+            throw new IllegalStateException("source.capacity == 0");
+        }
         while (!source.hasRemaining()) {
             source.clear(); // position -> zero, limit -> capacity
-            if (channel.read(source) == -1) {
+            if (getChannel().read(source) == -1) {
                 throw new EOFException("reached to an end");
             }
             source.flip(); // limit -> position, position -> zero
@@ -56,10 +70,21 @@ class ChannelByteInput extends BufferByteInput {
     }
 
     // -----------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Returns the current value of {@code channel} attribute.
+     *
+     * @returnp the current value of {@code channel} attribute.
+     */
     public ReadableByteChannel getChannel() {
         return channel;
     }
 
+    /**
+     * Replaces the current value of {@code channel} attribute with specified value.
+     *
+     * @param channel new value for {@code channel} attribute.
+     */
     public void setChannel(final ReadableByteChannel channel) {
         this.channel = channel;
     }

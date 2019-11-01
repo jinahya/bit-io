@@ -23,20 +23,19 @@ package com.github.jinahya.bit.io;
 import java.io.DataInput;
 
 /**
- * An abstract class for testing subclasses of {@link DataByteInput}.
+ * A class for unit-testing {@link DataByteInput} class.
  *
- * @param <T> data byte input type parameter.
+ * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
+ * @see DataByteOutputTest
  */
-abstract class DataByteInputTest<T extends DataByteInput> extends AbstractByteInputTest<T, DataInput> {
+class DataByteInputTest extends AbstractByteInputTest<DataByteInput, DataInput> {
 
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
      * Creates a new instance.
-     *
-     * @param byteInputClass byte input class
      */
-    DataByteInputTest(final Class<T> byteInputClass) {
-        super(byteInputClass, DataInput.class);
+    DataByteInputTest() {
+        super(DataByteInput.class, DataInput.class);
     }
 }

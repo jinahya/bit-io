@@ -48,8 +48,8 @@ public interface BitOutput {
      * Writes a {@code byte} value of specified number of bits.
      *
      * @param unsigned a flag for indicating unsigned value; {@code true} for unsigned, {@code false} for signed.
-     * @param size     the number of bits for value; between {@code 1} and {@value java.lang.Byte#SIZE} - (unsigned ? 1
-     *                 : 0)}, both inclusive.
+     * @param size     the number of bits for value; between {@code 1} and ({@value java.lang.Byte#SIZE} - (unsigned ? 1
+     *                 : 0)), both inclusive.
      * @param value    the value to write.
      * @throws IOException if an I/O error occurs.
      * @see BitInput#readByte(boolean, int)
@@ -62,8 +62,8 @@ public interface BitOutput {
      * Writes a {@code short} value of specified number of bits.
      *
      * @param unsigned a flag for indicating unsigned value; {@code true} for unsigned, {@code false} for signed.
-     * @param size     the number of bits for value; between {@code 1} and {@value java.lang.Short#SIZE} - (unsigned ? 1
-     *                 : 0)}, both inclusive.
+     * @param size     the number of bits for value; between {@code 1} and ({@value java.lang.Short#SIZE} - (unsigned ?
+     *                 1 : 0)), both inclusive.
      * @param value    the value to write.
      * @throws IOException if an I/O error occurs.
      * @see BitInput#readShort(boolean, int)
@@ -76,8 +76,8 @@ public interface BitOutput {
      * Writes an {@code int} value of specified number of bits. Only the lower number of specified bits are written.
      *
      * @param unsigned a flag for indicating unsigned value; {@code true} for unsigned, {@code false} for signed.
-     * @param size     the number of bits for value; between {@code 1} and {@value java.lang.Integer#SIZE} - (unsigned ?
-     *                 1 : 0)}, both inclusive.
+     * @param size     the number of bits for value; between {@code 1} and ({@value java.lang.Integer#SIZE} - (unsigned
+     *                 ? 1 : 0)), both inclusive.
      * @param value    the value to write.
      * @throws IOException if an I/O error occurs.
      * @see BitInput#readInt(boolean, int)
@@ -90,8 +90,8 @@ public interface BitOutput {
      * Writes a {@code long} value of specified number of bits. Only the lower number of specified bits are written.
      *
      * @param unsigned a flag for indicating unsigned value; {@code true} for unsigned, {@code false} for signed.
-     * @param size     the number of valid bits for value; between {@code 1} and {@value java.lang.Long#SIZE} -
-     *                 (unsigned ? 1 : 0)}, both inclusive.
+     * @param size     the number of valid bits for value; between {@code 1} and ({@value java.lang.Long#SIZE} -
+     *                 (unsigned ? 1 : 0)), both inclusive.
      * @param value    the value to write.
      * @throws IOException if an I/O error occurs.
      * @see BitInput#readLong(boolean, int)

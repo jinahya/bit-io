@@ -51,8 +51,7 @@ public interface BitInput {
      * @param size     the number of bits for value; between {@code 1} and ({@value java.lang.Byte#SIZE} + (unsigned ? 1
      *                 : 0)}), both inclusive.
      * @return a {@code byte} value of given {@code size}.
-     * @throws IOException if an I/O error occurs. //     * @see #readSignedByte(int) //     * @see
-     *                     #readUnsignedByte(int)
+     * @throws IOException if an I/O error occurs.
      * @see BitOutput#writeByte(boolean, int, byte)
      */
     byte readByte(boolean unsigned, int size) throws IOException;
@@ -66,8 +65,7 @@ public interface BitInput {
      * @param size     the number of bits for value; between {@code 1} and ({@value java.lang.Short#SIZE} - (unsigned ?
      *                 1 : 0)}), both inclusive.
      * @return a {@code short} value of given {@code size}.
-     * @throws IOException if an I/O error occurs. //     * @see #readSignedShort(int) //     * @see
-     *                     #readUnsignedShort(int)
+     * @throws IOException if an I/O error occurs.
      * @see BitOutput#writeShort(boolean, int, short)
      */
     short readShort(boolean unsigned, int size) throws IOException;

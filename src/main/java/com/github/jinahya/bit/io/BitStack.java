@@ -29,6 +29,43 @@ final class BitStack {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
+     * Reverses the lower specified bits of specified value.
+     *
+     * @param size  the number of bits to reverse.
+     * @param value the value to be reversed.
+     * @return the value with reversed bits.
+     */
+    public long reverse(final int size, final long value) {
+        push(size, value);
+        return pop(size);
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    private boolean pop() {
+        if (top == 0) {
+            throw new RuntimeException("stack underflow");
+        }
+        return set().get(--top);
+    }
+
+    /**
+     * Pops a value of specified bit size.
+     *
+     * @param size the number of lower bits for the number.
+     * @return a value of specified bit size.
+     */
+    public long pop(final int size) {
+        requireValidSizeLong(true, size);
+        long value = 0L;
+        for (int i = 0; i < size; i++) {
+            value |= ((pop() ? 1L : 0L) << i);
+        }
+        return value;
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+
+    /**
      * Pushes given bit flag.
      *
      * @param value the bit flag to push.
@@ -40,7 +77,13 @@ final class BitStack {
         set().set(top++, value);
     }
 
-    void push(final int size, long value) {
+    /**
+     * Pushes the lower specified bits of specified value.
+     *
+     * @param size  the number of bits.
+     * @param value the value to be pushed.
+     */
+    public void push(final int size, long value) {
         requireValidSizeLong(true, size);
         if (value < 0L) {
             throw new IllegalArgumentException("value(" + value + ") < 0L");
@@ -49,24 +92,6 @@ final class BitStack {
             push((value & 0x01L) == 0x01L);
             value >>= 1;
         }
-    }
-
-    // -----------------------------------------------------------------------------------------------------------------
-    private boolean pop() {
-        if (top == 0) {
-            throw new RuntimeException("stack underflow");
-        }
-        return set().get(--top);
-    }
-
-    long pop(final int size) {
-        requireValidSizeLong(true, size);
-        long value = 0L;
-        for (int i = 0; i < size; i++) {
-            value <<= 1;
-            value |= pop() ? 0L : 1L;
-        }
-        return value;
     }
 
     // -----------------------------------------------------------------------------------------------------------------

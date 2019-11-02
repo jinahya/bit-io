@@ -20,14 +20,21 @@ package com.github.jinahya.bit.io;
  * #L%
  */
 
+import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Field;
 
+import static com.github.jinahya.bit.io.BitIoTests.randomSizeForLong;
+import static com.github.jinahya.bit.io.BitIoTests.randomValueForLong;
+import static com.github.jinahya.bit.io.BitIoUtils.reverse;
 import static java.util.concurrent.ThreadLocalRandom.current;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@Slf4j
 class BitStackTest {
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -61,5 +68,18 @@ class BitStackTest {
         final long value = current().nextLong() >>> 1;
         stack.push(size, value);
         assertTrue(stack.pop(current().nextInt(1, size + 1)) <= value);
+    }
+
+    // --------------------------------------------------------------------------------------------------------- reverse
+    @RepeatedTest(16)
+    void testReverse() {
+        final BitStack stack = new BitStack();
+        for (int i = 0; i < 256; i++) {
+            final int size = randomSizeForLong(true);
+            final long value = randomValueForLong(true, size);
+            final long expected = reverse(size, value);
+            final long actual = stack.reverse(size, value);
+            assertEquals(expected, actual);
+        }
     }
 }

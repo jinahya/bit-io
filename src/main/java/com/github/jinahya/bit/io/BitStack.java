@@ -27,18 +27,26 @@ import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeLong;
 final class BitStack {
 
     // -----------------------------------------------------------------------------------------------------------------
-    static long reverse_(final int size, long value) {
-        long result = 0L;
-        for (; value > 0L; value >>= 1) {
-            result |= value & 0x01;
-        }
-        return result;
-    }
-
-    // -----------------------------------------------------------------------------------------------------------------
     public long reverse(final int size, final long value) {
         push(size, value);
         return pop(size);
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    private boolean pop() {
+        if (top == 0) {
+            throw new RuntimeException("stack underflow");
+        }
+        return set().get(--top);
+    }
+
+    long pop(final int size) {
+        requireValidSizeLong(true, size);
+        long value = 0L;
+        for (int i = 0; i < size; i++) {
+            value |= ((pop() ? 1L : 0L) << i);
+        }
+        return value;
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -64,24 +72,6 @@ final class BitStack {
             push((value & 0x01L) == 0x01L);
             value >>= 1;
         }
-    }
-
-    // -----------------------------------------------------------------------------------------------------------------
-    private boolean pop() {
-        if (top == 0) {
-            throw new RuntimeException("stack underflow");
-        }
-        return set().get(--top);
-    }
-
-    long pop(final int size) {
-        requireValidSizeLong(true, size);
-        long value = 0L;
-        for (int i = 0; i < size; i++) {
-            value <<= 1;
-            value |= pop() ? 0L : 1L;
-        }
-        return value;
     }
 
     // -----------------------------------------------------------------------------------------------------------------

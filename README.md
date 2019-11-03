@@ -61,7 +61,7 @@ final ByteInput byteInput = new ArrayByteInput(null) {
         // initialize the `source` field value
         if (getSource() == null) {
             setSource(byte[16]);
-            setIndex(source.length); // set as already drained
+            setIndex(getSource().length); // set as already drained
         }
         // read bytes from the original stream if empty
         if (getIndex() == getSource().length) {

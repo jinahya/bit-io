@@ -55,20 +55,20 @@ new StreamByteInput(java.io.InputStream);
 Constructors of these classes don't check arguments which means you can lazily instantiate and set them.
 
 ```java
-final ByteInput input = new ArrayByteInput(null) {
+final ByteInput byteInput = new ArrayByteInput(null) {
     @Override
     public int read() throws IOException {
         // initialize the `source` field value
-        if (source == null) {
-            source = byte[16];
-            index = source.length;
+        if (getSource() == null) {
+            setSource(byte[16]);
+            setIndex(source.length); // set as already drained
         }
         // read bytes from the original stream if empty
-        if (index == source.length) {
-            if (stream.read(source) == -1) {
+        if (getIndex() == getSource().length) {
+            if (stream.readFully(getSource()) == -1) {
                 throw new EOFException("unexpected end of stream");
             }
-            index = 0;
+            setIndex(0);
         }
         return super.read();
     }
@@ -82,18 +82,17 @@ final ByteInput input = new ArrayByteInput(null) {
 Construct with an already existing `ByteInput`.
 
 ```java
-final ByteInput byteInput = createByteInput();
 final BitInput bitInput = new DefalutBitInput(byteInput);
 ```
 
 Or lazily instantiate its `delegate` field.
 
 ```java
-new DefaultBitInput(null) {
+final BitInput bitInput = new DefaultBitInput(null) {
     @Override
     public int read() throws IOException {
-        if (delegate == null) {
-            delegate = new StreamByteInput(openFile());
+        if (getDelegate() == null) {
+            setDelegate(newByteInput());
         }
         return super.read();
     }

@@ -66,6 +66,7 @@ import static java.util.concurrent.ThreadLocalRandom.current;
 import static java.util.stream.IntStream.range;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * A class for unit-testing {@link ExtendedBitInput} class and {@link ExtendedBitOutput} class.
@@ -81,9 +82,9 @@ class ExtendedBitIoTest {
     void testUnsignedVariableInt(final BitOutput output, final BitInput input) throws IOException {
         final int expected = current().nextInt() >>> 1;
         writeUnsignedVariableInt(output, expected);
-        output.align(1);
+        assertTrue(output.align(Byte.BYTES) < Byte.SIZE);
         final int actual = readUnsignedVariableInt(input);
-        input.align(1);
+        assertTrue(input.align(Byte.BYTES) < Byte.SIZE);
         assertEquals(expected, actual);
     }
 
@@ -93,9 +94,9 @@ class ExtendedBitIoTest {
     void testUnsignedVariableLong(final BitOutput output, final BitInput input) throws IOException {
         final long expected = current().nextLong() >>> 1;
         writeUnsignedVariableLong(output, expected);
-        output.align(1);
+        assertTrue(output.align(Byte.BYTES) < Byte.SIZE);
         final long actual = readUnsignedVariableLong(input);
-        input.align(1);
+        assertTrue(input.align(Byte.BYTES) < Byte.SIZE);
         assertEquals(expected, actual);
     }
 
@@ -114,9 +115,9 @@ class ExtendedBitIoTest {
     void testUnsignedVariable3_Zero(final BitOutput output, final BitInput input) throws IOException {
         final byte expected = 0;
         writeUnsignedVariable3(output, expected);
-        output.align(1);
+        assertTrue(output.align(Byte.BYTES) < Byte.SIZE);
         final byte actual = readUnsignedVariable3(input);
-        input.align(1);
+        assertTrue(input.align(Byte.BYTES) < Byte.SIZE);
         assertEquals(expected, actual);
     }
 
@@ -125,9 +126,9 @@ class ExtendedBitIoTest {
     void testUnsignedVariable3_Max(final BitOutput output, final BitInput input) throws IOException {
         final byte expected = Byte.MAX_VALUE;
         writeUnsignedVariable3(output, expected);
-        output.align(1);
+        assertTrue(output.align(Byte.BYTES) < Byte.SIZE);
         final byte actual = readUnsignedVariable3(input);
-        input.align(1);
+        assertTrue(input.align(Byte.BYTES) < Byte.SIZE);
         assertEquals(expected, actual);
     }
 
@@ -136,9 +137,9 @@ class ExtendedBitIoTest {
     void testUnsignedVariable3(final BitOutput output, final BitInput input) throws IOException {
         final byte expected = (byte) (current().nextInt() >>> 25);
         writeUnsignedVariable3(output, expected);
-        output.align(1);
+        assertTrue(output.align(Byte.BYTES) < Byte.SIZE);
         final byte actual = readUnsignedVariable3(input);
-        input.align(1);
+        assertTrue(input.align(Byte.BYTES) < Byte.SIZE);
         assertEquals(expected, actual);
     }
 
@@ -157,9 +158,9 @@ class ExtendedBitIoTest {
     void testUnsignedVariable4_Zero(final BitOutput output, final BitInput input) throws IOException {
         final short expected = 0;
         writeUnsignedVariable4(output, expected);
-        output.align(1);
+        assertTrue(output.align(Byte.BYTES) < Byte.SIZE);
         final short actual = readUnsignedVariable4(input);
-        input.align(1);
+        assertTrue(input.align(Byte.BYTES) < Byte.SIZE);
         assertEquals(expected, actual);
     }
 
@@ -168,9 +169,9 @@ class ExtendedBitIoTest {
     void testUnsignedVariable4_Max(final BitOutput output, final BitInput input) throws IOException {
         final short expected = Short.MAX_VALUE;
         writeUnsignedVariable4(output, expected);
-        output.align(1);
+        assertTrue(output.align(Byte.BYTES) < Byte.SIZE);
         final short actual = readUnsignedVariable4(input);
-        input.align(1);
+        assertTrue(input.align(Byte.BYTES) < Byte.SIZE);
         assertEquals(expected, actual);
     }
 
@@ -179,9 +180,9 @@ class ExtendedBitIoTest {
     void testUnsignedVariable4(final BitOutput output, final BitInput input) throws IOException {
         final short expected = (short) (current().nextInt() >>> 17);
         writeUnsignedVariable4(output, expected);
-        output.align(1);
+        assertTrue(output.align(Byte.BYTES) < Byte.SIZE);
         final short actual = readUnsignedVariable4(input);
-        input.align(1);
+        assertTrue(input.align(Byte.BYTES) < Byte.SIZE);
         assertEquals(expected, actual);
     }
 
@@ -200,9 +201,9 @@ class ExtendedBitIoTest {
     void testUnsignedVariable5_Zero(final BitOutput output, final BitInput input) throws IOException {
         final int expected = 0;
         writeUnsignedVariable5(output, expected);
-        output.align(1);
+        assertTrue(output.align(Byte.BYTES) < Byte.SIZE);
         final int actual = readUnsignedVariable5(input);
-        input.align(1);
+        assertTrue(input.align(Byte.BYTES) < Byte.SIZE);
         assertEquals(expected, actual);
     }
 
@@ -211,9 +212,9 @@ class ExtendedBitIoTest {
     void testUnsignedVariable5_Max(final BitOutput output, final BitInput input) throws IOException {
         final int expected = Integer.MAX_VALUE;
         writeUnsignedVariable5(output, expected);
-        output.align(1);
+        assertTrue(output.align(Byte.BYTES) < Byte.SIZE);
         final int actual = readUnsignedVariable5(input);
-        input.align(1);
+        assertTrue(input.align(Byte.BYTES) < Byte.SIZE);
         assertEquals(expected, actual);
     }
 
@@ -223,9 +224,9 @@ class ExtendedBitIoTest {
 
         final int expected = current().nextInt() >>> 1;
         writeUnsignedVariable5(output, expected);
-        output.align(1);
+        assertTrue(output.align(Byte.BYTES) < Byte.SIZE);
         final int actual = readUnsignedVariable5(input);
-        input.align(1);
+        assertTrue(input.align(Byte.BYTES) < Byte.SIZE);
         assertEquals(expected, actual);
     }
 
@@ -235,9 +236,9 @@ class ExtendedBitIoTest {
     void testUnsignedVariable6_Zero(final BitOutput output, final BitInput input) throws IOException {
         final long expected = 0L;
         writeUnsignedVariable6(output, expected);
-        output.align(1);
+        assertTrue(output.align(Byte.BYTES) < Byte.SIZE);
         final long actual = readUnsignedVariable6(input);
-        input.align(1);
+        assertTrue(input.align(Byte.BYTES) < Byte.SIZE);
         assertEquals(expected, actual);
     }
 
@@ -246,9 +247,9 @@ class ExtendedBitIoTest {
     void testUnsignedVariable6_Max(final BitOutput output, final BitInput input) throws IOException {
         final long expected = Long.MAX_VALUE;
         writeUnsignedVariable6(output, expected);
-        output.align(1);
+        assertTrue(output.align(Byte.BYTES) < Byte.SIZE);
         final long actual = readUnsignedVariable6(input);
-        input.align(1);
+        assertTrue(input.align(Byte.BYTES) < Byte.SIZE);
         assertEquals(expected, actual);
     }
 
@@ -257,9 +258,9 @@ class ExtendedBitIoTest {
     void testUnsignedVariable6(final BitOutput output, final BitInput input) throws IOException {
         final long expected = current().nextLong() >>> 1;
         writeUnsignedVariable6(output, expected);
-        output.align(1);
+        assertTrue(output.align(Byte.BYTES) < Byte.SIZE);
         final long actual = readUnsignedVariable6(input);
-        input.align(1);
+        assertTrue(input.align(Byte.BYTES) < Byte.SIZE);
         assertEquals(expected, actual);
     }
 
@@ -272,9 +273,9 @@ class ExtendedBitIoTest {
                                 ? null : new RandomStringGenerator.Builder().build().generate(current().nextInt(128));
         final String charset = UTF_8.name();
         writeString(nullable, output, expected, charset);
-        output.align(1);
+        assertTrue(output.align(Byte.BYTES) < Byte.SIZE);
         final String actual = readString(nullable, input, charset);
-        input.align(1);
+        assertTrue(input.align(Byte.BYTES) < Byte.SIZE);
         assertEquals(expected, actual);
     }
 
@@ -286,9 +287,9 @@ class ExtendedBitIoTest {
                                 ? null : new RandomStringGenerator.Builder().withinRange(0, 127).build()
                                         .generate(current().nextInt(128));
         writeAscii(nullable, output, expected);
-        output.align(1);
+        assertTrue(output.align(Byte.BYTES) < Byte.SIZE);
         final String actual = readAscii(nullable, input);
-        input.align(1);
+        assertTrue(input.align(Byte.BYTES) < Byte.SIZE);
         assertEquals(expected, actual);
     }
 
@@ -299,9 +300,9 @@ class ExtendedBitIoTest {
         final int expected = 0;
         final int size = current().nextInt(1, Integer.SIZE);
         writeVariableLengthQuantityInt(output, size, expected);
-        output.align(1);
+        assertTrue(output.align(Byte.BYTES) < Byte.SIZE);
         final int actual = readVariableLengthQuantityInt(input, size);
-        input.align(1);
+        assertTrue(input.align(Byte.BYTES) < Byte.SIZE);
         assertEquals(expected, actual);
     }
 
@@ -311,9 +312,9 @@ class ExtendedBitIoTest {
         final int expected = current().nextInt() >>> 1;
         final int size = current().nextInt(1, Integer.SIZE);
         writeVariableLengthQuantityInt(output, size, expected);
-        output.align(1);
+        assertTrue(output.align(Byte.BYTES) < Byte.SIZE);
         final int actual = readVariableLengthQuantityInt(input, size);
-        input.align(1);
+        assertTrue(input.align(Byte.BYTES) < Byte.SIZE);
         assertEquals(expected, actual);
     }
 
@@ -323,9 +324,9 @@ class ExtendedBitIoTest {
         final int expected = current().nextInt() >>> 1;
         final int size = current().nextInt(1, Integer.SIZE);
         writeVariableLengthQuantityInt(output, size, expected);
-        output.align(1);
+        assertTrue(output.align(Byte.BYTES) < Byte.SIZE);
         final int actual = readVariableLengthQuantityInt(input, size);
-        input.align(1);
+        assertTrue(input.align(Byte.BYTES) < Byte.SIZE);
         assertEquals(expected, actual);
     }
 
@@ -357,9 +358,9 @@ class ExtendedBitIoTest {
             });
             try {
                 writeVariableLengthQuantityInt(output, 7, k);
-                assertEquals(0L, output.align(1));
+                assertEquals(0L, output.align(Byte.BYTES));
                 final int actual = readVariableLengthQuantityInt(input, 7);
-                assertEquals(0L, input.align(1));
+                assertEquals(0L, input.align(Byte.BYTES));
                 assertEquals(k, actual);
                 assertArrayEquals(v, baos.toByteArray());
             } catch (final IOException ioe) {
@@ -375,9 +376,9 @@ class ExtendedBitIoTest {
         final long expected = 0L;
         final int size = current().nextInt(1, Long.SIZE);
         writeVariableLengthQuantityLong(output, size, expected);
-        output.align(1);
+        assertTrue(output.align(Byte.BYTES) < Byte.SIZE);
         final long actual = readVariableLengthQuantityLong(input, size);
-        input.align(1);
+        assertTrue(input.align(Byte.BYTES) < Byte.SIZE);
         assertEquals(expected, actual);
     }
 
@@ -387,9 +388,9 @@ class ExtendedBitIoTest {
         final long expected = Long.MAX_VALUE;
         final int size = current().nextInt(1, Long.SIZE);
         writeVariableLengthQuantityLong(output, size, expected);
-        output.align(1);
+        assertTrue(output.align(Byte.BYTES) < Byte.SIZE);
         final long actual = readVariableLengthQuantityLong(input, size);
-        input.align(1);
+        assertTrue(input.align(Byte.BYTES) < Byte.SIZE);
         assertEquals(expected, actual);
     }
 
@@ -399,9 +400,9 @@ class ExtendedBitIoTest {
         final long expected = current().nextLong() >>> 1;
         final int size = current().nextInt(1, Long.SIZE);
         writeVariableLengthQuantityLong(output, size, expected);
-        output.align(1);
+        assertTrue(output.align(Byte.BYTES) < Byte.SIZE);
         final long actual = readVariableLengthQuantityLong(input, size);
-        input.align(1);
+        assertTrue(input.align(Byte.BYTES) < Byte.SIZE);
         assertEquals(expected, actual);
     }
 
@@ -427,9 +428,9 @@ class ExtendedBitIoTest {
             }
         }
         writeObjects(nullable, output, new UserWriter(), expected);
-        output.align(1);
+        assertTrue(output.align(Byte.BYTES) < Byte.SIZE);
         final List<User> actual = readObjects(nullable, input, new UserReader());
-        input.align(1);
+        assertTrue(input.align(Byte.BYTES) < Byte.SIZE);
         assertEquals(expected, actual);
     }
 

@@ -34,11 +34,12 @@ public abstract class AbstractByteOutput<T> implements ByteOutput {
     /**
      * Creates a new instance with specified byte target.
      *
-     * @param target the underlying byte target; {@code null} if it is supposed to be lazily initialized and set.
+     * @param target the underlying byte target to which bytes are written; {@code null} if it is supposed to be lazily
+     *               initialized and set.
      */
     public AbstractByteOutput(final T target) {
         super();
-        this.setTarget(target);
+        this.target = target;
     }
     // -----------------------------------------------------------------------------------------------------------------
 
@@ -77,7 +78,7 @@ public abstract class AbstractByteOutput<T> implements ByteOutput {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * The target to which bytes are written.
+     * The byte target to which bytes are written.
      */
     private T target;
 }

@@ -21,13 +21,16 @@ package com.github.jinahya.bit.io;
  */
 
 import lombok.extern.slf4j.Slf4j;
+import org.jboss.weld.junit5.WeldJunit5Extension;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import java.io.IOException;
 
 import static java.util.Objects.requireNonNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * An abstract class for unit-testing subclasses of {@link ByteInput} interface.
@@ -36,6 +39,7 @@ import static java.util.Objects.requireNonNull;
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  * @see ByteOutputTest
  */
+@ExtendWith({WeldJunit5Extension.class})
 @Slf4j
 abstract class ByteInputTest<T extends ByteInput> {
 
@@ -54,13 +58,16 @@ abstract class ByteInputTest<T extends ByteInput> {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * Tests {@link ByteInput#read()} method.
+     * Tests {@link ByteInput#read()} method and asserts the result is between {@code 0} and {@code 255}, both
+     * inclusive.
      *
      * @throws IOException if an I/O error occurs.
      */
     @Test
     public void testRead() throws IOException {
         final int octet = byteInput().read();
+        assertTrue(octet >= 0);
+        assertTrue(octet <= 255);
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -71,6 +78,7 @@ abstract class ByteInputTest<T extends ByteInput> {
     protected T byteInput() {
         return byteInputInstance.select(byteInputClass).get();
     }
+
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
@@ -79,5 +87,5 @@ abstract class ByteInputTest<T extends ByteInput> {
     final Class<T> byteInputClass;
 
     @Inject
-    private Instance<ByteInput> byteInputInstance;
+    private transient Instance<ByteInput> byteInputInstance;
 }

@@ -20,10 +20,6 @@ package com.github.jinahya.bit.io;
  * #L%
  */
 
-import org.jboss.weld.junit5.WeldJunit5Extension;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
-
 import java.nio.ByteBuffer;
 
 /**
@@ -32,7 +28,6 @@ import java.nio.ByteBuffer;
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  * @see BufferByteInputTest
  */
-@ExtendWith({MockitoExtension.class, WeldJunit5Extension.class})
 class BufferByteOutputTest extends AbstractByteOutputTest<BufferByteOutput, ByteBuffer> {
 
     // -----------------------------------------------------------------------------------------------------------------

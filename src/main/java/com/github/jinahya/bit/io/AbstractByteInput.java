@@ -34,11 +34,12 @@ public abstract class AbstractByteInput<T> implements ByteInput {
     /**
      * Creates a new instance with specified byte source.
      *
-     * @param source the underlying byte source; {@code null} if it is intended to be lazily initialized and set.
+     * @param source the underlying byte source from which bytes are read; {@code null} if it is intended to be lazily
+     *               initialized and set.
      */
     public AbstractByteInput(final T source) {
         super();
-        this.setSource(source);
+        this.source = source;
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -77,5 +78,8 @@ public abstract class AbstractByteInput<T> implements ByteInput {
 
     // -----------------------------------------------------------------------------------------------------------------
 
+    /**
+     * The bytes source from which byte are read.
+     */
     private T source;
 }

@@ -21,7 +21,9 @@ package com.github.jinahya.bit.io;
  */
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import static java.util.Objects.requireNonNull;
 
@@ -32,6 +34,7 @@ import static java.util.Objects.requireNonNull;
  * @param <U> byte target type parameter.
  * @see AbstractByteInputTest
  */
+@ExtendWith({MockitoExtension.class})
 abstract class AbstractByteOutputTest<T extends AbstractByteOutput<U>, U> extends ByteOutputTest<T> {
 
     // -----------------------------------------------------------------------------------------------------------------

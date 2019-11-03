@@ -48,8 +48,8 @@ public interface BitOutput {
      * Writes a {@code byte} value of specified number of bits.
      *
      * @param unsigned a flag for indicating unsigned value; {@code true} for unsigned, {@code false} for signed.
-     * @param size     the number of bits for value; between {@code 1} and ({@value java.lang.Byte#SIZE} - (unsigned ? 1
-     *                 : 0)), both inclusive.
+     * @param size     the number of bits to write; between {@code 1} and ({@value java.lang.Byte#SIZE} - (unsigned ?
+     *                 {@code 1} : {@code 0})), both inclusive.
      * @param value    the value to write.
      * @throws IOException if an I/O error occurs.
      * @see BitInput#readByte(boolean, int)
@@ -62,8 +62,8 @@ public interface BitOutput {
      * Writes a {@code short} value of specified number of bits.
      *
      * @param unsigned a flag for indicating unsigned value; {@code true} for unsigned, {@code false} for signed.
-     * @param size     the number of bits for value; between {@code 1} and ({@value java.lang.Short#SIZE} - (unsigned ?
-     *                 1 : 0)), both inclusive.
+     * @param size     the number of bits to write; between {@code 1} and ({@value java.lang.Short#SIZE} - (unsigned ?
+     *                 {@code 1} : {@code 0})), both inclusive.
      * @param value    the value to write.
      * @throws IOException if an I/O error occurs.
      * @see BitInput#readShort(boolean, int)
@@ -73,11 +73,11 @@ public interface BitOutput {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * Writes an {@code int} value of specified number of bits. Only the lower number of specified bits are written.
+     * Writes an {@code int} value of specified number of bits.
      *
      * @param unsigned a flag for indicating unsigned value; {@code true} for unsigned, {@code false} for signed.
-     * @param size     the number of bits for value; between {@code 1} and ({@value java.lang.Integer#SIZE} - (unsigned
-     *                 ? 1 : 0)), both inclusive.
+     * @param size     the number of bits to write; between {@code 1} and ({@value java.lang.Integer#SIZE} - (unsigned ?
+     *                 {@code 1} : {@code 0})), both inclusive.
      * @param value    the value to write.
      * @throws IOException if an I/O error occurs.
      * @see BitInput#readInt(boolean, int)
@@ -87,11 +87,11 @@ public interface BitOutput {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * Writes a {@code long} value of specified number of bits. Only the lower number of specified bits are written.
+     * Writes a {@code long} value of specified number of bits.
      *
      * @param unsigned a flag for indicating unsigned value; {@code true} for unsigned, {@code false} for signed.
-     * @param size     the number of valid bits for value; between {@code 1} and ({@value java.lang.Long#SIZE} -
-     *                 (unsigned ? 1 : 0)), both inclusive.
+     * @param size     the number of bits to write; between {@code 1} and ({@value java.lang.Long#SIZE} - (unsigned ?
+     *                 {@code 1} : {@code 0})), both inclusive.
      * @param value    the value to write.
      * @throws IOException if an I/O error occurs.
      * @see BitInput#readLong(boolean, int)
@@ -103,7 +103,7 @@ public interface BitOutput {
     /**
      * Writes a {@code char} value of specified number of bits.
      *
-     * @param size  the number of bits for value; between {@code 1} and {@value java.lang.Character#SIZE}, both
+     * @param size  the number of bits to write; between {@code 1} and {@value java.lang.Character#SIZE}, both
      *              inclusive.
      * @param value the value to write
      * @throws IOException if an I/O error occurs.
@@ -118,7 +118,7 @@ public interface BitOutput {
      * Aligns to specified number of bytes by padding zero bits.
      *
      * @param bytes the number of bytes to align; must be positive.
-     * @return the number of zero bits padded while aligning.
+     * @return the number of bits padded while aligning.
      * @throws IOException if an I/O error occurs.
      * @see BitInput#align(int)
      */

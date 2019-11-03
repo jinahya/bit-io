@@ -21,7 +21,9 @@ package com.github.jinahya.bit.io;
  */
 
 import lombok.extern.slf4j.Slf4j;
+import org.jboss.weld.junit5.WeldJunit5Extension;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
@@ -37,6 +39,7 @@ import static java.util.concurrent.ThreadLocalRandom.current;
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  * @see ByteInputTest
  */
+@ExtendWith({WeldJunit5Extension.class})
 @Slf4j
 abstract class ByteOutputTest<T extends ByteOutput> {
 
@@ -67,5 +70,5 @@ abstract class ByteOutputTest<T extends ByteOutput> {
     final Class<T> byteOutputClass;
 
     @Inject
-    private Instance<ByteOutput> byteInputInstance;
+    private transient Instance<ByteOutput> byteInputInstance;
 }

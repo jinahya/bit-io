@@ -35,9 +35,18 @@ import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeUnsigne
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  * @see AbstractBitOutput
- * @see DefaultBitOutput
+ * @see DefaultBitInput
  */
 public abstract class AbstractBitInput implements BitInput {
+
+    // -----------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Creates a new instance.
+     */
+    public AbstractBitInput() {
+        super();
+    }
 
     // -----------------------------------------------------------------------------------------------------------------
 
@@ -200,14 +209,16 @@ public abstract class AbstractBitInput implements BitInput {
         if (bytes <= 0) {
             throw new IllegalArgumentException("bytes(" + bytes + ") <= 0");
         }
-        long bits = 0; // number of bits to be discarded
+        long bits = 0; // number of bits discarded
         if (available > 0) {
             bits += available;
             readInt(true, available);
         }
-        for (; count % bytes > 0; bits += Byte.SIZE) {
+        assert available == 0;
+        for (; count % bytes > 0L; bits += Byte.SIZE) {
             readInt(true, Byte.SIZE);
         }
+        assert count % bytes == 0L;
         return bits;
     }
 
@@ -217,6 +228,7 @@ public abstract class AbstractBitInput implements BitInput {
      * Returns the number bytes read so far.
      *
      * @return the number of bytes read so far.
+     * @see #read()
      */
     public long getCount() {
         return count;

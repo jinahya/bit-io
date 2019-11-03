@@ -357,9 +357,9 @@ class ExtendedBitIoTest {
             });
             try {
                 writeVariableLengthQuantityInt(output, 7, k);
-                output.align(1);
+                assertEquals(0L, output.align(1));
                 final int actual = readVariableLengthQuantityInt(input, 7);
-                input.align(1);
+                assertEquals(0L, input.align(1));
                 assertEquals(k, actual);
                 assertArrayEquals(v, baos.toByteArray());
             } catch (final IOException ioe) {

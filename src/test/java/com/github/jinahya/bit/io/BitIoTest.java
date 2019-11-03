@@ -39,6 +39,7 @@ import static com.github.jinahya.bit.io.BitIoTests.randomValueForLong;
 import static com.github.jinahya.bit.io.BitIoTests.randomValueForShort;
 import static java.util.concurrent.ThreadLocalRandom.current;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * A class for unit-testing {@link ExtendedBitInput} class and {@link ExtendedBitOutput} class.
@@ -132,9 +133,9 @@ class BitIoTest {
         final int size = randomSizeForChar();
         final char expected = randomValueForChar(size);
         output.writeChar(size, expected);
-        output.align(1);
+        assertTrue(output.align(Byte.BYTES) < Byte.SIZE);
         final char actual = input.readChar(size);
-        input.align(1);
+        assertTrue(input.align(Byte.BYTES) < Byte.SIZE);
         assertEquals(expected, actual);
     }
 }

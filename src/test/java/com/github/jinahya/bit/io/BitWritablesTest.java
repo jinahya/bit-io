@@ -20,24 +20,23 @@ package com.github.jinahya.bit.io;
  * #L%
  */
 
-import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeLong;
+import org.junit.jupiter.api.Test;
 
-final class BitIoUtils {
+import java.io.IOException;
 
-    // -----------------------------------------------------------------------------------------------------------------
-    public static long reverse(final int size, long value) {
-        requireValidSizeLong(true, size);
-        long result = 0L;
-        for (int i = 0; i < size; i++) {
-            result <<= 1;
-            result |= value & 0x01;
-            value >>= 1;
-        }
-        return result;
-    }
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
+
+class BitWritablesTest {
 
     // -----------------------------------------------------------------------------------------------------------------
-    private BitIoUtils() {
-        super();
+    @Test
+    void testCachedBitWriterFor() throws IOException {
+        final BitWriter<User> expected = BitWritables.cachedBitWriterFor(User.class);
+        assertNotNull(expected);
+        final BitWriter<User> actual = BitWritables.cachedBitWriterFor(User.class);
+        assertNotNull(actual);
+        assertSame(expected, actual);
+        actual.write(new DefaultBitOutput(new StreamByteOutput(new BlackOutputStream())), new User());
     }
 }

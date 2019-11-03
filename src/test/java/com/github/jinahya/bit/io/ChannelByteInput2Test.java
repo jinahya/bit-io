@@ -20,24 +20,24 @@ package com.github.jinahya.bit.io;
  * #L%
  */
 
-import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeLong;
+import org.junit.jupiter.api.Test;
 
-final class BitIoUtils {
+import java.io.IOException;
+import java.nio.channels.ReadableByteChannel;
+
+class ChannelByteInput2Test extends AbstractByteInputTest<ChannelByteInput2, ReadableByteChannel> {
 
     // -----------------------------------------------------------------------------------------------------------------
-    public static long reverse(final int size, long value) {
-        requireValidSizeLong(true, size);
-        long result = 0L;
-        for (int i = 0; i < size; i++) {
-            result <<= 1;
-            result |= value & 0x01;
-            value >>= 1;
-        }
-        return result;
+    ChannelByteInput2Test() {
+        super(ChannelByteInput2.class, ReadableByteChannel.class);
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    private BitIoUtils() {
-        super();
+    @Test
+    void testOf() throws IOException {
+        final ByteInput byteInput = ChannelByteInput2.of(new WhiteByteChannel());
+        for (int i = 0; i < 1024; i++) {
+            byteInput.read();
+        }
     }
 }

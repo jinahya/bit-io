@@ -146,6 +146,13 @@ public abstract class AbstractBitOutput implements BitOutput {
     @Override
     public void writeInt(final boolean unsigned, final int size, final int value) throws IOException {
         requireValidSizeInt(unsigned, size);
+//        if (!unsigned) {
+//            writeInt(true, 1, value < 0 ? 1 : 0);
+//            if (size > 1) {
+//                writeInt(true, size - 1, value);
+//            }
+//            return;
+//        }
         final int quotient = size / Short.SIZE;
         final int remainder = size % Short.SIZE;
         if (remainder > 0) {

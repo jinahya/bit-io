@@ -147,8 +147,9 @@ public abstract class AbstractBitInput implements BitInput {
     @Override
     public int readInt(final boolean unsigned, final int size) throws IOException {
         requireValidSizeInt(unsigned, size);
+        int value = 0;
         if (!unsigned) {
-            int value = 0 - readInt(true, 1);
+            value -= readInt(true, 1);
             final int usize = size - 1;
             if (usize > 0) {
                 value <<= usize;
@@ -156,7 +157,6 @@ public abstract class AbstractBitInput implements BitInput {
             }
             return value;
         }
-        int value = 0x00;
         final int quotient = size / Short.SIZE;
         for (int i = 0; i < quotient; i++) {
             value <<= Short.SIZE;
@@ -174,8 +174,9 @@ public abstract class AbstractBitInput implements BitInput {
     @Override
     public long readLong(final boolean unsigned, final int size) throws IOException {
         requireValidSizeLong(unsigned, size);
+        long value = 0L;
         if (!unsigned) {
-            long value = 0L - readLong(true, 1);
+            value -= readLong(true, 1);
             final int usize = size - 1;
             if (usize > 0) {
                 value <<= usize;
@@ -183,7 +184,6 @@ public abstract class AbstractBitInput implements BitInput {
             }
             return value;
         }
-        long value = 0x00L;
         final int quotient = size / Integer.SIZE;
         for (int i = 0; i < quotient; i++) {
             value <<= Integer.SIZE;

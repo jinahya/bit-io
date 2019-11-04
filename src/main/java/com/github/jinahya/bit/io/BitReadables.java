@@ -37,7 +37,7 @@ final class BitReadables {
         BIT_READERS = synchronizedMap(new WeakHashMap<Class<?>, BitReader<?>>());
     }
 
-    public static <T extends BitReadable> BitReader<T> cachedBitReaderFor(final Class<? extends T> type) {
+    public static <T extends BitReadable> BitReader<T> cachedBitReaderFor(final Class<T> type) {
         if (type == null) {
             throw new NullPointerException("type is null");
         }
@@ -61,7 +61,7 @@ final class BitReadables {
      * @param <T>  bit readable type parameter
      * @return a new bit reader.
      */
-    public static <T extends BitReadable> BitReader<T> newBitReaderFor(final Class<? extends T> type) {
+    public static <T extends BitReadable> BitReader<T> newBitReaderFor(final Class<T> type) {
         if (type == null) {
             throw new NullPointerException("type is null");
         }
@@ -93,5 +93,6 @@ final class BitReadables {
 
     // -----------------------------------------------------------------------------------------------------------------
     private BitReadables() {
+        super();
     }
 }

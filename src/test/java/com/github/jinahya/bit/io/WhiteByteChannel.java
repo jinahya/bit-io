@@ -24,6 +24,8 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.ReadableByteChannel;
 
+import static java.util.concurrent.ThreadLocalRandom.current;
+
 /**
  * A readable byte channel whose {@link ReadableByteChannel#read(ByteBuffer)} method just fully fills up given buffer.
  *
@@ -35,8 +37,10 @@ class WhiteByteChannel implements ReadableByteChannel {
     // -----------------------------------------------------------------------------------------------------------------
     @Override
     public int read(final ByteBuffer dst) throws IOException {
-        final int r = dst.remaining();
-        dst.position(dst.limit());
+        int r;
+        for (r = 0; dst.hasRemaining(); r++) {
+            dst.put((byte) current().nextInt());
+        }
         return r;
     }
 

@@ -111,8 +111,8 @@ class BitIoTest {
     // ------------------------------------------------------------------------------------------------------------ long
     @MethodSource({"com.github.jinahya.bit.io.ByteIoSource#sourceByteIo"})
     @ParameterizedTest
-    void testSignedLong(@ConvertWith(BitOutputConverter.class) final BitOutput output,
-                        @ConvertWith(BitInputConverter.class) final BitInput input)
+    void testLong(@ConvertWith(BitOutputConverter.class) final BitOutput output,
+                  @ConvertWith(BitInputConverter.class) final BitInput input)
             throws IOException {
         final boolean unsigned = current().nextBoolean();
         final int size = randomSizeForLong(unsigned);

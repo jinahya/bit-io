@@ -146,13 +146,14 @@ public abstract class AbstractBitOutput implements BitOutput {
     @Override
     public void writeInt(final boolean unsigned, final int size, final int value) throws IOException {
         requireValidSizeInt(unsigned, size);
-//        if (!unsigned) {
-//            writeInt(true, 1, value < 0 ? 1 : 0);
-//            if (size > 1) {
-//                writeInt(true, size - 1, value);
-//            }
-//            return;
-//        }
+        if (!unsigned) {
+            writeInt(true, 1, value < 0 ? 1 : 0);
+            final int usize = size - 1;
+            if (usize > 0) {
+                writeInt(true, usize, value);
+            }
+            return;
+        }
         final int quotient = size / Short.SIZE;
         final int remainder = size % Short.SIZE;
         if (remainder > 0) {
@@ -167,10 +168,18 @@ public abstract class AbstractBitOutput implements BitOutput {
     @Override
     public void writeLong(final boolean unsigned, final int size, final long value) throws IOException {
         requireValidSizeLong(unsigned, size);
+        if (!unsigned) {
+            writeLong(true, 1, value < 0L ? 1L : 0L);
+            final int usize = size - 1;
+            if (usize > 0) {
+                writeLong(true, usize, value);
+            }
+            return;
+        }
         final int quotient = size / Integer.SIZE;
         final int remainder = size % Integer.SIZE;
         if (remainder > 0) {
-            writeInt(false, remainder, (int) (value >> (quotient * Integer.SIZE)));
+            writeInt(true, remainder, (int) (value >> (quotient * Integer.SIZE)));
         }
         for (int i = Integer.SIZE * (quotient - 1); i >= 0; i -= Integer.SIZE) {
             writeInt(false, Integer.SIZE, (int) (value >> i));

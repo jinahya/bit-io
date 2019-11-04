@@ -31,17 +31,6 @@ import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeLong;
 final class BitIoUtils {
 
     // -----------------------------------------------------------------------------------------------------------------
-    private static int reverseInt_(final int size, int value) {
-        requireValidSizeInt(false, size);
-        int result = 0;
-        for (int i = 0; i < size; i++) {
-            result <<= 1;
-            result |= value & 1;
-            value >>= 1;
-        }
-        return result;
-    }
-
     public static int reverseInt(final int size, int value) {
         requireValidSizeInt(false, size);
         if (value == 0) {

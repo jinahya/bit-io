@@ -176,13 +176,14 @@ public abstract class AbstractBitOutput implements BitOutput {
             }
             return;
         }
-        final int quotient = size / Integer.SIZE;
-        final int remainder = size % Integer.SIZE;
+        final int divisor = Integer.SIZE - 1;
+        final int quotient = size / divisor;
+        final int remainder = size % divisor;
         if (remainder > 0) {
-            writeInt(true, remainder, (int) (value >> (quotient * Integer.SIZE)));
+            writeInt(true, remainder, (int) (value >> (quotient * divisor)));
         }
-        for (int i = Integer.SIZE * (quotient - 1); i >= 0; i -= Integer.SIZE) {
-            writeInt(false, Integer.SIZE, (int) (value >> i));
+        for (int i = divisor * (quotient - 1); i >= 0; i -= divisor) {
+            writeInt(true, divisor, (int) (value >> i));
         }
     }
 
@@ -209,7 +210,7 @@ public abstract class AbstractBitOutput implements BitOutput {
         return bits;
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+    // ----------------------------------------------------------------------------------------------------------- count
 
     /**
      * Returns the number of bytes written so far.

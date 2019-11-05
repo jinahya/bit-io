@@ -184,12 +184,13 @@ public abstract class AbstractBitInput implements BitInput {
             }
             return value;
         }
-        final int quotient = size / Integer.SIZE;
+        final int divisor = Integer.SIZE - 1;
+        final int quotient = size / divisor;
         for (int i = 0; i < quotient; i++) {
-            value <<= Integer.SIZE;
-            value |= readInt(false, Integer.SIZE) & 0xFFFFFFFFL;
+            value <<= divisor;
+            value |= readInt(true, divisor);
         }
-        final int remainder = size % Integer.SIZE;
+        final int remainder = size % divisor;
         if (remainder > 0) {
             value <<= remainder;
             value |= readInt(true, remainder);
@@ -220,7 +221,7 @@ public abstract class AbstractBitInput implements BitInput {
         return bits;
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+    // ----------------------------------------------------------------------------------------------------------- count
 
     /**
      * Returns the number bytes read so far.

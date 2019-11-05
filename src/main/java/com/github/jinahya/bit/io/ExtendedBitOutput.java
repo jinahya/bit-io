@@ -35,6 +35,11 @@ import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeLong;
 class ExtendedBitOutput {
 
     // -----------------------------------------------------------------------------------------------------------------
+    public static final int MAX_SIZE_UTF8 = 36;
+
+    public static final long MAX_VALUE_UTF8 = -1L >>> (Long.SIZE - MAX_SIZE_UTF8);
+
+    // -----------------------------------------------------------------------------------------------------------------
 
     /**
      * Writes a {@code 1}-bit {@code boolean} value representing the nullability of specified value to specified bit
@@ -393,6 +398,32 @@ class ExtendedBitOutput {
         writeLengthInt(output, value.size());
         for (final T v : value) {
             writeObject(true, output, writer, v);
+        }
+    }
+
+    // ------------------------------------------------------------------------------------------------------------ utf8
+    public static void writeUtf8(final BitOutput output, final long value) throws IOException {
+        if (output == null) {
+            throw new NullPointerException("output is null");
+        }
+        if (value < 0L) {
+            throw new IllegalArgumentException("value(" + value + ") < 0L");
+        }
+        if (value > MAX_VALUE_UTF8) {
+            throw new IllegalArgumentException("value(" + value + ") > " + MAX_VALUE_UTF8);
+        }
+        if (value <= 0x7FL) {
+            output.writeInt(true, Byte.SIZE, (int) value);
+            return;
+        }
+        final int size = Long.SIZE - Long.numberOfLeadingZeros(value);
+        int bytes = size / 6;
+        if ((size % 6) > (6 - bytes)) {
+            bytes++;
+        }
+        output.writeInt(true, 8, (int) ((0xFE << (6 - bytes)) | (value >> (bytes * 6))));
+        for (int i = (bytes - 1) * 6; i >= 0; i -= 6) {
+            output.writeInt(true, 8, (int) (0x80 | ((value >> i) & 0x3F)));
         }
     }
 

@@ -411,6 +411,24 @@ class ExtendedBitInput {
         return value;
     }
 
+    // ------------------------------------------------------------------------------------------------------------ utf8
+    static long readUtf8(final BitInput input) throws IOException {
+        if (input == null) {
+            throw new NullPointerException("input is null");
+        }
+        long value = input.readInt(true, Byte.SIZE);
+        if (value <= 0x7FL) { // 0b01111111L
+            return value;
+        }
+        final int bytes = Integer.numberOfLeadingZeros(~((byte) value)) - 24;
+        value &= (0x7FL >> bytes);
+        for (int i = 1; i < bytes; i++) {
+            value <<= 6;
+            value |= input.readInt(true, 8) & 0x3F;
+        }
+        return value;
+    }
+
     // -----------------------------------------------------------------------------------------------------------------
 
     /**

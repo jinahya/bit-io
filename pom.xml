@@ -47,6 +47,7 @@
     <maven.compiler.testTarget>${maven.compiler.testSource}</maven.compiler.testTarget>
     <project.build.outputDirectory.retrotranslated13>${project.build.directory}/classes-retrotranslated13</project.build.outputDirectory.retrotranslated13>
     <project.build.outputDirectory.retrotranslated14>${project.build.directory}/classes-retrotranslated14</project.build.outputDirectory.retrotranslated14>
+    <version.maven-failsafe>${version.maven-surefire}</version.maven-failsafe>
     <version.maven-javadoc-plugin>3.1.0</version.maven-javadoc-plugin>
     <version.maven-surefire>2.22.2</version.maven-surefire>
     <version.org.junit.jupiter>5.5.2</version.org.junit.jupiter>
@@ -273,6 +274,19 @@
             <arg>-Xlint</arg>
           </compilerArgs>
         </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-failsafe-plugin</artifactId>
+        <version>${version.maven-failsafe}</version>
+        <executions>
+          <execution>
+            <goals>
+              <!--              <goal>integration-test</goal>-->
+              <!--              <goal>verify</goal>-->
+            </goals>
+          </execution>
+        </executions>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>

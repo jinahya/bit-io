@@ -136,10 +136,31 @@ public abstract class AbstractBitOutput implements BitOutput {
         writeInt(unsigned, requireValidSizeByte(unsigned, size), value);
     }
 
+    @Override
+    public void writeByte8(final byte value) throws IOException {
+        writeByte(false, Byte.SIZE, value);
+    }
+
     // ----------------------------------------------------------------------------------------------------------- short
     @Override
     public void writeShort(final boolean unsigned, final int size, final short value) throws IOException {
         writeInt(unsigned, requireValidSizeShort(unsigned, size), value);
+    }
+
+    @Override
+    public void writeShort16(final short value) throws IOException {
+        writeShort(false, Short.SIZE, value);
+    }
+
+    @Override
+    public void writeShort16Le(short be) throws IOException {
+        int le = 0;
+        for (int i = 0; i < Short.BYTES; i++) {
+            le <<= Byte.SIZE;
+            le |= (be & 0xFF);
+            be >>= Byte.SIZE;
+        }
+        writeShort16((short) le);
     }
 
     // ------------------------------------------------------------------------------------------------------------- int
@@ -164,6 +185,22 @@ public abstract class AbstractBitOutput implements BitOutput {
         }
     }
 
+    @Override
+    public void writeInt32(final int value) throws IOException {
+        writeInt(false, Integer.SIZE, value);
+    }
+
+    @Override
+    public void writeInt32Le(int be) throws IOException {
+        int le = 0;
+        for (int i = 0; i < Integer.BYTES; i++) {
+            le <<= Byte.SIZE;
+            le |= (be & 0xFF);
+            be >>= Byte.SIZE;
+        }
+        writeInt32(le);
+    }
+
     // ------------------------------------------------------------------------------------------------------------ long
     @Override
     public void writeLong(final boolean unsigned, final int size, final long value) throws IOException {
@@ -185,6 +222,17 @@ public abstract class AbstractBitOutput implements BitOutput {
         for (int i = divisor * (quotient - 1); i >= 0; i -= divisor) {
             writeInt(true, divisor, (int) (value >> i));
         }
+    }
+
+    @Override
+    public void writeLong64(final long value) throws IOException {
+        writeLong(false, Long.SIZE, value);
+    }
+
+    @Override
+    public void writeLong64Le(final long value) throws IOException {
+        writeInt32Le((int) value);
+        writeInt32Le((int) (value >> Integer.SIZE));
     }
 
     // ------------------------------------------------------------------------------------------------------------ char

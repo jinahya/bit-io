@@ -67,7 +67,8 @@ class BitIoTest {
     @MethodSource({"com.github.jinahya.bit.io.ByteIoSource#sourceByteIo"})
     @ParameterizedTest
     void testByte(@ConvertWith(BitOutputConverter.class) final BitOutput output,
-                  @ConvertWith(BitInputConverter.class) final BitInput input) throws IOException {
+                  @ConvertWith(BitInputConverter.class) final BitInput input)
+            throws IOException {
         final boolean unsigned = current().nextBoolean();
         final int size = randomSizeForByte(unsigned);
         final byte expected = randomValueForByte(unsigned, size);
@@ -78,11 +79,25 @@ class BitIoTest {
         assertEquals(expected, actual);
     }
 
+    @MethodSource({"com.github.jinahya.bit.io.ByteIoSource#sourceByteIo"})
+    @ParameterizedTest
+    void testByte8(@ConvertWith(BitOutputConverter.class) final BitOutput output,
+                   @ConvertWith(BitInputConverter.class) final BitInput input)
+            throws IOException {
+        final byte expected = (byte) current().nextInt();
+        output.writeByte8(expected);
+        assertEquals(0L, output.align(1));
+        final byte actual = input.readByte8();
+        assertEquals(0L, input.align(1));
+        assertEquals(expected, actual);
+    }
+
     // ----------------------------------------------------------------------------------------------------------- short
     @MethodSource({"com.github.jinahya.bit.io.ByteIoSource#sourceByteIo"})
     @ParameterizedTest
     void testShort(@ConvertWith(BitOutputConverter.class) final BitOutput output,
-                   @ConvertWith(BitInputConverter.class) final BitInput input) throws IOException {
+                   @ConvertWith(BitInputConverter.class) final BitInput input)
+            throws IOException {
         final boolean unsigned = current().nextBoolean();
         final int size = randomSizeForShort(unsigned);
         final short expected = randomValueForShort(unsigned, size);
@@ -93,11 +108,38 @@ class BitIoTest {
         assertEquals(expected, actual);
     }
 
+    @MethodSource({"com.github.jinahya.bit.io.ByteIoSource#sourceByteIo"})
+    @ParameterizedTest
+    void testShort16(@ConvertWith(BitOutputConverter.class) final BitOutput output,
+                     @ConvertWith(BitInputConverter.class) final BitInput input)
+            throws IOException {
+        final short expected = (short) current().nextInt();
+        output.writeShort16(expected);
+        assertEquals(0L, output.align(1));
+        final short actual = input.readShort16();
+        assertEquals(0L, input.align(1));
+        assertEquals(expected, actual);
+    }
+
+    @MethodSource({"com.github.jinahya.bit.io.ByteIoSource#sourceByteIo"})
+    @ParameterizedTest
+    void testShort16Le(@ConvertWith(BitOutputConverter.class) final BitOutput output,
+                       @ConvertWith(BitInputConverter.class) final BitInput input)
+            throws IOException {
+        final short expected = (short) current().nextInt();
+        output.writeShort16Le(expected);
+        assertEquals(0L, output.align(1));
+        final short actual = input.readShort16Le();
+        assertEquals(0L, input.align(1));
+        assertEquals(expected, actual);
+    }
+
     // ------------------------------------------------------------------------------------------------------------- int
     @MethodSource({"com.github.jinahya.bit.io.ByteIoSource#sourceByteIo"})
     @ParameterizedTest
     void testInt(@ConvertWith(BitOutputConverter.class) final BitOutput output,
-                 @ConvertWith(BitInputConverter.class) final BitInput input) throws IOException {
+                 @ConvertWith(BitInputConverter.class) final BitInput input)
+            throws IOException {
         final boolean unsigned = current().nextBoolean();
         final int size = randomSizeForInt(unsigned);
         final int expected = randomValueForInt(unsigned, size);
@@ -105,6 +147,32 @@ class BitIoTest {
         output.align(1);
         final int actual = input.readInt(unsigned, size);
         input.align(1);
+        assertEquals(expected, actual);
+    }
+
+    @MethodSource({"com.github.jinahya.bit.io.ByteIoSource#sourceByteIo"})
+    @ParameterizedTest
+    void testInt32(@ConvertWith(BitOutputConverter.class) final BitOutput output,
+                   @ConvertWith(BitInputConverter.class) final BitInput input)
+            throws IOException {
+        final int expected = current().nextInt();
+        output.writeInt32(expected);
+        assertEquals(0L, output.align(1));
+        final int actual = input.readInt32();
+        assertEquals(0L, input.align(1));
+        assertEquals(expected, actual);
+    }
+
+    @MethodSource({"com.github.jinahya.bit.io.ByteIoSource#sourceByteIo"})
+    @ParameterizedTest
+    void testInt32Le(@ConvertWith(BitOutputConverter.class) final BitOutput output,
+                     @ConvertWith(BitInputConverter.class) final BitInput input)
+            throws IOException {
+        final int expected = current().nextInt();
+        output.writeInt32Le(expected);
+        assertEquals(0L, output.align(1));
+        final int actual = input.readInt32Le();
+        assertEquals(0L, input.align(1));
         assertEquals(expected, actual);
     }
 
@@ -121,6 +189,32 @@ class BitIoTest {
         output.align(1);
         final long actual = input.readLong(unsigned, size);
         input.align(1);
+        assertEquals(expected, actual);
+    }
+
+    @MethodSource({"com.github.jinahya.bit.io.ByteIoSource#sourceByteIo"})
+    @ParameterizedTest
+    void testLong64(@ConvertWith(BitOutputConverter.class) final BitOutput output,
+                    @ConvertWith(BitInputConverter.class) final BitInput input)
+            throws IOException {
+        final long expected = current().nextLong();
+        output.writeLong64(expected);
+        assertEquals(0L, output.align(1));
+        final long actual = input.readLong64();
+        assertEquals(0L, input.align(1));
+        assertEquals(expected, actual);
+    }
+
+    @MethodSource({"com.github.jinahya.bit.io.ByteIoSource#sourceByteIo"})
+    @ParameterizedTest
+    void testLong64Le(@ConvertWith(BitOutputConverter.class) final BitOutput output,
+                      @ConvertWith(BitInputConverter.class) final BitInput input)
+            throws IOException {
+        final long expected = current().nextLong();
+        output.writeLong64Le(expected);
+        assertEquals(0L, output.align(1));
+        final long actual = input.readLong64Le();
+        assertEquals(0L, input.align(1));
         assertEquals(expected, actual);
     }
 

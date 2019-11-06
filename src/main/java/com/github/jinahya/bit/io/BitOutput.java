@@ -56,6 +56,8 @@ public interface BitOutput {
      */
     void writeByte(boolean unsigned, int size, byte value) throws IOException;
 
+    void writeByte8(byte value) throws IOException;
+
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
@@ -69,6 +71,10 @@ public interface BitOutput {
      * @see BitInput#readShort(boolean, int)
      */
     void writeShort(boolean unsigned, int size, short value) throws IOException;
+
+    void writeShort16(short value) throws IOException;
+
+    void writeShort16Le(short value) throws IOException;
 
     // -----------------------------------------------------------------------------------------------------------------
 
@@ -84,6 +90,10 @@ public interface BitOutput {
      */
     void writeInt(boolean unsigned, int size, int value) throws IOException;
 
+    void writeInt32(int value) throws IOException;
+
+    void writeInt32Le(int value) throws IOException;
+
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
@@ -97,6 +107,10 @@ public interface BitOutput {
      * @see BitInput#readLong(boolean, int)
      */
     void writeLong(boolean unsigned, int size, long value) throws IOException;
+
+    void writeLong64(long value) throws IOException;
+
+    void writeLong64Le(long value) throws IOException;
 
     // -----------------------------------------------------------------------------------------------------------------
 

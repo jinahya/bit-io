@@ -137,10 +137,32 @@ public abstract class AbstractBitInput implements BitInput {
         return (byte) readInt(unsigned, requireValidSizeByte(unsigned, size));
     }
 
+    @Override
+    public byte readByte8() throws IOException {
+        return readByte(false, Byte.SIZE);
+    }
+
     // ----------------------------------------------------------------------------------------------------------- short
     @Override
     public short readShort(final boolean unsigned, final int size) throws IOException {
         return (short) readInt(unsigned, requireValidSizeShort(unsigned, size));
+    }
+
+    @Override
+    public short readShort16() throws IOException {
+        return readShort(false, Short.SIZE);
+    }
+
+    @Override
+    public short readShort16Le() throws IOException {
+        int b = readShort16();
+        int l = 0;
+        for (int i = 0; i < Short.BYTES; i++) {
+            l <<= Byte.SIZE;
+            l |= (b & 0xFF);
+            b >>= Byte.SIZE;
+        }
+        return (short) l;
     }
 
     // ------------------------------------------------------------------------------------------------------------- int
@@ -170,6 +192,23 @@ public abstract class AbstractBitInput implements BitInput {
         return value;
     }
 
+    @Override
+    public int readInt32() throws IOException {
+        return readInt(false, Integer.SIZE);
+    }
+
+    @Override
+    public int readInt32Le() throws IOException {
+        int b = readInt32();
+        int l = 0;
+        for (int i = 0; i < Integer.BYTES; i++) {
+            l <<= Byte.SIZE;
+            l |= (b & 0xFF);
+            b >>= Byte.SIZE;
+        }
+        return l;
+    }
+
     // ------------------------------------------------------------------------------------------------------------ long
     @Override
     public long readLong(final boolean unsigned, final int size) throws IOException {
@@ -196,6 +235,17 @@ public abstract class AbstractBitInput implements BitInput {
             value |= readInt(true, remainder);
         }
         return value;
+    }
+
+    @Override
+    public long readLong64() throws IOException {
+        return readLong(false, Long.SIZE);
+    }
+
+    @Override
+    public long readLong64Le() throws IOException {
+//        return (((long) readInt32Le()) << Integer.SIZE) | (((long) readInt32Le()) & 0xFFFFFFFFL);
+        return ((((long) readInt32Le()) & 0xFFFFFFFFL) | (((long) readInt32Le()) << Integer.SIZE));
     }
 
     // ------------------------------------------------------------------------------------------------------------ char

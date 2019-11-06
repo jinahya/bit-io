@@ -56,6 +56,8 @@ public interface BitInput {
      */
     byte readByte(boolean unsigned, int size) throws IOException;
 
+    byte readByte8() throws IOException;
+
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
@@ -69,6 +71,10 @@ public interface BitInput {
      * @see BitOutput#writeShort(boolean, int, short)
      */
     short readShort(boolean unsigned, int size) throws IOException;
+
+    short readShort16() throws IOException;
+
+    short readShort16Le() throws IOException;
 
     // -----------------------------------------------------------------------------------------------------------------
 
@@ -84,6 +90,10 @@ public interface BitInput {
      */
     int readInt(boolean unsigned, int size) throws IOException;
 
+    int readInt32() throws IOException;
+
+    int readInt32Le() throws IOException;
+
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
@@ -97,6 +107,10 @@ public interface BitInput {
      * @see BitOutput#writeLong(boolean, int, long)
      */
     long readLong(boolean unsigned, int size) throws IOException;
+
+    long readLong64() throws IOException;
+
+    long readLong64Le() throws IOException;
 
     // -----------------------------------------------------------------------------------------------------------------
 

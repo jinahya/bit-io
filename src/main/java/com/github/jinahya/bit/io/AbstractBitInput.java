@@ -155,14 +155,14 @@ public abstract class AbstractBitInput implements BitInput {
 
     @Override
     public short readShort16Le() throws IOException {
-        int b = readShort16();
-        int l = 0;
+        int be = readShort16();
+        int le = 0;
         for (int i = 0; i < Short.BYTES; i++) {
-            l <<= Byte.SIZE;
-            l |= (b & 0xFF);
-            b >>= Byte.SIZE;
+            le <<= Byte.SIZE;
+            le |= (be & 0xFF);
+            be >>= Byte.SIZE;
         }
-        return (short) l;
+        return (short) le;
     }
 
     // ------------------------------------------------------------------------------------------------------------- int
@@ -199,14 +199,14 @@ public abstract class AbstractBitInput implements BitInput {
 
     @Override
     public int readInt32Le() throws IOException {
-        int b = readInt32();
-        int l = 0;
+        int be = readInt32();
+        int le = 0;
         for (int i = 0; i < Integer.BYTES; i++) {
-            l <<= Byte.SIZE;
-            l |= (b & 0xFF);
-            b >>= Byte.SIZE;
+            le <<= Byte.SIZE;
+            le |= (be & 0xFF);
+            be >>= Byte.SIZE;
         }
-        return l;
+        return le;
     }
 
     // ------------------------------------------------------------------------------------------------------------ long

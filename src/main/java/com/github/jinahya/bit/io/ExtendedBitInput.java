@@ -203,11 +203,11 @@ class ExtendedBitInput {
         if (nullable && readBooleanIsNextNull(input)) {
             return null;
         }
-        final byte[] bytes = new byte[readLengthInt(input)];
-        for (int i = 0; i < bytes.length; i++) {
-            bytes[i] = input.readByte(unsigned, size);
+        final byte[] value = new byte[readLengthInt(input)];
+        for (int i = 0; i < value.length; i++) {
+            value[i] = input.readByte(unsigned, size);
         }
-        return bytes;
+        return value;
     }
 
     // -----------------------------------------------------------------------------------------------------------------

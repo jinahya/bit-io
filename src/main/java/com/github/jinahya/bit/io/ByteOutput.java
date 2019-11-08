@@ -33,7 +33,7 @@ public interface ByteOutput {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * Writes given unsigned 8-bit value.
+     * Writes given unsigned {@value java.lang.Byte#SIZE}-bit value.
      *
      * @param value the value to write between {@code 0} and {@code 255}, both inclusive.
      * @throws IOException if an I/O error occurs.

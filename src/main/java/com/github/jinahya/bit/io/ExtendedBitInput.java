@@ -25,10 +25,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import static com.github.jinahya.bit.io.BitIoConstants.MAX_EXPONENT_BYTE;
-import static com.github.jinahya.bit.io.BitIoConstants.MAX_EXPONENT_INTEGER;
-import static com.github.jinahya.bit.io.BitIoConstants.MAX_EXPONENT_LONG;
-import static com.github.jinahya.bit.io.BitIoConstants.MAX_EXPONENT_SHORT;
+import static com.github.jinahya.bit.io.BitIoConstants.SIZE_EXPONENT_BYTE;
+import static com.github.jinahya.bit.io.BitIoConstants.SIZE_EXPONENT_INTEGER;
+import static com.github.jinahya.bit.io.BitIoConstants.SIZE_EXPONENT_LONG;
+import static com.github.jinahya.bit.io.BitIoConstants.SIZE_EXPONENT_SHORT;
 import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeByte;
 import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeInt;
 import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeLong;
@@ -92,7 +92,7 @@ class ExtendedBitInput {
             throw new NullPointerException("input is null");
         }
         final boolean extended = input.readBoolean();
-        final int size = input.readInt(true, MAX_EXPONENT_BYTE);
+        final int size = input.readInt(true, SIZE_EXPONENT_BYTE);
         if (!extended) {
             return (byte) size;
         }
@@ -104,7 +104,7 @@ class ExtendedBitInput {
             throw new NullPointerException("input is null");
         }
         final boolean extended = input.readBoolean();
-        final int size = input.readInt(true, MAX_EXPONENT_SHORT);
+        final int size = input.readInt(true, SIZE_EXPONENT_SHORT);
         if (!extended) {
             return (short) size;
         }
@@ -135,7 +135,7 @@ class ExtendedBitInput {
             throw new NullPointerException("input is null");
         }
         final boolean extended = input.readBoolean();
-        final int size = input.readInt(true, MAX_EXPONENT_INTEGER);
+        final int size = input.readInt(true, SIZE_EXPONENT_INTEGER);
         if (!extended) {
             return size;
         }
@@ -166,7 +166,7 @@ class ExtendedBitInput {
             throw new NullPointerException("input is null");
         }
         final boolean extended = input.readBoolean();
-        final int size = input.readInt(true, MAX_EXPONENT_LONG);
+        final int size = input.readInt(true, SIZE_EXPONENT_LONG);
         if (!extended) {
             return size;
         }

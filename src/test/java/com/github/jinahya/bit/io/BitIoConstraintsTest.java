@@ -23,9 +23,9 @@ package com.github.jinahya.bit.io;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 
+import static com.github.jinahya.bit.io.BitIoConstants.MIN_SIZE;
 import static com.github.jinahya.bit.io.BitIoConstraints.MAX_EXPONENT;
 import static com.github.jinahya.bit.io.BitIoConstraints.MIN_EXPONENT;
-import static com.github.jinahya.bit.io.BitIoConstraints.MIN_SIZE;
 import static com.github.jinahya.bit.io.BitIoConstraints.maxSize;
 import static com.github.jinahya.bit.io.BitIoConstraints.requireValidExponent;
 import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSize;

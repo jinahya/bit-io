@@ -155,14 +155,11 @@ public abstract class AbstractBitInput implements BitInput {
 
     @Override
     public short readShort16Le() throws IOException {
-        int be = readShort16();
-        int le = 0;
+        int value = 0;
         for (int i = 0; i < Short.BYTES; i++) {
-            le <<= Byte.SIZE;
-            le |= (be & 0xFF);
-            be >>= Byte.SIZE;
+            value |= unsigned8(Byte.SIZE) << (i * Byte.SIZE);
         }
-        return (short) le;
+        return (short) value;
     }
 
     // ------------------------------------------------------------------------------------------------------------- int
@@ -199,14 +196,11 @@ public abstract class AbstractBitInput implements BitInput {
 
     @Override
     public int readInt32Le() throws IOException {
-        int be = readInt32();
-        int le = 0;
+        int value = 0;
         for (int i = 0; i < Integer.BYTES; i++) {
-            le <<= Byte.SIZE;
-            le |= (be & 0xFF);
-            be >>= Byte.SIZE;
+            value |= unsigned8(Byte.SIZE) << (i * Byte.SIZE);
         }
-        return le;
+        return value;
     }
 
     // ------------------------------------------------------------------------------------------------------------ long
@@ -244,8 +238,7 @@ public abstract class AbstractBitInput implements BitInput {
 
     @Override
     public long readLong64Le() throws IOException {
-//        return (((long) readInt32Le()) << Integer.SIZE) | (((long) readInt32Le()) & 0xFFFFFFFFL);
-        return ((((long) readInt32Le()) & 0xFFFFFFFFL) | (((long) readInt32Le()) << Integer.SIZE));
+        return ((long) readInt32Le()) & 0xFFFFFFFFL | ((long) readInt32Le()) << Integer.SIZE;
     }
 
     // ------------------------------------------------------------------------------------------------------------ char
@@ -255,7 +248,7 @@ public abstract class AbstractBitInput implements BitInput {
     }
 
     @Override
-    public char readChar16() throws IOException{
+    public char readChar16() throws IOException {
         return readChar(Character.SIZE);
     }
 
@@ -298,7 +291,7 @@ public abstract class AbstractBitInput implements BitInput {
     /**
      * The number of available bits in {@link #octet} for reading..
      */
-    private int available;
+    private int available = 0;
 
     /**
      * The number of bytes read so far.

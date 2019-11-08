@@ -126,6 +126,15 @@ public interface BitOutput {
      */
     void writeChar(int size, char value) throws IOException;
 
+    /**
+     * Writes a {@value java.lang.Character#SIZE}-bit {@code char} value. This method is equivalent to {@code
+     * writeChar(Character.SIZE, value)}.
+     *
+     * @param value a {@value java.lang.Character#SIZE}-bit {@code char} value to write.
+     * @throws IOException if an I/O error occurs.
+     */
+    void writeChar16(char value) throws IOException;
+
     // -----------------------------------------------------------------------------------------------------------------
 
     /**

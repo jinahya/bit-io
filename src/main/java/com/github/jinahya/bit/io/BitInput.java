@@ -171,6 +171,15 @@ public interface BitInput {
      */
     char readChar(int size) throws IOException;
 
+    /**
+     * Reads a {@value java.lang.Character#SIZE}-bit {@code char} value. This method is equivalent to {@code
+     * readChar(Character.SIZE)}.
+     *
+     * @return a {@value java.lang.Character#SIZE}-bit {@code char} value.
+     * @throws IOException if an I/O error occurs.
+     */
+    char readChar16() throws IOException;
+
     // -----------------------------------------------------------------------------------------------------------------
 
     /**

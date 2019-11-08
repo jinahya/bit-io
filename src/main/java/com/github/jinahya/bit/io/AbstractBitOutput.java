@@ -241,6 +241,11 @@ public abstract class AbstractBitOutput implements BitOutput {
         writeInt(true, requireValidSizeChar(size), value);
     }
 
+    @Override
+    public void writeChar16(final char value) throws IOException {
+        writeChar(Character.SIZE, value);
+    }
+
     // -----------------------------------------------------------------------------------------------------------------
     @Override
     public long align(final int bytes) throws IOException {

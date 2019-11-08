@@ -57,9 +57,9 @@ class BitIoTest {
             throws IOException {
         final boolean expected = current().nextBoolean();
         output.writeBoolean(expected);
-        output.align(1);
+        assertEquals(7, output.align(Byte.BYTES));
         final boolean actual = input.readBoolean();
-        input.align(1);
+        assertEquals(7, input.align(Byte.BYTES));
         assertEquals(expected, actual);
     }
 
@@ -73,9 +73,9 @@ class BitIoTest {
         final int size = randomSizeForByte(unsigned);
         final byte expected = randomValueForByte(unsigned, size);
         output.writeByte(unsigned, size, expected);
-        output.align(1);
+        assertTrue(output.align(Byte.BYTES) < Byte.SIZE);
         final byte actual = input.readByte(unsigned, size);
-        input.align(1);
+        assertTrue(input.align(Byte.BYTES) < Byte.SIZE);
         assertEquals(expected, actual);
     }
 
@@ -86,9 +86,9 @@ class BitIoTest {
             throws IOException {
         final byte expected = (byte) current().nextInt();
         output.writeByte8(expected);
-        assertEquals(0L, output.align(1));
+        assertEquals(0L, output.align(Byte.BYTES));
         final byte actual = input.readByte8();
-        assertEquals(0L, input.align(1));
+        assertEquals(0L, input.align(Byte.BYTES));
         assertEquals(expected, actual);
     }
 
@@ -102,9 +102,9 @@ class BitIoTest {
         final int size = randomSizeForShort(unsigned);
         final short expected = randomValueForShort(unsigned, size);
         output.writeShort(unsigned, size, expected);
-        output.align(1);
+        assertTrue(output.align(Byte.BYTES) < Byte.SIZE);
         final short actual = input.readShort(unsigned, size);
-        input.align(1);
+        assertTrue(input.align(Byte.BYTES) < Byte.SIZE);
         assertEquals(expected, actual);
     }
 
@@ -115,9 +115,9 @@ class BitIoTest {
             throws IOException {
         final short expected = (short) current().nextInt();
         output.writeShort16(expected);
-        assertEquals(0L, output.align(1));
+        assertEquals(0L, output.align(Byte.BYTES));
         final short actual = input.readShort16();
-        assertEquals(0L, input.align(1));
+        assertEquals(0L, input.align(Byte.BYTES));
         assertEquals(expected, actual);
     }
 
@@ -128,9 +128,9 @@ class BitIoTest {
             throws IOException {
         final short expected = (short) current().nextInt();
         output.writeShort16Le(expected);
-        assertEquals(0L, output.align(1));
+        assertEquals(0L, output.align(Byte.BYTES));
         final short actual = input.readShort16Le();
-        assertEquals(0L, input.align(1));
+        assertEquals(0L, input.align(Byte.BYTES));
         assertEquals(expected, actual);
     }
 
@@ -144,9 +144,9 @@ class BitIoTest {
         final int size = randomSizeForInt(unsigned);
         final int expected = randomValueForInt(unsigned, size);
         output.writeInt(unsigned, size, expected);
-        output.align(1);
+        assertTrue(output.align(Byte.BYTES) < Byte.SIZE);
         final int actual = input.readInt(unsigned, size);
-        input.align(1);
+        assertTrue(input.align(Byte.BYTES) < Byte.SIZE);
         assertEquals(expected, actual);
     }
 
@@ -157,9 +157,9 @@ class BitIoTest {
             throws IOException {
         final int expected = current().nextInt();
         output.writeInt32(expected);
-        assertEquals(0L, output.align(1));
+        assertEquals(0L, output.align(Byte.BYTES));
         final int actual = input.readInt32();
-        assertEquals(0L, input.align(1));
+        assertEquals(0L, input.align(Byte.BYTES));
         assertEquals(expected, actual);
     }
 
@@ -170,9 +170,9 @@ class BitIoTest {
             throws IOException {
         final int expected = current().nextInt();
         output.writeInt32Le(expected);
-        assertEquals(0L, output.align(1));
+        assertEquals(0L, output.align(Byte.BYTES));
         final int actual = input.readInt32Le();
-        assertEquals(0L, input.align(1));
+        assertEquals(0L, input.align(Byte.BYTES));
         assertEquals(expected, actual);
     }
 
@@ -186,9 +186,9 @@ class BitIoTest {
         final int size = randomSizeForLong(unsigned);
         final long expected = randomValueForLong(unsigned, size);
         output.writeLong(unsigned, size, expected);
-        output.align(1);
+        assertTrue(output.align(Byte.BYTES) < Byte.SIZE);
         final long actual = input.readLong(unsigned, size);
-        input.align(1);
+        assertTrue(input.align(Byte.BYTES) < Byte.SIZE);
         assertEquals(expected, actual);
     }
 
@@ -199,9 +199,9 @@ class BitIoTest {
             throws IOException {
         final long expected = current().nextLong();
         output.writeLong64(expected);
-        assertEquals(0L, output.align(1));
+        assertEquals(0L, output.align(Byte.BYTES));
         final long actual = input.readLong64();
-        assertEquals(0L, input.align(1));
+        assertEquals(0L, input.align(Byte.BYTES));
         assertEquals(expected, actual);
     }
 
@@ -212,9 +212,9 @@ class BitIoTest {
             throws IOException {
         final long expected = current().nextLong();
         output.writeLong64Le(expected);
-        assertEquals(0L, output.align(1));
+        assertEquals(0L, output.align(Byte.BYTES));
         final long actual = input.readLong64Le();
-        assertEquals(0L, input.align(1));
+        assertEquals(0L, input.align(Byte.BYTES));
         assertEquals(expected, actual);
     }
 
@@ -230,6 +230,19 @@ class BitIoTest {
         assertTrue(output.align(Byte.BYTES) < Byte.SIZE);
         final char actual = input.readChar(size);
         assertTrue(input.align(Byte.BYTES) < Byte.SIZE);
+        assertEquals(expected, actual);
+    }
+
+    @MethodSource({"com.github.jinahya.bit.io.ByteIoSource#sourceByteIo"})
+    @ParameterizedTest
+    void testChar16(@ConvertWith(BitOutputConverter.class) final BitOutput output,
+                    @ConvertWith(BitInputConverter.class) final BitInput input)
+            throws IOException {
+        final char expected = (char) current().nextInt(0x00, Character.MAX_VALUE);
+        output.writeChar16(expected);
+        assertEquals(0L, output.align(Byte.BYTES));
+        final char actual = input.readChar16();
+        assertEquals(0L, input.align(Byte.BYTES));
         assertEquals(expected, actual);
     }
 }

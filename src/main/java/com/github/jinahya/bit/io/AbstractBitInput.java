@@ -254,6 +254,11 @@ public abstract class AbstractBitInput implements BitInput {
         return (char) readInt(true, requireValidSizeChar(size));
     }
 
+    @Override
+    public char readChar16() throws IOException{
+        return readChar(Character.SIZE);
+    }
+
     // -----------------------------------------------------------------------------------------------------------------
     @Override
     public long align(final int bytes) throws IOException {

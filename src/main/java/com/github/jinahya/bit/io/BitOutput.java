@@ -61,6 +61,7 @@ public interface BitOutput {
      *
      * @param value the {@value java.lang.Byte#SIZE}-bit signed {@code byte} value to write.
      * @throws IOException if an I/O error occurs.
+     * @see BitInput#readByte8()
      */
     void writeByte8(byte value) throws IOException;
 
@@ -83,6 +84,7 @@ public interface BitOutput {
      *
      * @param value the {@value java.lang.Short#SIZE}-bit signed {@code short} value to write.
      * @throws IOException if an I/O error occurs.
+     * @see BitInput#readShort16()
      */
     void writeShort16(short value) throws IOException;
 
@@ -91,6 +93,7 @@ public interface BitOutput {
      *
      * @param value the {@value java.lang.Short#SIZE}-bit signed {@code short} value to write.
      * @throws IOException if an I/O error occurs.
+     * @see BitInput#readShort16Le()
      */
     void writeShort16Le(short value) throws IOException;
 
@@ -113,6 +116,7 @@ public interface BitOutput {
      *
      * @param value the {@value java.lang.Integer#SIZE}-bit signed {@code int} value to write.
      * @throws IOException if an I/O error occurs.
+     * @see BitInput#readInt32()
      */
     void writeInt32(int value) throws IOException;
 
@@ -121,6 +125,7 @@ public interface BitOutput {
      *
      * @param value the {@value java.lang.Integer#SIZE}-bit signed {@code int} value to write.
      * @throws IOException if an I/O error occurs.
+     * @see BitInput#readInt32Le()
      */
     void writeInt32Le(int value) throws IOException;
 
@@ -143,6 +148,7 @@ public interface BitOutput {
      *
      * @param value the {@value java.lang.Long#SIZE}-bit signed {@code long} value to write.
      * @throws IOException if an I/O error occurs.
+     * @see BitInput#readLong64()
      */
     void writeLong64(long value) throws IOException;
 
@@ -151,6 +157,7 @@ public interface BitOutput {
      *
      * @param value the {@value java.lang.Long#SIZE}-bit signed {@code long} value to write.
      * @throws IOException if an I/O error occurs.
+     * @see BitInput#readLong64Le()
      */
     void writeLong64Le(long value) throws IOException;
 
@@ -174,6 +181,7 @@ public interface BitOutput {
      *
      * @param value a {@value java.lang.Character#SIZE}-bit {@code char} value to write.
      * @throws IOException if an I/O error occurs.
+     * @see BitInput#readChar16()
      */
     void writeChar16(char value) throws IOException;
 

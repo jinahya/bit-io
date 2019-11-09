@@ -24,13 +24,11 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
+import static com.github.jinahya.bit.io.BitWritables.cachedBitWriterFor;
+import static com.github.jinahya.bit.io.BitWritables.newBitWriterFor;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-
-import static com.github.jinahya.bit.io.BitWritables.cachedBitWriterFor;
-import static com.github.jinahya.bit.io.BitWritables.newBitWriterFor;
-
 
 class BitWritablesTest {
 
@@ -45,6 +43,7 @@ class BitWritablesTest {
         assertSame(expected, actual);
         actual.write(new DefaultBitOutput(new StreamByteOutput(new BlackOutputStream())), new User());
     }
+
     @Test
     void testNewBitWriterFor() throws IOException {
         assertThrows(NullPointerException.class, () -> newBitWriterFor(null));

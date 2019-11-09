@@ -24,19 +24,31 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
+import static com.github.jinahya.bit.io.BitReadables.cachedBitReaderFor;
+import static com.github.jinahya.bit.io.BitReadables.newBitReaderFor;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class BitReadablesTest {
 
     // -----------------------------------------------------------------------------------------------------------------
     @Test
     void testCachedBitReaderFor() throws IOException {
-        final BitReader<User> expected = BitReadables.cachedBitReaderFor(User.class);
+        assertThrows(NullPointerException.class, () -> cachedBitReaderFor(null));
+        final BitReader<User> expected = cachedBitReaderFor(User.class);
         assertNotNull(expected);
-        final BitReader<User> actual = BitReadables.cachedBitReaderFor(User.class);
+        final BitReader<User> actual = cachedBitReaderFor(User.class);
         assertNotNull(actual);
         assertSame(expected, actual);
         final User user = actual.read(new DefaultBitInput(new StreamByteInput(new WhiteInputStream())));
+    }
+
+    @Test
+    void testNewBitReaderFor() throws IOException {
+        assertThrows(NullPointerException.class, () -> newBitReaderFor(null));
+        final BitReader<User> reader = cachedBitReaderFor(User.class);
+        assertNotNull(reader);
+        final User user = reader.read(new DefaultBitInput(new StreamByteInput(new WhiteInputStream())));
     }
 }

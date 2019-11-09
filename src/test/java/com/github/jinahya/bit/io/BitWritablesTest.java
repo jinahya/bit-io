@@ -26,17 +26,30 @@ import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import static com.github.jinahya.bit.io.BitWritables.cachedBitWriterFor;
+import static com.github.jinahya.bit.io.BitWritables.newBitWriterFor;
+
 
 class BitWritablesTest {
 
     // -----------------------------------------------------------------------------------------------------------------
     @Test
     void testCachedBitWriterFor() throws IOException {
-        final BitWriter<User> expected = BitWritables.cachedBitWriterFor(User.class);
+        assertThrows(NullPointerException.class, () -> cachedBitWriterFor(null));
+        final BitWriter<User> expected = cachedBitWriterFor(User.class);
         assertNotNull(expected);
-        final BitWriter<User> actual = BitWritables.cachedBitWriterFor(User.class);
+        final BitWriter<User> actual = cachedBitWriterFor(User.class);
         assertNotNull(actual);
         assertSame(expected, actual);
         actual.write(new DefaultBitOutput(new StreamByteOutput(new BlackOutputStream())), new User());
+    }
+    @Test
+    void testNewBitWriterFor() throws IOException {
+        assertThrows(NullPointerException.class, () -> newBitWriterFor(null));
+        final BitWriter<User> writer = newBitWriterFor(User.class);
+        assertNotNull(writer);
+        writer.write(new DefaultBitOutput(new StreamByteOutput(new BlackOutputStream())), new User());
     }
 }

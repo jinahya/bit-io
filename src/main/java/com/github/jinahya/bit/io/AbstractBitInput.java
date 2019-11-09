@@ -155,11 +155,7 @@ public abstract class AbstractBitInput implements BitInput {
 
     @Override
     public short readShort16Le() throws IOException {
-        int value = 0;
-        for (int i = 0; i < Short.BYTES; i++) {
-            value |= unsigned8(Byte.SIZE) << (i * Byte.SIZE);
-        }
-        return (short) value;
+        return (short) (readByte8() & 0xFF | readByte8() << Byte.SIZE);
     }
 
     // ------------------------------------------------------------------------------------------------------------- int
@@ -196,11 +192,7 @@ public abstract class AbstractBitInput implements BitInput {
 
     @Override
     public int readInt32Le() throws IOException {
-        int value = 0;
-        for (int i = 0; i < Integer.BYTES; i++) {
-            value |= unsigned8(Byte.SIZE) << (i * Byte.SIZE);
-        }
-        return value;
+        return readShort16Le() & 0xFFFF | readShort16Le() << Short.SIZE;
     }
 
     // ------------------------------------------------------------------------------------------------------------ long
@@ -238,7 +230,7 @@ public abstract class AbstractBitInput implements BitInput {
 
     @Override
     public long readLong64Le() throws IOException {
-        return ((long) readInt32Le()) & 0xFFFFFFFFL | ((long) readInt32Le()) << Integer.SIZE;
+        return readInt32Le() & 0xFFFFFFFFL | ((long) readInt32Le()) << Integer.SIZE;
     }
 
     // ------------------------------------------------------------------------------------------------------------ char

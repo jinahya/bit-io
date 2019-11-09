@@ -153,11 +153,9 @@ public abstract class AbstractBitOutput implements BitOutput {
     }
 
     @Override
-    public void writeShort16Le(short value) throws IOException {
-        for (int i = 0; i < Short.BYTES; i++) {
-            unsigned8(Byte.SIZE, value);
-            value >>= Byte.SIZE;
-        }
+    public void writeShort16Le(final short value) throws IOException {
+        writeByte8((byte) value);
+        writeByte8((byte) (value >> Byte.SIZE));
     }
 
     // ------------------------------------------------------------------------------------------------------------- int
@@ -188,11 +186,9 @@ public abstract class AbstractBitOutput implements BitOutput {
     }
 
     @Override
-    public void writeInt32Le(int value) throws IOException {
-        for (int i = 0; i < Integer.BYTES; i++) {
-            unsigned8(Byte.SIZE, value);
-            value >>= Byte.SIZE;
-        }
+    public void writeInt32Le(final int value) throws IOException {
+        writeShort16Le((short) value);
+        writeShort16Le((short) (value >> Short.SIZE));
     }
 
     // ------------------------------------------------------------------------------------------------------------ long

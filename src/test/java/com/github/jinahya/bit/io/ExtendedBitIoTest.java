@@ -47,8 +47,10 @@ import static com.github.jinahya.bit.io.ExtendedBitInput.readUnsignedVariable5;
 import static com.github.jinahya.bit.io.ExtendedBitInput.readUnsignedVariable6;
 import static com.github.jinahya.bit.io.ExtendedBitInput.readUnsignedVariableInt;
 import static com.github.jinahya.bit.io.ExtendedBitInput.readUnsignedVariableLong;
+import static com.github.jinahya.bit.io.ExtendedBitInput.readUtf8;
 import static com.github.jinahya.bit.io.ExtendedBitInput.readVariableLengthQuantityInt;
 import static com.github.jinahya.bit.io.ExtendedBitInput.readVariableLengthQuantityLong;
+import static com.github.jinahya.bit.io.ExtendedBitOutput.MAX_SIZE_UTF8;
 import static com.github.jinahya.bit.io.ExtendedBitOutput.writeAscii;
 import static com.github.jinahya.bit.io.ExtendedBitOutput.writeObjects;
 import static com.github.jinahya.bit.io.ExtendedBitOutput.writeString;
@@ -58,6 +60,7 @@ import static com.github.jinahya.bit.io.ExtendedBitOutput.writeUnsignedVariable5
 import static com.github.jinahya.bit.io.ExtendedBitOutput.writeUnsignedVariable6;
 import static com.github.jinahya.bit.io.ExtendedBitOutput.writeUnsignedVariableInt;
 import static com.github.jinahya.bit.io.ExtendedBitOutput.writeUnsignedVariableLong;
+import static com.github.jinahya.bit.io.ExtendedBitOutput.writeUtf8;
 import static com.github.jinahya.bit.io.ExtendedBitOutput.writeVariableLengthQuantityInt;
 import static com.github.jinahya.bit.io.ExtendedBitOutput.writeVariableLengthQuantityLong;
 import static java.lang.StrictMath.pow;
@@ -431,6 +434,29 @@ class ExtendedBitIoTest {
         assertTrue(output.align(Byte.BYTES) < Byte.SIZE);
         final List<User> actual = readObjects(nullable, input, new UserReader());
         assertTrue(input.align(Byte.BYTES) < Byte.SIZE);
+        assertEquals(expected, actual);
+    }
+
+    // ------------------------------------------------------------------------------------------------------------ utf8
+    @MethodSource({"com.github.jinahya.bit.io.BitIoSource#sourceBitIo"})
+    @ParameterizedTest
+    void testUtf8Int(final BitOutput output, final BitInput input) throws IOException {
+        final int expected = current().nextInt() >>> 1;
+        writeUtf8(output, expected);
+        output.align(1);
+        final int actual = (int) readUtf8(input);
+        input.align(1);
+        assertEquals(expected, actual);
+    }
+
+    @MethodSource({"com.github.jinahya.bit.io.BitIoSource#sourceBitIo"})
+    @ParameterizedTest
+    void testUtf8(final BitOutput output, final BitInput input) throws IOException {
+        final long expected = current().nextLong() >>> current().nextInt(Long.SIZE - MAX_SIZE_UTF8, Long.SIZE);
+        writeUtf8(output, expected);
+        output.align(1);
+        final long actual = readUtf8(input);
+        input.align(1);
         assertEquals(expected, actual);
     }
 

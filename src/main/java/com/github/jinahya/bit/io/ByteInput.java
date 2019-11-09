@@ -33,7 +33,7 @@ public interface ByteInput {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * Reads an unsigned 8-bit value.
+     * Reads an unsigned {@value java.lang.Byte#SIZE}-bit value.
      *
      * @return an unsigned 8-bit value; between {@code 0} and {@code 255}, both inclusive.
      * @throws IOException if an I/O error occurs.

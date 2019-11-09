@@ -41,6 +41,13 @@ import static com.github.jinahya.bit.io.ByteIoSource.sourceByteIoStream;
 final class BitIoSource {
 
     // -----------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Sources arguments of {@link BitOutput} and {@link BitInput}.
+     *
+     * @return a stream of arguments
+     * @see ByteIoSource#sourceByteIoArray()
+     */
     static Stream<Arguments> sourceBitIoArray() {
         return sourceByteIoArray().map(a -> {
             final ArgumentsAccessor accessor = new DefaultArgumentsAccessor(a.get());

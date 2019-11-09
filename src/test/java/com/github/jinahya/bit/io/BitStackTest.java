@@ -28,7 +28,7 @@ import java.lang.reflect.Field;
 
 import static com.github.jinahya.bit.io.BitIoTests.randomSizeForLong;
 import static com.github.jinahya.bit.io.BitIoTests.randomValueForLong;
-import static com.github.jinahya.bit.io.BitIoUtils.reverse;
+import static com.github.jinahya.bit.io.BitIoUtils.reverseLong;
 import static java.util.concurrent.ThreadLocalRandom.current;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -77,7 +77,7 @@ class BitStackTest {
         for (int i = 0; i < 256; i++) {
             final int size = randomSizeForLong(true);
             final long value = randomValueForLong(true, size);
-            final long expected = reverse(size, value);
+            final long expected = reverseLong(size, value);
             final long actual = stack.reverse(size, value);
             assertEquals(expected, actual);
         }

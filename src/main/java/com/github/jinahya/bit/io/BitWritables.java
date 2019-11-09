@@ -35,7 +35,7 @@ final class BitWritables {
         BIT_WRITERS = synchronizedMap(new WeakHashMap<Class<?>, BitWriter<?>>());
     }
 
-    public static <T extends BitWritable> BitWriter<T> cachedBitWriterFor(final Class<? extends T> type) {
+    public static <T extends BitWritable> BitWriter<T> cachedBitWriterFor(final Class<T> type) {
         if (type == null) {
             throw new NullPointerException("type is null");
         }
@@ -57,7 +57,7 @@ final class BitWritables {
      * @param <T>  bit writable type parameter
      * @return a new bit writer.
      */
-    public static <T extends BitWritable> BitWriter<T> newBitWriterFor(final Class<? extends T> type) {
+    public static <T extends BitWritable> BitWriter<T> newBitWriterFor(final Class<T> type) {
         if (type == null) {
             throw new NullPointerException("type is null");
         }

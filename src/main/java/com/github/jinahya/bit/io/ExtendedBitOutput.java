@@ -24,15 +24,20 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 
-import static com.github.jinahya.bit.io.BitIoConstants.MAX_EXPONENT_BYTE;
-import static com.github.jinahya.bit.io.BitIoConstants.MAX_EXPONENT_INTEGER;
-import static com.github.jinahya.bit.io.BitIoConstants.MAX_EXPONENT_LONG;
-import static com.github.jinahya.bit.io.BitIoConstants.MAX_EXPONENT_SHORT;
+import static com.github.jinahya.bit.io.BitIoConstants.SIZE_EXPONENT_BYTE;
+import static com.github.jinahya.bit.io.BitIoConstants.SIZE_EXPONENT_INTEGER;
+import static com.github.jinahya.bit.io.BitIoConstants.SIZE_EXPONENT_LONG;
+import static com.github.jinahya.bit.io.BitIoConstants.SIZE_EXPONENT_SHORT;
 import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeByte;
 import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeInt;
 import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeLong;
 
 class ExtendedBitOutput {
+
+    // -----------------------------------------------------------------------------------------------------------------
+    public static final int MAX_SIZE_UTF8 = 36;
+
+    public static final long MAX_VALUE_UTF8 = -1L >>> (Long.SIZE - MAX_SIZE_UTF8);
 
     // -----------------------------------------------------------------------------------------------------------------
 
@@ -105,13 +110,13 @@ class ExtendedBitOutput {
             throw new IllegalArgumentException("value(" + value + ") < 0");
         }
         final int size = Byte.SIZE - (Integer.numberOfLeadingZeros(value) - 24);
-        final boolean extended = size > MAX_EXPONENT_BYTE;
+        final boolean extended = size > SIZE_EXPONENT_BYTE;
         output.writeBoolean(extended);
         if (!extended) {
-            output.writeByte(true, MAX_EXPONENT_BYTE, value);
+            output.writeByte(true, SIZE_EXPONENT_BYTE, value);
             return;
         }
-        output.writeInt(true, MAX_EXPONENT_BYTE, size);
+        output.writeInt(true, SIZE_EXPONENT_BYTE, size);
         output.writeByte(true, size, value);
     }
 
@@ -123,13 +128,13 @@ class ExtendedBitOutput {
             throw new IllegalArgumentException("value(" + value + ") < 0");
         }
         final int size = Short.SIZE - (Integer.numberOfLeadingZeros(value) - 16);
-        final boolean extended = size > MAX_EXPONENT_SHORT;
+        final boolean extended = size > SIZE_EXPONENT_SHORT;
         output.writeBoolean(extended);
         if (!extended) {
-            output.writeShort(true, MAX_EXPONENT_SHORT, value);
+            output.writeShort(true, SIZE_EXPONENT_SHORT, value);
             return;
         }
-        output.writeInt(true, MAX_EXPONENT_SHORT, size);
+        output.writeInt(true, SIZE_EXPONENT_SHORT, size);
         output.writeShort(true, size, value);
     }
 
@@ -141,13 +146,13 @@ class ExtendedBitOutput {
             throw new IllegalArgumentException("value(" + value + ") < 0");
         }
         final int size = Integer.SIZE - Integer.numberOfLeadingZeros(value);
-        final boolean extended = size > MAX_EXPONENT_INTEGER;
+        final boolean extended = size > SIZE_EXPONENT_INTEGER;
         output.writeBoolean(extended);
         if (!extended) {
-            output.writeInt(true, MAX_EXPONENT_INTEGER, value);
+            output.writeInt(true, SIZE_EXPONENT_INTEGER, value);
             return;
         }
-        output.writeInt(true, MAX_EXPONENT_INTEGER, size);
+        output.writeInt(true, SIZE_EXPONENT_INTEGER, size);
         output.writeInt(true, size, value);
     }
 
@@ -159,13 +164,13 @@ class ExtendedBitOutput {
             throw new IllegalArgumentException("value(" + value + ") < 0L");
         }
         final int size = Long.SIZE - Long.numberOfLeadingZeros(value);
-        final boolean extended = size > MAX_EXPONENT_LONG;
+        final boolean extended = size > SIZE_EXPONENT_LONG;
         output.writeBoolean(extended);
         if (!extended) {
-            output.writeLong(true, MAX_EXPONENT_LONG, value);
+            output.writeLong(true, SIZE_EXPONENT_LONG, value);
             return;
         }
-        output.writeInt(true, MAX_EXPONENT_LONG, size);
+        output.writeInt(true, SIZE_EXPONENT_LONG, size);
         output.writeLong(true, size, value);
     }
 
@@ -393,6 +398,32 @@ class ExtendedBitOutput {
         writeLengthInt(output, value.size());
         for (final T v : value) {
             writeObject(true, output, writer, v);
+        }
+    }
+
+    // ------------------------------------------------------------------------------------------------------------ utf8
+    public static void writeUtf8(final BitOutput output, final long value) throws IOException {
+        if (output == null) {
+            throw new NullPointerException("output is null");
+        }
+        if (value < 0L) {
+            throw new IllegalArgumentException("value(" + value + ") < 0L");
+        }
+        if (value > MAX_VALUE_UTF8) {
+            throw new IllegalArgumentException("value(" + value + ") > " + MAX_VALUE_UTF8);
+        }
+        if (value <= 0x7FL) {
+            output.writeInt(true, Byte.SIZE, (int) value);
+            return;
+        }
+        final int size = Long.SIZE - Long.numberOfLeadingZeros(value);
+        int bytes = size / 6;
+        if ((size % 6) > (6 - bytes)) {
+            bytes++;
+        }
+        output.writeInt(true, 8, (int) ((0xFE << (6 - bytes)) | (value >> (bytes * 6))));
+        for (int i = (bytes - 1) * 6; i >= 0; i -= 6) {
+            output.writeInt(true, 8, (int) (0x80 | ((value >> i) & 0x3F)));
         }
     }
 

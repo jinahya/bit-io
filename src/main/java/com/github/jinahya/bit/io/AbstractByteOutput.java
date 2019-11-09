@@ -41,6 +41,7 @@ public abstract class AbstractByteOutput<T> implements ByteOutput {
         super();
         this.target = target;
     }
+
     // -----------------------------------------------------------------------------------------------------------------
 
     /**

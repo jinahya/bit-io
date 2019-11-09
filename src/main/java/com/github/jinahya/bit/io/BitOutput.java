@@ -56,6 +56,14 @@ public interface BitOutput {
      */
     void writeByte(boolean unsigned, int size, byte value) throws IOException;
 
+    /**
+     * Writes specified {@value java.lang.Byte#SIZE}-bit signed {@code byte} value.
+     *
+     * @param value the {@value java.lang.Byte#SIZE}-bit signed {@code byte} value to write.
+     * @throws IOException if an I/O error occurs.
+     */
+    void writeByte8(byte value) throws IOException;
+
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
@@ -69,6 +77,22 @@ public interface BitOutput {
      * @see BitInput#readShort(boolean, int)
      */
     void writeShort(boolean unsigned, int size, short value) throws IOException;
+
+    /**
+     * Writes specified {@value java.lang.Short#SIZE}-bit signed {@code short} value.
+     *
+     * @param value the {@value java.lang.Short#SIZE}-bit signed {@code short} value to write.
+     * @throws IOException if an I/O error occurs.
+     */
+    void writeShort16(short value) throws IOException;
+
+    /**
+     * Writes specified {@value java.lang.Short#SIZE}-bit signed {@code short} value in little endian byte order.
+     *
+     * @param value the {@value java.lang.Short#SIZE}-bit signed {@code short} value to write.
+     * @throws IOException if an I/O error occurs.
+     */
+    void writeShort16Le(short value) throws IOException;
 
     // -----------------------------------------------------------------------------------------------------------------
 
@@ -84,6 +108,22 @@ public interface BitOutput {
      */
     void writeInt(boolean unsigned, int size, int value) throws IOException;
 
+    /**
+     * Writes specified {@value java.lang.Integer#SIZE}-bit signed {@code int} value.
+     *
+     * @param value the {@value java.lang.Integer#SIZE}-bit signed {@code int} value to write.
+     * @throws IOException if an I/O error occurs.
+     */
+    void writeInt32(int value) throws IOException;
+
+    /**
+     * Writes specified {@value java.lang.Integer#SIZE}-bit signed {@code int} value in little endian byte order.
+     *
+     * @param value the {@value java.lang.Integer#SIZE}-bit signed {@code int} value to write.
+     * @throws IOException if an I/O error occurs.
+     */
+    void writeInt32Le(int value) throws IOException;
+
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
@@ -98,6 +138,22 @@ public interface BitOutput {
      */
     void writeLong(boolean unsigned, int size, long value) throws IOException;
 
+    /**
+     * Writes specified {@value java.lang.Long#SIZE}-bit signed {@code long} value.
+     *
+     * @param value the {@value java.lang.Long#SIZE}-bit signed {@code long} value to write.
+     * @throws IOException if an I/O error occurs.
+     */
+    void writeLong64(long value) throws IOException;
+
+    /**
+     * Writes specified {@value java.lang.Long#SIZE}-bit signed {@code long} value in little endian byte order.
+     *
+     * @param value the {@value java.lang.Long#SIZE}-bit signed {@code long} value to write.
+     * @throws IOException if an I/O error occurs.
+     */
+    void writeLong64Le(long value) throws IOException;
+
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
@@ -111,6 +167,15 @@ public interface BitOutput {
      * @see BitInput#readChar(int)
      */
     void writeChar(int size, char value) throws IOException;
+
+    /**
+     * Writes a {@value java.lang.Character#SIZE}-bit {@code char} value. This method is equivalent to {@code
+     * writeChar(Character.SIZE, value)}.
+     *
+     * @param value a {@value java.lang.Character#SIZE}-bit {@code char} value to write.
+     * @throws IOException if an I/O error occurs.
+     */
+    void writeChar16(char value) throws IOException;
 
     // -----------------------------------------------------------------------------------------------------------------
 

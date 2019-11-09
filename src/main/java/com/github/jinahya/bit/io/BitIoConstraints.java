@@ -20,6 +20,12 @@ package com.github.jinahya.bit.io;
  * #L%
  */
 
+import static com.github.jinahya.bit.io.BitIoConstants.MIN_SIZE;
+import static com.github.jinahya.bit.io.BitIoConstants.SIZE_EXPONENT_BYTE;
+import static com.github.jinahya.bit.io.BitIoConstants.SIZE_EXPONENT_CHAR;
+import static com.github.jinahya.bit.io.BitIoConstants.SIZE_EXPONENT_INTEGER;
+import static com.github.jinahya.bit.io.BitIoConstants.SIZE_EXPONENT_LONG;
+import static com.github.jinahya.bit.io.BitIoConstants.SIZE_EXPONENT_SHORT;
 import static java.lang.Math.pow;
 
 /**
@@ -40,10 +46,10 @@ final class BitIoConstraints {
      */
     static int requireValidSizeUnsigned8(final int size) {
         if (size < 1) {
-            throw new IllegalArgumentException("size(" + size + ") < 1");
+            throw new IllegalArgumentException("unsigned8.size(" + size + ") < 1");
         }
         if (size > Byte.SIZE) {
-            throw new IllegalArgumentException("size(" + size + ") > " + Byte.SIZE);
+            throw new IllegalArgumentException("unsigned8.size(" + size + ") > " + Byte.SIZE);
         }
         return size;
     }
@@ -57,18 +63,18 @@ final class BitIoConstraints {
      */
     static int requireValidSizeUnsigned16(final int size) {
         if (size < 1) {
-            throw new IllegalArgumentException("size(" + size + ") < 1");
+            throw new IllegalArgumentException("unsigned16.size(" + size + ") < 1");
         }
         if (size > Short.SIZE) {
-            throw new IllegalArgumentException("size(" + size + ") > " + Short.SIZE);
+            throw new IllegalArgumentException("unsigned16.size(" + size + ") > " + Short.SIZE);
         }
         return size;
     }
 
     // -------------------------------------------------------------------------------------------------------- exponent
-    static final int MIN_EXPONENT = 3;
+    static final int MIN_EXPONENT = SIZE_EXPONENT_BYTE;
 
-    static final int MAX_EXPONENT = 6;
+    static final int MAX_EXPONENT = SIZE_EXPONENT_LONG;
 
     /**
      * Validates given exponent.
@@ -87,14 +93,12 @@ final class BitIoConstraints {
     }
 
     // ------------------------------------------------------------------------------------------------------------ size
-    static final int MIN_SIZE = 1;
-
-    private static final int[] MAX_SIZES = new int[MAX_EXPONENT - MIN_EXPONENT + 1];
+    private static final int[] MAX_SIZE = new int[MAX_EXPONENT - MIN_EXPONENT + 1];
 
     static {
-        MAX_SIZES[0] = (int) pow(2, MIN_EXPONENT);
-        for (int i = 1; i < MAX_SIZES.length; i++) {
-            MAX_SIZES[i] = MAX_SIZES[i - 1] * 2;
+        MAX_SIZE[0] = (int) pow(2, MIN_EXPONENT);
+        for (int i = 1; i < MAX_SIZE.length; i++) {
+            MAX_SIZE[i] = MAX_SIZE[i - 1] << 2;
         }
     }
 
@@ -106,39 +110,39 @@ final class BitIoConstraints {
      * @return the maximum size.
      */
     static int maxSize(final boolean unsigned, final int exponent) {
-        return MAX_SIZES[requireValidExponent(exponent) - MIN_EXPONENT] - (unsigned ? 1 : 0);
+        return MAX_SIZE[requireValidExponent(exponent) - MIN_EXPONENT] - (unsigned ? 1 : 0);
     }
 
     static int requireValidSize(final boolean unsigned, final int exponent, final int size) {
         if (size < MIN_SIZE) {
             throw new IllegalArgumentException("size(" + size + ") < " + MIN_SIZE);
         }
-        final int maxSize = maxSize(unsigned, exponent);
-        if (size > maxSize) {
-            throw new IllegalArgumentException("size(" + size + ") > " + maxSize + "; unsigned=" + unsigned
+        final int max = maxSize(unsigned, exponent);
+        if (size > max) {
+            throw new IllegalArgumentException("size(" + size + ") > " + max + "; unsigned=" + unsigned
                                                + "; exponent=" + exponent);
         }
         return size;
     }
 
     static int requireValidSizeByte(final boolean unsigned, final int size) {
-        return requireValidSize(unsigned, 3, size);
+        return requireValidSize(unsigned, SIZE_EXPONENT_BYTE, size);
     }
 
     static int requireValidSizeShort(final boolean unsigned, final int size) {
-        return requireValidSize(unsigned, 4, size);
+        return requireValidSize(unsigned, SIZE_EXPONENT_SHORT, size);
     }
 
     static int requireValidSizeInt(final boolean unsigned, final int size) {
-        return requireValidSize(unsigned, 5, size);
+        return requireValidSize(unsigned, SIZE_EXPONENT_INTEGER, size);
     }
 
     static int requireValidSizeLong(final boolean unsigned, final int size) {
-        return requireValidSize(unsigned, 6, size);
+        return requireValidSize(unsigned, SIZE_EXPONENT_LONG, size);
     }
 
     static int requireValidSizeChar(final int size) {
-        return requireValidSizeUnsigned16(size);
+        return requireValidSize(true, SIZE_EXPONENT_CHAR, size);
     }
 
     // -----------------------------------------------------------------------------------------------------------------

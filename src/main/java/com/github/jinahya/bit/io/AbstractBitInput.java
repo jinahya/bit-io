@@ -137,18 +137,34 @@ public abstract class AbstractBitInput implements BitInput {
         return (byte) readInt(unsigned, requireValidSizeByte(unsigned, size));
     }
 
+    @Override
+    public byte readByte8() throws IOException {
+        return readByte(false, Byte.SIZE);
+    }
+
     // ----------------------------------------------------------------------------------------------------------- short
     @Override
     public short readShort(final boolean unsigned, final int size) throws IOException {
         return (short) readInt(unsigned, requireValidSizeShort(unsigned, size));
     }
 
+    @Override
+    public short readShort16() throws IOException {
+        return readShort(false, Short.SIZE);
+    }
+
+    @Override
+    public short readShort16Le() throws IOException {
+        return (short) (readByte8() & 0xFF | readByte8() << Byte.SIZE);
+    }
+
     // ------------------------------------------------------------------------------------------------------------- int
     @Override
     public int readInt(final boolean unsigned, final int size) throws IOException {
         requireValidSizeInt(unsigned, size);
+        int value = 0;
         if (!unsigned) {
-            int value = 0 - readInt(true, 1);
+            value -= readInt(true, 1);
             final int usize = size - 1;
             if (usize > 0) {
                 value <<= usize;
@@ -156,7 +172,6 @@ public abstract class AbstractBitInput implements BitInput {
             }
             return value;
         }
-        int value = 0x00;
         final int quotient = size / Short.SIZE;
         for (int i = 0; i < quotient; i++) {
             value <<= Short.SIZE;
@@ -170,12 +185,23 @@ public abstract class AbstractBitInput implements BitInput {
         return value;
     }
 
+    @Override
+    public int readInt32() throws IOException {
+        return readInt(false, Integer.SIZE);
+    }
+
+    @Override
+    public int readInt32Le() throws IOException {
+        return readShort16Le() & 0xFFFF | readShort16Le() << Short.SIZE;
+    }
+
     // ------------------------------------------------------------------------------------------------------------ long
     @Override
     public long readLong(final boolean unsigned, final int size) throws IOException {
         requireValidSizeLong(unsigned, size);
+        long value = 0L;
         if (!unsigned) {
-            long value = 0L - readLong(true, 1);
+            value -= readLong(true, 1);
             final int usize = size - 1;
             if (usize > 0) {
                 value <<= usize;
@@ -183,13 +209,13 @@ public abstract class AbstractBitInput implements BitInput {
             }
             return value;
         }
-        long value = 0x00L;
-        final int quotient = size / Integer.SIZE;
+        final int divisor = Integer.SIZE - 1;
+        final int quotient = size / divisor;
         for (int i = 0; i < quotient; i++) {
-            value <<= Integer.SIZE;
-            value |= readInt(false, Integer.SIZE) & 0xFFFFFFFFL;
+            value <<= divisor;
+            value |= readInt(true, divisor);
         }
-        final int remainder = size % Integer.SIZE;
+        final int remainder = size % divisor;
         if (remainder > 0) {
             value <<= remainder;
             value |= readInt(true, remainder);
@@ -197,10 +223,25 @@ public abstract class AbstractBitInput implements BitInput {
         return value;
     }
 
+    @Override
+    public long readLong64() throws IOException {
+        return readLong(false, Long.SIZE);
+    }
+
+    @Override
+    public long readLong64Le() throws IOException {
+        return readInt32Le() & 0xFFFFFFFFL | ((long) readInt32Le()) << Integer.SIZE;
+    }
+
     // ------------------------------------------------------------------------------------------------------------ char
     @Override
     public char readChar(final int size) throws IOException {
         return (char) readInt(true, requireValidSizeChar(size));
+    }
+
+    @Override
+    public char readChar16() throws IOException {
+        return readChar(Character.SIZE);
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -220,7 +261,7 @@ public abstract class AbstractBitInput implements BitInput {
         return bits;
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+    // ----------------------------------------------------------------------------------------------------------- count
 
     /**
      * Returns the number bytes read so far.
@@ -242,7 +283,7 @@ public abstract class AbstractBitInput implements BitInput {
     /**
      * The number of available bits in {@link #octet} for reading..
      */
-    private int available;
+    private int available = 0;
 
     /**
      * The number of bytes read so far.

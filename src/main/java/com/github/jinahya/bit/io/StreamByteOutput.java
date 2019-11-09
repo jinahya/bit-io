@@ -46,8 +46,8 @@ public class StreamByteOutput extends AbstractByteOutput<OutputStream> {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * {@inheritDoc} The {@code write(int)} method of {@code StreamByteOutput} class invokes {@link
-     * OutputStream#write(int)}, on what {@link #getTarget() getTarget()} method returns, with given {@code value}.
+     * {@inheritDoc} The {@code write(int)} method of {@code StreamByteOutput} class {@link OutputStream#write(int)
+     * writes} specified value on the {@link #getTarget() target}.
      *
      * @param value {@inheritDoc}
      * @throws IOException {@inheritDoc}

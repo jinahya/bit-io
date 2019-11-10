@@ -50,7 +50,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 @ExtendWith({MockitoExtension.class})
 @Slf4j
-public class AbstractBitOutputSpyTest {
+final class AbstractBitOutputSpyTest {
 
     // -----------------------------------------------------------------------------------------------------------------
     @BeforeEach

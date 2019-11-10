@@ -93,9 +93,6 @@ class ChannelByteOutput2 extends AbstractByteOutput<WritableByteChannel> {
     @Override
     public void write(final int value) throws IOException {
         final ByteBuffer buffer = getBuffer();
-        if (buffer.capacity() == 0) {
-            throw new IllegalStateException("buffer.capacity == 0");
-        }
         while (!buffer.hasRemaining()) {
             buffer.flip(); // limit -> position, position -> zero
             final int written = getTarget().write(buffer);

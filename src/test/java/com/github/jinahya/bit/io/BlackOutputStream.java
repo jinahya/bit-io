@@ -29,7 +29,7 @@ import java.io.OutputStream;
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  * @see WhiteInputStream
  */
-class BlackOutputStream extends OutputStream {
+final class BlackOutputStream extends OutputStream {
 
     // -----------------------------------------------------------------------------------------------------------------
     @Override

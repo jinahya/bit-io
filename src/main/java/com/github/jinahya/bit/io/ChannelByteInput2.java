@@ -86,9 +86,6 @@ class ChannelByteInput2 extends AbstractByteInput<ReadableByteChannel> {
     @Override
     public int read() throws IOException {
         final ByteBuffer buffer = getBuffer();
-        if (buffer.capacity() == 0) {
-            throw new IllegalStateException("buffer.capacity == 0");
-        }
         while (!buffer.hasRemaining()) {
             buffer.clear(); // position -> zero, limit -> capacity
             if (getSource().read(buffer) == -1) {

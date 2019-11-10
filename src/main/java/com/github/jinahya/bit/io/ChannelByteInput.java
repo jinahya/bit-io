@@ -56,9 +56,6 @@ class ChannelByteInput extends BufferByteInput {
     @Override
     public int read() throws IOException {
         final ByteBuffer source = getSource();
-        if (source.capacity() == 0) {
-            throw new IllegalStateException("source.capacity == 0");
-        }
         while (!source.hasRemaining()) {
             source.clear(); // position -> zero, limit -> capacity
             if (getChannel().read(source) == -1) {

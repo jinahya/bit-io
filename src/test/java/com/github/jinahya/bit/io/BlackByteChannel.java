@@ -30,7 +30,7 @@ import java.nio.channels.WritableByteChannel;
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  * @see WhiteByteChannel
  */
-class BlackByteChannel implements WritableByteChannel {
+final class BlackByteChannel implements WritableByteChannel {
 
     // -----------------------------------------------------------------------------------------------------------------
     @Override

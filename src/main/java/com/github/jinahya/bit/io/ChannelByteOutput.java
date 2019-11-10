@@ -56,9 +56,6 @@ class ChannelByteOutput extends BufferByteOutput {
     @Override
     public void write(final int value) throws IOException {
         final ByteBuffer target = getTarget();
-        if (target.capacity() == 0) {
-            throw new IllegalStateException("target.capacity == 0");
-        }
         while (!target.hasRemaining()) {
             target.flip(); // limit -> position, position -> zero
             final int written = getChannel().write(target);

@@ -33,14 +33,14 @@ import org.mockito.junit.jupiter.MockitoExtension;
  * @see DefaultBitOutputTest
  */
 @ExtendWith({MockitoExtension.class, WeldJunit5Extension.class})
-class DefaultBitInputTest extends AbstractBitInputTest<DefaultBitInput> {
+public class DefaultBitInputTest extends AbstractBitInputTest<DefaultBitInput> {
 
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
      * Creates a new instance.
      */
-    public DefaultBitInputTest() {
+    DefaultBitInputTest() {
         super(DefaultBitInput.class);
     }
 
@@ -50,7 +50,7 @@ class DefaultBitInputTest extends AbstractBitInputTest<DefaultBitInput> {
      * Tests {@link DefaultBitInput#getDelegate()}.
      */
     @Test
-    void testGetDelegate() {
+    public void testGetDelegate() {
         final ByteInput delegate = bitInput.getDelegate();
     }
 
@@ -60,7 +60,7 @@ class DefaultBitInputTest extends AbstractBitInputTest<DefaultBitInput> {
      * Tests {@link DefaultBitInput#setDelegate(ByteInput)}.
      */
     @Test
-    void testSetDelegate() {
+    public void testSetDelegate() {
         bitInput.setDelegate(null);
         bitInput.setDelegate(byteInputMock);
     }

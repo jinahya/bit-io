@@ -33,7 +33,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
  * @see DefaultBitInputTest
  */
 @ExtendWith({MockitoExtension.class, WeldJunit5Extension.class})
-class DefaultBitOutputTest extends AbstractBitOutputTest<DefaultBitOutput> {
+public class DefaultBitOutputTest extends AbstractBitOutputTest<DefaultBitOutput> {
 
     // -----------------------------------------------------------------------------------------------------------------
 
@@ -50,7 +50,7 @@ class DefaultBitOutputTest extends AbstractBitOutputTest<DefaultBitOutput> {
      * Tests {@link DefaultBitOutput#getDelegate()}.
      */
     @Test
-    void testGetDelegate() {
+    public void testGetDelegate() {
         final ByteOutput delegate = bitOutput.getDelegate();
     }
 
@@ -60,7 +60,7 @@ class DefaultBitOutputTest extends AbstractBitOutputTest<DefaultBitOutput> {
      * Tests {@link DefaultBitOutput#setDelegate(ByteOutput)}.
      */
     @Test
-    void testSetDelegate() {
+    public void testSetDelegate() {
         bitOutput.setDelegate(null);
         bitOutput.setDelegate(byteOutputMock);
     }

@@ -23,26 +23,24 @@ package com.github.jinahya.bit.io;
 import java.io.IOException;
 import java.io.InputStream;
 
-import static java.util.concurrent.ThreadLocalRandom.current;
-
 /**
  * An input stream whose {@link InputStream#read()} returns zero.
  *
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  * @see BlackOutputStream
  */
-class WhiteInputStream extends InputStream {
+final class WhiteInputStream extends InputStream {
 
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * Returns a random value.
+     * Returns {@code 0}.
      *
-     * @return a random value.
+     * @return {@code 0}
      * @throws IOException if an I/O error occurs.
      */
     @Override
     public int read() throws IOException {
-        return current().nextInt(256);
+        return 0;
     }
 }

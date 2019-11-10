@@ -26,7 +26,7 @@ package com.github.jinahya.bit.io;
  * @param <T> subclass type parameter
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
-abstract class AbstractBitOutputTest<T extends AbstractBitOutput> extends BitOutputTest<T> {
+public abstract class AbstractBitOutputTest<T extends AbstractBitOutput> extends BitOutputTest<T> {
 
     // -----------------------------------------------------------------------------------------------------------------
 

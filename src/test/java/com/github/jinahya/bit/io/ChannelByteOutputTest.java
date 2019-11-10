@@ -23,15 +23,29 @@ package com.github.jinahya.bit.io;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.nio.channels.WritableByteChannel;
 
-class ChannelByteInput0Test {
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+/**
+ * A class for unit-testing {@link ChannelByteOutput} class.
+ *
+ * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
+ * @see ChannelByteInputTest
+ */
+public class ChannelByteOutputTest {
 
     // -----------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Tests {@link ChannelByteOutput#of(WritableByteChannel)} method.
+     *
+     * @throws IOException if an I/O error occurs.
+     */
     @Test
-    void testOf() throws IOException {
-        final ByteInput byteInput = ChannelByteInput.of(new WhiteByteChannel());
-        for (int i = 0; i < 1024; i++) {
-            byteInput.read();
-        }
+    public void testOf() throws IOException {
+        final ChannelByteOutput byteOutput = ChannelByteOutput.of(new BlackByteChannel());
+        byteOutput.write(0);
+        assertNotNull(byteOutput.getTarget());
     }
 }

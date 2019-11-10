@@ -34,8 +34,8 @@ import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeUnsigne
  * An abstract class for implementing {@link BitInput} interface.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
- * @see AbstractBitOutput
  * @see DefaultBitInput
+ * @see AbstractBitOutput
  */
 public abstract class AbstractBitInput implements BitInput {
 
@@ -65,10 +65,11 @@ public abstract class AbstractBitInput implements BitInput {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * Reads an unsigned 8-bit integer.
+     * Reads an {@value java.lang.Byte#SIZE}-bit unsigned integer.
      *
-     * @return an unsigned 8-bit integer.
+     * @return an {@value java.lang.Byte#SIZE}-bit unsigned integer.
      * @throws IOException if an I/O error occurs.
+     * @see AbstractBitOutput#write(int)
      */
     protected abstract int read() throws IOException;
 
@@ -83,6 +84,7 @@ public abstract class AbstractBitInput implements BitInput {
      * @throws IOException if an I/O error occurs.
      * @see #unsigned16(int)
      * @see #read()
+     * @see AbstractBitOutput#unsigned8(int, int)
      */
     protected int unsigned8(final int size) throws IOException {
         requireValidSizeUnsigned8(size);
@@ -108,6 +110,7 @@ public abstract class AbstractBitInput implements BitInput {
      * @return an unsigned short value.
      * @throws IOException if an I/O error occurs.
      * @see #unsigned8(int)
+     * @see AbstractBitOutput#unsigned16(int, int)
      */
     protected int unsigned16(final int size) throws IOException {
         requireValidSizeUnsigned16(size);

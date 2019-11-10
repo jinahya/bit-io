@@ -350,7 +350,7 @@
             <id>check-signature-java16:1.1</id>
             <phase>process-classes</phase>
             <goals>
-              <goal>check</goal>
+<!--              <goal>check</goal>-->
             </goals>
             <configuration>
               <signature>

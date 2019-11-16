@@ -26,6 +26,7 @@ import java.io.IOException;
  * An interface for reading bytes.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
+ * @see ByteOutput
  */
 //@FunctionalInterface
 public interface ByteInput {
@@ -35,7 +36,7 @@ public interface ByteInput {
     /**
      * Reads an unsigned {@value java.lang.Byte#SIZE}-bit value.
      *
-     * @return an unsigned 8-bit value; between {@code 0} and {@code 255}, both inclusive.
+     * @return an unsigned {@value java.lang.Byte#SIZE}-bit value; between {@code 0} and {@code 255}, both inclusive.
      * @throws IOException if an I/O error occurs.
      */
     int read() throws IOException;

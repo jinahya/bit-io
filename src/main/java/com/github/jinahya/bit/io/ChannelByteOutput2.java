@@ -93,9 +93,6 @@ class ChannelByteOutput2 extends AbstractByteOutput<WritableByteChannel> {
     @Override
     public void write(final int value) throws IOException {
         final ByteBuffer buffer = getBuffer();
-        if (buffer.capacity() == 0) {
-            throw new IllegalStateException("buffer.capacity == 0");
-        }
         while (!buffer.hasRemaining()) {
             buffer.flip(); // limit -> position, position -> zero
             final int written = getTarget().write(buffer);
@@ -111,7 +108,7 @@ class ChannelByteOutput2 extends AbstractByteOutput<WritableByteChannel> {
      *
      * @return the current value of {@code buffer} attribute.
      */
-    public ByteBuffer getBuffer() {
+    protected ByteBuffer getBuffer() {
         return buffer;
     }
 
@@ -120,7 +117,7 @@ class ChannelByteOutput2 extends AbstractByteOutput<WritableByteChannel> {
      *
      * @param buffer new value for {@code buffer} attribute.
      */
-    public void setBuffer(final ByteBuffer buffer) {
+    protected void setBuffer(final ByteBuffer buffer) {
         this.buffer = buffer;
     }
 

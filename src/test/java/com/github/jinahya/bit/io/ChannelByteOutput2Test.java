@@ -25,7 +25,15 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import java.nio.channels.WritableByteChannel;
 
-class ChannelByteOutput2Test extends AbstractByteOutputTest<ChannelByteOutput2, WritableByteChannel> {
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+/**
+ * A class for unit-testing {@link ChannelByteOutput2} class.
+ *
+ * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
+ * @see ChannelByteInput2Test
+ */
+public class ChannelByteOutput2Test extends AbstractByteOutputTest<ChannelByteOutput2, WritableByteChannel> {
 
     // -----------------------------------------------------------------------------------------------------------------
     ChannelByteOutput2Test() {
@@ -33,11 +41,16 @@ class ChannelByteOutput2Test extends AbstractByteOutputTest<ChannelByteOutput2, 
     }
 
     // -----------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Tests {@link ChannelByteOutput2#of(WritableByteChannel)} method.
+     *
+     * @throws IOException if an I/O error occurs.
+     */
     @Test
-    void testOf() throws IOException {
-        final ByteOutput byteOutput = ChannelByteOutput2.of(new BlackByteChannel());
-        for (int i = 0; i < 1024; i++) {
-            byteOutput.write(0);
-        }
+    public void testOf() throws IOException {
+        final ChannelByteOutput2 byteOutput = ChannelByteOutput2.of(new BlackByteChannel());
+        byteOutput.write(0);
+        assertNotNull(byteOutput.getBuffer());
     }
 }

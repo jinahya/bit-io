@@ -49,7 +49,7 @@ public class ArrayByteInput extends AbstractByteInput<byte[]> {
      *             setSource(new byte[16]);
      *             setIndex(getSource().length); // set as if it's already drained
      *         }
-     *         if (getIndex() == getSource().length) { // no more space to read; charge it.
+     *         if (getIndex() == getSource().length) { // no more array elements to read; charge it.
      *             readFully(getSource());
      *             setIndex(0);
      *         }
@@ -92,10 +92,7 @@ public class ArrayByteInput extends AbstractByteInput<byte[]> {
      */
     @Override
     public int read() throws IOException {
-        final int index = getIndex();
-        final int result = getSource()[index] & 0xFF;
-        setIndex(index + 1);
-        return result;
+        return getSource()[getIndexAndIncrement()] & 0xFF;
     }
 
     // ----------------------------------------------------------------------------------------------------------- index
@@ -105,8 +102,17 @@ public class ArrayByteInput extends AbstractByteInput<byte[]> {
      *
      * @return current value of {@code index} attribute.
      */
-    public int getIndex() {
+    protected int getIndex() {
         return index;
+    }
+
+    /**
+     * Returns the current value of {@code index} attribute and increments it by {@code 1}.
+     *
+     * @return the current value of {@code index} attribute.
+     */
+    protected int getIndexAndIncrement() {
+        return index++;
     }
 
     /**
@@ -114,7 +120,7 @@ public class ArrayByteInput extends AbstractByteInput<byte[]> {
      *
      * @param index new value for {@code index} attribute.
      */
-    public void setIndex(final int index) {
+    protected void setIndex(final int index) {
         this.index = index;
     }
 

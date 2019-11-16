@@ -26,6 +26,12 @@ import java.util.WeakHashMap;
 
 import static java.util.Collections.synchronizedMap;
 
+/**
+ * A utility class for {@link BitWritable}.
+ *
+ * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
+ * @see BitReadables
+ */
 final class BitWritables {
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -35,7 +41,7 @@ final class BitWritables {
         BIT_WRITERS = synchronizedMap(new WeakHashMap<Class<?>, BitWriter<?>>());
     }
 
-    public static <T extends BitWritable> BitWriter<T> cachedBitWriterFor(final Class<T> type) {
+    static <T extends BitWritable> BitWriter<T> cachedBitWriterFor(final Class<T> type) {
         if (type == null) {
             throw new NullPointerException("type is null");
         }

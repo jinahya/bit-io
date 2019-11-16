@@ -40,7 +40,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 /**
  * An abstract class for testing subclasses of {@link BitOutput}.
  *
- * @param <T> bit output type parameter.
+ * @param <T> bit output type parameter
  * @see BitInputTest
  * @see AbstractBitOutputTest
  */

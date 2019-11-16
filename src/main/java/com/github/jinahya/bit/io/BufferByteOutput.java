@@ -46,8 +46,8 @@ public class BufferByteOutput extends AbstractByteOutput<ByteBuffer> {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * {@inheritDoc} The {@code write(int)} method of {@code BufferByteOutput} class {@link ByteBuffer#put(byte) puts}
-     * specified value to {@link #getTarget() target}.
+     * {@inheritDoc} The {@code write(int)} method of {@code BufferByteOutput} class invokes {@link ByteBuffer#put(byte)
+     * put(byte)} method on the {@link #getTarget() target} with specified value casted as {@code byte}.
      *
      * @param value {@inheritDoc}
      * @throws IOException {@inheritDoc}

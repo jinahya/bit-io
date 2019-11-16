@@ -62,6 +62,12 @@ abstract class ByteOutputTest<T extends ByteOutput> {
     }
 
     // -----------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Returns an instance of byte output to test with.
+     *
+     * @return an instance of byte output.
+     */
     protected T byteOutput() {
         return byteInputInstance.select(byteOutputClass).get();
     }

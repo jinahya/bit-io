@@ -36,6 +36,8 @@ public abstract class AbstractByteOutput<T> implements ByteOutput {
      *
      * @param target the underlying byte target to which bytes are written; {@code null} if it is supposed to be lazily
      *               initialized and set.
+     * @see #getTarget()
+     * @see #setTarget(Object)
      */
     public AbstractByteOutput(final T target) {
         super();
@@ -63,7 +65,7 @@ public abstract class AbstractByteOutput<T> implements ByteOutput {
      *
      * @return the current value of {@code target} attribute.
      */
-    public T getTarget() {
+    protected T getTarget() {
         return target;
     }
 
@@ -72,7 +74,7 @@ public abstract class AbstractByteOutput<T> implements ByteOutput {
      *
      * @param target new value for {@code target} attribute.
      */
-    public void setTarget(final T target) {
+    protected void setTarget(final T target) {
         this.target = target;
     }
 

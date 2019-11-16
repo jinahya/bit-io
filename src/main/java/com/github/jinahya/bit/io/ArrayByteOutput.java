@@ -49,7 +49,7 @@ public class ArrayByteOutput extends AbstractByteOutput<byte[]> {
      *             setTarget(new byte[16]);
      *             setIndex(0);
      *         }
-     *         if (getIndex() == getTarget().length) { // no more space to write; drain it.
+     *         if (getIndex() == getTarget().length) { // no more array elements to write; drain it.
      *             writeFully(getTarget());
      *             setIndex(0);
      *         }
@@ -92,9 +92,7 @@ public class ArrayByteOutput extends AbstractByteOutput<byte[]> {
      */
     @Override
     public void write(final int value) throws IOException {
-        final int index = getIndex();
-        getTarget()[index] = (byte) value;
-        setIndex(index + 1);
+        getTarget()[getIndexAndIncrement()] = (byte) value;
     }
 
     // ----------------------------------------------------------------------------------------------------------- index
@@ -104,8 +102,17 @@ public class ArrayByteOutput extends AbstractByteOutput<byte[]> {
      *
      * @return the current value of {@code index} attribute.
      */
-    public int getIndex() {
+    protected int getIndex() {
         return index;
+    }
+
+    /**
+     * Returns the current value of {@code index} attribute and increments it by {@code 1}.
+     *
+     * @return the current value of {@code index} attribute.
+     */
+    protected int getIndexAndIncrement() {
+        return index++;
     }
 
     /**
@@ -113,7 +120,7 @@ public class ArrayByteOutput extends AbstractByteOutput<byte[]> {
      *
      * @param index new value for {@code index} attribute.
      */
-    public void setIndex(final int index) {
+    protected void setIndex(final int index) {
         this.index = index;
     }
 

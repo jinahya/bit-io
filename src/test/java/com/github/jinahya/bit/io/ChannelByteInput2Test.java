@@ -24,8 +24,17 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.nio.channels.ReadableByteChannel;
+import java.nio.channels.WritableByteChannel;
 
-class ChannelByteInput2Test extends AbstractByteInputTest<ChannelByteInput2, ReadableByteChannel> {
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+/**
+ * A class for unit-testing {@link ChannelByteInput2} class.
+ *
+ * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
+ * @see ChannelByteOutput2Test
+ */
+public class ChannelByteInput2Test extends AbstractByteInputTest<ChannelByteInput2, ReadableByteChannel> {
 
     // -----------------------------------------------------------------------------------------------------------------
     ChannelByteInput2Test() {
@@ -33,11 +42,16 @@ class ChannelByteInput2Test extends AbstractByteInputTest<ChannelByteInput2, Rea
     }
 
     // -----------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Tests {@link ChannelByteOutput2#of(WritableByteChannel)} method.
+     *
+     * @throws IOException if an I/O error occurs.
+     */
     @Test
-    void testOf() throws IOException {
-        final ByteInput byteInput = ChannelByteInput2.of(new WhiteByteChannel());
-        for (int i = 0; i < 1024; i++) {
-            byteInput.read();
-        }
+    public void testOf() throws IOException {
+        final ChannelByteInput2 byteInput = ChannelByteInput2.of(new WhiteByteChannel());
+        byteInput.read();
+        assertNotNull(byteInput.getBuffer());
     }
 }

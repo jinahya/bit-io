@@ -62,6 +62,7 @@ public interface BitInput {
      *
      * @return an {@value java.lang.Byte#SIZE}-bit signed {@code byte} value.
      * @throws IOException if an I/O error occurs.
+     * @see BitOutput#writeByte8(byte)
      */
     byte readByte8() throws IOException;
 
@@ -85,6 +86,7 @@ public interface BitInput {
      *
      * @return a {@value java.lang.Short#SIZE}-bit signed {@code short} value.
      * @throws IOException if an I/O error occurs.
+     * @see BitOutput#writeShort16(short)
      */
     short readShort16() throws IOException;
 
@@ -93,6 +95,7 @@ public interface BitInput {
      *
      * @return a signed {@value java.lang.Short#SIZE}-bit {@code short} value encoded in little endian byte order.
      * @throws IOException if an I/O error occurs.
+     * @see BitOutput#writeShort16Le(short)
      */
     short readShort16Le() throws IOException;
 
@@ -116,6 +119,7 @@ public interface BitInput {
      *
      * @return a {@value java.lang.Integer#SIZE}-bit signed {@code int} value.
      * @throws IOException if an I/O error occurs.
+     * @see BitInput#readInt32()
      */
     int readInt32() throws IOException;
 
@@ -124,6 +128,7 @@ public interface BitInput {
      *
      * @return a {@value java.lang.Integer#SIZE}-bit signed {@code int} value encoded in little endian byte order.
      * @throws IOException if an I/O error occurs.
+     * @see BitInput#readInt32Le()
      */
     int readInt32Le() throws IOException;
 
@@ -147,6 +152,7 @@ public interface BitInput {
      *
      * @return a {@value java.lang.Long#SIZE}-bit signed {@code long} value.
      * @throws IOException if an I/O error occurs.
+     * @see BitOutput#writeLong64(long)
      */
     long readLong64() throws IOException;
 
@@ -155,6 +161,7 @@ public interface BitInput {
      *
      * @return a {@value java.lang.Long#SIZE}-bit signed {@code long} value encoded in little endian byte order.
      * @throws IOException if an I/O error occurs.
+     * @see BitOutput#writeLong64Le(long)
      */
     long readLong64Le() throws IOException;
 
@@ -166,7 +173,6 @@ public interface BitInput {
      * @param size the number of bits to read; between {@code 1} and {@value java.lang.Character#SIZE}, both inclusive.
      * @return a {@code char} value of specified {@code size}.
      * @throws IOException if an I/O error occurs.
-     * @see #readInt(boolean, int)
      * @see BitOutput#writeChar(int, char)
      */
     char readChar(int size) throws IOException;
@@ -177,6 +183,7 @@ public interface BitInput {
      *
      * @return a {@value java.lang.Character#SIZE}-bit {@code char} value.
      * @throws IOException if an I/O error occurs.
+     * @see BitOutput#writeChar16(char)
      */
     char readChar16() throws IOException;
 

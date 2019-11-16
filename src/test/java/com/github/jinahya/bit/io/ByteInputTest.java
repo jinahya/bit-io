@@ -74,6 +74,8 @@ abstract class ByteInputTest<T extends ByteInput> {
 
     /**
      * An instance of {@link #byteInputClass} to test with.
+     *
+     * @return an instance of byte input.
      */
     protected T byteInput() {
         return byteInputInstance.select(byteInputClass).get();

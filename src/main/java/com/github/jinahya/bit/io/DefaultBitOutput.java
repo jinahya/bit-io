@@ -61,7 +61,7 @@ public class DefaultBitOutput extends AbstractBitOutput {
 
     /**
      * {@inheritDoc} The {@code write(int)} method of {@code DefaultBitOutput} class invokes {@link
-     * ByteOutput#write(int) write(int)} on {@link #getDelegate() delegate} with given value.
+     * ByteOutput#write(int) write(int)} on the {@link #getDelegate() delegate} with given value.
      *
      * @param value {@inheritDoc}
      * @throws IOException {@inheritDoc}
@@ -76,20 +76,20 @@ public class DefaultBitOutput extends AbstractBitOutput {
     // -------------------------------------------------------------------------------------------------------- delegate
 
     /**
-     * returns the current value of {@link #delegate}.
+     * returns the current value of {@code delegate} attribute.
      *
-     * @return current value of {@link #delegate}
+     * @return current value of {@code delegate} attribute.
      */
-    public ByteOutput getDelegate() {
+    protected ByteOutput getDelegate() {
         return delegate;
     }
 
     /**
-     * Replaces the value of {@link #delegate} with given.
+     * Replaces the value of {@code delegate} attribute with given.
      *
-     * @param delegate new value of {@link #delegate}.
+     * @param delegate new value of {@code delegate} attribute.
      */
-    public void setDelegate(final ByteOutput delegate) {
+    protected void setDelegate(final ByteOutput delegate) {
         this.delegate = delegate;
     }
 

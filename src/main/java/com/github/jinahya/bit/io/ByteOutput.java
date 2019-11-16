@@ -26,6 +26,7 @@ import java.io.IOException;
  * An interface for writing bytes.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
+ * @see ByteInput
  */
 //@FunctionalInterface
 public interface ByteOutput {
@@ -35,7 +36,8 @@ public interface ByteOutput {
     /**
      * Writes given unsigned {@value java.lang.Byte#SIZE}-bit value.
      *
-     * @param value the value to write between {@code 0} and {@code 255}, both inclusive.
+     * @param value the {@value java.lang.Byte#SIZE}-bit value to write between {@code 0} and {@code 255}, both
+     *              inclusive.
      * @throws IOException if an I/O error occurs.
      */
     void write(int value) throws IOException;

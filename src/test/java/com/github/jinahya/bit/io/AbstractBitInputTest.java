@@ -23,7 +23,7 @@ package com.github.jinahya.bit.io;
 /**
  * An abstract class for testing subclasses of {@link AbstractBitInput}.
  *
- * @param <T> abstract bit input type parameter.
+ * @param <T> abstract bit input type parameter
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  * @see AbstractBitOutputTest
  */

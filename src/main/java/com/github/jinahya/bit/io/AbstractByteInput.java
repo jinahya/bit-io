@@ -36,6 +36,8 @@ public abstract class AbstractByteInput<T> implements ByteInput {
      *
      * @param source the underlying byte source from which bytes are read; {@code null} if it is intended to be lazily
      *               initialized and set.
+     * @see #getSource()
+     * @see #setSource(Object)
      */
     public AbstractByteInput(final T source) {
         super();
@@ -63,7 +65,7 @@ public abstract class AbstractByteInput<T> implements ByteInput {
      *
      * @return the current value of {@code source} attribute.
      */
-    public T getSource() {
+    protected T getSource() {
         return source;
     }
 
@@ -72,7 +74,7 @@ public abstract class AbstractByteInput<T> implements ByteInput {
      *
      * @param source new value for {@code source} attribute.
      */
-    public void setSource(final T source) {
+    protected void setSource(final T source) {
         this.source = source;
     }
 

@@ -80,7 +80,7 @@ public class DefaultBitOutput extends AbstractBitOutput {
      *
      * @return current value of {@code delegate} attribute.
      */
-    public ByteOutput getDelegate() {
+    protected ByteOutput getDelegate() {
         return delegate;
     }
 
@@ -89,7 +89,7 @@ public class DefaultBitOutput extends AbstractBitOutput {
      *
      * @param delegate new value of {@code delegate} attribute.
      */
-    public void setDelegate(final ByteOutput delegate) {
+    protected void setDelegate(final ByteOutput delegate) {
         this.delegate = delegate;
     }
 

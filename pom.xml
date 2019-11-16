@@ -350,7 +350,7 @@
             <id>check-signature-java16:1.1</id>
             <phase>process-classes</phase>
             <goals>
-<!--              <goal>check</goal>-->
+              <!--              <goal>check</goal>-->
             </goals>
             <configuration>
               <signature>
@@ -524,7 +524,7 @@
         </pluginManagement>
       </build>
     </profile>
-    <profile>
+    <profile> <!-- just for IntelliJ IDEA -->
       <id>1.8</id>
       <properties>
         <maven.compiler.source>1.8</maven.compiler.source>

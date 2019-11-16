@@ -38,7 +38,7 @@ interface BitReader<T> {
      * Reads an instance from specified bit input.
      *
      * @param input the bit input from which the object is read.
-     * @return an object.
+     * @return an object value read.
      * @throws IOException if an I/O error occurs.
      */
     T read(BitInput input) throws IOException;

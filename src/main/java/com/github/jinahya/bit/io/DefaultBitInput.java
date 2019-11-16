@@ -33,7 +33,7 @@ public class DefaultBitInput extends AbstractBitInput {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * Create a new instance with specified delegate.
+     * Create a new instance with specified Adelegate.
      *
      * @param delegate the delegate from which bytes are read; may be {@code null} if it is intended to be lazily
      *                 initialized and set.
@@ -80,7 +80,7 @@ public class DefaultBitInput extends AbstractBitInput {
      *
      * @return current value of {@code delegate} attribute.
      */
-    public ByteInput getDelegate() {
+    protected ByteInput getDelegate() {
         return delegate;
     }
 
@@ -89,7 +89,7 @@ public class DefaultBitInput extends AbstractBitInput {
      *
      * @param delegate new value of {@code delegate} attribute.
      */
-    public void setDelegate(final ByteInput delegate) {
+    protected void setDelegate(final ByteInput delegate) {
         this.delegate = delegate;
     }
 

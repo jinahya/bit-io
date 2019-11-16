@@ -71,7 +71,7 @@ class ChannelByteOutput extends BufferByteOutput {
      *
      * @return the current value of {@code channel} attribute.
      */
-    public WritableByteChannel getChannel() {
+    protected WritableByteChannel getChannel() {
         return channel;
     }
 
@@ -80,7 +80,7 @@ class ChannelByteOutput extends BufferByteOutput {
      *
      * @param channel new value for {@code channel} attribute.
      */
-    public void setChannel(final WritableByteChannel channel) {
+    protected void setChannel(final WritableByteChannel channel) {
         this.channel = channel;
     }
 

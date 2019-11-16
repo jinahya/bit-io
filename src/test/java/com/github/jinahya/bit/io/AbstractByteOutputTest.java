@@ -30,8 +30,8 @@ import static java.util.Objects.requireNonNull;
 /**
  * An abstract class for testing subclasses of {@link AbstractByteOutput}.
  *
- * @param <T> byte output type parameter.
- * @param <U> byte target type parameter.
+ * @param <T> byte output type parameter
+ * @param <U> byte target type parameter
  * @see AbstractByteInputTest
  */
 @ExtendWith({MockitoExtension.class})

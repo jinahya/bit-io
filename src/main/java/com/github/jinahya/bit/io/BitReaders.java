@@ -32,9 +32,9 @@ import static java.util.Collections.synchronizedMap;
  * A utility class for {@link BitReadable}.
  *
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
- * @see BitWritables
+ * @see BitWriters
  */
-final class BitReadables {
+final class BitReaders {
 
     // -----------------------------------------------------------------------------------------------------------------
     private static final Map<Class<?>, BitReader<?>> BIT_READERS;
@@ -74,6 +74,9 @@ final class BitReadables {
         return new BitReader<T>() {
             @Override
             public T read(final BitInput input) throws IOException {
+                if (input == null) {
+                    throw new NullPointerException("input is null");
+                }
                 try {
                     final Constructor<? extends T> constructor = type.getDeclaredConstructor();
                     if (!constructor.isAccessible()) {
@@ -98,7 +101,7 @@ final class BitReadables {
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    private BitReadables() {
+    private BitReaders() {
         super();
     }
 }

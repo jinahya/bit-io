@@ -30,9 +30,9 @@ import static java.util.Collections.synchronizedMap;
  * A utility class for {@link BitWritable}.
  *
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
- * @see BitReadables
+ * @see BitReaders
  */
-final class BitWritables {
+final class BitWriters {
 
     // -----------------------------------------------------------------------------------------------------------------
     private static final Map<Class<?>, BitWriter<?>> BIT_WRITERS;
@@ -70,6 +70,12 @@ final class BitWritables {
         return new BitWriter<T>() {
             @Override
             public void write(final BitOutput output, final T value) throws IOException {
+                if (output == null) {
+                    throw new NullPointerException("output is null");
+                }
+                if (value == null) {
+                    throw new NullPointerException("value is null");
+                }
                 value.write(output);
             }
         };
@@ -80,7 +86,7 @@ final class BitWritables {
     /**
      * Creates a new instance.
      */
-    private BitWritables() {
+    private BitWriters() {
         super();
     }
 }

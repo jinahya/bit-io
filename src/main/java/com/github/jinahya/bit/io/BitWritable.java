@@ -26,7 +26,7 @@ import java.io.IOException;
  * An interface for writing contents to a bit output.
  *
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
- * @see BitWritables
+ * @see BitWriters
  * @see BitReadable
  */
 interface BitWritable {

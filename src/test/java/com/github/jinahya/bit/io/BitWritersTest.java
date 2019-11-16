@@ -24,31 +24,31 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
-import static com.github.jinahya.bit.io.BitReadables.cachedBitReaderFor;
-import static com.github.jinahya.bit.io.BitReadables.newBitReaderFor;
+import static com.github.jinahya.bit.io.BitWriters.cachedBitWriterFor;
+import static com.github.jinahya.bit.io.BitWriters.newBitWriterFor;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-class BitReadablesTest {
+public class BitWritersTest {
 
     // -----------------------------------------------------------------------------------------------------------------
     @Test
-    void testCachedBitReaderFor() throws IOException {
-        assertThrows(NullPointerException.class, () -> cachedBitReaderFor(null));
-        final BitReader<User> expected = cachedBitReaderFor(User.class);
+    public void testCachedBitWriterFor() throws IOException {
+        assertThrows(NullPointerException.class, () -> cachedBitWriterFor(null));
+        final BitWriter<User> expected = cachedBitWriterFor(User.class);
         assertNotNull(expected);
-        final BitReader<User> actual = cachedBitReaderFor(User.class);
+        final BitWriter<User> actual = cachedBitWriterFor(User.class);
         assertNotNull(actual);
         assertSame(expected, actual);
-        final User user = actual.read(new DefaultBitInput(new StreamByteInput(new WhiteInputStream())));
+        actual.write(new DefaultBitOutput(new StreamByteOutput(new BlackOutputStream())), new User());
     }
 
     @Test
-    void testNewBitReaderFor() throws IOException {
-        assertThrows(NullPointerException.class, () -> newBitReaderFor(null));
-        final BitReader<User> reader = cachedBitReaderFor(User.class);
-        assertNotNull(reader);
-        final User user = reader.read(new DefaultBitInput(new StreamByteInput(new WhiteInputStream())));
+    public void testNewBitWriterFor() throws IOException {
+        assertThrows(NullPointerException.class, () -> newBitWriterFor(null));
+        final BitWriter<User> writer = newBitWriterFor(User.class);
+        assertNotNull(writer);
+        writer.write(new DefaultBitOutput(new StreamByteOutput(new BlackOutputStream())), new User());
     }
 }

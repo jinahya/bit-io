@@ -20,6 +20,8 @@ package com.github.jinahya.bit.io;
  * #L%
  */
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.WritableByteChannel;
@@ -29,15 +31,17 @@ import java.nio.channels.WritableByteChannel;
  *
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  * @see WhiteByteChannel
+ * @see WhiteInputStream
  */
+@Slf4j
 final class BlackByteChannel implements WritableByteChannel {
 
     // -----------------------------------------------------------------------------------------------------------------
     @Override
     public int write(final ByteBuffer src) throws IOException {
-        final int w = src.remaining();
+        final int written = src.remaining();
         src.position(src.limit());
-        return w;
+        return written;
     }
 
     @Override

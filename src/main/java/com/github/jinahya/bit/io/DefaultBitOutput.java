@@ -76,7 +76,7 @@ public class DefaultBitOutput extends AbstractBitOutput {
     // -------------------------------------------------------------------------------------------------------- delegate
 
     /**
-     * returns the current value of {@code delegate} attribute.
+     * Returns the current value of {@code delegate} attribute.
      *
      * @return current value of {@code delegate} attribute.
      */

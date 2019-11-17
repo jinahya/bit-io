@@ -83,8 +83,8 @@ public class ArrayByteOutput extends AbstractByteOutput<byte[]> {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * {@inheritDoc} The {@code write(int)} method of {@code ArrayByteOutput} class sets at {@link #getIndex() index} in
-     * {@link #getTarget() target} with specified {@code value}. The {@link #setIndex(int) index} attribute, when
+     * {@inheritDoc} The {@code write(int)} method of {@code ArrayByteOutput} class sets {@link #getTarget()
+     * target}[{@link #getIndex() index}] with specified {@code value}. The {@link #setIndex(int) index} attribute, when
      * successfully returns, is increased by {@code 1}.
      *
      * @param value {@inheritDoc}
@@ -93,6 +93,17 @@ public class ArrayByteOutput extends AbstractByteOutput<byte[]> {
     @Override
     public void write(final int value) throws IOException {
         getTarget()[getIndexAndIncrement()] = (byte) value;
+    }
+
+    // ---------------------------------------------------------------------------------------------------------- target
+    @Override
+    protected byte[] getTarget() {
+        return super.getTarget();
+    }
+
+    @Override
+    protected void setTarget(final byte[] target) {
+        super.setTarget(target);
     }
 
     // ----------------------------------------------------------------------------------------------------------- index
@@ -111,7 +122,7 @@ public class ArrayByteOutput extends AbstractByteOutput<byte[]> {
      *
      * @return the current value of {@code index} attribute.
      */
-    protected int getIndexAndIncrement() {
+    int getIndexAndIncrement() {
         return index++;
     }
 

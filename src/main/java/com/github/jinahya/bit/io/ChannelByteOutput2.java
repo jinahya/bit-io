@@ -101,6 +101,17 @@ class ChannelByteOutput2 extends AbstractByteOutput<WritableByteChannel> {
         buffer.put((byte) value);
     }
 
+    // ---------------------------------------------------------------------------------------------------------- target
+    @Override
+    protected WritableByteChannel getTarget() {
+        return super.getTarget();
+    }
+
+    @Override
+    protected void setTarget(final WritableByteChannel target) {
+        super.setTarget(target);
+    }
+
     // ---------------------------------------------------------------------------------------------------------- buffer
 
     /**

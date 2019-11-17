@@ -58,4 +58,14 @@ public class StreamByteOutput extends AbstractByteOutput<OutputStream> {
     public void write(final int value) throws IOException {
         getTarget().write(value);
     }
+
+    @Override
+    protected OutputStream getTarget() {
+        return super.getTarget();
+    }
+
+    @Override
+    protected void setTarget(OutputStream target) {
+        super.setTarget(target);
+    }
 }

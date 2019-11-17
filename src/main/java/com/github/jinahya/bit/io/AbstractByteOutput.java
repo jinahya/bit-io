@@ -27,7 +27,7 @@ package com.github.jinahya.bit.io;
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  * @see AbstractByteInput
  */
-public abstract class AbstractByteOutput<T> implements ByteOutput {
+abstract class AbstractByteOutput<T> implements ByteOutput {
 
     // -----------------------------------------------------------------------------------------------------------------
 
@@ -39,7 +39,7 @@ public abstract class AbstractByteOutput<T> implements ByteOutput {
      * @see #getTarget()
      * @see #setTarget(Object)
      */
-    public AbstractByteOutput(final T target) {
+    AbstractByteOutput(final T target) {
         super();
         this.target = target;
     }

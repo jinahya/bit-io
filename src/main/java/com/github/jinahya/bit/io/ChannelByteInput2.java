@@ -96,6 +96,17 @@ class ChannelByteInput2 extends AbstractByteInput<ReadableByteChannel> {
         return buffer.get() & 0xFF;
     }
 
+    // ---------------------------------------------------------------------------------------------------------- source
+    @Override
+    protected ReadableByteChannel getSource() {
+        return super.getSource();
+    }
+
+    @Override
+    protected void setSource(final ReadableByteChannel source) {
+        super.setSource(source);
+    }
+
     // ---------------------------------------------------------------------------------------------------------- buffer
 
     /**

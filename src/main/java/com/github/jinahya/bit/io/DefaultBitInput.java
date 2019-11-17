@@ -87,7 +87,7 @@ public class DefaultBitInput extends AbstractBitInput {
     /**
      * Replaces the value of {@code delegate} attribute with given.
      *
-     * @param delegate new value of {@code delegate} attribute.
+     * @param delegate new value for {@code delegate} attribute.
      */
     protected void setDelegate(final ByteInput delegate) {
         this.delegate = delegate;

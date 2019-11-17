@@ -87,7 +87,7 @@ public class DefaultBitOutput extends AbstractBitOutput {
     /**
      * Replaces the value of {@code delegate} attribute with given.
      *
-     * @param delegate new value of {@code delegate} attribute.
+     * @param delegate new value for {@code delegate} attribute.
      */
     protected void setDelegate(final ByteOutput delegate) {
         this.delegate = delegate;

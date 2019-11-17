@@ -23,7 +23,7 @@ package com.github.jinahya.bit.io;
 import java.io.IOException;
 
 /**
- * A default implementation of {@link ByteInput} which reads bytes from an instance of {@link ByteInput}.
+ * A default implementation of {@link BitInput} which reads bytes from an instance of {@link ByteInput}.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  * @see DefaultBitOutput

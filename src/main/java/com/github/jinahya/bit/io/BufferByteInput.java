@@ -58,8 +58,8 @@ public class BufferByteInput extends AbstractByteInput<ByteBuffer> {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * {@inheritDoc} The {@code read()} method of {@code BufferByteInput} class invokes {@link ByteBuffer#get() get()}
-     * method on {@link #getSource() source} and returns it as an unsigned {@code int}.
+     * {@inheritDoc} The {@code read()} method of {@code BufferByteInput} class invokes {@link ByteBuffer#get()} method,
+     * on what {@link #getSource()} method returns, and returns the result as an unsigned {@code int}.
      *
      * @return {@inheritDoc}
      * @throws IOException {@inheritDoc}

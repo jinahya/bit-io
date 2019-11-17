@@ -78,7 +78,8 @@ class ChannelByteInput2 extends AbstractByteInput<ReadableByteChannel> {
 
     /**
      * {@inheritDoc} The {@code read()} method of {@code ChannelByteInput2} class, if required, charges the {@link
-     * #getBuffer() buffer} from the {@link #getSource() channel} and returns the value from the {@code buffer}.
+     * #getBuffer() buffer} from the {@link #getSource() channel} and returns the result of {@link ByteBuffer#get()
+     * get()} as an unsigned {@code int}.
      *
      * @return {@inheritDoc}
      * @throws IOException {@inheritDoc}

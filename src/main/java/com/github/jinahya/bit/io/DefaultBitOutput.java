@@ -61,7 +61,7 @@ public class DefaultBitOutput extends AbstractBitOutput {
 
     /**
      * {@inheritDoc} The {@code write(int)} method of {@code DefaultBitOutput} class invokes {@link
-     * ByteOutput#write(int) write(int)} on the {@link #getDelegate() delegate} with given value.
+     * ByteOutput#write(int) write(int)} on {@link #getDelegate() delegate} with given value.
      *
      * @param value {@inheritDoc}
      * @throws IOException {@inheritDoc}

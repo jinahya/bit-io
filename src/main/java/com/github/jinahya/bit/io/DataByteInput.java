@@ -47,7 +47,7 @@ public class DataByteInput extends AbstractByteInput<DataInput> {
 
     /**
      * {@inheritDoc} The {@code read()} method of {@code DataByteInput} class invokes {@link
-     * DataInput#readUnsignedByte() readUnsignedByte()} on the {@link #getSource() source} from the {@link #getSource()
+     * DataInput#readUnsignedByte() readUnsignedByte()} on {@link #getSource() source} from the {@link #getSource()
      * source} and returns the result.
      *
      * @return {@inheritDoc}

@@ -20,6 +20,8 @@ package com.github.jinahya.bit.io;
  * #L%
  */
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.ReadableByteChannel;
@@ -29,15 +31,17 @@ import java.nio.channels.ReadableByteChannel;
  *
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  * @see BlackByteChannel
+ * @see BlackOutputStream
  */
+@Slf4j
 final class WhiteByteChannel implements ReadableByteChannel {
 
     // -----------------------------------------------------------------------------------------------------------------
     @Override
     public int read(final ByteBuffer dst) throws IOException {
-        int r = dst.remaining();
+        int read = dst.remaining();
         dst.position(dst.limit());
-        return r;
+        return read;
     }
 
     @Override

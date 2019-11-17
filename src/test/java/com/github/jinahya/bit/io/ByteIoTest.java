@@ -49,7 +49,7 @@ class ByteIoTest {
     @MethodSource({"com.github.jinahya.bit.io.ByteIoSource#sourceByteIo"})
     @ParameterizedTest
     void test(final ByteOutput output, final ByteInput input) throws IOException {
-        final int expected = current().nextInt(Byte.MAX_VALUE);
+        final int expected = current().nextInt(256);
         output.write(expected);
         final int actual = input.read();
         assertEquals(expected, actual);

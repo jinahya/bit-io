@@ -28,6 +28,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.channels.WritableByteChannel;
 import java.util.stream.Stream;
@@ -104,7 +105,7 @@ final class ByteIoSource {
             public int read() throws IOException {
                 if (getSource() == null) {
                     setSource(ofNullable(holder[0]).orElseGet(() -> allocate(0)));
-                    getSource().flip(); // limit -> position, position -> zero
+                    ((Buffer) getSource()).flip(); // limit -> position, position -> zero
                 }
                 return super.read();
             }
@@ -179,7 +180,7 @@ final class ByteIoSource {
                     {
                         final WritableByteChannel target = output.getTarget();
                         final ByteBuffer buffer = output.getBuffer();
-                        for (buffer.flip(); buffer.hasRemaining(); ) {
+                        for (((Buffer) buffer).flip(); buffer.hasRemaining(); ) {
                             target.write(buffer);
                         }
                     }

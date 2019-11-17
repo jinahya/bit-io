@@ -20,6 +20,8 @@ package com.github.jinahya.bit.io;
  * #L%
  */
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -29,6 +31,7 @@ import java.io.InputStream;
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  * @see BlackOutputStream
  */
+@Slf4j
 final class WhiteInputStream extends InputStream {
 
     // -----------------------------------------------------------------------------------------------------------------

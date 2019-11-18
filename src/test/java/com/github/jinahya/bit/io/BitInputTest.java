@@ -172,5 +172,5 @@ abstract class BitInputTest<T extends BitInput> {
     /**
      * An injected instance of {@link #bitInputClass}.
      */
-    transient T bitInput;
+    T bitInput;
 }

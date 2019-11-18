@@ -21,11 +21,9 @@ package com.github.jinahya.bit.io;
  */
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import static java.util.Objects.requireNonNull;
+import static org.mockito.Mockito.mock;
 
 /**
  * An abstract class for testing subclasses of {@link AbstractByteOutput}.
@@ -34,7 +32,6 @@ import static java.util.Objects.requireNonNull;
  * @param <U> byte target type parameter
  * @see AbstractByteInputTest
  */
-@ExtendWith({MockitoExtension.class})
 abstract class AbstractByteOutputTest<T extends AbstractByteOutput<U>, U> extends ByteOutputTest<T> {
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -51,15 +48,27 @@ abstract class AbstractByteOutputTest<T extends AbstractByteOutput<U>, U> extend
     }
 
     // -----------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Tests {@link AbstractByteOutput#getTarget()} method.
+     */
     @Test
     void testGetTarget() {
         final U target = byteOutput().getTarget();
     }
 
+    /**
+     * Tests {@link AbstractByteOutput#setTarget(Object)} method.
+     */
     @Test
     void testSetTarget() {
         byteOutput().setTarget(null);
-        byteOutput().setTarget(byteTargetMock);
+        byteOutput().setTarget(byteTarget());
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    U byteTarget() {
+        return mock(byteTargetClass);
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -68,7 +77,4 @@ abstract class AbstractByteOutputTest<T extends AbstractByteOutput<U>, U> extend
      * The byte target class.
      */
     final Class<U> byteTargetClass;
-
-    @Mock
-    private transient U byteTargetMock;
 }

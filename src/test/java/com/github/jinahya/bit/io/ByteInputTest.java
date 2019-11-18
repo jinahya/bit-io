@@ -89,5 +89,5 @@ abstract class ByteInputTest<T extends ByteInput> {
     final Class<T> byteInputClass;
 
     @Inject
-    private transient Instance<ByteInput> byteInputInstance;
+    private Instance<ByteInput> byteInputInstance;
 }

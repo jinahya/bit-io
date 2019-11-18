@@ -21,11 +21,9 @@ package com.github.jinahya.bit.io;
  */
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import static java.util.Objects.requireNonNull;
+import static org.mockito.Mockito.mock;
 
 /**
  * An abstract class for testing subclasses of {@link AbstractByteInput}.
@@ -34,7 +32,6 @@ import static java.util.Objects.requireNonNull;
  * @param <U> byte source type parameter
  * @see AbstractByteOutputTest
  */
-@ExtendWith({MockitoExtension.class})
 abstract class AbstractByteInputTest<T extends AbstractByteInput<U>, U> extends ByteInputTest<T> {
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -68,7 +65,12 @@ abstract class AbstractByteInputTest<T extends AbstractByteInput<U>, U> extends 
     @Test
     void testSetSource() {
         byteInput().setSource(null);
-        byteInput().setSource(byteSourceMock);
+        byteInput().setSource(byteSource());
+    }
+
+    // ------------------------------------------------------------------------------------------------------ byteSource
+    U byteSource() {
+        return mock(byteSourceClass);
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -77,7 +79,4 @@ abstract class AbstractByteInputTest<T extends AbstractByteInput<U>, U> extends 
      * The type of byte source.
      */
     final Class<U> byteSourceClass;
-
-    @Mock
-    private transient U byteSourceMock;
 }

@@ -40,7 +40,7 @@ final class WhiteByteChannel implements ReadableByteChannel {
     @Override
     public int read(final ByteBuffer dst) throws IOException {
         int read = dst.remaining();
-        dst.position(dst.limit());
+        ((ByteBuffer) dst).position(dst.limit());
         return read;
     }
 

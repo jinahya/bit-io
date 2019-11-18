@@ -27,7 +27,7 @@ package com.github.jinahya.bit.io;
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  * @see AbstractByteOutput
  */
-public abstract class AbstractByteInput<T> implements ByteInput {
+abstract class AbstractByteInput<T> implements ByteInput {
 
     // -----------------------------------------------------------------------------------------------------------------
 
@@ -39,7 +39,7 @@ public abstract class AbstractByteInput<T> implements ByteInput {
      * @see #getSource()
      * @see #setSource(Object)
      */
-    public AbstractByteInput(final T source) {
+    AbstractByteInput(final T source) {
         super();
         this.source = source;
     }

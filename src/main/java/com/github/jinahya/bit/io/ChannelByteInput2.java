@@ -78,7 +78,8 @@ class ChannelByteInput2 extends AbstractByteInput<ReadableByteChannel> {
 
     /**
      * {@inheritDoc} The {@code read()} method of {@code ChannelByteInput2} class, if required, charges the {@link
-     * #getBuffer() buffer} from the {@link #getSource() channel} and returns the value from the {@code buffer}.
+     * #getBuffer() buffer} from the {@link #getSource() channel} and returns the result of {@link ByteBuffer#get()
+     * get()} as an unsigned {@code int}.
      *
      * @return {@inheritDoc}
      * @throws IOException {@inheritDoc}
@@ -94,6 +95,17 @@ class ChannelByteInput2 extends AbstractByteInput<ReadableByteChannel> {
             buffer.flip(); // limit -> position, position -> zero
         }
         return buffer.get() & 0xFF;
+    }
+
+    // ---------------------------------------------------------------------------------------------------------- source
+    @Override
+    protected ReadableByteChannel getSource() {
+        return super.getSource();
+    }
+
+    @Override
+    protected void setSource(final ReadableByteChannel source) {
+        super.setSource(source);
     }
 
     // ---------------------------------------------------------------------------------------------------------- buffer

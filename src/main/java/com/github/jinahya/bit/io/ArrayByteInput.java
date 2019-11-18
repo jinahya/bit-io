@@ -83,9 +83,9 @@ public class ArrayByteInput extends AbstractByteInput<byte[]> {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * {@inheritDoc} The {@code read()} method of {@code ArrayByteInput} class returns the value at {@link #getIndex()
-     * index} in {@link #getSource() source} as an unsigned 8-bit value. The {@link #setIndex(int) index} attribute,
-     * when successfully returns, is increased by {@code 1}.
+     * {@inheritDoc} The {@code read()} method of {@code ArrayByteInput} class returns {@link #getSource()
+     * source}[{@link #getIndex() index}] as an unsigned 8-bit value. The {@link #setIndex(int) index} attribute, when
+     * successfully returns, is increased by {@code 1}.
      *
      * @return {@inheritDoc}
      * @throws IOException {@inheritDoc}
@@ -93,6 +93,17 @@ public class ArrayByteInput extends AbstractByteInput<byte[]> {
     @Override
     public int read() throws IOException {
         return getSource()[getIndexAndIncrement()] & 0xFF;
+    }
+
+    // ---------------------------------------------------------------------------------------------------------- source
+    @Override
+    protected byte[] getSource() {
+        return super.getSource();
+    }
+
+    @Override
+    protected void setSource(final byte[] source) {
+        super.setSource(source);
     }
 
     // ----------------------------------------------------------------------------------------------------------- index
@@ -111,7 +122,7 @@ public class ArrayByteInput extends AbstractByteInput<byte[]> {
      *
      * @return the current value of {@code index} attribute.
      */
-    protected int getIndexAndIncrement() {
+    int getIndexAndIncrement() {
         return index++;
     }
 

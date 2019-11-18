@@ -46,8 +46,9 @@ public class BufferByteOutput extends AbstractByteOutput<ByteBuffer> {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * {@inheritDoc} The {@code write(int)} method of {@code BufferByteOutput} class invokes {@link ByteBuffer#put(byte)
-     * put(byte)} method on {@link #getTarget() target} with specified value casted as {@code byte}.
+     * {@inheritDoc} The {@code write(int)} method of {@code BufferByteOutput} class invokes {@link
+     * ByteBuffer#put(byte)} method, on what {@link #getTarget()} method returns, with specified value casted as {@code
+     * byte}.
      *
      * @param value {@inheritDoc}
      * @throws IOException {@inheritDoc}
@@ -57,5 +58,16 @@ public class BufferByteOutput extends AbstractByteOutput<ByteBuffer> {
     @Override
     public void write(final int value) throws IOException {
         getTarget().put((byte) value);
+    }
+
+    // ---------------------------------------------------------------------------------------------------------- target
+    @Override
+    protected ByteBuffer getTarget() {
+        return super.getTarget();
+    }
+
+    @Override
+    protected void setTarget(final ByteBuffer target) {
+        super.setTarget(target);
     }
 }

@@ -57,8 +57,7 @@ public interface BitInput {
     byte readByte(boolean unsigned, int size) throws IOException;
 
     /**
-     * Reads a {@value java.lang.Byte#SIZE}-bit signed {@code byte} value. This method is equivalent to {@code
-     * writeByte(true, Byte.SIZE)}.
+     * Reads a {@value java.lang.Byte#SIZE}-bit signed {@code byte} value.
      *
      * @return an {@value java.lang.Byte#SIZE}-bit signed {@code byte} value.
      * @throws IOException if an I/O error occurs.
@@ -81,8 +80,7 @@ public interface BitInput {
     short readShort(boolean unsigned, int size) throws IOException;
 
     /**
-     * Reads a {@value java.lang.Short#SIZE}-bit signed {@code short} value. This method is equivalent to {@code
-     * writeShort(false, Short.SIZE)}.
+     * Reads a {@value java.lang.Short#SIZE}-bit signed {@code short} value.
      *
      * @return a {@value java.lang.Short#SIZE}-bit signed {@code short} value.
      * @throws IOException if an I/O error occurs.
@@ -114,8 +112,7 @@ public interface BitInput {
     int readInt(boolean unsigned, int size) throws IOException;
 
     /**
-     * Reads a {@value java.lang.Integer#SIZE}-bit signed {@code int} value. This method is equivalent to {@code
-     * readInt(false, Integer.SIZE)}.
+     * Reads a {@value java.lang.Integer#SIZE}-bit signed {@code int} value.
      *
      * @return a {@value java.lang.Integer#SIZE}-bit signed {@code int} value.
      * @throws IOException if an I/O error occurs.
@@ -147,8 +144,7 @@ public interface BitInput {
     long readLong(boolean unsigned, int size) throws IOException;
 
     /**
-     * Reads a {@value java.lang.Long#SIZE}-bit signed {@code long} value. This method is equivalent to {@code
-     * readLong(false, Long.SIZE)}.
+     * Reads a {@value java.lang.Long#SIZE}-bit signed {@code long} value.
      *
      * @return a {@value java.lang.Long#SIZE}-bit signed {@code long} value.
      * @throws IOException if an I/O error occurs.
@@ -178,8 +174,7 @@ public interface BitInput {
     char readChar(int size) throws IOException;
 
     /**
-     * Reads a {@value java.lang.Character#SIZE}-bit {@code char} value. This method is equivalent to {@code
-     * readChar(Character.SIZE)}.
+     * Reads a {@value java.lang.Character#SIZE}-bit {@code char} value.
      *
      * @return a {@value java.lang.Character#SIZE}-bit {@code char} value.
      * @throws IOException if an I/O error occurs.

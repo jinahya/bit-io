@@ -47,8 +47,7 @@ public class DataByteInput extends AbstractByteInput<DataInput> {
 
     /**
      * {@inheritDoc} The {@code read()} method of {@code DataByteInput} class invokes {@link
-     * DataInput#readUnsignedByte() readUnsignedByte()} on {@link #getSource() source} from the {@link #getSource()
-     * source} and returns the result.
+     * DataInput#readUnsignedByte()} method, on what {@link #getSource()} method returns, and returns the result.
      *
      * @return {@inheritDoc}
      * @throws IOException {@inheritDoc}
@@ -58,5 +57,16 @@ public class DataByteInput extends AbstractByteInput<DataInput> {
     @Override
     public int read() throws IOException {
         return getSource().readUnsignedByte();
+    }
+
+    // ---------------------------------------------------------------------------------------------------------- source
+    @Override
+    protected DataInput getSource() {
+        return super.getSource();
+    }
+
+    @Override
+    protected void setSource(final DataInput source) {
+        super.setSource(source);
     }
 }

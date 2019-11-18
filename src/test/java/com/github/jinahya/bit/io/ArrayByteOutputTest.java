@@ -49,4 +49,10 @@ class ArrayByteOutputTest extends AbstractByteOutputTest<ArrayByteOutput, byte[]
     void testSetIndex() {
         byteOutput().setIndex(0);
     }
+
+    // ------------------------------------------------------------------------------------------------------ byteTarget
+    @Override
+    byte[] byteTarget() {
+        return new byte[0];
+    }
 }

@@ -66,7 +66,7 @@ class ChannelByteInput extends BufferByteInput {
         return super.read();
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------------------- channel
 
     /**
      * Returns the current value of {@code channel} attribute.

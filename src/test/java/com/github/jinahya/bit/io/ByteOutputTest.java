@@ -76,5 +76,5 @@ abstract class ByteOutputTest<T extends ByteOutput> {
     final Class<T> byteOutputClass;
 
     @Inject
-    private transient Instance<ByteOutput> byteInputInstance;
+    private Instance<ByteOutput> byteInputInstance;
 }

@@ -50,4 +50,10 @@ class ArrayByteInputTest extends AbstractByteInputTest<ArrayByteInput, byte[]> {
     void testSetIndex() {
         byteInput().setIndex(0);
     }
+
+    // ------------------------------------------------------------------------------------------------------ byteSource
+    @Override
+    byte[] byteSource() {
+        return new byte[0];
+    }
 }

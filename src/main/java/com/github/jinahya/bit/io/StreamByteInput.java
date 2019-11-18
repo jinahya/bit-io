@@ -64,7 +64,7 @@ public class StreamByteInput extends AbstractByteInput<InputStream> {
         return value;
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------------------------------------- source
     @Override
     protected InputStream getSource() {
         return super.getSource();

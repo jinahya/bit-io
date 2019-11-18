@@ -43,18 +43,6 @@ public class BufferByteInput extends AbstractByteInput<ByteBuffer> {
         super(source);
     }
 
-    // ---------------------------------------------------------------------------------------------------------- source
-
-    @Override
-    protected ByteBuffer getSource() {
-        return super.getSource();
-    }
-
-    @Override
-    protected void setSource(final ByteBuffer source) {
-        super.setSource(source);
-    }
-
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
@@ -69,5 +57,17 @@ public class BufferByteInput extends AbstractByteInput<ByteBuffer> {
     @Override
     public int read() throws IOException {
         return getSource().get() & 0xFF;
+    }
+
+    // ---------------------------------------------------------------------------------------------------------- source
+
+    @Override
+    protected ByteBuffer getSource() {
+        return super.getSource();
+    }
+
+    @Override
+    protected void setSource(final ByteBuffer source) {
+        super.setSource(source);
     }
 }

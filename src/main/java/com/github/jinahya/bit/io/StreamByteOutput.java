@@ -59,13 +59,14 @@ public class StreamByteOutput extends AbstractByteOutput<OutputStream> {
         getTarget().write(value);
     }
 
+    // ---------------------------------------------------------------------------------------------------------- target
     @Override
     protected OutputStream getTarget() {
         return super.getTarget();
     }
 
     @Override
-    protected void setTarget(OutputStream target) {
+    protected void setTarget(final OutputStream target) {
         super.setTarget(target);
     }
 }

@@ -43,17 +43,6 @@ public class BufferByteOutput extends AbstractByteOutput<ByteBuffer> {
         super(target);
     }
 
-    // ---------------------------------------------------------------------------------------------------------- target
-    @Override
-    protected ByteBuffer getTarget() {
-        return super.getTarget();
-    }
-
-    @Override
-    protected void setTarget(final ByteBuffer target) {
-        super.setTarget(target);
-    }
-
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
@@ -69,5 +58,16 @@ public class BufferByteOutput extends AbstractByteOutput<ByteBuffer> {
     @Override
     public void write(final int value) throws IOException {
         getTarget().put((byte) value);
+    }
+
+    // ---------------------------------------------------------------------------------------------------------- target
+    @Override
+    protected ByteBuffer getTarget() {
+        return super.getTarget();
+    }
+
+    @Override
+    protected void setTarget(final ByteBuffer target) {
+        super.setTarget(target);
     }
 }

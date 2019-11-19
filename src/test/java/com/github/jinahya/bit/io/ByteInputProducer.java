@@ -26,9 +26,16 @@ import javax.enterprise.inject.Disposes;
 import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.spi.InjectionPoint;
 import java.io.DataInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.channels.FileChannel;
+import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 
 import static java.nio.ByteBuffer.allocate;
+import static java.nio.file.Files.createTempFile;
+import static java.nio.file.Files.deleteIfExists;
 
 @Slf4j
 class ByteInputProducer {
@@ -105,5 +112,36 @@ class ByteInputProducer {
 
     void disposeChannelByteInput(@Disposes final ChannelByteInput2 byteInput) {
         // does nothing.
+    }
+
+    // ------------------------------------------------------------------------------------------------------------- raf
+    @Produces
+    RandomAccessFileByteInput produceRandomAccessFileByteInput(final InjectionPoint injectionPoint) {
+        final Path file;
+        try {
+            file = createTempFile(null, null);
+            try (OutputStream stream = new FileOutputStream(file.toFile())) {
+                stream.write(new byte[8]);
+                stream.flush();
+            }
+            return new ExtendedRandomAccessFileByteInput(file);
+        } catch (final IOException ioe) {
+            throw new RuntimeException(ioe);
+        }
+    }
+
+    void disposeRandomAccessFileByteInput(@Disposes final RandomAccessFileByteInput byteInput) {
+        try {
+            byteInput.getSource().close();
+        } catch (final IOException ioe) {
+            throw new RuntimeException(ioe);
+        }
+        final Path file = ((ExtendedRandomAccessFileByteInput) byteInput).file;
+        try {
+            final boolean deleted = deleteIfExists(file);
+            log.debug("deleted: {} {}", deleted, file);
+        } catch (final IOException ioe) {
+            throw new RuntimeException(ioe);
+        }
     }
 }

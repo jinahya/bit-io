@@ -30,6 +30,6 @@
   </root>
 
   <logger name="com.github.jinahya" level="DEBUG"/>
-  <logger name="org.jboss.weld" level="WARN"/>
+  <logger name="org.jboss.weld" level="warn"/>
 
 </configuration>

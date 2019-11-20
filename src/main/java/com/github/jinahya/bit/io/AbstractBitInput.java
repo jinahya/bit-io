@@ -90,6 +90,7 @@ public abstract class AbstractBitInput implements BitInput {
         requireValidSizeUnsigned8(size);
         if (available == 0) {
             octet = read();
+            assert octet >= 0 && octet < 256;
             count++;
             available = Byte.SIZE;
         }

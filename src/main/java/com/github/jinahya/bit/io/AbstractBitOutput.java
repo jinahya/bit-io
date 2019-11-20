@@ -96,6 +96,7 @@ public abstract class AbstractBitOutput implements BitOutput {
         octet |= (value & ((1 << size) - 1));
         available -= size;
         if (available == 0) {
+            assert octet >= 0 && octet < 256;
             write(octet);
             count++;
             octet = 0x00;

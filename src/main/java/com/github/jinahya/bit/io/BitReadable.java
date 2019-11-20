@@ -29,6 +29,7 @@ import java.io.IOException;
  * @see BitReaders
  * @see BitWritable
  */
+@FunctionalInterface
 interface BitReadable {
 
     // -----------------------------------------------------------------------------------------------------------------

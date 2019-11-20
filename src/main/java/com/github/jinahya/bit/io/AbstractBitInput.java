@@ -259,9 +259,11 @@ public abstract class AbstractBitInput implements BitInput {
             bits += available;
             readInt(true, available);
         }
+        assert available == 0;
         for (; count % bytes > 0L; bits += Byte.SIZE) {
             readInt(true, Byte.SIZE);
         }
+        assert count % bytes == 0L;
         return bits;
     }
 

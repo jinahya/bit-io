@@ -20,9 +20,18 @@ package com.github.jinahya.bit.io;
  * #L%
  */
 
+/**
+ * Constants for bit-io.
+ *
+ * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
+ */
 final class BitIoConstants {
 
     // -----------------------------------------------------------------------------------------------------------------
+
+    /**
+     * The minimum value for {@code size} paramter.
+     */
     static final int MIN_SIZE = 1;
 
     // ------------------------------------------------------------------------------------------------------------ Byte

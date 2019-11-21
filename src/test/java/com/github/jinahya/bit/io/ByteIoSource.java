@@ -159,6 +159,7 @@ final class ByteIoSource {
         return Stream.of(Arguments.of(output, input));
     }
 
+    // -----------------------------------------------------------------------------------------------------------------
     static Stream<Arguments> sourceByteIoChannel() {
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
         final ChannelByteOutput2 output = new ChannelByteOutput2(null, null) {
@@ -196,6 +197,7 @@ final class ByteIoSource {
         return Stream.of(Arguments.of(output, input));
     }
 
+    // -----------------------------------------------------------------------------------------------------------------
     static Stream<Arguments> sourceByteIo() {
         return Stream.of(sourceByteIoArray(), sourceByteIoBuffer(), sourceByteIoData(), sourceByteIoStream(),
                          sourceByteIoChannel())

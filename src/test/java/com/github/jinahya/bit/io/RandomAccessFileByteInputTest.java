@@ -20,25 +20,22 @@ package com.github.jinahya.bit.io;
  * #L%
  */
 
-import java.io.IOException;
+import java.io.RandomAccessFile;
 
 /**
- * An interface for writing bytes.
+ * A class for unit-testing {@link RandomAccessFileByteInput} class.
  *
- * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
- * @see ByteInput
+ * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
+ * @see RandomAccessFileByteOutputTest
  */
-@FunctionalInterface
-public interface ByteOutput {
+public class RandomAccessFileByteInputTest extends AbstractByteInputTest<RandomAccessFileByteInput, RandomAccessFile> {
 
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * Writes given unsigned {@value java.lang.Byte#SIZE}-bit value.
-     *
-     * @param value the unsigned {@value java.lang.Byte#SIZE}-bit value to write; between {@code 0} and {@code 255},
-     *              both inclusive.
-     * @throws IOException if an I/O error occurs.
+     * Creates a new instance.
      */
-    void write(int value) throws IOException;
+    RandomAccessFileByteInputTest() {
+        super(RandomAccessFileByteInput.class, RandomAccessFile.class);
+    }
 }

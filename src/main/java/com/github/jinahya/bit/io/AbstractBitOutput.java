@@ -96,6 +96,7 @@ public abstract class AbstractBitOutput implements BitOutput {
         octet |= (value & ((1 << size) - 1));
         available -= size;
         if (available == 0) {
+            assert octet >= 0 && octet < 256;
             write(octet);
             count++;
             octet = 0x00;
@@ -248,9 +249,11 @@ public abstract class AbstractBitOutput implements BitOutput {
             bits += available;
             writeInt(true, available, 0x00);
         }
+        assert available == Byte.SIZE;
         for (; count % bytes > 0; bits += Byte.SIZE) {
             writeInt(true, Byte.SIZE, 0x00);
         }
+        assert count % bytes == 0L;
         return bits;
     }
 

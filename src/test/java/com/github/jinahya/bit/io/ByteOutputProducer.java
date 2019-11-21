@@ -27,8 +27,11 @@ import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.spi.InjectionPoint;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.nio.file.Path;
 
 import static java.nio.ByteBuffer.allocate;
+import static java.nio.file.Files.createTempFile;
+import static java.nio.file.Files.deleteIfExists;
 
 @Slf4j
 class ByteOutputProducer {
@@ -111,5 +114,32 @@ class ByteOutputProducer {
     }
 
     void disposeChannelByteOutput(@Disposes final ChannelByteOutput2 byteOutput) {
+    }
+
+    // ------------------------------------------------------------------------------------------------------------- raf
+    @Produces
+    RandomAccessFileByteOutput produceRandomAccessFileByteOutput(final InjectionPoint injectionPoint) {
+        final Path file;
+        try {
+            file = createTempFile(null, null);
+            return new ExtendedRandomAccessFileByteOutput(file);
+        } catch (final IOException ioe) {
+            throw new RuntimeException(ioe);
+        }
+    }
+
+    void disposeRandomAccessFileByteOutput(@Disposes final RandomAccessFileByteOutput byteOutput) {
+        try {
+            byteOutput.getTarget().close();
+        } catch (final IOException ioe) {
+            throw new RuntimeException(ioe);
+        }
+        final Path file = ((ExtendedRandomAccessFileByteOutput) byteOutput).file;
+        try {
+            final boolean deleted = deleteIfExists(file);
+            log.debug("deleted: {} {}", deleted, file);
+        } catch (final IOException ioe) {
+            throw new RuntimeException(ioe);
+        }
     }
 }

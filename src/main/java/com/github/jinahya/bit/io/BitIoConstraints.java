@@ -29,7 +29,7 @@ import static com.github.jinahya.bit.io.BitIoConstants.SIZE_EXPONENT_SHORT;
 import static java.lang.Math.pow;
 
 /**
- * A class for constraints.
+ * Constraints for bit-io.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  */

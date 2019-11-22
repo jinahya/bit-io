@@ -27,11 +27,10 @@ import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.spi.InjectionPoint;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.nio.file.Path;
+import java.io.RandomAccessFile;
 
 import static java.nio.ByteBuffer.allocate;
-import static java.nio.file.Files.createTempFile;
-import static java.nio.file.Files.deleteIfExists;
+import static org.mockito.Mockito.mock;
 
 @Slf4j
 class ByteOutputProducer {
@@ -119,27 +118,9 @@ class ByteOutputProducer {
     // ------------------------------------------------------------------------------------------------------------- raf
     @Produces
     RandomAccessFileByteOutput produceRandomAccessFileByteOutput(final InjectionPoint injectionPoint) {
-        final Path file;
-        try {
-            file = createTempFile(null, null);
-            return new ExtendedRandomAccessFileByteOutput(file);
-        } catch (final IOException ioe) {
-            throw new RuntimeException(ioe);
-        }
+        return new RandomAccessFileByteOutput(mock(RandomAccessFile.class));
     }
 
     void disposeRandomAccessFileByteOutput(@Disposes final RandomAccessFileByteOutput byteOutput) {
-        try {
-            byteOutput.getTarget().close();
-        } catch (final IOException ioe) {
-            throw new RuntimeException(ioe);
-        }
-        final Path file = ((ExtendedRandomAccessFileByteOutput) byteOutput).file;
-        try {
-            final boolean deleted = deleteIfExists(file);
-            log.debug("deleted: {} {}", deleted, file);
-        } catch (final IOException ioe) {
-            throw new RuntimeException(ioe);
-        }
     }
 }

@@ -28,7 +28,7 @@ import java.nio.channels.ReadableByteChannel;
 import static java.nio.ByteBuffer.allocate;
 
 /**
- * A byte input which reads bytes from a readable byte channel.
+ * A byte input which reads bytes from a channel.
  *
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  * @see ChannelByteInput
@@ -72,6 +72,14 @@ class ChannelByteInput2 extends AbstractByteInput<ReadableByteChannel> {
     public ChannelByteInput2(final ReadableByteChannel source, final ByteBuffer buffer) {
         super(source);
         this.buffer = buffer;
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    @Override
+    public String toString() {
+        return super.toString() + "{"
+               + "buffer=" + buffer
+               + "}";
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -129,5 +137,9 @@ class ChannelByteInput2 extends AbstractByteInput<ReadableByteChannel> {
     }
 
     // -----------------------------------------------------------------------------------------------------------------
+
+    /**
+     * An auxiliary byte buffer for reading bytes from the {@code source}.
+     */
     private ByteBuffer buffer;
 }

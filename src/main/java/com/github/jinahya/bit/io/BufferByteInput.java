@@ -60,7 +60,6 @@ public class BufferByteInput extends AbstractByteInput<ByteBuffer> {
     }
 
     // ---------------------------------------------------------------------------------------------------------- source
-
     @Override
     protected ByteBuffer getSource() {
         return super.getSource();

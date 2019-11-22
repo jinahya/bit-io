@@ -26,15 +26,27 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 /**
- * An output stream whose {@link OutputStream#write(int)} does nothing.
+ * An output stream whose {@link OutputStream#write(int)} method ignores specified byte.
  *
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  * @see WhiteInputStream
+ * @see BlackByteChannel
  */
 @Slf4j
 final class BlackOutputStream extends OutputStream {
 
     // -----------------------------------------------------------------------------------------------------------------
+    static final OutputStream INSTANCE = new BlackOutputStream();
+
+    // -----------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Writes the specified byte into this output stream. The {@code write(int)} method of {@code BlackOutputStream}
+     * class does nothing.
+     *
+     * @param b the byte.
+     * @throws IOException if an I/O error occurs.
+     */
     @Override
     public void write(final int b) throws IOException {
         // does nothing.

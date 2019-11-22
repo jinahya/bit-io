@@ -37,7 +37,7 @@ class BitInputProducer {
 
     // -----------------------------------------------------------------------------------------------------------------
     @Produces
-    DefaultBitInput productDefaultBitInput(final InjectionPoint injectionPoint) {
+    DefaultBitInput produceDefaultBitInput(final InjectionPoint injectionPoint) {
         return new DefaultBitInput(() -> 0);
     }
 

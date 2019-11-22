@@ -26,10 +26,22 @@ import java.nio.channels.WritableByteChannel;
 
 import static java.nio.ByteBuffer.allocate;
 
+/**
+ * A byte output writes bytes to a channel.
+ *
+ * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
+ */
 @Deprecated
 class ChannelByteOutput extends BufferByteOutput {
 
     // -----------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Creates a new instance writes bytes to specified channel.
+     *
+     * @param channel the channel to which bytes are written; must be not {@code null}.
+     * @return a new instance.
+     */
     public static ChannelByteOutput of(final WritableByteChannel channel) {
         if (channel == null) {
             throw new NullPointerException("channel is null");
@@ -47,9 +59,28 @@ class ChannelByteOutput extends BufferByteOutput {
     }
 
     // -----------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Creates a new instance with specified buffer and channel.
+     *
+     * @param target  the byte buffer for writing bytes to channel.
+     * @param channel the channel to which bytes are written.
+     * @see #getTarget()
+     * @see #setTarget(ByteBuffer)
+     * @see #getChannel()
+     * @see #setChannel(WritableByteChannel)
+     */
     public ChannelByteOutput(final ByteBuffer target, final WritableByteChannel channel) {
         super(target);
         this.channel = channel;
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    @Override
+    public String toString() {
+        return super.toString() + "{"
+               + "channel=" + channel
+               + "}";
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -62,6 +93,17 @@ class ChannelByteOutput extends BufferByteOutput {
             target.compact();
         }
         super.write(value);
+    }
+
+    // ---------------------------------------------------------------------------------------------------------- target
+    @Override
+    protected ByteBuffer getTarget() {
+        return super.getTarget();
+    }
+
+    @Override
+    protected void setTarget(final ByteBuffer target) {
+        super.setTarget(target);
     }
 
     // --------------------------------------------------------------------------------------------------------- channel

@@ -27,7 +27,7 @@ import java.util.WeakHashMap;
 import static java.util.Collections.synchronizedMap;
 
 /**
- * A utility class for {@link BitWritable}.
+ * A utility class for {@link BitWriter} interface.
  *
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  * @see BitReaders
@@ -41,7 +41,14 @@ final class BitWriters {
         BIT_WRITERS = synchronizedMap(new WeakHashMap<Class<?>, BitWriter<?>>());
     }
 
-    static <T extends BitWritable> BitWriter<T> cachedBitWriterFor(final Class<T> type) {
+    /**
+     * Returns a cached instance of a bit writer for specified type of bit writable.
+     *
+     * @param type the type for the bit writer instance.
+     * @param <T>  bit writable type parameter
+     * @return the cached instance of bit writer.
+     */
+    public static <T extends BitWritable> BitWriter<T> cachedBitWriterFor(final Class<T> type) {
         if (type == null) {
             throw new NullPointerException("type is null");
         }
@@ -57,11 +64,11 @@ final class BitWriters {
     }
 
     /**
-     * Creates a new bit writer for instances of specified type.
+     * Returns a new bit writer instance for specified type of bit writable.
      *
-     * @param type the type of bit writable.
+     * @param type the type of bit writable to read.
      * @param <T>  bit writable type parameter
-     * @return a new bit writer.
+     * @return a new bit writer instance.
      */
     public static <T extends BitWritable> BitWriter<T> newBitWriterFor(final Class<T> type) {
         if (type == null) {

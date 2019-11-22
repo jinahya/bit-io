@@ -45,7 +45,7 @@ final class BitIoConstraints {
      * @return given size.
      */
     static int requireValidSizeUnsigned8(final int size) {
-        if (size < 1) {
+        if (size < MIN_SIZE) {
             throw new IllegalArgumentException("unsigned8.size(" + size + ") < 1");
         }
         if (size > Byte.SIZE) {
@@ -62,7 +62,7 @@ final class BitIoConstraints {
      * @return given size.
      */
     static int requireValidSizeUnsigned16(final int size) {
-        if (size < 1) {
+        if (size < MIN_SIZE) {
             throw new IllegalArgumentException("unsigned16.size(" + size + ") < 1");
         }
         if (size > Short.SIZE) {
@@ -93,12 +93,12 @@ final class BitIoConstraints {
     }
 
     // ------------------------------------------------------------------------------------------------------------ size
-    private static final int[] MAX_SIZE = new int[MAX_EXPONENT - MIN_EXPONENT + 1];
+    private static final int[] MAX_SIZES = new int[MAX_EXPONENT - MIN_EXPONENT + 1];
 
     static {
-        MAX_SIZE[0] = (int) pow(2, MIN_EXPONENT);
-        for (int i = 1; i < MAX_SIZE.length; i++) {
-            MAX_SIZE[i] = MAX_SIZE[i - 1] << 2;
+        MAX_SIZES[0] = (int) pow(2, MIN_EXPONENT);
+        for (int i = 1; i < MAX_SIZES.length; i++) {
+            MAX_SIZES[i] = MAX_SIZES[i - 1] << 2;
         }
     }
 
@@ -110,7 +110,7 @@ final class BitIoConstraints {
      * @return the maximum size.
      */
     static int maxSize(final boolean unsigned, final int exponent) {
-        return MAX_SIZE[requireValidExponent(exponent) - MIN_EXPONENT] - (unsigned ? 1 : 0);
+        return MAX_SIZES[requireValidExponent(exponent) - MIN_EXPONENT] - (unsigned ? 1 : 0);
     }
 
     static int requireValidSize(final boolean unsigned, final int exponent, final int size) {

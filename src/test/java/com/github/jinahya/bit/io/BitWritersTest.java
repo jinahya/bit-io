@@ -22,33 +22,41 @@ package com.github.jinahya.bit.io;
 
 import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
-
 import static com.github.jinahya.bit.io.BitWriters.cachedBitWriterFor;
 import static com.github.jinahya.bit.io.BitWriters.newBitWriterFor;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+/**
+ * A class for unit-testing {@link BitWriters} class.
+ *
+ * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
+ */
 public class BitWritersTest {
 
     // -----------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Tests {@link BitWriters#cachedBitWriterFor(Class)} method.
+     */
     @Test
-    public void testCachedBitWriterFor() throws IOException {
+    public void testCachedBitWriterFor() {
         assertThrows(NullPointerException.class, () -> cachedBitWriterFor(null));
         final BitWriter<User> expected = cachedBitWriterFor(User.class);
         assertNotNull(expected);
         final BitWriter<User> actual = cachedBitWriterFor(User.class);
         assertNotNull(actual);
         assertSame(expected, actual);
-        actual.write(new DefaultBitOutput(new StreamByteOutput(new BlackOutputStream())), new User());
     }
 
+    /**
+     * Tests {@link BitWriters#newBitWriterFor(Class)} method.
+     */
     @Test
-    public void testNewBitWriterFor() throws IOException {
+    public void testNewBitWriterFor() {
         assertThrows(NullPointerException.class, () -> newBitWriterFor(null));
         final BitWriter<User> writer = newBitWriterFor(User.class);
         assertNotNull(writer);
-        writer.write(new DefaultBitOutput(new StreamByteOutput(new BlackOutputStream())), new User());
     }
 }

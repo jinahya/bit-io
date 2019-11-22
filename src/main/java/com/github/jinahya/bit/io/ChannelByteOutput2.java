@@ -27,7 +27,7 @@ import java.nio.channels.WritableByteChannel;
 import static java.nio.ByteBuffer.allocate;
 
 /**
- * A byte output which writes bytes to a writable byte channel.
+ * A byte output which writes bytes to a channel.
  * <p>
  * Note that a flushing might be required when the {@code buffer}'s capacity is greater than {@code 1}.
  * <blockquote><pre>{@code
@@ -78,6 +78,14 @@ class ChannelByteOutput2 extends AbstractByteOutput<WritableByteChannel> {
     public ChannelByteOutput2(final WritableByteChannel target, final ByteBuffer buffer) {
         super(target);
         this.buffer = buffer;
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    @Override
+    public String toString() {
+        return super.toString() + "{"
+               + "buffer=" + buffer
+               + "}";
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -135,7 +143,7 @@ class ChannelByteOutput2 extends AbstractByteOutput<WritableByteChannel> {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * The buffer to which bytes are written.
+     * An auxiliary byte buffer for writing bytes from the {@code target}.
      */
     private ByteBuffer buffer;
 }

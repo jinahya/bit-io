@@ -27,16 +27,29 @@ import java.nio.ByteBuffer;
 import java.nio.channels.ReadableByteChannel;
 
 /**
- * A readable byte channel whose {@link ReadableByteChannel#read(ByteBuffer)} method just fully fills up given buffer.
+ * A readable byte channel whose {@link ReadableByteChannel#read(ByteBuffer)} method charges the buffer.
  *
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  * @see BlackByteChannel
- * @see BlackOutputStream
+ * @see WhiteInputStream
  */
 @Slf4j
 final class WhiteByteChannel implements ReadableByteChannel {
 
     // -----------------------------------------------------------------------------------------------------------------
+    static final ReadableByteChannel INSTANCE = new WhiteByteChannel();
+
+    // -----------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Reads a sequence of bytes from this channel into the given buffer. The {@code read(ByteBuffer)} method of {@code
+     * WhiteByteChannel} class simply makes the buffer as <i>fully-charged</i> by setting the {@code position} property
+     * with the current value of the {@code limit} property and returns the previous value of {@code remaining()}.
+     *
+     * @param dst the buffer to be charged.
+     * @return the number of bytes charged.
+     * @throws IOException if an I/O error occurs.
+     */
     @Override
     public int read(final ByteBuffer dst) throws IOException {
         int read = dst.remaining();
@@ -44,11 +57,22 @@ final class WhiteByteChannel implements ReadableByteChannel {
         return read;
     }
 
+    /**
+     * Tells whether or not this channel is open. The {@code isOpen()} method of {@code WhiteByteChannel} class always
+     * returns {@code true}.
+     *
+     * @return {@code true}.
+     */
     @Override
     public boolean isOpen() {
         return true;
     }
 
+    /**
+     * Closes this channel. The {@code close()} method of {@code WhiteByteChannel} class does nothing.
+     *
+     * @throws IOException if an I/O error occurs.
+     */
     @Override
     public void close() throws IOException {
         // empty

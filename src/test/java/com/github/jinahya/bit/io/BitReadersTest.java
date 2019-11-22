@@ -22,33 +22,41 @@ package com.github.jinahya.bit.io;
 
 import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
-
 import static com.github.jinahya.bit.io.BitReaders.cachedBitReaderFor;
 import static com.github.jinahya.bit.io.BitReaders.newBitReaderFor;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+/**
+ * A class for unit-testing {@link BitReaders} class.
+ *
+ * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
+ */
 public class BitReadersTest {
 
     // -----------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Tests {@link BitReaders#cachedBitReaderFor(Class)} method.
+     */
     @Test
-    public void testCachedBitReaderFor() throws IOException {
+    public void testCachedBitReaderFor() {
         assertThrows(NullPointerException.class, () -> cachedBitReaderFor(null));
         final BitReader<User> expected = cachedBitReaderFor(User.class);
         assertNotNull(expected);
         final BitReader<User> actual = cachedBitReaderFor(User.class);
         assertNotNull(actual);
         assertSame(expected, actual);
-        final User user = actual.read(new DefaultBitInput(new StreamByteInput(new WhiteInputStream())));
     }
 
+    /**
+     * Tests {@link BitReaders#newBitReaderFor(Class)} method.
+     */
     @Test
-    public void testNewBitReaderFor() throws IOException {
+    public void testNewBitReaderFor() {
         assertThrows(NullPointerException.class, () -> newBitReaderFor(null));
         final BitReader<User> reader = cachedBitReaderFor(User.class);
         assertNotNull(reader);
-        final User user = reader.read(new DefaultBitInput(new StreamByteInput(new WhiteInputStream())));
     }
 }

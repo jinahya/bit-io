@@ -26,20 +26,25 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * An input stream whose {@link InputStream#read()} returns zero.
+ * An input stream whose {@link InputStream#read()} always returns zero.
  *
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  * @see BlackOutputStream
+ * @see WhiteByteChannel
  */
 @Slf4j
 final class WhiteInputStream extends InputStream {
 
     // -----------------------------------------------------------------------------------------------------------------
+    static final InputStream INSTANCE = new WhiteInputStream();
+
+    // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * Returns {@code 0}.
+     * Reads the next byte of data from the input stream. The {@code read()} method of {@code WhiteInputStream} class
+     * always returns {@code 0}.
      *
-     * @return {@code 0}
+     * @return {@code 0}.
      * @throws IOException if an I/O error occurs.
      */
     @Override

@@ -224,7 +224,6 @@ class ExtendedBitIoTest {
     @MethodSource({"com.github.jinahya.bit.io.BitIoSource#sourceBitIo"})
     @ParameterizedTest
     void testUnsignedVariable5(final BitOutput output, final BitInput input) throws IOException {
-
         final int expected = current().nextInt() >>> 1;
         writeUnsignedVariable5(output, expected);
         assertTrue(output.align(Byte.BYTES) < Byte.SIZE);

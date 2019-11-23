@@ -34,17 +34,17 @@ import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeUnsigne
  * An abstract class for implementing {@link BitInput} interface.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
- * @see AbstractBitInput
- * @see DefaultBitOutput
+ * @see AbstractBareBitInput
+ * @see AbstractByteInput
  */
-public abstract class AbstractBitOutput implements BitOutput {
+public abstract class AbstractBareBitOutput implements BareBitOutput {
 
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
      * Creates a new instance.
      */
-    public AbstractBitOutput() {
+    public AbstractBareBitOutput() {
         super();
     }
 
@@ -65,9 +65,9 @@ public abstract class AbstractBitOutput implements BitOutput {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * Writes given {@value java.lang.Byte#SIZE}-bit unsigned integer.
+     * Writes given {@value Byte#SIZE}-bit unsigned integer.
      *
-     * @param value the {@value java.lang.Byte#SIZE}-bit unsigned integer to write.
+     * @param value the {@value Byte#SIZE}-bit unsigned integer to write.
      * @throws IOException if an I/O error occurs.
      */
     protected abstract void write(int value) throws IOException;
@@ -75,10 +75,9 @@ public abstract class AbstractBitOutput implements BitOutput {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * Writes an unsigned {@code int} value of specified bit size which is, in maximum, {@value java.lang.Byte#SIZE}.
+     * Writes an unsigned {@code int} value of specified bit size which is, in maximum, {@value Byte#SIZE}.
      *
-     * @param size  the number of lower bits to write; between {@code 1} and {@value java.lang.Byte#SIZE}, both
-     *              inclusive.
+     * @param size  the number of lower bits to write; between {@code 1} and {@value Byte#SIZE}, both inclusive.
      * @param value the value to write.
      * @throws IOException if an I/O error occurs.
      * @see #write(int)
@@ -105,10 +104,9 @@ public abstract class AbstractBitOutput implements BitOutput {
     }
 
     /**
-     * Writes an unsigned {@code int} value of specified bit size which is, in maximum, {@value java.lang.Short#SIZE}.
+     * Writes an unsigned {@code int} value of specified bit size which is, in maximum, {@value Short#SIZE}.
      *
-     * @param size  the number of lower bits to write; between {@code 1} and {@value java.lang.Short#SIZE}, both
-     *              inclusive.
+     * @param size  the number of lower bits to write; between {@code 1} and {@value Short#SIZE}, both inclusive.
      * @param value the value to write.
      * @throws IOException if an I/O error occurs
      * @see #unsigned8(int, int)
@@ -124,40 +122,6 @@ public abstract class AbstractBitOutput implements BitOutput {
         for (int i = quotient - 1; i >= 0; i--) {
             unsigned8(Byte.SIZE, value >> (Byte.SIZE * i));
         }
-    }
-
-    // --------------------------------------------------------------------------------------------------------- boolean
-    @Override
-    public void writeBoolean(final boolean value) throws IOException {
-        writeInt(true, 1, value ? 1 : 0);
-    }
-
-    // ------------------------------------------------------------------------------------------------------------ byte
-    @Override
-    public void writeByte(final boolean unsigned, final int size, final byte value) throws IOException {
-        writeInt(unsigned, requireValidSizeByte(unsigned, size), value);
-    }
-
-    @Override
-    public void writeByte8(final byte value) throws IOException {
-        writeByte(false, Byte.SIZE, value);
-    }
-
-    // ----------------------------------------------------------------------------------------------------------- short
-    @Override
-    public void writeShort(final boolean unsigned, final int size, final short value) throws IOException {
-        writeInt(unsigned, requireValidSizeShort(unsigned, size), value);
-    }
-
-    @Override
-    public void writeShort16(final short value) throws IOException {
-        writeShort(false, Short.SIZE, value);
-    }
-
-    @Override
-    public void writeShort16Le(final short value) throws IOException {
-        writeByte8((byte) value);
-        writeByte8((byte) (value >> Byte.SIZE));
     }
 
     // ------------------------------------------------------------------------------------------------------------- int
@@ -182,17 +146,6 @@ public abstract class AbstractBitOutput implements BitOutput {
         }
     }
 
-    @Override
-    public void writeInt32(final int value) throws IOException {
-        writeInt(false, Integer.SIZE, value);
-    }
-
-    @Override
-    public void writeInt32Le(final int value) throws IOException {
-        writeShort16Le((short) value);
-        writeShort16Le((short) (value >> Short.SIZE));
-    }
-
     // ------------------------------------------------------------------------------------------------------------ long
     @Override
     public void writeLong(final boolean unsigned, final int size, final long value) throws IOException {
@@ -214,28 +167,6 @@ public abstract class AbstractBitOutput implements BitOutput {
         for (int i = divisor * (quotient - 1); i >= 0; i -= divisor) {
             writeInt(true, divisor, (int) (value >> i));
         }
-    }
-
-    @Override
-    public void writeLong64(final long value) throws IOException {
-        writeLong(false, Long.SIZE, value);
-    }
-
-    @Override
-    public void writeLong64Le(final long value) throws IOException {
-        writeInt32Le((int) value);
-        writeInt32Le((int) (value >> Integer.SIZE));
-    }
-
-    // ------------------------------------------------------------------------------------------------------------ char
-    @Override
-    public void writeChar(final int size, final char value) throws IOException {
-        writeInt(true, requireValidSizeChar(size), value);
-    }
-
-    @Override
-    public void writeChar16(final char value) throws IOException {
-        writeChar(Character.SIZE, value);
     }
 
     // -----------------------------------------------------------------------------------------------------------------

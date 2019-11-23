@@ -34,17 +34,17 @@ import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeUnsigne
  * An abstract class for implementing {@link BitInput} interface.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
- * @see AbstractBitOutput
- * @see DefaultBitInput
+ * @see AbstractBareBitOutput
+ * @see AbstractBitInput
  */
-public abstract class AbstractBitInput implements BitInput {
+abstract class AbstractBareBitInput implements BareBitInput {
 
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
      * Creates a new instance.
      */
-    public AbstractBitInput() {
+    public AbstractBareBitInput() {
         super();
     }
 
@@ -65,9 +65,9 @@ public abstract class AbstractBitInput implements BitInput {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * Reads an {@value java.lang.Byte#SIZE}-bit unsigned integer.
+     * Reads an {@value Byte#SIZE}-bit unsigned integer.
      *
-     * @return an {@value java.lang.Byte#SIZE}-bit unsigned integer.
+     * @return an {@value Byte#SIZE}-bit unsigned integer.
      * @throws IOException if an I/O error occurs.
      * @see AbstractBitOutput#write(int)
      */
@@ -76,9 +76,9 @@ public abstract class AbstractBitInput implements BitInput {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * Reads an unsigned {@code int} value of specified bit size which is, in maximum, {@value java.lang.Byte#SIZE}.
+     * Reads an unsigned {@code int} value of specified bit size which is, in maximum, {@value Byte#SIZE}.
      *
-     * @param size the number of bits for the value; between {@code 1} and {@value java.lang.Byte#SIZE}, both
+     * @param size the number of bits for the value; between {@code 1} and {@value Byte#SIZE}, both
      *             inclusive.
      * @return an unsigned byte value.
      * @throws IOException if an I/O error occurs.
@@ -104,9 +104,9 @@ public abstract class AbstractBitInput implements BitInput {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * Reads an unsigned {@code int} value of specified bit size which is, in maximum, {@value java.lang.Short#SIZE}.
+     * Reads an unsigned {@code int} value of specified bit size which is, in maximum, {@value Short#SIZE}.
      *
-     * @param size the number of bits for the value; between {@code 1} and {@value java.lang.Short#SIZE}, both
+     * @param size the number of bits for the value; between {@code 1} and {@value Short#SIZE}, both
      *             inclusive.
      * @return an unsigned short value.
      * @throws IOException if an I/O error occurs.
@@ -127,39 +127,6 @@ public abstract class AbstractBitInput implements BitInput {
             value |= unsigned8(remainder);
         }
         return value;
-    }
-
-    // --------------------------------------------------------------------------------------------------------- boolean
-    @Override
-    public boolean readBoolean() throws IOException {
-        return readInt(true, 1) == 1;
-    }
-
-    // ------------------------------------------------------------------------------------------------------------ byte
-    @Override
-    public byte readByte(final boolean unsigned, final int size) throws IOException {
-        return (byte) readInt(unsigned, requireValidSizeByte(unsigned, size));
-    }
-
-    @Override
-    public byte readByte8() throws IOException {
-        return readByte(false, Byte.SIZE);
-    }
-
-    // ----------------------------------------------------------------------------------------------------------- short
-    @Override
-    public short readShort(final boolean unsigned, final int size) throws IOException {
-        return (short) readInt(unsigned, requireValidSizeShort(unsigned, size));
-    }
-
-    @Override
-    public short readShort16() throws IOException {
-        return readShort(false, Short.SIZE);
-    }
-
-    @Override
-    public short readShort16Le() throws IOException {
-        return (short) (readByte8() & 0xFF | readByte8() << Byte.SIZE);
     }
 
     // ------------------------------------------------------------------------------------------------------------- int
@@ -189,16 +156,6 @@ public abstract class AbstractBitInput implements BitInput {
         return value;
     }
 
-    @Override
-    public int readInt32() throws IOException {
-        return readInt(false, Integer.SIZE);
-    }
-
-    @Override
-    public int readInt32Le() throws IOException {
-        return readShort16Le() & 0xFFFF | readShort16Le() << Short.SIZE;
-    }
-
     // ------------------------------------------------------------------------------------------------------------ long
     @Override
     public long readLong(final boolean unsigned, final int size) throws IOException {
@@ -225,27 +182,6 @@ public abstract class AbstractBitInput implements BitInput {
             value |= readInt(true, remainder);
         }
         return value;
-    }
-
-    @Override
-    public long readLong64() throws IOException {
-        return readLong(false, Long.SIZE);
-    }
-
-    @Override
-    public long readLong64Le() throws IOException {
-        return readInt32Le() & 0xFFFFFFFFL | ((long) readInt32Le()) << Integer.SIZE;
-    }
-
-    // ------------------------------------------------------------------------------------------------------------ char
-    @Override
-    public char readChar(final int size) throws IOException {
-        return (char) readInt(true, requireValidSizeChar(size));
-    }
-
-    @Override
-    public char readChar16() throws IOException {
-        return readChar(Character.SIZE);
     }
 
     // -----------------------------------------------------------------------------------------------------------------

@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 
 /**
- * A byte input which writes bytes from a random access file.
+ * A byte input which writes bytes to a random access file.
  *
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  * @see RandomAccessFileByteInput

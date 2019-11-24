@@ -27,8 +27,8 @@ import java.io.IOException;
  *
  * @param <T> object type parameter
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
- * @see BitReadable
  * @see BitWriter
+ * @see BitReadable
  */
 interface BitReader<T> {
 

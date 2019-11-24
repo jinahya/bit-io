@@ -27,7 +27,7 @@ import java.nio.channels.WritableByteChannel;
 import static java.nio.ByteBuffer.allocate;
 
 /**
- * A byte output which writes bytes to a channel.
+ * A byte output which writes bytes to a writable byte channel.
  * <p>
  * Note that a flushing might be required when the {@code buffer}'s capacity is greater than {@code 1}.
  * <blockquote><pre>{@code

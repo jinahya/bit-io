@@ -28,7 +28,7 @@ import java.nio.channels.ReadableByteChannel;
 import static java.nio.ByteBuffer.allocate;
 
 /**
- * A byte input reads bytes from a channel.
+ * A byte input reads bytes from a readable byte channel.
  *
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
@@ -88,8 +88,7 @@ class ChannelByteInput extends BufferByteInput {
     // -----------------------------------------------------------------------------------------------------------------
     @Override
     public int read() throws IOException {
-        final ByteBuffer source = getSource();
-        while (!source.hasRemaining()) {
+        for (final ByteBuffer source = getSource(); !source.hasRemaining(); ) {
             source.clear(); // position -> zero, limit -> capacity
             if (getChannel().read(source) == -1) {
                 throw new EOFException("reached to an end");

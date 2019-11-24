@@ -24,7 +24,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 /**
- * A byte output writes bytes to an {@link OutputStream}.
+ * A byte output writes bytes to an instance of {@link OutputStream}.
  *
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  * @see StreamByteInput
@@ -38,6 +38,8 @@ public class StreamByteOutput extends AbstractByteOutput<OutputStream> {
      *
      * @param target the output stream to which bytes are written; {@code null} if it's supposed to be lazily
      *               initialized and set.
+     * @see #getTarget()
+     * @see #setTarget(OutputStream)
      */
     public StreamByteOutput(final OutputStream target) {
         super(target);

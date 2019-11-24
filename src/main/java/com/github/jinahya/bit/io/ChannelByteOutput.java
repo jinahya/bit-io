@@ -27,7 +27,7 @@ import java.nio.channels.WritableByteChannel;
 import static java.nio.ByteBuffer.allocate;
 
 /**
- * A byte output writes bytes to a channel.
+ * A byte output writes bytes to a writable byte channel.
  *
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
@@ -86,8 +86,7 @@ class ChannelByteOutput extends BufferByteOutput {
     // -----------------------------------------------------------------------------------------------------------------
     @Override
     public void write(final int value) throws IOException {
-        final ByteBuffer target = getTarget();
-        while (!target.hasRemaining()) {
+        for (final ByteBuffer target = getTarget(); !target.hasRemaining(); ) {
             target.flip(); // limit -> position, position -> zero
             final int written = getChannel().write(target);
             target.compact();

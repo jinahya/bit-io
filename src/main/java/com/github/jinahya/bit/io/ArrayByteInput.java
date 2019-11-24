@@ -23,7 +23,7 @@ package com.github.jinahya.bit.io;
 import java.io.IOException;
 
 /**
- * A byte input reading bytes from an array of bytes.
+ * A byte input reads bytes from an array of bytes.
  * <p>
  * Note that this implementation only tracks a single {@link #getIndex() index} as a next position to read in the
  * backing array which means there is no way to limit the maximum value of the {@code index} in the backing array. Use

@@ -28,7 +28,7 @@ import java.nio.channels.ReadableByteChannel;
 import static java.nio.ByteBuffer.allocate;
 
 /**
- * A byte input which reads bytes from a channel.
+ * A byte input which reads bytes from a readable byte channel.
  *
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  * @see ChannelByteInput

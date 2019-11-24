@@ -25,7 +25,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * A byte input reads bytes from an {@link InputStream}.
+ * A byte input reads bytes from an instance of {@link InputStream}.
  *
  * @author Jin Kwon &lt;onacit at gmail.com&gt;
  * @see StreamByteOutput
@@ -38,7 +38,9 @@ public class StreamByteInput extends AbstractByteInput<InputStream> {
      * Creates a new instance which read bytes from specified input stream.
      *
      * @param source the input stream from which bytes are read; {@code null} if it's supposed to be lazily initialized
-     *               and set
+     *               and set.
+     * @see #getSource()
+     * @see #setSource(InputStream)
      */
     public StreamByteInput(final InputStream source) {
         super(source);

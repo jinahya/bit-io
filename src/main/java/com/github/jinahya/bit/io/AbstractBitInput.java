@@ -44,7 +44,7 @@ public abstract class AbstractBitInput implements BitInput {
     /**
      * Creates a new instance.
      */
-    public AbstractBitInput() {
+    AbstractBitInput() {
         super();
     }
 

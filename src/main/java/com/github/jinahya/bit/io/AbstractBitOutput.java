@@ -44,7 +44,7 @@ public abstract class AbstractBitOutput implements BitOutput {
     /**
      * Creates a new instance.
      */
-    public AbstractBitOutput() {
+    AbstractBitOutput() {
         super();
     }
 

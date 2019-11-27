@@ -503,27 +503,6 @@
         </pluginManagement>
       </build>
     </profile>
-    <profile>
-      <id>ydoc</id>
-      <build>
-        <pluginManagement>
-          <plugins>
-            <plugin>
-              <groupId>org.apache.maven.plugins</groupId>
-              <artifactId>maven-javadoc-plugin</artifactId>
-              <version>${version.maven-javadoc-plugin}</version>
-              <configuration>
-                <doclet>ydoc.doclets.YStandard</doclet>
-                <docletPath>${project.basedir}/lib/yworks-uml-doclet-3.1-jdk1.8/lib/ydoc.jar:${project.basedir}/lib/yworks-uml-doclet-3.1-jdk1.8/lib/styleed.jar:${project.basedir}/lib/yworks-uml-doclet-3.1-jdk1.8/resources</docletPath>
-                <additionalOptions>
-                  <additionalOption>-umlautogen</additionalOption>
-                </additionalOptions>
-              </configuration>
-            </plugin>
-          </plugins>
-        </pluginManagement>
-      </build>
-    </profile>
     <profile> <!-- just for IntelliJ IDEA -->
       <id>1.8</id>
       <properties>

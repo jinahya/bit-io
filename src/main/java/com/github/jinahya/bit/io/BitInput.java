@@ -57,7 +57,7 @@ public interface BitInput {
     byte readByte(boolean unsigned, int size) throws IOException;
 
     /**
-     * Reads a {@value java.lang.Byte#SIZE}-bit signed {@code byte} value.
+     * Reads an {@value java.lang.Byte#SIZE}-bit signed {@code byte} value.
      *
      * @return an {@value java.lang.Byte#SIZE}-bit signed {@code byte} value.
      * @throws IOException if an I/O error occurs.

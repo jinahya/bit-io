@@ -31,8 +31,10 @@ import static java.nio.ByteBuffer.allocate;
  * A byte input reads bytes from a readable byte channel.
  *
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
+ * @deprecated Use {@link ChannelByteInput2}.
  */
 @Deprecated
+        // forRemoval = true
 class ChannelByteInput extends BufferByteInput {
 
     // -----------------------------------------------------------------------------------------------------------------

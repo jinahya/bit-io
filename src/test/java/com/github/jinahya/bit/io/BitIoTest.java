@@ -245,4 +245,24 @@ class BitIoTest {
         assertEquals(0L, input.align(Byte.BYTES));
         assertEquals(expected, actual);
     }
+
+    // ------------------------------------------------------------------------------------------------------------ skip
+
+    /**
+     * Tests {@link BitOutput#skip(int)} method and {@link BitInput#skip(int)} method.
+     *
+     * @param output an instance of bit output.
+     * @param input  an instance of bit input.
+     * @throws IOException if an I/O error occurs.
+     */
+    @MethodSource({"com.github.jinahya.bit.io.ByteIoSource#sourceByteIo"})
+    @ParameterizedTest
+    void testSkip(@ConvertWith(BitOutputConverter.class) final BitOutput output,
+                  @ConvertWith(BitInputConverter.class) final BitInput input)
+            throws IOException {
+        final int bits = current().nextInt(1, 9);
+        output.skip(bits);
+        output.align(1);
+        input.skip(bits);
+    }
 }

@@ -185,6 +185,14 @@ public interface BitInput {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
+     * Skips specified number of bits by discarding bits.
+     *
+     * @param bits the number of bit to skip; must be positive.
+     * @throws IOException if an I/O error occurs.
+     */
+    void skip(int bits) throws IOException;
+
+    /**
      * Aligns to specified number of bytes by discarding bits.
      *
      * @param bytes the number of bytes to align; must be positive.

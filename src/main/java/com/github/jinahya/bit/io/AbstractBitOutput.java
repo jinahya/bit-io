@@ -240,11 +240,27 @@ public abstract class AbstractBitOutput implements BitOutput {
 
     // -----------------------------------------------------------------------------------------------------------------
     @Override
+    public void skip(final int bits) throws IOException {
+        if (bits <= 0) {
+            throw new IllegalArgumentException("bits(" + bits + ") <= 0");
+        }
+        final int q = bits / Byte.SIZE;
+        for (int i = 0; i < q; i++) {
+            writeInt(true, Byte.SIZE, 0);
+        }
+        final int r = bits % Byte.SIZE;
+        for (int i = 0; i < r; i++) {
+            writeBoolean(false);
+        }
+    }
+
+    @Override
     public long align(final int bytes) throws IOException {
         if (bytes <= 0) {
             throw new IllegalArgumentException("bytes(" + bytes + ") <= 0");
         }
-        long bits = 0; // the number of bits padded
+        // TODO: 2020/02/14 Use skip()!!!
+        long bits = 0; // the number of bits to pad
         if (available < Byte.SIZE) {
             bits += available;
             writeInt(true, available, 0x00);

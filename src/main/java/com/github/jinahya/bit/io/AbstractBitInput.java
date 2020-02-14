@@ -250,17 +250,33 @@ public abstract class AbstractBitInput implements BitInput {
 
     // -----------------------------------------------------------------------------------------------------------------
     @Override
+    public void skip(final int bits) throws IOException {
+        if (bits <= 0) {
+            throw new IllegalArgumentException("bits(" + bits + ") <= 0");
+        }
+        final int q = bits / Byte.SIZE;
+        for (int i = 0; i < q; i++) {
+            readInt(true, Byte.SIZE);
+        }
+        final int r = bits % Byte.SIZE;
+        for (int i = 0; i < r; i++) {
+            readBoolean();
+        }
+    }
+
+    @Override
     public long align(final int bytes) throws IOException {
         if (bytes <= 0) {
             throw new IllegalArgumentException("bytes(" + bytes + ") <= 0");
         }
-        long bits = 0; // number of bits discarded
+        // TODO: 2020/02/14 Use skip()!!!
+        long bits = 0; // number of bits to discard
         if (available > 0) {
             bits += available;
             readInt(true, available);
         }
         assert available == 0;
-        for (; count % bytes > 0L; bits += Byte.SIZE) {
+        for (; (count % bytes) > 0L; bits += Byte.SIZE) {
             readInt(true, Byte.SIZE);
         }
         assert count % bytes == 0L;

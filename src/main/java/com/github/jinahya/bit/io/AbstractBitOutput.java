@@ -259,6 +259,25 @@ public abstract class AbstractBitOutput implements BitOutput {
         if (bytes <= 0) {
             throw new IllegalArgumentException("bytes(" + bytes + ") <= 0");
         }
+        if (true) {
+            long bits = 0;
+            long c = count; // TODO: 2020/02/14 remove!!!
+            if (available < Byte.SIZE) {
+                bits += available;
+                c++;
+            }
+            final long o = bytes == 1 ? 0 : (bytes - (c % bytes));
+            c += o;
+            bits += (Byte.SIZE * o);
+            if (bits >= Integer.MAX_VALUE) {
+                throw new IllegalArgumentException("too many bits to discard: " + bits);
+            }
+            if (bits > 0L) {
+                skip((int) bits);
+            }
+            assert count == c : count + "/" + c;
+            return bits;
+        }
         // TODO: 2020/02/14 Use skip()!!!
         long bits = 0; // the number of bits to pad
         if (available < Byte.SIZE) {

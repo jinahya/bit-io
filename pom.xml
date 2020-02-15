@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
@@ -100,12 +101,12 @@
       <version>${version.org.junit.jupiter}</version>
       <scope>test</scope>
     </dependency>
-    <dependency>
-      <groupId>org.mockito</groupId>
-      <artifactId>mockito-core</artifactId>
-      <version>${version.org.mockito}</version>
-      <scope>test</scope>
-    </dependency>
+    <!--    <dependency>-->
+    <!--      <groupId>org.mockito</groupId>-->
+    <!--      <artifactId>mockito-core</artifactId>-->
+    <!--      <version>${version.org.mockito}</version>-->
+    <!--      <scope>test</scope>-->
+    <!--    </dependency>-->
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-junit-jupiter</artifactId>
@@ -193,11 +194,16 @@
             </goals>
             <configuration>
               <target>
-                <taskdef name="retrotranslator" classname="net.sf.retrotranslator.transformer.RetrotranslatorTask" classpathref="maven.plugin.classpath" />
-                <mkdir dir="${project.build.outputDirectory.retrotranslated13}" />
-                <retrotranslator srcdir="${project.build.outputDirectory}" destdir="${project.build.outputDirectory.retrotranslated13}" embed="com.github.jinahya.bit.io.retrotranslated13" failonwarning="false" smart="true" stripannot="true" stripsign="true" syncvolatile="true" target="1.3" verbose="false" verify="false">
+                <taskdef name="retrotranslator" classname="net.sf.retrotranslator.transformer.RetrotranslatorTask"
+                         classpathref="maven.plugin.classpath"/>
+                <mkdir dir="${project.build.outputDirectory.retrotranslated13}"/>
+                <retrotranslator srcdir="${project.build.outputDirectory}"
+                                 destdir="${project.build.outputDirectory.retrotranslated13}"
+                                 embed="com.github.jinahya.bit.io.retrotranslated13" failonwarning="false" smart="true"
+                                 stripannot="true" stripsign="true" syncvolatile="true" target="1.3" verbose="false"
+                                 verify="false">
                   <classpath>
-                    <fileset dir="${basedir}/ext/retrotranslated13" includes="**/*.jar" />
+                    <fileset dir="${basedir}/ext/retrotranslated13" includes="**/*.jar"/>
                   </classpath>
                 </retrotranslator>
               </target>
@@ -211,11 +217,16 @@
             </goals>
             <configuration>
               <target>
-                <taskdef name="retrotranslator" classname="net.sf.retrotranslator.transformer.RetrotranslatorTask" classpathref="maven.plugin.classpath" />
-                <mkdir dir="${project.build.outputDirectory.retrotranslated14}" />
-                <retrotranslator srcdir="${project.build.outputDirectory}" destdir="${project.build.outputDirectory.retrotranslated14}" embed="com.github.jinahya.bit.io.retrotranslated14" failonwarning="false" smart="true" stripannot="true" stripsign="true" syncvolatile="true" target="1.4" verbose="false" verify="false">
+                <taskdef name="retrotranslator" classname="net.sf.retrotranslator.transformer.RetrotranslatorTask"
+                         classpathref="maven.plugin.classpath"/>
+                <mkdir dir="${project.build.outputDirectory.retrotranslated14}"/>
+                <retrotranslator srcdir="${project.build.outputDirectory}"
+                                 destdir="${project.build.outputDirectory.retrotranslated14}"
+                                 embed="com.github.jinahya.bit.io.retrotranslated14" failonwarning="false" smart="true"
+                                 stripannot="true" stripsign="true" syncvolatile="true" target="1.4" verbose="false"
+                                 verify="false">
                   <classpath>
-                    <fileset dir="${basedir}/ext/retrotranslated14" includes="**/*.jar" />
+                    <fileset dir="${basedir}/ext/retrotranslated14" includes="**/*.jar"/>
                   </classpath>
                 </retrotranslator>
               </target>
@@ -242,7 +253,7 @@
             </goals>
             <configuration>
               <rules>
-                <dependencyConvergence />
+                <dependencyConvergence/>
                 <requireJavaVersion>
                   <version>[1.8.0,)</version>
                 </requireJavaVersion>
@@ -332,20 +343,6 @@
                 <groupId>org.codehaus.mojo.signature</groupId>
                 <artifactId>java15</artifactId>
                 <version>1.0</version>
-              </signature>
-            </configuration>
-          </execution>
-          <execution>
-            <id>check-signature-java16:1.1</id>
-            <phase>process-classes</phase>
-            <goals>
-              <!--              <goal>check</goal>-->
-            </goals>
-            <configuration>
-              <signature>
-                <groupId>org.codehaus.mojo.signature</groupId>
-                <artifactId>java16</artifactId>
-                <version>1.1</version>
               </signature>
             </configuration>
           </execution>

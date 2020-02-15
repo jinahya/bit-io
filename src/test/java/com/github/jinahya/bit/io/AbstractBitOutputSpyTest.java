@@ -26,7 +26,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.IOException;
@@ -40,9 +40,8 @@ import static com.github.jinahya.bit.io.BitIoTests.randomValueForInt;
 import static com.github.jinahya.bit.io.BitIoTests.randomValueForLong;
 import static com.github.jinahya.bit.io.BitIoTests.randomValueForShort;
 import static java.util.concurrent.ThreadLocalRandom.current;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.lenient;
 
 /**
  * A class for unit-testing {@link AbstractBitOutput} class.
@@ -57,7 +56,7 @@ final class AbstractBitOutputSpyTest {
     // -----------------------------------------------------------------------------------------------------------------
     @BeforeEach
     void stubWrite() throws IOException {
-        lenient().doNothing().when(bitOutput).write(anyInt());
+        //lenient().doNothing().when(bitOutput).write(anyInt());
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -117,6 +116,22 @@ final class AbstractBitOutputSpyTest {
         bitOutput.writeChar(size, value);
     }
 
+    // ------------------------------------------------------------------------------------------------------------ skip
+    @Test
+    void assertSkipThrowsIllegalArgumentExceptionWhenBitsIsZero() {
+        assertThrows(IllegalArgumentException.class, () -> bitOutput.skip(0));
+    }
+
+    @Test
+    void assertSkipThrowsIllegalArgumentExceptionWhenBitsIsNegative() {
+        assertThrows(IllegalArgumentException.class, () -> bitOutput.skip(current().nextInt() | Integer.MIN_VALUE));
+    }
+
+    @Test
+    void testSkip() throws IOException {
+        bitOutput.skip(current().nextInt(1, 129));
+    }
+
     // ----------------------------------------------------------------------------------------------------------- align
     @Test
     void testAlign() throws IOException {
@@ -132,6 +147,6 @@ final class AbstractBitOutputSpyTest {
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    @Mock
+    @Spy
     private AbstractBitOutput bitOutput;
 }

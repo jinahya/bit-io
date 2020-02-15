@@ -26,7 +26,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.IOException;
@@ -38,6 +38,7 @@ import static com.github.jinahya.bit.io.BitIoTests.randomSizeForLong;
 import static com.github.jinahya.bit.io.BitIoTests.randomSizeForShort;
 import static java.util.concurrent.ThreadLocalRandom.current;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.lenient;
 
@@ -145,6 +146,22 @@ final class AbstractBitInputSpyTest {
         assertEquals(0, value >> size);
     }
 
+    // ------------------------------------------------------------------------------------------------------------ skip
+    @Test
+    void assertSkipThrowsIllegalArgumentExceptionWhenBitsIsZero() {
+        assertThrows(IllegalArgumentException.class, () -> bitInput.skip(0));
+    }
+
+    @Test
+    void assertSkipThrowsIllegalArgumentExceptionWhenBitsIsNegative() {
+        assertThrows(IllegalArgumentException.class, () -> bitInput.skip(current().nextInt() | Integer.MIN_VALUE));
+    }
+
+    @Test
+    void testSkip() throws IOException {
+        bitInput.skip(current().nextInt(1, 129));
+    }
+
     // ----------------------------------------------------------------------------------------------------------- align
     @Test
     void testAlign() throws IOException {
@@ -160,6 +177,6 @@ final class AbstractBitInputSpyTest {
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    @Mock
+    @Spy
     private AbstractBitInput bitInput;
 }

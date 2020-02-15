@@ -260,7 +260,7 @@ public abstract class AbstractBitInput implements BitInput {
         }
         final int r = bits % Byte.SIZE;
         for (int i = 0; i < r; i++) {
-            readBoolean();
+            readInt(true, 1);
         }
     }
 

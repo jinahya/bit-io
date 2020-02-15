@@ -250,7 +250,7 @@ public abstract class AbstractBitOutput implements BitOutput {
         }
         final int r = bits % Byte.SIZE;
         for (int i = 0; i < r; i++) {
-            writeBoolean(false);
+            writeInt(true, 1, 0);
         }
     }
 

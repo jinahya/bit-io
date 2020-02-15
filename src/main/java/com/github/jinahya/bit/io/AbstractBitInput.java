@@ -44,7 +44,7 @@ public abstract class AbstractBitInput implements BitInput {
     /**
      * Creates a new instance.
      */
-    AbstractBitInput() {
+    protected AbstractBitInput() {
         super();
     }
 
@@ -269,25 +269,6 @@ public abstract class AbstractBitInput implements BitInput {
         if (bytes <= 0) {
             throw new IllegalArgumentException("bytes(" + bytes + ") <= 0");
         }
-        if (true) {
-            long bits = 0;
-            long c = count; // TODO: 2020/02/14 remove!!!
-            if (available > 0) {
-                bits += available;
-            }
-            final long o = bytes == 1 ? 0 : (bytes - (c % bytes));
-            c += o;
-            bits += (Byte.SIZE * o);
-            if (bits >= Integer.MAX_VALUE) {
-                throw new IllegalArgumentException("too many bits to discard: " + bits);
-            }
-            if (bits > 0L) {
-                skip((int) bits);
-            }
-            assert count == c : count + "/" + c;
-            return bits;
-        }
-        // TODO: 2020/02/14 Use skip()!!!
         long bits = 0; // number of bits to discard
         if (available > 0) {
             bits += available;

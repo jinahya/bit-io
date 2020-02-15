@@ -26,7 +26,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Spy;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.IOException;
@@ -39,6 +39,7 @@ import static com.github.jinahya.bit.io.BitIoTests.randomSizeForShort;
 import static java.util.concurrent.ThreadLocalRandom.current;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.lenient;
 
 /**
  * A class for unit-testing {@link AbstractBitInput} with a spy.
@@ -53,7 +54,7 @@ final class AbstractBitInputSpyTest {
     // -----------------------------------------------------------------------------------------------------------------
     @BeforeEach
     void stubRead() throws IOException {
-        //when(bitInput.read()).thenReturn(current().nextInt(0, 256));
+        lenient().when(bitInput.read()).thenReturn(current().nextInt(0, 256));
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -63,6 +64,12 @@ final class AbstractBitInputSpyTest {
     }
 
     // ------------------------------------------------------------------------------------------------------------ byte
+
+    /**
+     * Tests {@link AbstractBitInput#readByte(boolean, int)} method.
+     *
+     * @throws IOException if an I/O error occurs.
+     */
     @RepeatedTest(8)
     void testReadByte() throws IOException {
         final boolean unsigned = current().nextBoolean();
@@ -153,7 +160,6 @@ final class AbstractBitInputSpyTest {
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-
-    @Spy
+    @Mock
     private AbstractBitInput bitInput;
 }

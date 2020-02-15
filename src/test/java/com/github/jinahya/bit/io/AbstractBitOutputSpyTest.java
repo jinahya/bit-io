@@ -26,7 +26,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Spy;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.IOException;
@@ -41,6 +41,8 @@ import static com.github.jinahya.bit.io.BitIoTests.randomValueForLong;
 import static com.github.jinahya.bit.io.BitIoTests.randomValueForShort;
 import static java.util.concurrent.ThreadLocalRandom.current;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.lenient;
 
 /**
  * A class for unit-testing {@link AbstractBitOutput} class.
@@ -55,7 +57,7 @@ final class AbstractBitOutputSpyTest {
     // -----------------------------------------------------------------------------------------------------------------
     @BeforeEach
     void stubWrite() throws IOException {
-        //doNothing().when(bitOutput).write(anyInt());
+        lenient().doNothing().when(bitOutput).write(anyInt());
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -130,7 +132,6 @@ final class AbstractBitOutputSpyTest {
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-
-    @Spy
+    @Mock
     private AbstractBitOutput bitOutput;
 }

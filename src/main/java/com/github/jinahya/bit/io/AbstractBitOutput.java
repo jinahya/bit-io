@@ -172,8 +172,9 @@ public abstract class AbstractBitOutput implements BitOutput {
             }
             return;
         }
-        final int quotient = size / Short.SIZE;
-        final int remainder = size % Short.SIZE;
+        final int divisor = Short.SIZE;
+        final int quotient = size / divisor;
+        final int remainder = size % divisor;
         if (remainder > 0) {
             unsigned16(remainder, value >> (quotient * Short.SIZE));
         }

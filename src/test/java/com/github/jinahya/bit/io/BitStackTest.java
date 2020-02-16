@@ -43,7 +43,7 @@ class BitStackTest {
         final BitStack stack = new BitStack();
         final Field field = BitStack.class.getDeclaredField("top");
         field.setAccessible(true);
-        field.set(stack, Integer.MAX_VALUE);
+        field.set(stack, Integer.MIN_VALUE);
         assertThrows(RuntimeException.class,
                      () -> stack.push(current().nextInt(1, Long.SIZE), current().nextLong() >>> 1));
     }
@@ -58,7 +58,7 @@ class BitStackTest {
     @Test
     void testPopAssertStackUnderflow() {
         final BitStack stack = new BitStack();
-        assertThrows(RuntimeException.class, () -> stack.pop(current().nextInt(1, Long.SIZE)));
+        assertThrows(RuntimeException.class, () -> stack.popLong(current().nextInt(1, Long.SIZE)));
     }
 
     @Test
@@ -67,7 +67,7 @@ class BitStackTest {
         final int size = current().nextInt(1, Long.SIZE);
         final long value = current().nextLong() >>> 1;
         stack.push(size, value);
-        assertTrue(stack.pop(current().nextInt(1, size + 1)) <= value);
+        assertTrue(stack.popLong(current().nextInt(1, size + 1)) <= value);
     }
 
     // --------------------------------------------------------------------------------------------------------- reverse

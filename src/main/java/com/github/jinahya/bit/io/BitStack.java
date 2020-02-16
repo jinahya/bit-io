@@ -22,6 +22,7 @@ package com.github.jinahya.bit.io;
 
 import java.util.BitSet;
 
+import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeInt;
 import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeLong;
 
 final class BitStack {
@@ -36,33 +37,10 @@ final class BitStack {
      * @return the value with reversed bits.
      */
     public long reverse(final int size, final long value) {
+        requireValidSizeLong(false, size);
         push(size, value);
-        return pop(size);
+        return popLong(size);
     }
-
-    // -----------------------------------------------------------------------------------------------------------------
-    private boolean pop() {
-        if (top == 0) {
-            throw new RuntimeException("stack underflow");
-        }
-        return set().get(--top);
-    }
-
-    /**
-     * Pops a value of specified bit size.
-     *
-     * @param size the number of lower bits for the number.
-     * @return a value of specified bit size.
-     */
-    public long pop(final int size) {
-        requireValidSizeLong(true, size);
-        long value = 0L;
-        for (int i = 0; i < size; i++) {
-            value |= ((pop() ? 1L : 0L) << i);
-        }
-        return value;
-    }
-
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
@@ -71,7 +49,7 @@ final class BitStack {
      * @param value the bit flag to push.
      */
     private void push(final boolean value) {
-        if (top == Integer.MAX_VALUE) {
+        if (top == Integer.MIN_VALUE) {
             throw new RuntimeException("stack overflow");
         }
         set().set(top++, value);
@@ -80,18 +58,74 @@ final class BitStack {
     /**
      * Pushes the lower specified bits of specified value.
      *
-     * @param size  the number of bits.
-     * @param value the value to be pushed.
+     * @param size  the number of lower bits to push.
+     * @param value the value whose lower {@code size} bits are pushed.
      */
-    public void push(final int size, long value) {
-        requireValidSizeLong(true, size);
-        if (value < 0L) {
-            throw new IllegalArgumentException("value(" + value + ") < 0L");
-        }
-        for (int i = 0; i < size; i++) {
+    public void push(int size, int value) {
+        requireValidSizeInt(false, size);
+        for (; size > 0; size--) {
             push((value & 0x01L) == 0x01L);
             value >>= 1;
         }
+    }
+
+    /**
+     * Pushes the lower specified bits of specified value.
+     *
+     * @param size  the number of lower bits to push.
+     * @param value the value whose lower {@code size} bits are pushed.
+     */
+    public void push(int size, long value) {
+        requireValidSizeLong(false, size);
+        for (; size > 0; size--) {
+            push((value & 0x01L) == 0x01L);
+            value >>= 1;
+        }
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Pops the flag on the {@code top}.
+     *
+     * @return a flag on the {@code top}.
+     */
+    private boolean pop() {
+        if (top == 0) {
+            throw new RuntimeException("stack underflow");
+        }
+        return set().get(--top);
+    }
+
+    /**
+     * Pops an {@code int} value of specified bit size.
+     *
+     * @param size the number of lower bits for the number.
+     * @return a value of specified bit size.
+     */
+    public int popInt(int size) {
+        requireValidSizeLong(true, size);
+        int value = 0;
+        for (; size > 0; size--) {
+            value |= (pop() ? 1 : 0);
+            value <<= 1;
+        }
+        return value;
+    }
+
+    /**
+     * Pops a {@code long} value of specified bit size.
+     *
+     * @param size the number of lower bits for the number.
+     * @return a value of specified bit size.
+     */
+    public long popLong(final int size) {
+        requireValidSizeLong(true, size);
+        long value = 0L;
+        for (int i = 0; i < size; i++) {
+            value |= ((pop() ? 1L : 0L) << i);
+        }
+        return value;
     }
 
     // -----------------------------------------------------------------------------------------------------------------

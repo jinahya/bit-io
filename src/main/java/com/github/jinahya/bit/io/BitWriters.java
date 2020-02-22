@@ -44,20 +44,20 @@ final class BitWriters {
     /**
      * Returns a cached instance of a bit writer for specified type of bit writable.
      *
-     * @param type the type for the bit writer instance.
-     * @param <T>  bit writable type parameter
+     * @param clazz the type for the bit writer instance.
+     * @param <T>   bit writable type parameter
      * @return the cached instance of bit writer.
      */
-    public static <T extends BitWritable> BitWriter<T> cachedBitWriterFor(final Class<T> type) {
-        if (type == null) {
-            throw new NullPointerException("type is null");
+    public static <T extends BitWritable> BitWriter<T> cachedBitWriterFor(final Class<T> clazz) {
+        if (clazz == null) {
+            throw new NullPointerException("clazz is null");
         }
         synchronized (BIT_WRITERS) {
             @SuppressWarnings({"unchecked"})
-            BitWriter<T> value = (BitWriter<T>) BIT_WRITERS.get(type);
+            BitWriter<T> value = (BitWriter<T>) BIT_WRITERS.get(clazz);
             if (value == null) {
-                value = newBitWriterFor(type);
-                BIT_WRITERS.put(type, value);
+                value = newBitWriterFor(clazz);
+                BIT_WRITERS.put(clazz, value);
             }
             return value;
         }
@@ -66,13 +66,13 @@ final class BitWriters {
     /**
      * Returns a new bit writer instance for specified type of bit writable.
      *
-     * @param type the type of bit writable to read.
-     * @param <T>  bit writable type parameter
+     * @param clazz the type of bit writable to read.
+     * @param <T>   bit writable type parameter
      * @return a new bit writer instance.
      */
-    public static <T extends BitWritable> BitWriter<T> newBitWriterFor(final Class<T> type) {
-        if (type == null) {
-            throw new NullPointerException("type is null");
+    public static <T extends BitWritable> BitWriter<T> newBitWriterFor(final Class<T> clazz) {
+        if (clazz == null) {
+            throw new NullPointerException("clazz is null");
         }
         return new BitWriter<T>() {
             @Override

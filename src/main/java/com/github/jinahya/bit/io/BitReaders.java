@@ -70,13 +70,13 @@ final class BitReaders {
     /**
      * Returns a new bit reader instance for specified type of bit readable.
      *
-     * @param type the type of bit readable to read.
-     * @param <T>  bit readable type parameter
+     * @param clazz the type of bit readable to read.
+     * @param <T>   bit readable type parameter
      * @return a new bit reader instance.
      */
-    public static <T extends BitReadable> BitReader<T> newBitReaderFor(final Class<T> type) {
-        if (type == null) {
-            throw new NullPointerException("type is null");
+    public static <T extends BitReadable> BitReader<T> newBitReaderFor(final Class<T> clazz) {
+        if (clazz == null) {
+            throw new NullPointerException("clazz is null");
         }
         return new BitReader<T>() {
             @Override
@@ -84,25 +84,27 @@ final class BitReaders {
                 if (input == null) {
                     throw new NullPointerException("input is null");
                 }
+                final Constructor<? extends T> constructor;
                 try {
-                    final Constructor<? extends T> constructor = type.getDeclaredConstructor();
-                    if (!constructor.isAccessible()) {
-                        constructor.setAccessible(true);
-                    }
-                    try {
-                        final T value = constructor.newInstance();
-                        value.read(input);
-                        return value;
-                    } catch (final InstantiationException ie) {
-                        throw new RuntimeException(ie);
-                    } catch (final IllegalAccessException iae) {
-                        throw new RuntimeException(iae);
-                    } catch (final InvocationTargetException ite) {
-                        throw new RuntimeException(ite);
-                    }
+                    constructor = clazz.getDeclaredConstructor();
                 } catch (final NoSuchMethodException nsme) {
                     throw new RuntimeException(nsme);
                 }
+                if (!constructor.isAccessible()) {
+                    constructor.setAccessible(true);
+                }
+                final T value;
+                try {
+                    value = constructor.newInstance();
+                } catch (final InstantiationException ie) {
+                    throw new RuntimeException(ie);
+                } catch (final IllegalAccessException iae) {
+                    throw new RuntimeException(iae);
+                } catch (final InvocationTargetException ite) {
+                    throw new RuntimeException(ite);
+                }
+                value.read(input);
+                return value;
             }
         };
     }

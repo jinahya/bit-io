@@ -5,7 +5,7 @@
 [![Build Status](https://travis-ci.org/jinahya/bit-io.svg?branch=develop)](https://travis-ci.org/jinahya/bit-io)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=com.github.jinahya%3Abit-io%3Adevelop&metric=alert_status)](https://sonarcloud.io/dashboard?id=com.github.jinahya%3Abit-io%3Adevelop)
 [![Known Vulnerabilities](https://snyk.io//test/github/jinahya/bit-io/badge.svg?targetFile=pom.xml)](https://snyk.io//test/github/jinahya/bit-io?targetFile=pom.xml)
-[![Maven Central](https://img.shields.io/maven-central/v/com.github.jinahya/bit-io.svg)](http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22bit-io%22)
+[![Maven Central](https://img.shields.io/maven-central/v/com.github.jinahya/bit-io.svg)](https://img.shields.io/maven-central/v/com.github.jinahya/bit-io)
 [![javadoc](https://javadoc.io/badge2/com.github.jinahya/bit-io/javadoc.svg)](https://javadoc.io/doc/com.github.jinahya/bit-io)
 
 A library for reading/writing non octet aligned values such as `1-bit boolean` or `17-bit unsigned int`.

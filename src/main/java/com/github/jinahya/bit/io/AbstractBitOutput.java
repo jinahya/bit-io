@@ -116,8 +116,10 @@ public abstract class AbstractBitOutput implements BitOutput {
      */
     protected void unsigned16(final int size, final int value) throws IOException {
         requireValidSizeUnsigned16(size);
-        final int quotient = size / Byte.SIZE;
-        final int remainder = size % Byte.SIZE;
+//        final int quotient = size / Byte.SIZE;
+        final int quotient = size >> 3;
+//        final int remainder = size % Byte.SIZE;
+        final int remainder = size & 7;
         if (remainder > 0) {
             unsigned8(remainder, value >> (quotient * Byte.SIZE));
         }
@@ -173,8 +175,10 @@ public abstract class AbstractBitOutput implements BitOutput {
             return;
         }
         final int divisor = Short.SIZE;
-        final int quotient = size / divisor;
-        final int remainder = size % divisor;
+//        final int quotient = size / divisor;
+        final int quotient = size >> 4;
+//        final int remainder = size % divisor;
+        final int remainder = size & 15;
         if (remainder > 0) {
             unsigned16(remainder, value >> (quotient * Short.SIZE));
         }
@@ -245,12 +249,14 @@ public abstract class AbstractBitOutput implements BitOutput {
         if (bits <= 0) {
             throw new IllegalArgumentException("bits(" + bits + ") <= 0");
         }
-        final int q = bits / Byte.SIZE;
-        for (int i = 0; i < q; i++) {
+//        final int q = bits / Byte.SIZE;
+//        for (int i = 0; i < q; i++) {
+        for (int i = bits >> 3; i > 0; i--) {
             writeInt(true, Byte.SIZE, 0);
         }
-        final int r = bits % Byte.SIZE;
-        for (int i = 0; i < r; i++) {
+//        final int r = bits % Byte.SIZE;
+//        for (int i = 0; i < r; i++) {
+        for (int i = bits & 7; i > 0; i--) {
             writeInt(true, 1, 0);
         }
     }

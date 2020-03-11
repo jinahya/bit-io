@@ -116,12 +116,14 @@ public abstract class AbstractBitInput implements BitInput {
     protected int unsigned16(final int size) throws IOException {
         requireValidSizeUnsigned16(size);
         int value = 0x00;
-        final int quotient = size / Byte.SIZE;
-        for (int i = 0; i < quotient; i++) {
+//        final int quotient = size / Byte.SIZE;
+//        for (int i = 0; i < quotient; i++) {
+        for (int i = size >> 3; i > 0; i--) {
             value <<= Byte.SIZE;
             value |= unsigned8(Byte.SIZE);
         }
-        final int remainder = size % Byte.SIZE;
+//        final int remainder = size % Byte.SIZE;
+        final int remainder = size & 7;
         if (remainder > 0) {
             value <<= remainder;
             value |= unsigned8(remainder);
@@ -176,12 +178,14 @@ public abstract class AbstractBitInput implements BitInput {
             }
             return value;
         }
-        final int quotient = size / Short.SIZE;
-        for (int i = 0; i < quotient; i++) {
+//        final int quotient = size / Short.SIZE;
+//        for (int i = 0; i < quotient; i++) {
+        for (int i = size >> 4; i > 0; i--) {
             value <<= Short.SIZE;
             value |= unsigned16(Short.SIZE);
         }
-        final int remainder = size % Short.SIZE;
+//        final int remainder = size % Short.SIZE;
+        final int remainder = size & 15;
         if (remainder > 0) {
             value <<= remainder;
             value |= unsigned16(remainder);
@@ -254,12 +258,14 @@ public abstract class AbstractBitInput implements BitInput {
         if (bits <= 0) {
             throw new IllegalArgumentException("bits(" + bits + ") <= 0");
         }
-        final int q = bits / Byte.SIZE;
-        for (int i = 0; i < q; i++) {
+//        final int q = bits / Byte.SIZE;
+//        for (int i = 0; i < q; i++) {
+        for (int i = bits >> 3; i > 0; i--) {
             readInt(true, Byte.SIZE);
         }
-        final int r = bits % Byte.SIZE;
-        for (int i = 0; i < r; i++) {
+//        final int r = bits % Byte.SIZE;
+//        for (int i = 0; i < r; i++) {
+        for (int i = bits & 7; i > 0; i--) {
             readInt(true, 1);
         }
     }

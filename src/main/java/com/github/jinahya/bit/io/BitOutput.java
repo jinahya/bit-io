@@ -199,7 +199,8 @@ public interface BitOutput {
      *
      * @param bytes the number of bytes to align; must be positive.
      * @return the number of bits padded while aligning.
-     * @throws IOException if an I/O error occurs.
+     * @throws IllegalArgumentException if {@code bytes} is not positive.
+     * @throws IOException              if an I/O error occurs.
      * @see BitInput#align(int)
      */
     long align(int bytes) throws IOException;

@@ -98,7 +98,7 @@ final class BitIoConstraints {
     static {
         MAX_SIZES[0] = (int) pow(2, MIN_EXPONENT);
         for (int i = 1; i < MAX_SIZES.length; i++) {
-            MAX_SIZES[i] = MAX_SIZES[i - 1] << 2;
+            MAX_SIZES[i] = MAX_SIZES[i - 1] << 1;
         }
     }
 
@@ -142,7 +142,7 @@ final class BitIoConstraints {
     }
 
     static int requireValidSizeChar(final int size) {
-        return requireValidSize(true, SIZE_EXPONENT_CHAR, size);
+        return requireValidSize(false, SIZE_EXPONENT_CHAR, size);
     }
 
     // -----------------------------------------------------------------------------------------------------------------

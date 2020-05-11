@@ -22,12 +22,12 @@ package com.github.jinahya.bit.io;
 
 import java.io.IOException;
 
+import static com.github.jinahya.bit.io.BitIoConstants.mask;
 import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeByte;
 import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeChar;
 import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeInt;
 import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeLong;
 import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeShort;
-import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeUnsigned8;
 
 /**
  * An abstract class for implementing {@link BitInput} interface.
@@ -70,7 +70,6 @@ public abstract class AbstractBitInput implements BitInput {
      * @see #read()
      */
     private int unsigned8(final int size) throws IOException {
-        requireValidSizeUnsigned8(size);
         if (available == 0) {
             octet = read();
             assert octet >= 0 && octet < 256;
@@ -82,7 +81,7 @@ public abstract class AbstractBitInput implements BitInput {
             return (unsigned8(available) << required) | unsigned8(required);
         }
         available -= size;
-        return (octet >> available) & ((1 << size) - 1);
+        return (octet >> available) & mask(size);
     }
 
     // --------------------------------------------------------------------------------------------------------- boolean

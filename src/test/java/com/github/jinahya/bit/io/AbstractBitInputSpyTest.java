@@ -169,13 +169,6 @@ final class AbstractBitInputSpyTest {
         assertTrue(discarded >= 0L);
     }
 
-    // ----------------------------------------------------------------------------------------------------------- count
-    @Test
-    void testCount() {
-        final long count = bitInput.getCount();
-        assertTrue(count >= 0L);
-    }
-
     // -----------------------------------------------------------------------------------------------------------------
     @Spy
     private AbstractBitInput bitInput;

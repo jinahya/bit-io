@@ -27,10 +27,8 @@ import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.spi.InjectionPoint;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.RandomAccessFile;
 
 import static java.nio.ByteBuffer.allocate;
-import static org.mockito.Mockito.mock;
 
 @Slf4j
 class ByteOutputProducer {
@@ -113,14 +111,5 @@ class ByteOutputProducer {
     }
 
     void disposeChannelByteOutput(@Disposes final ChannelByteOutput2 byteOutput) {
-    }
-
-    // ------------------------------------------------------------------------------------------------------------- raf
-    @Produces
-    RandomAccessFileByteOutput produceRandomAccessFileByteOutput(final InjectionPoint injectionPoint) {
-        return new RandomAccessFileByteOutput(mock(RandomAccessFile.class));
-    }
-
-    void disposeRandomAccessFileByteOutput(@Disposes final RandomAccessFileByteOutput byteOutput) {
     }
 }

@@ -22,6 +22,9 @@ package com.github.jinahya.bit.io;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.nio.channels.WritableByteChannel;
+
+import static java.nio.ByteBuffer.allocate;
 
 /**
  * A byte output writes bytes to a {@link ByteBuffer}.
@@ -30,6 +33,35 @@ import java.nio.ByteBuffer;
  * @see BufferByteInput
  */
 public class BufferByteOutput extends AbstractByteOutput<ByteBuffer> {
+
+    // -----------------------------------------------------------------------------------------------------------------
+    private static class ChannelBufferByteOutput extends BufferByteOutput {
+
+        private ChannelBufferByteOutput(final ByteBuffer target, final WritableByteChannel channel) {
+            super(target);
+            if (channel == null) {
+                throw new NullPointerException("channel is null");
+            }
+            this.channel = channel;
+        }
+
+        @Override
+        public void write(final int value) throws IOException {
+            super.write(value);
+            final ByteBuffer target = getTarget();
+            while (!target.hasRemaining()) {
+                target.flip();
+                channel.write(target);
+                target.compact();
+            }
+        }
+
+        private final WritableByteChannel channel;
+    }
+
+    public static BufferByteOutput from(final WritableByteChannel channel) {
+        return new ChannelBufferByteOutput(allocate(1), channel);
+    }
 
     // -----------------------------------------------------------------------------------------------------------------
 

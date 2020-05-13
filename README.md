@@ -10,6 +10,8 @@
 
 A library for reading/writing non octet aligned values such as `1-bit boolean` or `17-bit unsigned int`.
 
+See [bit-io2](https://github.com/jinahya/bit-io2) for Java8+ flavored version.
+
 ## Specifications
 
 #### boolean

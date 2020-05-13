@@ -190,7 +190,8 @@ public interface BitOutput {
      * Skips specified number of bits by padding zero bits.
      *
      * @param bits the number of bit to skip; must be positive.
-     * @throws IOException if an I/O error occurs.
+     * @throws IllegalArgumentException if {@code bits} is not positive.
+     * @throws IOException              if an I/O error occurs.
      */
     void skip(int bits) throws IOException;
 

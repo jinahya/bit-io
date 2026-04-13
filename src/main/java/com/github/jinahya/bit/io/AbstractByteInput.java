@@ -81,7 +81,7 @@ abstract class AbstractByteInput<T> implements ByteInput {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * The bytes source from which byte are read.
+     * The byte source from which bytes are read.
      */
     private T source;
 }

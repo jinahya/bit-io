@@ -48,15 +48,12 @@ public class BufferByteInput extends AbstractByteInput<ByteBuffer> {
         @Override
         public int read() throws IOException {
             final ByteBuffer source = getSource();
-            if (!source.hasRemaining()) {
+            while (!source.hasRemaining()) {
                 source.clear(); // position -> zero, limit -> capacity
-            }
-            while (source.hasRemaining()) {
-                source.clear();
                 if (channel.read(source) == -1) {
-                    throw new EOFException("reached to an end");
+                    throw new EOFException("end of channel reached");
                 }
-                source.flip();
+                source.flip(); // limit -> position, position -> zero
             }
             return super.read();
         }

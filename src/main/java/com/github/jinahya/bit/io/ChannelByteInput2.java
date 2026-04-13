@@ -39,9 +39,9 @@ class ChannelByteInput2 extends AbstractByteInput<ReadableByteChannel> {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * Creates a new instance which writes bytes to specified channel.
+     * Creates a new instance that reads bytes from the specified channel.
      *
-     * @param channel the channel to which bytes are written; must be not {@code null}.
+     * @param channel the channel from which bytes are read; must not be {@code null}.
      * @return a new instance.
      */
     public static ChannelByteInput2 of(final ReadableByteChannel channel) {
@@ -98,7 +98,7 @@ class ChannelByteInput2 extends AbstractByteInput<ReadableByteChannel> {
         while (!buffer.hasRemaining()) {
             buffer.clear(); // position -> zero, limit -> capacity
             if (getSource().read(buffer) == -1) {
-                throw new EOFException("reached to an end");
+                throw new EOFException("end of channel reached");
             }
             buffer.flip(); // limit -> position, position -> zero
         }

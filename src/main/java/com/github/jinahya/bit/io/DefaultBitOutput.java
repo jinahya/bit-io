@@ -23,7 +23,7 @@ package com.github.jinahya.bit.io;
 import java.io.IOException;
 
 /**
- * A default implementation of {@link BitOutput} writes bytes to an instance of {@link ByteOutput}.
+ * A default implementation of {@link BitOutput} that writes bytes to an instance of {@link ByteOutput}.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  * @see DefaultBitInput
@@ -35,7 +35,7 @@ public class DefaultBitOutput extends AbstractBitOutput {
     /**
      * Creates new instance with specified delegate.
      *
-     * @param delegate the delegate to which bytes are written; {@code null} if if is supposed to be lazily initialized
+     * @param delegate the delegate to which bytes are written; {@code null} if it is intended to be lazily initialized
      *                 and set.
      */
     public DefaultBitOutput(final ByteOutput delegate) {
@@ -70,7 +70,11 @@ public class DefaultBitOutput extends AbstractBitOutput {
      */
     @Override
     protected void write(final int value) throws IOException {
-        getDelegate().write(value);
+        final ByteOutput delegate = getDelegate();
+        if (delegate == null) {
+            throw new IllegalStateException("delegate has not been set");
+        }
+        delegate.write(value);
     }
 
     // -------------------------------------------------------------------------------------------------------- delegate

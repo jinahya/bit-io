@@ -116,7 +116,7 @@ public interface BitInput {
      *
      * @return a {@value java.lang.Integer#SIZE}-bit signed {@code int} value.
      * @throws IOException if an I/O error occurs.
-     * @see BitInput#readInt32()
+     * @see BitOutput#writeInt32(int)
      */
     int readInt32() throws IOException;
 
@@ -125,7 +125,7 @@ public interface BitInput {
      *
      * @return a {@value java.lang.Integer#SIZE}-bit signed {@code int} value encoded in little endian byte order.
      * @throws IOException if an I/O error occurs.
-     * @see BitInput#readInt32Le()
+     * @see BitOutput#writeInt32Le(int)
      */
     int readInt32Le() throws IOException;
 

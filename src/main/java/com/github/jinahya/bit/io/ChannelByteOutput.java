@@ -30,7 +30,7 @@ import static java.nio.ByteBuffer.allocate;
  * A byte output writes bytes to a writable byte channel.
  *
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
- * @deprecated Use {@link ChannelByteOutput}.
+ * @deprecated Use {@link ChannelByteOutput2}.
  */
 @Deprecated
         //forRemoval = true
@@ -39,9 +39,9 @@ class ChannelByteOutput extends BufferByteOutput {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * Creates a new instance writes bytes to specified channel.
+     * Creates a new instance that writes bytes to the specified channel.
      *
-     * @param channel the channel to which bytes are written; must be not {@code null}.
+     * @param channel the channel to which bytes are written; must not be {@code null}.
      * @return a new instance.
      */
     public static ChannelByteOutput of(final WritableByteChannel channel) {

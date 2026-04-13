@@ -40,9 +40,9 @@ class ChannelByteInput extends BufferByteInput {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * Creates a new instance reads bytes from specified channel.
+     * Creates a new instance that reads bytes from the specified channel.
      *
-     * @param channel the channel from which bytes are read; must be not {@code null}.
+     * @param channel the channel from which bytes are read; must not be {@code null}.
      * @return a new instance.
      */
     public static ChannelByteInput of(final ReadableByteChannel channel) {
@@ -93,7 +93,7 @@ class ChannelByteInput extends BufferByteInput {
         for (final ByteBuffer source = getSource(); !source.hasRemaining(); ) {
             source.clear(); // position -> zero, limit -> capacity
             if (getChannel().read(source) == -1) {
-                throw new EOFException("reached to an end");
+                throw new EOFException("end of channel reached");
             }
             source.flip(); // limit -> position, position -> zero
         }

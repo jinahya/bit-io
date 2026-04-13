@@ -70,7 +70,11 @@ public class ArrayByteInput extends AbstractByteInput<byte[]> {
      */
     @Override
     public int read() throws IOException {
-        return getSource()[getIndexAndIncrement()] & 0xFF;
+        try {
+            return getSource()[getIndexAndIncrement()] & 0xFF;
+        } catch (final ArrayIndexOutOfBoundsException aioobe) {
+            throw new java.io.EOFException("end of array reached");
+        }
     }
 
     // ---------------------------------------------------------------------------------------------------------- source

@@ -59,7 +59,7 @@ public class DataByteOutput extends AbstractByteOutput<DataOutput> {
         getTarget().writeByte(value);
     }
 
-    // ---------------------------------------------------------------------------------------------------------- source
+    // ---------------------------------------------------------------------------------------------------------- target
     @Override
     protected DataOutput getTarget() {
         return super.getTarget();

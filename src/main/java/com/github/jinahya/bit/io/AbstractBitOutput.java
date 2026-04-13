@@ -30,7 +30,7 @@ import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeLong;
 import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeShort;
 
 /**
- * An abstract class for implementing {@link BitInput} interface.
+ * An abstract class for implementing {@link BitOutput} interface.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  * @see AbstractBitInput
@@ -222,7 +222,7 @@ public abstract class AbstractBitOutput implements BitOutput {
         if (bytes == 1) {
             return bits;
         }
-        for (bytes = bytes - (int) (count % bytes); bytes > 0; bytes--) {
+        for (bytes = (bytes - (int) (count % bytes)) % bytes; bytes > 0; bytes--) {
             writeInt(true, Byte.SIZE, 0x00);
             bits += Byte.SIZE;
         }

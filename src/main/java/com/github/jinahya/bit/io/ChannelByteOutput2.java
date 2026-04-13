@@ -47,9 +47,9 @@ class ChannelByteOutput2 extends AbstractByteOutput<WritableByteChannel> {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * Creates a new instance which writes bytes to specified channel.
+     * Creates a new instance that writes bytes to the specified channel.
      *
-     * @param channel the channel to which bytes are written; must be not {@code null}.
+     * @param channel the channel to which bytes are written; must not be {@code null}.
      * @return a new instance.
      */
     public static ChannelByteOutput2 of(final WritableByteChannel channel) {

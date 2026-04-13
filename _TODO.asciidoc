@@ -1,0 +1,76 @@
+= bit-io TODO
+:toc: macro
+:toc-title: Table of Contents
+:toclevels: 2
+:sectnums:
+
+toc::[]
+
+== Enhancements
+
+=== ENH-1: `AbstractBitInput.unsigned8()` — assertion-only validation of `read()` return value
+
+*File:* `AbstractBitInput.java`
+
+[source,java]
+----
+private int unsigned8(final int size) throws IOException {
+    if (available == 0) {
+        octet = read();
+        assert octet >= 0 && octet < 256;  // <-- disabled with -da (default)
+        count++;
+        available = Byte.SIZE;
+    }
+    ...
+}
+----
+
+The `assert` is disabled in production JVMs by default.
+If a subclass's `read()` returns a value outside `[0, 255]`, the state machine will silently produce corrupt data.
+Consider replacing the `assert` with an explicit check:
+
+[source,java]
+----
+octet = read();
+if (octet < 0 || octet > 255) {
+    throw new IOException("read() returned out-of-range value: " + octet);
+}
+----
+
+=== ENH-4: `BufferByteOutput.ChannelBufferByteOutput.write()` — incomplete flush
+
+*File:* `BufferByteOutput.java`
+
+[source,java]
+----
+public void write(final int value) throws IOException {
+    super.write(value);
+    final ByteBuffer target = getTarget();
+    while (!target.hasRemaining()) {
+        target.flip();
+        channel.write(target);
+        target.compact();
+    }
+}
+----
+
+Bytes in the buffer are only flushed to the channel when the buffer is full.
+If the caller finishes writing without filling the last buffer, those bytes are never flushed.
+There is no `flush()` or `close()` method to drain the remaining buffer contents to the channel.
+
+The same issue exists in `ChannelByteOutput2.write()` — partial buffer contents are silently lost when writing ends.
+
+=== ENH-5: Channel-based classes do not implement `Closeable`
+
+*Files:* `ChannelByteInput2.java`, `ChannelByteOutput2.java`, `BufferByteInput` (inner class), `BufferByteOutput` (inner class)
+
+These classes hold references to `ReadableByteChannel` / `WritableByteChannel` but do not implement `Closeable` or `AutoCloseable`.
+Callers have no standard way to release the underlying channel resources, and for output channels, there is no guaranteed flush of buffered data (see ENH-4).
+
+=== ENH-9: `AbstractBitInput` has no `getCount()` — asymmetry with `AbstractBitOutput`
+
+*File:* `AbstractBitInput.java`
+
+`AbstractBitOutput` exposes `getCount()` but `AbstractBitInput` does not.
+The `count` field in `AbstractBitInput` is used internally by `align()` but is inaccessible to callers.
+Consider adding a matching `getCount()` method to `AbstractBitInput`.

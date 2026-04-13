@@ -84,7 +84,7 @@ final class BitIoConstraints {
             throw new IllegalArgumentException("size(" + size + ") <= 0");
         }
         if (size > Character.SIZE) {
-            throw new IllegalArgumentException("size(" + size + ") > " + Character.SIZE);
+            throw new IllegalArgumentException("invalid size(" + size + ") > " + Character.SIZE);
         }
         return size;
     }

@@ -223,7 +223,7 @@ public abstract class AbstractBitInput implements BitInput {
         if (bytes == 1) {
             return bits;
         }
-        for (bytes = bytes - (int) (count % bytes); bytes > 0L; bytes--) {
+        for (bytes = (bytes - (int) (count % bytes)) % bytes; bytes > 0L; bytes--) {
             readInt(true, Byte.SIZE);
             bits += Byte.SIZE;
         }

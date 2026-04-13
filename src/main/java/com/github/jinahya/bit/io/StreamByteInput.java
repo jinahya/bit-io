@@ -27,7 +27,7 @@ import java.io.InputStream;
 /**
  * A byte input reads bytes from an instance of {@link InputStream}.
  *
- * @author Jin Kwon &lt;onacit at gmail.com&gt;
+ * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  * @see StreamByteOutput
  */
 public class StreamByteInput extends AbstractByteInput<InputStream> {
@@ -35,7 +35,7 @@ public class StreamByteInput extends AbstractByteInput<InputStream> {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * Creates a new instance which read bytes from specified input stream.
+     * Creates a new instance that reads bytes from the specified input stream.
      *
      * @param source the input stream from which bytes are read; {@code null} if it's supposed to be lazily initialized
      *               and set.
@@ -61,7 +61,7 @@ public class StreamByteInput extends AbstractByteInput<InputStream> {
     public int read() throws IOException {
         final int value = getSource().read();
         if (value == -1) {
-            throw new EOFException("reached to an end");
+            throw new EOFException("end of stream reached");
         }
         return value;
     }

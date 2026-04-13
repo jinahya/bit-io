@@ -33,7 +33,7 @@ public class DefaultBitInput extends AbstractBitInput {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * Create a new instance with specified Adelegate.
+     * Creates a new instance with specified delegate.
      *
      * @param delegate the delegate from which bytes are read; may be {@code null} if it is intended to be lazily
      *                 initialized and set.
@@ -70,7 +70,11 @@ public class DefaultBitInput extends AbstractBitInput {
      */
     @Override
     protected int read() throws IOException {
-        return getDelegate().read();
+        final ByteInput delegate = getDelegate();
+        if (delegate == null) {
+            throw new IllegalStateException("delegate has not been set");
+        }
+        return delegate.read();
     }
 
     // -------------------------------------------------------------------------------------------------------- delegate

@@ -70,7 +70,11 @@ public class ArrayByteOutput extends AbstractByteOutput<byte[]> {
      */
     @Override
     public void write(final int value) throws IOException {
-        getTarget()[getIndexAndIncrement()] = (byte) value;
+        try {
+            getTarget()[getIndexAndIncrement()] = (byte) value;
+        } catch (final ArrayIndexOutOfBoundsException aioobe) {
+            throw new IOException("array is full");
+        }
     }
 
     // ---------------------------------------------------------------------------------------------------------- target

@@ -1,0 +1,607 @@
+= bit-io Project Analysis
+:toc: macro
+:toc-title: Table of Contents
+:toclevels: 3
+:sectnums:
+
+toc::[]
+
+== Project Overview
+
+*Group:* `io.github.jinahya` +
+*Artifact:* `bit-io` +
+*Version:* `2.0.6-SNAPSHOT` +
+*License:* Apache License 2.0 +
+*Inception:* 2014
+
+A Java library for reading and writing non-octet-aligned values such as 1-bit booleans, 6-bit unsigned ints, or 47-bit signed longs.
+The library targets *Java 1.6* source compatibility with zero runtime dependencies, and additionally produces retrotranslated JARs for Java 1.3 and 1.4 bytecode levels.
+A newer Java 8{plus} flavored successor exists as https://github.com/jinahya/bit-io2[bit-io2].
+
+== Build System
+
+=== Maven Coordinates
+
+[source,xml]
+----
+<parent>
+  <groupId>io.github.jinahya</groupId>
+  <artifactId>jinahya-parent</artifactId>
+  <version>1.0.8</version>
+</parent>
+----
+
+The project inherits from `jinahya-parent:1.0.8`, which provides shared plugin management and release configuration.
+
+=== Compiler Configuration
+
+[cols="1,1", options="header"]
+|===
+| Property | Value
+| `maven.compiler.source` | `1.6`
+| `maven.compiler.target` | `1.6`
+| `maven.compiler.testSource` | `1.8`
+| `maven.compiler.testTarget` | `1.8`
+|===
+
+Main sources are compiled at Java 1.6 level.
+Test sources are compiled at Java 1.8 level.
+An IntelliJ IDEA profile (`1.8`) is available for IDE convenience, overriding the main source level to 1.8.
+
+=== Build Lifecycle Plugins
+
+[cols="1,1,2", options="header"]
+|===
+| Plugin | Version | Purpose
+
+| `maven-compiler-plugin` | 3.15.0 | Compiles main (1.6) and test (1.8) sources with `-Xlint`
+| `maven-bundle-plugin` | 5.1.9 | Generates OSGi bundle manifest at `process-classes` phase
+| `maven-antrun-plugin` | 3.2.0 | Retrotranslates compiled classes to Java 1.3 and 1.4 bytecode via `retrotranslator-transformer:1.2.9`
+| `maven-jar-plugin` | 3.5.0 | Packages main JAR plus two classified JARs (`retrotranslated13`, `retrotranslated14`)
+| `maven-enforcer-plugin` | 3.6.2 | Enforces dependency convergence, Java >= 1.8, Maven >= 3.5.4
+| `animal-sniffer-maven-plugin` | 1.27 | Verifies API compatibility against `java15:1.0` and `android-api-level-9:2.3.1_r2` signatures
+| `maven-surefire-plugin` | 3.5.5 | Runs unit tests
+| `maven-failsafe-plugin` | 3.5.5 | Configured but integration test goals are commented out
+| `jacoco-maven-plugin` | 0.8.14 | Code coverage instrumentation and reporting
+| `license-maven-plugin` | 2.7.1 | Apache v2 license header management
+|===
+
+=== Retrotranslation
+
+The build retrotranslates compiled `.class` files into two additional output directories at the `process-classes` phase:
+
+* `target/classes-retrotranslated13` -- Java 1.3 target, embedded package `com.github.jinahya.bit.io.retrotranslated13`
+* `target/classes-retrotranslated14` -- Java 1.4 target, embedded package `com.github.jinahya.bit.io.retrotranslated14`
+
+These are packaged as separate classified JARs (`bit-io-2.0.6-SNAPSHOT-retrotranslated13.jar`, etc.).
+External retrotranslator support libraries are expected under `ext/retrotranslated13/` and `ext/retrotranslated14/`.
+
+=== Reporting Plugins
+
+The `mvn site` goal generates reports via:
+
+* *JXR* (3.6.0) -- source cross-reference
+* *Checkstyle* (3.6.0)
+* *Javadoc* (3.12.0) -- main sources only (`javadoc-no-fork`, `aggregate-no-fork`); test javadocs are excluded due to source level mismatch
+* *Surefire Report* (3.5.5) -- test results (failures only)
+* *PMD* (3.28.0) -- static analysis targeting JDK 1.6
+* *Versions* (2.21.0) -- dependency/plugin/property update reports
+* *JaCoCo* (0.8.14) -- code coverage report
+
+=== CI/CD
+
+A GitHub Actions workflow (`.github/workflows/maven.yml`) runs `mvn package` on `ubuntu-latest` with JDK 1.8 on every push.
+
+== Dependencies
+
+=== Runtime Dependencies
+
+*None.* The library has zero runtime dependencies.
+
+=== Test Dependencies
+
+[cols="2,1,2", options="header"]
+|===
+| Artifact | Version | Purpose
+
+| `ch.qos.logback:logback-classic` | 1.3.14 | SLF4J logging backend (last version supporting Java 8)
+| `org.apache.commons:commons-text` | 1.15.0 | Text utilities
+| `org.jboss.weld:weld-junit5` | 2.0.2.Final | CDI 2.0 (`javax` namespace) integration for JUnit 5
+| `org.junit:junit-bom` | 5.10.5 | JUnit 5 BOM (constrained for weld-junit5 compatibility)
+| `org.mockito:mockito-bom` | 4.11.0 | Mockito BOM (last version supporting Java 8 via byte-buddy 1.12.x)
+| `org.mockito:mockito-junit-jupiter` | 4.11.0 | Mockito JUnit 5 extension
+| `org.projectlombok:lombok` | 1.18.44 | Compile-time annotations (`@Slf4j`) for test code
+|===
+
+=== Dependency Constraints
+
+* `mockito-junit-jupiter` excludes its transitive `junit-jupiter-api` to satisfy `dependencyConvergence`.
+* `weld-junit5` 2.0.2.Final transitively brings in Weld SE 3.1.6.Final, Jakarta CDI 2.0.2 (`javax.enterprise`), and Jakarta Inject 1.0 (`javax.inject`).
+* Commented-out sections in the POM indicate prior exploration of JUnit 6.1.0-M1, Mockito 5.23.0, and weld-junit5 5.0.3.Final (all requiring Java 11{plus} or Jakarta namespace).
+
+== Architecture
+
+=== Package Structure
+
+All production code resides in a single package:
+
+----
+com.github.jinahya.bit.io
+----
+
+=== Two-Layer Design
+
+The library follows a strict two-layer architecture:
+
+==== Layer 1: Byte I/O (Octet Transport)
+
+Provides single-byte read/write abstraction over various Java I/O sources.
+
+[source]
+----
+ByteInput (FunctionalInterface)           ByteOutput (FunctionalInterface)
+    |                                         |
+AbstractByteInput<T>                     AbstractByteOutput<T>
+    |-- ArrayByteInput (byte[])              |-- ArrayByteOutput (byte[])
+    |-- BufferByteInput (ByteBuffer)         |-- BufferByteOutput (ByteBuffer)
+    |-- StreamByteInput (InputStream)        |-- StreamByteOutput (OutputStream)
+    |-- DataByteInput (DataInput)            |-- DataByteOutput (DataOutput)
+    |-- ChannelByteInput2 (Channel+Buffer)   |-- ChannelByteOutput2 (Channel+Buffer)
+    |-- ChannelByteInput (deprecated)        |-- ChannelByteOutput (deprecated)
+----
+
+* `ByteInput.read()` returns an unsigned 8-bit int (0--255).
+* `ByteOutput.write(int)` accepts an unsigned 8-bit int (0--255).
+* Both are `@FunctionalInterface`, enabling lambda-based implementations.
+* `AbstractByteInput<T>` / `AbstractByteOutput<T>` add generic source/target management with getter/setter access.
+* `ArrayByteInput` / `ArrayByteOutput` track an `index` field for array position.
+* `BufferByteInput` / `BufferByteOutput` include private inner classes (`ChannelBufferByteInput`, `ChannelBufferByteOutput`) that auto-replenish/flush via a channel, exposed through `BufferByteInput.from(ReadableByteChannel)` and `BufferByteOutput.from(WritableByteChannel)` factory methods.
+* `ChannelByteInput` / `ChannelByteOutput` (deprecated) extend `BufferByteInput` / `BufferByteOutput` and add a channel field; superseded by `ChannelByteInput2` / `ChannelByteOutput2` which use `AbstractByteInput<ReadableByteChannel>` / `AbstractByteOutput<WritableByteChannel>` with an auxiliary buffer field.
+* `StreamByteInput.read()` throws `EOFException` when the underlying stream returns `-1`.
+
+==== Layer 2: Bit I/O (Sub-Byte Operations)
+
+Provides arbitrary bit-width reading/writing on top of the byte layer.
+
+[source]
+----
+BitInput                                 BitOutput
+    |                                        |
+AbstractBitInput                        AbstractBitOutput
+    |                                        |
+DefaultBitInput(ByteInput delegate)     DefaultBitOutput(ByteOutput delegate)
+----
+
+* `BitInput` / `BitOutput` define the full API for reading/writing boolean, byte, short, int, long, and char values at arbitrary bit widths, plus `skip(int)` and `align(int)` operations.
+* `AbstractBitInput` / `AbstractBitOutput` implement the core bit manipulation state machine:
+** Maintain an *octet buffer* (`int octet`) and an *available bits counter* (`int available`, 0--8).
+** A private `unsigned8(int size)` / `unsigned8(int size, int value)` method handles the recursive decomposition of reads/writes within a single octet boundary.
+** For values wider than 8 bits, the `readInt`/`writeInt` and `readLong`/`writeLong` methods compose from multiple octet-level operations.
+** Signed values are handled by reading/writing the sign bit separately (1 bit for sign, remaining bits as unsigned magnitude with two's complement encoding).
+** Little-endian variants (`readShort16Le`, `readInt32Le`, `readLong64Le`, etc.) read/write individual bytes in reverse order.
+** `align(int bytes)` pads/discards bits to reach a multiple of `bytes * 8` bits.
+** A `count` field tracks total bytes read/written.
+* `DefaultBitInput` / `DefaultBitOutput` are concrete implementations that delegate the abstract `read()` / `write(int)` method to a `ByteInput` / `ByteOutput` instance.
+
+=== Utility Classes
+
+* `BitIoConstants` -- pre-computed bitmask array (`MASKS[1..8]`) and `mask(int size)` method returning the mask for a given bit width.
+* `BitIoConstraints` -- validation methods (`requireValidSizeByte`, `requireValidSizeShort`, `requireValidSizeInt`, `requireValidSizeLong`, `requireValidSizeChar`) that enforce bit-size constraints based on the type width and signed/unsigned flag. Throws `IllegalArgumentException` on invalid sizes.
+
+=== Design Patterns
+
+[cols="1,2", options="header"]
+|===
+| Pattern | Usage
+
+| Template Method | `AbstractBitInput`/`AbstractBitOutput` define the algorithm; subclasses implement `read()`/`write(int)`
+| Delegation | `DefaultBitInput`/`DefaultBitOutput` delegate byte operations to `ByteInput`/`ByteOutput`
+| Factory Method | `BufferByteInput.from()`, `ChannelByteInput2.of()`, `ChannelByteOutput2.of()`
+| Functional Interface | `ByteInput` and `ByteOutput` are `@FunctionalInterface`, enabling lambda construction
+| Generic Type Parameter | `AbstractByteInput<T>` / `AbstractByteOutput<T>` provide type-safe source/target
+|===
+
+=== Supported Value Types and Bit Ranges
+
+[cols="1,1,1,1", options="header"]
+|===
+| Type | Unsigned Max Bits | Signed Max Bits | Notes
+
+| `boolean` | 1 | 1 | Always 1 bit
+| `byte` | 7 | 8 | `2^3 - 1 = 7` unsigned
+| `short` | 15 | 16 | `2^4 - 1 = 15` unsigned
+| `int` | 31 | 32 | `2^5 - 1 = 31` unsigned
+| `long` | 63 | 64 | `2^6 - 1 = 63` unsigned
+| `char` | 16 | -- | Always unsigned
+|===
+
+Minimum size for all types is *1 bit*.
+
+== Test Architecture
+
+=== Test Framework Stack
+
+* *JUnit 5* (5.10.5) -- test execution
+* *Mockito* (4.11.0) -- mocking and spying
+* *Weld SE* (3.1.6.Final via weld-junit5 2.0.2.Final) -- CDI dependency injection in tests
+* *Lombok* (`@Slf4j`) -- logging in test classes
+
+=== Test Class Hierarchy
+
+==== Bit-Level Tests
+
+[source]
+----
+BitInputTest<T extends BitInput>              BitOutputTest<T extends BitOutput>
+    |                                             |
+AbstractBitInputTest<T extends AbstractBitInput>  AbstractBitOutputTest<T extends AbstractBitOutput>
+    |                                             |
+DefaultBitInputTest                              DefaultBitOutputTest
+----
+
+* `BitInputTest` / `BitOutputTest` -- abstract generic base classes using CDI `@Inject Instance<BitInput/BitOutput>` and `@BeforeEach` selection by class type. Test all interface methods with random sizes and repeated executions. `@AfterEach` performs alignment validation.
+* `AbstractBitInputTest` / `AbstractBitOutputTest` -- intermediate abstract classes constraining to `AbstractBit*` subclasses.
+* `DefaultBitInputTest` / `DefaultBitOutputTest` -- concrete tests annotated with `@ExtendWith({MockitoExtension.class, WeldJunit5Extension.class})`. Test delegate getter/setter methods. Use `@Mock` for `ByteInput`/`ByteOutput` mocks.
+
+==== Byte-Level Tests
+
+[source]
+----
+ByteInputTest<T extends ByteInput>            ByteOutputTest<T extends ByteOutput>
+    |                                             |
+AbstractByteInputTest<T,U>                   AbstractByteOutputTest<T,U>
+    |                                             |
+    |-- ArrayByteInputTest                       |-- ArrayByteOutputTest
+    |-- BufferByteInputTest                      |-- BufferByteOutputTest
+    |-- StreamByteInputTest                      |-- StreamByteOutputTest
+    |-- DataByteInputTest                        |-- DataByteOutputTest
+    |-- ChannelByteInput2Test                    |-- ChannelByteOutput2Test
+----
+
+* `ByteInputTest` / `ByteOutputTest` -- abstract bases using CDI injection. Test `read()` / `write(int)` contract.
+* `AbstractByteInputTest<T,U>` / `AbstractByteOutputTest<T,U>` -- add source/target getter/setter tests via `mock(byteSourceClass)`.
+* Concrete tests are minimal, providing type parameters and optional implementation-specific tests (e.g., `ArrayByteInputTest` tests `getIndex()`/`setIndex()`).
+
+==== Spy-Based Tests
+
+* `AbstractBitInputSpyTest` -- uses `@Spy` on `AbstractBitInput` with stubbed `read()` returning `0`. Validates that read values fit within expected bit-width constraints.
+* `AbstractBitOutputSpyTest` -- uses `@Spy` on `AbstractBitOutput` with no-op `write()`. Tests write operations, skip, align, and `getCount()`.
+
+==== Integration / Round-Trip Tests
+
+* `BitIoTest` -- parameterized tests (`@ParameterizedTest @MethodSource`) that write values through `BitOutput` and read them back through `BitInput`. Uses `@ConvertWith(BitOutputConverter.class)` and `@ConvertWith(BitInputConverter.class)` to convert `ByteOutput`/`ByteInput` pairs. Tests all primitive types for round-trip correctness.
+* `ByteIoSource` -- factory class providing `Stream<Arguments>` of matched `ByteOutput`/`ByteInput` pairs for all five transport implementations (array, buffer, data, stream, channel). Includes lazy initialization and auto-growing logic.
+
+=== CDI Producers
+
+[cols="1,2", options="header"]
+|===
+| Producer Class | Produces
+
+| `BitInputProducer` | `DefaultBitInput` with dummy `ByteInput` (`() -> 0`)
+| `BitOutputProducer` | `DefaultBitOutput` with no-op `ByteOutput` (`v -> {}`)
+| `ByteInputProducer` | `ArrayByteInput`, `BufferByteInput`, `DataByteInput`, `StreamByteInput`, `ChannelByteInput2` -- each wrapping a "white" source that yields zero bytes
+| `ByteOutputProducer` | `ArrayByteOutput`, `BufferByteOutput`, `DataByteOutput`, `StreamByteOutput`, `ChannelByteOutput2` -- each wrapping a "black" target that discards bytes
+|===
+
+=== Test Utilities
+
+[cols="1,2", options="header"]
+|===
+| Class | Purpose
+
+| `WhiteInputStream` | `InputStream` that always returns `0` from `read()`
+| `WhiteByteChannel` | `ReadableByteChannel` that fills buffer with zeros
+| `BlackOutputStream` | `OutputStream` that discards all written bytes
+| `BlackByteChannel` | `WritableByteChannel` that discards all written bytes
+| `BitIoTests` | Static helpers for generating random valid sizes for each type (`randomSizeForByte`, `randomSizeForShort`, etc.)
+| `BitInputConverter` | JUnit `ArgumentConverter`: `ByteInput` -> `DefaultBitInput`
+| `BitOutputConverter` | JUnit `ArgumentConverter`: `ByteOutput` -> `DefaultBitOutput`
+|===
+
+== API Compatibility Verification
+
+The build verifies that compiled classes do not use APIs beyond:
+
+* *Java 1.5* (`org.codehaus.mojo.signature:java15:1.0`) -- ensuring compatibility with Java SE 5 runtime
+* *Android API Level 9* (`net.sf.androidscents.signature:android-api-level-9:2.3.1_r2`) -- ensuring compatibility with Android 2.3 (Gingerbread)
+
+This is enforced via `animal-sniffer-maven-plugin` at the `process-classes` phase.
+
+== Known Constraints and Considerations
+
+=== Java Version Compatibility Matrix
+
+[cols="1,1", options="header"]
+|===
+| Component | Required Java Version
+
+| Main source compilation | 1.6
+| Test source compilation | 1.8
+| Build execution (Maven) | >= 1.8
+| Retrotranslated JAR (1.3) | 1.3 runtime
+| Retrotranslated JAR (1.4) | 1.4 runtime
+|===
+
+=== Dependency Version Ceilings
+
+The following dependencies are pinned to older major versions due to the Java 8 build requirement:
+
+* `logback-classic` must stay at *1.3.x* (1.4{plus} requires Java 11)
+* `junit-bom` must stay at *5.10.x* (5.11{plus} has lifecycle incompatibilities with weld-junit5 2.0.2.Final)
+* `mockito-bom` must stay at *4.x* (5.x requires Java 11 via byte-buddy 1.14{plus})
+* `weld-junit5` must stay at *2.0.x* (3.0{plus}/5.0{plus} use Jakarta `jakarta.enterprise` namespace requiring CDI 4.0)
+* `maven-bundle-plugin` must stay at *5.x* (6.x requires Java 17)
+
+=== OSGi
+
+The library generates an OSGi-compliant `MANIFEST.MF` via `maven-bundle-plugin`, with instructions loaded from `bnd.bnd` (if present).
+The manifest is embedded in the main JAR via `maven-jar-plugin` configuration.
+
+=== Deprecations
+
+`ChannelByteInput` and `ChannelByteOutput` are deprecated.
+Their replacements, `ChannelByteInput2` and `ChannelByteOutput2`, use `AbstractByteInput<ReadableByteChannel>` / `AbstractByteOutput<WritableByteChannel>` directly rather than extending the Buffer variants, and manage the intermediate `ByteBuffer` as a separate field.
+
+== Test Module Analysis
+
+=== Test Inventory
+
+320 tests across 20 test classes (including infrastructure).
+
+[cols="2,1,2", options="header"]
+|===
+| Test Class | Tests | Category
+
+| `BitIoTest` | 75 | Round-trip (bit layer, parameterized x5 transports)
+| `AbstractBitInputSpyTest` | 44 | Unit (spy, bit-width validation)
+| `AbstractBitOutputSpyTest` | 53 | Unit (spy, write contract)
+| `DefaultBitInputTest` | 54 | Smoke (CDI hierarchy, inherited)
+| `DefaultBitOutputTest` | 51 | Smoke (CDI hierarchy, inherited)
+| `ByteIoTest` | 5 | Round-trip (byte layer, parameterized x5 transports)
+| `ArrayByteInputTest` | 5 | Unit (CDI hierarchy)
+| `ArrayByteOutputTest` | 5 | Unit (CDI hierarchy)
+| `BufferByteInputTest` | 3 | Unit (CDI hierarchy)
+| `BufferByteOutputTest` | 3 | Unit (CDI hierarchy)
+| `DataByteInputTest` | 3 | Unit (CDI hierarchy)
+| `DataByteOutputTest` | 3 | Unit (CDI hierarchy)
+| `StreamByteInputTest` | 3 | Unit (CDI hierarchy)
+| `StreamByteOutputTest` | 3 | Unit (CDI hierarchy)
+| `ChannelByteInput2Test` | 4 | Unit (CDI hierarchy)
+| `ChannelByteOutput2Test` | (from parent) | Unit (CDI hierarchy)
+| `ChannelByteInputTest` | 1 | Unit (deprecated, minimal)
+| `ChannelByteOutputTest` | 1 | Unit (deprecated, minimal)
+| *Total* | *320* |
+|===
+
+=== Three Overlapping Test Approaches
+
+The current test suite uses three distinct strategies that overlap in what they exercise:
+
+==== Approach A: CDI Hierarchy Tests (smoke tests)
+
+*Classes:* `BitInputTest` -> `AbstractBitInputTest` -> `DefaultBitInputTest` (and mirror for Output) +
+*Classes:* `ByteInputTest` -> `AbstractByteInputTest` -> concrete `*Test` classes
+
+*Mechanism:* Weld CDI injects instances via `@Inject Instance<BitInput>` / `@Inject Instance<ByteOutput>`, selected by concrete class at `@BeforeEach`.
+CDI producers supply dummy implementations:
+
+* `BitInputProducer` produces `DefaultBitInput(() -> 0)` -- always reads zero bytes
+* `BitOutputProducer` produces `DefaultBitOutput(v -> {})` -- discards all bytes
+* `ByteInputProducer` produces each concrete `ByteInput` wrapping `WhiteInputStream` / `WhiteByteChannel` (always returns 0)
+* `ByteOutputProducer` produces each concrete `ByteOutput` wrapping `BlackOutputStream` / `BlackByteChannel` (discards everything)
+
+*What is actually verified:*
+
+* Operations execute without throwing exceptions
+* `align()` returns a non-negative value
+* `read()` returns a value between 0 and 255
+* Getter/setter methods can be called
+
+*What is NOT verified:*
+
+* Correctness of read values (read results are discarded or trivially checked)
+* Write-then-read round-trip (writing to /dev/null, reading from /dev/zero)
+* The two layers are never connected through real data flow
+
+*Cost:*
+
+* 4 CDI producer classes with produce/dispose method pairs
+* 4 test utility classes (`WhiteInputStream`, `WhiteByteChannel`, `BlackOutputStream`, `BlackByteChannel`)
+* Weld SE container boot per test class (~1-5s overhead)
+* Version compatibility fragility (weld-junit5 + JUnit 5 + Mockito extension conflicts)
+* 105+ test executions (DefaultBitInputTest: 54, DefaultBitOutputTest: 51, plus byte-level tests)
+
+==== Approach B: Spy Tests (bit-width contract)
+
+*Classes:* `AbstractBitInputSpyTest`, `AbstractBitOutputSpyTest`
+
+*Mechanism:* Mockito `@Spy` on `AbstractBitInput`/`AbstractBitOutput` with stubbed `read()` returning `random(0..255)`.
+No CDI -- pure Mockito.
+
+*What is actually verified:*
+
+* Read values fit within specified bit-width (e.g., `unsigned 6-bit value >> 6 == 0`)
+* Signed values maintain proper sign extension
+* `IllegalArgumentException` for invalid `skip(0)`, `skip(negative)`
+* `align()` returns non-negative value
+* `getCount()` returns non-negative value
+
+*Value:* Tests the bit manipulation state machine in `AbstractBitInput`/`AbstractBitOutput` in isolation from any transport, with real random data flowing through the octet buffer.
+This is the only place that validates the *shape* of produced values.
+
+==== Approach C: Round-Trip Tests (correctness)
+
+*Classes:* `BitIoTest`, `ByteIoTest`
+
+*Mechanism:* `@ParameterizedTest @MethodSource` using `ByteIoSource` which constructs matched write/read pairs for all 5 transports (array, buffer, data, stream, channel).
+`BitOutputConverter`/`BitInputConverter` wrap the byte pairs in `DefaultBitOutput`/`DefaultBitInput`.
+
+*What is actually verified:*
+
+* `write(value)` -> `read()` == `value` for every type and size variant
+* Alignment after operations produces expected padding
+* Both layers connected through real data flow end-to-end
+
+*Value:* This is the *essential correctness proof* for the library.
+It tests: transport correctness (byte layer), bit manipulation correctness (bit layer), and their composition.
+Each test method runs against all 5 transports, so 15 test methods × 5 transports = 75 executions.
+
+`ByteIoTest` adds 5 tests proving byte-layer round-trip in isolation (1 per transport).
+
+=== Test Infrastructure Inventory
+
+[cols="1,1,2", options="header"]
+|===
+| Category | Count | Classes
+
+| CDI Producers | 4 | `BitInputProducer`, `BitOutputProducer`, `ByteInputProducer`, `ByteOutputProducer`
+| Argument Converters | 2 | `BitInputConverter`, `BitOutputConverter`
+| Test Stubs | 4 | `WhiteInputStream`, `WhiteByteChannel`, `BlackOutputStream`, `BlackByteChannel`
+| Source Factories | 1 | `ByteIoSource`
+| Test Helpers | 1 | `BitIoTests`
+| *Total* | *12* |
+|===
+
+12 infrastructure classes supporting 26 production classes.
+
+=== Code Coverage (JaCoCo)
+
+[cols="2,1,1,1,1", options="header"]
+|===
+| Class | Instr. Covered | Instr. Missed | Branch Covered | Branch Missed
+
+| `AbstractBitInput` | 365 | 11 | 33 | 7
+| `AbstractBitOutput` | 378 | 4 | 39 | 5
+| `BitIoConstraints` | 83 | *185* | 24 | *12*
+| `BufferByteInput.ChannelBufferByteInput` | *0* | *47* | *0* | *8*
+| `BufferByteOutput.ChannelBufferByteOutput` | *0* | *36* | *0* | *4*
+| `DefaultBitInput` | 17 | 15 | 0 | 0
+| `DefaultBitOutput` | 18 | 15 | 0 | 0
+| `ChannelByteOutput` (deprecated) | 32 | 39 | 2 | 2
+| `StreamByteInput` | 21 | 5 | 1 | 1
+| All others | (high) | (low) | (high) | (low)
+|===
+
+==== Notable Coverage Gaps
+
+1. **`BufferByteInput.ChannelBufferByteInput`** -- *0% coverage*. The private inner class created by `BufferByteInput.from(ReadableByteChannel)` is never tested. This channel-backed auto-replenishing buffer input path is completely unexercised.
+
+2. **`BufferByteOutput.ChannelBufferByteOutput`** -- *0% coverage*. The private inner class created by `BufferByteOutput.from(WritableByteChannel)` is never tested. The channel-backed auto-flushing buffer output path is completely unexercised.
+
+3. **`BitIoConstraints`** -- *69% instructions missed*. Many validation branches (e.g., "size exceeds type width" error paths for byte, short, int, long, char) are never triggered because test values are always generated within valid ranges. The `requireValidSize*` methods are called by production code with already-validated parameters.
+
+4. **`StreamByteInput`** -- `EOFException` path (when `InputStream.read()` returns -1) is not covered.
+
+5. **`DefaultBitInput` / `DefaultBitOutput`** -- `toString()` methods are not covered.
+
+6. **`ChannelByteOutput`** (deprecated) -- low coverage; the write-with-flush path has gaps.
+
+=== Effective Testing Strategy for the Two-Layer Architecture
+
+Given the two-layer architecture (byte transport + bit manipulation), there are three fundamentally different things to test:
+
+==== Layer 1 (Byte Transport) Testing
+
+*Goal:* Verify each `ByteInput`/`ByteOutput` adapter correctly reads/writes bytes to/from its underlying source.
+
+*Effective approach:* Round-trip test per transport -- write a byte, read it back, assert equality.
+This is exactly what `ByteIoTest` does via `ByteIoSource#sourceByteIo`, and it is sufficient.
+Each `ByteInput`/`ByteOutput` implementation is a thin adapter (3-5 lines of real logic), so a single round-trip test per transport covers the meaningful behavior.
+
+The CDI hierarchy tests (`ByteInputTest` -> `AbstractByteInputTest` -> `StreamByteInputTest`, etc.) add getter/setter tests and a `read()` smoke test against white/black stubs.
+The getter/setter tests have some value (testing `getSource`/`setSource`, `getIndex`/`setIndex`).
+The `read()` / `write()` smoke tests against dummy sources add marginal value over the round-trip tests.
+
+==== Layer 2 (Bit Manipulation) Testing
+
+*Goal:* Verify the `AbstractBitInput`/`AbstractBitOutput` state machine correctly decomposes/composes values across octet boundaries for all types, sizes, and signed/unsigned variants.
+
+*Effective approach:* Two complementary strategies:
+
+1. **Spy tests with contract assertions** (current `AbstractBitInputSpyTest`/`AbstractBitOutputSpyTest`):
+Read/write operations are tested against random source data, and the results are validated against bit-width invariants.
+This tests the state machine in isolation without any transport dependency -- the most focused and fastest approach for verifying the bit manipulation algorithm.
+
+2. **Round-trip tests across the full stack** (current `BitIoTest`):
+Write a value with `BitOutput`, read it back with `BitInput`, assert equality.
+This proves correctness of the complete write→read cycle.
+Parameterizing across all 5 transports ensures no transport-specific issues affect bit-level operations.
+
+==== Composition Testing (Layer 1 + Layer 2)
+
+*Goal:* Verify the two layers work correctly when composed -- that `DefaultBitInput(ByteInput)` / `DefaultBitOutput(ByteOutput)` correctly connect the layers.
+
+*Effective approach:* The round-trip tests in `BitIoTest` implicitly cover this.
+Each test writes through `DefaultBitOutput` -> concrete `ByteOutput` -> shared buffer -> concrete `ByteInput` -> `DefaultBitInput` and verifies the value survives the full journey.
+
+=== Redundancy Analysis
+
+[cols="2,1,1,1", options="header"]
+|===
+| What Is Tested | CDI Hierarchy (A) | Spy Tests (B) | Round-Trip (C)
+
+| No-exception smoke | Yes | Yes | Yes
+| Bit-width invariant | No | *Yes* | No
+| Value correctness | No | No | *Yes*
+| Transport correctness | No | No | *Yes*
+| Getter/setter | *Yes* | No | No
+| Error paths (IAE) | Partial | *Yes* | No
+| All 5 transports | Via CDI producers | No (transport-free) | *Yes* (parameterized)
+|===
+
+The CDI hierarchy tests (Approach A) provide *unique* value only for getter/setter testing.
+For everything else, they overlap with Approaches B and C while adding significant infrastructure cost.
+
+=== Efficiency Assessment
+
+==== High-Value Tests (keep and strengthen)
+
+* **`BitIoTest`** (75 tests) -- The *essential* test class. Proves write-read correctness for every type across every transport. Each test is a concise round-trip with clear assertions.
+* **`AbstractBitInputSpyTest`** / **`AbstractBitOutputSpyTest`** (97 tests) -- Efficiently test the bit manipulation contract in isolation. No CDI overhead, fast execution (<1s), test real logic.
+* **`ByteIoTest`** (5 tests) -- Clean byte-layer round-trip. Proves each transport adapter works.
+
+==== Low-Value / High-Cost Tests (candidates for simplification)
+
+* **CDI hierarchy tests** (`DefaultBitInputTest`, `DefaultBitOutputTest` via `BitInputTest`/`BitOutputTest` -- 105 tests): These read from `() -> 0` and write to `v -> {}`. They call every type method but discard or trivially check results. The only unique assertions are in `@AfterEach` (`align()` returns >= 0) and the getter/setter tests in the leaf classes.
++
+These 105 tests require: Weld SE boot (seconds per class), 4 producer classes, 4 stub classes, and the MockitoExtension+WeldJunit5Extension combination that caused the build failures fixed earlier.
++
+The getter/setter tests (the unique part) could be written as simple JUnit tests with `new DefaultBitInput(null)` -- no CDI needed.
+
+* **Byte-level CDI hierarchy tests** (`StreamByteInputTest`, `BufferByteOutputTest`, etc. -- ~30 tests): CDI-injected `read()`/`write()` calls against dummy stubs. The byte layer round-trip is already covered by `ByteIoTest`.
+
+==== Missing Tests (gaps to fill)
+
+1. **`BufferByteInput.from(ReadableByteChannel)`** / **`BufferByteOutput.from(WritableByteChannel)`** factory methods -- 0% coverage. These private inner classes implement auto-replenishing/flushing buffer management, which is non-trivial logic.
+
+2. **`BitIoConstraints` error paths** -- The `requireValidSize*` methods are the library's input validation boundary. Invalid-size tests only exist for `readByte(size=0)` and `align(bytes=0)` in the CDI hierarchy tests. Missing: size-too-large for each type, unsigned-at-max-size, and `readChar(size=0)`.
+
+3. **Boundary values** -- The round-trip tests use random sizes. There are no tests that specifically exercise:
+   * 1-bit reads/writes (minimum)
+   * Max-size reads/writes (e.g., 31-bit unsigned int, 64-bit signed long)
+   * Values at the edges of their ranges (e.g., `Short.MAX_VALUE` at 16 bits, `0` and `-1` at various sizes)
+
+4. **Multi-value sequences** -- All round-trip tests write one value, align, read one value. No tests write multiple non-aligned values consecutively to verify the octet buffer state machine handles transitions across byte boundaries correctly over sustained sequences.
+
+5. **`StreamByteInput` EOF handling** -- The `EOFException` path when `InputStream.read()` returns `-1` is not tested.
+
+6. **`align()` with multi-byte alignment** -- `align(n)` for `n > 1` is tested with random `n` in `@AfterEach` but the `count`-based modular arithmetic for multi-byte alignment is not specifically validated.
+
+=== Recommended Testing Strategy
+
+For a two-layer architecture with thin adapters (byte layer) and a stateful algorithm (bit layer), the optimal strategy is:
+
+[cols="1,2,2,1", options="header"]
+|===
+| Priority | Test Type | What It Proves | Framework
+
+| *P0* | Round-trip per transport per type | Correctness of the full stack | `@ParameterizedTest` + `@MethodSource`
+| *P1* | Spy-based bit-width contract | Bit manipulation invariants in isolation | Mockito `@Spy`
+| *P2* | Boundary-value round-trips | Edge cases (min/max sizes, extreme values) | `@ParameterizedTest` + `@MethodSource`
+| *P3* | Multi-value sequences | Octet buffer state across boundaries | `@ParameterizedTest` + `@MethodSource`
+| *P4* | Constraint validation (error paths) | `IllegalArgumentException` for invalid inputs | Plain JUnit `@Test`
+| *P5* | Transport-specific edge cases | EOF, buffer depletion, channel flush | Plain JUnit `@Test`
+|===
+
+The CDI hierarchy can be replaced with plain JUnit tests or `@ParameterizedTest` for any remaining getter/setter or smoke test needs, eliminating the Weld dependency and its associated fragility.

@@ -1,5 +1,6 @@
 
 
+# ----------------------------------------------------------------------------------------------------------------------
 # Created by https://www.gitignore.io/api/maven
 # Edit at https://www.gitignore.io/?templates=maven
 
@@ -17,6 +18,22 @@ buildNumber.properties
 .flattened-pom.xml
 
 # End of https://www.gitignore.io/api/maven
+# ----------------------------------------------------------------------------------------------------------------------
+
+
+# ----------------------------------------------------------------------------------------------------------------------
+# Created by https://www.toptal.com/developers/gitignore/api/jenv
+# Edit at https://www.toptal.com/developers/gitignore?templates=jenv
+
+### JEnv ###
+# JEnv local Java version configuration file
+.java-version
+
+# Used by previous versions of JEnv
+.jenv-version
+
+# End of https://www.toptal.com/developers/gitignore/api/jenv
+# ----------------------------------------------------------------------------------------------------------------------
 
 
 *.iml

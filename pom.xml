@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>com.github.jinahya</groupId>
+    <groupId>io.github.jinahya</groupId>
     <artifactId>jinahya-parent</artifactId>
-    <version>0.8.5</version>
+    <version>1.0.8</version>
   </parent>
 
+  <groupId>io.github.jinahya</groupId>
   <artifactId>bit-io</artifactId>
   <version>2.0.6-SNAPSHOT</version>
   <packaging>jar</packaging>
@@ -47,59 +49,72 @@
     <project.build.outputDirectory.retrotranslated13>${project.build.directory}/classes-retrotranslated13</project.build.outputDirectory.retrotranslated13>
     <project.build.outputDirectory.retrotranslated14>${project.build.directory}/classes-retrotranslated14</project.build.outputDirectory.retrotranslated14>
     <version.maven-failsafe>${version.maven-surefire}</version.maven-failsafe>
-    <version.maven-javadoc-plugin>3.1.0</version.maven-javadoc-plugin>
-    <version.maven-surefire>2.22.2</version.maven-surefire>
-    <version.org.junit.jupiter>5.6.2</version.org.junit.jupiter>
-    <version.org.mockito>3.3.3</version.org.mockito>
+    <version.maven-javadoc-plugin>3.12.0</version.maven-javadoc-plugin>
+    <version.maven-surefire>3.5.5</version.maven-surefire>
   </properties>
 
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.junit</groupId>
+        <artifactId>junit-bom</artifactId>
+        <!-- https://central.sonatype.com/artifact/org.junit/junit-bom/versions -->
+<!--        <version>6.1.0-M1</version>-->
+        <version>5.10.5</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.mockito</groupId>
+        <artifactId>mockito-bom</artifactId>
+        <!-- https://central.sonatype.com/artifact/org.mockito/mockito-bom/versions -->
+        <version>4.11.0</version>
+<!--        <version>5.23.0</version>-->
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
   <dependencies>
     <dependency>
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>
-      <version>1.2.3</version>
+      <version>1.3.14</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-text</artifactId>
-      <version>1.8</version>
+      <version>1.15.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.jboss.weld</groupId>
       <artifactId>weld-junit5</artifactId>
-      <version>2.0.1.Final</version>
+      <version>2.0.2.Final</version>
+<!--      <version>5.0.3.Final</version>-->
       <scope>test</scope>
-      <exclusions>
-        <exclusion> <!-- dependencyConvergence -->
-          <groupId>org.junit.jupiter</groupId>
-          <artifactId>junit-jupiter-api</artifactId>
-        </exclusion>
-        <exclusion> <!-- dependencyConvergence -->
-          <groupId>org.junit.jupiter</groupId>
-          <artifactId>junit-jupiter-engine</artifactId>
-        </exclusion>
-      </exclusions>
+<!--      <exclusions>-->
+<!--        <exclusion> &lt;!&ndash; dependencyConvergence &ndash;&gt;-->
+<!--          <groupId>org.junit.jupiter</groupId>-->
+<!--          <artifactId>junit-jupiter-api</artifactId>-->
+<!--        </exclusion>-->
+<!--        <exclusion> &lt;!&ndash; dependencyConvergence &ndash;&gt;-->
+<!--          <groupId>org.junit.jupiter</groupId>-->
+<!--          <artifactId>junit-jupiter-engine</artifactId>-->
+<!--        </exclusion>-->
+<!--      </exclusions>-->
     </dependency>
     <dependency>
       <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter-api</artifactId>
-      <version>${version.org.junit.jupiter}</version>
+      <artifactId>junit-jupiter</artifactId>
       <scope>test</scope>
     </dependency>
-    <dependency>
-      <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter-engine</artifactId>
-      <version>${version.org.junit.jupiter}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter-params</artifactId>
-      <version>${version.org.junit.jupiter}</version>
-      <scope>test</scope>
-    </dependency>
+    <!--    <dependency>-->
+    <!--      <groupId>org.junit.jupiter</groupId>-->
+    <!--      <artifactId>junit-jupiter-params</artifactId>-->
+    <!--      <scope>test</scope>-->
+    <!--    </dependency>-->
     <!--    <dependency>-->
     <!--      <groupId>org.mockito</groupId>-->
     <!--      <artifactId>mockito-core</artifactId>-->
@@ -109,7 +124,6 @@
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-junit-jupiter</artifactId>
-      <version>${version.org.mockito}</version>
       <scope>test</scope>
       <exclusions>
         <exclusion> <!-- dependencyConvergence -->
@@ -121,7 +135,7 @@
     <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
-      <version>1.18.12</version>
+      <version>1.18.44</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
@@ -140,7 +154,8 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-site-plugin</artifactId>
-          <version>3.7.1</version>
+          <!-- https://central.sonatype.com/artifact/org.apache.maven.plugins/maven-site-plugin/versions -->
+          <version>3.21.0</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -150,12 +165,12 @@
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>versions-maven-plugin</artifactId>
-          <version>2.7</version>
+          <version>2.21.0</version>
         </plugin>
         <plugin>
           <groupId>org.jacoco</groupId>
           <artifactId>jacoco-maven-plugin</artifactId>
-          <version>0.8.5</version>
+          <version>0.8.14</version>
         </plugin>
       </plugins>
     </pluginManagement>
@@ -163,7 +178,9 @@
       <plugin>
         <groupId>org.apache.felix</groupId>
         <artifactId>maven-bundle-plugin</artifactId>
-        <version>4.2.1</version>
+        <!-- https://central.sonatype.com/artifact/org.apache.felix/maven-bundle-plugin/versions -->
+        <version>5.1.9</version>
+<!--        <version>6.0.2</version>--> <!-- Java 17 -->
         <executions>
           <execution>
             <id>bundle-manifest</id>
@@ -183,7 +200,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-antrun-plugin</artifactId>
-        <version>1.8</version>
+        <version>3.2.0</version>
         <executions>
           <execution>
             <id>retrotranslated13</id>
@@ -193,11 +210,16 @@
             </goals>
             <configuration>
               <target>
-                <taskdef name="retrotranslator" classname="net.sf.retrotranslator.transformer.RetrotranslatorTask" classpathref="maven.plugin.classpath" />
-                <mkdir dir="${project.build.outputDirectory.retrotranslated13}" />
-                <retrotranslator srcdir="${project.build.outputDirectory}" destdir="${project.build.outputDirectory.retrotranslated13}" embed="com.github.jinahya.bit.io.retrotranslated13" failonwarning="false" smart="true" stripannot="true" stripsign="true" syncvolatile="true" target="1.3" verbose="false" verify="false">
+                <taskdef name="retrotranslator" classname="net.sf.retrotranslator.transformer.RetrotranslatorTask"
+                         classpathref="maven.plugin.classpath"/>
+                <mkdir dir="${project.build.outputDirectory.retrotranslated13}"/>
+                <retrotranslator srcdir="${project.build.outputDirectory}"
+                                 destdir="${project.build.outputDirectory.retrotranslated13}"
+                                 embed="com.github.jinahya.bit.io.retrotranslated13" failonwarning="false" smart="true"
+                                 stripannot="true" stripsign="true" syncvolatile="true" target="1.3" verbose="false"
+                                 verify="false">
                   <classpath>
-                    <fileset dir="${basedir}/ext/retrotranslated13" includes="**/*.jar" />
+                    <fileset dir="${basedir}/ext/retrotranslated13" includes="**/*.jar"/>
                   </classpath>
                 </retrotranslator>
               </target>
@@ -211,11 +233,16 @@
             </goals>
             <configuration>
               <target>
-                <taskdef name="retrotranslator" classname="net.sf.retrotranslator.transformer.RetrotranslatorTask" classpathref="maven.plugin.classpath" />
-                <mkdir dir="${project.build.outputDirectory.retrotranslated14}" />
-                <retrotranslator srcdir="${project.build.outputDirectory}" destdir="${project.build.outputDirectory.retrotranslated14}" embed="com.github.jinahya.bit.io.retrotranslated14" failonwarning="false" smart="true" stripannot="true" stripsign="true" syncvolatile="true" target="1.4" verbose="false" verify="false">
+                <taskdef name="retrotranslator" classname="net.sf.retrotranslator.transformer.RetrotranslatorTask"
+                         classpathref="maven.plugin.classpath"/>
+                <mkdir dir="${project.build.outputDirectory.retrotranslated14}"/>
+                <retrotranslator srcdir="${project.build.outputDirectory}"
+                                 destdir="${project.build.outputDirectory.retrotranslated14}"
+                                 embed="com.github.jinahya.bit.io.retrotranslated14" failonwarning="false" smart="true"
+                                 stripannot="true" stripsign="true" syncvolatile="true" target="1.4" verbose="false"
+                                 verify="false">
                   <classpath>
-                    <fileset dir="${basedir}/ext/retrotranslated14" includes="**/*.jar" />
+                    <fileset dir="${basedir}/ext/retrotranslated14" includes="**/*.jar"/>
                   </classpath>
                 </retrotranslator>
               </target>
@@ -233,7 +260,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-enforcer-plugin</artifactId>
-        <version>3.0.0-M2</version>
+        <version>3.6.2</version>
         <executions>
           <execution>
             <id>enforce</id>
@@ -242,7 +269,7 @@
             </goals>
             <configuration>
               <rules>
-                <dependencyConvergence />
+                <dependencyConvergence/>
                 <requireJavaVersion>
                   <version>[1.8.0,)</version>
                 </requireJavaVersion>
@@ -257,7 +284,8 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.8.1</version>
+        <!-- https://central.sonatype.com/artifact/org.apache.maven.plugins/maven-compiler-plugin/versions -->
+        <version>3.15.0</version>
         <configuration>
           <compilerArgs>
             <arg>-Xlint</arg>
@@ -280,7 +308,8 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
-        <version>3.1.1</version>
+        <!-- https://central.sonatype.com/artifact/org.apache.maven.plugins/maven-jar-plugin/versions -->
+        <version>3.5.0</version>
         <configuration>
           <archive>
             <manifestFile>${project.build.outputDirectory}/META-INF/MANIFEST.MF</manifestFile>
@@ -319,7 +348,7 @@
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>animal-sniffer-maven-plugin</artifactId>
-        <version>1.18</version>
+        <version>1.27</version>
         <executions>
           <execution>
             <id>check-signature-java15:1.0</id>
@@ -354,7 +383,7 @@
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>license-maven-plugin</artifactId>
-        <version>2.0.0</version>
+        <version>2.7.1</version>
         <configuration>
           <licenseName>apache_v2</licenseName>
         </configuration>
@@ -383,28 +412,31 @@
   <reporting>
     <plugins>
       <plugin>
-        <groupId>com.github.spotbugs</groupId>
-        <artifactId>spotbugs-maven-plugin</artifactId>
-        <version>3.1.12.2</version>
-      </plugin>
-      <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jxr-plugin</artifactId>
-        <version>3.0.0</version>
+        <version>3.6.0</version>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-checkstyle-plugin</artifactId>
-        <version>3.0.0</version>
+        <version>3.6.0</version>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-project-info-reports-plugin</artifactId>
-        <version>3.0.0</version>
+        <version>3.9.0</version>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
+        <reportSets>
+          <reportSet>
+            <reports>
+              <report>javadoc-no-fork</report>
+              <report>aggregate-no-fork</report>
+            </reports>
+          </reportSet>
+        </reportSets>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -416,7 +448,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-pmd-plugin</artifactId>
-        <version>3.12.0</version>
+        <version>3.28.0</version>
         <configuration>
           <targetJdk>1.6</targetJdk>
           <skipEmptyReport>false</skipEmptyReport> <!-- https://issues.apache.org/jira/browse/MPMD-225 -->

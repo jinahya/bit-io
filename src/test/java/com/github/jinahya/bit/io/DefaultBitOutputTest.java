@@ -33,7 +33,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
  * @see DefaultBitInputTest
  */
 @ExtendWith({MockitoExtension.class, WeldJunit5Extension.class})
-public class DefaultBitOutputTest extends AbstractBitOutputTest<DefaultBitOutput> {
+public class DefaultBitOutputTest
+        extends AbstractBitOutputTest<DefaultBitOutput> {
 
     // -----------------------------------------------------------------------------------------------------------------
 

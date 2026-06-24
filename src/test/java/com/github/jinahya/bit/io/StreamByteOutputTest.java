@@ -28,7 +28,8 @@ import java.io.OutputStream;
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  * @see StreamByteInputTest
  */
-public class StreamByteOutputTest extends AbstractByteOutputTest<StreamByteOutput, OutputStream> {
+public class StreamByteOutputTest
+        extends AbstractByteOutputTest<StreamByteOutput, OutputStream> {
 
     // -----------------------------------------------------------------------------------------------------------------
 

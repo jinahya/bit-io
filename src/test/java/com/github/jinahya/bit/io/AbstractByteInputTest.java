@@ -32,7 +32,8 @@ import static org.mockito.Mockito.mock;
  * @param <U> byte source type parameter
  * @see AbstractByteOutputTest
  */
-abstract class AbstractByteInputTest<T extends AbstractByteInput<U>, U> extends ByteInputTest<T> {
+abstract class AbstractByteInputTest<T extends AbstractByteInput<U>, U>
+        extends ByteInputTest<T> {
 
     // -----------------------------------------------------------------------------------------------------------------
 
@@ -58,9 +59,9 @@ abstract class AbstractByteInputTest<T extends AbstractByteInput<U>, U> extends 
     }
 
     /**
-     * Tests {@link AbstractByteInput#setSource(Object)}. The {@code testSetSource} method of {@code
-     * AbstractByteInputTest} class invokes {@link AbstractByteInput#setSource(Object)} twice, with {@code null} and a
-     * {@code mock}, respectively.
+     * Tests {@link AbstractByteInput#setSource(Object)}. The {@code testSetSource} method of
+     * {@code AbstractByteInputTest} class invokes {@link AbstractByteInput#setSource(Object)} twice, with {@code null}
+     * and a {@code mock}, respectively.
      */
     @Test
     void testSetSource() {

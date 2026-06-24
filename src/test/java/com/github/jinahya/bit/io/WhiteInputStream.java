@@ -33,7 +33,8 @@ import java.io.InputStream;
  * @see WhiteByteChannel
  */
 @Slf4j
-final class WhiteInputStream extends InputStream {
+final class WhiteInputStream
+        extends InputStream {
 
     // -----------------------------------------------------------------------------------------------------------------
     static final InputStream INSTANCE = new WhiteInputStream();

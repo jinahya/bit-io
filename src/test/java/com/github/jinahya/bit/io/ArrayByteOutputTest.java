@@ -27,7 +27,8 @@ import org.junit.jupiter.api.Test;
  *
  * @see ArrayByteInputTest
  */
-class ArrayByteOutputTest extends AbstractByteOutputTest<ArrayByteOutput, byte[]> {
+class ArrayByteOutputTest
+        extends AbstractByteOutputTest<ArrayByteOutput, byte[]> {
 
     // -----------------------------------------------------------------------------------------------------------------
 

@@ -34,7 +34,8 @@ import java.nio.channels.WritableByteChannel;
  * @see BlackOutputStream
  */
 @Slf4j
-final class BlackByteChannel implements WritableByteChannel {
+final class BlackByteChannel
+        implements WritableByteChannel {
 
     // -----------------------------------------------------------------------------------------------------------------
     static final WritableByteChannel INSTANCE = new BlackByteChannel();
@@ -42,9 +43,10 @@ final class BlackByteChannel implements WritableByteChannel {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * Writes a sequence of bytes to this channel from the buffer. The {@code write(ByteBuffer)} method of {@code
-     * BlackByteChannel} class simply makes the buffer as <i>fully-drained</i> by setting the {@code position} property
-     * with the current value of the {@code limit} property and return the previous value of {@code remaining()}.
+     * Writes a sequence of bytes to this channel from the buffer. The {@code write(ByteBuffer)} method of
+     * {@code BlackByteChannel} class simply makes the buffer as <i>fully-drained</i> by setting the {@code position}
+     * property with the current value of the {@code limit} property and return the previous value of
+     * {@code remaining()}.
      *
      * @param src the buffer whose remaining bytes are drained.
      * @return the number of bytes drained.

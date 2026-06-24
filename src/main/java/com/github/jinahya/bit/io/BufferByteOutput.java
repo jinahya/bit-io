@@ -32,11 +32,24 @@ import static java.nio.ByteBuffer.allocate;
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  * @see BufferByteInput
  */
-public class BufferByteOutput extends AbstractByteOutput<ByteBuffer> {
+public class BufferByteOutput
+        extends AbstractByteOutput<ByteBuffer> {
 
     // -----------------------------------------------------------------------------------------------------------------
-    private static class ChannelBufferByteOutput extends BufferByteOutput {
 
+    /**
+     * A {@link BufferByteOutput} which, when its target buffer has no remaining space, drains the buffered bytes to an
+     * underlying {@link WritableByteChannel}.
+     */
+    private static class ChannelBufferByteOutput
+            extends BufferByteOutput {
+
+        /**
+         * Creates a new instance with specified target buffer and channel.
+         *
+         * @param target  the byte buffer to which bytes are written.
+         * @param channel the channel to which the {@code target} buffer is drained; must not be {@code null}.
+         */
         private ChannelBufferByteOutput(final ByteBuffer target, final WritableByteChannel channel) {
             super(target);
             if (channel == null) {
@@ -59,6 +72,13 @@ public class BufferByteOutput extends AbstractByteOutput<ByteBuffer> {
         private final WritableByteChannel channel;
     }
 
+    /**
+     * Creates a new instance which writes bytes to the specified writable byte channel. The returned instance keeps an
+     * internal {@code 1}-byte buffer and drains it to the {@code channel} whenever the buffer becomes full.
+     *
+     * @param channel the channel to which bytes are written; must not be {@code null}.
+     * @return a new instance.
+     */
     public static BufferByteOutput from(final WritableByteChannel channel) {
         return new ChannelBufferByteOutput(allocate(1), channel);
     }
@@ -78,9 +98,9 @@ public class BufferByteOutput extends AbstractByteOutput<ByteBuffer> {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * {@inheritDoc} The {@code write(int)} method of {@code BufferByteOutput} class invokes {@link
-     * ByteBuffer#put(byte)} method, on what {@link #getTarget()} method returns, with specified value casted as {@code
-     * byte}.
+     * {@inheritDoc} The {@code write(int)} method of {@code BufferByteOutput} class invokes
+     * {@link ByteBuffer#put(byte)} method, on what {@link #getTarget()} method returns, with specified value casted as
+     * {@code byte}.
      *
      * @param value {@inheritDoc}
      * @throws IOException {@inheritDoc}

@@ -27,6 +27,15 @@ package com.github.jinahya.bit.io;
  */
 final class BitIoConstraints {
 
+    /**
+     * Checks that the specified bit size is valid for a {@code byte} value.
+     *
+     * @param unsigned a flag for indicating unsigned value; {@code true} for unsigned, {@code false} for signed.
+     * @param size     the bit size to check; between {@code 1} and ({@value java.lang.Byte#SIZE} - (unsigned ?
+     *                 {@code 1} : {@code 0})), both inclusive.
+     * @return given {@code size}.
+     * @throws IllegalArgumentException if {@code size} is not valid.
+     */
     static int requireValidSizeByte(final boolean unsigned, final int size) {
         if (size <= 0) {
             throw new IllegalArgumentException("size(" + size + ") <= 0");
@@ -40,6 +49,15 @@ final class BitIoConstraints {
         return size;
     }
 
+    /**
+     * Checks that the specified bit size is valid for a {@code short} value.
+     *
+     * @param unsigned a flag for indicating unsigned value; {@code true} for unsigned, {@code false} for signed.
+     * @param size     the bit size to check; between {@code 1} and ({@value java.lang.Short#SIZE} - (unsigned ?
+     *                 {@code 1} : {@code 0})), both inclusive.
+     * @return given {@code size}.
+     * @throws IllegalArgumentException if {@code size} is not valid.
+     */
     static int requireValidSizeShort(final boolean unsigned, final int size) {
         if (size <= 0) {
             throw new IllegalArgumentException("size(" + size + ") <= 0");
@@ -53,6 +71,15 @@ final class BitIoConstraints {
         return size;
     }
 
+    /**
+     * Checks that the specified bit size is valid for an {@code int} value.
+     *
+     * @param unsigned a flag for indicating unsigned value; {@code true} for unsigned, {@code false} for signed.
+     * @param size     the bit size to check; between {@code 1} and ({@value java.lang.Integer#SIZE} - (unsigned ?
+     *                 {@code 1} : {@code 0})), both inclusive.
+     * @return given {@code size}.
+     * @throws IllegalArgumentException if {@code size} is not valid.
+     */
     static int requireValidSizeInt(final boolean unsigned, final int size) {
         if (size <= 0) {
             throw new IllegalArgumentException("size(" + size + ") <= 0");
@@ -66,6 +93,15 @@ final class BitIoConstraints {
         return size;
     }
 
+    /**
+     * Checks that the specified bit size is valid for a {@code long} value.
+     *
+     * @param unsigned a flag for indicating unsigned value; {@code true} for unsigned, {@code false} for signed.
+     * @param size     the bit size to check; between {@code 1} and ({@value java.lang.Long#SIZE} - (unsigned ?
+     *                 {@code 1} : {@code 0})), both inclusive.
+     * @return given {@code size}.
+     * @throws IllegalArgumentException if {@code size} is not valid.
+     */
     static int requireValidSizeLong(final boolean unsigned, final int size) {
         if (size <= 0) {
             throw new IllegalArgumentException("size(" + size + ") <= 0");
@@ -79,6 +115,13 @@ final class BitIoConstraints {
         return size;
     }
 
+    /**
+     * Checks that the specified bit size is valid for a {@code char} value.
+     *
+     * @param size the bit size to check; between {@code 1} and {@value java.lang.Character#SIZE}, both inclusive.
+     * @return given {@code size}.
+     * @throws IllegalArgumentException if {@code size} is not valid.
+     */
     static int requireValidSizeChar(final int size) {
         if (size <= 0) {
             throw new IllegalArgumentException("size(" + size + ") <= 0");

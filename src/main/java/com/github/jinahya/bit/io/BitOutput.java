@@ -51,7 +51,8 @@ public interface BitOutput {
      * @param size     the number of bits to write; between {@code 1} and ({@value java.lang.Byte#SIZE} - (unsigned ?
      *                 {@code 1} : {@code 0})), both inclusive.
      * @param value    the value to write.
-     * @throws IOException if an I/O error occurs.
+     * @throws IllegalArgumentException if {@code size} is not valid.
+     * @throws IOException              if an I/O error occurs.
      * @see BitInput#readByte(boolean, int)
      */
     void writeByte(boolean unsigned, int size, byte value) throws IOException;
@@ -74,7 +75,8 @@ public interface BitOutput {
      * @param size     the number of bits to write; between {@code 1} and ({@value java.lang.Short#SIZE} - (unsigned ?
      *                 {@code 1} : {@code 0})), both inclusive.
      * @param value    the value to write.
-     * @throws IOException if an I/O error occurs.
+     * @throws IllegalArgumentException if {@code size} is not valid.
+     * @throws IOException              if an I/O error occurs.
      * @see BitInput#readShort(boolean, int)
      */
     void writeShort(boolean unsigned, int size, short value) throws IOException;
@@ -106,7 +108,8 @@ public interface BitOutput {
      * @param size     the number of bits to write; between {@code 1} and ({@value java.lang.Integer#SIZE} - (unsigned ?
      *                 {@code 1} : {@code 0})), both inclusive.
      * @param value    the value to write.
-     * @throws IOException if an I/O error occurs.
+     * @throws IllegalArgumentException if {@code size} is not valid.
+     * @throws IOException              if an I/O error occurs.
      * @see BitInput#readInt(boolean, int)
      */
     void writeInt(boolean unsigned, int size, int value) throws IOException;
@@ -138,7 +141,8 @@ public interface BitOutput {
      * @param size     the number of bits to write; between {@code 1} and ({@value java.lang.Long#SIZE} - (unsigned ?
      *                 {@code 1} : {@code 0})), both inclusive.
      * @param value    the value to write.
-     * @throws IOException if an I/O error occurs.
+     * @throws IllegalArgumentException if {@code size} is not valid.
+     * @throws IOException              if an I/O error occurs.
      * @see BitInput#readLong(boolean, int)
      */
     void writeLong(boolean unsigned, int size, long value) throws IOException;
@@ -169,7 +173,8 @@ public interface BitOutput {
      * @param size  the number of bits to write; between {@code 1} and {@value java.lang.Character#SIZE}, both
      *              inclusive.
      * @param value the value to write
-     * @throws IOException if an I/O error occurs.
+     * @throws IllegalArgumentException if {@code size} is not valid.
+     * @throws IOException              if an I/O error occurs.
      * @see #writeInt(boolean, int, int)
      * @see BitInput#readChar(int)
      */

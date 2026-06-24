@@ -29,7 +29,8 @@ import java.io.IOException;
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  * @see DataByteOutput
  */
-public class DataByteInput extends AbstractByteInput<DataInput> {
+public class DataByteInput
+        extends AbstractByteInput<DataInput> {
 
     // -----------------------------------------------------------------------------------------------------------------
 
@@ -46,8 +47,9 @@ public class DataByteInput extends AbstractByteInput<DataInput> {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * {@inheritDoc} The {@code read()} method of {@code DataByteInput} class invokes {@link
-     * DataInput#readUnsignedByte()} method, on what {@link #getSource()} method returns, and returns the result.
+     * {@inheritDoc} The {@code read()} method of {@code DataByteInput} class invokes
+     * {@link DataInput#readUnsignedByte()} method, on what {@link #getSource()} method returns, and returns the
+     * result.
      *
      * @return {@inheritDoc}
      * @throws IOException {@inheritDoc}

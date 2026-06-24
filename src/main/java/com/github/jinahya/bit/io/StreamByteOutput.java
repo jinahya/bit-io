@@ -29,7 +29,8 @@ import java.io.OutputStream;
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  * @see StreamByteInput
  */
-public class StreamByteOutput extends AbstractByteOutput<OutputStream> {
+public class StreamByteOutput
+        extends AbstractByteOutput<OutputStream> {
 
     // -----------------------------------------------------------------------------------------------------------------
 
@@ -48,8 +49,9 @@ public class StreamByteOutput extends AbstractByteOutput<OutputStream> {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * {@inheritDoc} The {@code write(int)} method of {@code StreamByteOutput} class invokes {@link
-     * OutputStream#write(int) write(int)} method, on what {@link #getTarget()} method returns, with specified value.
+     * {@inheritDoc} The {@code write(int)} method of {@code StreamByteOutput} class invokes
+     * {@link OutputStream#write(int) write(int)} method, on what {@link #getTarget()} method returns, with specified
+     * value.
      *
      * @param value {@inheritDoc}
      * @throws IOException {@inheritDoc}

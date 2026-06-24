@@ -42,7 +42,8 @@ import static java.nio.ByteBuffer.allocate;
  * @see ChannelByteOutput
  * @see ChannelByteInput2
  */
-class ChannelByteOutput2 extends AbstractByteOutput<WritableByteChannel> {
+class ChannelByteOutput2
+        extends AbstractByteOutput<WritableByteChannel> {
 
     // -----------------------------------------------------------------------------------------------------------------
 
@@ -91,9 +92,9 @@ class ChannelByteOutput2 extends AbstractByteOutput<WritableByteChannel> {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * {@inheritDoc} The {@code write(int)} method of {@code ChannelByteOutput2} class, if required, drains the {@link
-     * #getBuffer() buffer} to the {@link #getTarget() channel} and {@link ByteBuffer#put(byte) puts} specified value to
-     * the {@code buffer}.
+     * {@inheritDoc} The {@code write(int)} method of {@code ChannelByteOutput2} class, if required, drains the
+     * {@link #getBuffer() buffer} to the {@link #getTarget() channel} and {@link ByteBuffer#put(byte) puts} specified
+     * value to the {@code buffer}.
      *
      * @param value {@inheritDoc}
      * @throws IOException {@inheritDoc}

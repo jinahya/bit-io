@@ -28,7 +28,8 @@ import java.io.DataOutput;
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  * @see DataByteInputTest
  */
-public class DataByteOutputTest extends AbstractByteOutputTest<DataByteOutput, DataOutput> {
+public class DataByteOutputTest
+        extends AbstractByteOutputTest<DataByteOutput, DataOutput> {
 
     // -----------------------------------------------------------------------------------------------------------------
 

@@ -28,7 +28,8 @@ import java.io.IOException;
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  * @see DefaultBitInput
  */
-public class DefaultBitOutput extends AbstractBitOutput {
+public class DefaultBitOutput
+        extends AbstractBitOutput {
 
     // -----------------------------------------------------------------------------------------------------------------
 
@@ -60,8 +61,8 @@ public class DefaultBitOutput extends AbstractBitOutput {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * {@inheritDoc} The {@code write(int)} method of {@code DefaultBitOutput} class invokes {@link
-     * ByteOutput#write(int)} method, on what {@link #getDelegate()} method returns, with given value.
+     * {@inheritDoc} The {@code write(int)} method of {@code DefaultBitOutput} class invokes
+     * {@link ByteOutput#write(int)} method, on what {@link #getDelegate()} method returns, with given value.
      *
      * @param value {@inheritDoc}
      * @throws IOException {@inheritDoc}

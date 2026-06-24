@@ -33,7 +33,8 @@ import java.io.OutputStream;
  * @see BlackByteChannel
  */
 @Slf4j
-final class BlackOutputStream extends OutputStream {
+final class BlackOutputStream
+        extends OutputStream {
 
     // -----------------------------------------------------------------------------------------------------------------
     static final OutputStream INSTANCE = new BlackOutputStream();

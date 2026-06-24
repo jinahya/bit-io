@@ -28,7 +28,8 @@ import java.io.IOException;
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  * @see DefaultBitOutput
  */
-public class DefaultBitInput extends AbstractBitInput {
+public class DefaultBitInput
+        extends AbstractBitInput {
 
     // -----------------------------------------------------------------------------------------------------------------
 

@@ -36,7 +36,8 @@ import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeShort;
  * @see AbstractBitOutput
  * @see DefaultBitInput
  */
-public abstract class AbstractBitInput implements BitInput {
+public abstract class AbstractBitInput
+        implements BitInput {
 
     // -----------------------------------------------------------------------------------------------------------------
 
@@ -72,7 +73,10 @@ public abstract class AbstractBitInput implements BitInput {
     private int unsigned8(final int size) throws IOException {
         if (available == 0) {
             octet = read();
-            assert octet >= 0 && octet < 256;
+            if (octet < 0 || octet > 255) {
+                throw new IOException("read() returned an out-of-range value: " + octet
+                                      + "; must be between 0 and 255, both inclusive");
+            }
             count++;
             available = Byte.SIZE;
         }
@@ -238,7 +242,7 @@ public abstract class AbstractBitInput implements BitInput {
     private int octet;
 
     /**
-     * The number of available bits in {@link #octet} for reading..
+     * The number of available bits in {@link #octet} for reading.
      */
     private int available = 0;
 

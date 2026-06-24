@@ -36,7 +36,8 @@ import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeShort;
  * @see AbstractBitInput
  * @see DefaultBitOutput
  */
-public abstract class AbstractBitOutput implements BitOutput {
+public abstract class AbstractBitOutput
+        implements BitOutput {
 
     // -----------------------------------------------------------------------------------------------------------------
 

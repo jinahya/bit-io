@@ -34,7 +34,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  * @see ChannelByteOutput2Test
  */
-public class ChannelByteInput2Test extends AbstractByteInputTest<ChannelByteInput2, ReadableByteChannel> {
+public class ChannelByteInput2Test
+        extends AbstractByteInputTest<ChannelByteInput2, ReadableByteChannel> {
 
     // -----------------------------------------------------------------------------------------------------------------
     ChannelByteInput2Test() {

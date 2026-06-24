@@ -33,10 +33,22 @@ import static java.nio.ByteBuffer.allocate;
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  * @see BufferByteOutput
  */
-public class BufferByteInput extends AbstractByteInput<ByteBuffer> {
+public class BufferByteInput
+        extends AbstractByteInput<ByteBuffer> {
 
-    private static class ChannelBufferByteInput extends BufferByteInput {
+    /**
+     * A {@link BufferByteInput} which, when its source buffer has no remaining bytes, lazily reads bytes from an
+     * underlying {@link ReadableByteChannel}.
+     */
+    private static class ChannelBufferByteInput
+            extends BufferByteInput {
 
+        /**
+         * Creates a new instance with specified source buffer and channel.
+         *
+         * @param source  the byte buffer from which bytes are read.
+         * @param channel the channel from which the {@code source} buffer is filled; must not be {@code null}.
+         */
         private ChannelBufferByteInput(final ByteBuffer source, final ReadableByteChannel channel) {
             super(source);
             if (channel == null) {
@@ -61,6 +73,13 @@ public class BufferByteInput extends AbstractByteInput<ByteBuffer> {
         private final ReadableByteChannel channel;
     }
 
+    /**
+     * Creates a new instance which reads bytes from the specified readable byte channel. The returned instance keeps an
+     * internal {@code 1}-byte buffer and refills it from the {@code channel} whenever the buffer is drained.
+     *
+     * @param channel the channel from which bytes are read; must not be {@code null}.
+     * @return a new instance.
+     */
     public static BufferByteInput from(final ReadableByteChannel channel) {
         return new ChannelBufferByteInput((ByteBuffer) allocate(1).position(1), channel);
     }

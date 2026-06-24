@@ -27,7 +27,8 @@ package com.github.jinahya.bit.io;
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  * @see AbstractBitOutputTest
  */
-public abstract class AbstractBitInputTest<T extends AbstractBitInput> extends BitInputTest<T> {
+public abstract class AbstractBitInputTest<T extends AbstractBitInput>
+        extends BitInputTest<T> {
 
     // -----------------------------------------------------------------------------------------------------------------
 

@@ -34,7 +34,8 @@ import java.nio.channels.ReadableByteChannel;
  * @see WhiteInputStream
  */
 @Slf4j
-final class WhiteByteChannel implements ReadableByteChannel {
+final class WhiteByteChannel
+        implements ReadableByteChannel {
 
     // -----------------------------------------------------------------------------------------------------------------
     static final ReadableByteChannel INSTANCE = new WhiteByteChannel();
@@ -42,9 +43,10 @@ final class WhiteByteChannel implements ReadableByteChannel {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * Reads a sequence of bytes from this channel into the given buffer. The {@code read(ByteBuffer)} method of {@code
-     * WhiteByteChannel} class simply makes the buffer as <i>fully-charged</i> by setting the {@code position} property
-     * with the current value of the {@code limit} property and returns the previous value of {@code remaining()}.
+     * Reads a sequence of bytes from this channel into the given buffer. The {@code read(ByteBuffer)} method of
+     * {@code WhiteByteChannel} class simply makes the buffer as <i>fully-charged</i> by setting the {@code position}
+     * property with the current value of the {@code limit} property and returns the previous value of
+     * {@code remaining()}.
      *
      * @param dst the buffer to be charged.
      * @return the number of bytes charged.

@@ -27,6 +27,10 @@ package com.github.jinahya.bit.io;
  */
 final class BitIoConstants {
 
+    /**
+     * Precomputed bit masks indexed by {@code (size - 1)}, where {@code MASKS[size - 1]} has its lowest {@code size}
+     * bits set.
+     */
     private static final int[] MASKS = new int[8];
 
     static {
@@ -37,10 +41,20 @@ final class BitIoConstants {
         }
     }
 
+    /**
+     * Returns a bit mask whose lowest {@code size} bits are set.
+     *
+     * @param size the number of lowest bits to set; between {@code 1} and {@value java.lang.Byte#SIZE}, both
+     *             inclusive.
+     * @return a bit mask with its lowest {@code size} bits set.
+     */
     static int mask(final int size) {
         return MASKS[size - 1];
     }
 
+    /**
+     * Creates a new instance.
+     */
     private BitIoConstants() {
         throw new AssertionError("initialization is not allowed");
     }

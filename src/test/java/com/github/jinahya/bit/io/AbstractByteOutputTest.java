@@ -32,7 +32,8 @@ import static org.mockito.Mockito.mock;
  * @param <U> byte target type parameter
  * @see AbstractByteInputTest
  */
-abstract class AbstractByteOutputTest<T extends AbstractByteOutput<U>, U> extends ByteOutputTest<T> {
+abstract class AbstractByteOutputTest<T extends AbstractByteOutput<U>, U>
+        extends ByteOutputTest<T> {
 
     // -----------------------------------------------------------------------------------------------------------------
 

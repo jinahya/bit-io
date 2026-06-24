@@ -46,3 +46,9 @@ buildNumber.properties
 .settings/
 
 *.log
+
+.claude
+CLAUDE.md
+_*.asciidoc
+_ANALYSYS.asciidoc
+_TODO.asciidoc

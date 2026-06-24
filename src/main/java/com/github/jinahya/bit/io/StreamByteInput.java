@@ -30,7 +30,8 @@ import java.io.InputStream;
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  * @see StreamByteOutput
  */
-public class StreamByteInput extends AbstractByteInput<InputStream> {
+public class StreamByteInput
+        extends AbstractByteInput<InputStream> {
 
     // -----------------------------------------------------------------------------------------------------------------
 
@@ -49,8 +50,8 @@ public class StreamByteInput extends AbstractByteInput<InputStream> {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * {@inheritDoc} The {@code read()} method of {@code StreamByteInput} class invokes {@link InputStream#read()
-     * read()} method, on what {@link #getSource()} method returns, and returns the result.
+     * {@inheritDoc} The {@code read()} method of {@code StreamByteInput} class invokes
+     * {@link InputStream#read() read()} method, on what {@link #getSource()} method returns, and returns the result.
      *
      * @return {@inheritDoc}
      * @throws IOException {@inheritDoc}

@@ -28,7 +28,8 @@ import java.io.DataInput;
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  * @see DataByteOutputTest
  */
-public class DataByteInputTest extends AbstractByteInputTest<DataByteInput, DataInput> {
+public class DataByteInputTest
+        extends AbstractByteInputTest<DataByteInput, DataInput> {
 
     // -----------------------------------------------------------------------------------------------------------------
 

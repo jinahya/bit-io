@@ -27,7 +27,8 @@ package com.github.jinahya.bit.io;
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  * @see AbstractByteOutput
  */
-abstract class AbstractByteInput<T> implements ByteInput {
+abstract class AbstractByteInput<T>
+        implements ByteInput {
 
     // -----------------------------------------------------------------------------------------------------------------
 

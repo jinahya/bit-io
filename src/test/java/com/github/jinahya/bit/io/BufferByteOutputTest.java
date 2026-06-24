@@ -28,7 +28,8 @@ import java.nio.ByteBuffer;
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  * @see BufferByteInputTest
  */
-class BufferByteOutputTest extends AbstractByteOutputTest<BufferByteOutput, ByteBuffer> {
+class BufferByteOutputTest
+        extends AbstractByteOutputTest<BufferByteOutput, ByteBuffer> {
 
     // -----------------------------------------------------------------------------------------------------------------
 

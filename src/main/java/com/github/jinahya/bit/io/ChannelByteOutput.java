@@ -34,7 +34,8 @@ import static java.nio.ByteBuffer.allocate;
  */
 @Deprecated
         //forRemoval = true
-class ChannelByteOutput extends BufferByteOutput {
+class ChannelByteOutput
+        extends BufferByteOutput {
 
     // -----------------------------------------------------------------------------------------------------------------
 

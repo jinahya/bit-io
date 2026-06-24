@@ -34,7 +34,8 @@ import static java.nio.ByteBuffer.allocate;
  * @see ChannelByteInput
  * @see ChannelByteOutput2
  */
-class ChannelByteInput2 extends AbstractByteInput<ReadableByteChannel> {
+class ChannelByteInput2
+        extends AbstractByteInput<ReadableByteChannel> {
 
     // -----------------------------------------------------------------------------------------------------------------
 
@@ -85,9 +86,9 @@ class ChannelByteInput2 extends AbstractByteInput<ReadableByteChannel> {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * {@inheritDoc} The {@code read()} method of {@code ChannelByteInput2} class, if required, charges the {@link
-     * #getBuffer() buffer} from the {@link #getSource() channel} and returns the result of {@link ByteBuffer#get()
-     * get()} as an unsigned {@code int}.
+     * {@inheritDoc} The {@code read()} method of {@code ChannelByteInput2} class, if required, charges the
+     * {@link #getBuffer() buffer} from the {@link #getSource() channel} and returns the result of
+     * {@link ByteBuffer#get() get()} as an unsigned {@code int}.
      *
      * @return {@inheritDoc}
      * @throws IOException {@inheritDoc}

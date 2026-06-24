@@ -28,7 +28,8 @@ import java.io.IOException;
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  * @see ArrayByteInput
  */
-public class ArrayByteOutput extends AbstractByteOutput<byte[]> {
+public class ArrayByteOutput
+        extends AbstractByteOutput<byte[]> {
 
     // -----------------------------------------------------------------------------------------------------------------
 
@@ -36,7 +37,7 @@ public class ArrayByteOutput extends AbstractByteOutput<byte[]> {
      * Creates a new instance with given parameters. The {@code index} attribute will be set as {@code 0}, or {@code -1}
      * when {@code target} argument is {@code null} or its {@code length} is {@code 0}.
      *
-     * @param target a byte array on which bytes are set; {@code null} if it's supposed to be lazily initialized an
+     * @param target a byte array on which bytes are set; {@code null} if it's supposed to be lazily initialized and
      *               set.
      */
     public ArrayByteOutput(final byte[] target) {
@@ -61,9 +62,9 @@ public class ArrayByteOutput extends AbstractByteOutput<byte[]> {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * {@inheritDoc} The {@code write(int)} method of {@code ArrayByteOutput} class sets {@link #getTarget()
-     * target}[{@link #getIndex() index}] with specified {@code value}. The {@link #setIndex(int) index} attribute, when
-     * successfully returns, is increased by {@code 1}.
+     * {@inheritDoc} The {@code write(int)} method of {@code ArrayByteOutput} class sets
+     * {@link #getTarget() target}[{@link #getIndex() index}] with specified {@code value}. The
+     * {@link #setIndex(int) index} attribute, when successfully returns, is increased by {@code 1}.
      *
      * @param value {@inheritDoc}
      * @throws IOException {@inheritDoc}

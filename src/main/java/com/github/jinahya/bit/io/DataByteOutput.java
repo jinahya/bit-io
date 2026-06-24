@@ -29,7 +29,8 @@ import java.io.IOException;
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  * @see DataByteInput
  */
-public class DataByteOutput extends AbstractByteOutput<DataOutput> {
+public class DataByteOutput
+        extends AbstractByteOutput<DataOutput> {
 
     // -----------------------------------------------------------------------------------------------------------------
 
@@ -46,8 +47,8 @@ public class DataByteOutput extends AbstractByteOutput<DataOutput> {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * {@inheritDoc} The {@code write(int)} method of {@code DataByteOutput} class invokes {@link
-     * DataOutput#writeByte(int)} method, on what {@link #getTarget()} method returns, with specified value.
+     * {@inheritDoc} The {@code write(int)} method of {@code DataByteOutput} class invokes
+     * {@link DataOutput#writeByte(int)} method, on what {@link #getTarget()} method returns, with specified value.
      *
      * @param value {@inheritDoc}
      * @throws IOException {@inheritDoc}

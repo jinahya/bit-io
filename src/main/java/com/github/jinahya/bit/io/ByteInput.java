@@ -36,8 +36,14 @@ public interface ByteInput {
     /**
      * Reads an unsigned {@value java.lang.Byte#SIZE}-bit value.
      *
+     * <p>Implementations <em>must</em> return a value between {@code 0} and {@code 255}, both inclusive, and
+     * <em>must</em> throw an {@link java.io.EOFException} when the end of the input is reached. Implementations must
+     * <em>not</em> return a negative value (such as the {@code -1} returned by {@link java.io.InputStream#read()}) to
+     * signal the end of the input; doing so corrupts the bit stream read by {@link BitInput}.</p>
+     *
      * @return an unsigned {@value java.lang.Byte#SIZE}-bit value; between {@code 0} and {@code 255}, both inclusive.
-     * @throws IOException if an I/O error occurs.
+     * @throws java.io.EOFException if the end of the input is reached.
+     * @throws IOException          if an I/O error occurs.
      */
     int read() throws IOException;
 }

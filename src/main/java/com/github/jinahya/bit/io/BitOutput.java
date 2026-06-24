@@ -189,6 +189,15 @@ public interface BitOutput {
      */
     void writeChar16(char value) throws IOException;
 
+    /**
+     * Writes specified {@value java.lang.Character#SIZE}-bit {@code char} value in little endian byte order.
+     *
+     * @param value a {@value java.lang.Character#SIZE}-bit {@code char} value to write.
+     * @throws IOException if an I/O error occurs.
+     * @see BitInput#readChar16Le()
+     */
+    void writeChar16Le(char value) throws IOException;
+
     // -----------------------------------------------------------------------------------------------------------------
 
     /**

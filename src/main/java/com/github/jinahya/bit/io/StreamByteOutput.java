@@ -38,41 +38,24 @@ public class StreamByteOutput
      * Creates a new instance which writes bytes to specified output stream.
      *
      * @param target the output stream to which bytes are written; must not be {@code null}.
-     * @see #getTarget()
-     * @see #setTarget(OutputStream)
+     * @throws NullPointerException if {@code target} is {@code null}.
      */
     public StreamByteOutput(final OutputStream target) {
         super(target);
-        if (target == null) {
-            throw new NullPointerException("target is null");
-        }
     }
 
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
      * {@inheritDoc} The {@code write(int)} method of {@code StreamByteOutput} class invokes
-     * {@link OutputStream#write(int) write(int)} method, on what {@link #getTarget()} method returns, with specified
-     * value.
+     * {@link OutputStream#write(int) write(int)} method, on the {@link #target target} stream, with specified value.
      *
      * @param value {@inheritDoc}
      * @throws IOException {@inheritDoc}
-     * @see #getTarget()
      * @see OutputStream#write(int)
      */
     @Override
     public void write(final int value) throws IOException {
-        getTarget().write(value);
-    }
-
-    // ---------------------------------------------------------------------------------------------------------- target
-    @Override
-    protected OutputStream getTarget() {
-        return super.getTarget();
-    }
-
-    @Override
-    protected void setTarget(final OutputStream target) {
-        super.setTarget(target);
+        target.write(value);
     }
 }

@@ -23,120 +23,80 @@ package com.github.jinahya.bit.io;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.params.provider.Arguments;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.PipedInputStream;
+import java.io.PipedOutputStream;
 import java.nio.Buffer;
 import java.nio.ByteBuffer;
-import java.nio.channels.WritableByteChannel;
+import java.nio.channels.Pipe;
 import java.util.stream.Stream;
 
-import static java.lang.System.arraycopy;
 import static java.nio.ByteBuffer.allocate;
-import static java.nio.channels.Channels.newChannel;
-import static java.util.Arrays.copyOf;
-import static java.util.Optional.ofNullable;
-import static java.util.concurrent.ThreadLocalRandom.current;
 
 @Slf4j
 final class ByteIoSource {
 
     // -----------------------------------------------------------------------------------------------------------------
+
+    /**
+     * The number of bytes the backing array/buffer must hold; large enough for any single value a test round-trips (the
+     * widest is a {@value java.lang.Long#BYTES}-byte {@code long}).
+     */
+    private static final int CAPACITY = 128;
+
+    /**
+     * The output and the input share a single backing array; the input reads back exactly what the output writes.
+     */
     static Stream<Arguments> sourceByteIoArray() {
-        final byte[][] holder = new byte[1][];
-        final ByteOutput output = new ArrayByteOutput(holder[0] = new byte[1]) {
-            @Override
-            public void write(int value) throws IOException {
-                final byte[] target = getTarget();
-                if (getIndex() == target.length) {
-                    setTarget(copyOf(target, target.length << 1));
-                    holder[0] = getTarget();
-                }
-                super.write(value);
-            }
-        };
-        final ByteInput input = new ArrayByteInput(new byte[0]) {
-            private boolean sourced;
-            @Override
-            public int read() throws IOException {
-                if (!sourced) {
-                    setSource(ofNullable(holder[0]).orElseGet(() -> new byte[0]));
-                    setIndex(0);
-                    sourced = true;
-                }
-                return super.read();
-            }
-        };
-        return Stream.of(Arguments.of(output, input));
+        final byte[] array = new byte[CAPACITY];
+        return Stream.of(Arguments.of(new ArrayByteOutput(array), new ArrayByteInput(array)));
     }
 
+    /**
+     * The output and the input share a single backing buffer; the input reads through an independent {@code position}
+     * via {@link ByteBuffer#duplicate()}.
+     */
     static Stream<Arguments> sourceByteIoBuffer() {
-        final ByteBuffer[] holder = new ByteBuffer[1];
-        final ByteOutput output = new BufferByteOutput(holder[0] = allocate(1)) {
+        final ByteBuffer buffer = allocate(CAPACITY);
+        return Stream.of(Arguments.of(new BufferByteOutput(buffer), new BufferByteInput(buffer.duplicate())));
+    }
+
+    /**
+     * The output and the input are wired to two ends of a connected pipe.
+     */
+    static Stream<Arguments> sourceByteIoData() throws IOException {
+        final PipedOutputStream pos = new PipedOutputStream();
+        final PipedInputStream pis = new PipedInputStream(pos);
+        return Stream.of(Arguments.of(new DataByteOutput(new DataOutputStream(pos)),
+                                      new DataByteInput(new DataInputStream(pis))));
+    }
+
+    /**
+     * The output and the input are wired to two ends of a connected pipe.
+     */
+    static Stream<Arguments> sourceByteIoStream() throws IOException {
+        final PipedOutputStream pos = new PipedOutputStream();
+        final PipedInputStream pis = new PipedInputStream(pos);
+        return Stream.of(Arguments.of(new StreamByteOutput(pos), new StreamByteInput(pis)));
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    static Stream<Arguments> sourceByteIoChannel() throws IOException {
+        final Pipe pipe = Pipe.open();
+        final ByteBuffer obuffer = allocate(1);
+        final ChannelByteOutput output = new ChannelByteOutput(pipe.sink(), obuffer);
+        final ByteInput input = new ChannelByteInput(pipe.source(), allocate(1)) {
+            private boolean flushed;
+
             @Override
-            public void write(int value) throws IOException {
-                final ByteBuffer target = getTarget();
-                if (!target.hasRemaining()) {
-                    final ByteBuffer bigger = allocate(target.capacity() << 1);
-                    if (target.hasArray() && bigger.hasArray()) {
-                        arraycopy(target.array(), target.arrayOffset(), bigger.array(), target.arrayOffset(),
-                                  target.position());
-                        bigger.position(target.position());
-                    } else {
-                        for (target.flip(); target.hasRemaining(); ) {
-                            bigger.put(target.get());
-                        }
+            public int read() throws IOException {
+                if (!flushed) { // drain the output's 1-byte buffer to the channel before reading it back
+                    for (((Buffer) obuffer).flip(); obuffer.hasRemaining(); ) {
+                        pipe.sink().write(obuffer);
                     }
-                    setTarget(bigger);
-                    holder[0] = getTarget();
-                }
-                super.write(value);
-            }
-        };
-        final ByteInput input = new BufferByteInput(allocate(0)) {
-            private boolean sourced;
-            @Override
-            public int read() throws IOException {
-                if (!sourced) {
-                    setSource(ofNullable(holder[0]).orElseGet(() -> allocate(0)));
-                    ((Buffer) getSource()).flip(); // limit -> position, position -> zero
-                    sourced = true;
-                }
-                return super.read();
-            }
-        };
-        return Stream.of(Arguments.of(output, input));
-    }
-
-    static Stream<Arguments> sourceByteIoData() {
-        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        final ByteOutput output = new DataByteOutput(new DataOutputStream(baos));
-        final ByteInput input = new DataByteInput(new DataInputStream(new ByteArrayInputStream(new byte[0]))) {
-            private boolean sourced;
-            @Override
-            public int read() throws IOException {
-                if (!sourced) {
-                    setSource(new DataInputStream(new ByteArrayInputStream(baos.toByteArray())));
-                    sourced = true;
-                }
-                return super.read();
-            }
-        };
-        return Stream.of(Arguments.of(output, input));
-    }
-
-    static Stream<Arguments> sourceByteIoStream() {
-        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        final ByteOutput output = new StreamByteOutput(baos);
-        final ByteInput input = new StreamByteInput(new ByteArrayInputStream(new byte[0])) {
-            private boolean sourced;
-            @Override
-            public int read() throws IOException {
-                if (!sourced) {
-                    setSource(new ByteArrayInputStream(baos.toByteArray()));
-                    sourced = true;
+                    flushed = true;
                 }
                 return super.read();
             }
@@ -145,45 +105,7 @@ final class ByteIoSource {
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    static Stream<Arguments> sourceByteIoChannel() {
-        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        final ChannelByteOutput2 output = new ChannelByteOutput2(null, null) {
-            @Override
-            public void write(final int value) throws IOException {
-                if (getTarget() == null) {
-                    setTarget(newChannel(baos));
-                }
-                if (getBuffer() == null) {
-                    setBuffer(allocate(current().nextInt(1, 8)));
-                }
-                super.write(value);
-            }
-        };
-        final ByteInput input = new ChannelByteInput2(null, null) {
-            @Override
-            public int read() throws IOException {
-                if (getSource() == null) {
-                    {
-                        final WritableByteChannel target = output.getTarget();
-                        final ByteBuffer buffer = output.getBuffer();
-                        for (((Buffer) buffer).flip(); buffer.hasRemaining(); ) {
-                            target.write(buffer);
-                        }
-                    }
-                    setSource(newChannel(new ByteArrayInputStream(baos.toByteArray())));
-                }
-                if (getBuffer() == null) {
-                    final int capacity = current().nextInt(1, 8);
-                    setBuffer((ByteBuffer) allocate(capacity).position(capacity));
-                }
-                return super.read();
-            }
-        };
-        return Stream.of(Arguments.of(output, input));
-    }
-
-    // -----------------------------------------------------------------------------------------------------------------
-    static Stream<Arguments> sourceByteIo() {
+    static Stream<Arguments> sourceByteIo() throws IOException {
         return Stream.of(sourceByteIoArray(), sourceByteIoBuffer(), sourceByteIoData(), sourceByteIoStream(),
                          sourceByteIoChannel())
                 .flatMap(s -> s);

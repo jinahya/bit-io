@@ -21,7 +21,8 @@ package com.github.jinahya.bit.io;
  */
 
 /**
- * An abstract class for implementing {@link ByteInput} interface.
+ * A skeletal implementation of {@link ByteInput} that holds the byte source. Subclasses implement
+ * {@link ByteInput#read()} by reading from the {@link #source} field.
  *
  * @param <T> byte source type parameter
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
@@ -35,12 +36,14 @@ abstract class AbstractByteInput<T>
     /**
      * Creates a new instance with specified byte source.
      *
-     * @param source the underlying byte source from which bytes are read.
-     * @see #getSource()
-     * @see #setSource(Object)
+     * @param source the underlying byte source from which bytes are read; must not be {@code null}.
+     * @throws NullPointerException if {@code source} is {@code null}.
      */
     AbstractByteInput(final T source) {
         super();
+        if (source == null) {
+            throw new NullPointerException("source is null");
+        }
         this.source = source;
     }
 
@@ -61,27 +64,7 @@ abstract class AbstractByteInput<T>
     // ---------------------------------------------------------------------------------------------------------- source
 
     /**
-     * Returns the current value of {@code source} attribute.
-     *
-     * @return the current value of {@code source} attribute.
-     */
-    protected T getSource() {
-        return source;
-    }
-
-    /**
-     * Replaces the current value of {@code source} attribute with given.
-     *
-     * @param source new value for {@code source} attribute.
-     */
-    protected void setSource(final T source) {
-        this.source = source;
-    }
-
-    // -----------------------------------------------------------------------------------------------------------------
-
-    /**
      * The byte source from which bytes are read.
      */
-    private T source;
+    protected final T source;
 }

@@ -38,38 +38,24 @@ public class DataByteOutput
      * Creates a new instance which writes bytes to specified data output.
      *
      * @param target the data output to which bytes are written; must not be {@code null}.
+     * @throws NullPointerException if {@code target} is {@code null}.
      */
     public DataByteOutput(final DataOutput target) {
         super(target);
-        if (target == null) {
-            throw new NullPointerException("target is null");
-        }
     }
 
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
      * {@inheritDoc} The {@code write(int)} method of {@code DataByteOutput} class invokes
-     * {@link DataOutput#writeByte(int)} method, on what {@link #getTarget()} method returns, with specified value.
+     * {@link DataOutput#writeByte(int)} method, on the {@link #target target}, with specified value.
      *
      * @param value {@inheritDoc}
      * @throws IOException {@inheritDoc}
-     * @see #getTarget()
      * @see DataOutput#writeByte(int)
      */
     @Override
     public void write(final int value) throws IOException {
-        getTarget().writeByte(value);
-    }
-
-    // ---------------------------------------------------------------------------------------------------------- target
-    @Override
-    protected DataOutput getTarget() {
-        return super.getTarget();
-    }
-
-    @Override
-    protected void setTarget(final DataOutput target) {
-        super.setTarget(target);
+        target.writeByte(value);
     }
 }

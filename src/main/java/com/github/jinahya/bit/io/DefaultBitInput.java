@@ -37,6 +37,7 @@ public class DefaultBitInput
      * Creates a new instance with specified delegate.
      *
      * @param delegate the delegate from which bytes are read; must not be {@code null}.
+     * @throws NullPointerException if {@code delegate} is {@code null}.
      */
     public DefaultBitInput(final ByteInput delegate) {
         super();
@@ -64,46 +65,21 @@ public class DefaultBitInput
 
     /**
      * {@inheritDoc} The {@code read()} method of {@code DefaultBitInput} class invokes {@link ByteInput#read()} method,
-     * on what {@link #getDelegate()} returns, and returns the result.
+     * on the {@link #delegate delegate}, and returns the result.
      *
      * @return {@inheritDoc}
      * @throws IOException {@inheritDoc}
-     * @see #getDelegate()
      * @see ByteInput#read()
      */
     @Override
     protected int read() throws IOException {
-        final ByteInput delegate = getDelegate();
-        if (delegate == null) {
-            throw new IllegalStateException("delegate has not been set");
-        }
         return delegate.read();
     }
 
     // -------------------------------------------------------------------------------------------------------- delegate
 
     /**
-     * Returns the current value of {@code delegate} attribute.
-     *
-     * @return current value of {@code delegate} attribute.
-     */
-    protected ByteInput getDelegate() {
-        return delegate;
-    }
-
-    /**
-     * Replaces the value of {@code delegate} attribute with given.
-     *
-     * @param delegate new value for {@code delegate} attribute.
-     */
-    protected void setDelegate(final ByteInput delegate) {
-        this.delegate = delegate;
-    }
-
-    // -----------------------------------------------------------------------------------------------------------------
-
-    /**
      * The delegate whose {@link ByteInput#read()} method is invoked via {@link #read()} method.
      */
-    private ByteInput delegate;
+    protected final ByteInput delegate;
 }

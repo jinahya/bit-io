@@ -47,7 +47,7 @@ class ByteOutputProducer {
             @Override
             public void write(final int value) throws IOException {
                 super.write(value);
-                if (getIndex() == getTarget().length) {
+                if (getIndex() == target.length) {
                     setIndex(0);
                 }
             }
@@ -69,8 +69,8 @@ class ByteOutputProducer {
             @Override
             public void write(final int value) throws IOException {
                 super.write(value);
-                if (!getTarget().hasRemaining()) {
-                    getTarget().clear();
+                if (!target.hasRemaining()) {
+                    target.clear();
                 }
             }
         };
@@ -99,10 +99,10 @@ class ByteOutputProducer {
 
     // --------------------------------------------------------------------------------------------------------- channel
     @Produces
-    ChannelByteOutput2 produceChannelByteOutput(final InjectionPoint injectionPoint) {
-        return ChannelByteOutput2.of(new BlackByteChannel());
+    ChannelByteOutput produceChannelByteOutput(final InjectionPoint injectionPoint) {
+        return new ChannelByteOutput(new BlackByteChannel(), allocate(1));
     }
 
-    void disposeChannelByteOutput(@Disposes final ChannelByteOutput2 byteOutput) {
+    void disposeChannelByteOutput(@Disposes final ChannelByteOutput byteOutput) {
     }
 }

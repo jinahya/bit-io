@@ -39,44 +39,28 @@ public class StreamByteInput
      * Creates a new instance that reads bytes from the specified input stream.
      *
      * @param source the input stream from which bytes are read; must not be {@code null}.
-     * @see #getSource()
-     * @see #setSource(InputStream)
+     * @throws NullPointerException if {@code source} is {@code null}.
      */
     public StreamByteInput(final InputStream source) {
         super(source);
-        if (source == null) {
-            throw new NullPointerException("source is null");
-        }
     }
 
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
      * {@inheritDoc} The {@code read()} method of {@code StreamByteInput} class invokes
-     * {@link InputStream#read() read()} method, on what {@link #getSource()} method returns, and returns the result.
+     * {@link InputStream#read() read()} method, on the {@link #source source} stream, and returns the result.
      *
      * @return {@inheritDoc}
      * @throws IOException {@inheritDoc}
-     * @see #getSource()
      * @see InputStream#read()
      */
     @Override
     public int read() throws IOException {
-        final int value = getSource().read();
+        final int value = source.read();
         if (value == -1) {
             throw new EOFException("end of stream reached");
         }
         return value;
-    }
-
-    // ---------------------------------------------------------------------------------------------------------- source
-    @Override
-    protected InputStream getSource() {
-        return super.getSource();
-    }
-
-    @Override
-    protected void setSource(InputStream source) {
-        super.setSource(source);
     }
 }

@@ -20,8 +20,6 @@ package com.github.jinahya.bit.io;
  * #L%
  */
 
-import org.junit.jupiter.api.Test;
-
 import static java.util.Objects.requireNonNull;
 import static org.mockito.Mockito.mock;
 
@@ -46,25 +44,6 @@ abstract class AbstractByteOutputTest<T extends AbstractByteOutput<U>, U>
     AbstractByteOutputTest(final Class<T> byteOutputClass, final Class<U> byteTargetClass) {
         super(byteOutputClass);
         this.byteTargetClass = requireNonNull(byteTargetClass, "byteTargetClass is null");
-    }
-
-    // -----------------------------------------------------------------------------------------------------------------
-
-    /**
-     * Tests {@link AbstractByteOutput#getTarget()} method.
-     */
-    @Test
-    void testGetTarget() {
-        final U target = byteOutput().getTarget();
-    }
-
-    /**
-     * Tests {@link AbstractByteOutput#setTarget(Object)} method.
-     */
-    @Test
-    void testSetTarget() {
-        byteOutput().setTarget(null);
-        byteOutput().setTarget(byteTarget());
     }
 
     // -----------------------------------------------------------------------------------------------------------------

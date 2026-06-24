@@ -20,8 +20,6 @@ package com.github.jinahya.bit.io;
  * #L%
  */
 
-import org.junit.jupiter.api.Test;
-
 import static java.util.Objects.requireNonNull;
 import static org.mockito.Mockito.mock;
 
@@ -46,27 +44,6 @@ abstract class AbstractByteInputTest<T extends AbstractByteInput<U>, U>
     AbstractByteInputTest(final Class<T> byteInputClass, final Class<U> byteSourceClass) {
         super(byteInputClass);
         this.byteSourceClass = requireNonNull(byteSourceClass, "byteSourceClass is null");
-    }
-
-    // ---------------------------------------------------------------------------------------------------------- source
-
-    /**
-     * Tests {@link AbstractByteInput#getSource()}.
-     */
-    @Test
-    void testGetSource() {
-        final U source = byteInput().getSource();
-    }
-
-    /**
-     * Tests {@link AbstractByteInput#setSource(Object)}. The {@code testSetSource} method of
-     * {@code AbstractByteInputTest} class invokes {@link AbstractByteInput#setSource(Object)} twice, with {@code null}
-     * and a {@code mock}, respectively.
-     */
-    @Test
-    void testSetSource() {
-        byteInput().setSource(null);
-        byteInput().setSource(byteSource());
     }
 
     // ------------------------------------------------------------------------------------------------------ byteSource

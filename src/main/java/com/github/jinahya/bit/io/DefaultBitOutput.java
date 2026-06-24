@@ -37,6 +37,7 @@ public class DefaultBitOutput
      * Creates new instance with specified delegate.
      *
      * @param delegate the delegate to which bytes are written; must not be {@code null}.
+     * @throws NullPointerException if {@code delegate} is {@code null}.
      */
     public DefaultBitOutput(final ByteOutput delegate) {
         super();
@@ -64,46 +65,21 @@ public class DefaultBitOutput
 
     /**
      * {@inheritDoc} The {@code write(int)} method of {@code DefaultBitOutput} class invokes
-     * {@link ByteOutput#write(int)} method, on what {@link #getDelegate()} method returns, with given value.
+     * {@link ByteOutput#write(int)} method, on the {@link #delegate delegate}, with given value.
      *
      * @param value {@inheritDoc}
      * @throws IOException {@inheritDoc}
-     * @see #getDelegate()
      * @see ByteOutput#write(int)
      */
     @Override
     protected void write(final int value) throws IOException {
-        final ByteOutput delegate = getDelegate();
-        if (delegate == null) {
-            throw new IllegalStateException("delegate has not been set");
-        }
         delegate.write(value);
     }
 
     // -------------------------------------------------------------------------------------------------------- delegate
 
     /**
-     * Returns the current value of {@code delegate} attribute.
-     *
-     * @return current value of {@code delegate} attribute.
-     */
-    protected ByteOutput getDelegate() {
-        return delegate;
-    }
-
-    /**
-     * Replaces the value of {@code delegate} attribute with given.
-     *
-     * @param delegate new value for {@code delegate} attribute.
-     */
-    protected void setDelegate(final ByteOutput delegate) {
-        this.delegate = delegate;
-    }
-
-    // -----------------------------------------------------------------------------------------------------------------
-
-    /**
      * The delegate whose {@link ByteOutput#write(int)} method is invoked via {@link #write(int)} method.
      */
-    private ByteOutput delegate;
+    protected final ByteOutput delegate;
 }

@@ -24,105 +24,79 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.WritableByteChannel;
 
-import static java.nio.ByteBuffer.allocate;
-
 /**
- * A byte output writes bytes to a writable byte channel.
+ * A byte output which writes bytes to a writable byte channel.
+ * <p>
+ * Note that a flushing might be required when the {@code buffer}'s capacity is greater than {@code 1}.
+ * <blockquote><pre>{@code
+ * for (buffer.flip(); buffer.hasRemaining(); ) {
+ *     target.write(buffer);
+ * }
+ * }</pre></blockquote>
  *
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
- * @deprecated Use {@link ChannelByteOutput2}.
+ * @see ChannelByteInput
  */
-@Deprecated
-        //forRemoval = true
 class ChannelByteOutput
-        extends BufferByteOutput {
+        extends AbstractByteOutput<WritableByteChannel> {
 
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * Creates a new instance that writes bytes to the specified channel.
+     * Creates a new instance with specified channel and buffer. The {@code buffer}'s position and limit are
+     * {@link ByteBuffer#clear() reset} so that it starts with full remaining space; only its
+     * {@link ByteBuffer#capacity() capacity} matters.
      *
-     * @param channel the channel to which bytes are written; must not be {@code null}.
-     * @return a new instance.
+     * @param target the channel to which bytes are written; must not be {@code null}.
+     * @param buffer the buffer in which bytes are stored before written to the channel; must not be {@code null} and
+     *               must have a non-zero {@link ByteBuffer#capacity() capacity}.
+     * @throws NullPointerException     if {@code target} or {@code buffer} is {@code null}.
+     * @throws IllegalArgumentException if {@code buffer}'s {@link ByteBuffer#capacity() capacity} is zero.
      */
-    public static ChannelByteOutput of(final WritableByteChannel channel) {
-        if (channel == null) {
-            throw new NullPointerException("channel is null");
-        }
-        return new ChannelByteOutput(allocate(1), channel);
-    }
-
-    // -----------------------------------------------------------------------------------------------------------------
-
-    /**
-     * Creates a new instance with specified buffer and channel.
-     *
-     * @param target  the byte buffer for writing bytes to channel.
-     * @param channel the channel to which bytes are written.
-     * @see #getTarget()
-     * @see #setTarget(ByteBuffer)
-     * @see #getChannel()
-     * @see #setChannel(WritableByteChannel)
-     */
-    public ChannelByteOutput(final ByteBuffer target, final WritableByteChannel channel) {
+    public ChannelByteOutput(final WritableByteChannel target, final ByteBuffer buffer) {
         super(target);
-        this.channel = channel;
+        if (buffer == null) {
+            throw new NullPointerException("buffer is null");
+        }
+        if (buffer.capacity() == 0) {
+            throw new IllegalArgumentException("buffer.capacity is zero");
+        }
+        buffer.clear(); // start with full remaining space
+        this.buffered = new BufferByteOutput(buffer);
     }
 
     // -----------------------------------------------------------------------------------------------------------------
     @Override
     public String toString() {
         return super.toString() + "{"
-               + "channel=" + channel
+               + "buffered=" + buffered
                + "}";
     }
 
     // -----------------------------------------------------------------------------------------------------------------
+
+    /**
+     * {@inheritDoc} The {@code write(int)} method of {@code ChannelByteOutput} class, if required, drains the
+     * {@link #buffered}'s buffer to the {@link #target channel} and writes the value through its
+     * {@link BufferByteOutput#write(int)}.
+     *
+     * @param value {@inheritDoc}
+     * @throws IOException {@inheritDoc}
+     */
     @Override
     public void write(final int value) throws IOException {
-        for (final ByteBuffer target = getTarget(); !target.hasRemaining(); ) {
-            target.flip(); // limit -> position, position -> zero
-            final int written = getChannel().write(target);
-            target.compact();
+        while (!buffered.target.hasRemaining()) {
+            buffered.target.flip(); // limit -> position, position -> zero
+            target.write(buffered.target);
+            buffered.target.compact();
         }
-        super.write(value);
+        buffered.write(value);
     }
 
-    // ---------------------------------------------------------------------------------------------------------- target
-    @Override
-    protected ByteBuffer getTarget() {
-        return super.getTarget();
-    }
-
-    @Override
-    protected void setTarget(final ByteBuffer target) {
-        super.setTarget(target);
-    }
-
-    // --------------------------------------------------------------------------------------------------------- channel
+    // -------------------------------------------------------------------------------------------------------- buffered
 
     /**
-     * Returns the current value of {@code channel} attribute.
-     *
-     * @return the current value of {@code channel} attribute.
+     * The buffer-backed byte output written to before its buffer is drained to the {@link #target channel}.
      */
-    protected WritableByteChannel getChannel() {
-        return channel;
-    }
-
-    /**
-     * Replaces the current value of {@code channel} attribute with specified value.
-     *
-     * @param channel new value for {@code channel} attribute.
-     */
-    protected void setChannel(final WritableByteChannel channel) {
-        this.channel = channel;
-    }
-
-    // -----------------------------------------------------------------------------------------------------------------
-
-    /**
-     * The channel to which bytes are written.
-     */
-    private WritableByteChannel channel;
+    private final BufferByteOutput buffered;
 }

@@ -187,6 +187,15 @@ public interface BitInput {
      */
     char readChar16() throws IOException;
 
+    /**
+     * Reads a {@value java.lang.Character#SIZE}-bit {@code char} value encoded in little endian byte order.
+     *
+     * @return a {@value java.lang.Character#SIZE}-bit {@code char} value encoded in little endian byte order.
+     * @throws IOException if an I/O error occurs.
+     * @see BitOutput#writeChar16Le(char)
+     */
+    char readChar16Le() throws IOException;
+
     // -----------------------------------------------------------------------------------------------------------------
 
     /**

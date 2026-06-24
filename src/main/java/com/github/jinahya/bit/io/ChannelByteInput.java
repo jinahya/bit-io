@@ -25,108 +25,75 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.ReadableByteChannel;
 
-import static java.nio.ByteBuffer.allocate;
-
 /**
- * A byte input reads bytes from a readable byte channel.
+ * A byte input which reads bytes from a readable byte channel. Bytes are read through an internal
+ * {@link java.nio.ByteBuffer} which is recharged from the channel whenever it drains.
  *
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
- * @deprecated Use {@link ChannelByteInput2}.
+ * @see ChannelByteOutput
  */
-@Deprecated
-        // forRemoval = true
 class ChannelByteInput
-        extends BufferByteInput {
+        extends AbstractByteInput<ReadableByteChannel> {
 
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * Creates a new instance that reads bytes from the specified channel.
+     * Creates a new instance with specified channel and buffer. The {@code buffer}'s position and limit are reset so
+     * that it starts <em>drained</em> (no {@link ByteBuffer#hasRemaining() remaining}); only its
+     * {@link ByteBuffer#capacity() capacity} matters.
      *
-     * @param channel the channel from which bytes are read; must not be {@code null}.
-     * @return a new instance.
+     * @param source the channel from which bytes are read; must not be {@code null}.
+     * @param buffer a byte buffer for reading bytes from the {@code channel}; must not be {@code null} and must have a
+     *               non-zero {@link ByteBuffer#capacity() capacity}.
+     * @throws NullPointerException     if {@code source} or {@code buffer} is {@code null}.
+     * @throws IllegalArgumentException if {@code buffer}'s {@link ByteBuffer#capacity() capacity} is zero.
      */
-    public static ChannelByteInput of(final ReadableByteChannel channel) {
-        if (channel == null) {
-            throw new NullPointerException("channel is null");
-        }
-        return new ChannelByteInput((ByteBuffer) allocate(1).position(1), channel); // already drained
-    }
-
-    // -----------------------------------------------------------------------------------------------------------------
-
-    /**
-     * Creates a new instance with specified buffer and channel.
-     *
-     * @param source  the byte buffer for reading bytes from the channel; must not be {@code null}.
-     * @param channel the channel from which bytes are read; {@code null} if it's supposed to be lazily initialized and
-     *                set.
-     * @see #getSource()
-     * @see #setSource(ByteBuffer)
-     * @see #getChannel()
-     * @see #setChannel(ReadableByteChannel)
-     */
-    public ChannelByteInput(final ByteBuffer source, final ReadableByteChannel channel) {
+    public ChannelByteInput(final ReadableByteChannel source, final ByteBuffer buffer) {
         super(source);
-        this.channel = channel;
+        if (buffer == null) {
+            throw new NullPointerException("buffer is null");
+        }
+        if (buffer.capacity() == 0) {
+            throw new IllegalArgumentException("buffer.capacity is zero");
+        }
+        buffer.position(buffer.limit()); // start drained so the first read() charges from the channel
+        this.buffered = new BufferByteInput(buffer);
     }
 
     // -----------------------------------------------------------------------------------------------------------------
     @Override
     public String toString() {
         return super.toString() + "{"
-               + "channel=" + channel
+               + "buffered=" + buffered
                + "}";
     }
 
     // -----------------------------------------------------------------------------------------------------------------
+
+    /**
+     * {@inheritDoc} The {@code read()} method of {@code ChannelByteInput} class, if required, charges the
+     * {@link #buffered}'s buffer from the {@link #source channel} and returns the result of its
+     * {@link BufferByteInput#read()}.
+     *
+     * @return {@inheritDoc}
+     * @throws IOException {@inheritDoc}
+     */
     @Override
     public int read() throws IOException {
-        for (final ByteBuffer source = getSource(); !source.hasRemaining(); ) {
-            source.clear(); // position -> zero, limit -> capacity
-            if (getChannel().read(source) == -1) {
+        while (!buffered.source.hasRemaining()) {
+            buffered.source.clear(); // position -> zero, limit -> capacity
+            if (source.read(buffered.source) == -1) {
                 throw new EOFException("end of channel reached");
             }
-            source.flip(); // limit -> position, position -> zero
+            buffered.source.flip(); // limit -> position, position -> zero
         }
-        return super.read();
+        return buffered.read();
     }
 
-    // ---------------------------------------------------------------------------------------------------------- source
-    @Override
-    protected ByteBuffer getSource() {
-        return super.getSource();
-    }
-
-    @Override
-    protected void setSource(final ByteBuffer source) {
-        super.setSource(source);
-    }
-
-    // --------------------------------------------------------------------------------------------------------- channel
+    // -------------------------------------------------------------------------------------------------------- buffered
 
     /**
-     * Returns the current value of {@code channel} attribute.
-     *
-     * @return the current value of {@code channel} attribute.
+     * The buffer-backed byte input read from after its buffer is charged from the {@link #source channel}.
      */
-    protected ReadableByteChannel getChannel() {
-        return channel;
-    }
-
-    /**
-     * Replaces the current value of {@code channel} attribute with specified value.
-     *
-     * @param channel new value for {@code channel} attribute.
-     */
-    protected void setChannel(final ReadableByteChannel channel) {
-        this.channel = channel;
-    }
-
-    // -----------------------------------------------------------------------------------------------------------------
-
-    /**
-     * The channel from which bytes are read.
-     */
-    private ReadableByteChannel channel;
+    private final BufferByteInput buffered;
 }

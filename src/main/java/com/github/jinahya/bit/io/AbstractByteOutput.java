@@ -21,7 +21,8 @@ package com.github.jinahya.bit.io;
  */
 
 /**
- * An abstract class for implementing {@link ByteOutput} interface.
+ * A skeletal implementation of {@link ByteOutput} that holds the byte target. Subclasses implement
+ * {@link ByteOutput#write(int)} by writing to the {@link #target} field.
  *
  * @param <T> byte target type parameter
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
@@ -35,12 +36,14 @@ abstract class AbstractByteOutput<T>
     /**
      * Creates a new instance with specified byte target.
      *
-     * @param target the underlying byte target to which bytes are written.
-     * @see #getTarget()
-     * @see #setTarget(Object)
+     * @param target the underlying byte target to which bytes are written; must not be {@code null}.
+     * @throws NullPointerException if {@code target} is {@code null}.
      */
     AbstractByteOutput(final T target) {
         super();
+        if (target == null) {
+            throw new NullPointerException("target is null");
+        }
         this.target = target;
     }
 
@@ -61,27 +64,7 @@ abstract class AbstractByteOutput<T>
     // ---------------------------------------------------------------------------------------------------------- target
 
     /**
-     * Returns the current value of {@code target} attribute.
-     *
-     * @return the current value of {@code target} attribute.
-     */
-    protected T getTarget() {
-        return target;
-    }
-
-    /**
-     * Replaces the value of {@code target} attribute with given.
-     *
-     * @param target new value for {@code target} attribute.
-     */
-    protected void setTarget(final T target) {
-        this.target = target;
-    }
-
-    // -----------------------------------------------------------------------------------------------------------------
-
-    /**
      * The byte target to which bytes are written.
      */
-    private T target;
+    protected final T target;
 }

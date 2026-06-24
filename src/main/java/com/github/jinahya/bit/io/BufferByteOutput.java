@@ -22,12 +22,13 @@ package com.github.jinahya.bit.io;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.nio.channels.WritableByteChannel;
-
-import static java.nio.ByteBuffer.allocate;
 
 /**
  * A byte output writes bytes to a {@link ByteBuffer}.
+ *
+ * <p>This class does not buffer or drain; it writes directly to the {@link #target target} buffer. Writing when the
+ * buffer has no {@link ByteBuffer#hasRemaining() remaining} space throws a
+ * {@link java.nio.BufferOverflowException}.</p>
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  * @see BufferByteInput
@@ -38,90 +39,29 @@ public class BufferByteOutput
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * A {@link BufferByteOutput} which, when its target buffer has no remaining space, drains the buffered bytes to an
-     * underlying {@link WritableByteChannel}.
-     */
-    private static class ChannelBufferByteOutput
-            extends BufferByteOutput {
-
-        /**
-         * Creates a new instance with specified target buffer and channel.
-         *
-         * @param target  the byte buffer to which bytes are written.
-         * @param channel the channel to which the {@code target} buffer is drained; must not be {@code null}.
-         */
-        private ChannelBufferByteOutput(final ByteBuffer target, final WritableByteChannel channel) {
-            super(target);
-            if (channel == null) {
-                throw new NullPointerException("channel is null");
-            }
-            this.channel = channel;
-        }
-
-        @Override
-        public void write(final int value) throws IOException {
-            super.write(value);
-            final ByteBuffer target = getTarget();
-            while (!target.hasRemaining()) {
-                target.flip();
-                channel.write(target);
-                target.compact();
-            }
-        }
-
-        private final WritableByteChannel channel;
-    }
-
-    /**
-     * Creates a new instance which writes bytes to the specified writable byte channel. The returned instance keeps an
-     * internal {@code 1}-byte buffer and drains it to the {@code channel} whenever the buffer becomes full.
-     *
-     * @param channel the channel to which bytes are written; must not be {@code null}.
-     * @return a new instance.
-     */
-    public static BufferByteOutput from(final WritableByteChannel channel) {
-        return new ChannelBufferByteOutput(allocate(1), channel);
-    }
-
-    // -----------------------------------------------------------------------------------------------------------------
-
-    /**
      * Creates a new instance which writes bytes to specified byte buffer.
      *
      * @param target the byte buffer to which bytes are written; must not be {@code null}.
+     * @throws NullPointerException if {@code target} is {@code null}.
      */
     public BufferByteOutput(final ByteBuffer target) {
         super(target);
-        if (target == null) {
-            throw new NullPointerException("target is null");
-        }
     }
 
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
      * {@inheritDoc} The {@code write(int)} method of {@code BufferByteOutput} class invokes
-     * {@link ByteBuffer#put(byte)} method, on what {@link #getTarget()} method returns, with specified value casted as
+     * {@link ByteBuffer#put(byte)} method, on the {@link #target target} buffer, with specified value casted as
      * {@code byte}.
      *
      * @param value {@inheritDoc}
-     * @throws IOException {@inheritDoc}
-     * @see #getTarget()
+     * @throws java.nio.BufferOverflowException if the {@link #target target} buffer has no remaining space.
+     * @throws IOException                      {@inheritDoc}
      * @see ByteBuffer#put(byte)
      */
     @Override
     public void write(final int value) throws IOException {
-        getTarget().put((byte) value);
-    }
-
-    // ---------------------------------------------------------------------------------------------------------- target
-    @Override
-    protected ByteBuffer getTarget() {
-        return super.getTarget();
-    }
-
-    @Override
-    protected void setTarget(final ByteBuffer target) {
-        super.setTarget(target);
+        target.put((byte) value);
     }
 }

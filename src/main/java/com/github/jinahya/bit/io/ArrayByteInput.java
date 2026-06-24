@@ -38,12 +38,10 @@ public class ArrayByteInput
      * {@code -1} when the {@code source}'s {@code length} is {@code 0}.
      *
      * @param source a byte array from which bytes are read; must not be {@code null}.
+     * @throws NullPointerException if {@code source} is {@code null}.
      */
     public ArrayByteInput(final byte[] source) {
         super(source);
-        if (source == null) {
-            throw new NullPointerException("source is null");
-        }
         this.index = source.length == 0 ? -1 : 0;
     }
 
@@ -65,8 +63,8 @@ public class ArrayByteInput
 
     /**
      * {@inheritDoc} The {@code read()} method of {@code ArrayByteInput} class returns
-     * {@link #getSource() source}[{@link #getIndex() index}] as an unsigned 8-bit value. The
-     * {@link #setIndex(int) index} attribute, when successfully returns, is increased by {@code 1}.
+     * {@link #source source}[{@link #getIndex() index}] as an unsigned 8-bit value. The {@link #setIndex(int) index}
+     * attribute, when successfully returns, is increased by {@code 1}.
      *
      * @return {@inheritDoc}
      * @throws IOException {@inheritDoc}
@@ -74,21 +72,10 @@ public class ArrayByteInput
     @Override
     public int read() throws IOException {
         try {
-            return getSource()[getIndexAndIncrement()] & 0xFF;
+            return source[getIndexAndIncrement()] & 0xFF;
         } catch (final ArrayIndexOutOfBoundsException aioobe) {
             throw new java.io.EOFException("end of array reached");
         }
-    }
-
-    // ---------------------------------------------------------------------------------------------------------- source
-    @Override
-    protected byte[] getSource() {
-        return super.getSource();
-    }
-
-    @Override
-    protected void setSource(final byte[] source) {
-        super.setSource(source);
     }
 
     // ----------------------------------------------------------------------------------------------------------- index

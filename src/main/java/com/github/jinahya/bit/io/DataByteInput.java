@@ -38,39 +38,24 @@ public class DataByteInput
      * Creates a new instance which reads bytes from specified data input.
      *
      * @param source the data input from which bytes are read; must not be {@code null}.
+     * @throws NullPointerException if {@code source} is {@code null}.
      */
     public DataByteInput(final DataInput source) {
         super(source);
-        if (source == null) {
-            throw new NullPointerException("source is null");
-        }
     }
 
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
      * {@inheritDoc} The {@code read()} method of {@code DataByteInput} class invokes
-     * {@link DataInput#readUnsignedByte()} method, on what {@link #getSource()} method returns, and returns the
-     * result.
+     * {@link DataInput#readUnsignedByte()} method, on the {@link #source source}, and returns the result.
      *
      * @return {@inheritDoc}
      * @throws IOException {@inheritDoc}
-     * @see #getSource()
      * @see DataInput#readUnsignedByte()
      */
     @Override
     public int read() throws IOException {
-        return getSource().readUnsignedByte();
-    }
-
-    // ---------------------------------------------------------------------------------------------------------- source
-    @Override
-    protected DataInput getSource() {
-        return super.getSource();
-    }
-
-    @Override
-    protected void setSource(final DataInput source) {
-        super.setSource(source);
+        return source.readUnsignedByte();
     }
 }

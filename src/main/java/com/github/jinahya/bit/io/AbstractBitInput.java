@@ -200,6 +200,11 @@ public abstract class AbstractBitInput
         return readChar(Character.SIZE);
     }
 
+    @Override
+    public char readChar16Le() throws IOException {
+        return (char) readShort16Le();
+    }
+
     // -----------------------------------------------------------------------------------------------------------------
     @Override
     public void skip(int bits) throws IOException {
@@ -232,6 +237,18 @@ public abstract class AbstractBitInput
             bits += Byte.SIZE;
         }
         return bits;
+    }
+
+    // ----------------------------------------------------------------------------------------------------------- count
+
+    /**
+     * Returns the number of bytes read so far.
+     *
+     * @return the number of bytes read so far.
+     * @see #read()
+     */
+    public long getCount() {
+        return count;
     }
 
     // -----------------------------------------------------------------------------------------------------------------

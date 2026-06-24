@@ -21,10 +21,7 @@ package com.github.jinahya.bit.io;
  */
 
 import org.jboss.weld.junit5.WeldJunit5Extension;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 /**
  * A class for unit-testing {@link DefaultBitInput} class.
@@ -32,7 +29,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  * @see DefaultBitOutputTest
  */
-@ExtendWith({MockitoExtension.class, WeldJunit5Extension.class})
+@ExtendWith({WeldJunit5Extension.class})
 public class DefaultBitInputTest
         extends AbstractBitInputTest<DefaultBitInput> {
 
@@ -44,29 +41,4 @@ public class DefaultBitInputTest
     DefaultBitInputTest() {
         super(DefaultBitInput.class);
     }
-
-    // -----------------------------------------------------------------------------------------------------------------
-
-    /**
-     * Tests {@link DefaultBitInput#getDelegate()}.
-     */
-    @Test
-    public void testGetDelegate() {
-        final ByteInput delegate = bitInput.getDelegate();
-    }
-
-    // -----------------------------------------------------------------------------------------------------------------
-
-    /**
-     * Tests {@link DefaultBitInput#setDelegate(ByteInput)}.
-     */
-    @Test
-    public void testSetDelegate() {
-        bitInput.setDelegate(null);
-        bitInput.setDelegate(byteInputMock);
-    }
-
-    // -----------------------------------------------------------------------------------------------------------------
-    @Mock
-    private ByteInput byteInputMock;
 }

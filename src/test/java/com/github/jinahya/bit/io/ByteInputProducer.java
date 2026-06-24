@@ -39,7 +39,7 @@ class ByteInputProducer {
         return new ArrayByteInput(new byte[1]) {
             @Override
             public int read() throws IOException {
-                if (getIndex() == getSource().length) {
+                if (getIndex() == source.length) {
                     setIndex(0);
                 }
                 return super.read();
@@ -57,8 +57,8 @@ class ByteInputProducer {
         return new BufferByteInput(allocate(1)) {
             @Override
             public int read() throws IOException {
-                if (!getSource().hasRemaining()) {
-                    getSource().clear(); // position -> zero, limit -> capacity
+                if (!source.hasRemaining()) {
+                    source.clear(); // position -> zero, limit -> capacity
                 }
                 return super.read();
             }
@@ -91,11 +91,11 @@ class ByteInputProducer {
 
     // --------------------------------------------------------------------------------------------------------- channel
     @Produces
-    ChannelByteInput2 produceChannelByteInput(final InjectionPoint injectionPoint) {
-        return ChannelByteInput2.of(new WhiteByteChannel());
+    ChannelByteInput produceChannelByteInput(final InjectionPoint injectionPoint) {
+        return new ChannelByteInput(new WhiteByteChannel(), allocate(1));
     }
 
-    void disposeChannelByteInput(@Disposes final ChannelByteInput2 byteInput) {
+    void disposeChannelByteInput(@Disposes final ChannelByteInput byteInput) {
         // does nothing.
     }
 }

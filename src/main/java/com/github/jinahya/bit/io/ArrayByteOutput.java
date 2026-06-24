@@ -23,7 +23,7 @@ package com.github.jinahya.bit.io;
 import java.io.IOException;
 
 /**
- * A byte output writes byte to an array of bytes.
+ * A byte output writes bytes to an array of bytes.
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  * @see ArrayByteInput
@@ -38,12 +38,10 @@ public class ArrayByteOutput
      * when the {@code target}'s {@code length} is {@code 0}.
      *
      * @param target a byte array on which bytes are set; must not be {@code null}.
+     * @throws NullPointerException if {@code target} is {@code null}.
      */
     public ArrayByteOutput(final byte[] target) {
         super(target);
-        if (target == null) {
-            throw new NullPointerException("target is null");
-        }
         this.index = target.length == 0 ? -1 : 0;
     }
 
@@ -65,8 +63,8 @@ public class ArrayByteOutput
 
     /**
      * {@inheritDoc} The {@code write(int)} method of {@code ArrayByteOutput} class sets
-     * {@link #getTarget() target}[{@link #getIndex() index}] with specified {@code value}. The
-     * {@link #setIndex(int) index} attribute, when successfully returns, is increased by {@code 1}.
+     * {@link #target target}[{@link #getIndex() index}] with specified {@code value}. The {@link #setIndex(int) index}
+     * attribute, when successfully returns, is increased by {@code 1}.
      *
      * @param value {@inheritDoc}
      * @throws IOException {@inheritDoc}
@@ -74,21 +72,10 @@ public class ArrayByteOutput
     @Override
     public void write(final int value) throws IOException {
         try {
-            getTarget()[getIndexAndIncrement()] = (byte) value;
+            target[getIndexAndIncrement()] = (byte) value;
         } catch (final ArrayIndexOutOfBoundsException aioobe) {
             throw new IOException("array is full");
         }
-    }
-
-    // ---------------------------------------------------------------------------------------------------------- target
-    @Override
-    protected byte[] getTarget() {
-        return super.getTarget();
-    }
-
-    @Override
-    protected void setTarget(final byte[] target) {
-        super.setTarget(target);
     }
 
     // ----------------------------------------------------------------------------------------------------------- index

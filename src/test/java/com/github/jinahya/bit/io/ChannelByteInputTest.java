@@ -25,7 +25,8 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import java.nio.channels.ReadableByteChannel;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static java.nio.ByteBuffer.allocate;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * A class for unit-testing {@link ChannelByteInput} class.
@@ -33,19 +34,30 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  * @see ChannelByteOutputTest
  */
-public class ChannelByteInputTest {
+public class ChannelByteInputTest
+        extends AbstractByteInputTest<ChannelByteInput, ReadableByteChannel> {
+
+    // -----------------------------------------------------------------------------------------------------------------
+    ChannelByteInputTest() {
+        super(ChannelByteInput.class, ReadableByteChannel.class);
+    }
 
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * Tests {@link ChannelByteInput#of(ReadableByteChannel)} method.
+     * Tests {@link ChannelByteInput#read()} reading from a channel.
      *
      * @throws IOException if an I/O error occurs.
      */
     @Test
-    public void testOf() throws IOException {
-        final ChannelByteInput byteInput = ChannelByteInput.of(new WhiteByteChannel());
+    public void readFromChannel() throws IOException {
+        final ChannelByteInput byteInput = new ChannelByteInput(new WhiteByteChannel(), allocate(1));
         byteInput.read();
-        assertNotNull(byteInput.getSource());
+    }
+
+    @Test
+    public void constructorRejectsZeroCapacityBuffer() {
+        assertThrows(IllegalArgumentException.class,
+                     () -> new ChannelByteInput(new WhiteByteChannel(), allocate(0)));
     }
 }

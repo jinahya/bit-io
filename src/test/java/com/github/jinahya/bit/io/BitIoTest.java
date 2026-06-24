@@ -246,6 +246,19 @@ class BitIoTest {
         assertEquals(expected, actual);
     }
 
+    @MethodSource({"com.github.jinahya.bit.io.ByteIoSource#sourceByteIo"})
+    @ParameterizedTest
+    void testChar16Le(@ConvertWith(BitOutputConverter.class) final BitOutput output,
+                      @ConvertWith(BitInputConverter.class) final BitInput input)
+            throws IOException {
+        final char expected = (char) current().nextInt(0x00, Character.MAX_VALUE);
+        output.writeChar16Le(expected);
+        assertEquals(0L, output.align(Byte.BYTES));
+        final char actual = input.readChar16Le();
+        assertEquals(0L, input.align(Byte.BYTES));
+        assertEquals(expected, actual);
+    }
+
     // ------------------------------------------------------------------------------------------------------------ skip
 
     /**

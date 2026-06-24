@@ -196,6 +196,11 @@ public abstract class AbstractBitOutput
         writeChar(Character.SIZE, value);
     }
 
+    @Override
+    public void writeChar16Le(final char value) throws IOException {
+        writeShort16Le((short) value);
+    }
+
     // -----------------------------------------------------------------------------------------------------------------
     @Override
     public void skip(int bits) throws IOException {

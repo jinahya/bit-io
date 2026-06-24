@@ -36,13 +36,9 @@ class ByteInputProducer {
     // ----------------------------------------------------------------------------------------------------------- array
     @Produces
     ArrayByteInput produceArrayByteInput(final InjectionPoint injectionPoint) {
-        return new ArrayByteInput(null) {
+        return new ArrayByteInput(new byte[1]) {
             @Override
             public int read() throws IOException {
-                if (getSource() == null) {
-                    setSource(new byte[1]);
-                    setIndex(getSource().length);
-                }
                 if (getIndex() == getSource().length) {
                     setIndex(0);
                 }
@@ -58,13 +54,9 @@ class ByteInputProducer {
     // ---------------------------------------------------------------------------------------------------------- buffer
     @Produces
     BufferByteInput produceBufferByteInput(final InjectionPoint injectionPoint) {
-        return new BufferByteInput(null) {
+        return new BufferByteInput(allocate(1)) {
             @Override
             public int read() throws IOException {
-                if (getSource() == null) {
-                    setSource(allocate(1));
-                    getSource().position(getSource().limit());
-                }
                 if (!getSource().hasRemaining()) {
                     getSource().clear(); // position -> zero, limit -> capacity
                 }

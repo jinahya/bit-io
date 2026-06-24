@@ -37,11 +37,13 @@ public class DataByteOutput
     /**
      * Creates a new instance which writes bytes to specified data output.
      *
-     * @param target the data output to which bytes are written; {@code null} if it is supposed to be lazily initialized
-     *               and set.
+     * @param target the data output to which bytes are written; must not be {@code null}.
      */
     public DataByteOutput(final DataOutput target) {
         super(target);
+        if (target == null) {
+            throw new NullPointerException("target is null");
+        }
     }
 
     // -----------------------------------------------------------------------------------------------------------------

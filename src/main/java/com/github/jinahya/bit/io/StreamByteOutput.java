@@ -37,13 +37,15 @@ public class StreamByteOutput
     /**
      * Creates a new instance which writes bytes to specified output stream.
      *
-     * @param target the output stream to which bytes are written; {@code null} if it's supposed to be lazily
-     *               initialized and set.
+     * @param target the output stream to which bytes are written; must not be {@code null}.
      * @see #getTarget()
      * @see #setTarget(OutputStream)
      */
     public StreamByteOutput(final OutputStream target) {
         super(target);
+        if (target == null) {
+            throw new NullPointerException("target is null");
+        }
     }
 
     // -----------------------------------------------------------------------------------------------------------------

@@ -35,8 +35,7 @@ abstract class AbstractByteInput<T>
     /**
      * Creates a new instance with specified byte source.
      *
-     * @param source the underlying byte source from which bytes are read; {@code null} if it is intended to be lazily
-     *               initialized and set.
+     * @param source the underlying byte source from which bytes are read.
      * @see #getSource()
      * @see #setSource(Object)
      */

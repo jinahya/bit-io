@@ -46,13 +46,9 @@ final class ByteIoSource {
     // -----------------------------------------------------------------------------------------------------------------
     static Stream<Arguments> sourceByteIoArray() {
         final byte[][] holder = new byte[1][];
-        final ByteOutput output = new ArrayByteOutput(null) {
+        final ByteOutput output = new ArrayByteOutput(holder[0] = new byte[1]) {
             @Override
             public void write(int value) throws IOException {
-                if (getTarget() == null) {
-                    setTarget(holder[0] = new byte[1]);
-                    setIndex(0);
-                }
                 final byte[] target = getTarget();
                 if (getIndex() == target.length) {
                     setTarget(copyOf(target, target.length << 1));
@@ -61,12 +57,14 @@ final class ByteIoSource {
                 super.write(value);
             }
         };
-        final ByteInput input = new ArrayByteInput(null) {
+        final ByteInput input = new ArrayByteInput(new byte[0]) {
+            private boolean sourced;
             @Override
             public int read() throws IOException {
-                if (getSource() == null) {
+                if (!sourced) {
                     setSource(ofNullable(holder[0]).orElseGet(() -> new byte[0]));
                     setIndex(0);
+                    sourced = true;
                 }
                 return super.read();
             }
@@ -76,12 +74,9 @@ final class ByteIoSource {
 
     static Stream<Arguments> sourceByteIoBuffer() {
         final ByteBuffer[] holder = new ByteBuffer[1];
-        final ByteOutput output = new BufferByteOutput(null) {
+        final ByteOutput output = new BufferByteOutput(holder[0] = allocate(1)) {
             @Override
             public void write(int value) throws IOException {
-                if (getTarget() == null) {
-                    setTarget(holder[0] = allocate(1));
-                }
                 final ByteBuffer target = getTarget();
                 if (!target.hasRemaining()) {
                     final ByteBuffer bigger = allocate(target.capacity() << 1);
@@ -100,12 +95,14 @@ final class ByteIoSource {
                 super.write(value);
             }
         };
-        final ByteInput input = new BufferByteInput(null) {
+        final ByteInput input = new BufferByteInput(allocate(0)) {
+            private boolean sourced;
             @Override
             public int read() throws IOException {
-                if (getSource() == null) {
+                if (!sourced) {
                     setSource(ofNullable(holder[0]).orElseGet(() -> allocate(0)));
                     ((Buffer) getSource()).flip(); // limit -> position, position -> zero
+                    sourced = true;
                 }
                 return super.read();
             }
@@ -115,20 +112,14 @@ final class ByteIoSource {
 
     static Stream<Arguments> sourceByteIoData() {
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        final ByteOutput output = new DataByteOutput(null) {
-            @Override
-            public void write(final int value) throws IOException {
-                if (getTarget() == null) {
-                    setTarget(new DataOutputStream(baos));
-                }
-                super.write(value);
-            }
-        };
-        final ByteInput input = new DataByteInput(null) {
+        final ByteOutput output = new DataByteOutput(new DataOutputStream(baos));
+        final ByteInput input = new DataByteInput(new DataInputStream(new ByteArrayInputStream(new byte[0]))) {
+            private boolean sourced;
             @Override
             public int read() throws IOException {
-                if (getSource() == null) {
+                if (!sourced) {
                     setSource(new DataInputStream(new ByteArrayInputStream(baos.toByteArray())));
+                    sourced = true;
                 }
                 return super.read();
             }
@@ -138,20 +129,14 @@ final class ByteIoSource {
 
     static Stream<Arguments> sourceByteIoStream() {
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        final ByteOutput output = new StreamByteOutput(null) {
-            @Override
-            public void write(final int value) throws IOException {
-                if (getTarget() == null) {
-                    setTarget(baos);
-                }
-                super.write(value);
-            }
-        };
-        final ByteInput input = new StreamByteInput(null) {
+        final ByteOutput output = new StreamByteOutput(baos);
+        final ByteInput input = new StreamByteInput(new ByteArrayInputStream(new byte[0])) {
+            private boolean sourced;
             @Override
             public int read() throws IOException {
-                if (getSource() == null) {
+                if (!sourced) {
                     setSource(new ByteArrayInputStream(baos.toByteArray()));
+                    sourced = true;
                 }
                 return super.read();
             }

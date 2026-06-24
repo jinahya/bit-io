@@ -57,15 +57,7 @@ class ChannelByteOutput2
         if (channel == null) {
             throw new NullPointerException("channel is null");
         }
-        return new ChannelByteOutput2(channel, null) {
-            @Override
-            public void write(final int value) throws IOException {
-                if (getBuffer() == null) {
-                    setBuffer(allocate(1));
-                }
-                super.write(value);
-            }
-        };
+        return new ChannelByteOutput2(channel, allocate(1));
     }
 
     // -----------------------------------------------------------------------------------------------------------------

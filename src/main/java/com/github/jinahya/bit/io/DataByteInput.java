@@ -37,11 +37,13 @@ public class DataByteInput
     /**
      * Creates a new instance which reads bytes from specified data input.
      *
-     * @param source the data input from which bytes are read; {@code null} if it's supposed to be lazily initialized
-     *               and set
+     * @param source the data input from which bytes are read; must not be {@code null}.
      */
     public DataByteInput(final DataInput source) {
         super(source);
+        if (source == null) {
+            throw new NullPointerException("source is null");
+        }
     }
 
     // -----------------------------------------------------------------------------------------------------------------

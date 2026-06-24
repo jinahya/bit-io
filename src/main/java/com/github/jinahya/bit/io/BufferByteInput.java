@@ -89,11 +89,13 @@ public class BufferByteInput
     /**
      * Creates a new instance which reads bytes from specified byte buffer.
      *
-     * @param source the byte buffer from which bytes are read; {@code null} if it's supposed to be lazily initialized
-     *               and set.
+     * @param source the byte buffer from which bytes are read; must not be {@code null}.
      */
     public BufferByteInput(final ByteBuffer source) {
         super(source);
+        if (source == null) {
+            throw new NullPointerException("source is null");
+        }
     }
 
     // -----------------------------------------------------------------------------------------------------------------

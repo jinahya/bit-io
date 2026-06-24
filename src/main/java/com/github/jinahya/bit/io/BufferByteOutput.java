@@ -88,11 +88,13 @@ public class BufferByteOutput
     /**
      * Creates a new instance which writes bytes to specified byte buffer.
      *
-     * @param target the byte buffer to which bytes are written; {@code null} if it's supposed to be lazily initialized
-     *               and set.
+     * @param target the byte buffer to which bytes are written; must not be {@code null}.
      */
     public BufferByteOutput(final ByteBuffer target) {
         super(target);
+        if (target == null) {
+            throw new NullPointerException("target is null");
+        }
     }
 
     // -----------------------------------------------------------------------------------------------------------------

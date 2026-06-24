@@ -43,13 +43,9 @@ class ByteOutputProducer {
      */
     @Produces
     ArrayByteOutput produceArrayByteOutput(final InjectionPoint injectionPoint) {
-        return new ArrayByteOutput(null) {
+        return new ArrayByteOutput(new byte[1]) {
             @Override
             public void write(final int value) throws IOException {
-                if (getTarget() == null) {
-                    setTarget(new byte[1]);
-                    setIndex(0);
-                }
                 super.write(value);
                 if (getIndex() == getTarget().length) {
                     setIndex(0);
@@ -69,12 +65,9 @@ class ByteOutputProducer {
     // -----------------------------------------------------------------------------------------------------------buffer
     @Produces
     BufferByteOutput produceBufferByteOutput(final InjectionPoint injectionPoint) {
-        return new BufferByteOutput(null) {
+        return new BufferByteOutput(allocate(1)) { // position: zero, limit: capacity
             @Override
             public void write(final int value) throws IOException {
-                if (getTarget() == null) {
-                    setTarget(allocate(1)); // position: zero, limit: capacity
-                }
                 super.write(value);
                 if (!getTarget().hasRemaining()) {
                     getTarget().clear();

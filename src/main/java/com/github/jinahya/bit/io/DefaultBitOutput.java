@@ -36,11 +36,13 @@ public class DefaultBitOutput
     /**
      * Creates new instance with specified delegate.
      *
-     * @param delegate the delegate to which bytes are written; {@code null} if it is intended to be lazily initialized
-     *                 and set.
+     * @param delegate the delegate to which bytes are written; must not be {@code null}.
      */
     public DefaultBitOutput(final ByteOutput delegate) {
         super();
+        if (delegate == null) {
+            throw new NullPointerException("delegate is null");
+        }
         this.delegate = delegate;
     }
 

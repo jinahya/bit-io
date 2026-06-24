@@ -38,13 +38,15 @@ public class StreamByteInput
     /**
      * Creates a new instance that reads bytes from the specified input stream.
      *
-     * @param source the input stream from which bytes are read; {@code null} if it's supposed to be lazily initialized
-     *               and set.
+     * @param source the input stream from which bytes are read; must not be {@code null}.
      * @see #getSource()
      * @see #setSource(InputStream)
      */
     public StreamByteInput(final InputStream source) {
         super(source);
+        if (source == null) {
+            throw new NullPointerException("source is null");
+        }
     }
 
     // -----------------------------------------------------------------------------------------------------------------

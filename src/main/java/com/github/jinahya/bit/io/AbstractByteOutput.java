@@ -35,8 +35,7 @@ abstract class AbstractByteOutput<T>
     /**
      * Creates a new instance with specified byte target.
      *
-     * @param target the underlying byte target to which bytes are written; {@code null} if it is supposed to be lazily
-     *               initialized and set.
+     * @param target the underlying byte target to which bytes are written.
      * @see #getTarget()
      * @see #setTarget(Object)
      */

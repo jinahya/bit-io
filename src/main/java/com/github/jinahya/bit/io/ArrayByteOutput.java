@@ -35,14 +35,16 @@ public class ArrayByteOutput
 
     /**
      * Creates a new instance with given parameters. The {@code index} attribute will be set as {@code 0}, or {@code -1}
-     * when {@code target} argument is {@code null} or its {@code length} is {@code 0}.
+     * when the {@code target}'s {@code length} is {@code 0}.
      *
-     * @param target a byte array on which bytes are set; {@code null} if it's supposed to be lazily initialized and
-     *               set.
+     * @param target a byte array on which bytes are set; must not be {@code null}.
      */
     public ArrayByteOutput(final byte[] target) {
         super(target);
-        this.index = target == null || target.length == 0 ? -1 : 0;
+        if (target == null) {
+            throw new NullPointerException("target is null");
+        }
+        this.index = target.length == 0 ? -1 : 0;
     }
 
     // -----------------------------------------------------------------------------------------------------------------

@@ -49,15 +49,7 @@ class ChannelByteInput2
         if (channel == null) {
             throw new NullPointerException("channel is null");
         }
-        return new ChannelByteInput2(channel, null) {
-            @Override
-            public int read() throws IOException {
-                if (getBuffer() == null) {
-                    setBuffer((ByteBuffer) allocate(1).position(1));
-                }
-                return super.read();
-            }
-        };
+        return new ChannelByteInput2(channel, (ByteBuffer) allocate(1).position(1));
     }
 
     // -----------------------------------------------------------------------------------------------------------------

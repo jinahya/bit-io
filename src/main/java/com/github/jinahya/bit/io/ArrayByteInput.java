@@ -35,14 +35,16 @@ public class ArrayByteInput
 
     /**
      * Creates a new instance with given arguments. The {@link #getIndex() index} attribute will be set as {@code 0}, or
-     * {@code -1} when {@code source} is {@code null} or its {@code length} is {@code 0}.
+     * {@code -1} when the {@code source}'s {@code length} is {@code 0}.
      *
-     * @param source a byte array from which bytes are read; {@code null} if it's supposed to be lazily initialized and
-     *               set.
+     * @param source a byte array from which bytes are read; must not be {@code null}.
      */
     public ArrayByteInput(final byte[] source) {
         super(source);
-        this.index = source == null || source.length == 0 ? -1 : 0;
+        if (source == null) {
+            throw new NullPointerException("source is null");
+        }
+        this.index = source.length == 0 ? -1 : 0;
     }
 
     // -----------------------------------------------------------------------------------------------------------------

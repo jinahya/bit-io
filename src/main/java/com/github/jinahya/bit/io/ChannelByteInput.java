@@ -50,15 +50,7 @@ class ChannelByteInput
         if (channel == null) {
             throw new NullPointerException("channel is null");
         }
-        return new ChannelByteInput(null, channel) {
-            @Override
-            public int read() throws IOException {
-                if (getSource() == null) {
-                    setSource((ByteBuffer) allocate(1).position(1)); // already drained
-                }
-                return super.read();
-            }
-        };
+        return new ChannelByteInput((ByteBuffer) allocate(1).position(1), channel); // already drained
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -66,8 +58,7 @@ class ChannelByteInput
     /**
      * Creates a new instance with specified buffer and channel.
      *
-     * @param source  the byte buffer for reading bytes from the channel; {@code null} if it's supposed to be lazily
-     *                initialized and set.
+     * @param source  the byte buffer for reading bytes from the channel; must not be {@code null}.
      * @param channel the channel from which bytes are read; {@code null} if it's supposed to be lazily initialized and
      *                set.
      * @see #getSource()

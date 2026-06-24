@@ -36,11 +36,13 @@ public class DefaultBitInput
     /**
      * Creates a new instance with specified delegate.
      *
-     * @param delegate the delegate from which bytes are read; may be {@code null} if it is intended to be lazily
-     *                 initialized and set.
+     * @param delegate the delegate from which bytes are read; must not be {@code null}.
      */
     public DefaultBitInput(final ByteInput delegate) {
         super();
+        if (delegate == null) {
+            throw new NullPointerException("delegate is null");
+        }
         this.delegate = delegate;
     }
 

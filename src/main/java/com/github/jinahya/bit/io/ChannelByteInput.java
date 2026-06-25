@@ -48,7 +48,7 @@ class ChannelByteInput
      * @throws NullPointerException     if {@code source} or {@code buffer} is {@code null}.
      * @throws IllegalArgumentException if {@code buffer}'s {@link ByteBuffer#capacity() capacity} is zero.
      */
-    public ChannelByteInput(final ReadableByteChannel source, final ByteBuffer buffer) {
+    ChannelByteInput(final ReadableByteChannel source, final ByteBuffer buffer) {
         super(source);
         if (buffer == null) {
             throw new NullPointerException("buffer is null");
@@ -80,12 +80,13 @@ class ChannelByteInput
      */
     @Override
     public int read() throws IOException {
-        while (!buffered.source.hasRemaining()) {
-            buffered.source.clear(); // position -> zero, limit -> capacity
-            if (source.read(buffered.source) == -1) {
-                throw new EOFException("end of channel reached");
+        if (!buffered.source.hasRemaining()) {
+            for (buffered.source.clear(); buffered.source.position() == 0; ) {
+                if (source.read(buffered.source) == -1) {
+                    throw new EOFException("end of channel reached");
+                }
             }
-            buffered.source.flip(); // limit -> position, position -> zero
+            buffered.source.flip();
         }
         return buffered.read();
     }

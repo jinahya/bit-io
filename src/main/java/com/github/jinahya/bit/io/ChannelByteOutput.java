@@ -53,7 +53,7 @@ class ChannelByteOutput
      * @throws NullPointerException     if {@code target} or {@code buffer} is {@code null}.
      * @throws IllegalArgumentException if {@code buffer}'s {@link ByteBuffer#capacity() capacity} is zero.
      */
-    public ChannelByteOutput(final WritableByteChannel target, final ByteBuffer buffer) {
+    ChannelByteOutput(final WritableByteChannel target, final ByteBuffer buffer) {
         super(target);
         if (buffer == null) {
             throw new NullPointerException("buffer is null");
@@ -85,9 +85,11 @@ class ChannelByteOutput
      */
     @Override
     public void write(final int value) throws IOException {
-        while (!buffered.target.hasRemaining()) {
-            buffered.target.flip(); // limit -> position, position -> zero
-            target.write(buffered.target);
+        if (!buffered.target.hasRemaining()) {
+            buffered.target.flip();
+            do {
+                target.write(buffered.target);
+            } while (buffered.target.position() == 0);
             buffered.target.compact();
         }
         buffered.write(value);

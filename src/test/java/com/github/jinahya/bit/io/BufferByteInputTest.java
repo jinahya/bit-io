@@ -20,7 +20,18 @@ package com.github.jinahya.bit.io;
  * #L%
  */
 
+import org.junit.jupiter.api.Test;
+
+import java.io.ByteArrayInputStream;
+import java.io.EOFException;
+import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
+import java.util.concurrent.ThreadLocalRandom;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * A class for unit-testing {@link BufferByteInput} class.
@@ -38,5 +49,30 @@ class BufferByteInputTest
      */
     BufferByteInputTest() {
         super(BufferByteInput.class, ByteBuffer.class);
+    }
+
+    // ------------------------------------------------------------------------------------------------------------ from
+
+    @Test
+    void from_NullPointerException_NullChannel() {
+        assertThrows(NullPointerException.class, () -> BufferByteInput.from(null));
+    }
+
+    @Test
+    void from_ReadsAllBytes_FromChannel() throws IOException {
+        final byte[] bytes = new byte[ThreadLocalRandom.current().nextInt(1, 1024)];
+        ThreadLocalRandom.current().nextBytes(bytes);
+        final ReadableByteChannel channel = Channels.newChannel(new ByteArrayInputStream(bytes));
+        final ByteInput input = BufferByteInput.from(channel);
+        for (final byte b : bytes) {
+            assertEquals(b & 0xFF, input.read());
+        }
+    }
+
+    @Test
+    void from_EOFException_WhenChannelExhausted() throws IOException {
+        final ReadableByteChannel channel = Channels.newChannel(new ByteArrayInputStream(new byte[0]));
+        final ByteInput input = BufferByteInput.from(channel);
+        assertThrows(EOFException.class, input::read);
     }
 }

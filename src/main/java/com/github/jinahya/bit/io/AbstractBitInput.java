@@ -22,7 +22,6 @@ package com.github.jinahya.bit.io;
 
 import java.io.IOException;
 
-import static com.github.jinahya.bit.io.BitIoConstants.mask;
 import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeByte;
 import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeChar;
 import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeInt;
@@ -85,7 +84,7 @@ public abstract class AbstractBitInput
             return (unsigned8(available) << required) | unsigned8(required);
         }
         available -= size;
-        return (octet >> available) & mask(size);
+        return (octet >> available) & ((1 << size) - 1);
     }
 
     // --------------------------------------------------------------------------------------------------------- boolean
@@ -95,6 +94,13 @@ public abstract class AbstractBitInput
     }
 
     // ------------------------------------------------------------------------------------------------------------ byte
+    private byte readByte_(final boolean unsigned, final int size) throws IOException {
+        // the following assertions are equivalent to requireValidSizeByte(unsigned, size)
+        assert size > 0;
+        assert size <= Byte.SIZE - (unsigned ? 1 : 0);
+        return (byte) readInt(unsigned, size);
+    }
+
     @Override
     public byte readByte(final boolean unsigned, final int size) throws IOException {
         return (byte) readInt(unsigned, requireValidSizeByte(unsigned, size));

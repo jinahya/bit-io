@@ -20,7 +20,17 @@ package com.github.jinahya.bit.io;
  * #L%
  */
 
+import org.junit.jupiter.api.Test;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.nio.channels.Channels;
+import java.nio.channels.WritableByteChannel;
+import java.util.concurrent.ThreadLocalRandom;
+
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * A class for unit-testing of {@link BufferByteOutput} class.
@@ -38,5 +48,32 @@ class BufferByteOutputTest
      */
     BufferByteOutputTest() {
         super(BufferByteOutput.class, ByteBuffer.class);
+    }
+
+    // ------------------------------------------------------------------------------------------------------------ from
+
+    @Test
+    void from_NullPointerException_NullChannel() {
+        assertThrows(NullPointerException.class, () -> BufferByteOutput.from(null));
+    }
+
+    /**
+     * Verifies that {@link BufferByteOutput#from(WritableByteChannel)} is write-through: every written byte reaches the
+     * channel immediately, with no flushing required.
+     *
+     * @throws IOException if an I/O error occurs.
+     */
+    @Test
+    void from_WritesThrough_ToChannel() throws IOException {
+        final byte[] bytes = new byte[ThreadLocalRandom.current().nextInt(1, 1024)];
+        ThreadLocalRandom.current().nextBytes(bytes);
+        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        final WritableByteChannel channel = Channels.newChannel(baos);
+        final ByteOutput output = BufferByteOutput.from(channel);
+        for (final byte b : bytes) {
+            output.write(b & 0xFF);
+        }
+        // write-through: all bytes are already in the stream, without any flush/close
+        assertArrayEquals(bytes, baos.toByteArray());
     }
 }

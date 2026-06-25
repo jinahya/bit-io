@@ -22,7 +22,6 @@ package com.github.jinahya.bit.io;
 
 import java.io.IOException;
 
-import static com.github.jinahya.bit.io.BitIoConstants.mask;
 import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeByte;
 import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeChar;
 import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeInt;
@@ -77,7 +76,7 @@ public abstract class AbstractBitOutput
             return;
         }
         octet <<= size;
-        octet |= value & mask(size);
+        octet |= value & ((1 << size) - 1);
         available -= size;
         if (available == 0) {
             assert octet >= 0 && octet < 256;

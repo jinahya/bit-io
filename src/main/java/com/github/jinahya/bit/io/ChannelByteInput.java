@@ -83,8 +83,12 @@ class ChannelByteInput
     public int read() throws IOException {
         if (!buffered.source.hasRemaining()) {
             for (buffered.source.clear(); buffered.source.position() == 0; ) {
-                if (source.read(buffered.source) == -1) {
+                final int read = source.read(buffered.source);
+                if (read == -1) {
                     throw new EOFException("end of channel reached");
+                }
+                if (read == 0) {
+                    throw new IOException("channel read made no progress");
                 }
             }
             buffered.source.flip();

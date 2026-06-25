@@ -28,7 +28,6 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
-import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.channels.Pipe;
 import java.util.stream.Stream;
@@ -83,25 +82,16 @@ final class ByteIoSource {
     }
 
     // -----------------------------------------------------------------------------------------------------------------
+
+    /**
+     * The output and the input are wired to the two ends of an NIO {@link Pipe}. The output is <em>write-through</em>
+     * ({@link BufferByteOutput#from(java.nio.channels.WritableByteChannel)}), so every byte is drained to the sink as it
+     * is written and nothing is ever stranded in an intermediate buffer — which keeps the single-threaded write-then-
+     * read pattern (including multi-cycle tests) from blocking.
+     */
     static Stream<Arguments> sourceByteIoChannel() throws IOException {
         final Pipe pipe = Pipe.open();
-        final ByteBuffer obuffer = allocate(1);
-        final ChannelByteOutput output = new ChannelByteOutput(pipe.sink(), obuffer);
-        final ByteInput input = new ChannelByteInput(pipe.source(), allocate(1)) {
-            private boolean flushed;
-
-            @Override
-            public int read() throws IOException {
-                if (!flushed) { // drain the output's 1-byte buffer to the channel before reading it back
-                    for (((Buffer) obuffer).flip(); obuffer.hasRemaining(); ) {
-                        pipe.sink().write(obuffer);
-                    }
-                    flushed = true;
-                }
-                return super.read();
-            }
-        };
-        return Stream.of(Arguments.of(output, input));
+        return Stream.of(Arguments.of(BufferByteOutput.from(pipe.sink()), BufferByteInput.from(pipe.source())));
     }
 
     // -----------------------------------------------------------------------------------------------------------------

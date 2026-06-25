@@ -30,7 +30,7 @@ import java.nio.channels.ReadableByteChannel;
  *
  * <p>This class reads directly from the {@link #source source} buffer; it does not refill on its own. The buffer is
  * meant to be a <em>caller-managed window</em>: keep a reference to it and, before a run of reads,
- * {@linkplain ByteBuffer#hasRemaining() pre-check} it and refill from your ultimate source when it runs low. Reading
+ * {@linkplain ByteBuffer#hasRemaining() pre-check} it and refill it from your ultimate source when it runs low. Reading
  * past the end (i.e. without pre-checking) throws an unchecked {@link java.nio.BufferUnderflowException} — it is a
  * signal of a missing pre-check, not a recoverable end-of-input.</p>
  *
@@ -54,10 +54,8 @@ public class BufferByteInput
      * source in a buffering layer (for example, a {@link java.io.BufferedInputStream} bridged to a channel with
      * {@link java.nio.channels.Channels}) instead.</p>
      *
-     * <p>A <em>blocking</em> channel is recommended. Each read loops, invoking the channel until at least one byte is
-     * read; a blocking channel parks until a byte (or end-of-input) is available, whereas a non-blocking channel that
-     * is not ready returns {@code 0} and the loop busy-waits (spins) — potentially forever if the channel never becomes
-     * ready. The result is still correct in either case; only a blocking channel avoids the spin.</p>
+     * <p>A <em>blocking</em> channel is recommended. If the channel reports no progress by returning {@code 0}, the
+     * returned input throws an {@link IOException} instead of busy-waiting.</p>
      *
      * @param channel the readable byte channel from which bytes are read; must not be {@code null}.
      * @return a new byte input reading from {@code channel}; its {@link ByteInput#read() read()} method throws an
@@ -73,8 +71,12 @@ public class BufferByteInput
             @Override
             public int read() throws IOException {
                 for (source.clear(); source.hasRemaining(); ) {
-                    if (channel.read(source) == -1) {
+                    final int read = channel.read(source);
+                    if (read == -1) {
                         throw new EOFException("end of channel reached");
+                    }
+                    if (read == 0) {
+                        throw new IOException("channel read made no progress");
                     }
                 }
                 source.flip();

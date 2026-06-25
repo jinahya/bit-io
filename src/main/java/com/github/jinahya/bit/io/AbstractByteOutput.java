@@ -50,6 +50,22 @@ abstract class AbstractByteOutput<T>
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
+     * Requires specified value to be an unsigned {@value java.lang.Byte#SIZE}-bit value.
+     *
+     * @param value the value to check.
+     * @return {@code value}.
+     * @throws IllegalArgumentException if {@code value} is out of range.
+     */
+    protected static int requireValidValue(final int value) {
+        if (value < 0 || value > 0xFF) {
+            throw new IllegalArgumentException("value(" + value + ") is out of range [0, 255]");
+        }
+        return value;
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+
+    /**
      * Returns a string representation of the object.
      *
      * @return a string representation of the object.

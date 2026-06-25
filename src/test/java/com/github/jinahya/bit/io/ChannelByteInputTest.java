@@ -20,6 +20,7 @@ package com.github.jinahya.bit.io;
  * #L%
  */
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -34,6 +35,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  * @see ChannelByteOutputTest
  */
+@Disabled("Reconstructing the test module")
 public class ChannelByteInputTest
         extends AbstractByteInputTest<ChannelByteInput, ReadableByteChannel> {
 

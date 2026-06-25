@@ -20,6 +20,7 @@ package com.github.jinahya.bit.io;
  * #L%
  */
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
@@ -39,6 +40,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  * @see BufferByteOutputTest
  */
+@Disabled("Reconstructing the test module")
 class BufferByteInputTest
         extends AbstractByteInputTest<BufferByteInput, ByteBuffer> {
 

@@ -89,7 +89,9 @@ class ChannelByteOutput
         if (!buffered.target.hasRemaining()) {
             buffered.target.flip();
             do {
-                target.write(buffered.target);
+                if (target.write(buffered.target) == 0) {
+                    throw new IOException("channel write made no progress");
+                }
             } while (buffered.target.position() == 0);
             buffered.target.compact();
         }

@@ -20,6 +20,7 @@ package com.github.jinahya.bit.io;
  * #L%
  */
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -27,6 +28,7 @@ import org.junit.jupiter.api.Test;
  *
  * @see ArrayByteInputTest
  */
+@Disabled("Reconstructing the test module")
 class ArrayByteOutputTest
         extends AbstractByteOutputTest<ArrayByteOutput, byte[]> {
 

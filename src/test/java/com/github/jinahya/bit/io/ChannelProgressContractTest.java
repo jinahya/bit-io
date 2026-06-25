@@ -1,0 +1,96 @@
+package com.github.jinahya.bit.io;
+
+/*-
+ * #%L
+ * bit-io
+ * %%
+ * Copyright (C) 2014 - 2019 Jinahya, Inc.
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
+
+import org.junit.jupiter.api.Test;
+
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.channels.ReadableByteChannel;
+import java.nio.channels.WritableByteChannel;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+class ChannelProgressContractTest {
+
+    @Test
+    void readableChannelFactoryRejectsZeroProgress() {
+        final ByteInput input = BufferByteInput.from(new ZeroProgressReadableByteChannel());
+        assertThrows(IOException.class, input::read);
+    }
+
+    @Test
+    void writableChannelFactoryRejectsZeroProgress() {
+        final ByteOutput output = BufferByteOutput.from(new ZeroProgressWritableByteChannel());
+        assertThrows(IOException.class, () -> output.write(0x00));
+    }
+
+    @Test
+    void channelByteInputRejectsZeroProgress() {
+        final ByteInput input = new ChannelByteInput(new ZeroProgressReadableByteChannel(), ByteBuffer.allocate(1));
+        assertThrows(IOException.class, input::read);
+    }
+
+    @Test
+    void channelByteOutputRejectsZeroProgress() throws IOException {
+        final ByteOutput output = new ChannelByteOutput(new ZeroProgressWritableByteChannel(), ByteBuffer.allocate(1));
+        output.write(0x00);
+        assertThrows(IOException.class, () -> output.write(0x01));
+    }
+
+    private static final class ZeroProgressReadableByteChannel
+            implements ReadableByteChannel {
+
+        @Override
+        public int read(final ByteBuffer dst) {
+            return 0;
+        }
+
+        @Override
+        public boolean isOpen() {
+            return true;
+        }
+
+        @Override
+        public void close() {
+            // no-op
+        }
+    }
+
+    private static final class ZeroProgressWritableByteChannel
+            implements WritableByteChannel {
+
+        @Override
+        public int write(final ByteBuffer src) {
+            return 0;
+        }
+
+        @Override
+        public boolean isOpen() {
+            return true;
+        }
+
+        @Override
+        public void close() {
+            // no-op
+        }
+    }
+}

@@ -20,26 +20,19 @@ package com.github.jinahya.bit.io;
  * #L%
  */
 
-import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
-import java.io.InputStream;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-/**
- * A class for unit-testing {@link StreamByteInput} class.
- *
- * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
- * @see StreamByteOutputTest
- */
-@Disabled("Reconstructing the test module")
-public class StreamByteInputTest
-        extends AbstractByteInputTest<StreamByteInput, InputStream> {
+class DefaultBitConstructorTest {
 
-    // -----------------------------------------------------------------------------------------------------------------
+    @Test
+    void defaultBitInputRejectsNullDelegate() {
+        assertThrows(NullPointerException.class, () -> new DefaultBitInput(null));
+    }
 
-    /**
-     * Creates a new instance.
-     */
-    StreamByteInputTest() {
-        super(StreamByteInput.class, InputStream.class);
+    @Test
+    void defaultBitOutputRejectsNullDelegate() {
+        assertThrows(NullPointerException.class, () -> new DefaultBitOutput(null));
     }
 }

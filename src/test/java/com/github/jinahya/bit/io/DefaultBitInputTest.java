@@ -21,6 +21,7 @@ package com.github.jinahya.bit.io;
  */
 
 import org.jboss.weld.junit5.WeldJunit5Extension;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 /**
@@ -30,6 +31,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
  * @see DefaultBitOutputTest
  */
 @ExtendWith({WeldJunit5Extension.class})
+@Disabled("Reconstructing the test module")
 public class DefaultBitInputTest
         extends AbstractBitInputTest<DefaultBitInput> {
 

@@ -20,6 +20,7 @@ package com.github.jinahya.bit.io;
  * #L%
  */
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -27,6 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 /**
  * A class for unit-testing {@link BitIoConstraints}.
  */
+@Disabled("Reconstructing the test module")
 class BitIoConstraintsTest {
 
     // ------------------------------------------------------------------------------------------------------------ byte

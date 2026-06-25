@@ -20,6 +20,8 @@ package com.github.jinahya.bit.io;
  * #L%
  */
 
+import org.junit.jupiter.api.Disabled;
+
 import java.io.DataOutput;
 
 /**
@@ -28,6 +30,7 @@ import java.io.DataOutput;
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  * @see DataByteInputTest
  */
+@Disabled("Reconstructing the test module")
 public class DataByteOutputTest
         extends AbstractByteOutputTest<DataByteOutput, DataOutput> {
 

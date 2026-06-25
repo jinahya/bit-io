@@ -27,9 +27,8 @@ import java.io.IOException;
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  * @see ArrayByteInput
- * @deprecated The {@code byte[]} adapters existed for CLDC/CDC profiles without {@code java.nio}. Prefer
- * {@link BufferByteOutput} over a {@link java.nio.ByteBuffer#wrap(byte[]) wrapped} array, which also lets the caller
- * pre-check {@link java.nio.Buffer#hasRemaining() remaining} and purge.
+ * @deprecated Prefer {@link BufferByteOutput} over a {@link java.nio.ByteBuffer#wrap(byte[]) wrapped} array, which also
+ * lets the caller {@linkplain java.nio.Buffer#hasRemaining() pre-check} and purge.
  */
 @Deprecated
 public class ArrayByteOutput
@@ -76,6 +75,7 @@ public class ArrayByteOutput
      */
     @Override
     public void write(final int value) throws IOException {
+        requireValidValue(value);
         try {
             target[getIndexAndIncrement()] = (byte) value;
         } catch (final ArrayIndexOutOfBoundsException aioobe) {

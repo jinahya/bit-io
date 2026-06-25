@@ -54,10 +54,8 @@ public class BufferByteOutput
      * high-throughput writing; when throughput matters, wrap the target in a buffering layer (for example, a
      * {@link java.io.BufferedOutputStream} bridged to a channel with {@link java.nio.channels.Channels}) instead.</p>
      *
-     * <p>A <em>blocking</em> channel is recommended. Each write loops, invoking the channel until the byte is written; a
-     * blocking channel parks until space is available, whereas a non-blocking channel that is not ready returns
-     * {@code 0} and the loop busy-waits (spins) — potentially forever if the channel never becomes ready. The result is
-     * still correct in either case; only a blocking channel avoids the spin.</p>
+     * <p>A <em>blocking</em> channel is recommended. If the channel reports no progress by returning {@code 0}, the
+     * returned output throws an {@link IOException} instead of busy-waiting.</p>
      *
      * @param channel the writable byte channel to which bytes are written; must not be {@code null}.
      * @return a new byte output writing to {@code channel}.
@@ -73,7 +71,9 @@ public class BufferByteOutput
             public void write(final int value) throws IOException {
                 super.write(value);
                 for (target.flip(); target.hasRemaining(); ) {
-                    channel.write(target);
+                    if (channel.write(target) == 0) {
+                        throw new IOException("channel write made no progress");
+                    }
                 }
                 target.clear();
             }
@@ -107,6 +107,6 @@ public class BufferByteOutput
      */
     @Override
     public void write(final int value) throws IOException {
-        target.put((byte) value);
+        target.put((byte) requireValidValue(value));
     }
 }

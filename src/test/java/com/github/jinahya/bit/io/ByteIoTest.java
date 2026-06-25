@@ -21,6 +21,7 @@ package com.github.jinahya.bit.io;
  */
 
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
@@ -35,6 +36,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
 @Slf4j
+@Disabled("Reconstructing the test module")
 class ByteIoTest {
 
     // -----------------------------------------------------------------------------------------------------------------

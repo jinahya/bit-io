@@ -198,6 +198,92 @@ public interface BitOutput {
      */
     void writeChar16Le(char value) throws IOException;
 
+    // ----------------------------------------------------------------------------------------------------------- float
+
+    // ---------------------------------------------------------------------------------------------------------- double
+
+    // ---------------------------------------------------------------------------------------------------------- byte[]
+
+    /**
+     * Writes specified array of bytes.
+     *
+     * <p>The {@code length} of the array is written, first, as an unsigned {@code int} of {@code lengthSize} bits;
+     * each element, then, is written as a signed {@code elementSize}-bit value. The packing is lossless when every
+     * element fits in the signed {@code elementSize}-bit range; {@code elementSize} of {@value java.lang.Byte#SIZE}
+     * is always lossless.
+     *
+     * @param lengthSize  the number of bits for the array length; between {@code 1} and ({@value
+     *                    java.lang.Integer#SIZE} - {@code 1}), both inclusive. The array length must not exceed
+     *                    ({@code 2}<sup>{@code lengthSize}</sup> - {@code 1}).
+     * @param elementSize the number of bits for each element; between {@code 1} and {@value java.lang.Byte#SIZE}, both
+     *                    inclusive.
+     * @param value       the array of bytes to write; must not be {@code null}.
+     * @throws IllegalArgumentException if {@code lengthSize} or {@code elementSize} is not valid, or {@code
+     *                                  value.length} does not fit in {@code lengthSize} bits.
+     * @throws IOException              if an I/O error occurs.
+     * @see BitInput#readBytes(int, int)
+     */
+    void writeBytes(int lengthSize, int elementSize, byte[] value) throws IOException;
+
+    // ------------------------------------------------------------------------------------------------ java.lang.String
+
+    /**
+     * Writes specified ASCII string in a compressed manner.
+     *
+     * <p>The string is encoded in {@code US-ASCII} and written via {@link #writeBytes(int, int, byte[])}-like packing
+     * with each byte stored as a {@value java.lang.Byte#SIZE}{@code  - 1}-bit unsigned value (each ASCII byte is
+     * {@code 0..127}).
+     *
+     * @param lengthSize the number of bits for the (byte) length of the encoded string; between {@code 1} and
+     *                   ({@value java.lang.Integer#SIZE} - {@code 1}), both inclusive.
+     * @param value      the ASCII string to write; must not be {@code null}.
+     * @throws IllegalArgumentException if {@code lengthSize} is not valid, or the encoded length does not fit in
+     *                                  {@code lengthSize} bits.
+     * @throws IOException              if an I/O error occurs.
+     * @see BitInput#readAscii(int)
+     */
+    void writeAscii(int lengthSize, String value) throws IOException;
+
+    /**
+     * Writes specified ASCII string with a ({@value java.lang.Integer#SIZE} - {@code 1})-bit length prefix. Equivalent
+     * to {@link #writeAscii(int, String)} invoked with a {@code lengthSize} of ({@value java.lang.Integer#SIZE} -
+     * {@code 1}).
+     *
+     * @param value the ASCII string to write; must not be {@code null}.
+     * @throws IOException if an I/O error occurs.
+     * @see BitInput#readAscii31()
+     */
+    void writeAscii31(String value) throws IOException;
+
+    /**
+     * Writes specified string, encoded in a named charset, as a length-prefixed array of full bytes.
+     *
+     * <p>The string is encoded using {@code charsetName} and written via {@link #writeBytes(int, int, byte[])} with an
+     * {@code elementSize} of {@value java.lang.Byte#SIZE} (each byte stored in full, hence lossless for any charset).
+     *
+     * @param lengthSize  the number of bits for the (byte) length of the encoded string; between {@code 1} and
+     *                    ({@value java.lang.Integer#SIZE} - {@code 1}), both inclusive.
+     * @param charsetName the name of the charset for encoding the string; must not be {@code null}.
+     * @param value       the string to write; must not be {@code null}.
+     * @throws IllegalArgumentException if {@code lengthSize} is not valid, or the encoded length does not fit in
+     *                                  {@code lengthSize} bits.
+     * @throws IOException              if an I/O error occurs (including an unsupported {@code charsetName}).
+     * @see BitInput#readString(int, String)
+     */
+    void writeString(int lengthSize, String charsetName, String value) throws IOException;
+
+    /**
+     * Writes specified string with a ({@value java.lang.Integer#SIZE} - {@code 1})-bit length prefix. Equivalent to
+     * {@link #writeString(int, String, String)} invoked with a {@code lengthSize} of ({@value java.lang.Integer#SIZE}
+     * - {@code 1}); the encoded byte length may be up to {@value java.lang.Integer#MAX_VALUE}.
+     *
+     * @param charsetName the name of the charset for encoding the string; must not be {@code null}.
+     * @param value       the string to write; must not be {@code null}.
+     * @throws IOException if an I/O error occurs (including an unsupported {@code charsetName}).
+     * @see BitInput#readString31(String)
+     */
+    void writeString31(String charsetName, String value) throws IOException;
+
     // -----------------------------------------------------------------------------------------------------------------
 
     /**

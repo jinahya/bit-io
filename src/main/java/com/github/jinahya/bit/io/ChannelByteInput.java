@@ -77,6 +77,7 @@ class ChannelByteInput
      *
      * @return {@inheritDoc}
      * @throws IOException {@inheritDoc}
+     * @see ChannelByteOutput#write(int)
      */
     @Override
     public int read() throws IOException {

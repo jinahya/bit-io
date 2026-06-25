@@ -53,6 +53,7 @@ public class DataByteOutput
      * @param value {@inheritDoc}
      * @throws IOException {@inheritDoc}
      * @see DataOutput#writeByte(int)
+     * @see DataByteInput#read()
      */
     @Override
     public void write(final int value) throws IOException {

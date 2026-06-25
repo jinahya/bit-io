@@ -27,7 +27,11 @@ import java.io.IOException;
  *
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  * @see ArrayByteOutput
+ * @deprecated The {@code byte[]} adapters existed for CLDC/CDC profiles without {@code java.nio}. Prefer
+ * {@link BufferByteInput} over a {@link java.nio.ByteBuffer#wrap(byte[]) wrapped} array, which also lets the caller
+ * pre-check {@link java.nio.Buffer#hasRemaining() remaining} and refill.
  */
+@Deprecated
 public class ArrayByteInput
         extends AbstractByteInput<byte[]> {
 
@@ -68,6 +72,7 @@ public class ArrayByteInput
      *
      * @return {@inheritDoc}
      * @throws IOException {@inheritDoc}
+     * @see ArrayByteOutput#write(int)
      */
     @Override
     public int read() throws IOException {

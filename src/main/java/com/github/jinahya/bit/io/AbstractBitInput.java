@@ -94,13 +94,6 @@ public abstract class AbstractBitInput
     }
 
     // ------------------------------------------------------------------------------------------------------------ byte
-    private byte readByte_(final boolean unsigned, final int size) throws IOException {
-        // the following assertions are equivalent to requireValidSizeByte(unsigned, size)
-        assert size > 0;
-        assert size <= Byte.SIZE - (unsigned ? 1 : 0);
-        return (byte) readInt(unsigned, size);
-    }
-
     @Override
     public byte readByte(final boolean unsigned, final int size) throws IOException {
         return (byte) readInt(unsigned, requireValidSizeByte(unsigned, size));
@@ -211,6 +204,59 @@ public abstract class AbstractBitInput
         return (char) readShort16Le();
     }
 
+    // ---------------------------------------------------------------------------------------------------------- byte[]
+
+    /**
+     * Reads an array of bytes; the general internal core shared by the public {@code byte[]} methods.
+     *
+     * @param lengthSize  the number of bits for the array length; between {@code 1} and ({@value
+     *                    java.lang.Integer#SIZE} - {@code 1}), both inclusive.
+     * @param unsigned    {@code true} to read each element as an unsigned {@code elementSize}-bit value; {@code false}
+     *                    to read each as a signed {@code elementSize}-bit value.
+     * @param elementSize the number of bits for each element; between {@code 1} and {@value java.lang.Byte#SIZE}, both
+     *                    inclusive.
+     * @return an array of bytes.
+     * @throws IOException if an I/O error occurs.
+     */
+    private byte[] readBytes(final int lengthSize, final boolean unsigned, final int elementSize) throws IOException {
+        requireValidSizeInt(true, lengthSize);
+        requireValidSizeByte(unsigned, elementSize); // unsigned: 1..7, signed: 1..8
+        final byte[] value = new byte[readInt(true, lengthSize)];
+        for (int i = 0; i < value.length; i++) {
+            value[i] = readByte(unsigned, elementSize);
+        }
+        return value;
+    }
+
+    @Override
+    public byte[] readBytes(final int lengthSize, final int elementSize) throws IOException {
+        return readBytes(lengthSize, false, elementSize);
+    }
+
+    // ------------------------------------------------------------------------------------------------ java.lang.String
+    @Override
+    public String readAscii(final int lengthSize) throws IOException {
+        return new String(readBytes(lengthSize, true, Byte.SIZE - 1), "US-ASCII"); // 7-bit unsigned elements
+    }
+
+    @Override
+    public String readAscii31() throws IOException {
+        return readAscii(Integer.SIZE - 1);
+    }
+
+    @Override
+    public String readString(final int lengthSize, final String charsetName) throws IOException {
+        if (charsetName == null) {
+            throw new NullPointerException("charsetName is null");
+        }
+        return new String(readBytes(lengthSize, Byte.SIZE), charsetName); // full 8-bit (signed) elements
+    }
+
+    @Override
+    public String readString31(final String charsetName) throws IOException {
+        return readString(Integer.SIZE - 1, charsetName);
+    }
+
     // -----------------------------------------------------------------------------------------------------------------
     @Override
     public void skip(int bits) throws IOException {
@@ -252,6 +298,7 @@ public abstract class AbstractBitInput
      *
      * @return the number of bytes read so far.
      * @see #read()
+     * @see AbstractBitOutput#getCount()
      */
     public long getCount() {
         return count;

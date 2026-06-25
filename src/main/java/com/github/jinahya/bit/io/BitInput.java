@@ -196,6 +196,85 @@ public interface BitInput {
      */
     char readChar16Le() throws IOException;
 
+    // ----------------------------------------------------------------------------------------------------------- float
+
+    // ---------------------------------------------------------------------------------------------------------- double
+
+    // ---------------------------------------------------------------------------------------------------------- byte[]
+
+    /**
+     * Reads an array of bytes.
+     *
+     * <p>The {@code length} of the array is read, first, as an unsigned {@code int} of {@code lengthSize} bits; each
+     * element, then, is read as a signed {@code elementSize}-bit value.
+     *
+     * @param lengthSize  the number of bits for the array length; between {@code 1} and ({@value
+     *                    java.lang.Integer#SIZE} - {@code 1}), both inclusive.
+     * @param elementSize the number of bits for each element; between {@code 1} and {@value java.lang.Byte#SIZE}, both
+     *                    inclusive.
+     * @return an array of bytes.
+     * @throws IllegalArgumentException if {@code lengthSize} or {@code elementSize} is not valid.
+     * @throws IOException              if an I/O error occurs.
+     * @see BitOutput#writeBytes(int, int, byte[])
+     */
+    byte[] readBytes(int lengthSize, int elementSize) throws IOException;
+
+    // ------------------------------------------------------------------------------------------------ java.lang.String
+
+    /**
+     * Reads an ASCII string written in a compressed manner.
+     *
+     * <p>The (byte) length is read, first, as an unsigned {@code int} of {@code lengthSize} bits; each byte, then, is
+     * read as a {@value java.lang.Byte#SIZE}{@code  - 1}-bit unsigned value, and the bytes are decoded in {@code
+     * US-ASCII}.
+     *
+     * @param lengthSize the number of bits for the (byte) length of the encoded string; between {@code 1} and
+     *                   ({@value java.lang.Integer#SIZE} - {@code 1}), both inclusive.
+     * @return an ASCII string.
+     * @throws IllegalArgumentException if {@code lengthSize} is not valid.
+     * @throws IOException              if an I/O error occurs.
+     * @see BitOutput#writeAscii(int, String)
+     */
+    String readAscii(int lengthSize) throws IOException;
+
+    /**
+     * Reads an ASCII string with a ({@value java.lang.Integer#SIZE} - {@code 1})-bit length prefix. Equivalent to
+     * {@link #readAscii(int)} invoked with a {@code lengthSize} of ({@value java.lang.Integer#SIZE} - {@code 1}).
+     *
+     * @return an ASCII string.
+     * @throws IOException if an I/O error occurs.
+     * @see BitOutput#writeAscii31(String)
+     */
+    String readAscii31() throws IOException;
+
+    /**
+     * Reads a string, written as a length-prefixed array of full bytes, and decodes it in a named charset.
+     *
+     * <p>The (byte) length is read, first, as an unsigned {@code int} of {@code lengthSize} bits; the bytes, then, are
+     * read via {@link #readBytes(int, int)} with an {@code elementSize} of {@value java.lang.Byte#SIZE} and decoded
+     * using {@code charsetName}.
+     *
+     * @param lengthSize  the number of bits for the (byte) length of the encoded string; between {@code 1} and
+     *                    ({@value java.lang.Integer#SIZE} - {@code 1}), both inclusive.
+     * @param charsetName the name of the charset for decoding the string; must not be {@code null}.
+     * @return a string.
+     * @throws IllegalArgumentException if {@code lengthSize} is not valid.
+     * @throws IOException              if an I/O error occurs (including an unsupported {@code charsetName}).
+     * @see BitOutput#writeString(int, String, String)
+     */
+    String readString(int lengthSize, String charsetName) throws IOException;
+
+    /**
+     * Reads a string with a ({@value java.lang.Integer#SIZE} - {@code 1})-bit length prefix. Equivalent to {@link
+     * #readString(int, String)} invoked with a {@code lengthSize} of ({@value java.lang.Integer#SIZE} - {@code 1}).
+     *
+     * @param charsetName the name of the charset for decoding the string; must not be {@code null}.
+     * @return a string.
+     * @throws IOException if an I/O error occurs (including an unsupported {@code charsetName}).
+     * @see BitOutput#writeString31(String, String)
+     */
+    String readString31(String charsetName) throws IOException;
+
     // -----------------------------------------------------------------------------------------------------------------
 
     /**

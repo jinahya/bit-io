@@ -54,6 +54,7 @@ public class StreamByteInput
      * @return {@inheritDoc}
      * @throws IOException {@inheritDoc}
      * @see InputStream#read()
+     * @see StreamByteOutput#write(int)
      */
     @Override
     public int read() throws IOException {

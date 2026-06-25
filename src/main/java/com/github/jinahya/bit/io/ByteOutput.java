@@ -36,9 +36,16 @@ public interface ByteOutput {
     /**
      * Writes specified unsigned {@value java.lang.Byte#SIZE}-bit value.
      *
+     * <p>How a full target is signalled is implementation-defined. Most targets throw an {@link IOException} when they
+     * can accept no more bytes. A <em>buffer-backed</em> target ({@link BufferByteOutput}) instead throws an unchecked
+     * {@link java.nio.BufferOverflowException} when its buffer is full; such a buffer is a caller-managed window, so
+     * callers should {@linkplain java.nio.Buffer#hasRemaining() pre-check} and purge it to the ultimate target rather
+     * than rely on that exception.</p>
+     *
      * @param value the unsigned {@value java.lang.Byte#SIZE}-bit value to write; between {@code 0} and {@code 255},
      *              both inclusive.
      * @throws IOException if an I/O error occurs.
+     * @see ByteInput#read()
      */
     void write(int value) throws IOException;
 }

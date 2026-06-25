@@ -28,9 +28,11 @@ import java.nio.channels.ReadableByteChannel;
 /**
  * A byte input reads bytes from a {@link ByteBuffer}.
  *
- * <p>This class does not buffer or refill; it reads directly from the {@link #source source} buffer. Reading when the
- * buffer has no {@link ByteBuffer#hasRemaining() remaining} bytes throws a
- * {@link java.nio.BufferUnderflowException}.</p>
+ * <p>This class reads directly from the {@link #source source} buffer; it does not refill on its own. The buffer is
+ * meant to be a <em>caller-managed window</em>: keep a reference to it and, before a run of reads,
+ * {@linkplain ByteBuffer#hasRemaining() pre-check} it and refill from your ultimate source when it runs low. Reading
+ * past the end (i.e. without pre-checking) throws an unchecked {@link java.nio.BufferUnderflowException} — it is a
+ * signal of a missing pre-check, not a recoverable end-of-input.</p>
  *
  * <p>The {@link #from(ReadableByteChannel)} factory method, however, returns a channel-backed variant that does refill
  * from a channel and signals end-of-input with an {@link EOFException} instead.</p>
@@ -61,6 +63,7 @@ public class BufferByteInput
      * @return a new byte input reading from {@code channel}; its {@link ByteInput#read() read()} method throws an
      * {@link EOFException} when {@code channel} reaches its end.
      * @throws NullPointerException if {@code channel} is {@code null}.
+     * @see BufferByteOutput#from(java.nio.channels.WritableByteChannel)
      */
     public static ByteInput from(final ReadableByteChannel channel) {
         if (channel == null) {
@@ -102,6 +105,7 @@ public class BufferByteInput
      * @throws java.nio.BufferUnderflowException if the {@link #source source} buffer has no remaining bytes.
      * @throws IOException                       {@inheritDoc}
      * @see ByteBuffer#get()
+     * @see BufferByteOutput#write(int)
      */
     @Override
     public int read() throws IOException {

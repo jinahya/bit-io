@@ -53,6 +53,7 @@ public class DataByteInput
      * @return {@inheritDoc}
      * @throws IOException {@inheritDoc}
      * @see DataInput#readUnsignedByte()
+     * @see DataByteOutput#write(int)
      */
     @Override
     public int read() throws IOException {

@@ -36,14 +36,21 @@ public interface ByteInput {
     /**
      * Reads an unsigned {@value java.lang.Byte#SIZE}-bit value.
      *
-     * <p>Implementations <em>must</em> return a value between {@code 0} and {@code 255}, both inclusive, and
-     * <em>must</em> throw an {@link java.io.EOFException} when the end of the input is reached. Implementations must
+     * <p>Implementations <em>must</em> return a value between {@code 0} and {@code 255}, both inclusive, and must
      * <em>not</em> return a negative value (such as the {@code -1} returned by {@link java.io.InputStream#read()}) to
      * signal the end of the input; doing so corrupts the bit stream read by {@link BitInput}.</p>
      *
+     * <p>How exhaustion is signalled is implementation-defined. <em>Terminal</em> sources (input stream, data input,
+     * channel) throw an {@link java.io.EOFException} when the end is reached. A <em>buffer-backed</em> source
+     * ({@link BufferByteInput}) instead throws an unchecked {@link java.nio.BufferUnderflowException} when its buffer is
+     * exhausted; such a buffer is a caller-managed window, so callers should
+     * {@linkplain java.nio.Buffer#hasRemaining() pre-check} and refill it from the ultimate source rather than rely on
+     * that exception.</p>
+     *
      * @return an unsigned {@value java.lang.Byte#SIZE}-bit value; between {@code 0} and {@code 255}, both inclusive.
-     * @throws java.io.EOFException if the end of the input is reached.
+     * @throws java.io.EOFException if a terminal source reaches its end.
      * @throws IOException          if an I/O error occurs.
+     * @see ByteOutput#write(int)
      */
     int read() throws IOException;
 }

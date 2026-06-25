@@ -54,6 +54,7 @@ public abstract class AbstractBitOutput
      *
      * @param value the {@value java.lang.Byte#SIZE}-bit unsigned integer to write.
      * @throws IOException if an I/O error occurs.
+     * @see AbstractBitInput#read()
      */
     protected abstract void write(int value) throws IOException;
 
@@ -200,6 +201,73 @@ public abstract class AbstractBitOutput
         writeShort16Le((short) value);
     }
 
+    // ---------------------------------------------------------------------------------------------------------- byte[]
+
+    /**
+     * Writes specified array of bytes; the general internal core shared by the public {@code byte[]} methods.
+     *
+     * @param lengthSize  the number of bits for the array length; between {@code 1} and ({@value
+     *                    java.lang.Integer#SIZE} - {@code 1}), both inclusive.
+     * @param unsigned    {@code true} to write each element as the unsigned lower {@code elementSize} bits; {@code
+     *                    false} to write each as a signed {@code elementSize}-bit value.
+     * @param elementSize the number of bits for each element; between {@code 1} and {@value java.lang.Byte#SIZE}, both
+     *                    inclusive.
+     * @param value       the array of bytes to write; must not be {@code null}.
+     * @throws IOException if an I/O error occurs.
+     */
+    private void writeBytes(final int lengthSize, final boolean unsigned, final int elementSize, final byte[] value)
+            throws IOException {
+        requireValidSizeInt(true, lengthSize);
+        requireValidSizeByte(unsigned, elementSize); // unsigned: 1..7, signed: 1..8
+        if (value == null) {
+            throw new NullPointerException("value is null");
+        }
+        final int length = value.length;
+        if ((length >>> lengthSize) != 0) {
+            throw new IllegalArgumentException(
+                    "value.length(" + length + ") requires more than lengthSize(" + lengthSize + ") bits");
+        }
+        writeInt(true, lengthSize, length);
+        for (final byte element : value) {
+            writeByte(unsigned, elementSize, element);
+        }
+    }
+
+    @Override
+    public void writeBytes(final int lengthSize, final int elementSize, final byte[] value) throws IOException {
+        writeBytes(lengthSize, false, elementSize, value);
+    }
+
+    // ------------------------------------------------------------------------------------------------ java.lang.String
+    @Override
+    public void writeAscii(final int lengthSize, final String value) throws IOException {
+        if (value == null) {
+            throw new NullPointerException("value is null");
+        }
+        writeBytes(lengthSize, true, Byte.SIZE - 1, value.getBytes("US-ASCII")); // 7-bit unsigned elements
+    }
+
+    @Override
+    public void writeAscii31(final String value) throws IOException {
+        writeAscii(Integer.SIZE - 1, value);
+    }
+
+    @Override
+    public void writeString(final int lengthSize, final String charsetName, final String value) throws IOException {
+        if (charsetName == null) {
+            throw new NullPointerException("charsetName is null");
+        }
+        if (value == null) {
+            throw new NullPointerException("value is null");
+        }
+        writeBytes(lengthSize, Byte.SIZE, value.getBytes(charsetName)); // full 8-bit (signed) elements
+    }
+
+    @Override
+    public void writeString31(final String charsetName, final String value) throws IOException {
+        writeString(Integer.SIZE - 1, charsetName, value);
+    }
+
     // -----------------------------------------------------------------------------------------------------------------
     @Override
     public void skip(int bits) throws IOException {
@@ -241,6 +309,7 @@ public abstract class AbstractBitOutput
      *
      * @return the number of bytes written so far.
      * @see #write(int)
+     * @see AbstractBitInput#getCount()
      */
     public long getCount() {
         return count;

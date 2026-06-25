@@ -82,6 +82,7 @@ class ChannelByteOutput
      *
      * @param value {@inheritDoc}
      * @throws IOException {@inheritDoc}
+     * @see ChannelByteInput#read()
      */
     @Override
     public void write(final int value) throws IOException {

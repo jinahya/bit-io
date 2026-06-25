@@ -48,10 +48,11 @@ No methods supplied for floating-point types.
 Prepare an instance of `ByteInput` from various sources.
 
 ````java
-new ArrayByteInput(byte[], int);
+new ArrayByteInput(byte[]);
 new BufferByteInput(java.nio.ByteBuffer);
 new DataByteInput(java.io.DataInput);
 new StreamByteInput(java.io.InputStream);
+BufferByteInput.from(java.nio.channels.ReadableByteChannel); // write-through; blocking channels
 ````
 
 ### Creating `BitInput`
@@ -61,7 +62,7 @@ new StreamByteInput(java.io.InputStream);
 Construct with an already existing `ByteInput`.
 
 ```java
-final BitInput bitInput = new DefalutBitInput(byteInput);
+final BitInput bitInput = new DefaultBitInput(byteInput);
 ```
 
 ### Reading values.
@@ -85,17 +86,19 @@ b        llllllll llllllll llllllll llllllll llllllll llllll
 ## Writing
 
 * You need to prepare an instance of `ByteOutput` for writing octets.
-* You can write bits to an instance of `BitInput` which uses the `ByteOutput` instance.
+* You can write bits to an instance of `BitOutput` which uses the `ByteOutput` instance.
 
 ### Preparing `ByteOutput`
 
-There are counter classes and contructors to `ByteInput`.
+There are counterpart classes and constructors mirroring those of `ByteInput`
+(e.g. `ArrayByteOutput`, `BufferByteOutput`, `DataByteOutput`, `StreamByteOutput`,
+and `BufferByteOutput.from(java.nio.channels.WritableByteChannel)`).
 
 ### Creating `BitOutput`
 
 There are also counter classes and constructors to `BitInput`.
 
-#### Using `DefalutBitOutput`
+#### Using `DefaultBitOutput`
 
 ### Writing values.
 
@@ -117,5 +120,31 @@ b          b                                     pppp pppppppp pppppppp
 01101110 00100000 00000000 00000000 00000110 00110000 00000000 00000000
 ```
 
+## Aligning
+
+Both `BitInput` and `BitOutput` work bit-by-bit, so after reading or writing a
+number of bits that is not a multiple of `8` the stream is left in the middle of
+a byte. Use `align(int bytes)` to move to a byte boundary.
+
+```java
+long align(int bytes); // bytes must be positive; returns the number of bits moved over
+```
+
+* `BitInput.align(bytes)` **discards** bits until the number of bytes read so far is
+  a multiple of `bytes`, and returns the number of bits discarded.
+* `BitOutput.align(bytes)` **pads** zero bits until the number of bytes written so far
+  is a multiple of `bytes`, and returns the number of bits padded.
+
+```java
+final long discarded = input.align(1);  // align to the next byte; discards 0..7 bits
+final long padded = output.align(1);     // align to the next byte; pads 0..7 zero bits
+```
+
+> **Important (writing):** a `BitOutput` buffers the current, partially-filled octet
+> and only emits it once the byte is complete. If your last write does not end on a
+> byte boundary, call `align(1)` (or any positive `bytes`) before you finish — otherwise
+> the trailing bits are never written. Reading and writing must use the **same**
+> `align(bytes)` argument at the same position to stay in sync.
+
 ----
-[![Domate via Paypal](https://img.shields.io/badge/donate-paypal-blue.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_cart&business=A954LDFBW4B9N&lc=KR&item_name=GitHub&amount=5%2e00&currency_code=USD&button_subtype=products&add=1&bn=PP%2dShopCartBF%3adonate%2dpaypal%2dblue%2epng%3aNonHosted)
+[![Donate via Paypal](https://img.shields.io/badge/donate-paypal-blue.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_cart&business=A954LDFBW4B9N&lc=KR&item_name=GitHub&amount=5%2e00&currency_code=USD&button_subtype=products&add=1&bn=PP%2dShopCartBF%3adonate%2dpaypal%2dblue%2epng%3aNonHosted)

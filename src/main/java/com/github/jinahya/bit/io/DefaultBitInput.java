@@ -70,6 +70,7 @@ public class DefaultBitInput
      * @return {@inheritDoc}
      * @throws IOException {@inheritDoc}
      * @see ByteInput#read()
+     * @see DefaultBitOutput#write(int)
      */
     @Override
     protected int read() throws IOException {

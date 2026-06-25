@@ -70,6 +70,7 @@ public class DefaultBitOutput
      * @param value {@inheritDoc}
      * @throws IOException {@inheritDoc}
      * @see ByteOutput#write(int)
+     * @see DefaultBitInput#read()
      */
     @Override
     protected void write(final int value) throws IOException {

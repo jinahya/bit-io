@@ -53,6 +53,7 @@ public class StreamByteOutput
      * @param value {@inheritDoc}
      * @throws IOException {@inheritDoc}
      * @see OutputStream#write(int)
+     * @see StreamByteInput#read()
      */
     @Override
     public void write(final int value) throws IOException {

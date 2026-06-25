@@ -27,9 +27,11 @@ import java.nio.channels.WritableByteChannel;
 /**
  * A byte output writes bytes to a {@link ByteBuffer}.
  *
- * <p>This class does not buffer or drain; it writes directly to the {@link #target target} buffer. Writing when the
- * buffer has no {@link ByteBuffer#hasRemaining() remaining} space throws a
- * {@link java.nio.BufferOverflowException}.</p>
+ * <p>This class writes directly to the {@link #target target} buffer; it does not drain on its own. The buffer is meant
+ * to be a <em>caller-managed window</em>: keep a reference to it and, before a run of writes,
+ * {@linkplain ByteBuffer#hasRemaining() pre-check} it and purge (drain) it to your ultimate target when it fills.
+ * Writing past the end (i.e. without pre-checking) throws an unchecked {@link java.nio.BufferOverflowException} — it is
+ * a signal of a missing pre-check, not a recoverable full-target condition.</p>
  *
  * <p>The {@link #from(WritableByteChannel)} factory method, however, returns a channel-backed, write-through variant
  * that drains every byte to a channel as it is written.</p>
@@ -60,6 +62,7 @@ public class BufferByteOutput
      * @param channel the writable byte channel to which bytes are written; must not be {@code null}.
      * @return a new byte output writing to {@code channel}.
      * @throws NullPointerException if {@code channel} is {@code null}.
+     * @see BufferByteInput#from(java.nio.channels.ReadableByteChannel)
      */
     public static ByteOutput from(final WritableByteChannel channel) {
         if (channel == null) {
@@ -100,6 +103,7 @@ public class BufferByteOutput
      * @throws java.nio.BufferOverflowException if the {@link #target target} buffer has no remaining space.
      * @throws IOException                      {@inheritDoc}
      * @see ByteBuffer#put(byte)
+     * @see BufferByteInput#read()
      */
     @Override
     public void write(final int value) throws IOException {

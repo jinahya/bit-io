@@ -200,89 +200,88 @@ public interface BitOutput {
 
     // ----------------------------------------------------------------------------------------------------------- float
 
+    /**
+     * Writes specified {@code float} value packed into {@code 1 + exponentSize + fractionSize} bits using an IEEE-like
+     * <em>reduced</em> encoding (sign, rebiased exponent, high-bit-kept fraction).
+     *
+     * <p>The encoding is a deterministic, mode-less projection that depends only on the raw bits observed from
+     * {@link Float#floatToRawIntBits(float)} and the two widths: {@code ±0}, {@code ±Infinity} and NaN round-trip as
+     * packed-format states; quiet/signaling NaN is preserved for the raw NaN bits observable at the write point, since
+     * both widths are {@code >= 2}. A magnitude too large to represent saturates to {@code ±Infinity}, one too small
+     * underflows to {@code ±0}, and an over-wide fraction is truncated toward zero (not rounded). At the full native
+     * widths ({@code exponentSize} of {@code 8}, {@code fractionSize} of {@code 23}) the packed bits are lossless. See
+     * {@link #writeFloat32(float)} for the unconditionally lossless full-width path.
+     *
+     * @param exponentSize the number of bits for the exponent; between {@code 2} and {@code 8}, both inclusive.
+     * @param fractionSize the number of bits for the fraction(significand); between {@code 2} and {@code 23}, both
+     *                     inclusive.
+     * @param value        the {@code float} value to write.
+     * @throws IllegalArgumentException if {@code exponentSize} or {@code fractionSize} is not valid.
+     * @throws IOException              if an I/O error occurs.
+     * @see BitInput#readFloat(int, int)
+     */
+    void writeFloat(int exponentSize, int fractionSize, float value) throws IOException;
+
+    /**
+     * Writes specified {@code float} value as a {@value java.lang.Float#SIZE}-bit pattern, losslessly. The value is
+     * reinterpreted via {@link Float#floatToRawIntBits(float)} and written with {@link #writeInt32(int)}; no
+     * exponent/fraction reduction is applied.
+     *
+     * @param value the {@code float} value to write.
+     * @throws IOException if an I/O error occurs.
+     * @see BitInput#readFloat32()
+     */
+    void writeFloat32(float value) throws IOException;
+
     // ---------------------------------------------------------------------------------------------------------- double
 
-    // ---------------------------------------------------------------------------------------------------------- byte[]
-
     /**
-     * Writes specified array of bytes.
+     * Writes specified {@code double} value packed into {@code 1 + exponentSize + fractionSize} bits using an
+     * IEEE-like
+     * <em>reduced</em> encoding (sign, rebiased exponent, high-bit-kept fraction).
      *
-     * <p>The {@code length} of the array is written, first, as an unsigned {@code int} of {@code lengthSize} bits;
-     * each element, then, is written as a signed {@code elementSize}-bit value. The packing is lossless when every
-     * element fits in the signed {@code elementSize}-bit range; {@code elementSize} of {@value java.lang.Byte#SIZE}
-     * is always lossless.
+     * <p>The encoding is a deterministic, mode-less projection that depends only on the raw bits observed from
+     * {@link Double#doubleToRawLongBits(double)} and the two widths: {@code ±0}, {@code ±Infinity} and NaN round-trip
+     * as packed-format states; quiet/signaling NaN is preserved for the raw NaN bits observable at the write point,
+     * since both widths are {@code >= 2}. A magnitude too large to represent saturates to {@code ±Infinity}, one too
+     * small underflows to {@code ±0}, and an over-wide fraction is truncated toward zero (not rounded). At the full
+     * native widths ({@code exponentSize} of {@code 11}, {@code fractionSize} of {@code 52}) the packed bits are
+     * lossless. See {@link #writeDouble64(double)} for the unconditionally lossless full-width path.
      *
-     * @param lengthSize  the number of bits for the array length; between {@code 1} and ({@value
-     *                    java.lang.Integer#SIZE} - {@code 1}), both inclusive. The array length must not exceed
-     *                    ({@code 2}<sup>{@code lengthSize}</sup> - {@code 1}).
-     * @param elementSize the number of bits for each element; between {@code 1} and {@value java.lang.Byte#SIZE}, both
-     *                    inclusive.
-     * @param value       the array of bytes to write; must not be {@code null}.
-     * @throws IllegalArgumentException if {@code lengthSize} or {@code elementSize} is not valid, or {@code
-     *                                  value.length} does not fit in {@code lengthSize} bits.
+     * @param exponentSize the number of bits for the exponent; between {@code 2} and {@code 11}, both inclusive.
+     * @param fractionSize the number of bits for the fraction(significand); between {@code 2} and {@code 52}, both
+     *                     inclusive.
+     * @param value        the {@code double} value to write.
+     * @throws IllegalArgumentException if {@code exponentSize} or {@code fractionSize} is not valid.
      * @throws IOException              if an I/O error occurs.
-     * @see BitInput#readBytes(int, int)
+     * @see BitInput#readDouble(int, int)
      */
-    void writeBytes(int lengthSize, int elementSize, byte[] value) throws IOException;
-
-    // ------------------------------------------------------------------------------------------------ java.lang.String
+    void writeDouble(int exponentSize, int fractionSize, double value) throws IOException;
 
     /**
-     * Writes specified ASCII string in a compressed manner.
+     * Writes specified {@code double} value as a {@value java.lang.Double#SIZE}-bit pattern, losslessly. The value is
+     * reinterpreted via {@link Double#doubleToRawLongBits(double)} and written with {@link #writeLong64(long)}; no
+     * exponent/fraction reduction is applied.
      *
-     * <p>The string is encoded in {@code US-ASCII} and written via {@link #writeBytes(int, int, byte[])}-like packing
-     * with each byte stored as a {@value java.lang.Byte#SIZE}{@code  - 1}-bit unsigned value (each ASCII byte is
-     * {@code 0..127}).
-     *
-     * @param lengthSize the number of bits for the (byte) length of the encoded string; between {@code 1} and
-     *                   ({@value java.lang.Integer#SIZE} - {@code 1}), both inclusive.
-     * @param value      the ASCII string to write; must not be {@code null}.
-     * @throws IllegalArgumentException if {@code lengthSize} is not valid, or the encoded length does not fit in
-     *                                  {@code lengthSize} bits.
-     * @throws IOException              if an I/O error occurs.
-     * @see BitInput#readAscii(int)
-     */
-    void writeAscii(int lengthSize, String value) throws IOException;
-
-    /**
-     * Writes specified ASCII string with a ({@value java.lang.Integer#SIZE} - {@code 1})-bit length prefix. Equivalent
-     * to {@link #writeAscii(int, String)} invoked with a {@code lengthSize} of ({@value java.lang.Integer#SIZE} -
-     * {@code 1}).
-     *
-     * @param value the ASCII string to write; must not be {@code null}.
+     * @param value the {@code double} value to write.
      * @throws IOException if an I/O error occurs.
-     * @see BitInput#readAscii31()
+     * @see BitInput#readDouble64()
      */
-    void writeAscii31(String value) throws IOException;
+    void writeDouble64(double value) throws IOException;
+
+    // ---------------------------------------------------------------------------------------------------------- object
 
     /**
-     * Writes specified string, encoded in a named charset, as a length-prefixed array of full bytes.
+     * Writes specified value using specified writer.
      *
-     * <p>The string is encoded using {@code charsetName} and written via {@link #writeBytes(int, int, byte[])} with an
-     * {@code elementSize} of {@value java.lang.Byte#SIZE} (each byte stored in full, hence lossless for any charset).
-     *
-     * @param lengthSize  the number of bits for the (byte) length of the encoded string; between {@code 1} and
-     *                    ({@value java.lang.Integer#SIZE} - {@code 1}), both inclusive.
-     * @param charsetName the name of the charset for encoding the string; must not be {@code null}.
-     * @param value       the string to write; must not be {@code null}.
-     * @throws IllegalArgumentException if {@code lengthSize} is not valid, or the encoded length does not fit in
-     *                                  {@code lengthSize} bits.
-     * @throws IOException              if an I/O error occurs (including an unsupported {@code charsetName}).
-     * @see BitInput#readString(int, String)
+     * @param writer the writer; must not be {@code null}.
+     * @param value  the value to write.
+     * @param <T>    value type parameter
+     * @throws NullPointerException if {@code writer} is {@code null}.
+     * @throws IOException          if an I/O error occurs.
+     * @see BitInput#readObject(BitReader)
      */
-    void writeString(int lengthSize, String charsetName, String value) throws IOException;
-
-    /**
-     * Writes specified string with a ({@value java.lang.Integer#SIZE} - {@code 1})-bit length prefix. Equivalent to
-     * {@link #writeString(int, String, String)} invoked with a {@code lengthSize} of ({@value java.lang.Integer#SIZE}
-     * - {@code 1}); the encoded byte length may be up to {@value java.lang.Integer#MAX_VALUE}.
-     *
-     * @param charsetName the name of the charset for encoding the string; must not be {@code null}.
-     * @param value       the string to write; must not be {@code null}.
-     * @throws IOException if an I/O error occurs (including an unsupported {@code charsetName}).
-     * @see BitInput#readString31(String)
-     */
-    void writeString31(String charsetName, String value) throws IOException;
+    <T> void writeObject(BitWriter<? super T> writer, T value) throws IOException;
 
     // -----------------------------------------------------------------------------------------------------------------
 

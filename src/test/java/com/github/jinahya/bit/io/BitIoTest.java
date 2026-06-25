@@ -21,7 +21,6 @@ package com.github.jinahya.bit.io;
  */
 
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.converter.ConvertWith;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -39,7 +38,6 @@ import static com.github.jinahya.bit.io.BitIoTests.randomValueForInt;
 import static com.github.jinahya.bit.io.BitIoTests.randomValueForLong;
 import static com.github.jinahya.bit.io.BitIoTests.randomValueForShort;
 import static java.util.concurrent.ThreadLocalRandom.current;
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -49,7 +47,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
 @Slf4j
-@Disabled("Reconstructing the test module")
 class BitIoTest {
 
     // --------------------------------------------------------------------------------------------------------- boolean
@@ -260,70 +257,6 @@ class BitIoTest {
         final char actual = input.readChar16Le();
         assertEquals(0L, input.align(Byte.BYTES));
         assertEquals(expected, actual);
-    }
-
-    // ---------------------------------------------------------------------------------------------------------- byte[]
-    @MethodSource({"com.github.jinahya.bit.io.ByteIoSource#sourceByteIo"})
-    @ParameterizedTest
-    void testBytes(@ConvertWith(BitOutputConverter.class) final BitOutput output,
-                   @ConvertWith(BitInputConverter.class) final BitInput input)
-            throws IOException {
-        final int lengthSize = current().nextInt(1, Integer.SIZE);       // 1..31
-        final int elementSize = current().nextInt(1, Byte.SIZE + 1);     // 1..8 (signed)
-        // keep the packed payload within the test sinks (ByteIoSource.CAPACITY == 128 bytes)
-        final long maxLength = Math.min((1L << lengthSize) - 1L, 100L);
-        final int length = current().nextInt(0, (int) maxLength + 1);
-        final byte[] expected = new byte[length];
-        for (int i = 0; i < length; i++) {
-            expected[i] = (byte) (current().nextInt() >> (Integer.SIZE - elementSize)); // fits signed elementSize bits
-        }
-        output.writeBytes(lengthSize, elementSize, expected);
-        output.align(Byte.BYTES);
-        final byte[] actual = input.readBytes(lengthSize, elementSize);
-        input.align(Byte.BYTES);
-        assertArrayEquals(expected, actual);
-    }
-
-    // ----------------------------------------------------------------------------------------------------------- ascii
-    @MethodSource({"com.github.jinahya.bit.io.ByteIoSource#sourceByteIo"})
-    @ParameterizedTest
-    void testAscii(@ConvertWith(BitOutputConverter.class) final BitOutput output,
-                         @ConvertWith(BitInputConverter.class) final BitInput input)
-            throws IOException {
-        final String expected = "Hello, bit-io! 0123456789 ~ABCxyz";
-        output.writeAscii(16, expected);                           // 7-bit unsigned elements
-        output.align(Byte.BYTES);
-        final String actual = input.readAscii(16);
-        input.align(Byte.BYTES);
-        assertEquals(expected, actual);
-
-        output.writeAscii31(expected);
-        output.align(Byte.BYTES);
-        assertEquals(expected, input.readAscii31());
-        input.align(Byte.BYTES);
-    }
-
-    // ---------------------------------------------------------------------------------------------------------- string
-    @MethodSource({"com.github.jinahya.bit.io.ByteIoSource#sourceByteIo"})
-    @ParameterizedTest
-    void testString(@ConvertWith(BitOutputConverter.class) final BitOutput output,
-                    @ConvertWith(BitInputConverter.class) final BitInput input)
-            throws IOException {
-        final String expected = new StringBuilder("bit-io ")
-                .appendCodePoint(0x00E9)   // e-acute
-                .appendCodePoint(0x4E16)   // CJK
-                .appendCodePoint(0x754C)   // CJK
-                .append(" 0123 ~").toString();                          // multi-byte UTF-8
-        output.writeString(16, "UTF-8", expected);
-        output.align(Byte.BYTES);
-        final String actual = input.readString(16, "UTF-8");
-        input.align(Byte.BYTES);
-        assertEquals(expected, actual);
-
-        output.writeString31("UTF-8", expected);
-        output.align(Byte.BYTES);
-        assertEquals(expected, input.readString31("UTF-8"));
-        input.align(Byte.BYTES);
     }
 
     // ------------------------------------------------------------------------------------------------------------ skip

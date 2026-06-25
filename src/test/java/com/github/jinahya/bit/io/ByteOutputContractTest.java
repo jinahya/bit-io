@@ -32,7 +32,6 @@ import java.nio.channels.Channels;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class ByteOutputContractTest {
 
@@ -53,19 +52,19 @@ class ByteOutputContractTest {
         assertArrayEquals(expected, target.toByteArray());
     }
 
-    @ParameterizedTest(name = "{0}: {1}")
-    @MethodSource("outOfRangeValues")
-    void writeRejectsOutOfRangeValues(final String name, final int value) {
-        final Stream<Arguments> factories = byteOutputs();
-        factories.forEach(arguments -> {
-            final ByteOutputFactory factory = (ByteOutputFactory) arguments.get()[1];
-            try {
-                final ByteOutputTarget target = factory.create(1);
-                assertThrows(IllegalArgumentException.class, () -> target.output.write(value));
-            } catch (final IOException ioe) {
-                throw new AssertionError(ioe);
-            }
-        });
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("byteOutputs")
+    void writeWritesLowEightBitsOfValue(final String name, final ByteOutputFactory factory) throws IOException {
+        final int[] values = {-1, 256, 0x1FF, 0x142, Integer.MIN_VALUE, Integer.MAX_VALUE};
+        final byte[] expected = new byte[values.length];
+        for (int i = 0; i < values.length; i++) {
+            expected[i] = (byte) values[i]; // only the eight low-order bits are written
+        }
+        final ByteOutputTarget target = factory.create(values.length);
+        for (final int value : values) {
+            target.output.write(value);
+        }
+        assertArrayEquals(expected, target.toByteArray());
     }
 
     private static Stream<Arguments> byteOutputs() {
@@ -134,15 +133,6 @@ class ByteOutputContractTest {
                         };
                     }
                 })
-        );
-    }
-
-    private static Stream<Arguments> outOfRangeValues() {
-        return Stream.of(
-                Arguments.of("negative one", -1),
-                Arguments.of("greater than unsigned byte max", 256),
-                Arguments.of("integer minimum", Integer.MIN_VALUE),
-                Arguments.of("integer maximum", Integer.MAX_VALUE)
         );
     }
 

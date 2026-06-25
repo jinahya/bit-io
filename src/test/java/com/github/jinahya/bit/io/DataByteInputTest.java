@@ -20,9 +20,16 @@ package com.github.jinahya.bit.io;
  * #L%
  */
 
-import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
+import java.io.ByteArrayInputStream;
 import java.io.DataInput;
+import java.io.DataInputStream;
+import java.io.EOFException;
+import java.io.IOException;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * A class for unit-testing {@link DataByteInput} class.
@@ -30,16 +37,28 @@ import java.io.DataInput;
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  * @see DataByteOutputTest
  */
-@Disabled("Reconstructing the test module")
-public class DataByteInputTest
-        extends AbstractByteInputTest<DataByteInput, DataInput> {
+public class DataByteInputTest {
 
-    // -----------------------------------------------------------------------------------------------------------------
+    @Test
+    void readsUnsignedBytesFromDataInput() throws IOException {
+        final DataInput source = new DataInputStream(new ByteArrayInputStream(new byte[]{0x00, 0x7F, (byte) 0xFF}));
+        final DataByteInput input = new DataByteInput(source);
 
-    /**
-     * Creates a new instance.
-     */
-    DataByteInputTest() {
-        super(DataByteInput.class, DataInput.class);
+        assertEquals(0x00, input.read());
+        assertEquals(0x7F, input.read());
+        assertEquals(0xFF, input.read());
+        assertThrows(EOFException.class, input::read);
+    }
+
+    @Test
+    void propagatesEofFromBackingDataInput() {
+        final DataByteInput input = new DataByteInput(new DataInputStream(new ByteArrayInputStream(new byte[0])));
+
+        assertThrows(EOFException.class, input::read);
+    }
+
+    @Test
+    void rejectsNullDataInput() {
+        assertThrows(NullPointerException.class, () -> new DataByteInput(null));
     }
 }

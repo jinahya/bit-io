@@ -20,8 +20,12 @@ package com.github.jinahya.bit.io;
  * #L%
  */
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+
+import java.io.IOException;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * A class for testing {@link ArrayByteInput} class.
@@ -29,34 +33,67 @@ import org.junit.jupiter.api.Test;
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  * @see ArrayByteOutputTest
  */
-@Disabled("Reconstructing the test module")
-class ArrayByteInputTest
-        extends AbstractByteInputTest<ArrayByteInput, byte[]> {
+class ArrayByteInputTest {
 
-    // -----------------------------------------------------------------------------------------------------------------
+    @Test
+    void readsUnsignedBytesAndAdvancesIndex() throws IOException {
+        final ArrayByteInput input = new ArrayByteInput(new byte[]{0x00, 0x7F, (byte) 0xFF});
 
-    /**
-     * Creates a new instance.
-     */
-    ArrayByteInputTest() {
-        super(ArrayByteInput.class, byte[].class);
+        assertEquals(0, input.getIndex());
+        assertEquals(0x00, input.read());
+        assertEquals(1, input.getIndex());
+        assertEquals(0x7F, input.read());
+        assertEquals(2, input.getIndex());
+        assertEquals(0xFF, input.read());
+        assertEquals(3, input.getIndex());
+    }
+
+    @Test
+    void rejectsNullSource() {
+        assertThrows(NullPointerException.class, () -> new ArrayByteInput(null));
+    }
+
+    @Test
+    void throwsArrayIndexOutOfBoundsWhenExhausted() throws IOException {
+        final ArrayByteInput input = new ArrayByteInput(new byte[]{0x01});
+
+        assertEquals(0x01, input.read());
+        assertThrows(ArrayIndexOutOfBoundsException.class, input::read);
+    }
+
+    @Test
+    void emptyArrayStartsAtMinusOneAndThrowsArrayIndexOutOfBounds() {
+        final ArrayByteInput input = new ArrayByteInput(new byte[0]);
+
+        assertEquals(-1, input.getIndex());
+        assertThrows(ArrayIndexOutOfBoundsException.class, input::read);
+        assertEquals(0, input.getIndex());
     }
 
     // ----------------------------------------------------------------------------------------------------- getIndex()I
     @Test
     void testGetIndex() {
-        final int index = byteInput().getIndex();
+        final ArrayByteInput input = new ArrayByteInput(new byte[]{0x00});
+
+        assertEquals(0, input.getIndex());
     }
 
     // ---------------------------------------------------------------------------------------------------- setIndex(I)V
     @Test
-    void testSetIndex() {
-        byteInput().setIndex(0);
+    void testSetIndex() throws IOException {
+        final ArrayByteInput input = new ArrayByteInput(new byte[]{0x00, 0x01});
+
+        input.setIndex(1);
+        assertEquals(1, input.getIndex());
+        assertEquals(0x01, input.read());
     }
 
-    // ------------------------------------------------------------------------------------------------------ byteSource
-    @Override
-    byte[] byteSource() {
-        return new byte[0];
+    @Test
+    void setIndexPastEndMakesNextReadThrowArrayIndexOutOfBounds() {
+        final ArrayByteInput input = new ArrayByteInput(new byte[]{0x00});
+
+        input.setIndex(1);
+        assertThrows(ArrayIndexOutOfBoundsException.class, input::read);
+        assertEquals(2, input.getIndex());
     }
 }

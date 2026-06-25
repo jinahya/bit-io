@@ -26,7 +26,6 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
-import java.io.EOFException;
 import java.io.IOException;
 import java.nio.BufferOverflowException;
 import java.nio.ByteBuffer;
@@ -75,15 +74,15 @@ class ByteAdapterBoundaryTest {
     }
 
     @Test
-    void arrayByteInputThrowsEOFExceptionWhenEmpty() {
+    void arrayByteInputThrowsArrayIndexOutOfBoundsWhenEmpty() {
         final ByteInput input = new ArrayByteInput(new byte[0]);
-        assertThrows(EOFException.class, input::read);
+        assertThrows(ArrayIndexOutOfBoundsException.class, input::read);
     }
 
     @Test
-    void arrayByteOutputThrowsIOExceptionWhenFull() {
+    void arrayByteOutputThrowsArrayIndexOutOfBoundsWhenFull() {
         final ByteOutput output = new ArrayByteOutput(new byte[0]);
-        assertThrows(IOException.class, () -> output.write(0x00));
+        assertThrows(ArrayIndexOutOfBoundsException.class, () -> output.write(0x00));
     }
 
     @Test

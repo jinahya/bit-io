@@ -22,6 +22,10 @@ package com.github.jinahya.bit.io;
 
 import java.io.IOException;
 
+import static com.github.jinahya.bit.io.BitIoConstraints.requireValidExponentSizeDouble;
+import static com.github.jinahya.bit.io.BitIoConstraints.requireValidExponentSizeFloat;
+import static com.github.jinahya.bit.io.BitIoConstraints.requireValidFractionSizeDouble;
+import static com.github.jinahya.bit.io.BitIoConstraints.requireValidFractionSizeFloat;
 import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeByte;
 import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeChar;
 import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeInt;
@@ -201,71 +205,126 @@ public abstract class AbstractBitOutput
         writeShort16Le((short) value);
     }
 
-    // ---------------------------------------------------------------------------------------------------------- byte[]
+    // ----------------------------------------------------------------------------------------------------------- float
+    @Override
+    public void writeFloat(final int exponentSize, final int fractionSize, final float value) throws IOException {
+        requireValidExponentSizeFloat(exponentSize);
+        requireValidFractionSizeFloat(fractionSize);
+        final int bits = Float.floatToRawIntBits(value);
+        final int sign = (bits >>> 31) & 0x01;
+        final int rawExp = (bits >>> 23) & 0xFF;
+        final int rawFrac = bits & 0x7FFFFF;
+        final int expMask = (1 << exponentSize) - 1;
+        final int newBias = (1 << (exponentSize - 1)) - 1;
+        final int fracShift = 23 - fractionSize;
+        int storedFrac = rawFrac >>> fracShift; // keep the high fractionSize bits
+        final int storedExp;
+        if (rawExp == 0xFF) {                    // Infinity / NaN
+            storedExp = expMask;
+            if (rawFrac != 0) {                  // NaN: keep it a NaN, preserve quiet/signaling
+                final int msb = 1 << (fractionSize - 1);
+                if ((rawFrac & 0x400000) != 0) { // qNaN: native bit 22 (the quiet bit) is set
+                    storedFrac |= msb;
+                } else {                         // sNaN: keep the quiet bit clear, guard against collapsing to Infinity
+                    storedFrac &= ~msb;
+                    if (storedFrac == 0) {       // payload truncated away
+                        storedFrac = msb >> 1;   // force the next-highest bit (fractionSize >= 2 guaranteed)
+                    }
+                }
+            }
+        } else if (rawExp == 0) {                // signed zero / native subnormal
+            storedExp = 0;
+        } else {
+            final int stored = (rawExp - 127) + newBias;
+            if (stored >= expMask) {             // overflow -> Infinity
+                storedExp = expMask;
+                storedFrac = 0;
+            } else if (stored <= 0) {            // underflow -> signed zero
+                storedExp = 0;
+                storedFrac = 0;
+            } else {                             // finite normal
+                storedExp = stored;
+            }
+        }
+        writeInt(true, 1, sign);
+        writeInt(true, exponentSize, storedExp);
+        writeInt(true, fractionSize, storedFrac);
+    }
+
+    @Override
+    public void writeFloat32(final float value) throws IOException {
+        writeInt32(Float.floatToRawIntBits(value));
+    }
+
+    // ---------------------------------------------------------------------------------------------------------- double
+    @Override
+    public void writeDouble(final int exponentSize, final int fractionSize, final double value) throws IOException {
+        requireValidExponentSizeDouble(exponentSize);
+        requireValidFractionSizeDouble(fractionSize);
+        final long bits = Double.doubleToRawLongBits(value);
+        final int sign = (int) ((bits >>> 63) & 0x01L);
+        final int rawExp = (int) ((bits >>> 52) & 0x7FFL);
+        final long rawFrac = bits & 0x000FFFFFFFFFFFFFL;
+        final int expMask = (1 << exponentSize) - 1;
+        final int newBias = (1 << (exponentSize - 1)) - 1;
+        final int fracShift = 52 - fractionSize;
+        long storedFrac = rawFrac >>> fracShift; // keep the high fractionSize bits
+        final int storedExp;
+        if (rawExp == 0x7FF) {                   // Infinity / NaN
+            storedExp = expMask;
+            if (rawFrac != 0L) {                 // NaN: keep it a NaN, preserve quiet/signaling
+                final long msb = 1L << (fractionSize - 1);
+                if ((rawFrac & 0x0008000000000000L) != 0L) { // qNaN: native bit 51 (the quiet bit) is set
+                    storedFrac |= msb;
+                } else {                         // sNaN: keep the quiet bit clear, guard against collapsing to Infinity
+                    storedFrac &= ~msb;
+                    if (storedFrac == 0L) {      // payload truncated away
+                        storedFrac = msb >> 1;   // force the next-highest bit (fractionSize >= 2 guaranteed)
+                    }
+                }
+            }
+        } else if (rawExp == 0) {                // signed zero / native subnormal
+            storedExp = 0;
+        } else {
+            final int stored = (rawExp - 1023) + newBias;
+            if (stored >= expMask) {             // overflow -> Infinity
+                storedExp = expMask;
+                storedFrac = 0L;
+            } else if (stored <= 0) {            // underflow -> signed zero
+                storedExp = 0;
+                storedFrac = 0L;
+            } else {                             // finite normal
+                storedExp = stored;
+            }
+        }
+        writeInt(true, 1, sign);
+        writeInt(true, exponentSize, storedExp);
+        writeLong(true, fractionSize, storedFrac);
+    }
+
+    @Override
+    public void writeDouble64(final double value) throws IOException {
+        writeLong64(Double.doubleToRawLongBits(value));
+    }
+
+    // ---------------------------------------------------------------------------------------------------------- object
 
     /**
-     * Writes specified array of bytes; the general internal core shared by the public {@code byte[]} methods.
+     * Writes specified value using specified writer.
      *
-     * @param lengthSize  the number of bits for the array length; between {@code 1} and ({@value
-     *                    java.lang.Integer#SIZE} - {@code 1}), both inclusive.
-     * @param unsigned    {@code true} to write each element as the unsigned lower {@code elementSize} bits; {@code
-     *                    false} to write each as a signed {@code elementSize}-bit value.
-     * @param elementSize the number of bits for each element; between {@code 1} and {@value java.lang.Byte#SIZE}, both
-     *                    inclusive.
-     * @param value       the array of bytes to write; must not be {@code null}.
-     * @throws IOException if an I/O error occurs.
+     * @param writer the writer; must not be {@code null}.
+     * @param value  the value to write.
+     * @param <T>    value type parameter
+     * @throws NullPointerException if {@code writer} is {@code null}.
+     * @throws IOException          if an I/O error occurs.
+     * @see AbstractBitInput#readObject(BitReader)
      */
-    private void writeBytes(final int lengthSize, final boolean unsigned, final int elementSize, final byte[] value)
-            throws IOException {
-        requireValidSizeInt(true, lengthSize);
-        requireValidSizeByte(unsigned, elementSize); // unsigned: 1..7, signed: 1..8
-        if (value == null) {
-            throw new NullPointerException("value is null");
-        }
-        final int length = value.length;
-        if ((length >>> lengthSize) != 0) {
-            throw new IllegalArgumentException(
-                    "value.length(" + length + ") requires more than lengthSize(" + lengthSize + ") bits");
-        }
-        writeInt(true, lengthSize, length);
-        for (final byte element : value) {
-            writeByte(unsigned, elementSize, element);
-        }
-    }
-
     @Override
-    public void writeBytes(final int lengthSize, final int elementSize, final byte[] value) throws IOException {
-        writeBytes(lengthSize, false, elementSize, value);
-    }
-
-    // ------------------------------------------------------------------------------------------------ java.lang.String
-    @Override
-    public void writeAscii(final int lengthSize, final String value) throws IOException {
-        if (value == null) {
-            throw new NullPointerException("value is null");
+    public <T> void writeObject(final BitWriter<? super T> writer, final T value) throws IOException {
+        if (writer == null) {
+            throw new NullPointerException("writer is null");
         }
-        writeBytes(lengthSize, true, Byte.SIZE - 1, value.getBytes("US-ASCII")); // 7-bit unsigned elements
-    }
-
-    @Override
-    public void writeAscii31(final String value) throws IOException {
-        writeAscii(Integer.SIZE - 1, value);
-    }
-
-    @Override
-    public void writeString(final int lengthSize, final String charsetName, final String value) throws IOException {
-        if (charsetName == null) {
-            throw new NullPointerException("charsetName is null");
-        }
-        if (value == null) {
-            throw new NullPointerException("value is null");
-        }
-        writeBytes(lengthSize, Byte.SIZE, value.getBytes(charsetName)); // full 8-bit (signed) elements
-    }
-
-    @Override
-    public void writeString31(final String charsetName, final String value) throws IOException {
-        writeString(Integer.SIZE - 1, charsetName, value);
+        writer.write(this, value);
     }
 
     // -----------------------------------------------------------------------------------------------------------------

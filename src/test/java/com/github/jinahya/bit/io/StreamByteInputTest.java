@@ -20,9 +20,15 @@ package com.github.jinahya.bit.io;
  * #L%
  */
 
-import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
+import java.io.ByteArrayInputStream;
+import java.io.EOFException;
+import java.io.IOException;
 import java.io.InputStream;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * A class for unit-testing {@link StreamByteInput} class.
@@ -30,16 +36,28 @@ import java.io.InputStream;
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  * @see StreamByteOutputTest
  */
-@Disabled("Reconstructing the test module")
-public class StreamByteInputTest
-        extends AbstractByteInputTest<StreamByteInput, InputStream> {
+public class StreamByteInputTest {
 
-    // -----------------------------------------------------------------------------------------------------------------
+    @Test
+    void readsUnsignedBytesFromStream() throws IOException {
+        final InputStream source = new ByteArrayInputStream(new byte[]{0x00, 0x7F, (byte) 0xFF});
+        final StreamByteInput input = new StreamByteInput(source);
 
-    /**
-     * Creates a new instance.
-     */
-    StreamByteInputTest() {
-        super(StreamByteInput.class, InputStream.class);
+        assertEquals(0x00, input.read());
+        assertEquals(0x7F, input.read());
+        assertEquals(0xFF, input.read());
+        assertThrows(EOFException.class, input::read);
+    }
+
+    @Test
+    void throwsEofWhenBackingStreamIsAlreadyExhausted() {
+        final StreamByteInput input = new StreamByteInput(new ByteArrayInputStream(new byte[0]));
+
+        assertThrows(EOFException.class, input::read);
+    }
+
+    @Test
+    void rejectsNullStream() {
+        assertThrows(NullPointerException.class, () -> new StreamByteInput(null));
     }
 }

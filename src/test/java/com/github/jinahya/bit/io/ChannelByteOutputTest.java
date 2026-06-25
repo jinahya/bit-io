@@ -20,13 +20,15 @@ package com.github.jinahya.bit.io;
  * #L%
  */
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.nio.channels.Channels;
 import java.nio.channels.WritableByteChannel;
 
 import static java.nio.ByteBuffer.allocate;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
@@ -35,14 +37,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  * @see ChannelByteInputTest
  */
-@Disabled("Reconstructing the test module")
-public class ChannelByteOutputTest
-        extends AbstractByteOutputTest<ChannelByteOutput, WritableByteChannel> {
-
-    // -----------------------------------------------------------------------------------------------------------------
-    ChannelByteOutputTest() {
-        super(ChannelByteOutput.class, WritableByteChannel.class);
-    }
+public class ChannelByteOutputTest {
 
     // -----------------------------------------------------------------------------------------------------------------
 
@@ -53,8 +48,20 @@ public class ChannelByteOutputTest
      */
     @Test
     public void writeToChannel() throws IOException {
-        final ChannelByteOutput byteOutput = new ChannelByteOutput(new BlackByteChannel(), allocate(1));
-        byteOutput.write(0);
+        final ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        final WritableByteChannel channel = Channels.newChannel(bytes);
+        final ChannelByteOutput output = new ChannelByteOutput(channel, allocate(1));
+
+        output.write(0x11);
+        output.write(0x22); // drains the first byte before buffering the second
+
+        assertArrayEquals(new byte[]{0x11}, bytes.toByteArray());
+    }
+
+    @Test
+    public void constructorRejectsNullChannelAndBuffer() {
+        assertThrows(NullPointerException.class, () -> new ChannelByteOutput(null, allocate(1)));
+        assertThrows(NullPointerException.class, () -> new ChannelByteOutput(new BlackByteChannel(), null));
     }
 
     @Test

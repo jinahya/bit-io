@@ -20,9 +20,14 @@ package com.github.jinahya.bit.io;
  * #L%
  */
 
-import org.jboss.weld.junit5.WeldJunit5Extension;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.Test;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * A class for unit-testing {@link DefaultBitOutput} class.
@@ -30,17 +35,29 @@ import org.junit.jupiter.api.extension.ExtendWith;
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  * @see DefaultBitInputTest
  */
-@ExtendWith({WeldJunit5Extension.class})
-@Disabled("Reconstructing the test module")
-public class DefaultBitOutputTest
-        extends AbstractBitOutputTest<DefaultBitOutput> {
+public class DefaultBitOutputTest {
 
-    // -----------------------------------------------------------------------------------------------------------------
+    @Test
+    void rejectsNullDelegate() {
+        assertThrows(NullPointerException.class, () -> new DefaultBitOutput(null));
+    }
 
-    /**
-     * Creates a new instance.
-     */
-    DefaultBitOutputTest() {
-        super(DefaultBitOutput.class);
+    @Test
+    void writeDelegatesToByteOutput() throws IOException {
+        final ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        final DefaultBitOutput output = new DefaultBitOutput(new StreamByteOutput(bytes));
+
+        output.write(0x00);
+        output.write(0x7F);
+        output.write(0xFF);
+
+        assertArrayEquals(new byte[]{0x00, 0x7F, (byte) 0xFF}, bytes.toByteArray());
+    }
+
+    @Test
+    void toStringIncludesDelegate() {
+        final ByteOutput delegate = new StreamByteOutput(new ByteArrayOutputStream());
+
+        assertTrue(new DefaultBitOutput(delegate).toString().contains("delegate=" + delegate));
     }
 }

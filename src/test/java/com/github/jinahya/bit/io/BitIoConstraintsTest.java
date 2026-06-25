@@ -20,117 +20,226 @@ package com.github.jinahya.bit.io;
  * #L%
  */
 
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.MethodSource;
 
+import java.util.stream.Stream;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * A class for unit-testing {@link BitIoConstraints}.
  */
-@Disabled("Reconstructing the test module")
 class BitIoConstraintsTest {
 
-    // ------------------------------------------------------------------------------------------------------------ byte
-    @Test
-    void testRequireValidSizeByte_throwsOnZero() {
-        assertThrows(IllegalArgumentException.class, () -> BitIoConstraints.requireValidSizeByte(false, 0));
+    @MethodSource("integralSizeValidators")
+    @ParameterizedTest
+    void splitIntegralValidatorsAcceptMinAndMax(final Validator validator, final int min, final int max) {
+        assertEquals(min, validator.requireValidSize(min));
+        assertEquals(max, validator.requireValidSize(max));
     }
 
-    @Test
-    void testRequireValidSizeByte_throwsOnNegative() {
-        assertThrows(IllegalArgumentException.class, () -> BitIoConstraints.requireValidSizeByte(false, -1));
+    @MethodSource("integralSizeValidators")
+    @ParameterizedTest
+    void splitIntegralValidatorsRejectOutOfRangeSizes(final Validator validator, final int min, final int max) {
+        assertThrows(IllegalArgumentException.class, () -> validator.requireValidSize(min - 1));
+        assertThrows(IllegalArgumentException.class, () -> validator.requireValidSize(-1));
+        assertThrows(IllegalArgumentException.class, () -> validator.requireValidSize(max + 1));
     }
 
-    @Test
-    void testRequireValidSizeByte_throwsOnTooLarge() {
-        assertThrows(IllegalArgumentException.class, () -> BitIoConstraints.requireValidSizeByte(false, Byte.SIZE + 1));
+    @CsvSource({
+            "1, 16"
+    })
+    @ParameterizedTest
+    void charValidatorAcceptsMinAndMax(final int min, final int max) {
+        assertEquals(min, BitIoConstraints.requireValidSizeChar(min));
+        assertEquals(max, BitIoConstraints.requireValidSizeChar(max));
     }
 
-    @Test
-    void testRequireValidSizeByte_throwsOnUnsignedMaxSize() {
-        assertThrows(IllegalArgumentException.class, () -> BitIoConstraints.requireValidSizeByte(true, Byte.SIZE));
+    @CsvSource({
+            "0",
+            "-1",
+            "17"
+    })
+    @ParameterizedTest
+    void charValidatorRejectsOutOfRangeSizes(final int size) {
+        assertThrows(IllegalArgumentException.class, () -> BitIoConstraints.requireValidSizeChar(size));
     }
 
-    // ----------------------------------------------------------------------------------------------------------- short
-    @Test
-    void testRequireValidSizeShort_throwsOnZero() {
-        assertThrows(IllegalArgumentException.class, () -> BitIoConstraints.requireValidSizeShort(false, 0));
+    @CsvSource({
+            "true,  byte,  1,  7",
+            "false, byte,  1,  8",
+            "true,  short, 1,  15",
+            "false, short, 1,  16",
+            "true,  int,   1,  31",
+            "false, int,   1,  32",
+            "true,  long,  1,  63",
+            "false, long,  1,  64"
+    })
+    @ParameterizedTest
+    void dispatchersAcceptMinAndMax(final boolean unsigned, final String type, final int min, final int max) {
+        assertEquals(min, dispatch(type, unsigned, min));
+        assertEquals(max, dispatch(type, unsigned, max));
     }
 
-    @Test
-    void testRequireValidSizeShort_throwsOnNegative() {
-        assertThrows(IllegalArgumentException.class, () -> BitIoConstraints.requireValidSizeShort(false, -1));
+    @CsvSource({
+            "true,  byte,  1,  7",
+            "false, byte,  1,  8",
+            "true,  short, 1,  15",
+            "false, short, 1,  16",
+            "true,  int,   1,  31",
+            "false, int,   1,  32",
+            "true,  long,  1,  63",
+            "false, long,  1,  64"
+    })
+    @ParameterizedTest
+    void dispatchersRejectOutOfRangeSizes(final boolean unsigned, final String type, final int min, final int max) {
+        assertThrows(IllegalArgumentException.class, () -> dispatch(type, unsigned, min - 1));
+        assertThrows(IllegalArgumentException.class, () -> dispatch(type, unsigned, -1));
+        assertThrows(IllegalArgumentException.class, () -> dispatch(type, unsigned, max + 1));
     }
 
-    @Test
-    void testRequireValidSizeShort_throwsOnTooLarge() {
-        assertThrows(IllegalArgumentException.class,
-                     () -> BitIoConstraints.requireValidSizeShort(false, Short.SIZE + 1));
+    @CsvSource({
+            "true,  byte,  1",
+            "true,  byte,  7",
+            "false, byte,  1",
+            "false, byte,  7",
+            "false, byte,  8",
+            "true,  short, 1",
+            "true,  short, 15",
+            "false, short, 1",
+            "false, short, 15",
+            "false, short, 16",
+            "true,  int,   1",
+            "true,  int,   31",
+            "false, int,   1",
+            "false, int,   31",
+            "false, int,   32",
+            "true,  long,  1",
+            "true,  long,  63",
+            "false, long,  1",
+            "false, long,  63",
+            "false, long,  64"
+    })
+    @ParameterizedTest
+    void dispatchersMatchSplitValidatorsForValidSizes(final boolean unsigned, final String type, final int size) {
+        assertEquals(split(type, unsigned, size), dispatch(type, unsigned, size));
     }
 
-    @Test
-    void testRequireValidSizeShort_throwsOnUnsignedMaxSize() {
-        assertThrows(IllegalArgumentException.class, () -> BitIoConstraints.requireValidSizeShort(true, Short.SIZE));
+    @CsvSource({
+            "true,  byte,  0",
+            "true,  byte,  -1",
+            "true,  byte,  8",
+            "false, byte,  0",
+            "false, byte,  -1",
+            "false, byte,  9",
+            "true,  short, 0",
+            "true,  short, -1",
+            "true,  short, 16",
+            "false, short, 0",
+            "false, short, -1",
+            "false, short, 17",
+            "true,  int,   0",
+            "true,  int,   -1",
+            "true,  int,   32",
+            "false, int,   0",
+            "false, int,   -1",
+            "false, int,   33",
+            "true,  long,  0",
+            "true,  long,  -1",
+            "true,  long,  64",
+            "false, long,  0",
+            "false, long,  -1",
+            "false, long,  65"
+    })
+    @ParameterizedTest
+    void dispatchersAndSplitValidatorsThrowSameTypeForInvalidSizes(final boolean unsigned, final String type,
+                                                                   final int size) {
+        assertThrows(IllegalArgumentException.class, () -> split(type, unsigned, size));
+        assertThrows(IllegalArgumentException.class, () -> dispatch(type, unsigned, size));
     }
 
-    // ------------------------------------------------------------------------------------------------------------- int
-    @Test
-    void testRequireValidSizeInt_throwsOnZero() {
-        assertThrows(IllegalArgumentException.class, () -> BitIoConstraints.requireValidSizeInt(false, 0));
+    @MethodSource("floatingPointSizeValidators")
+    @ParameterizedTest
+    void floatingPointValidatorsAcceptMinAndMax(final Validator validator, final int min, final int max) {
+        assertEquals(min, validator.requireValidSize(min));
+        assertEquals(max, validator.requireValidSize(max));
     }
 
-    @Test
-    void testRequireValidSizeInt_throwsOnNegative() {
-        assertThrows(IllegalArgumentException.class, () -> BitIoConstraints.requireValidSizeInt(false, -1));
+    @MethodSource("floatingPointSizeValidators")
+    @ParameterizedTest
+    void floatingPointValidatorsRejectOutOfRangeSizes(final Validator validator, final int min, final int max) {
+        assertThrows(IllegalArgumentException.class, () -> validator.requireValidSize(1));
+        assertThrows(IllegalArgumentException.class, () -> validator.requireValidSize(-1));
+        assertThrows(IllegalArgumentException.class, () -> validator.requireValidSize(max + 1));
     }
 
-    @Test
-    void testRequireValidSizeInt_throwsOnTooLarge() {
-        assertThrows(IllegalArgumentException.class,
-                     () -> BitIoConstraints.requireValidSizeInt(false, Integer.SIZE + 1));
+    private static Stream<Object[]> integralSizeValidators() {
+        return Stream.of(
+                new Object[]{validator(BitIoConstraints::requireValidSizeForUnsignedByte), 1, 7},
+                new Object[]{validator(BitIoConstraints::requireValidSizeForSignedByte), 1, 8},
+                new Object[]{validator(BitIoConstraints::requireValidSizeForUnsignedShort), 1, 15},
+                new Object[]{validator(BitIoConstraints::requireValidSizeForSignedShort), 1, 16},
+                new Object[]{validator(BitIoConstraints::requireValidSizeForUnsignedInt), 1, 31},
+                new Object[]{validator(BitIoConstraints::requireValidSizeForSignedInt), 1, 32},
+                new Object[]{validator(BitIoConstraints::requireValidSizeForUnsignedLong), 1, 63},
+                new Object[]{validator(BitIoConstraints::requireValidSizeForSignedLong), 1, 64}
+        );
     }
 
-    @Test
-    void testRequireValidSizeInt_throwsOnUnsignedMaxSize() {
-        assertThrows(IllegalArgumentException.class, () -> BitIoConstraints.requireValidSizeInt(true, Integer.SIZE));
+    private static Stream<Object[]> floatingPointSizeValidators() {
+        return Stream.of(
+                new Object[]{validator(BitIoConstraints::requireValidExponentSizeFloat), 2, 8},
+                new Object[]{validator(BitIoConstraints::requireValidFractionSizeFloat), 2, 23},
+                new Object[]{validator(BitIoConstraints::requireValidExponentSizeDouble), 2, 11},
+                new Object[]{validator(BitIoConstraints::requireValidFractionSizeDouble), 2, 52}
+        );
     }
 
-    // ------------------------------------------------------------------------------------------------------------ long
-    @Test
-    void testRequireValidSizeLong_throwsOnZero() {
-        assertThrows(IllegalArgumentException.class, () -> BitIoConstraints.requireValidSizeLong(false, 0));
+    private static Validator validator(final Validator validator) {
+        return validator;
     }
 
-    @Test
-    void testRequireValidSizeLong_throwsOnNegative() {
-        assertThrows(IllegalArgumentException.class, () -> BitIoConstraints.requireValidSizeLong(false, -1));
+    private static int dispatch(final String type, final boolean unsigned, final int size) {
+        if ("byte".equals(type)) {
+            return BitIoConstraints.requireValidSizeByte(unsigned, size);
+        }
+        if ("short".equals(type)) {
+            return BitIoConstraints.requireValidSizeShort(unsigned, size);
+        }
+        if ("int".equals(type)) {
+            return BitIoConstraints.requireValidSizeInt(unsigned, size);
+        }
+        if ("long".equals(type)) {
+            return BitIoConstraints.requireValidSizeLong(unsigned, size);
+        }
+        throw new AssertionError("unknown type: " + type);
     }
 
-    @Test
-    void testRequireValidSizeLong_throwsOnTooLarge() {
-        assertThrows(IllegalArgumentException.class,
-                     () -> BitIoConstraints.requireValidSizeLong(false, Long.SIZE + 1));
+    private static int split(final String type, final boolean unsigned, final int size) {
+        if ("byte".equals(type)) {
+            return unsigned ? BitIoConstraints.requireValidSizeForUnsignedByte(size)
+                    : BitIoConstraints.requireValidSizeForSignedByte(size);
+        }
+        if ("short".equals(type)) {
+            return unsigned ? BitIoConstraints.requireValidSizeForUnsignedShort(size)
+                    : BitIoConstraints.requireValidSizeForSignedShort(size);
+        }
+        if ("int".equals(type)) {
+            return unsigned ? BitIoConstraints.requireValidSizeForUnsignedInt(size)
+                    : BitIoConstraints.requireValidSizeForSignedInt(size);
+        }
+        if ("long".equals(type)) {
+            return unsigned ? BitIoConstraints.requireValidSizeForUnsignedLong(size)
+                    : BitIoConstraints.requireValidSizeForSignedLong(size);
+        }
+        throw new AssertionError("unknown type: " + type);
     }
 
-    @Test
-    void testRequireValidSizeLong_throwsOnUnsignedMaxSize() {
-        assertThrows(IllegalArgumentException.class, () -> BitIoConstraints.requireValidSizeLong(true, Long.SIZE));
-    }
+    private interface Validator {
 
-    // ------------------------------------------------------------------------------------------------------------ char
-    @Test
-    void testRequireValidSizeChar_throwsOnZero() {
-        assertThrows(IllegalArgumentException.class, () -> BitIoConstraints.requireValidSizeChar(0));
-    }
-
-    @Test
-    void testRequireValidSizeChar_throwsOnNegative() {
-        assertThrows(IllegalArgumentException.class, () -> BitIoConstraints.requireValidSizeChar(-1));
-    }
-
-    @Test
-    void testRequireValidSizeChar_throwsOnTooLarge() {
-        assertThrows(IllegalArgumentException.class, () -> BitIoConstraints.requireValidSizeChar(Character.SIZE + 1));
+        int requireValidSize(int size);
     }
 }

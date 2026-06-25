@@ -85,9 +85,9 @@ final class ByteIoSource {
 
     /**
      * The output and the input are wired to the two ends of an NIO {@link Pipe}. The output is <em>write-through</em>
-     * ({@link BufferByteOutput#from(java.nio.channels.WritableByteChannel)}), so every byte is drained to the sink as it
-     * is written and nothing is ever stranded in an intermediate buffer — which keeps the single-threaded write-then-
-     * read pattern (including multi-cycle tests) from blocking.
+     * ({@link BufferByteOutput#from(java.nio.channels.WritableByteChannel)}), so every byte is drained to the sink as
+     * it is written and nothing is ever stranded in an intermediate buffer — which keeps the single-threaded
+     * write-then- read pattern (including multi-cycle tests) from blocking.
      */
     static Stream<Arguments> sourceByteIoChannel() throws IOException {
         final Pipe pipe = Pipe.open();

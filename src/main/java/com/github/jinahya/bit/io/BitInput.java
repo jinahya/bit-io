@@ -198,82 +198,71 @@ public interface BitInput {
 
     // ----------------------------------------------------------------------------------------------------------- float
 
+    /**
+     * Reads a {@code float} value packed into {@code 1 + exponentSize + fractionSize} bits by
+     * {@link BitOutput#writeFloat(int, int, float)}. The same {@code (exponentSize, fractionSize)} pair must be used as
+     * when writing.
+     *
+     * @param exponentSize the number of bits for the exponent; between {@code 2} and {@code 8}, both inclusive.
+     * @param fractionSize the number of bits for the fraction(significand); between {@code 2} and {@code 23}, both
+     *                     inclusive.
+     * @return a {@code float} value.
+     * @throws IllegalArgumentException if {@code exponentSize} or {@code fractionSize} is not valid.
+     * @throws IOException              if an I/O error occurs.
+     * @see BitOutput#writeFloat(int, int, float)
+     */
+    float readFloat(int exponentSize, int fractionSize) throws IOException;
+
+    /**
+     * Reads a {@code float} value from a {@value java.lang.Float#SIZE}-bit pattern written by
+     * {@link BitOutput#writeFloat32(float)}.
+     *
+     * @return a {@code float} value.
+     * @throws IOException if an I/O error occurs.
+     * @see BitOutput#writeFloat32(float)
+     */
+    float readFloat32() throws IOException;
+
     // ---------------------------------------------------------------------------------------------------------- double
 
-    // ---------------------------------------------------------------------------------------------------------- byte[]
-
     /**
-     * Reads an array of bytes.
+     * Reads a {@code double} value packed into {@code 1 + exponentSize + fractionSize} bits by
+     * {@link BitOutput#writeDouble(int, int, double)}. The same {@code (exponentSize, fractionSize)} pair must be used
+     * as when writing.
      *
-     * <p>The {@code length} of the array is read, first, as an unsigned {@code int} of {@code lengthSize} bits; each
-     * element, then, is read as a signed {@code elementSize}-bit value.
-     *
-     * @param lengthSize  the number of bits for the array length; between {@code 1} and ({@value
-     *                    java.lang.Integer#SIZE} - {@code 1}), both inclusive.
-     * @param elementSize the number of bits for each element; between {@code 1} and {@value java.lang.Byte#SIZE}, both
-     *                    inclusive.
-     * @return an array of bytes.
-     * @throws IllegalArgumentException if {@code lengthSize} or {@code elementSize} is not valid.
+     * @param exponentSize the number of bits for the exponent; between {@code 2} and {@code 11}, both inclusive.
+     * @param fractionSize the number of bits for the fraction(significand); between {@code 2} and {@code 52}, both
+     *                     inclusive.
+     * @return a {@code double} value.
+     * @throws IllegalArgumentException if {@code exponentSize} or {@code fractionSize} is not valid.
      * @throws IOException              if an I/O error occurs.
-     * @see BitOutput#writeBytes(int, int, byte[])
+     * @see BitOutput#writeDouble(int, int, double)
      */
-    byte[] readBytes(int lengthSize, int elementSize) throws IOException;
-
-    // ------------------------------------------------------------------------------------------------ java.lang.String
+    double readDouble(int exponentSize, int fractionSize) throws IOException;
 
     /**
-     * Reads an ASCII string written in a compressed manner.
+     * Reads a {@code double} value from a {@value java.lang.Double#SIZE}-bit pattern written by
+     * {@link BitOutput#writeDouble64(double)}.
      *
-     * <p>The (byte) length is read, first, as an unsigned {@code int} of {@code lengthSize} bits; each byte, then, is
-     * read as a {@value java.lang.Byte#SIZE}{@code  - 1}-bit unsigned value, and the bytes are decoded in {@code
-     * US-ASCII}.
-     *
-     * @param lengthSize the number of bits for the (byte) length of the encoded string; between {@code 1} and
-     *                   ({@value java.lang.Integer#SIZE} - {@code 1}), both inclusive.
-     * @return an ASCII string.
-     * @throws IllegalArgumentException if {@code lengthSize} is not valid.
-     * @throws IOException              if an I/O error occurs.
-     * @see BitOutput#writeAscii(int, String)
-     */
-    String readAscii(int lengthSize) throws IOException;
-
-    /**
-     * Reads an ASCII string with a ({@value java.lang.Integer#SIZE} - {@code 1})-bit length prefix. Equivalent to
-     * {@link #readAscii(int)} invoked with a {@code lengthSize} of ({@value java.lang.Integer#SIZE} - {@code 1}).
-     *
-     * @return an ASCII string.
+     * @return a {@code double} value.
      * @throws IOException if an I/O error occurs.
-     * @see BitOutput#writeAscii31(String)
+     * @see BitOutput#writeDouble64(double)
      */
-    String readAscii31() throws IOException;
+    double readDouble64() throws IOException;
+
+    // ---------------------------------------------------------------------------------------------------------- object
 
     /**
-     * Reads a string, written as a length-prefixed array of full bytes, and decodes it in a named charset.
+     * Reads a value using specified reader.
      *
-     * <p>The (byte) length is read, first, as an unsigned {@code int} of {@code lengthSize} bits; the bytes, then, are
-     * read via {@link #readBytes(int, int)} with an {@code elementSize} of {@value java.lang.Byte#SIZE} and decoded
-     * using {@code charsetName}.
-     *
-     * @param lengthSize  the number of bits for the (byte) length of the encoded string; between {@code 1} and
-     *                    ({@value java.lang.Integer#SIZE} - {@code 1}), both inclusive.
-     * @param charsetName the name of the charset for decoding the string; must not be {@code null}.
-     * @return a string.
-     * @throws IllegalArgumentException if {@code lengthSize} is not valid.
-     * @throws IOException              if an I/O error occurs (including an unsupported {@code charsetName}).
-     * @see BitOutput#writeString(int, String, String)
+     * @param reader the reader; must not be {@code null}.
+     * @param <T>    value type parameter
+     * @return the value read by {@code reader}.
+     * @throws NullPointerException if {@code reader} is {@code null}.
+     * @throws IOException          if an I/O error occurs.
+     * @see BitOutput#writeObject(BitWriter, Object)
      */
-    String readString(int lengthSize, String charsetName) throws IOException;
-
-    /**
-     * Reads a string with a ({@value java.lang.Integer#SIZE} - {@code 1})-bit length prefix. Equivalent to {@link
-     * #readString(int, String)} invoked with a {@code lengthSize} of ({@value java.lang.Integer#SIZE} - {@code 1}).
-     *
-     * @param charsetName the name of the charset for decoding the string; must not be {@code null}.
-     * @return a string.
-     * @throws IOException if an I/O error occurs (including an unsupported {@code charsetName}).
-     * @see BitOutput#writeString31(String, String)
-     */
-    String readString31(String charsetName) throws IOException;
+    <T> T readObject(BitReader<? extends T> reader) throws IOException;
 
     // -----------------------------------------------------------------------------------------------------------------
 

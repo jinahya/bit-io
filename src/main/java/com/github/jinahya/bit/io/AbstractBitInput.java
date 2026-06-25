@@ -22,6 +22,10 @@ package com.github.jinahya.bit.io;
 
 import java.io.IOException;
 
+import static com.github.jinahya.bit.io.BitIoConstraints.requireValidExponentSizeDouble;
+import static com.github.jinahya.bit.io.BitIoConstraints.requireValidExponentSizeFloat;
+import static com.github.jinahya.bit.io.BitIoConstraints.requireValidFractionSizeDouble;
+import static com.github.jinahya.bit.io.BitIoConstraints.requireValidFractionSizeFloat;
 import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeByte;
 import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeChar;
 import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeInt;
@@ -204,57 +208,82 @@ public abstract class AbstractBitInput
         return (char) readShort16Le();
     }
 
-    // ---------------------------------------------------------------------------------------------------------- byte[]
+    // ----------------------------------------------------------------------------------------------------------- float
+    @Override
+    public float readFloat(final int exponentSize, final int fractionSize) throws IOException {
+        requireValidExponentSizeFloat(exponentSize);
+        requireValidFractionSizeFloat(fractionSize);
+        final int sign = readInt(true, 1);
+        final int storedExp = readInt(true, exponentSize);
+        final int storedFrac = readInt(true, fractionSize);
+        final int expMask = (1 << exponentSize) - 1;
+        final int newBias = (1 << (exponentSize - 1)) - 1;
+        final int fracShift = 23 - fractionSize;
+        final int rawExp;
+        if (storedExp == 0) {                    // signed zero / native subnormal
+            rawExp = 0;
+        } else if (storedExp == expMask) {       // Infinity / NaN
+            rawExp = 0xFF;
+        } else {                                 // finite normal
+            rawExp = (storedExp - newBias) + 127;
+        }
+        final int rawFrac = storedFrac << fracShift;
+        final int bits = (sign << 31) | ((rawExp & 0xFF) << 23) | (rawFrac & 0x7FFFFF);
+        return Float.intBitsToFloat(bits);
+    }
+
+    @Override
+    public float readFloat32() throws IOException {
+        return Float.intBitsToFloat(readInt32());
+    }
+
+    // ---------------------------------------------------------------------------------------------------------- double
+    @Override
+    public double readDouble(final int exponentSize, final int fractionSize) throws IOException {
+        requireValidExponentSizeDouble(exponentSize);
+        requireValidFractionSizeDouble(fractionSize);
+        final long sign = readInt(true, 1);
+        final int storedExp = readInt(true, exponentSize);
+        final long storedFrac = readLong(true, fractionSize);
+        final int expMask = (1 << exponentSize) - 1;
+        final int newBias = (1 << (exponentSize - 1)) - 1;
+        final int fracShift = 52 - fractionSize;
+        final long rawExp;
+        if (storedExp == 0) {                    // signed zero / native subnormal
+            rawExp = 0L;
+        } else if (storedExp == expMask) {       // Infinity / NaN
+            rawExp = 0x7FFL;
+        } else {                                 // finite normal
+            rawExp = (storedExp - newBias) + 1023;
+        }
+        final long rawFrac = storedFrac << fracShift;
+        final long bits = (sign << 63) | ((rawExp & 0x7FFL) << 52) | (rawFrac & 0x000FFFFFFFFFFFFFL);
+        return Double.longBitsToDouble(bits);
+    }
+
+    @Override
+    public double readDouble64() throws IOException {
+        return Double.longBitsToDouble(readLong64());
+    }
+
+    // ---------------------------------------------------------------------------------------------------------- object
 
     /**
-     * Reads an array of bytes; the general internal core shared by the public {@code byte[]} methods.
+     * Reads a value using specified reader.
      *
-     * @param lengthSize  the number of bits for the array length; between {@code 1} and ({@value
-     *                    java.lang.Integer#SIZE} - {@code 1}), both inclusive.
-     * @param unsigned    {@code true} to read each element as an unsigned {@code elementSize}-bit value; {@code false}
-     *                    to read each as a signed {@code elementSize}-bit value.
-     * @param elementSize the number of bits for each element; between {@code 1} and {@value java.lang.Byte#SIZE}, both
-     *                    inclusive.
-     * @return an array of bytes.
-     * @throws IOException if an I/O error occurs.
+     * @param reader the reader; must not be {@code null}.
+     * @param <T>    value type parameter
+     * @return the value read by {@code reader}.
+     * @throws NullPointerException if {@code reader} is {@code null}.
+     * @throws IOException          if an I/O error occurs.
+     * @see AbstractBitOutput#writeObject(BitWriter, Object)
      */
-    private byte[] readBytes(final int lengthSize, final boolean unsigned, final int elementSize) throws IOException {
-        requireValidSizeInt(true, lengthSize);
-        requireValidSizeByte(unsigned, elementSize); // unsigned: 1..7, signed: 1..8
-        final byte[] value = new byte[readInt(true, lengthSize)];
-        for (int i = 0; i < value.length; i++) {
-            value[i] = readByte(unsigned, elementSize);
+    @Override
+    public <T> T readObject(final BitReader<? extends T> reader) throws IOException {
+        if (reader == null) {
+            throw new NullPointerException("reader is null");
         }
-        return value;
-    }
-
-    @Override
-    public byte[] readBytes(final int lengthSize, final int elementSize) throws IOException {
-        return readBytes(lengthSize, false, elementSize);
-    }
-
-    // ------------------------------------------------------------------------------------------------ java.lang.String
-    @Override
-    public String readAscii(final int lengthSize) throws IOException {
-        return new String(readBytes(lengthSize, true, Byte.SIZE - 1), "US-ASCII"); // 7-bit unsigned elements
-    }
-
-    @Override
-    public String readAscii31() throws IOException {
-        return readAscii(Integer.SIZE - 1);
-    }
-
-    @Override
-    public String readString(final int lengthSize, final String charsetName) throws IOException {
-        if (charsetName == null) {
-            throw new NullPointerException("charsetName is null");
-        }
-        return new String(readBytes(lengthSize, Byte.SIZE), charsetName); // full 8-bit (signed) elements
-    }
-
-    @Override
-    public String readString31(final String charsetName) throws IOException {
-        return readString(Integer.SIZE - 1, charsetName);
+        return reader.read(this);
     }
 
     // -----------------------------------------------------------------------------------------------------------------

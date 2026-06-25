@@ -20,13 +20,16 @@ package com.github.jinahya.bit.io;
  * #L%
  */
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+import java.io.ByteArrayInputStream;
+import java.io.EOFException;
 import java.io.IOException;
+import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 
 import static java.nio.ByteBuffer.allocate;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
@@ -35,14 +38,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  * @see ChannelByteOutputTest
  */
-@Disabled("Reconstructing the test module")
-public class ChannelByteInputTest
-        extends AbstractByteInputTest<ChannelByteInput, ReadableByteChannel> {
-
-    // -----------------------------------------------------------------------------------------------------------------
-    ChannelByteInputTest() {
-        super(ChannelByteInput.class, ReadableByteChannel.class);
-    }
+public class ChannelByteInputTest {
 
     // -----------------------------------------------------------------------------------------------------------------
 
@@ -53,8 +49,20 @@ public class ChannelByteInputTest
      */
     @Test
     public void readFromChannel() throws IOException {
-        final ChannelByteInput byteInput = new ChannelByteInput(new WhiteByteChannel(), allocate(1));
-        byteInput.read();
+        final byte[] bytes = {0x00, 0x7F, (byte) 0xFF};
+        final ReadableByteChannel channel = Channels.newChannel(new ByteArrayInputStream(bytes));
+        final ChannelByteInput input = new ChannelByteInput(channel, allocate(2));
+
+        assertEquals(0x00, input.read());
+        assertEquals(0x7F, input.read());
+        assertEquals(0xFF, input.read());
+        assertThrows(EOFException.class, input::read);
+    }
+
+    @Test
+    public void constructorRejectsNullChannelAndBuffer() {
+        assertThrows(NullPointerException.class, () -> new ChannelByteInput(null, allocate(1)));
+        assertThrows(NullPointerException.class, () -> new ChannelByteInput(new WhiteByteChannel(), null));
     }
 
     @Test

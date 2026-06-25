@@ -20,9 +20,15 @@ package com.github.jinahya.bit.io;
  * #L%
  */
 
-import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
+import java.io.ByteArrayOutputStream;
 import java.io.DataOutput;
+import java.io.DataOutputStream;
+import java.io.IOException;
+
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * A class for unit-testing {@link DataByteOutput} class.
@@ -30,16 +36,23 @@ import java.io.DataOutput;
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  * @see DataByteInputTest
  */
-@Disabled("Reconstructing the test module")
-public class DataByteOutputTest
-        extends AbstractByteOutputTest<DataByteOutput, DataOutput> {
+public class DataByteOutputTest {
 
-    // -----------------------------------------------------------------------------------------------------------------
+    @Test
+    void writesBytesToDataOutput() throws IOException {
+        final ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        final DataOutput target = new DataOutputStream(bytes);
+        final DataByteOutput output = new DataByteOutput(target);
 
-    /**
-     * Creates a new instance.
-     */
-    DataByteOutputTest() {
-        super(DataByteOutput.class, DataOutput.class);
+        output.write(0x00);
+        output.write(0x7F);
+        output.write(0xFF);
+
+        assertArrayEquals(new byte[]{0x00, 0x7F, (byte) 0xFF}, bytes.toByteArray());
+    }
+
+    @Test
+    void rejectsNullDataOutput() {
+        assertThrows(NullPointerException.class, () -> new DataByteOutput(null));
     }
 }

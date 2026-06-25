@@ -20,9 +20,14 @@ package com.github.jinahya.bit.io;
  * #L%
  */
 
-import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.OutputStream;
+
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * A class for unit-testing {@link StreamByteOutput} class.
@@ -30,16 +35,23 @@ import java.io.OutputStream;
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  * @see StreamByteInputTest
  */
-@Disabled("Reconstructing the test module")
-public class StreamByteOutputTest
-        extends AbstractByteOutputTest<StreamByteOutput, OutputStream> {
+public class StreamByteOutputTest {
 
-    // -----------------------------------------------------------------------------------------------------------------
+    @Test
+    void writesBytesToStream() throws IOException {
+        final ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        final OutputStream target = bytes;
+        final StreamByteOutput output = new StreamByteOutput(target);
 
-    /**
-     * Creates a new instance.
-     */
-    StreamByteOutputTest() {
-        super(StreamByteOutput.class, OutputStream.class);
+        output.write(0x00);
+        output.write(0x7F);
+        output.write(0xFF);
+
+        assertArrayEquals(new byte[]{0x00, 0x7F, (byte) 0xFF}, bytes.toByteArray());
+    }
+
+    @Test
+    void rejectsNullStream() {
+        assertThrows(NullPointerException.class, () -> new StreamByteOutput(null));
     }
 }

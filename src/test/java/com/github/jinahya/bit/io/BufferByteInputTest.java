@@ -20,14 +20,13 @@ package com.github.jinahya.bit.io;
  * #L%
  */
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
 import java.io.EOFException;
 import java.io.IOException;
+import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
-import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -40,17 +39,40 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  * @see BufferByteOutputTest
  */
-@Disabled("Reconstructing the test module")
-class BufferByteInputTest
-        extends AbstractByteInputTest<BufferByteInput, ByteBuffer> {
+class BufferByteInputTest {
 
-    // -----------------------------------------------------------------------------------------------------------------
+    @Test
+    void readsUnsignedBytesFromBuffer() throws IOException {
+        final BufferByteInput input = new BufferByteInput(ByteBuffer.wrap(new byte[]{0x00, 0x7F, (byte) 0xFF}));
 
-    /**
-     * Creates a new instance.
-     */
-    BufferByteInputTest() {
-        super(BufferByteInput.class, ByteBuffer.class);
+        assertEquals(0x00, input.read());
+        assertEquals(0x7F, input.read());
+        assertEquals(0xFF, input.read());
+    }
+
+    @Test
+    void rejectsNullBuffer() {
+        assertThrows(NullPointerException.class, () -> new BufferByteInput(null));
+    }
+
+    @Test
+    void throwsBufferUnderflowWhenBufferExhausted() throws IOException {
+        final BufferByteInput input = new BufferByteInput(ByteBuffer.allocate(0));
+
+        assertThrows(BufferUnderflowException.class, input::read);
+    }
+
+    @Test
+    void readsAdvancePositionAndRespectLimit() throws IOException {
+        final ByteBuffer buffer = ByteBuffer.wrap(new byte[]{0x10, 0x20, 0x30});
+        buffer.position(1);
+        buffer.limit(2);
+        final BufferByteInput input = new BufferByteInput(buffer);
+
+        assertEquals(0x20, input.read());
+        assertEquals(2, buffer.position());
+        assertEquals(2, buffer.limit());
+        assertThrows(BufferUnderflowException.class, input::read);
     }
 
     // ------------------------------------------------------------------------------------------------------------ from
@@ -64,7 +86,7 @@ class BufferByteInputTest
     void from_ReadsAllBytes_FromChannel() throws IOException {
         final byte[] bytes = new byte[ThreadLocalRandom.current().nextInt(1, 1024)];
         ThreadLocalRandom.current().nextBytes(bytes);
-        final ReadableByteChannel channel = Channels.newChannel(new ByteArrayInputStream(bytes));
+        final ReadableByteChannel channel = java.nio.channels.Channels.newChannel(new ByteArrayInputStream(bytes));
         final ByteInput input = BufferByteInput.from(channel);
         for (final byte b : bytes) {
             assertEquals(b & 0xFF, input.read());
@@ -72,9 +94,58 @@ class BufferByteInputTest
     }
 
     @Test
+    void from_UsesSingleByteReads_FromChannel() throws IOException {
+        final SingleByteReadableByteChannel channel = new SingleByteReadableByteChannel(new byte[]{0x11, 0x22});
+        final ByteInput input = BufferByteInput.from(channel);
+
+        assertEquals(0x11, input.read());
+        assertEquals(1, channel.reads);
+        assertEquals(0x22, input.read());
+        assertEquals(2, channel.reads);
+        assertThrows(EOFException.class, input::read);
+        assertEquals(3, channel.reads);
+    }
+
+    @Test
     void from_EOFException_WhenChannelExhausted() throws IOException {
-        final ReadableByteChannel channel = Channels.newChannel(new ByteArrayInputStream(new byte[0]));
+        final ReadableByteChannel channel =
+                java.nio.channels.Channels.newChannel(new ByteArrayInputStream(new byte[0]));
         final ByteInput input = BufferByteInput.from(channel);
         assertThrows(EOFException.class, input::read);
+    }
+
+    private static final class SingleByteReadableByteChannel
+            implements ReadableByteChannel {
+
+        private SingleByteReadableByteChannel(final byte[] bytes) {
+            this.bytes = bytes;
+        }
+
+        @Override
+        public int read(final ByteBuffer dst) {
+            assertEquals(1, dst.remaining());
+            reads++;
+            if (index == bytes.length) {
+                return -1;
+            }
+            dst.put(bytes[index++]);
+            return 1;
+        }
+
+        @Override
+        public boolean isOpen() {
+            return true;
+        }
+
+        @Override
+        public void close() {
+            // no-op
+        }
+
+        private final byte[] bytes;
+
+        private int index;
+
+        private int reads;
     }
 }

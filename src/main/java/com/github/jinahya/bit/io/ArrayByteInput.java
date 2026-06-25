@@ -28,7 +28,7 @@ import java.io.IOException;
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  * @see ArrayByteOutput
  * @deprecated Prefer {@link BufferByteInput} over a {@link java.nio.ByteBuffer#wrap(byte[]) wrapped} array, which also
- * lets the caller {@linkplain java.nio.Buffer#hasRemaining() pre-check} and refill.
+ *         lets the caller {@linkplain java.nio.Buffer#hasRemaining() pre-check} and refill.
  */
 @Deprecated
 public class ArrayByteInput
@@ -70,16 +70,14 @@ public class ArrayByteInput
      * attribute, when successfully returns, is increased by {@code 1}.
      *
      * @return {@inheritDoc}
-     * @throws IOException {@inheritDoc}
+     * @throws IOException                    {@inheritDoc}
+     * @throws ArrayIndexOutOfBoundsException if the {@link #getIndex() index} is out of the {@code source}'s bounds;
+     *                                        that is, when the {@code source} has been exhausted (or was empty).
      * @see ArrayByteOutput#write(int)
      */
     @Override
     public int read() throws IOException {
-        try {
-            return source[getIndexAndIncrement()] & 0xFF;
-        } catch (final ArrayIndexOutOfBoundsException aioobe) {
-            throw new java.io.EOFException("end of array reached");
-        }
+        return source[getIndexAndIncrement()] & 0xFF;
     }
 
     // ----------------------------------------------------------------------------------------------------------- index

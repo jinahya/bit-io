@@ -57,6 +57,6 @@ public class StreamByteOutput
      */
     @Override
     public void write(final int value) throws IOException {
-        target.write(requireValidValue(value));
+        target.write(value);
     }
 }

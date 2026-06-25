@@ -28,13 +28,15 @@ import java.io.IOException;
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  * @see ByteInput
  */
-@FunctionalInterface
+//@FunctionalInterface
 public interface ByteOutput {
 
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * Writes specified unsigned {@value java.lang.Byte#SIZE}-bit value.
+     * Writes a byte: the eight low-order bits of specified value. The {@value java.lang.Integer#SIZE}{@code  -}
+     * {@value java.lang.Byte#SIZE} high-order bits of {@code value} are ignored, mirroring
+     * {@link java.io.OutputStream#write(int)} and {@link java.io.DataOutput#writeByte(int)}.
      *
      * <p>How a full target is signalled is implementation-defined. Most targets throw an {@link IOException} when they
      * can accept no more bytes. A <em>buffer-backed</em> target ({@link BufferByteOutput}) instead throws an unchecked
@@ -42,10 +44,8 @@ public interface ByteOutput {
      * callers should {@linkplain java.nio.Buffer#hasRemaining() pre-check} and purge it to the ultimate target rather
      * than rely on that exception.</p>
      *
-     * @param value the unsigned {@value java.lang.Byte#SIZE}-bit value to write; between {@code 0} and {@code 255},
-     *              both inclusive.
-     * @throws IllegalArgumentException if {@code value} is out of range.
-     * @throws IOException              if an I/O error occurs.
+     * @param value the value whose eight low-order bits are written.
+     * @throws IOException if an I/O error occurs.
      * @see ByteInput#read()
      */
     void write(int value) throws IOException;

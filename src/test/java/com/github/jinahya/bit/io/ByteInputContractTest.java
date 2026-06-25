@@ -126,12 +126,6 @@ class ByteInputContractTest {
 
     private static Stream<Arguments> eofSignalingByteInputs() {
         return Stream.of(
-                Arguments.of("ArrayByteInput", new ByteInputFactory() {
-                    @Override
-                    public ByteInput create(final byte[] bytes) {
-                        return new ArrayByteInput(bytes);
-                    }
-                }),
                 Arguments.of("DataByteInput", new ByteInputFactory() {
                     @Override
                     public ByteInput create(final byte[] bytes) {

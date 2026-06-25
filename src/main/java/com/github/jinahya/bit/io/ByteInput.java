@@ -28,7 +28,7 @@ import java.io.IOException;
  * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
  * @see ByteOutput
  */
-@FunctionalInterface
+//@FunctionalInterface
 public interface ByteInput {
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -42,8 +42,8 @@ public interface ByteInput {
      *
      * <p>How exhaustion is signalled is implementation-defined. <em>Terminal</em> sources (input stream, data input,
      * channel) throw an {@link java.io.EOFException} when the end is reached. A <em>buffer-backed</em> source
-     * ({@link BufferByteInput}) instead throws an unchecked {@link java.nio.BufferUnderflowException} when its buffer is
-     * exhausted; such a buffer is a caller-managed window, so callers should
+     * ({@link BufferByteInput}) instead throws an unchecked {@link java.nio.BufferUnderflowException} when its buffer
+     * is exhausted; such a buffer is a caller-managed window, so callers should
      * {@linkplain java.nio.Buffer#hasRemaining() pre-check} and refill it from the ultimate source rather than rely on
      * that exception.</p>
      *

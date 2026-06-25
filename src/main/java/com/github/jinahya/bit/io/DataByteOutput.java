@@ -57,6 +57,6 @@ public class DataByteOutput
      */
     @Override
     public void write(final int value) throws IOException {
-        target.writeByte(requireValidValue(value));
+        target.writeByte(value);
     }
 }

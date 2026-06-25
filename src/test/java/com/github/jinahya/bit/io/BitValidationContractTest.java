@@ -25,6 +25,8 @@ import org.junit.jupiter.api.Test;
 import java.io.EOFException;
 import java.io.IOException;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class BitValidationContractTest {
@@ -46,7 +48,7 @@ class BitValidationContractTest {
 
     @Test
     void bitOutputRejectsInvalidSizes() {
-        final BitOutput output = output();
+        final DefaultBitOutput output = output();
         assertThrows(IllegalArgumentException.class, () -> output.writeByte(false, 0, (byte) 0));
         assertThrows(IllegalArgumentException.class, () -> output.writeByte(true, Byte.SIZE, (byte) 0));
         assertThrows(IllegalArgumentException.class, () -> output.writeShort(false, 0, (short) 0));
@@ -70,11 +72,63 @@ class BitValidationContractTest {
 
     @Test
     void bitOutputRejectsInvalidSkipAndAlignArguments() {
-        final BitOutput output = output();
+        final DefaultBitOutput output = output();
         assertThrows(IllegalArgumentException.class, () -> output.skip(0));
         assertThrows(IllegalArgumentException.class, () -> output.skip(-1));
         assertThrows(IllegalArgumentException.class, () -> output.align(0));
         assertThrows(IllegalArgumentException.class, () -> output.align(-1));
+    }
+
+    @Test
+    void bitOutputCountStartsAtZeroAndTracksFlushedOctets() throws IOException {
+        final DefaultBitOutput output = output();
+
+        assertEquals(0L, output.getCount());
+        output.skip(3);
+        assertEquals(0L, output.getCount());
+        output.align(1);
+        assertEquals(1L, output.getCount());
+    }
+
+    @Test
+    void bitInputCountStartsAtZeroAndTracksReadOctets() throws IOException {
+        final DefaultBitInput input = new DefaultBitInput(new ByteInput() {
+            @Override
+            public int read() {
+                return 0x00;
+            }
+        });
+
+        assertEquals(0L, input.getCount());
+        input.readBoolean();
+        assertEquals(1L, input.getCount());
+        input.align(1);
+        assertEquals(1L, input.getCount());
+    }
+
+    @Test
+    void bitInputRejectsOutOfRangeDelegateValues() {
+        assertThrows(IOException.class, () -> new DefaultBitInput(new ConstantByteInput(-2)).readBoolean());
+        assertThrows(IOException.class, () -> new DefaultBitInput(new ConstantByteInput(256)).readBoolean());
+    }
+
+    @Test
+    void skipCrossesIntegerSizedChunksForInputAndOutput() throws IOException {
+        final DefaultBitInput input = new DefaultBitInput(new ByteInput() {
+            @Override
+            public int read() {
+                return 0x00;
+            }
+        });
+        final RecordingByteOutput target = new RecordingByteOutput();
+        final DefaultBitOutput output = new DefaultBitOutput(target);
+
+        input.skip(40);
+        output.skip(40);
+
+        assertEquals(5L, input.getCount());
+        assertEquals(5L, output.getCount());
+        assertArrayEquals(new byte[]{0x00, 0x00, 0x00, 0x00, 0x00}, target.bytes());
     }
 
     private static BitInput input() {
@@ -86,12 +140,46 @@ class BitValidationContractTest {
         });
     }
 
-    private static BitOutput output() {
+    private static DefaultBitOutput output() {
         return new DefaultBitOutput(new ByteOutput() {
             @Override
             public void write(final int value) {
                 // discard
             }
         });
+    }
+
+    private static final class ConstantByteInput
+            implements ByteInput {
+
+        private ConstantByteInput(final int value) {
+            this.value = value;
+        }
+
+        @Override
+        public int read() {
+            return value;
+        }
+
+        private final int value;
+    }
+
+    private static final class RecordingByteOutput
+            implements ByteOutput {
+
+        @Override
+        public void write(final int value) {
+            bytes[count++] = (byte) value;
+        }
+
+        private byte[] bytes() {
+            final byte[] copy = new byte[count];
+            System.arraycopy(bytes, 0, copy, 0, count);
+            return copy;
+        }
+
+        private final byte[] bytes = new byte[8];
+
+        private int count;
     }
 }

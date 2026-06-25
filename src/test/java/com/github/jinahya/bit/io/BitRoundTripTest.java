@@ -85,6 +85,161 @@ class BitRoundTripTest {
     }
 
     @Test
+    void roundTripsSizedBytesForEveryValidSize() throws IOException {
+        for (int size = 1; size < Byte.SIZE; size++) {
+            final int s = size;
+            final byte expected = (byte) ((1 << s) - 1);
+            read(write(new BitWriter() {
+                @Override
+                public void write(final BitOutput output) throws IOException {
+                    output.writeByte(true, s, expected);
+                }
+            }), new BitReader() {
+                @Override
+                public void read(final BitInput input) throws IOException {
+                    assertEquals(expected, input.readByte(true, s));
+                }
+            });
+        }
+        for (int size = 1; size <= Byte.SIZE; size++) {
+            final int s = size;
+            final byte expected = (byte) -(1 << (s - 1));
+            read(write(new BitWriter() {
+                @Override
+                public void write(final BitOutput output) throws IOException {
+                    output.writeByte(false, s, expected);
+                }
+            }), new BitReader() {
+                @Override
+                public void read(final BitInput input) throws IOException {
+                    assertEquals(expected, input.readByte(false, s));
+                }
+            });
+        }
+    }
+
+    @Test
+    void roundTripsSizedShortsForEveryValidSize() throws IOException {
+        for (int size = 1; size < Short.SIZE; size++) {
+            final int s = size;
+            final short expected = (short) ((1 << s) - 1);
+            read(write(new BitWriter() {
+                @Override
+                public void write(final BitOutput output) throws IOException {
+                    output.writeShort(true, s, expected);
+                }
+            }), new BitReader() {
+                @Override
+                public void read(final BitInput input) throws IOException {
+                    assertEquals(expected, input.readShort(true, s));
+                }
+            });
+        }
+        for (int size = 1; size <= Short.SIZE; size++) {
+            final int s = size;
+            final short expected = (short) -(1 << (s - 1));
+            read(write(new BitWriter() {
+                @Override
+                public void write(final BitOutput output) throws IOException {
+                    output.writeShort(false, s, expected);
+                }
+            }), new BitReader() {
+                @Override
+                public void read(final BitInput input) throws IOException {
+                    assertEquals(expected, input.readShort(false, s));
+                }
+            });
+        }
+    }
+
+    @Test
+    void roundTripsSizedIntsForEveryValidSize() throws IOException {
+        for (int size = 1; size < Integer.SIZE; size++) {
+            final int s = size;
+            final int expected = (1 << s) - 1;
+            read(write(new BitWriter() {
+                @Override
+                public void write(final BitOutput output) throws IOException {
+                    output.writeInt(true, s, expected);
+                }
+            }), new BitReader() {
+                @Override
+                public void read(final BitInput input) throws IOException {
+                    assertEquals(expected, input.readInt(true, s));
+                }
+            });
+        }
+        for (int size = 1; size <= Integer.SIZE; size++) {
+            final int s = size;
+            final int expected = -(1 << (s - 1));
+            read(write(new BitWriter() {
+                @Override
+                public void write(final BitOutput output) throws IOException {
+                    output.writeInt(false, s, expected);
+                }
+            }), new BitReader() {
+                @Override
+                public void read(final BitInput input) throws IOException {
+                    assertEquals(expected, input.readInt(false, s));
+                }
+            });
+        }
+    }
+
+    @Test
+    void roundTripsSizedLongsForEveryValidSize() throws IOException {
+        for (int size = 1; size < Long.SIZE; size++) {
+            final int s = size;
+            final long expected = (1L << s) - 1L;
+            read(write(new BitWriter() {
+                @Override
+                public void write(final BitOutput output) throws IOException {
+                    output.writeLong(true, s, expected);
+                }
+            }), new BitReader() {
+                @Override
+                public void read(final BitInput input) throws IOException {
+                    assertEquals(expected, input.readLong(true, s));
+                }
+            });
+        }
+        for (int size = 1; size <= Long.SIZE; size++) {
+            final int s = size;
+            final long expected = -(1L << (s - 1));
+            read(write(new BitWriter() {
+                @Override
+                public void write(final BitOutput output) throws IOException {
+                    output.writeLong(false, s, expected);
+                }
+            }), new BitReader() {
+                @Override
+                public void read(final BitInput input) throws IOException {
+                    assertEquals(expected, input.readLong(false, s));
+                }
+            });
+        }
+    }
+
+    @Test
+    void roundTripsSizedCharsForEveryValidSize() throws IOException {
+        for (int size = 1; size <= Character.SIZE; size++) {
+            final int s = size;
+            final char expected = (char) ((1 << s) - 1);
+            read(write(new BitWriter() {
+                @Override
+                public void write(final BitOutput output) throws IOException {
+                    output.writeChar(s, expected);
+                }
+            }), new BitReader() {
+                @Override
+                public void read(final BitInput input) throws IOException {
+                    assertEquals(expected, input.readChar(s));
+                }
+            });
+        }
+    }
+
+    @Test
     void roundTripsFixedWidthValues() throws IOException {
         final byte[] bytes = write(new BitWriter() {
             @Override

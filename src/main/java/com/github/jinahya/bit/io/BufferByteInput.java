@@ -59,7 +59,7 @@ public class BufferByteInput
      *
      * @param channel the readable byte channel from which bytes are read; must not be {@code null}.
      * @return a new byte input reading from {@code channel}; its {@link ByteInput#read() read()} method throws an
-     * {@link EOFException} when {@code channel} reaches its end.
+     *         {@link EOFException} when {@code channel} reaches its end.
      * @throws NullPointerException if {@code channel} is {@code null}.
      * @see BufferByteOutput#from(java.nio.channels.WritableByteChannel)
      */

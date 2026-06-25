@@ -20,17 +20,17 @@ package com.github.jinahya.bit.io;
  * #L%
  */
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.nio.BufferOverflowException;
 import java.nio.ByteBuffer;
-import java.nio.channels.Channels;
 import java.nio.channels.WritableByteChannel;
 import java.util.concurrent.ThreadLocalRandom;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
@@ -39,17 +39,42 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  * @see BufferByteInputTest
  */
-@Disabled("Reconstructing the test module")
-class BufferByteOutputTest
-        extends AbstractByteOutputTest<BufferByteOutput, ByteBuffer> {
+class BufferByteOutputTest {
 
-    // -----------------------------------------------------------------------------------------------------------------
+    @Test
+    void writesBytesToBuffer() throws IOException {
+        final ByteBuffer buffer = ByteBuffer.allocate(3);
+        final BufferByteOutput output = new BufferByteOutput(buffer);
 
-    /**
-     * Creates a new instance.
-     */
-    BufferByteOutputTest() {
-        super(BufferByteOutput.class, ByteBuffer.class);
+        output.write(0x00);
+        output.write(0x7F);
+        output.write(0xFF);
+
+        assertArrayEquals(new byte[]{0x00, 0x7F, (byte) 0xFF}, buffer.array());
+    }
+
+    @Test
+    void rejectsNullBuffer() {
+        assertThrows(NullPointerException.class, () -> new BufferByteOutput(null));
+    }
+
+    @Test
+    void throwsBufferOverflowWhenBufferFull() throws IOException {
+        final BufferByteOutput output = new BufferByteOutput(ByteBuffer.allocate(0));
+
+        assertThrows(BufferOverflowException.class, () -> output.write(0x00));
+    }
+
+    @Test
+    void writesAdvancePositionAndRespectLimit() throws IOException {
+        final ByteBuffer buffer = ByteBuffer.allocate(3);
+        buffer.position(1);
+        buffer.limit(2);
+        final BufferByteOutput output = new BufferByteOutput(buffer);
+
+        output.write(0x7E);
+        assertArrayEquals(new byte[]{0x00, 0x7E, 0x00}, buffer.array());
+        assertThrows(BufferOverflowException.class, () -> output.write(0x7F));
     }
 
     // ------------------------------------------------------------------------------------------------------------ from
@@ -70,12 +95,51 @@ class BufferByteOutputTest
         final byte[] bytes = new byte[ThreadLocalRandom.current().nextInt(1, 1024)];
         ThreadLocalRandom.current().nextBytes(bytes);
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        final WritableByteChannel channel = Channels.newChannel(baos);
+        final WritableByteChannel channel = java.nio.channels.Channels.newChannel(baos);
         final ByteOutput output = BufferByteOutput.from(channel);
         for (final byte b : bytes) {
             output.write(b & 0xFF);
         }
         // write-through: all bytes are already in the stream, without any flush/close
         assertArrayEquals(bytes, baos.toByteArray());
+    }
+
+    @Test
+    void from_UsesSingleByteWrites_ToChannel() throws IOException {
+        final RecordingWritableByteChannel channel = new RecordingWritableByteChannel();
+        final ByteOutput output = BufferByteOutput.from(channel);
+
+        output.write(0x11);
+        assertArrayEquals(new byte[]{0x11}, channel.bytes.toByteArray());
+        assertEquals(1, channel.writes);
+        output.write(0x22);
+        assertArrayEquals(new byte[]{0x11, 0x22}, channel.bytes.toByteArray());
+        assertEquals(2, channel.writes);
+    }
+
+    private static final class RecordingWritableByteChannel
+            implements WritableByteChannel {
+
+        @Override
+        public int write(final ByteBuffer src) {
+            assertEquals(1, src.remaining());
+            writes++;
+            bytes.write(src.get() & 0xFF);
+            return 1;
+        }
+
+        @Override
+        public boolean isOpen() {
+            return true;
+        }
+
+        @Override
+        public void close() {
+            // no-op
+        }
+
+        private final ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+
+        private int writes;
     }
 }

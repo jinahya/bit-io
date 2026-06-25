@@ -20,9 +20,15 @@ package com.github.jinahya.bit.io;
  * #L%
  */
 
-import org.jboss.weld.junit5.WeldJunit5Extension;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.Test;
+
+import java.io.ByteArrayInputStream;
+import java.io.EOFException;
+import java.io.IOException;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * A class for unit-testing {@link DefaultBitInput} class.
@@ -30,17 +36,28 @@ import org.junit.jupiter.api.extension.ExtendWith;
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  * @see DefaultBitOutputTest
  */
-@ExtendWith({WeldJunit5Extension.class})
-@Disabled("Reconstructing the test module")
-public class DefaultBitInputTest
-        extends AbstractBitInputTest<DefaultBitInput> {
+public class DefaultBitInputTest {
 
-    // -----------------------------------------------------------------------------------------------------------------
+    @Test
+    void rejectsNullDelegate() {
+        assertThrows(NullPointerException.class, () -> new DefaultBitInput(null));
+    }
 
-    /**
-     * Creates a new instance.
-     */
-    DefaultBitInputTest() {
-        super(DefaultBitInput.class);
+    @Test
+    void readDelegatesToByteInput() throws IOException {
+        final DefaultBitInput input =
+                new DefaultBitInput(new StreamByteInput(new ByteArrayInputStream(new byte[]{0x00, 0x7F, (byte) 0xFF})));
+
+        assertEquals(0x00, input.read());
+        assertEquals(0x7F, input.read());
+        assertEquals(0xFF, input.read());
+        assertThrows(EOFException.class, input::read);
+    }
+
+    @Test
+    void toStringIncludesDelegate() {
+        final ByteInput delegate = new StreamByteInput(new ByteArrayInputStream(new byte[0]));
+
+        assertTrue(new DefaultBitInput(delegate).toString().contains("delegate=" + delegate));
     }
 }

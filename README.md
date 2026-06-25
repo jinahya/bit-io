@@ -1,10 +1,8 @@
 # bit-io
 
 [![GitHub Action](https://github.com/jinahya/bit-io/workflows/Java%20CI/badge.svg)](https://github.com/jinahya/bit-io/actions?workflow=Java+CI)
-[![CircleCI](https://circleci.com/gh/jinahya/bit-io/tree/develop.svg?style=svg)](https://circleci.com/gh/jinahya/bit-io/tree/develop)
-[![Build Status](https://travis-ci.org/jinahya/bit-io.svg?branch=develop)](https://travis-ci.org/jinahya/bit-io)
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=com.github.jinahya%3Abit-io%3Adevelop&metric=alert_status)](https://sonarcloud.io/dashboard?id=com.github.jinahya%3Abit-io%3Adevelop)
-[![Known Vulnerabilities](https://snyk.io//test/github/jinahya/bit-io/badge.svg?targetFile=pom.xml)](https://snyk.io//test/github/jinahya/bit-io?targetFile=pom.xml)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=jinahya_bit-io&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=jinahya_bit-io)
+
 [![Maven Central](https://img.shields.io/maven-central/v/com.github.jinahya/bit-io.svg)](https://img.shields.io/maven-central/v/com.github.jinahya/bit-io)
 [![javadoc](https://javadoc.io/badge2/com.github.jinahya/bit-io/javadoc.svg)](https://javadoc.io/doc/com.github.jinahya/bit-io)
 
@@ -14,29 +12,68 @@ See [bit-io2](https://github.com/jinahya/bit-io2) for Java8+ flavored version.
 
 ## Specifications
 
-#### boolean
+The library reads and writes the following value types. All sizes are in **bits**.
 
-|type     |size(min)|size(max)|notes                                   |
-|---------|---------|---------|----------------------------------------|
-|`boolean`|1        |1        |`readBoolean()`, `writeBoolean(boolean)`|
+### `boolean`
 
-### numeric
+A single bit. `readBoolean()` / `writeBoolean(boolean)`.
 
-#### integral
+### `byte`
 
-The size(min) is `1` and the size(max) is `2^e - (unsigned ? 1 : 0)`.
+Signed `1`–`8` bits, unsigned `1`–`7`. `readByte(unsigned, size)` / `writeByte(unsigned, size, byte)`.
 
-|type   |e  |size(min)|size(max)|notes                                                           |
-|-------|---|---------|---------|----------------------------------------------------------------|
-|`byte` |3  |1        |7/8      |`readByte(unsigned, size)`, `writeByte(unsigned, size, byte)`   |
-|`short`|4  |1        |15/16    |`readShort(unsigned, size)`, `writeShort(unsigned, size, short)`|
-|`int`  |5  |1        |31/32    |`readInt(unsigned, size)`, `writeInt(unsigned, size, int)`      |
-|`long` |6  |1        |63/64    |`readLong(unsigned, size)`, `writeLong(unsigned, size, long)`   |
-|`char` |   |1        |16       |`readChar(size)`, `writeChar(size, char)`                       |
+### `short`
 
-#### floating-point
+Signed `1`–`16` bits, unsigned `1`–`15`. `readShort(unsigned, size)` / `writeShort(unsigned, size, short)`.
 
-No methods supplied for floating-point types.
+### `int`
+
+Signed `1`–`32` bits, unsigned `1`–`31`. `readInt(unsigned, size)` / `writeInt(unsigned, size, int)`.
+
+### `long`
+
+Signed `1`–`64` bits, unsigned `1`–`63`. `readLong(unsigned, size)` / `writeLong(unsigned, size, long)`.
+
+### `char`
+
+`1`–`16` bits (always unsigned). `readChar(size)` / `writeChar(size, char)`.
+
+### `float`
+
+**Packed:** `readFloat(exponentSize, fractionSize)` / `writeFloat(exponentSize, fractionSize, float)`, with
+`exponentSize` `2`–`8` and `fractionSize` `2`–`23`, storing `1 + exponentSize + fractionSize` bits
+(sign + exponent + fraction). Magnitudes that don't fit saturate to `±Infinity`, too-small ones underflow to
+`±0`, and an over-wide fraction is truncated.
+
+**Full width (lossless):** `readFloat32()` / `writeFloat32(float)` — `Float.SIZE` = 32 bits via raw IEEE-754
+bits. At the native `8`/`23` widths the packed form equals this.
+
+### `double`
+
+**Packed:** `readDouble(exponentSize, fractionSize)` / `writeDouble(exponentSize, fractionSize, double)`, with
+`exponentSize` `2`–`11` and `fractionSize` `2`–`52`; same packing and saturation rules as `float`.
+
+**Full width (lossless):** `readDouble64()` / `writeDouble64(double)` — `Double.SIZE` = 64 bits via raw
+IEEE-754 bits. At the native `11`/`52` widths the packed form equals this.
+
+### Object references
+
+Arbitrary types are read/written through a `BitReader<T>` / `BitWriter<T>` pair.
+
+```java
+<T> T  readObject(BitReader<? extends T> reader);
+<T> void writeObject(BitWriter<? super T> writer, T value);
+```
+
+Implement `BitReader`/`BitWriter` as named classes (no lambdas on Java 1.6) to (de)serialize your own types.
+Built-in implementations:
+
+|kind        |reader / writer                                                         |notes                                            |
+|------------|------------------------------------------------------------------------|-------------------------------------------------|
+|byte array  |`ByteArrayReader.ofSigned`/`ofUnsigned(lengthSize, elementSize)`, `ByteArrayWriter`|length-prefixed `byte[]`, each element `elementSize` bits|
+|string      |`new StringReader(lengthSize, charsetName)`, `new StringWriter(...)`     |length-prefixed bytes decoded in a named charset |
+|ASCII string|`StringReader.ofAscii(lengthSize)`, `StringWriter.ofAscii(lengthSize)`   |compressed 7-bit (`Byte.SIZE - 1`) elements      |
+|nullable    |`FilterBitReader.nullable(reader)`, `FilterBitWriter.nullable(writer)`   |prefixes a 1-bit nullability flag                |
 
 ## Reading
 
@@ -146,5 +183,3 @@ final long padded = output.align(1);     // align to the next byte; pads 0..7 ze
 > the trailing bits are never written. Reading and writing must use the **same**
 > `align(bytes)` argument at the same position to stay in sync.
 
-----
-[![Donate via Paypal](https://img.shields.io/badge/donate-paypal-blue.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_cart&business=A954LDFBW4B9N&lc=KR&item_name=GitHub&amount=5%2e00&currency_code=USD&button_subtype=products&add=1&bn=PP%2dShopCartBF%3adonate%2dpaypal%2dblue%2epng%3aNonHosted)

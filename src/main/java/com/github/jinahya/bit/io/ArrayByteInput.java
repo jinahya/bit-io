@@ -25,7 +25,7 @@ import java.io.IOException;
 /**
  * A byte input reads bytes from an array of bytes.
  *
- * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
+ * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  * @see ArrayByteOutput
  * @deprecated Prefer {@link BufferByteInput} over a {@link java.nio.ByteBuffer#wrap(byte[]) wrapped} array, which also
  *         lets the caller {@linkplain java.nio.Buffer#hasRemaining() pre-check} and refill.
@@ -37,8 +37,8 @@ public class ArrayByteInput
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * Creates a new instance with given arguments. The {@link #getIndex() index} attribute will be set as {@code 0}, or
-     * {@code -1} when the {@code source}'s {@code length} is {@code 0}.
+     * Creates a new instance with given arguments. The {@code index} attribute will be set as {@code 0}, or {@code -1}
+     * when the {@code source}'s {@code length} is {@code 0}.
      *
      * @param source a byte array from which bytes are read; must not be {@code null}.
      * @throws NullPointerException if {@code source} is {@code null}.
@@ -66,49 +66,29 @@ public class ArrayByteInput
 
     /**
      * {@inheritDoc} The {@code read()} method of {@code ArrayByteInput} class returns
-     * {@link #source source}[{@link #getIndex() index}] as an unsigned 8-bit value. The {@link #setIndex(int) index}
-     * attribute, when successfully returns, is increased by {@code 1}.
+     * {@link #source source}[{@code index}] as an unsigned 8-bit value and increases the {@code index} by {@code 1}.
      *
      * @return {@inheritDoc}
      * @throws IOException                    {@inheritDoc}
-     * @throws ArrayIndexOutOfBoundsException if the {@link #getIndex() index} is out of the {@code source}'s bounds;
-     *                                        that is, when the {@code source} has been exhausted (or was empty).
+     * @throws ArrayIndexOutOfBoundsException if the {@code index} is out of the {@code source}'s bounds; that is, when
+     *                                        the {@code source} has been exhausted (or was empty).
      * @see ArrayByteOutput#write(int)
      */
     @Override
     public int read() throws IOException {
-        return source[getIndexAndIncrement()] & 0xFF;
+        return source[index++] & 0xFF;
     }
 
     // ----------------------------------------------------------------------------------------------------------- index
 
     /**
-     * Returns the current value of {@code index} attribute.
+     * Returns the current value of the {@code index} attribute; the position in the {@link #source source} from which
+     * the next byte is read.
      *
-     * @return current value of {@code index} attribute.
+     * @return the current value of the {@code index} attribute.
      */
-    protected int getIndex() {
+    public int getIndex() {
         return index;
-    }
-
-    /**
-     * Returns the current value of {@code index} attribute and increments it by {@code 1}.
-     *
-     * @return the current value of {@code index} attribute.
-     */
-    int getIndexAndIncrement() {
-        final int result = getIndex();
-        setIndex(result + 1);
-        return result;
-    }
-
-    /**
-     * Replaces the current value of {@code index} attribute with given.
-     *
-     * @param index new value for {@code index} attribute.
-     */
-    protected void setIndex(final int index) {
-        this.index = index;
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -116,5 +96,5 @@ public class ArrayByteInput
     /**
      * The index in the {@code source} to read.
      */
-    private int index;
+    int index;
 }

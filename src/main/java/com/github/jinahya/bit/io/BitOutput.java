@@ -25,7 +25,7 @@ import java.io.IOException;
 /**
  * An interface for writing values of an arbitrary number of bits.
  *
- * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
+ * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  * @see BitInput
  */
 public interface BitOutput {
@@ -304,4 +304,15 @@ public interface BitOutput {
      * @see BitInput#align(int)
      */
     long align(int bytes) throws IOException;
+
+    // -----------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Returns the number of bytes written so far. Only <em>complete</em> octets are counted; bits of the current
+     * partially-written octet are not included until the octet is completed (e.g. by {@link #align(int)}).
+     *
+     * @return the number of bytes written so far.
+     * @see BitInput#getCount()
+     */
+    long getCount();
 }

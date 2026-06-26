@@ -22,6 +22,16 @@ package com.github.jinahya.bit.io;
 
 import lombok.extern.slf4j.Slf4j;
 
+import static com.github.jinahya.bit.io.BitIoConstants.MAX_EXPONENT_SIZE_DOUBLE;
+import static com.github.jinahya.bit.io.BitIoConstants.MAX_EXPONENT_SIZE_FLOAT;
+import static com.github.jinahya.bit.io.BitIoConstants.MAX_FRACTION_SIZE_DOUBLE;
+import static com.github.jinahya.bit.io.BitIoConstants.MAX_FRACTION_SIZE_FLOAT;
+import static com.github.jinahya.bit.io.BitIoConstants.MIN_EXPONENT_SIZE;
+import static com.github.jinahya.bit.io.BitIoConstants.MIN_FRACTION_SIZE;
+import static com.github.jinahya.bit.io.BitIoConstraints.requireValidExponentSizeDouble;
+import static com.github.jinahya.bit.io.BitIoConstraints.requireValidExponentSizeFloat;
+import static com.github.jinahya.bit.io.BitIoConstraints.requireValidFractionSizeDouble;
+import static com.github.jinahya.bit.io.BitIoConstraints.requireValidFractionSizeFloat;
 import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeByte;
 import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeChar;
 import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeInt;
@@ -36,6 +46,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 @Slf4j
 final class BitIoTests {
+
+    // --------------------------------------------------------------------------------------------------------- boolean
+    static boolean randomValueForBoolean() {
+        return current().nextBoolean();
+    }
 
     // ------------------------------------------------------------------------------------------------------------ byte
     static int randomSizeForByte(final boolean unsigned) {
@@ -116,6 +131,32 @@ final class BitIoTests {
 
     static char randomValueForChar(final int size) {
         return (char) (current().nextInt(Character.MAX_VALUE + 1) >> (Integer.SIZE - size));
+    }
+
+    // ----------------------------------------------------------------------------------------------------------- float
+    static int randomExponentSizeForFloat() {
+        return requireValidExponentSizeFloat(current().nextInt(MIN_EXPONENT_SIZE, MAX_EXPONENT_SIZE_FLOAT + 1));
+    }
+
+    static int randomFractionSizeForFloat() {
+        return requireValidFractionSizeFloat(current().nextInt(MIN_FRACTION_SIZE, MAX_FRACTION_SIZE_FLOAT + 1));
+    }
+
+    static float randomValueForFloat() {
+        return Float.intBitsToFloat(current().nextInt());
+    }
+
+    // ---------------------------------------------------------------------------------------------------------- double
+    static int randomExponentSizeForDouble() {
+        return requireValidExponentSizeDouble(current().nextInt(MIN_EXPONENT_SIZE, MAX_EXPONENT_SIZE_DOUBLE + 1));
+    }
+
+    static int randomFractionSizeForDouble() {
+        return requireValidFractionSizeDouble(current().nextInt(MIN_FRACTION_SIZE, MAX_FRACTION_SIZE_DOUBLE + 1));
+    }
+
+    static double randomValueForDouble() {
+        return Double.longBitsToDouble(current().nextLong());
     }
 
     // -----------------------------------------------------------------------------------------------------------------

@@ -20,10 +20,16 @@ package com.github.jinahya.bit.io;
  * #L%
  */
 
+import static com.github.jinahya.bit.io.BitIoConstants.MAX_EXPONENT_SIZE_DOUBLE;
+import static com.github.jinahya.bit.io.BitIoConstants.MAX_EXPONENT_SIZE_FLOAT;
+import static com.github.jinahya.bit.io.BitIoConstants.MAX_FRACTION_SIZE_DOUBLE;
+import static com.github.jinahya.bit.io.BitIoConstants.MAX_FRACTION_SIZE_FLOAT;
+import static com.github.jinahya.bit.io.BitIoConstants.MIN_EXPONENT_SIZE;
+
 /**
  * Constraints for bit-io.
  *
- * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
+ * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
 final class BitIoConstraints {
 
@@ -238,42 +244,6 @@ final class BitIoConstraints {
 
     // ----------------------------------------------------------------------------------------------------------- float
 
-    /**
-     * The minimum size, inclusive, for an exponent of a {@code float}/{@code double} reduced encoding; the smallest
-     * width at which the finite-normal code range ({@code 1 .. expMask-1}) is non-empty.
-     */
-    static final int MIN_EXPONENT_SIZE = 2;
-
-    /**
-     * The minimum size, inclusive, for a fraction(significand) of a {@code float}/{@code double} reduced encoding; the
-     * smallest width that can distinguish all three reserved {@code expMask}-exponent states (Infinity, qNaN, sNaN).
-     */
-    static final int MIN_FRACTION_SIZE = 2;
-
-    /**
-     * The maximum size, inclusive, for an exponent of a {@code float} reduced encoding; the native {@code float}
-     * exponent width.
-     */
-    static final int MAX_EXPONENT_SIZE_FLOAT = 8;
-
-    /**
-     * The maximum size, inclusive, for a fraction of a {@code float} reduced encoding; the native {@code float}
-     * fraction width.
-     */
-    static final int MAX_FRACTION_SIZE_FLOAT = 23;
-
-    /**
-     * The maximum size, inclusive, for an exponent of a {@code double} reduced encoding; the native {@code double}
-     * exponent width.
-     */
-    static final int MAX_EXPONENT_SIZE_DOUBLE = 11;
-
-    /**
-     * The maximum size, inclusive, for a fraction of a {@code double} reduced encoding; the native {@code double}
-     * fraction width.
-     */
-    static final int MAX_FRACTION_SIZE_DOUBLE = 52;
-
     private static int requireValidSizeInRange(final int size, final int max, final String name) {
         if (size < MIN_EXPONENT_SIZE) { // MIN_EXPONENT_SIZE == MIN_FRACTION_SIZE == 2
             throw new IllegalArgumentException("invalid " + name + "(" + size + ") < " + MIN_EXPONENT_SIZE);
@@ -287,8 +257,8 @@ final class BitIoConstraints {
     /**
      * Checks that the specified exponent size is valid for a {@code float} reduced encoding.
      *
-     * @param size the exponent size to check; between {@value #MIN_EXPONENT_SIZE} and
-     *             {@value #MAX_EXPONENT_SIZE_FLOAT}, both inclusive.
+     * @param size the exponent size to check; between {@value BitIoConstants#MIN_EXPONENT_SIZE} and
+     *             {@value BitIoConstants#MAX_EXPONENT_SIZE_FLOAT}, both inclusive.
      * @return given {@code size}.
      * @throws IllegalArgumentException if {@code size} is not valid.
      */
@@ -299,8 +269,8 @@ final class BitIoConstraints {
     /**
      * Checks that the specified fraction size is valid for a {@code float} reduced encoding.
      *
-     * @param size the fraction size to check; between {@value #MIN_FRACTION_SIZE} and
-     *             {@value #MAX_FRACTION_SIZE_FLOAT}, both inclusive.
+     * @param size the fraction size to check; between {@value BitIoConstants#MIN_FRACTION_SIZE} and
+     *             {@value BitIoConstants#MAX_FRACTION_SIZE_FLOAT}, both inclusive.
      * @return given {@code size}.
      * @throws IllegalArgumentException if {@code size} is not valid.
      */
@@ -311,8 +281,8 @@ final class BitIoConstraints {
     /**
      * Checks that the specified exponent size is valid for a {@code double} reduced encoding.
      *
-     * @param size the exponent size to check; between {@value #MIN_EXPONENT_SIZE} and
-     *             {@value #MAX_EXPONENT_SIZE_DOUBLE}, both inclusive.
+     * @param size the exponent size to check; between {@value BitIoConstants#MIN_EXPONENT_SIZE} and
+     *             {@value BitIoConstants#MAX_EXPONENT_SIZE_DOUBLE}, both inclusive.
      * @return given {@code size}.
      * @throws IllegalArgumentException if {@code size} is not valid.
      */
@@ -323,8 +293,8 @@ final class BitIoConstraints {
     /**
      * Checks that the specified fraction size is valid for a {@code double} reduced encoding.
      *
-     * @param size the fraction size to check; between {@value #MIN_FRACTION_SIZE} and
-     *             {@value #MAX_FRACTION_SIZE_DOUBLE}, both inclusive.
+     * @param size the fraction size to check; between {@value BitIoConstants#MIN_FRACTION_SIZE} and
+     *             {@value BitIoConstants#MAX_FRACTION_SIZE_DOUBLE}, both inclusive.
      * @return given {@code size}.
      * @throws IllegalArgumentException if {@code size} is not valid.
      */

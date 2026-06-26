@@ -51,7 +51,8 @@ public class StringReader
      * @param lengthSize  the number of bits for the (byte) length; between {@code 1} and
      *                    ({@value java.lang.Integer#SIZE} - {@code 1}), both inclusive.
      * @param charsetName the name of the charset for decoding; must not be {@code null}.
-     * @throws NullPointerException if {@code charsetName} is {@code null}.
+     * @throws NullPointerException     if {@code charsetName} is {@code null}.
+     * @throws IllegalArgumentException if {@code lengthSize} is not valid.
      */
     public StringReader(final int lengthSize, final String charsetName) {
         super();
@@ -69,9 +70,8 @@ public class StringReader
      *
      * @param input {@inheritDoc}
      * @return {@inheritDoc}
-     * @throws NullPointerException     if {@code input} is {@code null}.
-     * @throws IllegalArgumentException if this reader's {@code lengthSize} is not valid.
-     * @throws IOException              {@inheritDoc} (including an unsupported {@code charsetName}).
+     * @throws NullPointerException if {@code input} is {@code null}.
+     * @throws IOException          {@inheritDoc} (including an unsupported {@code charsetName}).
      */
     @Override
     public String read(final BitInput input) throws IOException {

@@ -25,7 +25,7 @@ import java.io.IOException;
 /**
  * An interface for writing bytes.
  *
- * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
+ * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  * @see ByteInput
  */
 //@FunctionalInterface

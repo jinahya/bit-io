@@ -47,8 +47,8 @@ class ByteOutputProducer {
             @Override
             public void write(final int value) throws IOException {
                 super.write(value);
-                if (getIndex() == target.length) {
-                    setIndex(0);
+                if (index == target.length) {
+                    index = 0;
                 }
             }
         };

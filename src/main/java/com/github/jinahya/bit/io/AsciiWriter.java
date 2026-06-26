@@ -44,6 +44,9 @@ class AsciiWriter
         if (output == null) {
             throw new NullPointerException("output is null");
         }
+        if (value == null) {
+            throw new NullPointerException("value is null");
+        }
         delegate.write(output, value.getBytes(BitIoConstants.US_ASCII));
     }
 

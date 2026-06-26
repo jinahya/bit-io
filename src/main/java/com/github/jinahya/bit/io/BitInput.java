@@ -25,7 +25,7 @@ import java.io.IOException;
 /**
  * An interface for reading values of an arbitrary number of bits.
  *
- * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
+ * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  * @see BitOutput
  */
 public interface BitInput {
@@ -285,4 +285,15 @@ public interface BitInput {
      * @see BitOutput#align(int)
      */
     long align(int bytes) throws IOException;
+
+    // -----------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Returns the number of bytes read so far. Only <em>complete</em> octets are counted; bits of the current
+     * partially-read octet are not included until the octet is completed (e.g. by {@link #align(int)}).
+     *
+     * @return the number of bytes read so far.
+     * @see BitOutput#getCount()
+     */
+    long getCount();
 }

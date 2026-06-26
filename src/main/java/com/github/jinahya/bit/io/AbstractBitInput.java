@@ -22,6 +22,7 @@ package com.github.jinahya.bit.io;
 
 import java.io.IOException;
 
+import static com.github.jinahya.bit.io.BitIoConstants.FLAG_SIZE;
 import static com.github.jinahya.bit.io.BitIoConstraints.requireValidExponentSizeDouble;
 import static com.github.jinahya.bit.io.BitIoConstraints.requireValidExponentSizeFloat;
 import static com.github.jinahya.bit.io.BitIoConstraints.requireValidFractionSizeDouble;
@@ -35,7 +36,11 @@ import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeShort;
 /**
  * An abstract class for implementing {@link BitInput} interface.
  *
- * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
+ * <p>Instances are <strong>not</strong> thread-safe: they hold mutable bit-position state ({@code octet},
+ * {@code available}, {@code count}) that is updated without synchronization, so an instance must be confined to a
+ * single thread.</p>
+ *
+ * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  * @see AbstractBitOutput
  * @see DefaultBitInput
  */
@@ -94,7 +99,7 @@ public abstract class AbstractBitInput
     // --------------------------------------------------------------------------------------------------------- boolean
     @Override
     public boolean readBoolean() throws IOException {
-        return readInt(true, 1) == 1;
+        return readInt(true, FLAG_SIZE) == 1;
     }
 
     // ------------------------------------------------------------------------------------------------------------ byte
@@ -130,7 +135,7 @@ public abstract class AbstractBitInput
         requireValidSizeInt(unsigned, size);
         int value = 0;
         if (!unsigned) {
-            value -= readInt(true, 1);
+            value -= readInt(true, FLAG_SIZE);
             if (--size > 0) {
                 value <<= size;
                 value |= readInt(true, size);
@@ -213,7 +218,7 @@ public abstract class AbstractBitInput
     public float readFloat(final int exponentSize, final int fractionSize) throws IOException {
         requireValidExponentSizeFloat(exponentSize);
         requireValidFractionSizeFloat(fractionSize);
-        final int sign = readInt(true, 1);
+        final int sign = readInt(true, FLAG_SIZE);
         final int storedExp = readInt(true, exponentSize);
         final int storedFrac = readInt(true, fractionSize);
         final int expMask = (1 << exponentSize) - 1;
@@ -242,7 +247,7 @@ public abstract class AbstractBitInput
     public double readDouble(final int exponentSize, final int fractionSize) throws IOException {
         requireValidExponentSizeDouble(exponentSize);
         requireValidFractionSizeDouble(fractionSize);
-        final long sign = readInt(true, 1);
+        final long sign = readInt(true, FLAG_SIZE);
         final int storedExp = readInt(true, exponentSize);
         final long storedFrac = readLong(true, fractionSize);
         final int expMask = (1 << exponentSize) - 1;
@@ -329,6 +334,7 @@ public abstract class AbstractBitInput
      * @see #read()
      * @see AbstractBitOutput#getCount()
      */
+    @Override
     public long getCount() {
         return count;
     }

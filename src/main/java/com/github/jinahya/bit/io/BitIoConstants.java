@@ -23,9 +23,74 @@ package com.github.jinahya.bit.io;
 /**
  * Constants for bit-io.
  *
- * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
+ * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
-final class BitIoConstants {
+public final class BitIoConstants {
+
+    // ------------------------------------------------------------------------------------------------------------ byte
+    static final int SIZE_MAX_BYTE_UNSIGNED = 7;
+
+    // ----------------------------------------------------------------------------------------------------------- short
+    static final int SIZE_MAX_SHORT_UNSIGNED = 15;
+
+    // ------------------------------------------------------------------------------------------------------------- int
+    static final int SIZE_MAX_INT_UNSIGNED = 31;
+
+    // ------------------------------------------------------------------------------------------------------------ long
+    static final int SIZE_MAX_LONG_UNSIGNED = 63;
+
+    // -----------------------------------------------------------------------------------------------------
+    // float/double
+
+    /**
+     * The minimum size, inclusive, for an exponent of a {@code float}/{@code double} reduced encoding; the smallest
+     * width at which the finite-normal code range ({@code 1 .. expMask-1}) is non-empty.
+     */
+    static final int MIN_EXPONENT_SIZE = 2;
+
+    /**
+     * The minimum size, inclusive, for a fraction(significand) of a {@code float}/{@code double} reduced encoding; the
+     * smallest width that can distinguish all three reserved {@code expMask}-exponent states (Infinity, qNaN, sNaN).
+     */
+    static final int MIN_FRACTION_SIZE = 2;
+
+    /**
+     * The maximum size, inclusive, for an exponent of a {@code float} reduced encoding; the native {@code float}
+     * exponent width.
+     */
+    static final int MAX_EXPONENT_SIZE_FLOAT = 8;
+
+    /**
+     * The maximum size, inclusive, for a fraction of a {@code float} reduced encoding; the native {@code float}
+     * fraction width.
+     */
+    static final int MAX_FRACTION_SIZE_FLOAT = 23;
+
+    /**
+     * The maximum size, inclusive, for an exponent of a {@code double} reduced encoding; the native {@code double}
+     * exponent width.
+     */
+    static final int MAX_EXPONENT_SIZE_DOUBLE = 11;
+
+    /**
+     * The maximum size, inclusive, for a fraction of a {@code double} reduced encoding; the native {@code double}
+     * fraction width.
+     */
+    static final int MAX_FRACTION_SIZE_DOUBLE = 52;
+
+    // -----------------------------------------------------------------------------------------------------------------
+
+    /**
+     * The size, in bits, of a single unsigned flag bit. Shared by the I/O layer ({@code boolean} values and the sign
+     * bit of signed/floating-point values) and the reader/writer layer (the {@code null}ability flag of
+     * {@link FilterBitReader#nullable(BitReader) nullable} readers/writers).
+     *
+     * @see AbstractBitInput#readBoolean()
+     * @see AbstractBitOutput#writeBoolean(boolean)
+     * @see FilterBitReader#nullable(BitReader)
+     * @see FilterBitWriter#nullable(BitWriter)
+     */
+    static final int FLAG_SIZE = 1;
 
     /**
      * The name of the {@code US-ASCII} charset; the charset used for compressed

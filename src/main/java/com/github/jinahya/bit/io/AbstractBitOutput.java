@@ -22,6 +22,7 @@ package com.github.jinahya.bit.io;
 
 import java.io.IOException;
 
+import static com.github.jinahya.bit.io.BitIoConstants.FLAG_SIZE;
 import static com.github.jinahya.bit.io.BitIoConstraints.requireValidExponentSizeDouble;
 import static com.github.jinahya.bit.io.BitIoConstraints.requireValidExponentSizeFloat;
 import static com.github.jinahya.bit.io.BitIoConstraints.requireValidFractionSizeDouble;
@@ -35,7 +36,11 @@ import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeShort;
 /**
  * An abstract class for implementing {@link BitOutput} interface.
  *
- * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
+ * <p>Instances are <strong>not</strong> thread-safe: they hold mutable bit-position state ({@code octet},
+ * {@code available}, {@code count}) that is updated without synchronization, so an instance must be confined to a
+ * single thread.</p>
+ *
+ * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  * @see AbstractBitInput
  * @see DefaultBitOutput
  */
@@ -95,7 +100,7 @@ public abstract class AbstractBitOutput
     // --------------------------------------------------------------------------------------------------------- boolean
     @Override
     public void writeBoolean(final boolean value) throws IOException {
-        writeInt(true, 1, value ? 1 : 0);
+        writeInt(true, FLAG_SIZE, value ? 1 : 0);
     }
 
     // ------------------------------------------------------------------------------------------------------------ byte
@@ -131,7 +136,7 @@ public abstract class AbstractBitOutput
     public void writeInt(final boolean unsigned, int size, final int value) throws IOException {
         requireValidSizeInt(unsigned, size);
         if (!unsigned) {
-            writeInt(true, 1, value < 0 ? 1 : 0);
+            writeInt(true, FLAG_SIZE, value < 0 ? 1 : 0);
             if (--size > 0) {
                 writeInt(true, size, value);
             }
@@ -163,7 +168,7 @@ public abstract class AbstractBitOutput
     public void writeLong(final boolean unsigned, int size, final long value) throws IOException {
         requireValidSizeLong(unsigned, size);
         if (!unsigned) {
-            writeInt(true, 1, value < 0L ? 0x01 : 0x00);
+            writeInt(true, FLAG_SIZE, value < 0L ? 0x01 : 0x00);
             if (--size > 0) {
                 writeLong(true, size, value);
             }
@@ -246,7 +251,7 @@ public abstract class AbstractBitOutput
                 storedExp = stored;
             }
         }
-        writeInt(true, 1, sign);
+        writeInt(true, FLAG_SIZE, sign);
         writeInt(true, exponentSize, storedExp);
         writeInt(true, fractionSize, storedFrac);
     }
@@ -297,7 +302,7 @@ public abstract class AbstractBitOutput
                 storedExp = stored;
             }
         }
-        writeInt(true, 1, sign);
+        writeInt(true, FLAG_SIZE, sign);
         writeInt(true, exponentSize, storedExp);
         writeLong(true, fractionSize, storedFrac);
     }
@@ -370,6 +375,7 @@ public abstract class AbstractBitOutput
      * @see #write(int)
      * @see AbstractBitInput#getCount()
      */
+    @Override
     public long getCount() {
         return count;
     }

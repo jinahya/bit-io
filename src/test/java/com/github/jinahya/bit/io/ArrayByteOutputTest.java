@@ -40,13 +40,13 @@ class ArrayByteOutputTest {
         final byte[] bytes = new byte[3];
         final ArrayByteOutput output = new ArrayByteOutput(bytes);
 
-        assertEquals(0, output.getIndex());
+        assertEquals(0, output.index);
         output.write(0x00);
-        assertEquals(1, output.getIndex());
+        assertEquals(1, output.index);
         output.write(0x7F);
-        assertEquals(2, output.getIndex());
+        assertEquals(2, output.index);
         output.write(0xFF);
-        assertEquals(3, output.getIndex());
+        assertEquals(3, output.index);
         assertArrayEquals(new byte[]{0x00, 0x7F, (byte) 0xFF}, bytes);
     }
 
@@ -67,37 +67,36 @@ class ArrayByteOutputTest {
     void emptyArrayStartsAtMinusOneAndThrowsArrayIndexOutOfBoundsWhenWritten() {
         final ArrayByteOutput output = new ArrayByteOutput(new byte[0]);
 
-        assertEquals(-1, output.getIndex());
+        assertEquals(-1, output.index);
         assertThrows(ArrayIndexOutOfBoundsException.class, () -> output.write(0x00));
-        assertEquals(0, output.getIndex());
+        assertEquals(0, output.index);
     }
 
-    // ----------------------------------------------------------------------------------------------------- getIndex()I
+    // --------------------------------------------------------------------------------------------------------- index
     @Test
-    void testGetIndex() {
+    void indexStartsAtZero() {
         final ArrayByteOutput output = new ArrayByteOutput(new byte[]{0x00});
 
-        assertEquals(0, output.getIndex());
+        assertEquals(0, output.index);
     }
 
-    // ---------------------------------------------------------------------------------------------------- setIndex(I)V
     @Test
-    void testSetIndex() throws IOException {
+    void writesToAssignedIndex() throws IOException {
         final byte[] bytes = new byte[2];
         final ArrayByteOutput output = new ArrayByteOutput(bytes);
 
-        output.setIndex(1);
-        assertEquals(1, output.getIndex());
+        output.index = 1;
+        assertEquals(1, output.index);
         output.write(0x7F);
         assertArrayEquals(new byte[]{0x00, 0x7F}, bytes);
     }
 
     @Test
-    void setIndexPastEndMakesNextWriteThrowArrayIndexOutOfBounds() {
+    void indexPastEndMakesNextWriteThrowArrayIndexOutOfBounds() {
         final ArrayByteOutput output = new ArrayByteOutput(new byte[1]);
 
-        output.setIndex(1);
+        output.index = 1;
         assertThrows(ArrayIndexOutOfBoundsException.class, () -> output.write(0x7F));
-        assertEquals(2, output.getIndex());
+        assertEquals(2, output.index);
     }
 }

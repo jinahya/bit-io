@@ -22,6 +22,8 @@ package com.github.jinahya.bit.io;
 
 import java.io.IOException;
 
+import static com.github.jinahya.bit.io.BitIoConstants.FLAG_SIZE;
+
 /**
  * A skeletal {@link BitReader} that wraps another reader (the {@link #delegate delegate}), for composing readers
  * without modifying them.
@@ -50,7 +52,7 @@ public abstract class FilterBitReader<T>
                 if (input == null) {
                     throw new NullPointerException("input is null");
                 }
-                if (input.readInt(true, 1) == 0) {
+                if (input.readInt(true, FLAG_SIZE) == 0) {
                     return null;
                 }
                 return delegate.read(input);

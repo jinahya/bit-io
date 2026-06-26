@@ -206,6 +206,44 @@ class BitFloatingPointRoundTripTest {
     }
 
     @Test
+    void fullWidthRoundTripsNativeSubnormals() throws IOException {
+        final float[] floats = {
+                Float.MIN_VALUE,                          // smallest positive subnormal
+                -Float.MIN_VALUE,
+                Float.intBitsToFloat(0x007FFFFF),         // largest positive subnormal
+                Float.intBitsToFloat(0x807FFFFF)          // largest negative subnormal
+        };
+        for (final float value : floats) {
+            assertEquals(Float.floatToRawIntBits(value),
+                         Float.floatToRawIntBits(readFloat(writeFloat(8, 23, value), 8, 23)));
+            assertEquals(Float.floatToRawIntBits(value),
+                         Float.floatToRawIntBits(readFloat32(writeFloat32(value))));
+        }
+        final double[] doubles = {
+                Double.MIN_VALUE,                         // smallest positive subnormal
+                -Double.MIN_VALUE,
+                Double.longBitsToDouble(0x000FFFFFFFFFFFFFL), // largest positive subnormal
+                Double.longBitsToDouble(0x800FFFFFFFFFFFFFL)  // largest negative subnormal
+        };
+        for (final double value : doubles) {
+            assertEquals(Double.doubleToRawLongBits(value),
+                         Double.doubleToRawLongBits(readDouble(writeDouble(11, 52, value), 11, 52)));
+            assertEquals(Double.doubleToRawLongBits(value),
+                         Double.doubleToRawLongBits(readDouble64(writeDouble64(value))));
+        }
+    }
+
+    @Test
+    void reducedEncodingUnderflowsTiniestSubnormalToSignedZero() throws IOException {
+        assertEquals(0x00000000, Float.floatToRawIntBits(readFloat(writeFloat(3, 2, Float.MIN_VALUE), 3, 2)));
+        assertEquals(0x80000000, Float.floatToRawIntBits(readFloat(writeFloat(3, 2, -Float.MIN_VALUE), 3, 2)));
+        assertEquals(0x0000000000000000L,
+                     Double.doubleToRawLongBits(readDouble(writeDouble(4, 2, Double.MIN_VALUE), 4, 2)));
+        assertEquals(0x8000000000000000L,
+                     Double.doubleToRawLongBits(readDouble(writeDouble(4, 2, -Double.MIN_VALUE), 4, 2)));
+    }
+
+    @Test
     void floatingPointSizeConstraintsRejectOutOfRangeValues() {
         assertThrows(IllegalArgumentException.class, () -> BitIoConstraints.requireValidExponentSizeFloat(1));
         assertThrows(IllegalArgumentException.class, () -> BitIoConstraints.requireValidExponentSizeFloat(9));

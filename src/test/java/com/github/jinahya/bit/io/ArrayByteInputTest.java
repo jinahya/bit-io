@@ -39,13 +39,13 @@ class ArrayByteInputTest {
     void readsUnsignedBytesAndAdvancesIndex() throws IOException {
         final ArrayByteInput input = new ArrayByteInput(new byte[]{0x00, 0x7F, (byte) 0xFF});
 
-        assertEquals(0, input.getIndex());
+        assertEquals(0, input.index);
         assertEquals(0x00, input.read());
-        assertEquals(1, input.getIndex());
+        assertEquals(1, input.index);
         assertEquals(0x7F, input.read());
-        assertEquals(2, input.getIndex());
+        assertEquals(2, input.index);
         assertEquals(0xFF, input.read());
-        assertEquals(3, input.getIndex());
+        assertEquals(3, input.index);
     }
 
     @Test
@@ -65,35 +65,34 @@ class ArrayByteInputTest {
     void emptyArrayStartsAtMinusOneAndThrowsArrayIndexOutOfBounds() {
         final ArrayByteInput input = new ArrayByteInput(new byte[0]);
 
-        assertEquals(-1, input.getIndex());
+        assertEquals(-1, input.index);
         assertThrows(ArrayIndexOutOfBoundsException.class, input::read);
-        assertEquals(0, input.getIndex());
+        assertEquals(0, input.index);
     }
 
-    // ----------------------------------------------------------------------------------------------------- getIndex()I
+    // --------------------------------------------------------------------------------------------------------- index
     @Test
-    void testGetIndex() {
+    void indexStartsAtZero() {
         final ArrayByteInput input = new ArrayByteInput(new byte[]{0x00});
 
-        assertEquals(0, input.getIndex());
+        assertEquals(0, input.index);
     }
 
-    // ---------------------------------------------------------------------------------------------------- setIndex(I)V
     @Test
-    void testSetIndex() throws IOException {
+    void readsFromAssignedIndex() throws IOException {
         final ArrayByteInput input = new ArrayByteInput(new byte[]{0x00, 0x01});
 
-        input.setIndex(1);
-        assertEquals(1, input.getIndex());
+        input.index = 1;
+        assertEquals(1, input.index);
         assertEquals(0x01, input.read());
     }
 
     @Test
-    void setIndexPastEndMakesNextReadThrowArrayIndexOutOfBounds() {
+    void indexPastEndMakesNextReadThrowArrayIndexOutOfBounds() {
         final ArrayByteInput input = new ArrayByteInput(new byte[]{0x00});
 
-        input.setIndex(1);
+        input.index = 1;
         assertThrows(ArrayIndexOutOfBoundsException.class, input::read);
-        assertEquals(2, input.getIndex());
+        assertEquals(2, input.index);
     }
 }

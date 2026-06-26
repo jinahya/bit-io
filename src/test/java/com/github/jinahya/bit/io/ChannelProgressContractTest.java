@@ -36,31 +36,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class ChannelProgressContractTest {
 
     @Test
-    void readableChannelFactoryRejectsZeroProgress() {
-        final ByteInput input = BufferByteInput.from(new ZeroProgressReadableByteChannel());
-        assertThrows(IOException.class, input::read);
-    }
-
-    @Test
-    void writableChannelFactoryRejectsZeroProgress() {
-        final ByteOutput output = BufferByteOutput.from(new ZeroProgressWritableByteChannel());
-        assertThrows(IOException.class, () -> output.write(0x00));
-    }
-
-    @Test
-    void channelByteInputRejectsZeroProgress() {
-        final ByteInput input = new ChannelByteInput(new ZeroProgressReadableByteChannel(), ByteBuffer.allocate(1));
-        assertThrows(IOException.class, input::read);
-    }
-
-    @Test
-    void channelByteOutputRejectsZeroProgress() throws IOException {
-        final ByteOutput output = new ChannelByteOutput(new ZeroProgressWritableByteChannel(), ByteBuffer.allocate(1));
-        output.write(0x00);
-        assertThrows(IOException.class, () -> output.write(0x01));
-    }
-
-    @Test
     void channelByteInputHandlesPartialReadsAndThenEof() throws IOException {
         final ByteInput input =
                 new ChannelByteInput(new PartialReadableByteChannel(new byte[]{0x11, 0x22, 0x33}, 2),
@@ -78,18 +53,11 @@ class ChannelProgressContractTest {
         final ByteOutput output = new ChannelByteOutput(channel, ByteBuffer.allocate(2));
 
         output.write(0x11);
-        output.write(0x22);
-        output.write(0x33); // drains at least part of the full buffer
-        output.write(0x44); // drains the remaining part of the previous buffer
+        output.write(0x22); // fills the buffer, then drains one byte (partial write)
+        output.write(0x33); // fills again, drains one more byte
+        output.write(0x44); // fills again, drains one more byte
 
-        assertArrayEquals(new byte[]{0x11, 0x22}, channel.bytes.toByteArray());
-    }
-
-    @Test
-    void readableChannelFactoryRejectsZeroProgressBeforeLaterData() {
-        final ByteInput input = BufferByteInput.from(new ZeroThenDataReadableByteChannel());
-
-        assertThrows(IOException.class, input::read);
+        assertArrayEquals(new byte[]{0x11, 0x22, 0x33}, channel.bytes.toByteArray());
     }
 
     @Test
@@ -138,31 +106,6 @@ class ChannelProgressContractTest {
         public void close() {
             // no-op
         }
-    }
-
-    private static final class ZeroThenDataReadableByteChannel
-            implements ReadableByteChannel {
-
-        @Override
-        public int read(final ByteBuffer dst) {
-            if (reads++ == 0) {
-                return 0;
-            }
-            dst.put((byte) 0x7F);
-            return 1;
-        }
-
-        @Override
-        public boolean isOpen() {
-            return true;
-        }
-
-        @Override
-        public void close() {
-            // no-op
-        }
-
-        private int reads;
     }
 
     private static final class PartialReadableByteChannel

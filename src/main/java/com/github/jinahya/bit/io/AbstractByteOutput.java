@@ -25,7 +25,7 @@ package com.github.jinahya.bit.io;
  * {@link ByteOutput#write(int)} by writing to the {@link #target} field.
  *
  * @param <T> byte target type parameter
- * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
+ * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  * @see AbstractByteInput
  */
 abstract class AbstractByteOutput<T>

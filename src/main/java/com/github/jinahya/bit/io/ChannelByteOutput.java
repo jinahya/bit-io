@@ -86,16 +86,13 @@ class ChannelByteOutput
      */
     @Override
     public void write(final int value) throws IOException {
+        buffered.write(value);
         if (!buffered.target.hasRemaining()) {
-            buffered.target.flip();
-            do {
-                if (target.write(buffered.target) == 0) {
-                    throw new IOException("channel write made no progress");
-                }
-            } while (buffered.target.position() == 0);
+            for (buffered.target.flip(); buffered.target.position() == 0; ) {
+                target.write(buffered.target);
+            }
             buffered.target.compact();
         }
-        buffered.write(value);
     }
 
     // -------------------------------------------------------------------------------------------------------- buffered

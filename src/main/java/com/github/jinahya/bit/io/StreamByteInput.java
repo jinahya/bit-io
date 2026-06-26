@@ -49,10 +49,12 @@ public class StreamByteInput
 
     /**
      * {@inheritDoc} The {@code read()} method of {@code StreamByteInput} class invokes
-     * {@link InputStream#read() read()} method, on the {@link #source source} stream, and returns the result.
+     * {@link InputStream#read() read()} method, on the {@link #source source} stream, and returns the result; a return
+     * of {@code -1} (end of stream) is translated into an {@link EOFException}.
      *
      * @return {@inheritDoc}
-     * @throws IOException {@inheritDoc}
+     * @throws EOFException if the {@link #source source} stream has reached its end.
+     * @throws IOException  {@inheritDoc}
      * @see InputStream#read()
      * @see StreamByteOutput#write(int)
      */

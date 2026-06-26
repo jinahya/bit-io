@@ -26,7 +26,7 @@ import java.io.IOException;
 /**
  * A byte input reads bytes from an instance of {@link DataInput}.
  *
- * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
+ * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  * @see DataByteOutput
  */
 public class DataByteInput

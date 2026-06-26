@@ -22,6 +22,8 @@ package com.github.jinahya.bit.io;
 
 import java.io.IOException;
 
+import static com.github.jinahya.bit.io.BitIoConstants.FLAG_SIZE;
+
 /**
  * A skeletal {@link BitWriter} that wraps another writer (the {@link #delegate delegate}), for composing writers
  * without modifying them.
@@ -51,10 +53,10 @@ public abstract class FilterBitWriter<T>
                     throw new NullPointerException("output is null");
                 }
                 if (value == null) {
-                    output.writeInt(true, 1, 0);
+                    output.writeInt(true, FLAG_SIZE, 0);
                     return;
                 }
-                output.writeInt(true, 1, 1);
+                output.writeInt(true, FLAG_SIZE, 1);
                 delegate.write(output, value);
             }
         };

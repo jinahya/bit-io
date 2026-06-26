@@ -25,7 +25,7 @@ import java.io.IOException;
 /**
  * A byte output writes bytes to an array of bytes.
  *
- * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
+ * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  * @see ArrayByteInput
  * @deprecated Prefer {@link BufferByteOutput} over a {@link java.nio.ByteBuffer#wrap(byte[]) wrapped} array, which also
  *         lets the caller {@linkplain java.nio.Buffer#hasRemaining() pre-check} and purge.
@@ -66,49 +66,29 @@ public class ArrayByteOutput
 
     /**
      * {@inheritDoc} The {@code write(int)} method of {@code ArrayByteOutput} class sets
-     * {@link #target target}[{@link #getIndex() index}] with specified {@code value}. The {@link #setIndex(int) index}
-     * attribute, when successfully returns, is increased by {@code 1}.
+     * {@link #target target}[{@code index}] with specified {@code value} and increases the {@code index} by {@code 1}.
      *
      * @param value {@inheritDoc}
      * @throws IOException                    {@inheritDoc}
-     * @throws ArrayIndexOutOfBoundsException if the {@link #getIndex() index} is out of the {@code target}'s bounds;
-     *                                        that is, when the {@code target} has been filled (or was empty).
+     * @throws ArrayIndexOutOfBoundsException if the {@code index} is out of the {@code target}'s bounds; that is, when
+     *                                        the {@code target} has been filled (or was empty).
      * @see ArrayByteInput#read()
      */
     @Override
     public void write(final int value) throws IOException {
-        target[getIndexAndIncrement()] = (byte) value;
+        target[index++] = (byte) value;
     }
 
     // ----------------------------------------------------------------------------------------------------------- index
 
     /**
-     * Returns the current value of {@code index} attribute.
+     * Returns the current value of the {@code index} attribute; the position in the {@link #target target} to which the
+     * next byte is written.
      *
-     * @return the current value of {@code index} attribute.
+     * @return the current value of the {@code index} attribute.
      */
-    protected int getIndex() {
+    public int getIndex() {
         return index;
-    }
-
-    /**
-     * Returns the current value of {@code index} attribute and increments it by {@code 1}.
-     *
-     * @return the current value of {@code index} attribute.
-     */
-    int getIndexAndIncrement() {
-        final int result = getIndex();
-        setIndex(result + 1);
-        return result;
-    }
-
-    /**
-     * Replaces the {@code index} attribute with given value.
-     *
-     * @param index new value for {@code index} attribute.
-     */
-    protected void setIndex(final int index) {
-        this.index = index;
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -116,5 +96,5 @@ public class ArrayByteOutput
     /**
      * The index in the {@code target} to write.
      */
-    private int index;
+    int index;
 }

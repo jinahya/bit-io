@@ -52,10 +52,10 @@ public class ChannelByteOutputTest {
         final WritableByteChannel channel = Channels.newChannel(bytes);
         final ChannelByteOutput output = new ChannelByteOutput(channel, allocate(1));
 
-        output.write(0x11);
-        output.write(0x22); // drains the first byte before buffering the second
+        output.write(0x11); // buffers then drains immediately (capacity 1)
+        output.write(0x22); // buffers then drains immediately (capacity 1)
 
-        assertArrayEquals(new byte[]{0x11}, bytes.toByteArray());
+        assertArrayEquals(new byte[]{0x11, 0x22}, bytes.toByteArray());
     }
 
     @Test

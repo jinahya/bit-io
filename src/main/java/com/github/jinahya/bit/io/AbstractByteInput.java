@@ -25,7 +25,7 @@ package com.github.jinahya.bit.io;
  * {@link ByteInput#read()} by reading from the {@link #source} field.
  *
  * @param <T> byte source type parameter
- * @author Jin Kwon &lt;jinahya_at_gmail.com&gt;
+ * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  * @see AbstractByteOutput
  */
 abstract class AbstractByteInput<T>

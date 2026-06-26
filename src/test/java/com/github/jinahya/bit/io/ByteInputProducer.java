@@ -39,8 +39,8 @@ class ByteInputProducer {
         return new ArrayByteInput(new byte[1]) {
             @Override
             public int read() throws IOException {
-                if (getIndex() == source.length) {
-                    setIndex(0);
+                if (index == source.length) {
+                    index = 0;
                 }
                 return super.read();
             }

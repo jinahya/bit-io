@@ -51,7 +51,8 @@ public class StringWriter
      * @param lengthSize  the number of bits for the (byte) length; between {@code 1} and
      *                    ({@value java.lang.Integer#SIZE} - {@code 1}), both inclusive.
      * @param charsetName the name of the charset for encoding; must not be {@code null}.
-     * @throws NullPointerException if {@code charsetName} is {@code null}.
+     * @throws NullPointerException     if {@code charsetName} is {@code null}.
+     * @throws IllegalArgumentException if {@code lengthSize} is not valid.
      */
     public StringWriter(final int lengthSize, final String charsetName) {
         super();
@@ -70,13 +71,17 @@ public class StringWriter
      * @param output {@inheritDoc}
      * @param value  {@inheritDoc}
      * @throws NullPointerException     if {@code output} or {@code value} is {@code null}.
-     * @throws IllegalArgumentException if this writer's {@code lengthSize} is not valid.
+     * @throws IllegalArgumentException if the {@code charsetName}-encoded byte length does not fit in
+     *                                  {@code lengthSize} bits.
      * @throws IOException              {@inheritDoc} (including an unsupported {@code charsetName}).
      */
     @Override
     public void write(final BitOutput output, final String value) throws IOException {
         if (output == null) {
             throw new NullPointerException("output is null");
+        }
+        if (value == null) {
+            throw new NullPointerException("value is null");
         }
         delegate.write(output, value.getBytes(charsetName));
     }

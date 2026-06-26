@@ -106,10 +106,12 @@ public abstract class Leb128Reader
      */
     public static final Leb128Reader SIGNED = new Signed();
 
+    // -----------------------------------------------------------------------------------------------------------------
     private Leb128Reader() {
         super();
     }
 
+    // -----------------------------------------------------------------------------------------------------------------
     @Override
     public final Long read(final BitInput input) throws IOException {
         return readValue(input);

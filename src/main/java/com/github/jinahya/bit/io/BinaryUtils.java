@@ -23,7 +23,7 @@ package com.github.jinahya.bit.io;
 /**
  * Utilities for low-level binary manipulation.
  */
-public final class BinaryUtils {
+final class BinaryUtils {
 
     /**
      * Returns the value obtained by reversing the order of both bytes of specified {@code short} value; that is,

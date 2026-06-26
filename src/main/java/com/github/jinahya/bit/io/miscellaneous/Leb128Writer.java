@@ -38,6 +38,12 @@ import static com.github.jinahya.bit.io.miscellaneous.Leb128Constants.SIZE_PAYLO
 public abstract class Leb128Writer
         implements BitWriter<Long> {
 
+    private static void requireOutput(final BitOutput output) {
+        if (output == null) {
+            throw new NullPointerException("output is null");
+        }
+    }
+
     private static final class Unsigned
             extends Leb128Writer {
 
@@ -87,16 +93,12 @@ public abstract class Leb128Writer
      */
     public static final Leb128Writer SIGNED = new Signed();
 
-    private static void requireOutput(final BitOutput output) {
-        if (output == null) {
-            throw new NullPointerException("output is null");
-        }
-    }
-
+    // -----------------------------------------------------------------------------------------------------------------
     private Leb128Writer() {
         super();
     }
 
+    // -----------------------------------------------------------------------------------------------------------------
     @Override
     public final void write(final BitOutput output, final Long value) throws IOException {
         if (value == null) {

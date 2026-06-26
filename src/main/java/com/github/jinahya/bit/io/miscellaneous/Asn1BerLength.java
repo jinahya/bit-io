@@ -28,11 +28,11 @@ import com.github.jinahya.bit.io.BitWriter;
 import java.io.IOException;
 
 /**
- * A codec for ASN.1 BER definite length octets.
+ * A codec for ASN.1 BER length octets.
  *
- * <p>The {@code read}/{@code write} contract is definite-length only. BER indefinite length is a marker, not a
- * non-negative length value, and is handled explicitly by {@link #readIndefinite(BitInput)} and
- * {@link #writeIndefinite(BitOutput)}.</p>
+ * <p>The {@link #read(BitInput)} and {@link #write(BitOutput, Long)} methods handle definite lengths only. A BER
+ * indefinite length is a marker, not a non-negative length value, and is handled explicitly by
+ * {@link #readBerIndefiniteLength(BitInput)} and {@link #writeBerIndefiniteLength(BitOutput)}.</p>
  */
 public final class Asn1BerLength
         implements BitReader<Long>, BitWriter<Long> {
@@ -57,8 +57,20 @@ public final class Asn1BerLength
      * @param input the input to read from; must not be {@code null}.
      * @throws IOException if an I/O error occurs, or if the next octet is not {@code 0x80}.
      */
-    public void readIndefinite(final BitInput input) throws IOException {
+    public void readBerIndefiniteLength(final BitInput input) throws IOException {
         Asn1Lengths.readIndefinite(input);
+    }
+
+    /**
+     * Reads and verifies a BER indefinite length marker.
+     *
+     * @param input the input to read from; must not be {@code null}.
+     * @throws IOException if an I/O error occurs, or if the next octet is not {@code 0x80}.
+     * @deprecated Use {@link #readBerIndefiniteLength(BitInput)}. This method remains as a compatibility alias.
+     */
+    @Deprecated
+    public void readIndefinite(final BitInput input) throws IOException {
+        readBerIndefiniteLength(input);
     }
 
     @Override
@@ -75,7 +87,19 @@ public final class Asn1BerLength
      * @param output the output to write to; must not be {@code null}.
      * @throws IOException if an I/O error occurs.
      */
-    public void writeIndefinite(final BitOutput output) throws IOException {
+    public void writeBerIndefiniteLength(final BitOutput output) throws IOException {
         Asn1Lengths.writeIndefinite(output);
+    }
+
+    /**
+     * Writes a BER indefinite length marker.
+     *
+     * @param output the output to write to; must not be {@code null}.
+     * @throws IOException if an I/O error occurs.
+     * @deprecated Use {@link #writeBerIndefiniteLength(BitOutput)}. This method remains as a compatibility alias.
+     */
+    @Deprecated
+    public void writeIndefinite(final BitOutput output) throws IOException {
+        writeBerIndefiniteLength(output);
     }
 }

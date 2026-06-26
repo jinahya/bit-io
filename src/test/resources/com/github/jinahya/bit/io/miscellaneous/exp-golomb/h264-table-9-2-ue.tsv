@@ -1,0 +1,18 @@
+# Official Exp-Golomb ue(v) (unsigned) test vectors.
+# Source: ITU-T Rec. H.264 (ISO/IEC 14496-10), Section 9.1 "Parsing process for Exp-Golomb codes",
+#         Table 9-2 "Bit strings with 'prefix' and 'suffix' bits and assignment to codeNum ranges".
+#         https://www.itu.int/rec/T-REC-H.264
+# Identical construction is used by ITU-T H.265 (ISO/IEC 23008-2).
+#
+# Columns (tab-separated): codeNum  bits (MSB-first bit string as written to the stream)
+0	1
+1	010
+2	011
+3	00100
+4	00101
+5	00110
+6	00111
+7	0001000
+8	0001001
+9	0001010
+10	0001011

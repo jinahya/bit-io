@@ -22,8 +22,10 @@ package com.github.jinahya.bit.io;
 
 import static com.github.jinahya.bit.io.BitIoConstants.MAX_EXPONENT_SIZE_DOUBLE;
 import static com.github.jinahya.bit.io.BitIoConstants.MAX_EXPONENT_SIZE_FLOAT;
+import static com.github.jinahya.bit.io.BitIoConstants.MAX_EXPONENT_SIZE_HALF;
 import static com.github.jinahya.bit.io.BitIoConstants.MAX_FRACTION_SIZE_DOUBLE;
 import static com.github.jinahya.bit.io.BitIoConstants.MAX_FRACTION_SIZE_FLOAT;
+import static com.github.jinahya.bit.io.BitIoConstants.MAX_FRACTION_SIZE_HALF;
 import static com.github.jinahya.bit.io.BitIoConstants.MIN_EXPONENT_SIZE;
 
 /**
@@ -252,6 +254,30 @@ final class BitIoConstraints {
             throw new IllegalArgumentException("invalid " + name + "(" + size + ") > " + max);
         }
         return size;
+    }
+
+    /**
+     * Checks that the specified exponent size is valid for a {@code binary16} (half) reduced encoding.
+     *
+     * @param size the exponent size to check; between {@value BitIoConstants#MIN_EXPONENT_SIZE} and
+     *             {@value BitIoConstants#MAX_EXPONENT_SIZE_HALF}, both inclusive.
+     * @return given {@code size}.
+     * @throws IllegalArgumentException if {@code size} is not valid.
+     */
+    static int requireValidExponentSizeHalf(final int size) {
+        return requireValidSizeInRange(size, MAX_EXPONENT_SIZE_HALF, "exponentSize");
+    }
+
+    /**
+     * Checks that the specified fraction size is valid for a {@code binary16} (half) reduced encoding.
+     *
+     * @param size the fraction size to check; between {@value BitIoConstants#MIN_FRACTION_SIZE} and
+     *             {@value BitIoConstants#MAX_FRACTION_SIZE_HALF}, both inclusive.
+     * @return given {@code size}.
+     * @throws IllegalArgumentException if {@code size} is not valid.
+     */
+    static int requireValidFractionSizeHalf(final int size) {
+        return requireValidSizeInRange(size, MAX_FRACTION_SIZE_HALF, "fractionSize");
     }
 
     /**

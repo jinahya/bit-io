@@ -42,7 +42,7 @@ public interface BitOutput {
      */
     void writeBoolean(boolean value) throws IOException;
 
-    // -----------------------------------------------------------------------------------------------------------------
+    // ------------------------------------------------------------------------------------------------------------ byte
 
     /**
      * Writes a {@code byte} value of specified number of bits.
@@ -66,7 +66,7 @@ public interface BitOutput {
      */
     void writeByte8(byte value) throws IOException;
 
-    // -----------------------------------------------------------------------------------------------------------------
+    // ----------------------------------------------------------------------------------------------------------- short
 
     /**
      * Writes a {@code short} value of specified number of bits.
@@ -99,7 +99,7 @@ public interface BitOutput {
      */
     void writeShort16Le(short value) throws IOException;
 
-    // -----------------------------------------------------------------------------------------------------------------
+    // ------=------------------------------------------------------------------------------------------------------ int
 
     /**
      * Writes an {@code int} value of specified number of bits.
@@ -132,7 +132,7 @@ public interface BitOutput {
      */
     void writeInt32Le(int value) throws IOException;
 
-    // -----------------------------------------------------------------------------------------------------------------
+    // ------------------------------------------------------------------------------------------------------------ long
 
     /**
      * Writes a {@code long} value of specified number of bits.
@@ -165,7 +165,7 @@ public interface BitOutput {
      */
     void writeLong64Le(long value) throws IOException;
 
-    // -----------------------------------------------------------------------------------------------------------------
+    // ------------------------------------------------------------------------------------------------------------ char
 
     /**
      * Writes a {@code char} value of specified number of bits.
@@ -197,6 +197,50 @@ public interface BitOutput {
      * @see BitInput#readChar16Le()
      */
     void writeChar16Le(char value) throws IOException;
+
+    // ------------------------------------------------------------------------------------------------------------ half
+
+    /**
+     * Writes specified {@code float} value packed into {@code 1 + exponentSize + fractionSize} bits using the same
+     * IEEE-like <em>reduced</em> encoding as {@link #writeFloat(int, int, float)}, bounded to {@code binary16}
+     * (half-precision) widths. The over-wide fraction is truncated toward zero; see {@link #writeHalf16(float)} for a
+     * conformant {@code binary16} encoder that rounds to nearest-even and generates subnormals.
+     *
+     * @param exponentSize the number of bits for the exponent; between {@code 2} and {@code 5}, both inclusive.
+     * @param fractionSize the number of bits for the fraction(significand); between {@code 2} and {@code 10}, both
+     *                     inclusive.
+     * @param value        the {@code float} value to write.
+     * @throws IllegalArgumentException if {@code exponentSize} or {@code fractionSize} is not valid.
+     * @throws IOException              if an I/O error occurs.
+     * @see BitInput#readHalf(int, int)
+     */
+    void writeHalf(int exponentSize, int fractionSize, float value) throws IOException;
+
+    /**
+     * Writes specified {@code float} value as a {@code 16}-bit IEEE 754 {@code binary16} (half-precision) pattern:
+     * {@code sign(1) + exponent(5) + significand(10)}, bias {@code 15}.
+     *
+     * <p>This is a <em>conformant</em> {@code binary16} encoding (unlike {@link #writeHalf(int, int, float)} at widths
+     * {@code (5, 10)}): the over-wide fraction is rounded <em>to nearest, ties to even</em> (RNE), subnormals are
+     * generated, magnitudes too large saturate to {@code ±Infinity} and ones too small underflow to {@code ±0}.
+     * {@code ±0}/{@code ±Infinity} round-trip, and quiet/signaling {@code NaN} is preserved from the raw bits observed
+     * via {@link Float#floatToRawIntBits(float)} (qNaN {@code 10...}, sNaN {@code 01...}) rather than quieted.</p>
+     *
+     * @param value the {@code float} value to write.
+     * @throws IOException if an I/O error occurs.
+     * @see BitInput#readHalf16()
+     */
+    void writeHalf16(float value) throws IOException;
+
+    /**
+     * Writes specified {@code float} value as a {@code 16}-bit IEEE 754 {@code binary16} (half-precision) pattern in
+     * little endian byte order. Identical to {@link #writeHalf16(float)} but with the two octets reversed.
+     *
+     * @param value the {@code float} value to write.
+     * @throws IOException if an I/O error occurs.
+     * @see BitInput#readHalf16Le()
+     */
+    void writeHalf16Le(float value) throws IOException;
 
     // ----------------------------------------------------------------------------------------------------------- float
 
@@ -233,6 +277,17 @@ public interface BitOutput {
      */
     void writeFloat32(float value) throws IOException;
 
+    /**
+     * Writes specified {@code float} value as a {@value java.lang.Float#SIZE}-bit pattern, losslessly, in little endian
+     * byte order. The value is reinterpreted via {@link Float#floatToRawIntBits(float)} and written with
+     * {@link #writeInt32Le(int)}.
+     *
+     * @param value the {@code float} value to write.
+     * @throws IOException if an I/O error occurs.
+     * @see BitInput#readFloat32Le()
+     */
+    void writeFloat32Le(float value) throws IOException;
+
     // ---------------------------------------------------------------------------------------------------------- double
 
     /**
@@ -268,6 +323,17 @@ public interface BitOutput {
      * @see BitInput#readDouble64()
      */
     void writeDouble64(double value) throws IOException;
+
+    /**
+     * Writes specified {@code double} value as a {@value java.lang.Double#SIZE}-bit pattern, losslessly, in little
+     * endian byte order. The value is reinterpreted via {@link Double#doubleToRawLongBits(double)} and written with
+     * {@link #writeLong64Le(long)}.
+     *
+     * @param value the {@code double} value to write.
+     * @throws IOException if an I/O error occurs.
+     * @see BitInput#readDouble64Le()
+     */
+    void writeDouble64Le(double value) throws IOException;
 
     // ---------------------------------------------------------------------------------------------------------- object
 

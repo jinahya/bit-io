@@ -57,21 +57,21 @@ class BitObjectContractTest {
             }
         });
 
-        assertEquals(Integer.valueOf(5), value);
+        assertEquals(5, value);
     }
 
     @Test
     void writeObjectDelegatesCurrentOutputAndValue() throws IOException {
         final ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         final BitOutput output = bitOutput(bytes);
-        final Integer value = Integer.valueOf(5);
+        final Integer value = 5;
 
         output.writeObject(new BitWriter<Integer>() {
             @Override
             public void write(final BitOutput actual, final Integer actualValue) throws IOException {
                 assertSame(output, actual);
                 assertSame(value, actualValue);
-                actual.writeInt(true, 3, actualValue.intValue());
+                actual.writeInt(true, 3, actualValue);
             }
         }, value);
         output.align(1);

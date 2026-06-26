@@ -42,7 +42,7 @@ public interface BitInput {
      */
     boolean readBoolean() throws IOException;
 
-    // -----------------------------------------------------------------------------------------------------------------
+    // ------------------------------------------------------------------------------------------------------------ byte
 
     /**
      * Reads a {@code byte} value of specified number of bits.
@@ -66,7 +66,7 @@ public interface BitInput {
      */
     byte readByte8() throws IOException;
 
-    // -----------------------------------------------------------------------------------------------------------------
+    // ----------------------------------------------------------------------------------------------------------- short
 
     /**
      * Reads a {@code short} value of specified number of bits.
@@ -99,7 +99,7 @@ public interface BitInput {
      */
     short readShort16Le() throws IOException;
 
-    // -----------------------------------------------------------------------------------------------------------------
+    // ------------------------------------------------------------------------------------------------------------- int
 
     /**
      * Reads an {@code int} value of specified number of bits.
@@ -132,7 +132,7 @@ public interface BitInput {
      */
     int readInt32Le() throws IOException;
 
-    // -----------------------------------------------------------------------------------------------------------------
+    // ------------------------------------------------------------------------------------------------------------ long
 
     /**
      * Reads a {@code long} value of specified number of bits.
@@ -165,7 +165,7 @@ public interface BitInput {
      */
     long readLong64Le() throws IOException;
 
-    // -----------------------------------------------------------------------------------------------------------------
+    // ------------------------------------------------------------------------------------------------------------ char
 
     /**
      * Reads a {@code char} value of specified number of bits.
@@ -196,6 +196,46 @@ public interface BitInput {
      */
     char readChar16Le() throws IOException;
 
+    // ------------------------------------------------------------------------------------------------------------ half
+
+    /**
+     * Reads a {@code float} value packed into {@code 1 + exponentSize + fractionSize} bits by
+     * {@link BitOutput#writeHalf(int, int, float)} — the same IEEE-like reduced encoding as
+     * {@link #readFloat(int, int)}, bounded to {@code binary16} (half-precision) widths. The same
+     * {@code (exponentSize, fractionSize)} pair must be used as when writing.
+     *
+     * @param exponentSize the number of bits for the exponent; between {@code 2} and {@code 5}, both inclusive.
+     * @param fractionSize the number of bits for the fraction(significand); between {@code 2} and {@code 10}, both
+     *                     inclusive.
+     * @return a {@code float} value.
+     * @throws IllegalArgumentException if {@code exponentSize} or {@code fractionSize} is not valid.
+     * @throws IOException              if an I/O error occurs.
+     * @see BitOutput#writeHalf(int, int, float)
+     */
+    float readHalf(int exponentSize, int fractionSize) throws IOException;
+
+    /**
+     * Reads a {@code float} value from a {@code 16}-bit IEEE 754 {@code binary16} (half-precision) pattern written by
+     * {@link BitOutput#writeHalf16(float)}. The result is exact — every {@code binary16} value, including subnormals,
+     * is representable as a {@code float}.
+     *
+     * @return a {@code float} value.
+     * @throws IOException if an I/O error occurs.
+     * @see BitOutput#writeHalf16(float)
+     */
+    float readHalf16() throws IOException;
+
+    /**
+     * Reads a {@code float} value from a {@code 16}-bit IEEE 754 {@code binary16} (half-precision) pattern written by
+     * {@link BitOutput#writeHalf16Le(float)} in little endian byte order. As with {@link #readHalf16()} the result is
+     * exact.
+     *
+     * @return a {@code float} value.
+     * @throws IOException if an I/O error occurs.
+     * @see BitOutput#writeHalf16Le(float)
+     */
+    float readHalf16Le() throws IOException;
+
     // ----------------------------------------------------------------------------------------------------------- float
 
     /**
@@ -223,6 +263,16 @@ public interface BitInput {
      */
     float readFloat32() throws IOException;
 
+    /**
+     * Reads a {@code float} value from a {@value java.lang.Float#SIZE}-bit pattern written by
+     * {@link BitOutput#writeFloat32Le(float)} in little endian byte order.
+     *
+     * @return a {@code float} value.
+     * @throws IOException if an I/O error occurs.
+     * @see BitOutput#writeFloat32Le(float)
+     */
+    float readFloat32Le() throws IOException;
+
     // ---------------------------------------------------------------------------------------------------------- double
 
     /**
@@ -249,6 +299,16 @@ public interface BitInput {
      * @see BitOutput#writeDouble64(double)
      */
     double readDouble64() throws IOException;
+
+    /**
+     * Reads a {@code double} value from a {@value java.lang.Double#SIZE}-bit pattern written by
+     * {@link BitOutput#writeDouble64Le(double)} in little endian byte order.
+     *
+     * @return a {@code double} value.
+     * @throws IOException if an I/O error occurs.
+     * @see BitOutput#writeDouble64Le(double)
+     */
+    double readDouble64Le() throws IOException;
 
     // ---------------------------------------------------------------------------------------------------------- object
 

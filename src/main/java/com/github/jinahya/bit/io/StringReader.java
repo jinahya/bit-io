@@ -45,6 +45,8 @@ public class StringReader
         return new AsciiReader(lengthSize);
     }
 
+    // -----------------------------------------------------------------------------------------------------------------
+
     /**
      * Creates a new instance reading a length-prefixed array of full bytes decoded in specified charset.
      *
@@ -62,6 +64,8 @@ public class StringReader
         this.delegate = ByteArrayReader.ofSigned(lengthSize, Byte.SIZE);
         this.charsetName = charsetName;
     }
+
+    // -----------------------------------------------------------------------------------------------------------------
 
     /**
      * {@inheritDoc} The {@code read(BitInput)} method of {@code StringReader} class reads the bytes through a
@@ -81,6 +85,7 @@ public class StringReader
         return new String(delegate.read(input), charsetName);
     }
 
+    // -----------------------------------------------------------------------------------------------------------------
     private final ByteArrayReader delegate;
 
     private final String charsetName;

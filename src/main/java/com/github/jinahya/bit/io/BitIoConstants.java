@@ -55,6 +55,18 @@ public final class BitIoConstants {
     static final int MIN_FRACTION_SIZE = 2;
 
     /**
+     * The maximum size, inclusive, for an exponent of a {@code binary16} (half) reduced encoding; the native
+     * {@code binary16} exponent width.
+     */
+    static final int MAX_EXPONENT_SIZE_HALF = 5;
+
+    /**
+     * The maximum size, inclusive, for a fraction of a {@code binary16} (half) reduced encoding; the native
+     * {@code binary16} fraction width.
+     */
+    static final int MAX_FRACTION_SIZE_HALF = 10;
+
+    /**
      * The maximum size, inclusive, for an exponent of a {@code float} reduced encoding; the native {@code float}
      * exponent width.
      */

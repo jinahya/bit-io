@@ -45,6 +45,8 @@ public class StringWriter
         return new AsciiWriter(lengthSize);
     }
 
+    // -----------------------------------------------------------------------------------------------------------------
+
     /**
      * Creates a new instance writing a length-prefixed array of full bytes encoded in specified charset.
      *
@@ -62,6 +64,8 @@ public class StringWriter
         this.delegate = ByteArrayWriter.ofSigned(lengthSize, Byte.SIZE);
         this.charsetName = charsetName;
     }
+
+    // -----------------------------------------------------------------------------------------------------------------
 
     /**
      * {@inheritDoc} The {@code write(BitOutput, String)} method of {@code StringWriter} class encodes {@code value}
@@ -86,6 +90,7 @@ public class StringWriter
         delegate.write(output, value.getBytes(charsetName));
     }
 
+    // -----------------------------------------------------------------------------------------------------------------
     private final ByteArrayWriter delegate;
 
     private final String charsetName;

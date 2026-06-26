@@ -25,8 +25,10 @@ import java.io.IOException;
 import static com.github.jinahya.bit.io.BitIoConstants.FLAG_SIZE;
 import static com.github.jinahya.bit.io.BitIoConstraints.requireValidExponentSizeDouble;
 import static com.github.jinahya.bit.io.BitIoConstraints.requireValidExponentSizeFloat;
+import static com.github.jinahya.bit.io.BitIoConstraints.requireValidExponentSizeHalf;
 import static com.github.jinahya.bit.io.BitIoConstraints.requireValidFractionSizeDouble;
 import static com.github.jinahya.bit.io.BitIoConstraints.requireValidFractionSizeFloat;
+import static com.github.jinahya.bit.io.BitIoConstraints.requireValidFractionSizeHalf;
 import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeByte;
 import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeChar;
 import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeInt;
@@ -213,6 +215,52 @@ public abstract class AbstractBitInput
         return (char) readShort16Le();
     }
 
+    // ------------------------------------------------------------------------------------------------------------ half
+    @Override
+    public float readHalf(final int exponentSize, final int fractionSize) throws IOException {
+        requireValidExponentSizeHalf(exponentSize);
+        requireValidFractionSizeHalf(fractionSize);
+        return readFloat(exponentSize, fractionSize); // reduced encoding over the float carrier, bounded to binary16
+    }
+
+    @Override
+    public float readHalf16() throws IOException {
+        return halfValue(readShort16() & 0xFFFF);
+    }
+
+    @Override
+    public float readHalf16Le() throws IOException {
+        return halfValue(readShort16Le() & 0xFFFF);
+    }
+
+    /**
+     * Decodes a {@code 16}-bit IEEE 754 {@code binary16} pattern into an exact {@code float}.
+     *
+     * @param bits16 the {@code binary16} bit pattern, in the low {@value java.lang.Short#SIZE} bits.
+     * @return the decoded value, as a {@code float}.
+     */
+    private static float halfValue(final int bits16) {
+        final int sign = (bits16 >>> 15) & 0x01;
+        final int exponent = (bits16 >>> 10) & 0x1F;
+        final int significand = bits16 & 0x3FF;
+        final int bits;
+        if (exponent == 0) {                          // zero / subnormal
+            if (significand == 0) {                   // ±0
+                bits = sign << 31;
+            } else {                                  // subnormal -> renormalize into a float normal (exact)
+                final int p = 31 - Integer.numberOfLeadingZeros(significand); // highest set bit, 0 .. 9
+                final int floatExp = p + 103;                                 // (p - 24) + 127
+                final int floatFrac = (significand & ((1 << p) - 1)) << (23 - p);
+                bits = (sign << 31) | (floatExp << 23) | floatFrac;
+            }
+        } else if (exponent == 0x1F) {                // Infinity / NaN
+            bits = (sign << 31) | 0x7F800000 | (significand << 13);
+        } else {                                      // finite normal
+            bits = (sign << 31) | ((exponent - 15 + 127) << 23) | (significand << 13);
+        }
+        return Float.intBitsToFloat(bits);
+    }
+
     // ----------------------------------------------------------------------------------------------------------- float
     @Override
     public float readFloat(final int exponentSize, final int fractionSize) throws IOException {
@@ -242,6 +290,11 @@ public abstract class AbstractBitInput
         return Float.intBitsToFloat(readInt32());
     }
 
+    @Override
+    public float readFloat32Le() throws IOException {
+        return Float.intBitsToFloat(readInt32Le());
+    }
+
     // ---------------------------------------------------------------------------------------------------------- double
     @Override
     public double readDouble(final int exponentSize, final int fractionSize) throws IOException {
@@ -269,6 +322,11 @@ public abstract class AbstractBitInput
     @Override
     public double readDouble64() throws IOException {
         return Double.longBitsToDouble(readLong64());
+    }
+
+    @Override
+    public double readDouble64Le() throws IOException {
+        return Double.longBitsToDouble(readLong64Le());
     }
 
     // ---------------------------------------------------------------------------------------------------------- object

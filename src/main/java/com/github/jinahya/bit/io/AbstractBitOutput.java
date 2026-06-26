@@ -25,8 +25,10 @@ import java.io.IOException;
 import static com.github.jinahya.bit.io.BitIoConstants.FLAG_SIZE;
 import static com.github.jinahya.bit.io.BitIoConstraints.requireValidExponentSizeDouble;
 import static com.github.jinahya.bit.io.BitIoConstraints.requireValidExponentSizeFloat;
+import static com.github.jinahya.bit.io.BitIoConstraints.requireValidExponentSizeHalf;
 import static com.github.jinahya.bit.io.BitIoConstraints.requireValidFractionSizeDouble;
 import static com.github.jinahya.bit.io.BitIoConstraints.requireValidFractionSizeFloat;
+import static com.github.jinahya.bit.io.BitIoConstraints.requireValidFractionSizeHalf;
 import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeByte;
 import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeChar;
 import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeInt;
@@ -210,6 +212,82 @@ public abstract class AbstractBitOutput
         writeShort16Le((short) value);
     }
 
+    // ------------------------------------------------------------------------------------------------------------ half
+    @Override
+    public void writeHalf(final int exponentSize, final int fractionSize, final float value) throws IOException {
+        requireValidExponentSizeHalf(exponentSize);
+        requireValidFractionSizeHalf(fractionSize);
+        writeFloat(exponentSize, fractionSize, value); // reduced encoding over the float carrier, bounded to binary16
+    }
+
+    @Override
+    public void writeHalf16(final float value) throws IOException {
+        writeShort16((short) halfBits(value));
+    }
+
+    @Override
+    public void writeHalf16Le(final float value) throws IOException {
+        writeShort16Le((short) halfBits(value));
+    }
+
+    /**
+     * Encodes specified {@code float} into a conformant IEEE 754 {@code binary16} bit pattern (RNE rounding, subnormal
+     * generation, saturation, quiet/signaling-preserving NaN).
+     *
+     * @param value the value to encode.
+     * @return the {@code binary16} bit pattern, in the low {@value java.lang.Short#SIZE} bits.
+     */
+    private static int halfBits(final float value) {
+        final int bits = Float.floatToRawIntBits(value);
+        final int sign = (bits >>> 16) & 0x8000;     // half sign bit (bit 15)
+        final int rawExp = (bits >>> 23) & 0xFF;     // native float exponent
+        int rawFrac = bits & 0x7FFFFF;               // native float fraction
+        int half;
+        if (rawExp == 0xFF) {                         // Infinity / NaN
+            if (rawFrac == 0) {                       // Infinity
+                half = sign | 0x7C00;
+            } else {                                  // NaN: preserve quiet/signaling (consistent with writeFloat)
+                int frac = rawFrac >>> 13;            // top 10 bits
+                if ((rawFrac & 0x400000) != 0) {      // qNaN: native quiet bit (bit 22) set
+                    frac |= 0x0200;                   // 10...
+                } else {                              // sNaN
+                    frac &= ~0x0200;                  // keep quiet bit clear
+                    if (frac == 0) {                  // payload truncated away -> force 01...
+                        frac = 0x0100;
+                    }
+                }
+                half = sign | 0x7C00 | frac;
+            }
+        } else {
+            final int e = (rawExp - 127) + 15;        // candidate half biased exponent
+            if (e >= 0x1F) {                          // overflow -> Infinity
+                half = sign | 0x7C00;
+            } else if (e <= 0) {                      // subnormal range or underflow
+                if (e < -10) {                        // smaller than half of the least subnormal -> ±0
+                    half = sign;
+                } else {                              // subnormal, round to nearest even
+                    rawFrac |= 0x800000;              // restore the implicit leading 1 (24-bit significand)
+                    final int shift = 14 - e;         // 14 .. 24
+                    int frac = rawFrac >>> shift;
+                    final int rem = rawFrac & ((1 << shift) - 1);
+                    final int halfway = 1 << (shift - 1);
+                    if (rem > halfway || (rem == halfway && (frac & 1) != 0)) {
+                        frac++;                       // carry may reach the least normal (0x400)
+                    }
+                    half = sign | frac;
+                }
+            } else {                                  // normal, round to nearest even
+                int frac = rawFrac >>> 13;            // top 10 bits
+                final int rem = rawFrac & 0x1FFF;     // low 13 bits dropped
+                half = sign | (e << 10) | frac;
+                if (rem > 0x1000 || (rem == 0x1000 && (frac & 1) != 0)) {
+                    half++;                           // carry bumps exponent; e==30 may round to Infinity
+                }
+            }
+        }
+        return half;
+    }
+
     // ----------------------------------------------------------------------------------------------------------- float
     @Override
     public void writeFloat(final int exponentSize, final int fractionSize, final float value) throws IOException {
@@ -261,6 +339,11 @@ public abstract class AbstractBitOutput
         writeInt32(Float.floatToRawIntBits(value));
     }
 
+    @Override
+    public void writeFloat32Le(final float value) throws IOException {
+        writeInt32Le(Float.floatToRawIntBits(value));
+    }
+
     // ---------------------------------------------------------------------------------------------------------- double
     @Override
     public void writeDouble(final int exponentSize, final int fractionSize, final double value) throws IOException {
@@ -310,6 +393,11 @@ public abstract class AbstractBitOutput
     @Override
     public void writeDouble64(final double value) throws IOException {
         writeLong64(Double.doubleToRawLongBits(value));
+    }
+
+    @Override
+    public void writeDouble64Le(final double value) throws IOException {
+        writeLong64Le(Double.doubleToRawLongBits(value));
     }
 
     // ---------------------------------------------------------------------------------------------------------- object

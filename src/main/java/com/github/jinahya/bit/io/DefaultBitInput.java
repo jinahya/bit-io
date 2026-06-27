@@ -82,5 +82,5 @@ public class DefaultBitInput
     /**
      * The delegate whose {@link ByteInput#read()} method is invoked via {@link #read()} method.
      */
-    protected final ByteInput delegate;
+    private final ByteInput delegate;
 }

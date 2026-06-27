@@ -82,5 +82,5 @@ public class DefaultBitOutput
     /**
      * The delegate whose {@link ByteOutput#write(int)} method is invoked via {@link #write(int)} method.
      */
-    protected final ByteOutput delegate;
+    private final ByteOutput delegate;
 }

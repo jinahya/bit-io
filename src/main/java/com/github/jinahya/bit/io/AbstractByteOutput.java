@@ -28,7 +28,7 @@ package com.github.jinahya.bit.io;
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  * @see AbstractByteInput
  */
-abstract class AbstractByteOutput<T>
+public abstract class AbstractByteOutput<T>
         implements ByteOutput {
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -39,7 +39,7 @@ abstract class AbstractByteOutput<T>
      * @param target the underlying byte target to which bytes are written; must not be {@code null}.
      * @throws NullPointerException if {@code target} is {@code null}.
      */
-    AbstractByteOutput(final T target) {
+    protected AbstractByteOutput(final T target) {
         super();
         if (target == null) {
             throw new NullPointerException("target is null");

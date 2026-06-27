@@ -28,7 +28,7 @@ package com.github.jinahya.bit.io;
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  * @see AbstractByteOutput
  */
-abstract class AbstractByteInput<T>
+public abstract class AbstractByteInput<T>
         implements ByteInput {
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -39,7 +39,7 @@ abstract class AbstractByteInput<T>
      * @param source the underlying byte source from which bytes are read; must not be {@code null}.
      * @throws NullPointerException if {@code source} is {@code null}.
      */
-    AbstractByteInput(final T source) {
+    protected AbstractByteInput(final T source) {
         super();
         if (source == null) {
             throw new NullPointerException("source is null");

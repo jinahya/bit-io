@@ -62,5 +62,4 @@ API reference: [javadoc.io/doc/io.github.jinahya/bit-io](https://javadoc.io/doc/
 
 - Runtime target: Java 1.6.
 - Retro-translated artifacts are published with `retrotranslated13` and `retrotranslated14` classifiers.
-- For a Java 8+ flavored version, see [bit-io2](https://github.com/jinahya/bit-io2).
 - License: [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0).

@@ -31,7 +31,7 @@ import java.util.function.Consumer;
 @Slf4j
 final class BitIoTestUtils {
 
-    private static void _(final Consumer<? super BitOutput> outputConsumer, final ByteOutput byteOutput) {
+    private static void _a(final Consumer<? super BitOutput> outputConsumer, final ByteOutput byteOutput) {
         final BitOutput bitOutput = new DefaultBitOutput(byteOutput);
         outputConsumer.accept(bitOutput);
         try {
@@ -41,7 +41,7 @@ final class BitIoTestUtils {
         }
     }
 
-    private static void _(final Consumer<? super BitInput> inputConsumer, final ByteInput byteInput) {
+    private static void _b(final Consumer<? super BitInput> inputConsumer, final ByteInput byteInput) {
         final BitInput bitInput = new DefaultBitInput(byteInput);
         inputConsumer.accept(bitInput);
         try {
@@ -54,8 +54,8 @@ final class BitIoTestUtils {
     // -----------------------------------------------------------------------------------------------------------------
     static void stream(final Consumer<? super BitOutput> consumer1, final Consumer<? super BitInput> consumer2) {
         ByteIoTestUtils.stream_(
-                o -> _(consumer1, o),
-                i -> _(consumer2, i)
+                o -> _a(consumer1, o),
+                i -> _b(consumer2, i)
         );
     }
 

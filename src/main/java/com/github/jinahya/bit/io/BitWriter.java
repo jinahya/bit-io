@@ -41,7 +41,7 @@ public interface BitWriter<T> {
      *
      * @param output the bit output to which the value is written; must not be {@code null}.
      * @param value  the value to write; {@code null} is accepted only when this writer explicitly supports it (e.g. a
-     *               {@link FilterBitWriter#nullable(BitWriter) nullable} writer).
+     *               {@link BitWriters#nullable(BitWriter) nullable} writer).
      * @throws IOException if an I/O error occurs.
      * @see BitReader#read(BitInput)
      */

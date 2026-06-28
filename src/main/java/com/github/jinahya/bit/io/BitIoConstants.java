@@ -95,12 +95,12 @@ public final class BitIoConstants {
     /**
      * The size, in bits, of a single unsigned flag bit. Shared by the I/O layer ({@code boolean} values and the sign
      * bit of signed/floating-point values) and the reader/writer layer (the presence flag of
-     * {@link FilterBitReader#nullable(BitReader) nullable} readers/writers).
+     * {@link BitReaders#nullable(BitReader) nullable} readers/writers).
      *
      * @see AbstractBitInput#readBoolean()
      * @see AbstractBitOutput#writeBoolean(boolean)
-     * @see FilterBitReader#nullable(BitReader)
-     * @see FilterBitWriter#nullable(BitWriter)
+     * @see BitReaders#nullable(BitReader)
+     * @see BitWriters#nullable(BitWriter)
      */
     static final int FLAG_SIZE = 1;
 

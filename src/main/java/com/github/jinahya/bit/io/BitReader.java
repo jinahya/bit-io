@@ -41,7 +41,7 @@ public interface BitReader<T> {
      *
      * @param input the bit input from which the value is read; must not be {@code null}.
      * @return a value read from {@code input}; may be {@code null} only when this reader explicitly supports it (e.g. a
-     *         {@link FilterBitReader#nullable(BitReader) nullable} reader).
+     *         {@link BitReaders#nullable(BitReader) nullable} reader).
      * @throws IOException if an I/O error occurs.
      * @see BitWriter#write(BitOutput, Object)
      */

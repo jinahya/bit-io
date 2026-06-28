@@ -117,12 +117,10 @@ class Asn1LengthTest {
     void rejectsNullArguments() {
         final DefaultBitOutput output = new DefaultBitOutput(new StreamByteOutput(new ByteArrayOutputStream()));
         assertThrows(NullPointerException.class, () -> Asn1BerLength.INSTANCE.read(null));
-        assertThrows(NullPointerException.class, () -> Asn1BerLength.INSTANCE.readIndefinite(null));
-        assertThrows(NullPointerException.class, () -> Asn1BerLength.INSTANCE.readBerIndefiniteLength(null));
+        assertThrows(NullPointerException.class, () -> Asn1BerLength.readBerIndefiniteLength(null));
         assertThrows(NullPointerException.class, () -> Asn1DerLength.INSTANCE.read(null));
         assertThrows(NullPointerException.class, () -> Asn1BerLength.INSTANCE.write(null, 0L));
-        assertThrows(NullPointerException.class, () -> Asn1BerLength.INSTANCE.writeIndefinite(null));
-        assertThrows(NullPointerException.class, () -> Asn1BerLength.INSTANCE.writeBerIndefiniteLength(null));
+        assertThrows(NullPointerException.class, () -> Asn1BerLength.writeBerIndefiniteLength(null));
         assertThrows(NullPointerException.class, () -> Asn1DerLength.INSTANCE.write(null, 0L));
         assertThrows(NullPointerException.class, () -> Asn1BerLength.INSTANCE.write(output, null));
         assertThrows(NullPointerException.class, () -> writeDerObject(null));

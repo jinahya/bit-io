@@ -29,27 +29,23 @@ import static com.github.jinahya.bit.io.miscellaneous.Leb128Constants.MASK_CONTI
 import static com.github.jinahya.bit.io.miscellaneous.Leb128Constants.MASK_PAYLOAD;
 import static com.github.jinahya.bit.io.miscellaneous.Leb128Constants.MASK_SIGN;
 import static com.github.jinahya.bit.io.miscellaneous.Leb128Constants.SIZE_PAYLOAD;
+import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullInput;
 
 /**
  * A reader for LEB128-encoded {@code long} values.
  *
+ * @see <a href="https://dwarfstd.org/dwarf5std.html">DWARF Version 5 Standard</a>
  * @see Leb128Writer
  */
 public abstract class Leb128Reader
         implements BitReader<Long> {
-
-    private static void requireInput(final BitInput input) {
-        if (input == null) {
-            throw new NullPointerException("input is null");
-        }
-    }
 
     private static final class Unsigned
             extends Leb128Reader {
 
         @Override
         long readValue(final BitInput input) throws IOException {
-            requireInput(input);
+            requireNonNullInput(input);
             long value = 0L;
             for (int shift = 0; ; shift += SIZE_PAYLOAD) {
                 final int group = input.readInt(true, Byte.SIZE);
@@ -73,7 +69,7 @@ public abstract class Leb128Reader
 
         @Override
         long readValue(final BitInput input) throws IOException {
-            requireInput(input);
+            requireNonNullInput(input);
             long value = 0L;
             for (int shift = 0; ; shift += SIZE_PAYLOAD) {
                 final int group = input.readInt(true, Byte.SIZE);
@@ -114,6 +110,7 @@ public abstract class Leb128Reader
     // -----------------------------------------------------------------------------------------------------------------
     @Override
     public final Long read(final BitInput input) throws IOException {
+        requireNonNullInput(input);
         return readValue(input);
     }
 

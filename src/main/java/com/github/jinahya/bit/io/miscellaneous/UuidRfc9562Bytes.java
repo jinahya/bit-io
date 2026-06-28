@@ -27,11 +27,17 @@ import com.github.jinahya.bit.io.BitWriter;
 
 import java.io.IOException;
 
+import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullInput;
+import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullOutput;
+import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullValue;
+
 /**
  * A codec for RFC 9562 UUID values in canonical 16-octet byte order.
  *
  * <p>This codec intentionally uses {@code byte[]} rather than {@code java.util.UUID}, so it remains usable after
  * retro-translation to runtimes where {@code java.util.UUID} is unavailable.</p>
+ *
+ * @see <a href="https://www.rfc-editor.org/rfc/rfc9562.html">RFC 9562: Universally Unique IDentifiers</a>
  */
 public final class UuidRfc9562Bytes
         implements BitReader<byte[]>, BitWriter<byte[]> {
@@ -54,9 +60,7 @@ public final class UuidRfc9562Bytes
     // -----------------------------------------------------------------------------------------------------------------
     @Override
     public byte[] read(final BitInput input) throws IOException {
-        if (input == null) {
-            throw new NullPointerException("input is null");
-        }
+        requireNonNullInput(input);
         final byte[] value = new byte[LENGTH];
         for (int i = 0; i < value.length; i++) {
             value[i] = input.readByte8();
@@ -66,12 +70,8 @@ public final class UuidRfc9562Bytes
 
     @Override
     public void write(final BitOutput output, final byte[] value) throws IOException {
-        if (output == null) {
-            throw new NullPointerException("output is null");
-        }
-        if (value == null) {
-            throw new NullPointerException("value is null");
-        }
+        requireNonNullOutput(output);
+        requireNonNullValue(value);
         if (value.length != LENGTH) {
             throw new IllegalArgumentException("value.length(" + value.length + ") != " + LENGTH);
         }

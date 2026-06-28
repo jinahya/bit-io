@@ -27,6 +27,10 @@ import com.github.jinahya.bit.io.BitWriter;
 
 import java.io.IOException;
 
+import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullInput;
+import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullOutput;
+import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullValue;
+
 /**
  * A value-level codec for one JPEG-LS-style Golomb-coded signed prediction error.
  *
@@ -34,6 +38,9 @@ import java.io.IOException;
  * mapped-error folding, then writes a JPEG-LS-style unary quotient using one bits followed by a zero stop bit. It does
  * not implement JPEG-LS prediction, context modeling, adaptive parameter update, run mode, {@code LIMIT},
  * {@code RESET}, or near-lossless reconstruction.</p>
+ *
+ * @see <a href="https://www.itu.int/rec/T-REC-T.87">ITU-T T.87: Lossless and near-lossless compression of
+ *         continuous-tone still images</a>
  */
 public final class GolombJPEGLS
         implements BitReader<Long>, BitWriter<Long> {
@@ -55,15 +62,15 @@ public final class GolombJPEGLS
 
     @Override
     public Long read(final BitInput input) throws IOException {
+        requireNonNullInput(input);
         return RiceGolombCodes.unfoldSigned(RiceGolombCodes.readUnsigned(input, parameter, 1));
     }
 
     @Override
     public void write(final BitOutput output, final Long value) throws IOException {
-        if (value == null) {
-            throw new NullPointerException("value is null");
-        }
-        RiceGolombCodes.writeUnsigned(output, parameter, RiceGolombCodes.foldSigned(value), 1);
+        requireNonNullOutput(output);
+        final long v = requireNonNullValue(value);
+        RiceGolombCodes.writeUnsigned(output, parameter, RiceGolombCodes.foldSigned(v), 1);
     }
 
     /**

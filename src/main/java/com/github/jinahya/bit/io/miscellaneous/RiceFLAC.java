@@ -27,11 +27,17 @@ import com.github.jinahya.bit.io.BitWriter;
 
 import java.io.IOException;
 
+import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullInput;
+import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullOutput;
+import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullValue;
+
 /**
  * A value-level codec for one FLAC Rice-coded signed residual.
  *
  * <p>This class encodes only the signed residual value for a supplied Rice parameter. It does not encode FLAC residual
  * partition headers, method selectors, escape/raw residuals, predictor order, or block-level constraints.</p>
+ *
+ * @see <a href="https://xiph.org/flac/format.html">FLAC format specification</a>
  */
 public final class RiceFLAC
         implements BitReader<Long>, BitWriter<Long> {
@@ -53,15 +59,15 @@ public final class RiceFLAC
 
     @Override
     public Long read(final BitInput input) throws IOException {
+        requireNonNullInput(input);
         return RiceGolombCodes.unfoldSigned(RiceGolombCodes.readUnsigned(input, parameter, 0));
     }
 
     @Override
     public void write(final BitOutput output, final Long value) throws IOException {
-        if (value == null) {
-            throw new NullPointerException("value is null");
-        }
-        RiceGolombCodes.writeUnsigned(output, parameter, RiceGolombCodes.foldSigned(value), 0);
+        requireNonNullOutput(output);
+        final long v = requireNonNullValue(value);
+        RiceGolombCodes.writeUnsigned(output, parameter, RiceGolombCodes.foldSigned(v), 0);
     }
 
     /**

@@ -30,11 +30,13 @@ import static com.github.jinahya.bit.io.miscellaneous.Asn1LengthConstants.MASK_L
 import static com.github.jinahya.bit.io.miscellaneous.Asn1LengthConstants.MAX_LENGTH_OCTETS_FOR_LONG;
 import static com.github.jinahya.bit.io.miscellaneous.Asn1LengthConstants.VALUE_INDEFINITE;
 import static com.github.jinahya.bit.io.miscellaneous.Asn1LengthConstants.VALUE_RESERVED;
+import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullInput;
+import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullOutput;
 
 final class Asn1Lengths {
 
     static long readDefinite(final BitInput input, final boolean der) throws IOException {
-        requireInput(input);
+        requireNonNullInput(input);
         final int first = input.readInt(true, Byte.SIZE);
         if ((first & MASK_LONG_FORM) == 0) {
             return first;
@@ -50,7 +52,7 @@ final class Asn1Lengths {
     }
 
     static void writeDefinite(final BitOutput output, final long value) throws IOException {
-        requireOutput(output);
+        requireNonNullOutput(output);
         if (value < 0L) {
             throw new IllegalArgumentException("negative length: " + value);
         }
@@ -69,7 +71,7 @@ final class Asn1Lengths {
     }
 
     static void readIndefinite(final BitInput input) throws IOException {
-        requireInput(input);
+        requireNonNullInput(input);
         final int value = input.readInt(true, Byte.SIZE);
         if (value != VALUE_INDEFINITE) {
             throw new IOException("not an indefinite length marker: " + value);
@@ -77,7 +79,7 @@ final class Asn1Lengths {
     }
 
     static void writeIndefinite(final BitOutput output) throws IOException {
-        requireOutput(output);
+        requireNonNullOutput(output);
         output.writeInt(true, Byte.SIZE, VALUE_INDEFINITE);
     }
 
@@ -122,18 +124,6 @@ final class Asn1Lengths {
             throw new IOException("non-minimal DER length");
         }
         return value;
-    }
-
-    private static void requireInput(final BitInput input) {
-        if (input == null) {
-            throw new NullPointerException("input is null");
-        }
-    }
-
-    private static void requireOutput(final BitOutput output) {
-        if (output == null) {
-            throw new NullPointerException("output is null");
-        }
     }
 
     private Asn1Lengths() {

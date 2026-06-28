@@ -29,27 +29,24 @@ import static com.github.jinahya.bit.io.miscellaneous.Leb128Constants.MASK_CONTI
 import static com.github.jinahya.bit.io.miscellaneous.Leb128Constants.MASK_PAYLOAD;
 import static com.github.jinahya.bit.io.miscellaneous.Leb128Constants.MASK_SIGN;
 import static com.github.jinahya.bit.io.miscellaneous.Leb128Constants.SIZE_PAYLOAD;
+import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullOutput;
+import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullValue;
 
 /**
  * A writer for LEB128-encoded {@code long} values.
  *
+ * @see <a href="https://dwarfstd.org/dwarf5std.html">DWARF Version 5 Standard</a>
  * @see Leb128Reader
  */
 public abstract class Leb128Writer
         implements BitWriter<Long> {
-
-    private static void requireOutput(final BitOutput output) {
-        if (output == null) {
-            throw new NullPointerException("output is null");
-        }
-    }
 
     private static final class Unsigned
             extends Leb128Writer {
 
         @Override
         void writeValue(final BitOutput output, long value) throws IOException {
-            requireOutput(output);
+            requireNonNullOutput(output);
             if (value < 0L) {
                 throw new IllegalArgumentException("negative value: " + value);
             }
@@ -69,7 +66,7 @@ public abstract class Leb128Writer
 
         @Override
         void writeValue(final BitOutput output, long value) throws IOException {
-            requireOutput(output);
+            requireNonNullOutput(output);
             while (true) {
                 final int group = (int) (value & MASK_PAYLOAD);
                 value >>= SIZE_PAYLOAD;
@@ -101,10 +98,9 @@ public abstract class Leb128Writer
     // -----------------------------------------------------------------------------------------------------------------
     @Override
     public final void write(final BitOutput output, final Long value) throws IOException {
-        if (value == null) {
-            throw new NullPointerException("value is null");
-        }
-        writeValue(output, value);
+        requireNonNullOutput(output);
+        final long v = requireNonNullValue(value);
+        writeValue(output, v);
     }
 
     abstract void writeValue(BitOutput output, long value) throws IOException;

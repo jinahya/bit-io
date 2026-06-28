@@ -27,11 +27,17 @@ import com.github.jinahya.bit.io.BitWriter;
 
 import java.io.IOException;
 
+import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullInput;
+import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullOutput;
+import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullValue;
+
 /**
  * A codec for ASN.1 DER definite length octets.
  *
  * <p>DER uses definite, shortest-form length octets only. Indefinite and non-minimal BER forms are rejected on read,
  * and writes always use the shortest definite form.</p>
+ *
+ * @see <a href="https://www.itu.int/rec/T-REC-X.690">ITU-T X.690: ASN.1 encoding rules</a>
  */
 public final class Asn1DerLength
         implements BitReader<Long>, BitWriter<Long> {
@@ -41,20 +47,23 @@ public final class Asn1DerLength
      */
     public static final Asn1DerLength INSTANCE = new Asn1DerLength();
 
+    // -----------------------------------------------------------------------------------------------------------------
     private Asn1DerLength() {
         super();
     }
 
+    // -----------------------------------------------------------------------------------------------------------------
     @Override
     public Long read(final BitInput input) throws IOException {
+        requireNonNullInput(input);
         return Asn1Lengths.readDefinite(input, true);
     }
 
+    // -----------------------------------------------------------------------------------------------------------------
     @Override
     public void write(final BitOutput output, final Long value) throws IOException {
-        if (value == null) {
-            throw new NullPointerException("value is null");
-        }
-        Asn1Lengths.writeDefinite(output, value);
+        requireNonNullOutput(output);
+        final long v = requireNonNullValue(value);
+        Asn1Lengths.writeDefinite(output, v);
     }
 }

@@ -27,12 +27,17 @@ import com.github.jinahya.bit.io.BitWriter;
 
 import java.io.IOException;
 
+import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullInput;
+import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullOutput;
+import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullValue;
+
 /**
  * A codec for unsigned Exp-Golomb {@code ue(v)} values.
  *
  * <p>The codec accepts and returns non-negative {@code long} values; encoded values beyond
  * {@link Long#MAX_VALUE} are rejected.</p>
  *
+ * @see <a href="https://www.itu.int/rec/T-REC-H.264">ITU-T H.264: Advanced video coding</a>
  * @see ExpGolombSE
  */
 public final class ExpGolombUE
@@ -44,7 +49,7 @@ public final class ExpGolombUE
     public static final ExpGolombUE INSTANCE = new ExpGolombUE();
 
     static long readCodeNum(final BitInput input) throws IOException {
-        requireInput(input);
+        requireNonNullInput(input);
         int leadingZeros = 0;
         while (input.readInt(true, 1) == 0) {
             if (++leadingZeros > Long.SIZE - 1) {
@@ -65,7 +70,7 @@ public final class ExpGolombUE
     }
 
     static void writeCodeNum(final BitOutput output, final long codeNum) throws IOException {
-        requireOutput(output);
+        requireNonNullOutput(output);
         if (codeNum < 0L) {
             throw new IllegalArgumentException("negative codeNum: " + codeNum);
         }
@@ -88,35 +93,23 @@ public final class ExpGolombUE
         }
     }
 
-    static void requireInput(final BitInput input) {
-        if (input == null) {
-            throw new NullPointerException("input is null");
-        }
-    }
-
-    static void requireOutput(final BitOutput output) {
-        if (output == null) {
-            throw new NullPointerException("output is null");
-        }
-    }
-
     private ExpGolombUE() {
         super();
     }
 
     @Override
     public Long read(final BitInput input) throws IOException {
+        requireNonNullInput(input);
         return readCodeNum(input);
     }
 
     @Override
     public void write(final BitOutput output, final Long value) throws IOException {
-        if (value == null) {
-            throw new NullPointerException("value is null");
-        }
-        if (value < 0L) {
+        requireNonNullOutput(output);
+        final long v = requireNonNullValue(value);
+        if (v < 0L) {
             throw new IllegalArgumentException("negative value: " + value);
         }
-        writeCodeNum(output, value);
+        writeCodeNum(output, v);
     }
 }

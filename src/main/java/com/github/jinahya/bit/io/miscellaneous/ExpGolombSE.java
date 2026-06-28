@@ -29,6 +29,9 @@ import java.io.IOException;
 
 import static com.github.jinahya.bit.io.miscellaneous.ExpGolombConstants.MAX_SE;
 import static com.github.jinahya.bit.io.miscellaneous.ExpGolombConstants.MIN_SE;
+import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullInput;
+import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullOutput;
+import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullValue;
 
 /**
  * A codec for signed Exp-Golomb {@code se(v)} values.
@@ -36,6 +39,7 @@ import static com.github.jinahya.bit.io.miscellaneous.ExpGolombConstants.MIN_SE;
  * <p>Because this codec stores the underlying {@code codeNum} in a non-negative {@code long}, the supported signed
  * range is {@code -4611686018427387903} through {@code 4611686018427387904}, both inclusive.</p>
  *
+ * @see <a href="https://www.itu.int/rec/T-REC-H.264">ITU-T H.264: Advanced video coding</a>
  * @see ExpGolombUE
  */
 public final class ExpGolombSE
@@ -65,15 +69,15 @@ public final class ExpGolombSE
     // -----------------------------------------------------------------------------------------------------------------
     @Override
     public Long read(final BitInput input) throws IOException {
+        requireNonNullInput(input);
         return value(ExpGolombUE.readCodeNum(input));
     }
 
     // -----------------------------------------------------------------------------------------------------------------
     @Override
     public void write(final BitOutput output, final Long value) throws IOException {
-        if (value == null) {
-            throw new NullPointerException("value is null");
-        }
-        ExpGolombUE.writeCodeNum(output, codeNum(value));
+        requireNonNullOutput(output);
+        final long v = requireNonNullValue(value);
+        ExpGolombUE.writeCodeNum(output, codeNum(v));
     }
 }

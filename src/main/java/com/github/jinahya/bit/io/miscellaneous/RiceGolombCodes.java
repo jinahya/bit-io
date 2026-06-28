@@ -25,6 +25,9 @@ import com.github.jinahya.bit.io.BitOutput;
 
 import java.io.IOException;
 
+import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullInput;
+import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullOutput;
+
 final class RiceGolombCodes {
 
     static final int MIN_PARAMETER = 0;
@@ -54,7 +57,7 @@ final class RiceGolombCodes {
     }
 
     static long readUnsigned(final BitInput input, final int parameter, final int quotientBit) throws IOException {
-        requireInput(input);
+        requireNonNullInput(input);
         requireParameter(parameter);
         if (quotientBit != 0 && quotientBit != 1) {
             throw new IllegalArgumentException("invalid quotientBit: " + quotientBit);
@@ -75,7 +78,7 @@ final class RiceGolombCodes {
 
     static void writeUnsigned(final BitOutput output, final int parameter, final long value, final int quotientBit)
             throws IOException {
-        requireOutput(output);
+        requireNonNullOutput(output);
         requireParameter(parameter);
         if (value < 0L) {
             throw new IllegalArgumentException("negative value: " + value);
@@ -88,18 +91,6 @@ final class RiceGolombCodes {
         output.writeInt(true, 1, quotientBit ^ 0x01);
         if (parameter > 0) {
             output.writeLong(true, parameter, value & ((1L << parameter) - 1L));
-        }
-    }
-
-    private static void requireInput(final BitInput input) {
-        if (input == null) {
-            throw new NullPointerException("input is null");
-        }
-    }
-
-    private static void requireOutput(final BitOutput output) {
-        if (output == null) {
-            throw new NullPointerException("output is null");
         }
     }
 

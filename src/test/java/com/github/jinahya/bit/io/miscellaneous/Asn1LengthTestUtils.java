@@ -44,7 +44,7 @@ final class Asn1LengthTestUtils {
     static byte[] writeBerIndefinite() throws IOException {
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
         final BitOutput output = new DefaultBitOutput(new StreamByteOutput(baos));
-        Asn1BerLength.INSTANCE.writeBerIndefiniteLength(output);
+        Asn1BerLength.writeBerIndefiniteLength(output);
         output.align(1);
         return baos.toByteArray();
     }
@@ -56,7 +56,7 @@ final class Asn1LengthTestUtils {
 
     static void readBerIndefinite(final byte[] bytes) throws IOException {
         final BitInput input = new DefaultBitInput(new StreamByteInput(new ByteArrayInputStream(bytes)));
-        Asn1BerLength.INSTANCE.readBerIndefiniteLength(input);
+        Asn1BerLength.readBerIndefiniteLength(input);
     }
 
     static byte[] writeDer(final long value) throws IOException {

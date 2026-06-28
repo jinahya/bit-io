@@ -83,7 +83,7 @@ class BitObjectContractTest {
     void nullableWriterAndReaderRoundTripPresentObject() throws IOException {
         final byte[] bytes = writeSample(new Sample(true, 5));
 
-        final Sample value = bitInput(bytes).readObject(FilterBitReader.nullable(sampleReader()));
+        final Sample value = bitInput(bytes).readObject(BitReaders.nullable(sampleReader()));
 
         assertEquals(new Sample(true, 5), value);
     }
@@ -92,7 +92,7 @@ class BitObjectContractTest {
     void nullableWriterAndReaderRoundTripNullObject() throws IOException {
         final byte[] bytes = writeSample(null);
 
-        final Sample value = bitInput(bytes).readObject(FilterBitReader.nullable(sampleReader()));
+        final Sample value = bitInput(bytes).readObject(BitReaders.nullable(sampleReader()));
 
         assertNull(value);
         assertArrayEquals(new byte[]{0x00}, bytes);
@@ -102,7 +102,7 @@ class BitObjectContractTest {
     void nullableReaderDoesNotCallDelegateForNullObject() throws IOException {
         final CountingReader delegate = new CountingReader();
 
-        final Sample value = bitInput(new byte[]{0x00}).readObject(FilterBitReader.nullable(delegate));
+        final Sample value = bitInput(new byte[]{0x00}).readObject(BitReaders.nullable(delegate));
 
         assertNull(value);
         assertEquals(0, delegate.count);
@@ -114,7 +114,7 @@ class BitObjectContractTest {
         final ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         final BitOutput output = bitOutput(bytes);
 
-        output.writeObject(FilterBitWriter.nullable(delegate), null);
+        output.writeObject(BitWriters.nullable(delegate), null);
         output.align(1);
 
         assertEquals(0, delegate.count);
@@ -123,21 +123,21 @@ class BitObjectContractTest {
 
     @Test
     void nullableReaderRejectsNullDelegateAndInput() {
-        assertThrows(NullPointerException.class, () -> FilterBitReader.nullable(null));
-        assertThrows(NullPointerException.class, () -> FilterBitReader.nullable(sampleReader()).read(null));
+        assertThrows(NullPointerException.class, () -> BitReaders.nullable(null));
+        assertThrows(NullPointerException.class, () -> BitReaders.nullable(sampleReader()).read(null));
     }
 
     @Test
     void nullableWriterRejectsNullDelegateAndOutput() {
-        assertThrows(NullPointerException.class, () -> FilterBitWriter.nullable(null));
+        assertThrows(NullPointerException.class, () -> BitWriters.nullable(null));
         assertThrows(NullPointerException.class,
-                     () -> FilterBitWriter.nullable(sampleWriter()).write(null, new Sample(true, 5)));
+                     () -> BitWriters.nullable(sampleWriter()).write(null, new Sample(true, 5)));
     }
 
     private static byte[] writeSample(final Sample value) throws IOException {
         final ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         final BitOutput output = bitOutput(bytes);
-        output.writeObject(FilterBitWriter.nullable(sampleWriter()), value);
+        output.writeObject(BitWriters.nullable(sampleWriter()), value);
         output.align(1);
         return bytes.toByteArray();
     }

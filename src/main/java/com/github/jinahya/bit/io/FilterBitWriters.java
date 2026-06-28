@@ -20,47 +20,36 @@ package com.github.jinahya.bit.io;
  * #L%
  */
 
-import java.io.IOException;
-
 /**
- * A skeletal {@link BitWriter} that maps a value through {@link #apply(Object)} before writing it with another writer
- * (the {@link #delegate delegate}), for composing writers without modifying them.
+ * Static factory methods for creating {@link FilterBitWriter} instances.
  *
- * @param <T> value type parameter
- * @param <U> delegate value type parameter
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
- * @see FilterBitReader
- * @see BitWriters
+ * @see FilterBitReaders
  */
-public abstract class FilterBitWriter<T, U>
-        implements BitWriter<T> {
+public final class FilterBitWriters {
 
     // -----------------------------------------------------------------------------------------------------------------
+
     /**
-     * Creates a new instance wrapping specified delegate.
+     * Returns a new filter writer that writes specified values to specified delegate unchanged.
      *
      * @param delegate the writer to wrap; must not be {@code null}.
+     * @param <T>      value type parameter
+     * @return a new identity filter writer.
      * @throws NullPointerException if {@code delegate} is {@code null}.
      */
-    protected FilterBitWriter(final BitWriter<? super U> delegate) {
-        super();
-        if (delegate == null) {
-            throw new NullPointerException("delegate is null");
-        }
-        this.delegate = delegate;
+    public static <T> FilterBitWriter<T, T> identity(final BitWriter<? super T> delegate) {
+        return new FilterBitWriter<T, T>(delegate) {
+            @Override
+            protected T apply(final T value) {
+                return value;
+            }
+        };
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    @Override
-    public void write(final BitOutput output, final T value) throws IOException {
-        delegate.write(output, apply(value));
+
+    private FilterBitWriters() {
+        throw new AssertionError("instantiation is not allowed");
     }
-
-    protected abstract U apply(T value);
-
-    // -----------------------------------------------------------------------------------------------------------------
-    /**
-     * The writer wrapped by this filter.
-     */
-    protected final BitWriter<? super U> delegate;
 }

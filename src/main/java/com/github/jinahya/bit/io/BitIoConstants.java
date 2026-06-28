@@ -94,7 +94,7 @@ public final class BitIoConstants {
 
     /**
      * The size, in bits, of a single unsigned flag bit. Shared by the I/O layer ({@code boolean} values and the sign
-     * bit of signed/floating-point values) and the reader/writer layer (the {@code null}ability flag of
+     * bit of signed/floating-point values) and the reader/writer layer (the presence flag of
      * {@link FilterBitReader#nullable(BitReader) nullable} readers/writers).
      *
      * @see AbstractBitInput#readBoolean()
@@ -104,6 +104,7 @@ public final class BitIoConstants {
      */
     static final int FLAG_SIZE = 1;
 
+    // -----------------------------------------------------------------------------------------------------------------
     /**
      * The name of the {@code US-ASCII} charset; the charset used for compressed
      * ({@value java.lang.Byte#SIZE}{@code  - 1}-bit element) ASCII strings.

@@ -20,47 +20,36 @@ package com.github.jinahya.bit.io;
  * #L%
  */
 
-import java.io.IOException;
-
 /**
- * A skeletal {@link BitReader} that maps the value read by another reader (the {@link #delegate delegate}) through
- * {@link #apply(Object)}, for composing readers without modifying them.
+ * Static factory methods for creating {@link FilterBitReader} instances.
  *
- * @param <T> value type parameter
- * @param <U> delegate value type parameter
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
- * @see FilterBitWriter
- * @see BitReaders
+ * @see FilterBitWriters
  */
-public abstract class FilterBitReader<T, U>
-        implements BitReader<T> {
+public final class FilterBitReaders {
 
     // -----------------------------------------------------------------------------------------------------------------
+
     /**
-     * Creates a new instance wrapping specified delegate.
+     * Returns a new filter reader that returns values read by specified delegate unchanged.
      *
      * @param delegate the reader to wrap; must not be {@code null}.
+     * @param <T>      value type parameter
+     * @return a new identity filter reader.
      * @throws NullPointerException if {@code delegate} is {@code null}.
      */
-    protected FilterBitReader(final BitReader<? extends U> delegate) {
-        super();
-        if (delegate == null) {
-            throw new NullPointerException("delegate is null");
-        }
-        this.delegate = delegate;
+    public static <T> FilterBitReader<T, T> identity(final BitReader<? extends T> delegate) {
+        return new FilterBitReader<T, T>(delegate) {
+            @Override
+            protected T apply(final T value) {
+                return value;
+            }
+        };
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    @Override
-    public T read(final BitInput input) throws IOException {
-        return apply(delegate.read(input));
+
+    private FilterBitReaders() {
+        throw new AssertionError("instantiation is not allowed");
     }
-
-    protected abstract T apply(U value);
-
-    // -----------------------------------------------------------------------------------------------------------------
-    /**
-     * The reader wrapped by this filter.
-     */
-    protected final BitReader<? extends U> delegate;
 }

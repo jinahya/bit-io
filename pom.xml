@@ -235,7 +235,7 @@
               <target>
                 <taskdef name="retrotranslator" classname="net.sf.retrotranslator.transformer.RetrotranslatorTask" classpathref="maven.plugin.classpath" />
                 <mkdir dir="${project.build.outputDirectory.retrotranslated14}" />
-                <retrotranslator srcdir="${project.build.outputDirectory}" destdir="${project.build.outputDirectory.retrotranslated14}" embed="com.github.jinahya.bit.io.retrotranslated14" failonwarning="false" smart="true" stripannot="true" stripsign="true" syncvolatile="true" target="1.4" verbose="false" verify="false">
+                <retrotranslator srcdir="${project.build.outputDirectory}" destdir="${project.build.outputDirectory.retrotranslated14}" embed="com.github.jinahya.bit.io.retrotranslated14" failonwarning="true" smart="true" stripannot="true" stripsign="true" syncvolatile="true" target="1.4" verbose="false" verify="true">
                   <classpath>
                     <fileset dir="${basedir}/ext/retrotranslated14" includes="**/*.jar" />
                   </classpath>
@@ -294,8 +294,8 @@
         <executions>
           <execution>
             <goals>
-              <!--              <goal>integration-test</goal>-->
-              <!--              <goal>verify</goal>-->
+              <goal>integration-test</goal>
+              <goal>verify</goal>
             </goals>
           </execution>
         </executions>

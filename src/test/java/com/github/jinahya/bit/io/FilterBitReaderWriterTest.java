@@ -59,7 +59,7 @@ class FilterBitReaderWriterTest {
         final BitReader<Integer> delegate = new BitReader<Integer>() {
             @Override
             public Integer read(final BitInput input) throws IOException {
-                return input.readInt(true, 3);
+                return input.readUnsignedInt(3);
             }
         };
 
@@ -111,7 +111,7 @@ class FilterBitReaderWriterTest {
         new FilterBitWriter<String, Integer>(new BitWriter<Integer>() {
             @Override
             public void write(final BitOutput output, final Integer value) throws IOException {
-                output.writeInt(true, 3, value);
+                output.writeUnsignedInt(3, value);
             }
         }) {
             @Override

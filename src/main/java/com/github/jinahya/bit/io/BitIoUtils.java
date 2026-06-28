@@ -32,7 +32,7 @@ final class BitIoUtils {
      *
      * @param input the input from which the flag is read; must not be {@code null}.
      * @return {@code true} if a value is present and follows (flag set); {@code false} if the value is {@code null}
-     * (flag clear).
+     *         (flag clear).
      * @throws NullPointerException if {@code input} is {@code null}.
      * @throws IOException          if an I/O error occurs.
      */
@@ -49,7 +49,8 @@ final class BitIoUtils {
      *
      * @param output the output to which the flag is written; must not be {@code null}.
      * @param value  the value whose presence the flag represents; may be {@code null}.
-     * @return {@code true} if {@code value} is present (non-{@code null}) and should be written; {@code false} otherwise.
+     * @return {@code true} if {@code value} is present (non-{@code null}) and should be written; {@code false}
+     *         otherwise.
      * @throws NullPointerException if {@code output} is {@code null}.
      * @throws IOException          if an I/O error occurs.
      */
@@ -60,6 +61,23 @@ final class BitIoUtils {
         final boolean present = value != null;
         output.writeBoolean(present);
         return present;
+    }
+
+    /**
+     * Returns the zero-based index of the highest set bit in specified value. A {@code 1.4}-safe replacement for
+     * {@code 31 - }{@link Integer#numberOfLeadingZeros(int)} ({@code Integer.numberOfLeadingZeros} is a Java {@code 5}
+     * method that the retro-translated {@code 1.3}/{@code 1.4} artifacts cannot rely on).
+     *
+     * @param value the value.
+     * @return the index of the highest set bit, between {@code 0} and {@code 31}, both inclusive; {@code -1} when
+     *         {@code value} is {@code 0}.
+     */
+    static int highestOneBitIndex(final int value) {
+        int index = -1;
+        for (int v = value; v != 0; v >>>= 1) {
+            index++;
+        }
+        return index;
     }
 
     private BitIoUtils() {

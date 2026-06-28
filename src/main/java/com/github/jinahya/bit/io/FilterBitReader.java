@@ -36,6 +36,7 @@ public abstract class FilterBitReader<T, U>
         implements BitReader<T> {
 
     // -----------------------------------------------------------------------------------------------------------------
+
     /**
      * Creates a new instance wrapping specified delegate.
      *
@@ -59,6 +60,7 @@ public abstract class FilterBitReader<T, U>
     protected abstract T apply(U value);
 
     // -----------------------------------------------------------------------------------------------------------------
+
     /**
      * The reader wrapped by this filter.
      */

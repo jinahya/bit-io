@@ -26,6 +26,8 @@ import com.github.jinahya.bit.io.DefaultBitInput;
 import com.github.jinahya.bit.io.DefaultBitOutput;
 import com.github.jinahya.bit.io.StreamByteInput;
 import com.github.jinahya.bit.io.StreamByteOutput;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
@@ -37,6 +39,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+@NoArgsConstructor(access = AccessLevel.PACKAGE)
 class UuidRfc9562BytesTest {
 
     @Test

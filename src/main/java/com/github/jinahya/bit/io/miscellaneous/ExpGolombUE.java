@@ -51,7 +51,7 @@ public final class ExpGolombUE
     static long readCodeNum(final BitInput input) throws IOException {
         requireNonNullInput(input);
         int leadingZeros = 0;
-        while (input.readInt(true, 1) == 0) {
+        while (input.readUnsignedInt(1) == 0) {
             if (++leadingZeros > Long.SIZE - 1) {
                 throw new IOException("Exp-Golomb codeNum exceeds signed long range");
             }
@@ -59,7 +59,7 @@ public final class ExpGolombUE
         if (leadingZeros == 0) {
             return 0L;
         }
-        final long suffix = input.readLong(true, leadingZeros);
+        final long suffix = input.readUnsignedLong(leadingZeros);
         if (leadingZeros == Long.SIZE - 1) {
             if (suffix != 0L) {
                 throw new IOException("Exp-Golomb codeNum exceeds signed long range");
@@ -81,15 +81,15 @@ public final class ExpGolombUE
             suffix = 0L;
         } else {
             final long info = codeNum + 1L;
-            leadingZeros = Long.SIZE - 1 - Long.numberOfLeadingZeros(info);
+            leadingZeros = _Utils.highestOneBitIndex(info);
             suffix = info - (1L << leadingZeros);
         }
         if (leadingZeros > 0) {
-            output.writeLong(true, leadingZeros, 0L);
+            output.writeUnsignedLong(leadingZeros, 0L);
         }
-        output.writeInt(true, 1, 1);
+        output.writeUnsignedInt(1, 1);
         if (leadingZeros > 0) {
-            output.writeLong(true, leadingZeros, suffix);
+            output.writeUnsignedLong(leadingZeros, suffix);
         }
     }
 

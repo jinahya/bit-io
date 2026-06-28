@@ -29,11 +29,15 @@ import static com.github.jinahya.bit.io.BitIoConstraints.requireValidExponentSiz
 import static com.github.jinahya.bit.io.BitIoConstraints.requireValidFractionSizeDouble;
 import static com.github.jinahya.bit.io.BitIoConstraints.requireValidFractionSizeFloat;
 import static com.github.jinahya.bit.io.BitIoConstraints.requireValidFractionSizeHalf;
-import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeByte;
 import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeChar;
-import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeInt;
-import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeLong;
-import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeShort;
+import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeForSignedByte;
+import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeForSignedInt;
+import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeForSignedLong;
+import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeForSignedShort;
+import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeForUnsignedByte;
+import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeForUnsignedInt;
+import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeForUnsignedLong;
+import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeForUnsignedShort;
 
 /**
  * An abstract class for implementing {@link BitOutput} interface.
@@ -102,29 +106,59 @@ public abstract class AbstractBitOutput
     // --------------------------------------------------------------------------------------------------------- boolean
     @Override
     public void writeBoolean(final boolean value) throws IOException {
-        writeInt(true, FLAG_SIZE, value ? 1 : 0);
+        writeUnsignedInt(FLAG_SIZE, value ? 1 : 0);
     }
 
     // ------------------------------------------------------------------------------------------------------------ byte
+    @Deprecated
     @Override
     public void writeByte(final boolean unsigned, final int size, final byte value) throws IOException {
-        writeInt(unsigned, requireValidSizeByte(unsigned, size), value);
+        if (unsigned) {
+            writeUnsignedByte(size, value);
+        } else {
+            writeByte(size, value);
+        }
+    }
+
+    @Override
+    public void writeUnsignedByte(final int size, final byte value) throws IOException {
+        writeUnsignedInt(requireValidSizeForUnsignedByte(size), value);
+    }
+
+    @Override
+    public void writeByte(final int size, final byte value) throws IOException {
+        writeInt(requireValidSizeForSignedByte(size), value);
     }
 
     @Override
     public void writeByte8(final byte value) throws IOException {
-        writeByte(false, Byte.SIZE, value);
+        writeByte(Byte.SIZE, value);
     }
 
     // ----------------------------------------------------------------------------------------------------------- short
+    @Deprecated
     @Override
     public void writeShort(final boolean unsigned, final int size, final short value) throws IOException {
-        writeInt(unsigned, requireValidSizeShort(unsigned, size), value);
+        if (unsigned) {
+            writeUnsignedShort(size, value);
+        } else {
+            writeShort(size, value);
+        }
+    }
+
+    @Override
+    public void writeUnsignedShort(final int size, final short value) throws IOException {
+        writeUnsignedInt(requireValidSizeForUnsignedShort(size), value);
+    }
+
+    @Override
+    public void writeShort(final int size, final short value) throws IOException {
+        writeInt(requireValidSizeForSignedShort(size), value);
     }
 
     @Override
     public void writeShort16(final short value) throws IOException {
-        writeShort(false, Short.SIZE, value);
+        writeShort(Short.SIZE, value);
     }
 
     @Override
@@ -134,16 +168,19 @@ public abstract class AbstractBitOutput
     }
 
     // ------------------------------------------------------------------------------------------------------------- int
+    @Deprecated
     @Override
     public void writeInt(final boolean unsigned, int size, final int value) throws IOException {
-        requireValidSizeInt(unsigned, size);
-        if (!unsigned) {
-            writeInt(true, FLAG_SIZE, value < 0 ? 1 : 0);
-            if (--size > 0) {
-                writeInt(true, size, value);
-            }
-            return;
+        if (unsigned) {
+            writeUnsignedInt(size, value);
+        } else {
+            writeInt(size, value);
         }
+    }
+
+    @Override
+    public void writeUnsignedInt(int size, final int value) throws IOException {
+        requireValidSizeForUnsignedInt(size);
         final int quotient = size >> 3;
         final int remainder = size & 7;
         if (remainder > 0) {
@@ -155,8 +192,17 @@ public abstract class AbstractBitOutput
     }
 
     @Override
+    public void writeInt(int size, final int value) throws IOException {
+        requireValidSizeForSignedInt(size);
+        writeUnsignedInt(FLAG_SIZE, value < 0 ? 1 : 0);
+        if (--size > 0) {
+            writeUnsignedInt(size, value);
+        }
+    }
+
+    @Override
     public void writeInt32(final int value) throws IOException {
-        writeInt(false, Integer.SIZE, value);
+        writeInt(Integer.SIZE, value);
     }
 
     @Override
@@ -166,28 +212,40 @@ public abstract class AbstractBitOutput
     }
 
     // ------------------------------------------------------------------------------------------------------------ long
+    @Deprecated
     @Override
     public void writeLong(final boolean unsigned, int size, final long value) throws IOException {
-        requireValidSizeLong(unsigned, size);
-        if (!unsigned) {
-            writeInt(true, FLAG_SIZE, value < 0L ? 0x01 : 0x00);
-            if (--size > 0) {
-                writeLong(true, size, value);
-            }
-            return;
+        if (unsigned) {
+            writeUnsignedLong(size, value);
+        } else {
+            writeLong(size, value);
         }
+    }
+
+    @Override
+    public void writeUnsignedLong(int size, final long value) throws IOException {
+        requireValidSizeForUnsignedLong(size);
         if (size >= Integer.SIZE) {
-            writeInt(false, Integer.SIZE, (int) (value >> (size - Integer.SIZE)));
+            writeInt(Integer.SIZE, (int) (value >> (size - Integer.SIZE)));
             size -= Integer.SIZE;
         }
         if (size > 0) {
-            writeInt(true, size, (int) value);
+            writeUnsignedInt(size, (int) value);
+        }
+    }
+
+    @Override
+    public void writeLong(int size, final long value) throws IOException {
+        requireValidSizeForSignedLong(size);
+        writeUnsignedLong(FLAG_SIZE, value < 0L ? 0x01L : 0x00L);
+        if (--size > 0) {
+            writeUnsignedLong(size, value);
         }
     }
 
     @Override
     public void writeLong64(final long value) throws IOException {
-        writeLong(false, Long.SIZE, value);
+        writeLong(Long.SIZE, value);
     }
 
     @Override
@@ -199,7 +257,7 @@ public abstract class AbstractBitOutput
     // ------------------------------------------------------------------------------------------------------------ char
     @Override
     public void writeChar(final int size, final char value) throws IOException {
-        writeInt(true, requireValidSizeChar(size), value);
+        writeUnsignedInt(requireValidSizeChar(size), value);
     }
 
     @Override
@@ -329,9 +387,9 @@ public abstract class AbstractBitOutput
                 storedExp = stored;
             }
         }
-        writeInt(true, FLAG_SIZE, sign);
-        writeInt(true, exponentSize, storedExp);
-        writeInt(true, fractionSize, storedFrac);
+        writeUnsignedInt(FLAG_SIZE, sign);
+        writeUnsignedInt(exponentSize, storedExp);
+        writeUnsignedInt(fractionSize, storedFrac);
     }
 
     @Override
@@ -385,9 +443,9 @@ public abstract class AbstractBitOutput
                 storedExp = stored;
             }
         }
-        writeInt(true, FLAG_SIZE, sign);
-        writeInt(true, exponentSize, storedExp);
-        writeLong(true, fractionSize, storedFrac);
+        writeUnsignedInt(FLAG_SIZE, sign);
+        writeUnsignedInt(exponentSize, storedExp);
+        writeUnsignedLong(fractionSize, storedFrac);
     }
 
     @Override
@@ -427,10 +485,10 @@ public abstract class AbstractBitOutput
             throw new IllegalArgumentException("bits(" + bits + ") <= 0");
         }
         for (; bits >= Integer.SIZE; bits -= Integer.SIZE) {
-            writeInt(false, Integer.SIZE, 0);
+            writeInt(Integer.SIZE, 0);
         }
         if (bits > 0) {
-            writeInt(true, bits, 0);
+            writeUnsignedInt(bits, 0);
         }
     }
 
@@ -442,13 +500,13 @@ public abstract class AbstractBitOutput
         long bits = 0L; // number of bits padded
         if (available < Byte.SIZE) {
             bits += available; // must be prior to the below
-            writeInt(true, available, 0x00);
+            writeUnsignedInt(available, 0x00);
         }
         if (bytes == 1) {
             return bits;
         }
         for (bytes = (bytes - (int) (count % bytes)) % bytes; bytes > 0; bytes--) {
-            writeInt(true, Byte.SIZE, 0x00);
+            writeUnsignedInt(Byte.SIZE, 0x00);
             bits += Byte.SIZE;
         }
         return bits;

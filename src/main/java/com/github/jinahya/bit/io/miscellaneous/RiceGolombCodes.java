@@ -63,7 +63,7 @@ final class RiceGolombCodes {
             throw new IllegalArgumentException("invalid quotientBit: " + quotientBit);
         }
         long quotient = 0L;
-        while (input.readInt(true, 1) == quotientBit) {
+        while (input.readUnsignedInt(1) == quotientBit) {
             if (quotient == Long.MAX_VALUE) {
                 throw new IOException("quotient exceeds signed long range");
             }
@@ -72,7 +72,7 @@ final class RiceGolombCodes {
         if (quotient > (Long.MAX_VALUE >> parameter)) {
             throw new IOException("value exceeds signed long range");
         }
-        final long remainder = parameter == 0 ? 0L : input.readLong(true, parameter);
+        final long remainder = parameter == 0 ? 0L : input.readUnsignedLong(parameter);
         return (quotient << parameter) | remainder;
     }
 
@@ -88,20 +88,20 @@ final class RiceGolombCodes {
         }
         final long quotient = value >>> parameter;
         writeRepeated(output, quotient, quotientBit);
-        output.writeInt(true, 1, quotientBit ^ 0x01);
+        output.writeUnsignedInt(1, quotientBit ^ 0x01);
         if (parameter > 0) {
-            output.writeLong(true, parameter, value & ((1L << parameter) - 1L));
+            output.writeUnsignedLong(parameter, value & ((1L << parameter) - 1L));
         }
     }
 
     private static void writeRepeated(final BitOutput output, long count, final int bit) throws IOException {
         final long chunk = bit == 0 ? 0L : Long.MAX_VALUE;
         while (count >= Long.SIZE - 1) {
-            output.writeLong(true, Long.SIZE - 1, chunk);
+            output.writeUnsignedLong(Long.SIZE - 1, chunk);
             count -= Long.SIZE - 1;
         }
         if (count > 0L) {
-            output.writeLong(true, (int) count, chunk);
+            output.writeUnsignedLong((int) count, chunk);
         }
     }
 

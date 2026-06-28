@@ -48,7 +48,7 @@ public abstract class Leb128Reader
             requireNonNullInput(input);
             long value = 0L;
             for (int shift = 0; ; shift += SIZE_PAYLOAD) {
-                final int group = input.readInt(true, Byte.SIZE);
+                final int group = input.readUnsignedInt(Byte.SIZE);
                 final int payload = group & MASK_PAYLOAD;
                 if (shift == Long.SIZE - 1 && payload != 0) {
                     throw new IOException("unsigned LEB128 value exceeds signed long range");
@@ -72,7 +72,7 @@ public abstract class Leb128Reader
             requireNonNullInput(input);
             long value = 0L;
             for (int shift = 0; ; shift += SIZE_PAYLOAD) {
-                final int group = input.readInt(true, Byte.SIZE);
+                final int group = input.readUnsignedInt(Byte.SIZE);
                 final int payload = group & MASK_PAYLOAD;
                 if (shift == Long.SIZE - 1 && payload != 0x00 && payload != MASK_PAYLOAD) {
                     throw new IOException("signed LEB128 value exceeds long range");

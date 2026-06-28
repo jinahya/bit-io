@@ -316,18 +316,18 @@ class BitFloatingPointRoundTripTest {
     private static FloatFields readFloatFields(final byte[] bytes, final int exponentSize, final int fractionSize)
             throws IOException {
         final BitInput input = input(bytes);
-        final int sign = input.readInt(true, 1);
-        final int exponent = input.readInt(true, exponentSize);
-        final int fraction = input.readInt(true, fractionSize);
+        final int sign = input.readUnsignedInt(1);
+        final int exponent = input.readUnsignedInt(exponentSize);
+        final int fraction = input.readUnsignedInt(fractionSize);
         return new FloatFields(sign, exponent, fraction);
     }
 
     private static DoubleFields readDoubleFields(final byte[] bytes, final int exponentSize, final int fractionSize)
             throws IOException {
         final BitInput input = input(bytes);
-        final int sign = input.readInt(true, 1);
-        final int exponent = input.readInt(true, exponentSize);
-        final long fraction = input.readLong(true, fractionSize);
+        final int sign = input.readUnsignedInt(1);
+        final int exponent = input.readUnsignedInt(exponentSize);
+        final long fraction = input.readUnsignedLong(fractionSize);
         return new DoubleFields(sign, exponent, fraction);
     }
 

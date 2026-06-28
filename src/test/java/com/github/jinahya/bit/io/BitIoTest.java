@@ -72,9 +72,13 @@ class BitIoTest {
         final boolean unsigned = current().nextBoolean();
         final int size = randomSizeForByte(unsigned);
         final byte expected = randomValueForByte(unsigned, size);
-        output.writeByte(unsigned, size, expected);
+        if (unsigned) {
+            output.writeUnsignedByte(size, expected);
+        } else {
+            output.writeByte(size, expected);
+        }
         assertTrue(output.align(Byte.BYTES) < Byte.SIZE);
-        final byte actual = input.readByte(unsigned, size);
+        final byte actual = unsigned ? input.readUnsignedByte(size) : input.readByte(size);
         assertTrue(input.align(Byte.BYTES) < Byte.SIZE);
         assertEquals(expected, actual);
     }
@@ -101,9 +105,13 @@ class BitIoTest {
         final boolean unsigned = current().nextBoolean();
         final int size = randomSizeForShort(unsigned);
         final short expected = randomValueForShort(unsigned, size);
-        output.writeShort(unsigned, size, expected);
+        if (unsigned) {
+            output.writeUnsignedShort(size, expected);
+        } else {
+            output.writeShort(size, expected);
+        }
         assertTrue(output.align(Byte.BYTES) < Byte.SIZE);
-        final short actual = input.readShort(unsigned, size);
+        final short actual = unsigned ? input.readUnsignedShort(size) : input.readShort(size);
         assertTrue(input.align(Byte.BYTES) < Byte.SIZE);
         assertEquals(expected, actual);
     }
@@ -143,9 +151,13 @@ class BitIoTest {
         final boolean unsigned = current().nextBoolean();
         final int size = randomSizeForInt(unsigned);
         final int expected = randomValueForInt(unsigned, size);
-        output.writeInt(unsigned, size, expected);
+        if (unsigned) {
+            output.writeUnsignedInt(size, expected);
+        } else {
+            output.writeInt(size, expected);
+        }
         assertTrue(output.align(Byte.BYTES) < Byte.SIZE);
-        final int actual = input.readInt(unsigned, size);
+        final int actual = unsigned ? input.readUnsignedInt(size) : input.readInt(size);
         assertTrue(input.align(Byte.BYTES) < Byte.SIZE);
         assertEquals(expected, actual);
     }
@@ -185,9 +197,13 @@ class BitIoTest {
         final boolean unsigned = current().nextBoolean();
         final int size = randomSizeForLong(unsigned);
         final long expected = randomValueForLong(unsigned, size);
-        output.writeLong(unsigned, size, expected);
+        if (unsigned) {
+            output.writeUnsignedLong(size, expected);
+        } else {
+            output.writeLong(size, expected);
+        }
         assertTrue(output.align(Byte.BYTES) < Byte.SIZE);
-        final long actual = input.readLong(unsigned, size);
+        final long actual = unsigned ? input.readUnsignedLong(size) : input.readLong(size);
         assertTrue(input.align(Byte.BYTES) < Byte.SIZE);
         assertEquals(expected, actual);
     }

@@ -57,28 +57,28 @@ class BitRoundTripTest {
         final byte[] bytes = write(new BitWriter() {
             @Override
             public void write(final BitOutput output) throws IOException {
-                output.writeByte(true, 7, (byte) 0x7F);
-                output.writeByte(false, 8, (byte) -1);
-                output.writeShort(true, 15, (short) 0x7FFF);
-                output.writeShort(false, 16, (short) -32768);
-                output.writeInt(true, 31, 0x7FFFFFFF);
-                output.writeInt(false, 32, Integer.MIN_VALUE);
-                output.writeLong(true, 63, Long.MAX_VALUE);
-                output.writeLong(false, 64, Long.MIN_VALUE);
+                output.writeUnsignedByte(7, (byte) 0x7F);
+                output.writeByte(8, (byte) -1);
+                output.writeUnsignedShort(15, (short) 0x7FFF);
+                output.writeShort(16, (short) -32768);
+                output.writeUnsignedInt(31, 0x7FFFFFFF);
+                output.writeInt(32, Integer.MIN_VALUE);
+                output.writeUnsignedLong(63, Long.MAX_VALUE);
+                output.writeLong(64, Long.MIN_VALUE);
                 output.writeChar(16, (char) 0xFFFF);
             }
         });
         read(bytes, new BitReader() {
             @Override
             public void read(final BitInput input) throws IOException {
-                assertEquals((byte) 0x7F, input.readByte(true, 7));
-                assertEquals((byte) -1, input.readByte(false, 8));
-                assertEquals((short) 0x7FFF, input.readShort(true, 15));
-                assertEquals((short) -32768, input.readShort(false, 16));
-                assertEquals(0x7FFFFFFF, input.readInt(true, 31));
-                assertEquals(Integer.MIN_VALUE, input.readInt(false, 32));
-                assertEquals(Long.MAX_VALUE, input.readLong(true, 63));
-                assertEquals(Long.MIN_VALUE, input.readLong(false, 64));
+                assertEquals((byte) 0x7F, input.readUnsignedByte(7));
+                assertEquals((byte) -1, input.readByte(8));
+                assertEquals((short) 0x7FFF, input.readUnsignedShort(15));
+                assertEquals((short) -32768, input.readShort(16));
+                assertEquals(0x7FFFFFFF, input.readUnsignedInt(31));
+                assertEquals(Integer.MIN_VALUE, input.readInt(32));
+                assertEquals(Long.MAX_VALUE, input.readUnsignedLong(63));
+                assertEquals(Long.MIN_VALUE, input.readLong(64));
                 assertEquals((char) 0xFFFF, input.readChar(16));
             }
         });
@@ -92,12 +92,12 @@ class BitRoundTripTest {
             read(write(new BitWriter() {
                 @Override
                 public void write(final BitOutput output) throws IOException {
-                    output.writeByte(true, s, expected);
+                    output.writeUnsignedByte(s, expected);
                 }
             }), new BitReader() {
                 @Override
                 public void read(final BitInput input) throws IOException {
-                    assertEquals(expected, input.readByte(true, s));
+                    assertEquals(expected, input.readUnsignedByte(s));
                 }
             });
         }
@@ -107,12 +107,12 @@ class BitRoundTripTest {
             read(write(new BitWriter() {
                 @Override
                 public void write(final BitOutput output) throws IOException {
-                    output.writeByte(false, s, expected);
+                    output.writeByte(s, expected);
                 }
             }), new BitReader() {
                 @Override
                 public void read(final BitInput input) throws IOException {
-                    assertEquals(expected, input.readByte(false, s));
+                    assertEquals(expected, input.readByte(s));
                 }
             });
         }
@@ -126,12 +126,12 @@ class BitRoundTripTest {
             read(write(new BitWriter() {
                 @Override
                 public void write(final BitOutput output) throws IOException {
-                    output.writeShort(true, s, expected);
+                    output.writeUnsignedShort(s, expected);
                 }
             }), new BitReader() {
                 @Override
                 public void read(final BitInput input) throws IOException {
-                    assertEquals(expected, input.readShort(true, s));
+                    assertEquals(expected, input.readUnsignedShort(s));
                 }
             });
         }
@@ -141,12 +141,12 @@ class BitRoundTripTest {
             read(write(new BitWriter() {
                 @Override
                 public void write(final BitOutput output) throws IOException {
-                    output.writeShort(false, s, expected);
+                    output.writeShort(s, expected);
                 }
             }), new BitReader() {
                 @Override
                 public void read(final BitInput input) throws IOException {
-                    assertEquals(expected, input.readShort(false, s));
+                    assertEquals(expected, input.readShort(s));
                 }
             });
         }
@@ -160,12 +160,12 @@ class BitRoundTripTest {
             read(write(new BitWriter() {
                 @Override
                 public void write(final BitOutput output) throws IOException {
-                    output.writeInt(true, s, expected);
+                    output.writeUnsignedInt(s, expected);
                 }
             }), new BitReader() {
                 @Override
                 public void read(final BitInput input) throws IOException {
-                    assertEquals(expected, input.readInt(true, s));
+                    assertEquals(expected, input.readUnsignedInt(s));
                 }
             });
         }
@@ -175,12 +175,12 @@ class BitRoundTripTest {
             read(write(new BitWriter() {
                 @Override
                 public void write(final BitOutput output) throws IOException {
-                    output.writeInt(false, s, expected);
+                    output.writeInt(s, expected);
                 }
             }), new BitReader() {
                 @Override
                 public void read(final BitInput input) throws IOException {
-                    assertEquals(expected, input.readInt(false, s));
+                    assertEquals(expected, input.readInt(s));
                 }
             });
         }
@@ -194,12 +194,12 @@ class BitRoundTripTest {
             read(write(new BitWriter() {
                 @Override
                 public void write(final BitOutput output) throws IOException {
-                    output.writeLong(true, s, expected);
+                    output.writeUnsignedLong(s, expected);
                 }
             }), new BitReader() {
                 @Override
                 public void read(final BitInput input) throws IOException {
-                    assertEquals(expected, input.readLong(true, s));
+                    assertEquals(expected, input.readUnsignedLong(s));
                 }
             });
         }
@@ -209,12 +209,12 @@ class BitRoundTripTest {
             read(write(new BitWriter() {
                 @Override
                 public void write(final BitOutput output) throws IOException {
-                    output.writeLong(false, s, expected);
+                    output.writeLong(s, expected);
                 }
             }), new BitReader() {
                 @Override
                 public void read(final BitInput input) throws IOException {
-                    assertEquals(expected, input.readLong(false, s));
+                    assertEquals(expected, input.readLong(s));
                 }
             });
         }

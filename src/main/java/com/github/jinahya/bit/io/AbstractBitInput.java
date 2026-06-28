@@ -29,11 +29,15 @@ import static com.github.jinahya.bit.io.BitIoConstraints.requireValidExponentSiz
 import static com.github.jinahya.bit.io.BitIoConstraints.requireValidFractionSizeDouble;
 import static com.github.jinahya.bit.io.BitIoConstraints.requireValidFractionSizeFloat;
 import static com.github.jinahya.bit.io.BitIoConstraints.requireValidFractionSizeHalf;
-import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeByte;
 import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeChar;
-import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeInt;
-import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeLong;
-import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeShort;
+import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeForSignedByte;
+import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeForSignedInt;
+import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeForSignedLong;
+import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeForSignedShort;
+import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeForUnsignedByte;
+import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeForUnsignedInt;
+import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeForUnsignedLong;
+import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeForUnsignedShort;
 
 /**
  * An abstract class for implementing {@link BitInput} interface.
@@ -101,29 +105,51 @@ public abstract class AbstractBitInput
     // --------------------------------------------------------------------------------------------------------- boolean
     @Override
     public boolean readBoolean() throws IOException {
-        return readInt(true, FLAG_SIZE) == 1;
+        return readUnsignedInt(FLAG_SIZE) == 1;
     }
 
     // ------------------------------------------------------------------------------------------------------------ byte
+    @Deprecated
     @Override
     public byte readByte(final boolean unsigned, final int size) throws IOException {
-        return (byte) readInt(unsigned, requireValidSizeByte(unsigned, size));
+        return unsigned ? readUnsignedByte(size) : readByte(size);
+    }
+
+    @Override
+    public byte readUnsignedByte(final int size) throws IOException {
+        return (byte) readUnsignedInt(requireValidSizeForUnsignedByte(size));
+    }
+
+    @Override
+    public byte readByte(final int size) throws IOException {
+        return (byte) readInt(requireValidSizeForSignedByte(size));
     }
 
     @Override
     public byte readByte8() throws IOException {
-        return readByte(false, Byte.SIZE);
+        return readByte(Byte.SIZE);
     }
 
     // ----------------------------------------------------------------------------------------------------------- short
+    @Deprecated
     @Override
     public short readShort(final boolean unsigned, final int size) throws IOException {
-        return (short) readInt(unsigned, requireValidSizeShort(unsigned, size));
+        return unsigned ? readUnsignedShort(size) : readShort(size);
+    }
+
+    @Override
+    public short readUnsignedShort(final int size) throws IOException {
+        return (short) readUnsignedInt(requireValidSizeForUnsignedShort(size));
+    }
+
+    @Override
+    public short readShort(final int size) throws IOException {
+        return (short) readInt(requireValidSizeForSignedShort(size));
     }
 
     @Override
     public short readShort16() throws IOException {
-        return readShort(false, Short.SIZE);
+        return readShort(Short.SIZE);
     }
 
     @Override
@@ -132,18 +158,16 @@ public abstract class AbstractBitInput
     }
 
     // ------------------------------------------------------------------------------------------------------------- int
+    @Deprecated
     @Override
     public int readInt(final boolean unsigned, int size) throws IOException {
-        requireValidSizeInt(unsigned, size);
+        return unsigned ? readUnsignedInt(size) : readInt(size);
+    }
+
+    @Override
+    public int readUnsignedInt(int size) throws IOException {
+        requireValidSizeForUnsignedInt(size);
         int value = 0;
-        if (!unsigned) {
-            value -= readInt(true, FLAG_SIZE);
-            if (--size > 0) {
-                value <<= size;
-                value |= readInt(true, size);
-            }
-            return value;
-        }
         for (; size >= Byte.SIZE; size -= Byte.SIZE) {
             value <<= Byte.SIZE;
             value |= unsigned8(Byte.SIZE);
@@ -156,8 +180,20 @@ public abstract class AbstractBitInput
     }
 
     @Override
+    public int readInt(int size) throws IOException {
+        requireValidSizeForSignedInt(size);
+        int value = 0;
+        value -= readUnsignedInt(FLAG_SIZE);
+        if (--size > 0) {
+            value <<= size;
+            value |= readUnsignedInt(size);
+        }
+        return value;
+    }
+
+    @Override
     public int readInt32() throws IOException {
-        return readInt(false, Integer.SIZE);
+        return readInt(Integer.SIZE);
     }
 
     @Override
@@ -166,32 +202,42 @@ public abstract class AbstractBitInput
     }
 
     // ------------------------------------------------------------------------------------------------------------ long
+    @Deprecated
     @Override
     public long readLong(final boolean unsigned, int size) throws IOException {
-        requireValidSizeLong(unsigned, size);
+        return unsigned ? readUnsignedLong(size) : readLong(size);
+    }
+
+    @Override
+    public long readUnsignedLong(int size) throws IOException {
+        requireValidSizeForUnsignedLong(size);
         long value = 0L;
-        if (!unsigned) {
-            value -= readLong(true, 1);
-            if (--size > 0) {
-                value <<= size;
-                value |= readLong(true, size);
-            }
-            return value;
-        }
         if (size >= Integer.SIZE) {
-            value = (readInt(false, Integer.SIZE) & 0xFFFFFFFFL);
+            value = (readInt(Integer.SIZE) & 0xFFFFFFFFL);
             size -= Integer.SIZE;
         }
         if (size > 0) {
             value <<= size;
-            value |= readInt(true, size);
+            value |= readUnsignedInt(size);
+        }
+        return value;
+    }
+
+    @Override
+    public long readLong(int size) throws IOException {
+        requireValidSizeForSignedLong(size);
+        long value = 0L;
+        value -= readUnsignedLong(FLAG_SIZE);
+        if (--size > 0) {
+            value <<= size;
+            value |= readUnsignedLong(size);
         }
         return value;
     }
 
     @Override
     public long readLong64() throws IOException {
-        return readLong(false, Long.SIZE);
+        return readLong(Long.SIZE);
     }
 
     @Override
@@ -202,7 +248,7 @@ public abstract class AbstractBitInput
     // ------------------------------------------------------------------------------------------------------------ char
     @Override
     public char readChar(final int size) throws IOException {
-        return (char) readInt(true, requireValidSizeChar(size));
+        return (char) readUnsignedInt(requireValidSizeChar(size));
     }
 
     @Override
@@ -248,7 +294,7 @@ public abstract class AbstractBitInput
             if (significand == 0) {                   // ±0
                 bits = sign << 31;
             } else {                                  // subnormal -> renormalize into a float normal (exact)
-                final int p = 31 - Integer.numberOfLeadingZeros(significand); // highest set bit, 0 .. 9
+                final int p = BitIoUtils.highestOneBitIndex(significand); // highest set bit, 0 .. 9
                 final int floatExp = p + 103;                                 // (p - 24) + 127
                 final int floatFrac = (significand & ((1 << p) - 1)) << (23 - p);
                 bits = (sign << 31) | (floatExp << 23) | floatFrac;
@@ -266,9 +312,9 @@ public abstract class AbstractBitInput
     public float readFloat(final int exponentSize, final int fractionSize) throws IOException {
         requireValidExponentSizeFloat(exponentSize);
         requireValidFractionSizeFloat(fractionSize);
-        final int sign = readInt(true, FLAG_SIZE);
-        final int storedExp = readInt(true, exponentSize);
-        final int storedFrac = readInt(true, fractionSize);
+        final int sign = readUnsignedInt(FLAG_SIZE);
+        final int storedExp = readUnsignedInt(exponentSize);
+        final int storedFrac = readUnsignedInt(fractionSize);
         final int expMask = (1 << exponentSize) - 1;
         final int newBias = (1 << (exponentSize - 1)) - 1;
         final int fracShift = 23 - fractionSize;
@@ -300,9 +346,9 @@ public abstract class AbstractBitInput
     public double readDouble(final int exponentSize, final int fractionSize) throws IOException {
         requireValidExponentSizeDouble(exponentSize);
         requireValidFractionSizeDouble(fractionSize);
-        final long sign = readInt(true, FLAG_SIZE);
-        final int storedExp = readInt(true, exponentSize);
-        final long storedFrac = readLong(true, fractionSize);
+        final long sign = readUnsignedInt(FLAG_SIZE);
+        final int storedExp = readUnsignedInt(exponentSize);
+        final long storedFrac = readUnsignedLong(fractionSize);
         final int expMask = (1 << exponentSize) - 1;
         final int newBias = (1 << (exponentSize - 1)) - 1;
         final int fracShift = 52 - fractionSize;
@@ -356,10 +402,10 @@ public abstract class AbstractBitInput
             throw new IllegalArgumentException("bits(" + bits + ") <= 0");
         }
         for (; bits >= Integer.SIZE; bits -= Integer.SIZE) {
-            readInt(false, Integer.SIZE);
+            readInt(Integer.SIZE);
         }
         if (bits > 0) {
-            readInt(true, bits);
+            readUnsignedInt(bits);
         }
     }
 
@@ -371,13 +417,13 @@ public abstract class AbstractBitInput
         long bits = 0; // number of bits to discard
         if (available > 0) {
             bits += available;
-            readInt(true, available);
+            readUnsignedInt(available);
         }
         if (bytes == 1) {
             return bits;
         }
         for (bytes = (bytes - (int) (count % bytes)) % bytes; bytes > 0L; bytes--) {
-            readInt(true, Byte.SIZE);
+            readUnsignedInt(Byte.SIZE);
             bits += Byte.SIZE;
         }
         return bits;

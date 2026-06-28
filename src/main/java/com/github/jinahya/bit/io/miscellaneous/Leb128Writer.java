@@ -56,7 +56,7 @@ public abstract class Leb128Writer
                 if (value != 0L) {
                     group |= MASK_CONTINUATION;
                 }
-                output.writeInt(true, Byte.SIZE, group);
+                output.writeUnsignedInt(Byte.SIZE, group);
             } while (value != 0L);
         }
     }
@@ -72,10 +72,10 @@ public abstract class Leb128Writer
                 value >>= SIZE_PAYLOAD;
                 final boolean clear = (group & MASK_SIGN) == 0;
                 if ((value == 0L && clear) || (value == -1L && !clear)) {
-                    output.writeInt(true, Byte.SIZE, group);
+                    output.writeUnsignedInt(Byte.SIZE, group);
                     return;
                 }
-                output.writeInt(true, Byte.SIZE, group | MASK_CONTINUATION);
+                output.writeUnsignedInt(Byte.SIZE, group | MASK_CONTINUATION);
             }
         }
     }

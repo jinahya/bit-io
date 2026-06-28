@@ -53,7 +53,7 @@ class BitObjectContractTest {
             @Override
             public Integer read(final BitInput actual) throws IOException {
                 assertSame(input, actual);
-                return actual.readInt(true, 3);
+                return actual.readUnsignedInt(3);
             }
         });
 
@@ -71,7 +71,7 @@ class BitObjectContractTest {
             public void write(final BitOutput actual, final Integer actualValue) throws IOException {
                 assertSame(output, actual);
                 assertSame(value, actualValue);
-                actual.writeInt(true, 3, actualValue);
+                actual.writeUnsignedInt(3, actualValue);
             }
         }, value);
         output.align(1);
@@ -146,7 +146,7 @@ class BitObjectContractTest {
         return new BitReader<Sample>() {
             @Override
             public Sample read(final BitInput input) throws IOException {
-                return new Sample(input.readBoolean(), input.readInt(true, 3));
+                return new Sample(input.readBoolean(), input.readUnsignedInt(3));
             }
         };
     }
@@ -156,7 +156,7 @@ class BitObjectContractTest {
             @Override
             public void write(final BitOutput output, final Sample value) throws IOException {
                 output.writeBoolean(value.flag);
-                output.writeInt(true, 3, value.code);
+                output.writeUnsignedInt(3, value.code);
             }
         };
     }

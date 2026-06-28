@@ -87,9 +87,9 @@ public class ByteArrayReader
         if (input == null) {
             throw new NullPointerException("input is null");
         }
-        final byte[] value = new byte[input.readInt(true, lengthSize)];
+        final byte[] value = new byte[input.readUnsignedInt(lengthSize)];
         for (int i = 0; i < value.length; i++) {
-            value[i] = input.readByte(unsigned, elementSize);
+            value[i] = unsigned ? input.readUnsignedByte(elementSize) : input.readByte(elementSize);
         }
         return value;
     }

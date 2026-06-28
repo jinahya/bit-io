@@ -22,6 +22,8 @@ package com.github.jinahya.bit.io.miscellaneous;
 
 import com.github.jinahya.bit.io.DefaultBitOutput;
 import com.github.jinahya.bit.io.StreamByteOutput;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayOutputStream;
@@ -38,6 +40,7 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+@NoArgsConstructor(access = AccessLevel.PACKAGE)
 class Asn1LengthTest {
 
     @Test

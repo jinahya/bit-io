@@ -37,7 +37,7 @@ final class Asn1Lengths {
 
     static long readDefinite(final BitInput input, final boolean der) throws IOException {
         requireNonNullInput(input);
-        final int first = input.readInt(true, Byte.SIZE);
+        final int first = input.readUnsignedInt(Byte.SIZE);
         if ((first & MASK_LONG_FORM) == 0) {
             return first;
         }
@@ -57,22 +57,22 @@ final class Asn1Lengths {
             throw new IllegalArgumentException("negative length: " + value);
         }
         if (value <= MASK_LENGTH_OCTETS) {
-            output.writeInt(true, Byte.SIZE, (int) value);
+            output.writeUnsignedInt(Byte.SIZE, (int) value);
             return;
         }
         int count = 0;
         for (long v = value; v != 0L; v >>>= Byte.SIZE) {
             count++;
         }
-        output.writeInt(true, Byte.SIZE, MASK_LONG_FORM | count);
+        output.writeUnsignedInt(Byte.SIZE, MASK_LONG_FORM | count);
         for (int shift = (count - 1) * Byte.SIZE; shift >= 0; shift -= Byte.SIZE) {
-            output.writeInt(true, Byte.SIZE, (int) (value >>> shift) & 0xFF);
+            output.writeUnsignedInt(Byte.SIZE, (int) (value >>> shift) & 0xFF);
         }
     }
 
     static void readIndefinite(final BitInput input) throws IOException {
         requireNonNullInput(input);
-        final int value = input.readInt(true, Byte.SIZE);
+        final int value = input.readUnsignedInt(Byte.SIZE);
         if (value != VALUE_INDEFINITE) {
             throw new IOException("not an indefinite length marker: " + value);
         }
@@ -80,14 +80,14 @@ final class Asn1Lengths {
 
     static void writeIndefinite(final BitOutput output) throws IOException {
         requireNonNullOutput(output);
-        output.writeInt(true, Byte.SIZE, VALUE_INDEFINITE);
+        output.writeUnsignedInt(Byte.SIZE, VALUE_INDEFINITE);
     }
 
     private static long readBerLongForm(final BitInput input, final int lengthOctets) throws IOException {
         long value = 0L;
         boolean overflow = false;
         for (int i = 0; i < lengthOctets; i++) {
-            final int octet = input.readInt(true, Byte.SIZE);
+            final int octet = input.readUnsignedInt(Byte.SIZE);
             if (!overflow) {
                 if (value > (Long.MAX_VALUE >>> Byte.SIZE)) {
                     overflow = true;
@@ -111,7 +111,7 @@ final class Asn1Lengths {
         }
         long value = 0L;
         for (int i = 0; i < lengthOctets; i++) {
-            final int octet = input.readInt(true, Byte.SIZE);
+            final int octet = input.readUnsignedInt(Byte.SIZE);
             if (i == 0 && octet == 0) {
                 throw new IOException("non-minimal DER length");
             }

@@ -32,31 +32,65 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class BitValidationContractTest {
 
     @Test
+    @SuppressWarnings("deprecation")
     void bitInputRejectsInvalidSizes() {
         final BitInput input = input();
         assertThrows(IllegalArgumentException.class, () -> input.readByte(false, 0));
         assertThrows(IllegalArgumentException.class, () -> input.readByte(true, Byte.SIZE));
+        assertThrows(IllegalArgumentException.class, () -> input.readByte(0));
+        assertThrows(IllegalArgumentException.class, () -> input.readByte(Byte.SIZE + 1));
+        assertThrows(IllegalArgumentException.class, () -> input.readUnsignedByte(0));
+        assertThrows(IllegalArgumentException.class, () -> input.readUnsignedByte(Byte.SIZE));
         assertThrows(IllegalArgumentException.class, () -> input.readShort(false, 0));
         assertThrows(IllegalArgumentException.class, () -> input.readShort(true, Short.SIZE));
+        assertThrows(IllegalArgumentException.class, () -> input.readShort(0));
+        assertThrows(IllegalArgumentException.class, () -> input.readShort(Short.SIZE + 1));
+        assertThrows(IllegalArgumentException.class, () -> input.readUnsignedShort(0));
+        assertThrows(IllegalArgumentException.class, () -> input.readUnsignedShort(Short.SIZE));
         assertThrows(IllegalArgumentException.class, () -> input.readInt(false, 0));
         assertThrows(IllegalArgumentException.class, () -> input.readInt(true, Integer.SIZE));
+        assertThrows(IllegalArgumentException.class, () -> input.readInt(0));
+        assertThrows(IllegalArgumentException.class, () -> input.readInt(Integer.SIZE + 1));
+        assertThrows(IllegalArgumentException.class, () -> input.readUnsignedInt(0));
+        assertThrows(IllegalArgumentException.class, () -> input.readUnsignedInt(Integer.SIZE));
         assertThrows(IllegalArgumentException.class, () -> input.readLong(false, 0));
         assertThrows(IllegalArgumentException.class, () -> input.readLong(true, Long.SIZE));
+        assertThrows(IllegalArgumentException.class, () -> input.readLong(0));
+        assertThrows(IllegalArgumentException.class, () -> input.readLong(Long.SIZE + 1));
+        assertThrows(IllegalArgumentException.class, () -> input.readUnsignedLong(0));
+        assertThrows(IllegalArgumentException.class, () -> input.readUnsignedLong(Long.SIZE));
         assertThrows(IllegalArgumentException.class, () -> input.readChar(0));
         assertThrows(IllegalArgumentException.class, () -> input.readChar(Character.SIZE + 1));
     }
 
     @Test
+    @SuppressWarnings("deprecation")
     void bitOutputRejectsInvalidSizes() {
         final DefaultBitOutput output = output();
         assertThrows(IllegalArgumentException.class, () -> output.writeByte(false, 0, (byte) 0));
         assertThrows(IllegalArgumentException.class, () -> output.writeByte(true, Byte.SIZE, (byte) 0));
+        assertThrows(IllegalArgumentException.class, () -> output.writeByte(0, (byte) 0));
+        assertThrows(IllegalArgumentException.class, () -> output.writeByte(Byte.SIZE + 1, (byte) 0));
+        assertThrows(IllegalArgumentException.class, () -> output.writeUnsignedByte(0, (byte) 0));
+        assertThrows(IllegalArgumentException.class, () -> output.writeUnsignedByte(Byte.SIZE, (byte) 0));
         assertThrows(IllegalArgumentException.class, () -> output.writeShort(false, 0, (short) 0));
         assertThrows(IllegalArgumentException.class, () -> output.writeShort(true, Short.SIZE, (short) 0));
+        assertThrows(IllegalArgumentException.class, () -> output.writeShort(0, (short) 0));
+        assertThrows(IllegalArgumentException.class, () -> output.writeShort(Short.SIZE + 1, (short) 0));
+        assertThrows(IllegalArgumentException.class, () -> output.writeUnsignedShort(0, (short) 0));
+        assertThrows(IllegalArgumentException.class, () -> output.writeUnsignedShort(Short.SIZE, (short) 0));
         assertThrows(IllegalArgumentException.class, () -> output.writeInt(false, 0, 0));
         assertThrows(IllegalArgumentException.class, () -> output.writeInt(true, Integer.SIZE, 0));
+        assertThrows(IllegalArgumentException.class, () -> output.writeInt(0, 0));
+        assertThrows(IllegalArgumentException.class, () -> output.writeInt(Integer.SIZE + 1, 0));
+        assertThrows(IllegalArgumentException.class, () -> output.writeUnsignedInt(0, 0));
+        assertThrows(IllegalArgumentException.class, () -> output.writeUnsignedInt(Integer.SIZE, 0));
         assertThrows(IllegalArgumentException.class, () -> output.writeLong(false, 0, 0L));
         assertThrows(IllegalArgumentException.class, () -> output.writeLong(true, Long.SIZE, 0L));
+        assertThrows(IllegalArgumentException.class, () -> output.writeLong(0, 0L));
+        assertThrows(IllegalArgumentException.class, () -> output.writeLong(Long.SIZE + 1, 0L));
+        assertThrows(IllegalArgumentException.class, () -> output.writeUnsignedLong(0, 0L));
+        assertThrows(IllegalArgumentException.class, () -> output.writeUnsignedLong(Long.SIZE, 0L));
         assertThrows(IllegalArgumentException.class, () -> output.writeChar(0, (char) 0));
         assertThrows(IllegalArgumentException.class, () -> output.writeChar(Character.SIZE + 1, (char) 0));
     }

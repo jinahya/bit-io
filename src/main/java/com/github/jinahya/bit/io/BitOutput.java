@@ -53,9 +53,35 @@ public interface BitOutput {
      * @param value    the value to write.
      * @throws IllegalArgumentException if {@code size} is not valid.
      * @throws IOException              if an I/O error occurs.
-     * @see BitInput#readByte(boolean, int)
+     * @see BitInput#readUnsignedByte(int)
+     * @see BitInput#readByte(int)
+     * @deprecated Use {@link #writeUnsignedByte(int, byte)} or {@link #writeByte(int, byte)} instead.
      */
+    @Deprecated
     void writeByte(boolean unsigned, int size, byte value) throws IOException;
+
+    /**
+     * Writes an unsigned {@code byte} value of specified number of bits.
+     *
+     * @param size  the number of bits to write; between {@code 1} and ({@value java.lang.Byte#SIZE} - {@code 1}), both
+     *              inclusive.
+     * @param value the value to write.
+     * @throws IllegalArgumentException if {@code size} is not valid.
+     * @throws IOException              if an I/O error occurs.
+     * @see BitInput#readUnsignedByte(int)
+     */
+    void writeUnsignedByte(int size, byte value) throws IOException;
+
+    /**
+     * Writes a signed {@code byte} value of specified number of bits.
+     *
+     * @param size  the number of bits to write; between {@code 1} and {@value java.lang.Byte#SIZE}, both inclusive.
+     * @param value the value to write.
+     * @throws IllegalArgumentException if {@code size} is not valid.
+     * @throws IOException              if an I/O error occurs.
+     * @see BitInput#readByte(int)
+     */
+    void writeByte(int size, byte value) throws IOException;
 
     /**
      * Writes specified {@value java.lang.Byte#SIZE}-bit signed {@code byte} value.
@@ -77,9 +103,35 @@ public interface BitOutput {
      * @param value    the value to write.
      * @throws IllegalArgumentException if {@code size} is not valid.
      * @throws IOException              if an I/O error occurs.
-     * @see BitInput#readShort(boolean, int)
+     * @see BitInput#readUnsignedShort(int)
+     * @see BitInput#readShort(int)
+     * @deprecated Use {@link #writeUnsignedShort(int, short)} or {@link #writeShort(int, short)} instead.
      */
+    @Deprecated
     void writeShort(boolean unsigned, int size, short value) throws IOException;
+
+    /**
+     * Writes an unsigned {@code short} value of specified number of bits.
+     *
+     * @param size  the number of bits to write; between {@code 1} and ({@value java.lang.Short#SIZE} - {@code 1}), both
+     *              inclusive.
+     * @param value the value to write.
+     * @throws IllegalArgumentException if {@code size} is not valid.
+     * @throws IOException              if an I/O error occurs.
+     * @see BitInput#readUnsignedShort(int)
+     */
+    void writeUnsignedShort(int size, short value) throws IOException;
+
+    /**
+     * Writes a signed {@code short} value of specified number of bits.
+     *
+     * @param size  the number of bits to write; between {@code 1} and {@value java.lang.Short#SIZE}, both inclusive.
+     * @param value the value to write.
+     * @throws IllegalArgumentException if {@code size} is not valid.
+     * @throws IOException              if an I/O error occurs.
+     * @see BitInput#readShort(int)
+     */
+    void writeShort(int size, short value) throws IOException;
 
     /**
      * Writes specified {@value java.lang.Short#SIZE}-bit signed {@code short} value.
@@ -110,9 +162,35 @@ public interface BitOutput {
      * @param value    the value to write.
      * @throws IllegalArgumentException if {@code size} is not valid.
      * @throws IOException              if an I/O error occurs.
-     * @see BitInput#readInt(boolean, int)
+     * @see BitInput#readUnsignedInt(int)
+     * @see BitInput#readInt(int)
+     * @deprecated Use {@link #writeUnsignedInt(int, int)} or {@link #writeInt(int, int)} instead.
      */
+    @Deprecated
     void writeInt(boolean unsigned, int size, int value) throws IOException;
+
+    /**
+     * Writes an unsigned {@code int} value of specified number of bits.
+     *
+     * @param size  the number of bits to write; between {@code 1} and ({@value java.lang.Integer#SIZE} - {@code 1}),
+     *              both inclusive.
+     * @param value the value to write.
+     * @throws IllegalArgumentException if {@code size} is not valid.
+     * @throws IOException              if an I/O error occurs.
+     * @see BitInput#readUnsignedInt(int)
+     */
+    void writeUnsignedInt(int size, int value) throws IOException;
+
+    /**
+     * Writes a signed {@code int} value of specified number of bits.
+     *
+     * @param size  the number of bits to write; between {@code 1} and {@value java.lang.Integer#SIZE}, both inclusive.
+     * @param value the value to write.
+     * @throws IllegalArgumentException if {@code size} is not valid.
+     * @throws IOException              if an I/O error occurs.
+     * @see BitInput#readInt(int)
+     */
+    void writeInt(int size, int value) throws IOException;
 
     /**
      * Writes specified {@value java.lang.Integer#SIZE}-bit signed {@code int} value.
@@ -143,9 +221,35 @@ public interface BitOutput {
      * @param value    the value to write.
      * @throws IllegalArgumentException if {@code size} is not valid.
      * @throws IOException              if an I/O error occurs.
-     * @see BitInput#readLong(boolean, int)
+     * @see BitInput#readUnsignedLong(int)
+     * @see BitInput#readLong(int)
+     * @deprecated Use {@link #writeUnsignedLong(int, long)} or {@link #writeLong(int, long)} instead.
      */
+    @Deprecated
     void writeLong(boolean unsigned, int size, long value) throws IOException;
+
+    /**
+     * Writes an unsigned {@code long} value of specified number of bits.
+     *
+     * @param size  the number of bits to write; between {@code 1} and ({@value java.lang.Long#SIZE} - {@code 1}), both
+     *              inclusive.
+     * @param value the value to write.
+     * @throws IllegalArgumentException if {@code size} is not valid.
+     * @throws IOException              if an I/O error occurs.
+     * @see BitInput#readUnsignedLong(int)
+     */
+    void writeUnsignedLong(int size, long value) throws IOException;
+
+    /**
+     * Writes a signed {@code long} value of specified number of bits.
+     *
+     * @param size  the number of bits to write; between {@code 1} and {@value java.lang.Long#SIZE}, both inclusive.
+     * @param value the value to write.
+     * @throws IllegalArgumentException if {@code size} is not valid.
+     * @throws IOException              if an I/O error occurs.
+     * @see BitInput#readLong(int)
+     */
+    void writeLong(int size, long value) throws IOException;
 
     /**
      * Writes specified {@value java.lang.Long#SIZE}-bit signed {@code long} value.

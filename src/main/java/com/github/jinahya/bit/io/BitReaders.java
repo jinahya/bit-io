@@ -45,7 +45,8 @@ public final class BitReaders {
         if (reader == null) {
             throw new NullPointerException("reader is null");
         }
-        // not a FilterBitReader: a nullability wrapper reads its own flag bit and bypasses the apply(...) mapping, so it
+        // not a FilterBitReader: a nullability wrapper reads its own flag bit and bypasses the apply(...) mapping,
+        // so it
         // implements the interface directly rather than the value-mapping skeletal type.
         return new BitReader<T>() {
             @Override

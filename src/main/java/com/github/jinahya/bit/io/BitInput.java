@@ -54,8 +54,33 @@ public interface BitInput {
      * @throws IllegalArgumentException if {@code size} is not valid.
      * @throws IOException              if an I/O error occurs.
      * @see BitOutput#writeByte(boolean, int, byte)
+     * @deprecated Use {@link #readUnsignedByte(int)} or {@link #readByte(int)} instead.
      */
+    @Deprecated
     byte readByte(boolean unsigned, int size) throws IOException;
+
+    /**
+     * Reads an unsigned {@code byte} value of specified number of bits.
+     *
+     * @param size the number of bits to read; between {@code 1} and ({@value java.lang.Byte#SIZE} - {@code 1}), both
+     *             inclusive.
+     * @return an unsigned {@code byte} value of specified {@code size}.
+     * @throws IllegalArgumentException if {@code size} is not valid.
+     * @throws IOException              if an I/O error occurs.
+     * @see #readByte(boolean, int)
+     */
+    byte readUnsignedByte(int size) throws IOException;
+
+    /**
+     * Reads a signed {@code byte} value of specified number of bits.
+     *
+     * @param size the number of bits to read; between {@code 1} and {@value java.lang.Byte#SIZE}, both inclusive.
+     * @return a signed {@code byte} value of specified {@code size}.
+     * @throws IllegalArgumentException if {@code size} is not valid.
+     * @throws IOException              if an I/O error occurs.
+     * @see #readByte(boolean, int)
+     */
+    byte readByte(int size) throws IOException;
 
     /**
      * Reads an {@value java.lang.Byte#SIZE}-bit signed {@code byte} value.
@@ -78,8 +103,33 @@ public interface BitInput {
      * @throws IllegalArgumentException if {@code size} is not valid.
      * @throws IOException              if an I/O error occurs.
      * @see BitOutput#writeShort(boolean, int, short)
+     * @deprecated Use {@link #readUnsignedShort(int)} or {@link #readShort(int)} instead.
      */
+    @Deprecated
     short readShort(boolean unsigned, int size) throws IOException;
+
+    /**
+     * Reads an unsigned {@code short} value of specified number of bits.
+     *
+     * @param size the number of bits to read; between {@code 1} and ({@value java.lang.Short#SIZE} - {@code 1}), both
+     *             inclusive.
+     * @return an unsigned {@code short} value of specified {@code size}.
+     * @throws IllegalArgumentException if {@code size} is not valid.
+     * @throws IOException              if an I/O error occurs.
+     * @see #readShort(boolean, int)
+     */
+    short readUnsignedShort(int size) throws IOException;
+
+    /**
+     * Reads a signed {@code short} value of specified number of bits.
+     *
+     * @param size the number of bits to read; between {@code 1} and {@value java.lang.Short#SIZE}, both inclusive.
+     * @return a signed {@code short} value of specified {@code size}.
+     * @throws IllegalArgumentException if {@code size} is not valid.
+     * @throws IOException              if an I/O error occurs.
+     * @see #readShort(boolean, int)
+     */
+    short readShort(int size) throws IOException;
 
     /**
      * Reads a {@value java.lang.Short#SIZE}-bit signed {@code short} value.
@@ -111,8 +161,33 @@ public interface BitInput {
      * @throws IllegalArgumentException if {@code size} is not valid.
      * @throws IOException              if an I/O error occurs.
      * @see BitOutput#writeInt(boolean, int, int)
+     * @deprecated Use {@link #readUnsignedInt(int)} or {@link #readInt(int)} instead.
      */
+    @Deprecated
     int readInt(boolean unsigned, int size) throws IOException;
+
+    /**
+     * Reads an unsigned {@code int} value of specified number of bits.
+     *
+     * @param size the number of bits to read; between {@code 1} and ({@value java.lang.Integer#SIZE} - {@code 1}), both
+     *             inclusive.
+     * @return an unsigned {@code int} value of specified {@code size}.
+     * @throws IllegalArgumentException if {@code size} is not valid.
+     * @throws IOException              if an I/O error occurs.
+     * @see #readInt(boolean, int)
+     */
+    int readUnsignedInt(int size) throws IOException;
+
+    /**
+     * Reads a signed {@code int} value of specified number of bits.
+     *
+     * @param size the number of bits to read; between {@code 1} and {@value java.lang.Integer#SIZE}, both inclusive.
+     * @return a signed {@code int} value of specified {@code size}.
+     * @throws IllegalArgumentException if {@code size} is not valid.
+     * @throws IOException              if an I/O error occurs.
+     * @see #readInt(boolean, int)
+     */
+    int readInt(int size) throws IOException;
 
     /**
      * Reads a {@value java.lang.Integer#SIZE}-bit signed {@code int} value.
@@ -144,8 +219,33 @@ public interface BitInput {
      * @throws IllegalArgumentException if {@code size} is not valid.
      * @throws IOException              if an I/O error occurs.
      * @see BitOutput#writeLong(boolean, int, long)
+     * @deprecated Use {@link #readUnsignedLong(int)} or {@link #readLong(int)} instead.
      */
+    @Deprecated
     long readLong(boolean unsigned, int size) throws IOException;
+
+    /**
+     * Reads an unsigned {@code long} value of specified number of bits.
+     *
+     * @param size the number of bits to read; between {@code 1} and ({@value java.lang.Long#SIZE} - {@code 1}), both
+     *             inclusive.
+     * @return an unsigned {@code long} value of specified {@code size}.
+     * @throws IllegalArgumentException if {@code size} is not valid.
+     * @throws IOException              if an I/O error occurs.
+     * @see #readLong(boolean, int)
+     */
+    long readUnsignedLong(int size) throws IOException;
+
+    /**
+     * Reads a signed {@code long} value of specified number of bits.
+     *
+     * @param size the number of bits to read; between {@code 1} and {@value java.lang.Long#SIZE}, both inclusive.
+     * @return a signed {@code long} value of specified {@code size}.
+     * @throws IllegalArgumentException if {@code size} is not valid.
+     * @throws IOException              if an I/O error occurs.
+     * @see #readLong(boolean, int)
+     */
+    long readLong(int size) throws IOException;
 
     /**
      * Reads a {@value java.lang.Long#SIZE}-bit signed {@code long} value.

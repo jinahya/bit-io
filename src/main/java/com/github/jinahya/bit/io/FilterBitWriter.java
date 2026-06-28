@@ -36,6 +36,7 @@ public abstract class FilterBitWriter<T, U>
         implements BitWriter<T> {
 
     // -----------------------------------------------------------------------------------------------------------------
+
     /**
      * Creates a new instance wrapping specified delegate.
      *
@@ -59,6 +60,7 @@ public abstract class FilterBitWriter<T, U>
     protected abstract U apply(T value);
 
     // -----------------------------------------------------------------------------------------------------------------
+
     /**
      * The writer wrapped by this filter.
      */

@@ -96,9 +96,13 @@ public class ByteArrayWriter
             throw new IllegalArgumentException(
                     "value.length(" + length + ") requires more than lengthSize(" + lengthSize + ") bits");
         }
-        output.writeInt(true, lengthSize, length);
+        output.writeUnsignedInt(lengthSize, length);
         for (final byte element : value) {
-            output.writeByte(unsigned, elementSize, element);
+            if (unsigned) {
+                output.writeUnsignedByte(elementSize, element);
+            } else {
+                output.writeByte(elementSize, element);
+            }
         }
     }
 

@@ -20,7 +20,7 @@
  * <p>Typical usage stacks a bit-layer implementation on top of a byte-layer adapter:</p>
  * <blockquote><pre>{@code
  * final BitInput input = new DefaultBitInput(new StreamByteInput(stream));
- * final int value = input.readInt(true, 17); // a 17-bit unsigned int
+ * final int value = input.readUnsignedInt(17); // a 17-bit unsigned int
  * }</pre></blockquote>
  *
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;

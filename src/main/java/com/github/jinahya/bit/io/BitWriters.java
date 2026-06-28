@@ -45,7 +45,8 @@ public final class BitWriters {
         if (writer == null) {
             throw new NullPointerException("writer is null");
         }
-        // not a FilterBitWriter: a nullability wrapper writes its own flag bit and bypasses the apply(...) mapping, so it
+        // not a FilterBitWriter: a nullability wrapper writes its own flag bit and bypasses the apply(...) mapping,
+        // so it
         // implements the interface directly rather than the value-mapping skeletal type.
         return new BitWriter<T>() {
             @Override

@@ -20,6 +20,8 @@ package com.github.jinahya.bit.io.miscellaneous;
  * #L%
  */
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -34,6 +36,7 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+@NoArgsConstructor(access = AccessLevel.PACKAGE)
 class Leb128Test {
 
     @Test

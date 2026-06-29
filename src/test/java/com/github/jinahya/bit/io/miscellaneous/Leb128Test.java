@@ -29,9 +29,7 @@ import java.io.IOException;
 import static com.github.jinahya.bit.io.miscellaneous.Leb128TestUtils.readSigned;
 import static com.github.jinahya.bit.io.miscellaneous.Leb128TestUtils.readUnsigned;
 import static com.github.jinahya.bit.io.miscellaneous.Leb128TestUtils.writeSigned;
-import static com.github.jinahya.bit.io.miscellaneous.Leb128TestUtils.writeSignedObject;
 import static com.github.jinahya.bit.io.miscellaneous.Leb128TestUtils.writeUnsigned;
-import static com.github.jinahya.bit.io.miscellaneous.Leb128TestUtils.writeUnsignedObject;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -85,12 +83,10 @@ class Leb128Test {
 
     @Test
     void rejectsNullArguments() {
-        assertThrows(NullPointerException.class, () -> Leb128Reader.UNSIGNED.read(null));
-        assertThrows(NullPointerException.class, () -> Leb128Reader.SIGNED.read(null));
-        assertThrows(NullPointerException.class, () -> Leb128Writer.UNSIGNED.write(null, 0L));
-        assertThrows(NullPointerException.class, () -> Leb128Writer.SIGNED.write(null, 0L));
-        assertThrows(NullPointerException.class, () -> writeUnsignedObject(null));
-        assertThrows(NullPointerException.class, () -> writeSignedObject(null));
+        assertThrows(NullPointerException.class, () -> Leb128Reader.UNSIGNED.readLong(null));
+        assertThrows(NullPointerException.class, () -> Leb128Reader.SIGNED.readLong(null));
+        assertThrows(NullPointerException.class, () -> Leb128Writer.UNSIGNED.writeLong(null, 0L));
+        assertThrows(NullPointerException.class, () -> Leb128Writer.SIGNED.writeLong(null, 0L));
     }
 
     @Test

@@ -37,8 +37,8 @@ class CborGenericIntIT
         final String document = downloadText("https://www.rfc-editor.org/rfc/rfc8949.txt", 512 * 1024);
         assertTrue(document.contains("Appendix A.  Examples of Encoded CBOR Data Items"), "downloaded RFC 8949");
 
-        assertArrayEquals(hex("1818"), write(CborGenericInt.INSTANCE, Long.valueOf(24L)));
-        assertEquals(Long.valueOf(0L), read(CborGenericInt.INSTANCE, hex("1800")));
-        assertEquals(Long.valueOf(-100L), read(CborGenericInt.INSTANCE, hex("3863")));
+        assertArrayEquals(hex("1818"), write(CborGenericInt.INSTANCE, 24L));
+        assertEquals(0L, read(CborGenericInt.INSTANCE, hex("1800")));
+        assertEquals(-100L, read(CborGenericInt.INSTANCE, hex("3863")));
     }
 }

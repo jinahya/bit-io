@@ -76,24 +76,64 @@ final class _Utils {
         return value;
     }
 
-    /**
-     * Returns the zero-based index of the highest set bit in specified value. A {@code 1.4}-safe replacement for
-     * {@code 63 - }{@link Long#numberOfLeadingZeros(long)} ({@code Long.numberOfLeadingZeros} is a Java {@code 5}
-     * method that the retro-translated {@code 1.3}/{@code 1.4} artifacts cannot rely on).
-     *
-     * @param value the value.
-     * @return the index of the highest set bit, between {@code 0} and {@code 63}, both inclusive; {@code -1} when
-     *         {@code value} is {@code 0}.
-     */
-    static int highestOneBitIndex(final long value) {
-        int index = -1;
-        for (long v = value; v != 0L; v >>>= 1) {
-            index++;
+    private static final char[] HEX_DIGITS = "0123456789abcdef".toCharArray();
+
+    // -----------------------------------------------------------------------------------------------------------------
+    static <T extends Comparable<? super T>, X extends Exception> T requireGreaterThanOrEqualsTo2(
+            final T value, final T minimum, final _Supplier<? extends X> exceptionSupplier)
+            throws X {
+        if (value.compareTo(minimum) >= 0) {
+            return value;
         }
-        return index;
+        throw exceptionSupplier.get();
     }
 
-    private static final char[] HEX_DIGITS = "0123456789abcdef".toCharArray();
+    static <T extends Comparable<? super T>, X extends Exception> T requireLessThanOrEqualsTo2(
+            final T value, final T maximum, final _Supplier<? extends X> exceptionSupplier)
+            throws X {
+        if (value.compareTo(maximum) <= 0) {
+            return value;
+        }
+        throw exceptionSupplier.get();
+    }
+
+    static <X extends Exception> int requireGreaterThanOrEqualsTo(final int value, final int minimum,
+                                                                  final _Supplier<? extends X> exceptionSupplier)
+            throws X {
+        if (value >= minimum) {
+            return value;
+        }
+        throw exceptionSupplier.get();
+    }
+
+    static <X extends Exception> int requireLessThanOrEqualsTo(final int value, final int maximum,
+                                                               final _Supplier<? extends X> exceptionSupplier)
+            throws X {
+        if (value <= maximum) {
+            return value;
+        }
+        throw exceptionSupplier.get();
+    }
+
+    static <X extends Exception> long requireGreaterThanOrEqualsTo(final long value, final long minimum,
+                                                                   final _Supplier<? extends X> exceptionSupplier)
+            throws X {
+        if (value >= minimum) {
+            return value;
+        }
+        throw exceptionSupplier.get();
+    }
+
+    static <X extends Exception> long requireLessThanOrEqualsTo(final long value, final long maximum,
+                                                                final _Supplier<? extends X> exceptionSupplier)
+            throws X {
+        if (value <= maximum) {
+            return value;
+        }
+        throw exceptionSupplier.get();
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
 
     private _Utils() {
         throw new AssertionError("instantiation is not allowed");

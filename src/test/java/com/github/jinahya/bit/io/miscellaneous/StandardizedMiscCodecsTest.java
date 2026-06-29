@@ -24,8 +24,14 @@ import com.github.jinahya.bit.io.BitInput;
 import com.github.jinahya.bit.io.BitOutput;
 import com.github.jinahya.bit.io.BitReader;
 import com.github.jinahya.bit.io.BitWriter;
+import com.github.jinahya.bit.io.BooleanBitReader;
+import com.github.jinahya.bit.io.BooleanBitWriter;
 import com.github.jinahya.bit.io.DefaultBitInput;
 import com.github.jinahya.bit.io.DefaultBitOutput;
+import com.github.jinahya.bit.io.IntBitReader;
+import com.github.jinahya.bit.io.IntBitWriter;
+import com.github.jinahya.bit.io.LongBitReader;
+import com.github.jinahya.bit.io.LongBitWriter;
 import com.github.jinahya.bit.io.StreamByteInput;
 import com.github.jinahya.bit.io.StreamByteOutput;
 import lombok.AccessLevel;
@@ -55,10 +61,10 @@ class StandardizedMiscCodecsTest {
 
     @Test
     void asn1BooleanHandlesBerAndDerRules() throws IOException {
-        assertEquals(Boolean.TRUE, read(Asn1BerBoolean.INSTANCE, new byte[]{0x01}));
-        assertEquals(Boolean.TRUE, read(Asn1DerBoolean.INSTANCE, new byte[]{(byte) 0xFF}));
-        assertArrayEquals(new byte[]{(byte) 0xFF}, write(Asn1BerBoolean.INSTANCE, Boolean.TRUE));
-        assertArrayEquals(new byte[]{0x00}, write(Asn1DerBoolean.INSTANCE, Boolean.FALSE));
+        assertEquals(true, read(Asn1BerBoolean.INSTANCE, new byte[]{0x01}));
+        assertEquals(true, read(Asn1DerBoolean.INSTANCE, new byte[]{(byte) 0xFF}));
+        assertArrayEquals(new byte[]{(byte) 0xFF}, write(Asn1BerBoolean.INSTANCE, true));
+        assertArrayEquals(new byte[]{0x00}, write(Asn1DerBoolean.INSTANCE, false));
         assertThrows(IOException.class, () -> read(Asn1DerBoolean.INSTANCE, new byte[]{0x01}));
     }
 
@@ -83,30 +89,45 @@ class StandardizedMiscCodecsTest {
 
     @Test
     void cborIntegersUseShortestWritesAndDeterministicReads() throws IOException {
-        assertArrayEquals(new byte[]{0x00}, write(CborDeterministicInt.INSTANCE, Long.valueOf(0L)));
-        assertArrayEquals(new byte[]{0x17}, write(CborDeterministicInt.INSTANCE, Long.valueOf(23L)));
-        assertArrayEquals(new byte[]{0x18, 0x18}, write(CborDeterministicInt.INSTANCE, Long.valueOf(24L)));
-        assertArrayEquals(new byte[]{0x20}, write(CborDeterministicInt.INSTANCE, Long.valueOf(-1L)));
-        assertArrayEquals(new byte[]{0x37}, write(CborDeterministicInt.INSTANCE, Long.valueOf(-24L)));
-        assertArrayEquals(new byte[]{0x38, 0x18}, write(CborDeterministicInt.INSTANCE, Long.valueOf(-25L)));
+        assertArrayEquals(new byte[]{0x00}, write(CborDeterministicInt.INSTANCE, 0L));
+        assertArrayEquals(new byte[]{0x17}, write(CborDeterministicInt.INSTANCE, 23L));
+        assertArrayEquals(new byte[]{0x18, 0x18}, write(CborDeterministicInt.INSTANCE, 24L));
+        assertArrayEquals(new byte[]{0x20}, write(CborDeterministicInt.INSTANCE, -1L));
+        assertArrayEquals(new byte[]{0x37}, write(CborDeterministicInt.INSTANCE, -24L));
+        assertArrayEquals(new byte[]{0x38, 0x18}, write(CborDeterministicInt.INSTANCE, -25L));
         assertArrayEquals(new byte[]{0x19, 0x03, (byte) 0xE8},
-                          write(CborDeterministicInt.INSTANCE, Long.valueOf(1000L)));
-        assertEquals(Long.valueOf(0L), read(CborGenericInt.INSTANCE, new byte[]{0x18, 0x00}));
+                          write(CborDeterministicInt.INSTANCE, 1000L));
+        assertEquals(0L, read(CborGenericInt.INSTANCE, new byte[]{0x18, 0x00}));
         assertThrows(IOException.class, () -> read(CborDeterministicInt.INSTANCE, new byte[]{0x18, 0x00}));
     }
 
     @Test
     void cborSimpleValuesExcludeFloatsAndBreak() throws IOException {
-        assertArrayEquals(new byte[]{(byte) 0xF4}, write(CborSimpleValue.INSTANCE, Integer.valueOf(20)));
-        assertArrayEquals(new byte[]{(byte) 0xF8, 0x20}, write(CborSimpleValue.INSTANCE, Integer.valueOf(32)));
-        assertEquals(Integer.valueOf(255), read(CborSimpleValue.INSTANCE, new byte[]{(byte) 0xF8, (byte) 0xFF}));
-        assertThrows(IllegalArgumentException.class, () -> write(CborSimpleValue.INSTANCE, Integer.valueOf(24)));
+        assertArrayEquals(new byte[]{(byte) 0xF4}, write(CborSimpleValue.INSTANCE, 20));
+        assertArrayEquals(new byte[]{(byte) 0xF8, 0x20}, write(CborSimpleValue.INSTANCE, 32));
+        assertEquals(255, read(CborSimpleValue.INSTANCE, new byte[]{(byte) 0xF8, (byte) 0xFF}));
+        assertThrows(IllegalArgumentException.class, () -> write(CborSimpleValue.INSTANCE, 24));
         assertThrows(IOException.class, () -> read(CborSimpleValue.INSTANCE, new byte[]{(byte) 0xF9, 0x00, 0x00}));
     }
 
     private static <T> T read(final BitReader<T> reader, final byte[] bytes) throws IOException {
         final BitInput input = new DefaultBitInput(new StreamByteInput(new ByteArrayInputStream(bytes)));
         return reader.read(input);
+    }
+
+    private static boolean read(final BooleanBitReader reader, final byte[] bytes) throws IOException {
+        final BitInput input = new DefaultBitInput(new StreamByteInput(new ByteArrayInputStream(bytes)));
+        return input.readBoolean(reader);
+    }
+
+    private static int read(final IntBitReader reader, final byte[] bytes) throws IOException {
+        final BitInput input = new DefaultBitInput(new StreamByteInput(new ByteArrayInputStream(bytes)));
+        return input.readInt(reader);
+    }
+
+    private static long read(final LongBitReader reader, final byte[] bytes) throws IOException {
+        final BitInput input = new DefaultBitInput(new StreamByteInput(new ByteArrayInputStream(bytes)));
+        return input.readLong(reader);
     }
 
     private static <T> byte[] write(final BitWriter<T> writer, final T value) throws IOException {
@@ -117,29 +138,65 @@ class StandardizedMiscCodecsTest {
         return baos.toByteArray();
     }
 
+    private static byte[] write(final BooleanBitWriter writer, final boolean value) throws IOException {
+        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        final BitOutput output = new DefaultBitOutput(new StreamByteOutput(baos));
+        output.writeBoolean(writer, value);
+        output.align(1);
+        return baos.toByteArray();
+    }
+
+    private static byte[] write(final IntBitWriter writer, final int value) throws IOException {
+        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        final BitOutput output = new DefaultBitOutput(new StreamByteOutput(baos));
+        output.writeInt(writer, value);
+        output.align(1);
+        return baos.toByteArray();
+    }
+
+    private static byte[] write(final LongBitWriter writer, final long value) throws IOException {
+        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        final BitOutput output = new DefaultBitOutput(new StreamByteOutput(baos));
+        output.writeLong(writer, value);
+        output.align(1);
+        return baos.toByteArray();
+    }
+
     private static BigInteger readDerInteger(final byte[] bytes) throws IOException {
-        final BitInput input = new DefaultBitInput(new StreamByteInput(new ByteArrayInputStream(bytes)));
-        return Asn1DerInteger.readContent(input, bytes.length);
+        if (bytes.length == 0) {
+            throw new IllegalArgumentException("bytes.length == 0");
+        }
+        if (bytes.length > 1) {
+            final int first = bytes[0] & 0xFF;
+            final int second = bytes[1] & 0xFF;
+            if (first == 0x00 && (second & 0x80) == 0) {
+                throw new IOException("non-minimal DER INTEGER content");
+            }
+            if (first == 0xFF && (second & 0x80) != 0) {
+                throw new IOException("non-minimal DER INTEGER content");
+            }
+        }
+        return new BigInteger(bytes);
     }
 
     private static byte[] writeDerInteger(final BigInteger value) throws IOException {
-        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        final BitOutput output = new DefaultBitOutput(new StreamByteOutput(baos));
-        Asn1DerInteger.writeContent(output, value);
-        output.align(1);
-        return baos.toByteArray();
+        if (value == null) {
+            throw new NullPointerException("value is null");
+        }
+        return value.toByteArray();
     }
 
     private static long[] readOid(final byte[] bytes) throws IOException {
-        final BitInput input = new DefaultBitInput(new StreamByteInput(new ByteArrayInputStream(bytes)));
-        return Asn1Oid.readContent(input, bytes.length);
+        final ByteArrayOutputStream prefixed = new ByteArrayOutputStream();
+        final BitOutput output = new DefaultBitOutput(new StreamByteOutput(prefixed));
+        output.writeObject(new com.github.jinahya.bit.io.ByteArrayWriter.Signed8(31), bytes);
+        output.align(1);
+        return read(Asn1Oid.INSTANCE, prefixed.toByteArray());
     }
 
     private static byte[] writeOid(final long[] value) throws IOException {
-        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        final BitOutput output = new DefaultBitOutput(new StreamByteOutput(baos));
-        Asn1Oid.writeContent(output, value);
-        output.align(1);
-        return baos.toByteArray();
+        final byte[] encoded = write(Asn1Oid.INSTANCE, value);
+        final BitInput input = new DefaultBitInput(new StreamByteInput(new ByteArrayInputStream(encoded)));
+        return input.readObject(new com.github.jinahya.bit.io.ByteArrayReader.Signed8(31));
     }
 }

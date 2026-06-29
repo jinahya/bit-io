@@ -22,8 +22,8 @@ package com.github.jinahya.bit.io.miscellaneous;
 
 import com.github.jinahya.bit.io.BitInput;
 import com.github.jinahya.bit.io.BitOutput;
-import com.github.jinahya.bit.io.BitReader;
-import com.github.jinahya.bit.io.BitWriter;
+import com.github.jinahya.bit.io.LongBitReader;
+import com.github.jinahya.bit.io.LongBitWriter;
 
 import java.io.IOException;
 
@@ -31,7 +31,6 @@ import static com.github.jinahya.bit.io.miscellaneous.ExpGolombConstants.MAX_SE;
 import static com.github.jinahya.bit.io.miscellaneous.ExpGolombConstants.MIN_SE;
 import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullInput;
 import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullOutput;
-import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullValue;
 
 /**
  * A codec for signed Exp-Golomb {@code se(v)} values.
@@ -43,7 +42,7 @@ import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullValue
  * @see ExpGolombUE
  */
 public final class ExpGolombSE
-        implements BitReader<Long>, BitWriter<Long> {
+        implements LongBitReader, LongBitWriter {
 
     /**
      * The singleton instance of this codec.
@@ -68,16 +67,15 @@ public final class ExpGolombSE
 
     // -----------------------------------------------------------------------------------------------------------------
     @Override
-    public Long read(final BitInput input) throws IOException {
+    public long readLong(final BitInput input) throws IOException {
         requireNonNullInput(input);
         return value(ExpGolombUE.readCodeNum(input));
     }
 
     // -----------------------------------------------------------------------------------------------------------------
     @Override
-    public void write(final BitOutput output, final Long value) throws IOException {
+    public void writeLong(final BitOutput output, final long value) throws IOException {
         requireNonNullOutput(output);
-        final long v = requireNonNullValue(value);
-        ExpGolombUE.writeCodeNum(output, codeNum(v));
+        ExpGolombUE.writeCodeNum(output, codeNum(value));
     }
 }

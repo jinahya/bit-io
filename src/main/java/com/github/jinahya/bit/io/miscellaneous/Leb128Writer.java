@@ -21,7 +21,7 @@ package com.github.jinahya.bit.io.miscellaneous;
  */
 
 import com.github.jinahya.bit.io.BitOutput;
-import com.github.jinahya.bit.io.BitWriter;
+import com.github.jinahya.bit.io.LongBitWriter;
 
 import java.io.IOException;
 
@@ -30,7 +30,6 @@ import static com.github.jinahya.bit.io.miscellaneous.Leb128Constants.MASK_PAYLO
 import static com.github.jinahya.bit.io.miscellaneous.Leb128Constants.MASK_SIGN;
 import static com.github.jinahya.bit.io.miscellaneous.Leb128Constants.SIZE_PAYLOAD;
 import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullOutput;
-import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullValue;
 
 /**
  * A writer for LEB128-encoded {@code long} values.
@@ -39,7 +38,7 @@ import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullValue
  * @see Leb128Reader
  */
 public abstract class Leb128Writer
-        implements BitWriter<Long> {
+        implements LongBitWriter {
 
     private static final class Unsigned
             extends Leb128Writer {
@@ -97,10 +96,9 @@ public abstract class Leb128Writer
 
     // -----------------------------------------------------------------------------------------------------------------
     @Override
-    public final void write(final BitOutput output, final Long value) throws IOException {
+    public final void writeLong(final BitOutput output, final long value) throws IOException {
         requireNonNullOutput(output);
-        final long v = requireNonNullValue(value);
-        writeValue(output, v);
+        writeValue(output, value);
     }
 
     abstract void writeValue(BitOutput output, long value) throws IOException;

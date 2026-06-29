@@ -36,27 +36,27 @@ final class RiceGolombTestUtils {
     static byte[] writeRiceFlac(final int parameter, final long value) throws IOException {
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
         final BitOutput output = new DefaultBitOutput(new StreamByteOutput(baos));
-        RiceFLAC.of(parameter).write(output, value);
+        RiceFLAC.of(parameter).writeLong(output, value);
         output.align(1);
         return baos.toByteArray();
     }
 
     static long readRiceFlac(final int parameter, final byte[] bytes) throws IOException {
         final BitInput input = new DefaultBitInput(new StreamByteInput(new ByteArrayInputStream(bytes)));
-        return RiceFLAC.of(parameter).read(input);
+        return RiceFLAC.of(parameter).readLong(input);
     }
 
     static byte[] writeGolombJpegLs(final int parameter, final long value) throws IOException {
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
         final BitOutput output = new DefaultBitOutput(new StreamByteOutput(baos));
-        GolombJPEGLS.of(parameter).write(output, value);
+        GolombJPEGLS.of(parameter).writeLong(output, value);
         output.align(1);
         return baos.toByteArray();
     }
 
     static long readGolombJpegLs(final int parameter, final byte[] bytes) throws IOException {
         final BitInput input = new DefaultBitInput(new StreamByteInput(new ByteArrayInputStream(bytes)));
-        return GolombJPEGLS.of(parameter).read(input);
+        return GolombJPEGLS.of(parameter).readLong(input);
     }
 
     private RiceGolombTestUtils() {

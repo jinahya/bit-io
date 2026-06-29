@@ -22,26 +22,25 @@ package com.github.jinahya.bit.io.miscellaneous;
 
 import com.github.jinahya.bit.io.BitInput;
 import com.github.jinahya.bit.io.BitOutput;
-import com.github.jinahya.bit.io.BitReader;
-import com.github.jinahya.bit.io.BitWriter;
+import com.github.jinahya.bit.io.LongBitReader;
+import com.github.jinahya.bit.io.LongBitWriter;
 
 import java.io.IOException;
 
 import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullInput;
 import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullOutput;
-import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullValue;
 
 /**
  * A codec for ASN.1 BER length octets.
  *
- * <p>The {@link #read(BitInput)} and {@link #write(BitOutput, Long)} methods handle definite lengths only. A BER
- * indefinite length is a marker, not a non-negative length value, and is handled explicitly by
+ * <p>The {@link #readLong(BitInput)} and {@link #writeLong(BitOutput, long)} methods handle definite lengths only. A
+ * BER indefinite length is a marker, not a non-negative length value, and is handled explicitly by
  * {@link #readBerIndefiniteLength(BitInput)} and {@link #writeBerIndefiniteLength(BitOutput)}.</p>
  *
  * @see <a href="https://www.itu.int/rec/T-REC-X.690">ITU-T X.690: ASN.1 encoding rules</a>
  */
 public final class Asn1BerLength
-        implements BitReader<Long>, BitWriter<Long> {
+        implements LongBitReader, LongBitWriter {
 
     /**
      * Reads and verifies a BER indefinite length marker.
@@ -51,7 +50,7 @@ public final class Asn1BerLength
      */
     public static void readBerIndefiniteLength(final BitInput input) throws IOException {
         requireNonNullInput(input);
-        Asn1Lengths.readIndefinite(input);
+        Asn1LengthUtil.readIndefinite(input);
     }
 
     /**
@@ -62,7 +61,7 @@ public final class Asn1BerLength
      */
     public static void writeBerIndefiniteLength(final BitOutput output) throws IOException {
         requireNonNullOutput(output);
-        Asn1Lengths.writeIndefinite(output);
+        Asn1LengthUtil.writeIndefinite(output);
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -79,15 +78,14 @@ public final class Asn1BerLength
 
     // -----------------------------------------------------------------------------------------------------------------
     @Override
-    public Long read(final BitInput input) throws IOException {
+    public long readLong(final BitInput input) throws IOException {
         requireNonNullInput(input);
-        return Asn1Lengths.readDefinite(input, false);
+        return Asn1LengthUtil.readDefinite(input, false);
     }
 
     @Override
-    public void write(final BitOutput output, final Long value) throws IOException {
+    public void writeLong(final BitOutput output, final long value) throws IOException {
         requireNonNullOutput(output);
-        final long v = requireNonNullValue(value);
-        Asn1Lengths.writeDefinite(output, v);
+        Asn1LengthUtil.writeDefinite(output, value);
     }
 }

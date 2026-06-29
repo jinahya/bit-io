@@ -61,7 +61,7 @@ public class StringReader
         if (charsetName == null) {
             throw new NullPointerException("charsetName is null");
         }
-        this.delegate = ByteArrayReader.ofSigned(lengthSize, Byte.SIZE);
+        this.delegate = new ByteArrayReader.Signed8(lengthSize);
         this.charsetName = charsetName;
     }
 

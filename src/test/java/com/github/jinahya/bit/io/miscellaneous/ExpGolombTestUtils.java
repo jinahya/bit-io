@@ -36,27 +36,27 @@ final class ExpGolombTestUtils {
     static byte[] writeUe(final long value) throws IOException {
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
         final BitOutput output = new DefaultBitOutput(new StreamByteOutput(baos));
-        ExpGolombUE.INSTANCE.write(output, value);
+        ExpGolombUE.INSTANCE.writeLong(output, value);
         output.align(1);
         return baos.toByteArray();
     }
 
     static long readUe(final byte[] bytes) throws IOException {
         final BitInput input = new DefaultBitInput(new StreamByteInput(new ByteArrayInputStream(bytes)));
-        return ExpGolombUE.INSTANCE.read(input);
+        return ExpGolombUE.INSTANCE.readLong(input);
     }
 
     static byte[] writeSe(final long value) throws IOException {
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
         final BitOutput output = new DefaultBitOutput(new StreamByteOutput(baos));
-        ExpGolombSE.INSTANCE.write(output, value);
+        ExpGolombSE.INSTANCE.writeLong(output, value);
         output.align(1);
         return baos.toByteArray();
     }
 
     static long readSe(final byte[] bytes) throws IOException {
         final BitInput input = new DefaultBitInput(new StreamByteInput(new ByteArrayInputStream(bytes)));
-        return ExpGolombSE.INSTANCE.read(input);
+        return ExpGolombSE.INSTANCE.readLong(input);
     }
 
     private ExpGolombTestUtils() {

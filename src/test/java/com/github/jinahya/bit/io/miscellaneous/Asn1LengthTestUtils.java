@@ -36,7 +36,7 @@ final class Asn1LengthTestUtils {
     static byte[] writeBer(final long value) throws IOException {
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
         final BitOutput output = new DefaultBitOutput(new StreamByteOutput(baos));
-        Asn1BerLength.INSTANCE.write(output, value);
+        Asn1BerLength.INSTANCE.writeLong(output, value);
         output.align(1);
         return baos.toByteArray();
     }
@@ -51,7 +51,7 @@ final class Asn1LengthTestUtils {
 
     static long readBer(final byte[] bytes) throws IOException {
         final BitInput input = new DefaultBitInput(new StreamByteInput(new ByteArrayInputStream(bytes)));
-        return Asn1BerLength.INSTANCE.read(input);
+        return Asn1BerLength.INSTANCE.readLong(input);
     }
 
     static void readBerIndefinite(final byte[] bytes) throws IOException {
@@ -62,19 +62,19 @@ final class Asn1LengthTestUtils {
     static byte[] writeDer(final long value) throws IOException {
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
         final BitOutput output = new DefaultBitOutput(new StreamByteOutput(baos));
-        Asn1DerLength.INSTANCE.write(output, value);
+        Asn1DerLength.INSTANCE.writeLong(output, value);
         output.align(1);
         return baos.toByteArray();
     }
 
-    static void writeDerObject(final Long value) throws IOException {
+    static void writeDerObject(final long value) throws IOException {
         final BitOutput output = new DefaultBitOutput(new StreamByteOutput(new ByteArrayOutputStream()));
-        Asn1DerLength.INSTANCE.write(output, value);
+        Asn1DerLength.INSTANCE.writeLong(output, value);
     }
 
     static long readDer(final byte[] bytes) throws IOException {
         final BitInput input = new DefaultBitInput(new StreamByteInput(new ByteArrayInputStream(bytes)));
-        return Asn1DerLength.INSTANCE.read(input);
+        return Asn1DerLength.INSTANCE.readLong(input);
     }
 
     private Asn1LengthTestUtils() {

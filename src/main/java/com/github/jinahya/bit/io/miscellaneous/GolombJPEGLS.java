@@ -22,14 +22,13 @@ package com.github.jinahya.bit.io.miscellaneous;
 
 import com.github.jinahya.bit.io.BitInput;
 import com.github.jinahya.bit.io.BitOutput;
-import com.github.jinahya.bit.io.BitReader;
-import com.github.jinahya.bit.io.BitWriter;
+import com.github.jinahya.bit.io.LongBitReader;
+import com.github.jinahya.bit.io.LongBitWriter;
 
 import java.io.IOException;
 
 import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullInput;
 import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullOutput;
-import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullValue;
 
 /**
  * A value-level codec for one JPEG-LS-style Golomb-coded signed prediction error.
@@ -43,7 +42,7 @@ import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullValue
  *         continuous-tone still images</a>
  */
 public final class GolombJPEGLS
-        implements BitReader<Long>, BitWriter<Long> {
+        implements LongBitReader, LongBitWriter {
 
     /**
      * Returns a codec for specified Golomb parameter.
@@ -57,20 +56,19 @@ public final class GolombJPEGLS
 
     private GolombJPEGLS(final int parameter) {
         super();
-        this.parameter = RiceGolombCodes.requireParameter(parameter);
+        this.parameter = RiceGolombCodeUtil.requireParameter(parameter);
     }
 
     @Override
-    public Long read(final BitInput input) throws IOException {
+    public long readLong(final BitInput input) throws IOException {
         requireNonNullInput(input);
-        return RiceGolombCodes.unfoldSigned(RiceGolombCodes.readUnsigned(input, parameter, 1));
+        return RiceGolombCodeUtil.unfoldSigned(RiceGolombCodeUtil.readUnsigned(input, parameter, 1));
     }
 
     @Override
-    public void write(final BitOutput output, final Long value) throws IOException {
+    public void writeLong(final BitOutput output, final long value) throws IOException {
         requireNonNullOutput(output);
-        final long v = requireNonNullValue(value);
-        RiceGolombCodes.writeUnsigned(output, parameter, RiceGolombCodes.foldSigned(v), 1);
+        RiceGolombCodeUtil.writeUnsigned(output, parameter, RiceGolombCodeUtil.foldSigned(value), 1);
     }
 
     /**

@@ -36,37 +36,27 @@ final class Leb128TestUtils {
     static byte[] writeUnsigned(final long value) throws IOException {
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
         final BitOutput output = new DefaultBitOutput(new StreamByteOutput(baos));
-        Leb128Writer.UNSIGNED.write(output, value);
+        Leb128Writer.UNSIGNED.writeLong(output, value);
         output.align(1);
         return baos.toByteArray();
     }
 
-    static void writeUnsignedObject(final Long value) throws IOException {
-        final BitOutput output = new DefaultBitOutput(new StreamByteOutput(new ByteArrayOutputStream()));
-        Leb128Writer.UNSIGNED.write(output, value);
-    }
-
     static long readUnsigned(final byte[] bytes) throws IOException {
         final BitInput input = new DefaultBitInput(new StreamByteInput(new ByteArrayInputStream(bytes)));
-        return Leb128Reader.UNSIGNED.read(input);
+        return Leb128Reader.UNSIGNED.readLong(input);
     }
 
     static byte[] writeSigned(final long value) throws IOException {
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
         final BitOutput output = new DefaultBitOutput(new StreamByteOutput(baos));
-        Leb128Writer.SIGNED.write(output, value);
+        Leb128Writer.SIGNED.writeLong(output, value);
         output.align(1);
         return baos.toByteArray();
     }
 
-    static void writeSignedObject(final Long value) throws IOException {
-        final BitOutput output = new DefaultBitOutput(new StreamByteOutput(new ByteArrayOutputStream()));
-        Leb128Writer.SIGNED.write(output, value);
-    }
-
     static long readSigned(final byte[] bytes) throws IOException {
         final BitInput input = new DefaultBitInput(new StreamByteInput(new ByteArrayInputStream(bytes)));
-        return Leb128Reader.SIGNED.read(input);
+        return Leb128Reader.SIGNED.readLong(input);
     }
 
     private Leb128TestUtils() {

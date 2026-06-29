@@ -245,14 +245,14 @@ class BitFloatingPointRoundTripTest {
 
     @Test
     void floatingPointSizeConstraintsRejectOutOfRangeValues() {
-        assertThrows(IllegalArgumentException.class, () -> BitIoConstraints.requireValidExponentSizeFloat(1));
-        assertThrows(IllegalArgumentException.class, () -> BitIoConstraints.requireValidExponentSizeFloat(9));
-        assertThrows(IllegalArgumentException.class, () -> BitIoConstraints.requireValidFractionSizeFloat(1));
-        assertThrows(IllegalArgumentException.class, () -> BitIoConstraints.requireValidFractionSizeFloat(24));
-        assertThrows(IllegalArgumentException.class, () -> BitIoConstraints.requireValidExponentSizeDouble(1));
-        assertThrows(IllegalArgumentException.class, () -> BitIoConstraints.requireValidExponentSizeDouble(12));
-        assertThrows(IllegalArgumentException.class, () -> BitIoConstraints.requireValidFractionSizeDouble(1));
-        assertThrows(IllegalArgumentException.class, () -> BitIoConstraints.requireValidFractionSizeDouble(53));
+        assertThrows(IllegalArgumentException.class, () -> BitIoUtils.requireValidExponentSizeFloat(1));
+        assertThrows(IllegalArgumentException.class, () -> BitIoUtils.requireValidExponentSizeFloat(9));
+        assertThrows(IllegalArgumentException.class, () -> BitIoUtils.requireValidFractionSizeFloat(1));
+        assertThrows(IllegalArgumentException.class, () -> BitIoUtils.requireValidFractionSizeFloat(24));
+        assertThrows(IllegalArgumentException.class, () -> BitIoUtils.requireValidExponentSizeDouble(1));
+        assertThrows(IllegalArgumentException.class, () -> BitIoUtils.requireValidExponentSizeDouble(12));
+        assertThrows(IllegalArgumentException.class, () -> BitIoUtils.requireValidFractionSizeDouble(1));
+        assertThrows(IllegalArgumentException.class, () -> BitIoUtils.requireValidFractionSizeDouble(53));
     }
 
     private static byte[] writeFloat(final int exponentSize, final int fractionSize, final float value)

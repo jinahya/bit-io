@@ -42,7 +42,7 @@ class CborDeterministicIntIT
                 {-1L, 0x20L}, {-10L, 0x29L}, {-100L, 0x3863L}, {-1000L, 0x3903E7L}
         };
         for (int i = 0; i < rows.length; i++) {
-            final Long value = Long.valueOf(rows[i][0]);
+            final long value = rows[i][0];
             final byte[] encoded = hex(Long.toHexString(rows[i][1]));
             assertArrayEquals(encoded, write(CborDeterministicInt.INSTANCE, value), "write row " + i);
             assertEquals(value, read(CborDeterministicInt.INSTANCE, encoded), "read row " + i);

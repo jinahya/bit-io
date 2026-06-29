@@ -33,13 +33,13 @@ internal class KotlinObjectCompatibilityTest {
         val target = ByteArrayOutputStream()
         val output = BitOutputs.from(target)
         val bytes = byteArrayOf(1, 2, 15)
-        output.writeObject(ByteArrayWriter.ofUnsigned(4, 4), bytes)
+        output.writeObject(ByteArrayWriter.Unsigned(4, 4), bytes)
         output.writeObject(StringWriter.ofAscii(8), "Kotlin")
         output.writeObject(StringWriter(8, "UTF-8"), "compat")
         output.align(1)
 
         val input = BitInputs.from(ByteArrayInputStream(target.toByteArray()))
-        assertArrayEquals(bytes, input.readObject(ByteArrayReader.ofUnsigned(4, 4)))
+        assertArrayEquals(bytes, input.readObject(ByteArrayReader.Unsigned(4, 4)))
         assertEquals("Kotlin", input.readObject(StringReader.ofAscii(8)))
         assertEquals("compat", input.readObject(StringReader(8, "UTF-8")))
     }

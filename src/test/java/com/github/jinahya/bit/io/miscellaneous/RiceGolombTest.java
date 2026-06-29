@@ -30,8 +30,8 @@ import org.junit.jupiter.api.Test;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-import static com.github.jinahya.bit.io.miscellaneous.RiceGolombCodes.MAX_SIGNED_VALUE;
-import static com.github.jinahya.bit.io.miscellaneous.RiceGolombCodes.MIN_SIGNED_VALUE;
+import static com.github.jinahya.bit.io.miscellaneous.RiceGolombCodeConstants.MAX_SIGNED_VALUE;
+import static com.github.jinahya.bit.io.miscellaneous.RiceGolombCodeConstants.MIN_SIGNED_VALUE;
 import static com.github.jinahya.bit.io.miscellaneous.RiceGolombTestUtils.readGolombJpegLs;
 import static com.github.jinahya.bit.io.miscellaneous.RiceGolombTestUtils.readRiceFlac;
 import static com.github.jinahya.bit.io.miscellaneous.RiceGolombTestUtils.writeGolombJpegLs;
@@ -116,11 +116,9 @@ class RiceGolombTest {
     @Test
     void rejectsNullArguments() {
         final BitOutput output = new DefaultBitOutput(new StreamByteOutput(new ByteArrayOutputStream()));
-        assertThrows(NullPointerException.class, () -> RiceFLAC.of(0).read(null));
-        assertThrows(NullPointerException.class, () -> GolombJPEGLS.of(0).read(null));
-        assertThrows(NullPointerException.class, () -> RiceFLAC.of(0).write(null, 0L));
-        assertThrows(NullPointerException.class, () -> GolombJPEGLS.of(0).write(null, 0L));
-        assertThrows(NullPointerException.class, () -> RiceFLAC.of(0).write(output, null));
-        assertThrows(NullPointerException.class, () -> GolombJPEGLS.of(0).write(output, null));
+        assertThrows(NullPointerException.class, () -> RiceFLAC.of(0).readLong(null));
+        assertThrows(NullPointerException.class, () -> GolombJPEGLS.of(0).readLong(null));
+        assertThrows(NullPointerException.class, () -> RiceFLAC.of(0).writeLong(null, 0L));
+        assertThrows(NullPointerException.class, () -> GolombJPEGLS.of(0).writeLong(null, 0L));
     }
 }

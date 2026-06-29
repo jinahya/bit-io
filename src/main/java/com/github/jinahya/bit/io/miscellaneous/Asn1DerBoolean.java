@@ -22,14 +22,13 @@ package com.github.jinahya.bit.io.miscellaneous;
 
 import com.github.jinahya.bit.io.BitInput;
 import com.github.jinahya.bit.io.BitOutput;
-import com.github.jinahya.bit.io.BitReader;
-import com.github.jinahya.bit.io.BitWriter;
+import com.github.jinahya.bit.io.BooleanBitReader;
+import com.github.jinahya.bit.io.BooleanBitWriter;
 
 import java.io.IOException;
 
 import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullInput;
 import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullOutput;
-import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullValue;
 
 /**
  * A codec for ASN.1 DER BOOLEAN content octets.
@@ -37,7 +36,7 @@ import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullValue
  * @see <a href="https://www.itu.int/rec/T-REC-X.690">ITU-T X.690: ASN.1 encoding rules</a>
  */
 public final class Asn1DerBoolean
-        implements BitReader<Boolean>, BitWriter<Boolean> {
+        implements BooleanBitReader, BooleanBitWriter {
 
     public static final Asn1DerBoolean INSTANCE = new Asn1DerBoolean();
 
@@ -46,18 +45,18 @@ public final class Asn1DerBoolean
     }
 
     @Override
-    public Boolean read(final BitInput input) throws IOException {
+    public boolean readBoolean(final BitInput input) throws IOException {
         requireNonNullInput(input);
         final int value = input.readUnsignedInt(Byte.SIZE);
         if (value != 0x00 && value != 0xFF) {
             throw new IOException("invalid DER BOOLEAN content octet: " + value);
         }
-        return Boolean.valueOf(value != 0);
+        return value != 0;
     }
 
     @Override
-    public void write(final BitOutput output, final Boolean value) throws IOException {
+    public void writeBoolean(final BitOutput output, final boolean value) throws IOException {
         requireNonNullOutput(output);
-        output.writeUnsignedInt(Byte.SIZE, requireNonNullValue(value).booleanValue() ? 0xFF : 0x00);
+        output.writeUnsignedInt(Byte.SIZE, value ? 0xFF : 0x00);
     }
 }

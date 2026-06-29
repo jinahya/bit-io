@@ -22,12 +22,12 @@ package com.github.jinahya.bit.io;
 
 import java.io.IOException;
 
-import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeByte;
-import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeForUnsignedInt;
+import static com.github.jinahya.bit.io.BitIoUtils.requireValidSizeByte;
+import static com.github.jinahya.bit.io.BitIoUtils.requireValidSizeForUnsignedInt;
 
 /**
  * A {@link BitWriter} for writing a length-prefixed array of bytes, with each element written as a signed or unsigned
- * value of a configurable bit width. Obtained via {@link #ofSigned(int, int)} or {@link #ofUnsigned(int, int)}.
+ * value of a configurable bit width.
  *
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  * @see ByteArrayReader
@@ -36,40 +36,76 @@ public class ByteArrayWriter
         implements BitWriter<byte[]> {
 
     /**
-     * Returns a new writer that writes each element as a <em>signed</em> {@code elementSize}-bit value.
-     *
-     * @param lengthSize  the number of bits for the array length; between {@code 1} and
-     *                    ({@value java.lang.Integer#SIZE} - {@code 1}), both inclusive.
-     * @param elementSize the number of bits for each (signed) element; between {@code 1} and
-     *                    {@value java.lang.Byte#SIZE}, both inclusive.
-     * @return a new signed writer.
-     * @throws IllegalArgumentException if {@code lengthSize} or {@code elementSize} is not valid.
+     * A {@link ByteArrayWriter} that writes each element as a signed value.
      */
-    public static ByteArrayWriter ofSigned(final int lengthSize, final int elementSize) {
-        return new ByteArrayWriter(lengthSize, false, elementSize);
+    public static class Signed
+            extends ByteArrayWriter {
+
+        /**
+         * Creates a new instance.
+         *
+         * @param lengthSize  the number of bits for the array length.
+         * @param elementSize the number of bits for each signed element.
+         */
+        public Signed(final int lengthSize, final int elementSize) {
+            super(lengthSize, false, elementSize);
+        }
     }
 
     /**
-     * Returns a new writer that writes each element as an <em>unsigned</em> {@code elementSize}-bit value. Use this to
-     * write sub-byte unsigned values losslessly, e.g. nibbles of {@code 0..15} with an {@code elementSize} of
-     * {@code 4}.
-     *
-     * @param lengthSize  the number of bits for the array length; between {@code 1} and
-     *                    ({@value java.lang.Integer#SIZE} - {@code 1}), both inclusive.
-     * @param elementSize the number of bits for each (unsigned) element; between {@code 1} and
-     *                    ({@value java.lang.Byte#SIZE} - {@code 1}), both inclusive.
-     * @return a new unsigned writer.
-     * @throws IllegalArgumentException if {@code lengthSize} or {@code elementSize} is not valid.
+     * A {@link ByteArrayWriter} that writes each element as a signed 8-bit value.
      */
-    public static ByteArrayWriter ofUnsigned(final int lengthSize, final int elementSize) {
-        return new ByteArrayWriter(lengthSize, true, elementSize);
+    public static class Signed8
+            extends Signed {
+
+        /**
+         * Creates a new instance.
+         *
+         * @param lengthSize the number of bits for the array length.
+         */
+        public Signed8(final int lengthSize) {
+            super(lengthSize, Byte.SIZE);
+        }
     }
 
-    private ByteArrayWriter(final int lengthSize, final boolean unsigned, final int elementSize) {
+    /**
+     * A {@link ByteArrayWriter} that writes each element as an unsigned value.
+     */
+    public static class Unsigned
+            extends ByteArrayWriter {
+
+        /**
+         * Creates a new instance.
+         *
+         * @param lengthSize  the number of bits for the array length.
+         * @param elementSize the number of bits for each unsigned element.
+         */
+        public Unsigned(final int lengthSize, final int elementSize) {
+            super(lengthSize, true, elementSize);
+        }
+    }
+
+    /**
+     * A {@link ByteArrayWriter} that writes each element as an unsigned 7-bit value.
+     */
+    public static class Unsigned7
+            extends Unsigned {
+
+        /**
+         * Creates a new instance.
+         *
+         * @param lengthSize the number of bits for the array length.
+         */
+        public Unsigned7(final int lengthSize) {
+            super(lengthSize, Byte.SIZE - 1);
+        }
+    }
+
+    public ByteArrayWriter(final int lengthSize, final boolean elementUnsigned, final int elementSize) {
         super();
         this.lengthSize = requireValidSizeForUnsignedInt(lengthSize);
-        this.unsigned = unsigned;
-        this.elementSize = requireValidSizeByte(unsigned, elementSize);
+        this.elementUnsigned = elementUnsigned;
+        this.elementSize = requireValidSizeByte(elementUnsigned, elementSize);
     }
 
     /**
@@ -98,7 +134,7 @@ public class ByteArrayWriter
         }
         output.writeUnsignedInt(lengthSize, length);
         for (final byte element : value) {
-            if (unsigned) {
+            if (elementUnsigned) {
                 output.writeUnsignedByte(elementSize, element);
             } else {
                 output.writeByte(elementSize, element);
@@ -108,7 +144,7 @@ public class ByteArrayWriter
 
     private final int lengthSize;
 
-    private final boolean unsigned;
+    private final boolean elementUnsigned;
 
     private final int elementSize;
 }

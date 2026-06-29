@@ -25,24 +25,33 @@ import com.github.jinahya.bit.io.BitOutput;
 
 import java.io.IOException;
 
+import static com.github.jinahya.bit.io.miscellaneous.CborIntConstants.ADDITIONAL_1_BYTE;
+import static com.github.jinahya.bit.io.miscellaneous.CborIntConstants.ADDITIONAL_2_BYTES;
+import static com.github.jinahya.bit.io.miscellaneous.CborIntConstants.ADDITIONAL_4_BYTES;
+import static com.github.jinahya.bit.io.miscellaneous.CborIntConstants.ADDITIONAL_8_BYTES;
+import static com.github.jinahya.bit.io.miscellaneous.CborIntConstants.ADDITIONAL_DIRECT_MAX;
+import static com.github.jinahya.bit.io.miscellaneous.CborIntConstants.ADDITIONAL_MASK;
+import static com.github.jinahya.bit.io.miscellaneous.CborIntConstants.MAJOR_NEGATIVE_INTEGER;
+import static com.github.jinahya.bit.io.miscellaneous.CborIntConstants.MAJOR_POSITIVE_INTEGER;
+import static com.github.jinahya.bit.io.miscellaneous.CborIntConstants.MAJOR_TYPE_SHIFT;
 import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullInput;
 import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullOutput;
 
-final class CborInts {
+final class CborIntUtil {
 
     static long read(final BitInput input, final boolean deterministic) throws IOException {
         requireNonNullInput(input);
         final int first = input.readUnsignedInt(Byte.SIZE);
-        final int major = first >>> 5;
-        if (major != 0 && major != 1) {
+        final int major = first >>> MAJOR_TYPE_SHIFT;
+        if (major != MAJOR_POSITIVE_INTEGER && major != MAJOR_NEGATIVE_INTEGER) {
             throw new IOException("not a CBOR integer major type: " + major);
         }
-        final int additional = first & 0x1F;
+        final int additional = first & ADDITIONAL_MASK;
         final long argument = readArgument(input, additional);
         if (deterministic && !isShortest(additional, argument)) {
             throw new IOException("non-minimal CBOR integer");
         }
-        if (major == 0) {
+        if (major == MAJOR_POSITIVE_INTEGER) {
             return argument;
         }
         return -1L - argument;
@@ -51,26 +60,26 @@ final class CborInts {
     static void write(final BitOutput output, final long value) throws IOException {
         requireNonNullOutput(output);
         if (value >= 0L) {
-            writeArgument(output, 0, value);
+            writeArgument(output, MAJOR_POSITIVE_INTEGER, value);
         } else {
-            writeArgument(output, 1, -1L - value);
+            writeArgument(output, MAJOR_NEGATIVE_INTEGER, -1L - value);
         }
     }
 
     private static long readArgument(final BitInput input, final int additional) throws IOException {
-        if (additional < 24) {
+        if (additional <= ADDITIONAL_DIRECT_MAX) {
             return additional;
         }
-        if (additional == 24) {
+        if (additional == ADDITIONAL_1_BYTE) {
             return input.readUnsignedInt(Byte.SIZE);
         }
-        if (additional == 25) {
+        if (additional == ADDITIONAL_2_BYTES) {
             return input.readUnsignedInt(Short.SIZE);
         }
-        if (additional == 26) {
+        if (additional == ADDITIONAL_4_BYTES) {
             return input.readUnsignedLong(Integer.SIZE);
         }
-        if (additional == 27) {
+        if (additional == ADDITIONAL_8_BYTES) {
             final long v = input.readLong64();
             if (v < 0L) {
                 throw new IOException("CBOR integer argument exceeds signed long range");
@@ -81,33 +90,33 @@ final class CborInts {
     }
 
     private static void writeArgument(final BitOutput output, final int major, final long argument) throws IOException {
-        final int prefix = major << 5;
-        if (argument < 24L) {
+        final int prefix = major << MAJOR_TYPE_SHIFT;
+        if (argument <= ADDITIONAL_DIRECT_MAX) {
             output.writeUnsignedInt(Byte.SIZE, prefix | (int) argument);
         } else if (argument <= 0xFFL) {
-            output.writeUnsignedInt(Byte.SIZE, prefix | 24);
+            output.writeUnsignedInt(Byte.SIZE, prefix | ADDITIONAL_1_BYTE);
             output.writeUnsignedInt(Byte.SIZE, (int) argument);
         } else if (argument <= 0xFFFFL) {
-            output.writeUnsignedInt(Byte.SIZE, prefix | 25);
+            output.writeUnsignedInt(Byte.SIZE, prefix | ADDITIONAL_2_BYTES);
             output.writeUnsignedInt(Short.SIZE, (int) argument);
         } else if (argument <= 0xFFFFFFFFL) {
-            output.writeUnsignedInt(Byte.SIZE, prefix | 26);
+            output.writeUnsignedInt(Byte.SIZE, prefix | ADDITIONAL_4_BYTES);
             output.writeUnsignedLong(Integer.SIZE, argument);
         } else {
-            output.writeUnsignedInt(Byte.SIZE, prefix | 27);
+            output.writeUnsignedInt(Byte.SIZE, prefix | ADDITIONAL_8_BYTES);
             output.writeLong64(argument);
         }
     }
 
     private static boolean isShortest(final int additional, final long argument) {
-        return additional < 24
-               || additional == 24 && argument >= 24L
-               || additional == 25 && argument > 0xFFL
-               || additional == 26 && argument > 0xFFFFL
-               || additional == 27 && argument > 0xFFFFFFFFL;
+        return additional <= ADDITIONAL_DIRECT_MAX
+               || additional == ADDITIONAL_1_BYTE && argument > ADDITIONAL_DIRECT_MAX
+               || additional == ADDITIONAL_2_BYTES && argument > 0xFFL
+               || additional == ADDITIONAL_4_BYTES && argument > 0xFFFFL
+               || additional == ADDITIONAL_8_BYTES && argument > 0xFFFFFFFFL;
     }
 
-    private CborInts() {
+    private CborIntUtil() {
         throw new AssertionError("instantiation is not allowed");
     }
 }

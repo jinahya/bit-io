@@ -21,32 +21,65 @@ package com.github.jinahya.bit.io.miscellaneous;
  */
 
 import com.github.jinahya.bit.io.BitInput;
+import com.github.jinahya.bit.io.BitIoConstants;
 import com.github.jinahya.bit.io.BitOutput;
+import com.github.jinahya.bit.io.BitReader;
+import com.github.jinahya.bit.io.BitWriter;
+import com.github.jinahya.bit.io.ByteArrayReader;
+import com.github.jinahya.bit.io.ByteArrayWriter;
+import com.github.jinahya.bit.io.DefaultBitOutput;
+import com.github.jinahya.bit.io.StreamByteOutput;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.github.jinahya.bit.io.miscellaneous._Utils.requireGreaterThanOrEqualsTo;
 import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullInput;
 import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullOutput;
 import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullValue;
 
 /**
- * Utilities for ASN.1 OBJECT IDENTIFIER content octets.
+ * A codec for length-prefixed ASN.1 OBJECT IDENTIFIER content octets.
  *
  * @see <a href="https://www.itu.int/rec/T-REC-X.690">ITU-T X.690: ASN.1 encoding rules</a>
  */
-public final class Asn1Oid {
+public final class Asn1Oid
+        implements BitReader<long[]>, BitWriter<long[]> {
 
-    public static long[] readContent(final BitInput input, final int length) throws IOException {
+    /**
+     * The singleton instance of this codec.
+     */
+    public static final Asn1Oid INSTANCE = new Asn1Oid();
+
+    @Override
+    public long[] read(final BitInput input) throws IOException {
         requireNonNullInput(input);
-        if (length <= 0) {
-            throw new IllegalArgumentException("length(" + length + ") <= 0");
-        }
-        final byte[] bytes = new byte[length];
-        for (int i = 0; i < bytes.length; i++) {
-            bytes[i] = input.readByte8();
-        }
+        final byte[] bytes = byteArrayReader.read(input);
+        requireGreaterThanOrEqualsTo(bytes.length, MIN_LENGTH, new _Supplier<IOException>() {
+            @Override
+            public IOException get() {
+                return new IOException("length(" + bytes.length + ") < " + MIN_LENGTH);
+            }
+        });
+        return decode(bytes);
+    }
+
+    @Override
+    public void write(final BitOutput output, final long[] value) throws IOException {
+        requireNonNullOutput(output);
+        final byte[] bytes = encode(value);
+        requireGreaterThanOrEqualsTo(bytes.length, MIN_LENGTH, new _Supplier<IllegalArgumentException>() {
+            @Override
+            public IllegalArgumentException get() {
+                return new IllegalArgumentException("length(" + bytes.length + ") < " + MIN_LENGTH);
+            }
+        });
+        byteArrayWriter.write(output, bytes);
+    }
+
+    private static long[] decode(final byte[] bytes) throws IOException {
         final int[] index = {0};
         final long firstSubidentifier = readSubidentifier(bytes, index);
         final List<Long> values = new ArrayList<Long>();
@@ -70,8 +103,7 @@ public final class Asn1Oid {
         return arcs;
     }
 
-    public static void writeContent(final BitOutput output, final long[] value) throws IOException {
-        requireNonNullOutput(output);
+    private static byte[] encode(final long[] value) throws IOException {
         requireNonNullValue(value);
         if (value.length < 2) {
             throw new IllegalArgumentException("OBJECT IDENTIFIER must have at least two arcs");
@@ -84,10 +116,14 @@ public final class Asn1Oid {
         if (arc1 < 0L || (arc0 < 2L && arc1 > 39L)) {
             throw new IllegalArgumentException("invalid second OBJECT IDENTIFIER arc: " + arc1);
         }
-        Asn1Base128s.write(output, arc0 * 40L + arc1);
+        final ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        final BitOutput output = new DefaultBitOutput(new StreamByteOutput(bytes));
+        Asn1Base128Util.write(output, arc0 * 40L + arc1);
         for (int i = 2; i < value.length; i++) {
-            Asn1Base128s.write(output, value[i]);
+            Asn1Base128Util.write(output, value[i]);
         }
+        output.align(1);
+        return bytes.toByteArray();
     }
 
     private static long readSubidentifier(final byte[] bytes, final int[] index) throws IOException {
@@ -109,6 +145,14 @@ public final class Asn1Oid {
     }
 
     private Asn1Oid() {
-        throw new AssertionError("instantiation is not allowed");
+        super();
+        byteArrayReader = new ByteArrayReader.Signed8(BitIoConstants.SIZE_MAX_INT_UNSIGNED);
+        byteArrayWriter = new ByteArrayWriter.Signed8(BitIoConstants.SIZE_MAX_INT_UNSIGNED);
     }
+
+    private static final int MIN_LENGTH = 1;
+
+    private final ByteArrayReader byteArrayReader;
+
+    private final ByteArrayWriter byteArrayWriter;
 }

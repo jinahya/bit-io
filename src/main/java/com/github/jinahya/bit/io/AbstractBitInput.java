@@ -23,21 +23,21 @@ package com.github.jinahya.bit.io;
 import java.io.IOException;
 
 import static com.github.jinahya.bit.io.BitIoConstants.FLAG_SIZE;
-import static com.github.jinahya.bit.io.BitIoConstraints.requireValidExponentSizeDouble;
-import static com.github.jinahya.bit.io.BitIoConstraints.requireValidExponentSizeFloat;
-import static com.github.jinahya.bit.io.BitIoConstraints.requireValidExponentSizeHalf;
-import static com.github.jinahya.bit.io.BitIoConstraints.requireValidFractionSizeDouble;
-import static com.github.jinahya.bit.io.BitIoConstraints.requireValidFractionSizeFloat;
-import static com.github.jinahya.bit.io.BitIoConstraints.requireValidFractionSizeHalf;
-import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeChar;
-import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeForSignedByte;
-import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeForSignedInt;
-import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeForSignedLong;
-import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeForSignedShort;
-import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeForUnsignedByte;
-import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeForUnsignedInt;
-import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeForUnsignedLong;
-import static com.github.jinahya.bit.io.BitIoConstraints.requireValidSizeForUnsignedShort;
+import static com.github.jinahya.bit.io.BitIoUtils.requireValidExponentSizeDouble;
+import static com.github.jinahya.bit.io.BitIoUtils.requireValidExponentSizeFloat;
+import static com.github.jinahya.bit.io.BitIoUtils.requireValidExponentSizeHalf;
+import static com.github.jinahya.bit.io.BitIoUtils.requireValidFractionSizeDouble;
+import static com.github.jinahya.bit.io.BitIoUtils.requireValidFractionSizeFloat;
+import static com.github.jinahya.bit.io.BitIoUtils.requireValidFractionSizeHalf;
+import static com.github.jinahya.bit.io.BitIoUtils.requireValidSizeChar;
+import static com.github.jinahya.bit.io.BitIoUtils.requireValidSizeForSignedByte;
+import static com.github.jinahya.bit.io.BitIoUtils.requireValidSizeForSignedInt;
+import static com.github.jinahya.bit.io.BitIoUtils.requireValidSizeForSignedLong;
+import static com.github.jinahya.bit.io.BitIoUtils.requireValidSizeForSignedShort;
+import static com.github.jinahya.bit.io.BitIoUtils.requireValidSizeForUnsignedByte;
+import static com.github.jinahya.bit.io.BitIoUtils.requireValidSizeForUnsignedInt;
+import static com.github.jinahya.bit.io.BitIoUtils.requireValidSizeForUnsignedLong;
+import static com.github.jinahya.bit.io.BitIoUtils.requireValidSizeForUnsignedShort;
 
 /**
  * An abstract class for implementing {@link BitInput} interface.
@@ -373,6 +373,47 @@ public abstract class AbstractBitInput
     @Override
     public double readDouble64Le() throws IOException {
         return Double.longBitsToDouble(readLong64Le());
+    }
+
+    // ------------------------------------------------------------------------------------------------------- primitive
+    @Override
+    public boolean readBoolean(final BooleanBitReader reader) throws IOException {
+        if (reader == null) {
+            throw new NullPointerException("reader is null");
+        }
+        return reader.readBoolean(this);
+    }
+
+    @Override
+    public int readInt(final IntBitReader reader) throws IOException {
+        if (reader == null) {
+            throw new NullPointerException("reader is null");
+        }
+        return reader.readInt(this);
+    }
+
+    @Override
+    public long readLong(final LongBitReader reader) throws IOException {
+        if (reader == null) {
+            throw new NullPointerException("reader is null");
+        }
+        return reader.readLong(this);
+    }
+
+    @Override
+    public float readFloat(final FloatBitReader reader) throws IOException {
+        if (reader == null) {
+            throw new NullPointerException("reader is null");
+        }
+        return reader.readFloat(this);
+    }
+
+    @Override
+    public double readDouble(final DoubleBitReader reader) throws IOException {
+        if (reader == null) {
+            throw new NullPointerException("reader is null");
+        }
+        return reader.readDouble(this);
     }
 
     // ---------------------------------------------------------------------------------------------------------- object

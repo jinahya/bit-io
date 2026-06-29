@@ -54,8 +54,8 @@ class BitIoConstraintsTest {
     })
     @ParameterizedTest
     void charValidatorAcceptsMinAndMax(final int min, final int max) {
-        assertEquals(min, BitIoConstraints.requireValidSizeChar(min));
-        assertEquals(max, BitIoConstraints.requireValidSizeChar(max));
+        assertEquals(min, BitIoUtils.requireValidSizeChar(min));
+        assertEquals(max, BitIoUtils.requireValidSizeChar(max));
     }
 
     @CsvSource({
@@ -65,7 +65,7 @@ class BitIoConstraintsTest {
     })
     @ParameterizedTest
     void charValidatorRejectsOutOfRangeSizes(final int size) {
-        assertThrows(IllegalArgumentException.class, () -> BitIoConstraints.requireValidSizeChar(size));
+        assertThrows(IllegalArgumentException.class, () -> BitIoUtils.requireValidSizeChar(size));
     }
 
     @CsvSource({
@@ -178,23 +178,23 @@ class BitIoConstraintsTest {
 
     private static Stream<Object[]> integralSizeValidators() {
         return Stream.of(
-                new Object[]{validator(BitIoConstraints::requireValidSizeForUnsignedByte), 1, 7},
-                new Object[]{validator(BitIoConstraints::requireValidSizeForSignedByte), 1, 8},
-                new Object[]{validator(BitIoConstraints::requireValidSizeForUnsignedShort), 1, 15},
-                new Object[]{validator(BitIoConstraints::requireValidSizeForSignedShort), 1, 16},
-                new Object[]{validator(BitIoConstraints::requireValidSizeForUnsignedInt), 1, 31},
-                new Object[]{validator(BitIoConstraints::requireValidSizeForSignedInt), 1, 32},
-                new Object[]{validator(BitIoConstraints::requireValidSizeForUnsignedLong), 1, 63},
-                new Object[]{validator(BitIoConstraints::requireValidSizeForSignedLong), 1, 64}
+                new Object[]{validator(BitIoUtils::requireValidSizeForUnsignedByte), 1, 7},
+                new Object[]{validator(BitIoUtils::requireValidSizeForSignedByte), 1, 8},
+                new Object[]{validator(BitIoUtils::requireValidSizeForUnsignedShort), 1, 15},
+                new Object[]{validator(BitIoUtils::requireValidSizeForSignedShort), 1, 16},
+                new Object[]{validator(BitIoUtils::requireValidSizeForUnsignedInt), 1, 31},
+                new Object[]{validator(BitIoUtils::requireValidSizeForSignedInt), 1, 32},
+                new Object[]{validator(BitIoUtils::requireValidSizeForUnsignedLong), 1, 63},
+                new Object[]{validator(BitIoUtils::requireValidSizeForSignedLong), 1, 64}
         );
     }
 
     private static Stream<Object[]> floatingPointSizeValidators() {
         return Stream.of(
-                new Object[]{validator(BitIoConstraints::requireValidExponentSizeFloat), 2, 8},
-                new Object[]{validator(BitIoConstraints::requireValidFractionSizeFloat), 2, 23},
-                new Object[]{validator(BitIoConstraints::requireValidExponentSizeDouble), 2, 11},
-                new Object[]{validator(BitIoConstraints::requireValidFractionSizeDouble), 2, 52}
+                new Object[]{validator(BitIoUtils::requireValidExponentSizeFloat), 2, 8},
+                new Object[]{validator(BitIoUtils::requireValidFractionSizeFloat), 2, 23},
+                new Object[]{validator(BitIoUtils::requireValidExponentSizeDouble), 2, 11},
+                new Object[]{validator(BitIoUtils::requireValidFractionSizeDouble), 2, 52}
         );
     }
 
@@ -204,36 +204,36 @@ class BitIoConstraintsTest {
 
     private static int dispatch(final String type, final boolean unsigned, final int size) {
         if ("byte".equals(type)) {
-            return BitIoConstraints.requireValidSizeByte(unsigned, size);
+            return BitIoUtils.requireValidSizeByte(unsigned, size);
         }
         if ("short".equals(type)) {
-            return BitIoConstraints.requireValidSizeShort(unsigned, size);
+            return BitIoUtils.requireValidSizeShort(unsigned, size);
         }
         if ("int".equals(type)) {
-            return BitIoConstraints.requireValidSizeInt(unsigned, size);
+            return BitIoUtils.requireValidSizeInt(unsigned, size);
         }
         if ("long".equals(type)) {
-            return BitIoConstraints.requireValidSizeLong(unsigned, size);
+            return BitIoUtils.requireValidSizeLong(unsigned, size);
         }
         throw new AssertionError("unknown type: " + type);
     }
 
     private static int split(final String type, final boolean unsigned, final int size) {
         if ("byte".equals(type)) {
-            return unsigned ? BitIoConstraints.requireValidSizeForUnsignedByte(size)
-                    : BitIoConstraints.requireValidSizeForSignedByte(size);
+            return unsigned ? BitIoUtils.requireValidSizeForUnsignedByte(size)
+                    : BitIoUtils.requireValidSizeForSignedByte(size);
         }
         if ("short".equals(type)) {
-            return unsigned ? BitIoConstraints.requireValidSizeForUnsignedShort(size)
-                    : BitIoConstraints.requireValidSizeForSignedShort(size);
+            return unsigned ? BitIoUtils.requireValidSizeForUnsignedShort(size)
+                    : BitIoUtils.requireValidSizeForSignedShort(size);
         }
         if ("int".equals(type)) {
-            return unsigned ? BitIoConstraints.requireValidSizeForUnsignedInt(size)
-                    : BitIoConstraints.requireValidSizeForSignedInt(size);
+            return unsigned ? BitIoUtils.requireValidSizeForUnsignedInt(size)
+                    : BitIoUtils.requireValidSizeForSignedInt(size);
         }
         if ("long".equals(type)) {
-            return unsigned ? BitIoConstraints.requireValidSizeForUnsignedLong(size)
-                    : BitIoConstraints.requireValidSizeForSignedLong(size);
+            return unsigned ? BitIoUtils.requireValidSizeForUnsignedLong(size)
+                    : BitIoUtils.requireValidSizeForSignedLong(size);
         }
         throw new AssertionError("unknown type: " + type);
     }

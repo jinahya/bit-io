@@ -46,6 +46,49 @@ class BitObjectContractTest {
     }
 
     @Test
+    void readIntRejectsNullReader() {
+        assertThrows(NullPointerException.class, () -> bitInput(new byte[]{0x00}).readInt(null));
+    }
+
+    @Test
+    void readLongRejectsNullReader() {
+        assertThrows(NullPointerException.class, () -> bitInput(new byte[]{0x00}).readLong(null));
+    }
+
+    @Test
+    void writeIntRejectsNullWriter() {
+        assertThrows(NullPointerException.class,
+                     () -> bitOutput(new ByteArrayOutputStream()).writeInt(null, 0));
+    }
+
+    @Test
+    void writeLongRejectsNullWriter() {
+        assertThrows(NullPointerException.class,
+                     () -> bitOutput(new ByteArrayOutputStream()).writeLong(null, 0L));
+    }
+
+    @Test
+    void readFloatRejectsNullReader() {
+        assertThrows(NullPointerException.class, () -> bitInput(new byte[]{0x00}).readFloat(null));
+    }
+
+    @Test
+    void readDoubleRejectsNullReader() {
+        assertThrows(NullPointerException.class, () -> bitInput(new byte[]{0x00}).readDouble(null));
+    }
+
+    @Test
+    void writeFloatRejectsNullWriter() {
+        assertThrows(NullPointerException.class,
+                     () -> bitOutput(new ByteArrayOutputStream()).writeFloat(null, 0.0F));
+    }
+
+    @Test
+    void writeDoubleRejectsNullWriter() {
+        assertThrows(NullPointerException.class,
+                     () -> bitOutput(new ByteArrayOutputStream()).writeDouble(null, 0.0D));
+    }
+
     void readObjectDelegatesCurrentInputAndReturnsReaderValue() throws IOException {
         final BitInput input = bitInput(new byte[]{(byte) 0xA0});
 
@@ -58,6 +101,72 @@ class BitObjectContractTest {
         });
 
         assertEquals(5, value);
+    }
+
+    @Test
+    void readIntDelegatesCurrentInputAndReturnsReaderValue() throws IOException {
+        final BitInput input = bitInput(new byte[]{(byte) 0xA0});
+
+        final int value = input.readInt(new IntBitReader() {
+            @Override
+            public int readInt(final BitInput actual) throws IOException {
+                assertSame(input, actual);
+                return actual.readUnsignedInt(3);
+            }
+        });
+
+        assertEquals(5, value);
+    }
+
+    @Test
+    void readLongDelegatesCurrentInputAndReturnsReaderValue() throws IOException {
+        final BitInput input = bitInput(new byte[]{(byte) 0xA0});
+
+        final long value = input.readLong(new LongBitReader() {
+            @Override
+            public long readLong(final BitInput actual) throws IOException {
+                assertSame(input, actual);
+                return actual.readUnsignedLong(3);
+            }
+        });
+
+        assertEquals(5L, value);
+    }
+
+    @Test
+    void readFloatDelegatesCurrentInputAndReturnsReaderValue() throws IOException {
+        final ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        final BitOutput output = bitOutput(bytes);
+        output.writeFloat(8, 23, 1.25F);
+        final BitInput input = bitInput(bytes.toByteArray());
+
+        final float value = input.readFloat(new FloatBitReader() {
+            @Override
+            public float readFloat(final BitInput actual) throws IOException {
+                assertSame(input, actual);
+                return actual.readFloat(8, 23);
+            }
+        });
+
+        assertEquals(1.25F, value);
+    }
+
+    @Test
+    void readDoubleDelegatesCurrentInputAndReturnsReaderValue() throws IOException {
+        final ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        final BitOutput output = bitOutput(bytes);
+        output.writeDouble(11, 52, 123.5D);
+        final BitInput input = bitInput(bytes.toByteArray());
+
+        final double value = input.readDouble(new DoubleBitReader() {
+            @Override
+            public double readDouble(final BitInput actual) throws IOException {
+                assertSame(input, actual);
+                return actual.readDouble(11, 52);
+            }
+        });
+
+        assertEquals(123.5D, value);
     }
 
     @Test
@@ -77,6 +186,76 @@ class BitObjectContractTest {
         output.align(1);
 
         assertArrayEquals(new byte[]{(byte) 0xA0}, bytes.toByteArray());
+    }
+
+    @Test
+    void writeIntDelegatesCurrentOutputAndValue() throws IOException {
+        final ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        final BitOutput output = bitOutput(bytes);
+
+        output.writeInt(new IntBitWriter() {
+            @Override
+            public void writeInt(final BitOutput actual, final int actualValue) throws IOException {
+                assertSame(output, actual);
+                assertEquals(5, actualValue);
+                actual.writeUnsignedInt(3, actualValue);
+            }
+        }, 5);
+        output.align(1);
+
+        assertArrayEquals(new byte[]{(byte) 0xA0}, bytes.toByteArray());
+    }
+
+    @Test
+    void writeLongDelegatesCurrentOutputAndValue() throws IOException {
+        final ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        final BitOutput output = bitOutput(bytes);
+
+        output.writeLong(new LongBitWriter() {
+            @Override
+            public void writeLong(final BitOutput actual, final long actualValue) throws IOException {
+                assertSame(output, actual);
+                assertEquals(5L, actualValue);
+                actual.writeUnsignedLong(3, actualValue);
+            }
+        }, 5L);
+        output.align(1);
+
+        assertArrayEquals(new byte[]{(byte) 0xA0}, bytes.toByteArray());
+    }
+
+    @Test
+    void writeFloatDelegatesCurrentOutputAndValue() throws IOException {
+        final ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        final BitOutput output = bitOutput(bytes);
+
+        output.writeFloat(new FloatBitWriter() {
+            @Override
+            public void writeFloat(final BitOutput actual, final float actualValue) throws IOException {
+                assertSame(output, actual);
+                assertEquals(1.25F, actualValue);
+                actual.writeFloat(8, 23, actualValue);
+            }
+        }, 1.25F);
+
+        assertEquals(1.25F, bitInput(bytes.toByteArray()).readFloat(8, 23));
+    }
+
+    @Test
+    void writeDoubleDelegatesCurrentOutputAndValue() throws IOException {
+        final ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        final BitOutput output = bitOutput(bytes);
+
+        output.writeDouble(new DoubleBitWriter() {
+            @Override
+            public void writeDouble(final BitOutput actual, final double actualValue) throws IOException {
+                assertSame(output, actual);
+                assertEquals(123.5D, actualValue);
+                actual.writeDouble(11, 52, actualValue);
+            }
+        }, 123.5D);
+
+        assertEquals(123.5D, bitInput(bytes.toByteArray()).readDouble(11, 52));
     }
 
     @Test

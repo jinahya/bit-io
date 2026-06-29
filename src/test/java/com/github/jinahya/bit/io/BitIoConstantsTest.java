@@ -23,10 +23,32 @@ package com.github.jinahya.bit.io;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 class BitIoConstantsTest {
 
     @Test
     void SIZE_MAX_BYTE_UNSIGNED() {
         Assertions.assertEquals(Byte.SIZE - 1, BitIoConstants.SIZE_MAX_BYTE_UNSIGNED);
+    }
+
+    @Test
+    void US_ASCII() {
+        Assertions.assertEquals("US-ASCII", BitIoConstants.US_ASCII);
+    }
+
+    @Test
+    void constructorThrowsAssertionError() throws Exception {
+        final Constructor<?> constructor = BitIoConstants.class.getDeclaredConstructor();
+        constructor.setAccessible(true);
+
+        final InvocationTargetException exception =
+                assertThrows(InvocationTargetException.class, constructor::newInstance);
+
+        assertSame(AssertionError.class, exception.getCause().getClass());
     }
 }

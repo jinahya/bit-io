@@ -35,7 +35,6 @@ import static com.github.jinahya.bit.io.miscellaneous.Asn1LengthTestUtils.readDe
 import static com.github.jinahya.bit.io.miscellaneous.Asn1LengthTestUtils.writeBer;
 import static com.github.jinahya.bit.io.miscellaneous.Asn1LengthTestUtils.writeBerIndefinite;
 import static com.github.jinahya.bit.io.miscellaneous.Asn1LengthTestUtils.writeDer;
-import static com.github.jinahya.bit.io.miscellaneous.Asn1LengthTestUtils.writeDerObject;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -119,13 +118,11 @@ class Asn1LengthTest {
     @Test
     void rejectsNullArguments() {
         final DefaultBitOutput output = new DefaultBitOutput(new StreamByteOutput(new ByteArrayOutputStream()));
-        assertThrows(NullPointerException.class, () -> Asn1BerLength.INSTANCE.read(null));
+        assertThrows(NullPointerException.class, () -> Asn1BerLength.INSTANCE.readLong(null));
         assertThrows(NullPointerException.class, () -> Asn1BerLength.readBerIndefiniteLength(null));
-        assertThrows(NullPointerException.class, () -> Asn1DerLength.INSTANCE.read(null));
-        assertThrows(NullPointerException.class, () -> Asn1BerLength.INSTANCE.write(null, 0L));
+        assertThrows(NullPointerException.class, () -> Asn1DerLength.INSTANCE.readLong(null));
+        assertThrows(NullPointerException.class, () -> Asn1BerLength.INSTANCE.writeLong(null, 0L));
         assertThrows(NullPointerException.class, () -> Asn1BerLength.writeBerIndefiniteLength(null));
-        assertThrows(NullPointerException.class, () -> Asn1DerLength.INSTANCE.write(null, 0L));
-        assertThrows(NullPointerException.class, () -> Asn1BerLength.INSTANCE.write(output, null));
-        assertThrows(NullPointerException.class, () -> writeDerObject(null));
+        assertThrows(NullPointerException.class, () -> Asn1DerLength.INSTANCE.writeLong(null, 0L));
     }
 }

@@ -21,7 +21,7 @@ package com.github.jinahya.bit.io.miscellaneous;
  */
 
 import com.github.jinahya.bit.io.BitInput;
-import com.github.jinahya.bit.io.BitReader;
+import com.github.jinahya.bit.io.LongBitReader;
 
 import java.io.IOException;
 
@@ -38,7 +38,7 @@ import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullInput
  * @see Leb128Writer
  */
 public abstract class Leb128Reader
-        implements BitReader<Long> {
+        implements LongBitReader {
 
     private static final class Unsigned
             extends Leb128Reader {
@@ -109,7 +109,7 @@ public abstract class Leb128Reader
 
     // -----------------------------------------------------------------------------------------------------------------
     @Override
-    public final Long read(final BitInput input) throws IOException {
+    public final long readLong(final BitInput input) throws IOException {
         requireNonNullInput(input);
         return readValue(input);
     }

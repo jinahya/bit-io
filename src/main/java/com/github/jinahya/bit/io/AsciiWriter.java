@@ -36,7 +36,7 @@ class AsciiWriter
 
     AsciiWriter(final int lengthSize) {
         super();
-        this.delegate = ByteArrayWriter.ofUnsigned(lengthSize, Byte.SIZE - 1); // 7-bit unsigned elements
+        this.delegate = new ByteArrayWriter.Unsigned7(lengthSize); // 7-bit unsigned elements
     }
 
     @Override

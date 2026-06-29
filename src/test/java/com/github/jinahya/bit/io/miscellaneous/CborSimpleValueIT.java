@@ -41,7 +41,7 @@ class CborSimpleValueIT
                 {20, 0xF4}, {21, 0xF5}, {22, 0xF6}, {23, 0xF7}, {32, 0xF820}, {255, 0xF8FF}
         };
         for (int i = 0; i < rows.length; i++) {
-            final Integer value = Integer.valueOf(rows[i][0]);
+            final int value = rows[i][0];
             final byte[] encoded = hex(Integer.toHexString(rows[i][1]));
             assertArrayEquals(encoded, write(CborSimpleValue.INSTANCE, value), "write row " + i);
             assertEquals(value, read(CborSimpleValue.INSTANCE, encoded), "read row " + i);

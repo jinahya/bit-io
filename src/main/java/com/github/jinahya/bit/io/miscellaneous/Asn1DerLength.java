@@ -22,14 +22,13 @@ package com.github.jinahya.bit.io.miscellaneous;
 
 import com.github.jinahya.bit.io.BitInput;
 import com.github.jinahya.bit.io.BitOutput;
-import com.github.jinahya.bit.io.BitReader;
-import com.github.jinahya.bit.io.BitWriter;
+import com.github.jinahya.bit.io.LongBitReader;
+import com.github.jinahya.bit.io.LongBitWriter;
 
 import java.io.IOException;
 
 import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullInput;
 import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullOutput;
-import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullValue;
 
 /**
  * A codec for ASN.1 DER definite length octets.
@@ -40,7 +39,7 @@ import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullValue
  * @see <a href="https://www.itu.int/rec/T-REC-X.690">ITU-T X.690: ASN.1 encoding rules</a>
  */
 public final class Asn1DerLength
-        implements BitReader<Long>, BitWriter<Long> {
+        implements LongBitReader, LongBitWriter {
 
     /**
      * The singleton instance of this codec.
@@ -54,16 +53,15 @@ public final class Asn1DerLength
 
     // -----------------------------------------------------------------------------------------------------------------
     @Override
-    public Long read(final BitInput input) throws IOException {
+    public long readLong(final BitInput input) throws IOException {
         requireNonNullInput(input);
-        return Asn1Lengths.readDefinite(input, true);
+        return Asn1LengthUtil.readDefinite(input, true);
     }
 
     // -----------------------------------------------------------------------------------------------------------------
     @Override
-    public void write(final BitOutput output, final Long value) throws IOException {
+    public void writeLong(final BitOutput output, final long value) throws IOException {
         requireNonNullOutput(output);
-        final long v = requireNonNullValue(value);
-        Asn1Lengths.writeDefinite(output, v);
+        Asn1LengthUtil.writeDefinite(output, value);
     }
 }

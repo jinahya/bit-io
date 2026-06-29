@@ -107,12 +107,10 @@ class ExpGolombTest {
     @Test
     void rejectsNullArguments() {
         final BitOutput output = new DefaultBitOutput(new StreamByteOutput(new ByteArrayOutputStream()));
-        assertThrows(NullPointerException.class, () -> ExpGolombUE.INSTANCE.read(null));
-        assertThrows(NullPointerException.class, () -> ExpGolombSE.INSTANCE.read(null));
-        assertThrows(NullPointerException.class, () -> ExpGolombUE.INSTANCE.write(null, 0L));
-        assertThrows(NullPointerException.class, () -> ExpGolombSE.INSTANCE.write(null, 0L));
-        assertThrows(NullPointerException.class, () -> ExpGolombUE.INSTANCE.write(output, null));
-        assertThrows(NullPointerException.class, () -> ExpGolombSE.INSTANCE.write(output, null));
+        assertThrows(NullPointerException.class, () -> ExpGolombUE.INSTANCE.readLong(null));
+        assertThrows(NullPointerException.class, () -> ExpGolombSE.INSTANCE.readLong(null));
+        assertThrows(NullPointerException.class, () -> ExpGolombUE.INSTANCE.writeLong(null, 0L));
+        assertThrows(NullPointerException.class, () -> ExpGolombSE.INSTANCE.writeLong(null, 0L));
     }
 
     @Test

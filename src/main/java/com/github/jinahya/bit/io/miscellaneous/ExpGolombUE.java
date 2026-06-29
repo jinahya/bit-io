@@ -22,14 +22,14 @@ package com.github.jinahya.bit.io.miscellaneous;
 
 import com.github.jinahya.bit.io.BitInput;
 import com.github.jinahya.bit.io.BitOutput;
-import com.github.jinahya.bit.io.BitReader;
-import com.github.jinahya.bit.io.BitWriter;
+import com.github.jinahya.bit.io.LongBitReader;
+import com.github.jinahya.bit.io.LongBitWriter;
 
 import java.io.IOException;
 
+import static com.github.jinahya.bit.io.BitIoUtils.highestOneBitIndex;
 import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullInput;
 import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullOutput;
-import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullValue;
 
 /**
  * A codec for unsigned Exp-Golomb {@code ue(v)} values.
@@ -41,7 +41,7 @@ import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullValue
  * @see ExpGolombSE
  */
 public final class ExpGolombUE
-        implements BitReader<Long>, BitWriter<Long> {
+        implements LongBitReader, LongBitWriter {
 
     /**
      * The singleton instance of this codec.
@@ -81,7 +81,7 @@ public final class ExpGolombUE
             suffix = 0L;
         } else {
             final long info = codeNum + 1L;
-            leadingZeros = _Utils.highestOneBitIndex(info);
+            leadingZeros = highestOneBitIndex(info);
             suffix = info - (1L << leadingZeros);
         }
         if (leadingZeros > 0) {
@@ -98,17 +98,17 @@ public final class ExpGolombUE
     }
 
     @Override
-    public Long read(final BitInput input) throws IOException {
+    public long readLong(final BitInput input) throws IOException {
         requireNonNullInput(input);
         return readCodeNum(input);
     }
 
     @Override
-    public void write(final BitOutput output, final Long value) throws IOException {
+    public void writeLong(final BitOutput output, final long value) throws IOException {
         requireNonNullOutput(output);
-        final long v = requireNonNullValue(value);
+        final long v = value;
         if (v < 0L) {
-            throw new IllegalArgumentException("negative value: " + value);
+            throw new IllegalArgumentException("negative value: " + v);
         }
         writeCodeNum(output, v);
     }

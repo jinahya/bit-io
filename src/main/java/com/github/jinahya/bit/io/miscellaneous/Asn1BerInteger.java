@@ -21,43 +21,75 @@ package com.github.jinahya.bit.io.miscellaneous;
  */
 
 import com.github.jinahya.bit.io.BitInput;
+import com.github.jinahya.bit.io.BitIoConstants;
 import com.github.jinahya.bit.io.BitOutput;
+import com.github.jinahya.bit.io.BitReader;
+import com.github.jinahya.bit.io.BitWriter;
+import com.github.jinahya.bit.io.ByteArrayReader;
+import com.github.jinahya.bit.io.ByteArrayWriter;
 
 import java.io.IOException;
 import java.math.BigInteger;
 
+import static com.github.jinahya.bit.io.miscellaneous._Utils.requireGreaterThanOrEqualsTo;
 import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullInput;
 import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullOutput;
 import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullValue;
 
 /**
- * Utilities for ASN.1 BER INTEGER content octets.
+ * A codec for length-prefixed ASN.1 BER INTEGER content octets.
  *
  * @see <a href="https://www.itu.int/rec/T-REC-X.690">ITU-T X.690: ASN.1 encoding rules</a>
  */
-public final class Asn1BerInteger {
+public final class Asn1BerInteger
+        implements BitReader<BigInteger>, BitWriter<BigInteger> {
 
-    public static BigInteger readContent(final BitInput input, final int length) throws IOException {
+    private static final int MIN_LENGTH = 1;
+
+    // -----------------------------------------------------------------------------------------------------------------
+
+    /**
+     * The singleton instance of this codec.
+     */
+    public static final Asn1BerInteger INSTANCE = new Asn1BerInteger();
+
+    // -----------------------------------------------------------------------------------------------------------------
+    private Asn1BerInteger() {
+        super();
+        byteArrayReader = new ByteArrayReader.Signed8(BitIoConstants.SIZE_MAX_INT_UNSIGNED);
+        byteArrayWriter = new ByteArrayWriter.Signed8(BitIoConstants.SIZE_MAX_INT_UNSIGNED);
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    @Override
+    public BigInteger read(final BitInput input) throws IOException {
         requireNonNullInput(input);
-        if (length <= 0) {
-            throw new IllegalArgumentException("length(" + length + ") <= 0");
-        }
-        final byte[] bytes = new byte[length];
-        for (int i = 0; i < length; i++) {
-            bytes[i] = input.readByte8();
-        }
+        final byte[] bytes = byteArrayReader.read(input);
+        requireGreaterThanOrEqualsTo(bytes.length, MIN_LENGTH, new _Supplier<IOException>() {
+            @Override
+            public IOException get() {
+                return new IOException("length(" + bytes.length + ") < " + MIN_LENGTH);
+            }
+        });
         return new BigInteger(bytes);
     }
 
-    public static void writeContent(final BitOutput output, final BigInteger value) throws IOException {
+    @Override
+    public void write(final BitOutput output, final BigInteger value) throws IOException {
         requireNonNullOutput(output);
         final byte[] bytes = requireNonNullValue(value).toByteArray();
-        for (int i = 0; i < bytes.length; i++) {
-            output.writeByte8(bytes[i]);
-        }
+        requireGreaterThanOrEqualsTo(bytes.length, MIN_LENGTH, new _Supplier<IllegalArgumentException>() {
+            @Override
+            public IllegalArgumentException get() {
+                return new IllegalArgumentException("length(" + bytes.length + ") < " + MIN_LENGTH);
+            }
+        });
+        byteArrayWriter.write(output, bytes);
     }
 
-    private Asn1BerInteger() {
-        throw new AssertionError("instantiation is not allowed");
-    }
+    // -----------------------------------------------------------------------------------------------------------------
+
+    private final ByteArrayReader byteArrayReader;
+
+    private final ByteArrayWriter byteArrayWriter;
 }

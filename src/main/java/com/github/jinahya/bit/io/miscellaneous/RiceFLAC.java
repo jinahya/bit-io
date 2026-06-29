@@ -22,14 +22,13 @@ package com.github.jinahya.bit.io.miscellaneous;
 
 import com.github.jinahya.bit.io.BitInput;
 import com.github.jinahya.bit.io.BitOutput;
-import com.github.jinahya.bit.io.BitReader;
-import com.github.jinahya.bit.io.BitWriter;
+import com.github.jinahya.bit.io.LongBitReader;
+import com.github.jinahya.bit.io.LongBitWriter;
 
 import java.io.IOException;
 
 import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullInput;
 import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullOutput;
-import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullValue;
 
 /**
  * A value-level codec for one FLAC Rice-coded signed residual.
@@ -40,7 +39,7 @@ import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullValue
  * @see <a href="https://xiph.org/flac/format.html">FLAC format specification</a>
  */
 public final class RiceFLAC
-        implements BitReader<Long>, BitWriter<Long> {
+        implements LongBitReader, LongBitWriter {
 
     /**
      * Returns a codec for specified Rice parameter.
@@ -54,21 +53,24 @@ public final class RiceFLAC
 
     private RiceFLAC(final int parameter) {
         super();
-        this.parameter = RiceGolombCodes.requireParameter(parameter);
+        this.parameter = RiceGolombCodeUtil.requireParameter(parameter);
     }
 
+    // -----------------------------------------------------------------------------------------------------------------
     @Override
-    public Long read(final BitInput input) throws IOException {
+    public long readLong(final BitInput input) throws IOException {
         requireNonNullInput(input);
-        return RiceGolombCodes.unfoldSigned(RiceGolombCodes.readUnsigned(input, parameter, 0));
+        return RiceGolombCodeUtil.unfoldSigned(RiceGolombCodeUtil.readUnsigned(input, parameter, 0));
     }
 
+    // -----------------------------------------------------------------------------------------------------------------
     @Override
-    public void write(final BitOutput output, final Long value) throws IOException {
+    public void writeLong(final BitOutput output, final long value) throws IOException {
         requireNonNullOutput(output);
-        final long v = requireNonNullValue(value);
-        RiceGolombCodes.writeUnsigned(output, parameter, RiceGolombCodes.foldSigned(v), 0);
+        RiceGolombCodeUtil.writeUnsigned(output, parameter, RiceGolombCodeUtil.foldSigned(value), 0);
     }
+
+    // -----------------------------------------------------------------------------------------------------------------
 
     /**
      * Returns the Rice parameter held by this codec.
@@ -79,5 +81,6 @@ public final class RiceFLAC
         return parameter;
     }
 
+    // -----------------------------------------------------------------------------------------------------------------
     private final int parameter;
 }

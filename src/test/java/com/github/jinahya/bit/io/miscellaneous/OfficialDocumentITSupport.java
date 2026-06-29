@@ -24,8 +24,14 @@ import com.github.jinahya.bit.io.BitInput;
 import com.github.jinahya.bit.io.BitOutput;
 import com.github.jinahya.bit.io.BitReader;
 import com.github.jinahya.bit.io.BitWriter;
+import com.github.jinahya.bit.io.BooleanBitReader;
+import com.github.jinahya.bit.io.BooleanBitWriter;
 import com.github.jinahya.bit.io.DefaultBitInput;
 import com.github.jinahya.bit.io.DefaultBitOutput;
+import com.github.jinahya.bit.io.IntBitReader;
+import com.github.jinahya.bit.io.IntBitWriter;
+import com.github.jinahya.bit.io.LongBitReader;
+import com.github.jinahya.bit.io.LongBitWriter;
 import com.github.jinahya.bit.io.StreamByteInput;
 import com.github.jinahya.bit.io.StreamByteOutput;
 import org.junit.jupiter.api.io.TempDir;
@@ -68,6 +74,21 @@ abstract class OfficialDocumentITSupport {
         return reader.read(input);
     }
 
+    protected static boolean read(final BooleanBitReader reader, final byte[] bytes) throws IOException {
+        final BitInput input = new DefaultBitInput(new StreamByteInput(new ByteArrayInputStream(bytes)));
+        return input.readBoolean(reader);
+    }
+
+    protected static int read(final IntBitReader reader, final byte[] bytes) throws IOException {
+        final BitInput input = new DefaultBitInput(new StreamByteInput(new ByteArrayInputStream(bytes)));
+        return input.readInt(reader);
+    }
+
+    protected static long read(final LongBitReader reader, final byte[] bytes) throws IOException {
+        final BitInput input = new DefaultBitInput(new StreamByteInput(new ByteArrayInputStream(bytes)));
+        return input.readLong(reader);
+    }
+
     protected static <T> byte[] write(final BitWriter<T> writer, final T value) throws IOException {
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
         final BitOutput output = new DefaultBitOutput(new StreamByteOutput(baos));
@@ -76,43 +97,80 @@ abstract class OfficialDocumentITSupport {
         return baos.toByteArray();
     }
 
+    protected static byte[] write(final BooleanBitWriter writer, final boolean value) throws IOException {
+        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        final BitOutput output = new DefaultBitOutput(new StreamByteOutput(baos));
+        output.writeBoolean(writer, value);
+        output.align(1);
+        return baos.toByteArray();
+    }
+
+    protected static byte[] write(final IntBitWriter writer, final int value) throws IOException {
+        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        final BitOutput output = new DefaultBitOutput(new StreamByteOutput(baos));
+        output.writeInt(writer, value);
+        output.align(1);
+        return baos.toByteArray();
+    }
+
+    protected static byte[] write(final LongBitWriter writer, final long value) throws IOException {
+        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        final BitOutput output = new DefaultBitOutput(new StreamByteOutput(baos));
+        output.writeLong(writer, value);
+        output.align(1);
+        return baos.toByteArray();
+    }
+
     protected static BigInteger readDerInteger(final byte[] bytes) throws IOException {
-        final BitInput input = new DefaultBitInput(new StreamByteInput(new ByteArrayInputStream(bytes)));
-        return Asn1DerInteger.readContent(input, bytes.length);
+        if (bytes.length == 0) {
+            throw new IllegalArgumentException("bytes.length == 0");
+        }
+        if (bytes.length > 1) {
+            final int first = bytes[0] & 0xFF;
+            final int second = bytes[1] & 0xFF;
+            if (first == 0x00 && (second & 0x80) == 0) {
+                throw new IOException("non-minimal DER INTEGER content");
+            }
+            if (first == 0xFF && (second & 0x80) != 0) {
+                throw new IOException("non-minimal DER INTEGER content");
+            }
+        }
+        return new BigInteger(bytes);
     }
 
     protected static byte[] writeDerInteger(final BigInteger value) throws IOException {
-        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        final BitOutput output = new DefaultBitOutput(new StreamByteOutput(baos));
-        Asn1DerInteger.writeContent(output, value);
-        output.align(1);
-        return baos.toByteArray();
+        if (value == null) {
+            throw new NullPointerException("value is null");
+        }
+        return value.toByteArray();
     }
 
     protected static BigInteger readBerInteger(final byte[] bytes) throws IOException {
-        final BitInput input = new DefaultBitInput(new StreamByteInput(new ByteArrayInputStream(bytes)));
-        return Asn1BerInteger.readContent(input, bytes.length);
+        if (bytes.length == 0) {
+            throw new IllegalArgumentException("bytes.length == 0");
+        }
+        return new BigInteger(bytes);
     }
 
     protected static byte[] writeBerInteger(final BigInteger value) throws IOException {
-        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        final BitOutput output = new DefaultBitOutput(new StreamByteOutput(baos));
-        Asn1BerInteger.writeContent(output, value);
-        output.align(1);
-        return baos.toByteArray();
+        if (value == null) {
+            throw new NullPointerException("value is null");
+        }
+        return value.toByteArray();
     }
 
     protected static long[] readOid(final byte[] bytes) throws IOException {
-        final BitInput input = new DefaultBitInput(new StreamByteInput(new ByteArrayInputStream(bytes)));
-        return Asn1Oid.readContent(input, bytes.length);
+        final ByteArrayOutputStream prefixed = new ByteArrayOutputStream();
+        final BitOutput output = new DefaultBitOutput(new StreamByteOutput(prefixed));
+        output.writeObject(new com.github.jinahya.bit.io.ByteArrayWriter.Signed8(31), bytes);
+        output.align(1);
+        return read(Asn1Oid.INSTANCE, prefixed.toByteArray());
     }
 
     protected static byte[] writeOid(final long[] value) throws IOException {
-        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        final BitOutput output = new DefaultBitOutput(new StreamByteOutput(baos));
-        Asn1Oid.writeContent(output, value);
-        output.align(1);
-        return baos.toByteArray();
+        final byte[] encoded = write(Asn1Oid.INSTANCE, value);
+        final BitInput input = new DefaultBitInput(new StreamByteInput(new ByteArrayInputStream(encoded)));
+        return input.readObject(new com.github.jinahya.bit.io.ByteArrayReader.Signed8(31));
     }
 
     protected static byte[] hex(final String value) {

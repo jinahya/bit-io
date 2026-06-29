@@ -410,6 +410,63 @@ public interface BitInput {
      */
     double readDouble64Le() throws IOException;
 
+    // ------------------------------------------------------------------------------------------------------- primitive
+
+    /**
+     * Reads a {@code boolean} value using specified reader.
+     *
+     * @param reader the reader; must not be {@code null}.
+     * @return the value read by {@code reader}.
+     * @throws NullPointerException if {@code reader} is {@code null}.
+     * @throws IOException          if an I/O error occurs.
+     * @see BitOutput#writeBoolean(BooleanBitWriter, boolean)
+     */
+    boolean readBoolean(BooleanBitReader reader) throws IOException;
+
+    /**
+     * Reads an {@code int} value using specified reader.
+     *
+     * @param reader the reader; must not be {@code null}.
+     * @return the value read by {@code reader}.
+     * @throws NullPointerException if {@code reader} is {@code null}.
+     * @throws IOException          if an I/O error occurs.
+     * @see BitOutput#writeInt(IntBitWriter, int)
+     */
+    int readInt(IntBitReader reader) throws IOException;
+
+    /**
+     * Reads a {@code long} value using specified reader.
+     *
+     * @param reader the reader; must not be {@code null}.
+     * @return the value read by {@code reader}.
+     * @throws NullPointerException if {@code reader} is {@code null}.
+     * @throws IOException          if an I/O error occurs.
+     * @see BitOutput#writeLong(LongBitWriter, long)
+     */
+    long readLong(LongBitReader reader) throws IOException;
+
+    /**
+     * Reads a {@code float} value using specified reader.
+     *
+     * @param reader the reader; must not be {@code null}.
+     * @return the value read by {@code reader}.
+     * @throws NullPointerException if {@code reader} is {@code null}.
+     * @throws IOException          if an I/O error occurs.
+     * @see BitOutput#writeFloat(FloatBitWriter, float)
+     */
+    float readFloat(FloatBitReader reader) throws IOException;
+
+    /**
+     * Reads a {@code double} value using specified reader.
+     *
+     * @param reader the reader; must not be {@code null}.
+     * @return the value read by {@code reader}.
+     * @throws NullPointerException if {@code reader} is {@code null}.
+     * @throws IOException          if an I/O error occurs.
+     * @see BitOutput#writeDouble(DoubleBitWriter, double)
+     */
+    double readDouble(DoubleBitReader reader) throws IOException;
+
     // ---------------------------------------------------------------------------------------------------------- object
 
     /**

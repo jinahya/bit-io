@@ -27,6 +27,7 @@ import com.github.jinahya.bit.io.BitWriter;
 
 import java.io.IOException;
 
+import static com.github.jinahya.bit.io.BitIoUtils.requireValidSizeForUnsignedInt;
 import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullInput;
 import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullOutput;
 import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullValue;
@@ -38,37 +39,18 @@ import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullValue
 final class CompressedUtf8
         implements BitReader<String>, BitWriter<String> {
 
-    public CompressedUtf8(final int lengthSize) {
-        super();
-        this.lengthSize = requireLengthSize(lengthSize);
-    }
+    private static final int TYPE_SIZE = 2;
 
-    @Override
-    public String read(final BitInput input) throws IOException {
-        requireNonNullInput(input);
-        final int length = input.readUnsignedInt(lengthSize);
-        final StringBuffer builder = new StringBuffer(length);
-        for (int i = 0; i < length; i++) {
-            builder.appendCodePoint(readCodePoint(input));
-        }
-        return builder.toString();
-    }
+    private static final int TYPE_1 = 0;
 
-    @Override
-    public void write(final BitOutput output, final String value) throws IOException {
-        requireNonNullOutput(output);
-        final String v = requireNonNullValue(value);
-        final int length = codePointCount(v);
-        if ((length >>> lengthSize) != 0) {
-            throw new IllegalArgumentException(
-                    "code point length(" + length + ") requires more than lengthSize(" + lengthSize + ") bits");
-        }
-        output.writeUnsignedInt(lengthSize, length);
-        for (int offset = 0; offset < v.length(); ) {
-            final int codePoint = v.codePointAt(offset);
-            writeCodePoint(output, codePoint);
-            offset += Character.charCount(codePoint);
-        }
+    private static final int TYPE_2 = 1;
+
+    private static final int TYPE_3 = 2;
+
+    private static final int TYPE_4 = 3;
+
+    private static boolean isSurrogate(final int codePoint) {
+        return codePoint >= Character.MIN_SURROGATE && codePoint <= Character.MAX_SURROGATE;
     }
 
     private static int codePointCount(final String value) {
@@ -81,15 +63,6 @@ final class CompressedUtf8
             offset += Character.charCount(codePoint);
         }
         return count;
-    }
-
-    private static int requireLengthSize(final int lengthSize) {
-        if (lengthSize <= 0 || lengthSize >= Integer.SIZE) {
-            throw new IllegalArgumentException(
-                    "lengthSize(" + lengthSize + ") is not between 1 and " + (Integer.SIZE - 1)
-                    + ", both inclusive");
-        }
-        return lengthSize;
     }
 
     private static int readCodePoint(final BitInput input) throws IOException {
@@ -150,19 +123,41 @@ final class CompressedUtf8
         }
     }
 
-    private static boolean isSurrogate(final int codePoint) {
-        return codePoint >= Character.MIN_SURROGATE && codePoint <= Character.MAX_SURROGATE;
+    // -----------------------------------------------------------------------------------------------------------------
+    public CompressedUtf8(final int lengthSize) {
+        super();
+        this.lengthSize = requireValidSizeForUnsignedInt(lengthSize);
     }
 
-    private static final int TYPE_SIZE = 2;
+    // -----------------------------------------------------------------------------------------------------------------
+    @Override
+    public String read(final BitInput input) throws IOException {
+        requireNonNullInput(input);
+        final int length = input.readUnsignedInt(lengthSize);
+        final StringBuilder builder = new StringBuilder(length);
+        for (int i = 0; i < length; i++) {
+            builder.appendCodePoint(readCodePoint(input));
+        }
+        return builder.toString();
+    }
 
-    private static final int TYPE_1 = 0;
+    @Override
+    public void write(final BitOutput output, final String value) throws IOException {
+        requireNonNullOutput(output);
+        final String v = requireNonNullValue(value);
+        final int length = codePointCount(v);
+        if ((length >>> lengthSize) != 0) {
+            throw new IllegalArgumentException(
+                    "code point length(" + length + ") requires more than lengthSize(" + lengthSize + ") bits");
+        }
+        output.writeUnsignedInt(lengthSize, length);
+        for (int offset = 0; offset < v.length(); ) {
+            final int codePoint = v.codePointAt(offset);
+            writeCodePoint(output, codePoint);
+            offset += Character.charCount(codePoint);
+        }
+    }
 
-    private static final int TYPE_2 = 1;
-
-    private static final int TYPE_3 = 2;
-
-    private static final int TYPE_4 = 3;
-
+    // -----------------------------------------------------------------------------------------------------------------
     private final int lengthSize;
 }

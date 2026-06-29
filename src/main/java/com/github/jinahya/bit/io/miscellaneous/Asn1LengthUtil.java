@@ -33,7 +33,7 @@ import static com.github.jinahya.bit.io.miscellaneous.Asn1LengthConstants.VALUE_
 import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullInput;
 import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullOutput;
 
-final class Asn1Lengths {
+final class Asn1LengthUtil {
 
     static long readDefinite(final BitInput input, final boolean der) throws IOException {
         requireNonNullInput(input);
@@ -126,7 +126,7 @@ final class Asn1Lengths {
         return value;
     }
 
-    private Asn1Lengths() {
+    private Asn1LengthUtil() {
         throw new AssertionError("instantiation is not allowed");
     }
 }

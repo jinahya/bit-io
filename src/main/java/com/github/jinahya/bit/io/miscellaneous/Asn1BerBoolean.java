@@ -22,14 +22,13 @@ package com.github.jinahya.bit.io.miscellaneous;
 
 import com.github.jinahya.bit.io.BitInput;
 import com.github.jinahya.bit.io.BitOutput;
-import com.github.jinahya.bit.io.BitReader;
-import com.github.jinahya.bit.io.BitWriter;
+import com.github.jinahya.bit.io.BooleanBitReader;
+import com.github.jinahya.bit.io.BooleanBitWriter;
 
 import java.io.IOException;
 
 import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullInput;
 import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullOutput;
-import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullValue;
 
 /**
  * A codec for ASN.1 BER BOOLEAN content octets.
@@ -37,7 +36,7 @@ import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullValue
  * @see <a href="https://www.itu.int/rec/T-REC-X.690">ITU-T X.690: ASN.1 encoding rules</a>
  */
 public final class Asn1BerBoolean
-        implements BitReader<Boolean>, BitWriter<Boolean> {
+        implements BooleanBitReader, BooleanBitWriter {
 
     public static final Asn1BerBoolean INSTANCE = new Asn1BerBoolean();
 
@@ -46,14 +45,14 @@ public final class Asn1BerBoolean
     }
 
     @Override
-    public Boolean read(final BitInput input) throws IOException {
+    public boolean readBoolean(final BitInput input) throws IOException {
         requireNonNullInput(input);
-        return Boolean.valueOf(input.readUnsignedInt(Byte.SIZE) != 0);
+        return input.readUnsignedInt(Byte.SIZE) != 0;
     }
 
     @Override
-    public void write(final BitOutput output, final Boolean value) throws IOException {
+    public void writeBoolean(final BitOutput output, final boolean value) throws IOException {
         requireNonNullOutput(output);
-        output.writeUnsignedInt(Byte.SIZE, requireNonNullValue(value).booleanValue() ? 0xFF : 0x00);
+        output.writeUnsignedInt(Byte.SIZE, value ? 0xFF : 0x00);
     }
 }

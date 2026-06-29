@@ -61,7 +61,7 @@ public class StringWriter
         if (charsetName == null) {
             throw new NullPointerException("charsetName is null");
         }
-        this.delegate = ByteArrayWriter.ofSigned(lengthSize, Byte.SIZE);
+        this.delegate = new ByteArrayWriter.Signed8(lengthSize);
         this.charsetName = charsetName;
     }
 

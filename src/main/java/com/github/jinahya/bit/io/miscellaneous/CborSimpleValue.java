@@ -22,14 +22,13 @@ package com.github.jinahya.bit.io.miscellaneous;
 
 import com.github.jinahya.bit.io.BitInput;
 import com.github.jinahya.bit.io.BitOutput;
-import com.github.jinahya.bit.io.BitReader;
-import com.github.jinahya.bit.io.BitWriter;
+import com.github.jinahya.bit.io.IntBitReader;
+import com.github.jinahya.bit.io.IntBitWriter;
 
 import java.io.IOException;
 
 import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullInput;
 import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullOutput;
-import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullValue;
 
 /**
  * A codec for CBOR simple values, excluding floats and the break stop code.
@@ -37,16 +36,18 @@ import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullValue
  * @see <a href="https://www.rfc-editor.org/rfc/rfc8949.html">RFC 8949: Concise Binary Object Representation</a>
  */
 public final class CborSimpleValue
-        implements BitReader<Integer>, BitWriter<Integer> {
+        implements IntBitReader, IntBitWriter {
 
     public static final CborSimpleValue INSTANCE = new CborSimpleValue();
 
+    // -----------------------------------------------------------------------------------------------------------------
     private CborSimpleValue() {
         super();
     }
 
+    // -----------------------------------------------------------------------------------------------------------------
     @Override
-    public Integer read(final BitInput input) throws IOException {
+    public int readInt(final BitInput input) throws IOException {
         requireNonNullInput(input);
         final int first = input.readUnsignedInt(Byte.SIZE);
         if ((first >>> 5) != 7) {
@@ -54,22 +55,23 @@ public final class CborSimpleValue
         }
         final int additional = first & 0x1F;
         if (additional < 24) {
-            return Integer.valueOf(additional);
+            return additional;
         }
         if (additional == 24) {
             final int value = input.readUnsignedInt(Byte.SIZE);
             if (value < 32) {
                 throw new IOException("non-minimal CBOR simple value");
             }
-            return Integer.valueOf(value);
+            return value;
         }
         throw new IOException("not a CBOR simple value additional information: " + additional);
     }
 
+    // -----------------------------------------------------------------------------------------------------------------
     @Override
-    public void write(final BitOutput output, final Integer value) throws IOException {
+    public void writeInt(final BitOutput output, final int value) throws IOException {
         requireNonNullOutput(output);
-        final int v = requireNonNullValue(value).intValue();
+        final int v = value;
         if (v < 0 || v > 255) {
             throw new IllegalArgumentException("CBOR simple value out of range: " + v);
         }

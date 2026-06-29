@@ -439,6 +439,63 @@ public interface BitOutput {
      */
     void writeDouble64Le(double value) throws IOException;
 
+    // ------------------------------------------------------------------------------------------------------- primitive
+
+    /**
+     * Writes specified {@code boolean} value using specified writer.
+     *
+     * @param writer the writer; must not be {@code null}.
+     * @param value  the value to write.
+     * @throws NullPointerException if {@code writer} is {@code null}.
+     * @throws IOException          if an I/O error occurs.
+     * @see BitInput#readBoolean(BooleanBitReader)
+     */
+    void writeBoolean(BooleanBitWriter writer, boolean value) throws IOException;
+
+    /**
+     * Writes specified {@code int} value using specified writer.
+     *
+     * @param writer the writer; must not be {@code null}.
+     * @param value  the value to write.
+     * @throws NullPointerException if {@code writer} is {@code null}.
+     * @throws IOException          if an I/O error occurs.
+     * @see BitInput#readInt(IntBitReader)
+     */
+    void writeInt(IntBitWriter writer, int value) throws IOException;
+
+    /**
+     * Writes specified {@code long} value using specified writer.
+     *
+     * @param writer the writer; must not be {@code null}.
+     * @param value  the value to write.
+     * @throws NullPointerException if {@code writer} is {@code null}.
+     * @throws IOException          if an I/O error occurs.
+     * @see BitInput#readLong(LongBitReader)
+     */
+    void writeLong(LongBitWriter writer, long value) throws IOException;
+
+    /**
+     * Writes specified {@code float} value using specified writer.
+     *
+     * @param writer the writer; must not be {@code null}.
+     * @param value  the value to write.
+     * @throws NullPointerException if {@code writer} is {@code null}.
+     * @throws IOException          if an I/O error occurs.
+     * @see BitInput#readFloat(FloatBitReader)
+     */
+    void writeFloat(FloatBitWriter writer, float value) throws IOException;
+
+    /**
+     * Writes specified {@code double} value using specified writer.
+     *
+     * @param writer the writer; must not be {@code null}.
+     * @param value  the value to write.
+     * @throws NullPointerException if {@code writer} is {@code null}.
+     * @throws IOException          if an I/O error occurs.
+     * @see BitInput#readDouble(DoubleBitReader)
+     */
+    void writeDouble(DoubleBitWriter writer, double value) throws IOException;
+
     // ---------------------------------------------------------------------------------------------------------- object
 
     /**

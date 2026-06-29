@@ -20,10 +20,63 @@ package com.github.jinahya.bit.io.miscellaneous;
  * #L%
  */
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import com.github.jinahya.bit.io.BitInput;
+import com.github.jinahya.bit.io.BitOutput;
+import com.github.jinahya.bit.io.DefaultBitOutput;
+import com.github.jinahya.bit.io.StreamByteOutput;
 
-@NoArgsConstructor(access = AccessLevel.PACKAGE)
+import org.junit.jupiter.api.Test;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.math.BigInteger;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 class Asn1BerIntegerTest {
 
+    @Test
+    void instanceIsNotNull() {
+        assertNotNull(Asn1BerInteger.INSTANCE);
+    }
+
+    @Test
+    void roundTripsValues() throws IOException {
+        roundTrip(BigInteger.ZERO);
+        roundTrip(BigInteger.ONE);
+        roundTrip(BigInteger.valueOf(-1L));
+        roundTrip(BigInteger.valueOf(127L));
+        roundTrip(BigInteger.valueOf(128L));
+        roundTrip(BigInteger.valueOf(-128L));
+        roundTrip(BigInteger.valueOf(-129L));
+    }
+
+    @Test
+    void readRejectsZeroLengthContent() {
+        assertThrows(IOException.class,
+                     () -> _TestUtils.read(Asn1BerInteger.INSTANCE, new byte[]{0x00, 0x00, 0x00, 0x00}));
+    }
+
+    @Test
+    void readRejectsNullInput() {
+        assertThrows(NullPointerException.class, () -> Asn1BerInteger.INSTANCE.read((BitInput) null));
+    }
+
+    @Test
+    void writeRejectsNullArguments() {
+        assertThrows(NullPointerException.class,
+                     () -> Asn1BerInteger.INSTANCE.write((BitOutput) null, BigInteger.ZERO));
+        assertThrows(NullPointerException.class, () -> Asn1BerInteger.INSTANCE.write(
+                output(new ByteArrayOutputStream()), null));
+    }
+
+    private static void roundTrip(final BigInteger value) throws IOException {
+        assertEquals(value, _TestUtils.read(Asn1BerInteger.INSTANCE, _TestUtils.write(Asn1BerInteger.INSTANCE, value)));
+    }
+
+    private static BitOutput output(final ByteArrayOutputStream bytes) {
+        return new DefaultBitOutput(new StreamByteOutput(bytes));
+    }
 }

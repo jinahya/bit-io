@@ -22,14 +22,13 @@ package com.github.jinahya.bit.io.miscellaneous;
 
 import com.github.jinahya.bit.io.BitInput;
 import com.github.jinahya.bit.io.BitOutput;
-import com.github.jinahya.bit.io.BitReader;
-import com.github.jinahya.bit.io.BitWriter;
+import com.github.jinahya.bit.io.LongBitReader;
+import com.github.jinahya.bit.io.LongBitWriter;
 
 import java.io.IOException;
 
 import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullInput;
 import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullOutput;
-import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullValue;
 
 /**
  * A codec for shortest-form CBOR integer values.
@@ -37,7 +36,7 @@ import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullValue
  * @see <a href="https://www.rfc-editor.org/rfc/rfc8949.html#section-4.2">RFC 8949 deterministic encoding</a>
  */
 public final class CborDeterministicInt
-        implements BitReader<Long>, BitWriter<Long> {
+        implements LongBitReader, LongBitWriter {
 
     public static final CborDeterministicInt INSTANCE = new CborDeterministicInt();
 
@@ -46,14 +45,14 @@ public final class CborDeterministicInt
     }
 
     @Override
-    public Long read(final BitInput input) throws IOException {
+    public long readLong(final BitInput input) throws IOException {
         requireNonNullInput(input);
-        return Long.valueOf(CborInts.read(input, true));
+        return CborIntUtil.read(input, true);
     }
 
     @Override
-    public void write(final BitOutput output, final Long value) throws IOException {
+    public void writeLong(final BitOutput output, final long value) throws IOException {
         requireNonNullOutput(output);
-        CborInts.write(output, requireNonNullValue(value));
+        CborIntUtil.write(output, value);
     }
 }

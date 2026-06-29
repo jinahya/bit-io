@@ -25,18 +25,14 @@ import com.github.jinahya.bit.io.BitOutput;
 
 import java.io.IOException;
 
+import static com.github.jinahya.bit.io.miscellaneous.RiceGolombCodeConstants.MAX_PARAMETER;
+import static com.github.jinahya.bit.io.miscellaneous.RiceGolombCodeConstants.MAX_SIGNED_VALUE;
+import static com.github.jinahya.bit.io.miscellaneous.RiceGolombCodeConstants.MIN_PARAMETER;
+import static com.github.jinahya.bit.io.miscellaneous.RiceGolombCodeConstants.MIN_SIGNED_VALUE;
 import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullInput;
 import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullOutput;
 
-final class RiceGolombCodes {
-
-    static final int MIN_PARAMETER = 0;
-
-    static final int MAX_PARAMETER = Long.SIZE - 2;
-
-    static final long MIN_SIGNED_VALUE = -(1L << (Long.SIZE - 2));
-
-    static final long MAX_SIGNED_VALUE = Long.MAX_VALUE >> 1;
+final class RiceGolombCodeUtil {
 
     static int requireParameter(final int parameter) {
         if (parameter < MIN_PARAMETER || parameter > MAX_PARAMETER) {
@@ -105,7 +101,7 @@ final class RiceGolombCodes {
         }
     }
 
-    private RiceGolombCodes() {
+    private RiceGolombCodeUtil() {
         throw new AssertionError("instantiation is not allowed");
     }
 }

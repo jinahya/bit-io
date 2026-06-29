@@ -22,14 +22,14 @@ package com.github.jinahya.bit.io.miscellaneous;
 
 import com.github.jinahya.bit.io.BitInput;
 import com.github.jinahya.bit.io.BitOutput;
-import com.github.jinahya.bit.io.BitReader;
-import com.github.jinahya.bit.io.BitWriter;
+import com.github.jinahya.bit.io.LongBitReader;
+import com.github.jinahya.bit.io.LongBitWriter;
 
 import java.io.IOException;
 
+import static com.github.jinahya.bit.io.BitIoUtils.requireValidSizeForSignedByte;
 import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullInput;
 import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullOutput;
-import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullValue;
 
 /**
  * A codec for HPACK/QPACK integer representations with an N-bit prefix.
@@ -42,7 +42,7 @@ import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullValue
  * @see <a href="https://www.rfc-editor.org/rfc/rfc9204.html">RFC 9204: QPACK</a>
  */
 public final class HpackPrefixInteger
-        implements BitReader<Long>, BitWriter<Long> {
+        implements LongBitReader, LongBitWriter {
 
     /**
      * Returns a codec for the specified prefix size.
@@ -54,30 +54,20 @@ public final class HpackPrefixInteger
         return new HpackPrefixInteger(prefixSize);
     }
 
-    private static int requirePrefixSize(final int prefixSize) {
-        if (prefixSize < 1) {
-            throw new IllegalArgumentException("prefixSize(" + prefixSize + ") < 1");
-        }
-        if (prefixSize > Byte.SIZE) {
-            throw new IllegalArgumentException("prefixSize(" + prefixSize + ") > " + Byte.SIZE);
-        }
-        return prefixSize;
-    }
-
     // -----------------------------------------------------------------------------------------------------------------
     private HpackPrefixInteger(final int prefixSize) {
         super();
-        this.prefixSize = requirePrefixSize(prefixSize);
+        this.prefixSize = requireValidSizeForSignedByte(prefixSize);
         prefixLimit = (1 << prefixSize) - 1;
     }
 
     // -----------------------------------------------------------------------------------------------------------------
     @Override
-    public Long read(final BitInput input) throws IOException {
+    public long readLong(final BitInput input) throws IOException {
         requireNonNullInput(input);
         long value = input.readUnsignedInt(prefixSize);
         if (value < prefixLimit) {
-            return Long.valueOf(value);
+            return value;
         }
         for (int shift = 0; ; shift += 7) {
             final int octet = input.readUnsignedInt(Byte.SIZE);
@@ -87,15 +77,15 @@ public final class HpackPrefixInteger
             }
             value += ((long) payload) << shift;
             if ((octet & 0x80) == 0) {
-                return Long.valueOf(value);
+                return value;
             }
         }
     }
 
     @Override
-    public void write(final BitOutput output, final Long value) throws IOException {
+    public void writeLong(final BitOutput output, final long value) throws IOException {
         requireNonNullOutput(output);
-        long v = requireNonNullValue(value);
+        long v = value;
         if (v < 0L) {
             throw new IllegalArgumentException("negative HPACK prefix integer: " + v);
         }

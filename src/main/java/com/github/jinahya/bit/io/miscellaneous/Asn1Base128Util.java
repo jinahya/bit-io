@@ -25,24 +25,28 @@ import com.github.jinahya.bit.io.BitOutput;
 
 import java.io.IOException;
 
+import static com.github.jinahya.bit.io.miscellaneous.Asn1Base128Constants.GROUP_SIZE;
+import static com.github.jinahya.bit.io.miscellaneous.Asn1Base128Constants.MASK_CONTINUATION;
+import static com.github.jinahya.bit.io.miscellaneous.Asn1Base128Constants.MASK_VALUE;
+import static com.github.jinahya.bit.io.miscellaneous.Asn1Base128Constants.MAX_OCTETS_FOR_LONG;
 import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullInput;
 import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullOutput;
 
-final class Asn1Base128s {
+final class Asn1Base128Util {
 
     static long read(final BitInput input, final boolean minimal) throws IOException {
         requireNonNullInput(input);
         long value = 0L;
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < MAX_OCTETS_FOR_LONG; i++) {
             final int octet = input.readUnsignedInt(Byte.SIZE);
-            if (minimal && i == 0 && (octet & 0x80) != 0 && (octet & 0x7F) == 0) {
+            if (minimal && i == 0 && (octet & MASK_CONTINUATION) != 0 && (octet & MASK_VALUE) == 0) {
                 throw new IOException("non-minimal ASN.1 base-128 value");
             }
-            if (value > (Long.MAX_VALUE >>> 7)) {
+            if (value > (Long.MAX_VALUE >>> GROUP_SIZE)) {
                 throw new IOException("ASN.1 base-128 value exceeds signed long range");
             }
-            value = (value << 7) | (octet & 0x7F);
-            if ((octet & 0x80) == 0) {
+            value = (value << GROUP_SIZE) | (octet & MASK_VALUE);
+            if ((octet & MASK_CONTINUATION) == 0) {
                 return value;
             }
         }
@@ -55,16 +59,16 @@ final class Asn1Base128s {
             throw new IllegalArgumentException("negative ASN.1 base-128 value: " + value);
         }
         int shift = 63;
-        while (shift > 0 && ((value >>> shift) & 0x7FL) == 0L) {
-            shift -= 7;
+        while (shift > 0 && ((value >>> shift) & MASK_VALUE) == 0L) {
+            shift -= GROUP_SIZE;
         }
-        for (; shift > 0; shift -= 7) {
-            output.writeUnsignedInt(Byte.SIZE, (int) ((value >>> shift) & 0x7F) | 0x80);
+        for (; shift > 0; shift -= GROUP_SIZE) {
+            output.writeUnsignedInt(Byte.SIZE, (int) ((value >>> shift) & MASK_VALUE) | MASK_CONTINUATION);
         }
-        output.writeUnsignedInt(Byte.SIZE, (int) value & 0x7F);
+        output.writeUnsignedInt(Byte.SIZE, (int) value & MASK_VALUE);
     }
 
-    private Asn1Base128s() {
+    private Asn1Base128Util() {
         throw new AssertionError("instantiation is not allowed");
     }
 }

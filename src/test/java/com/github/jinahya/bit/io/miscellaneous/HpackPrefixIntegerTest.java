@@ -72,22 +72,21 @@ class HpackPrefixIntegerTest {
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
         final BitOutput output = new DefaultBitOutput(new StreamByteOutput(baos));
         output.writeUnsignedInt(3, 0b101);
-        HpackPrefixInteger.of(5).write(output, Long.valueOf(10L));
+        HpackPrefixInteger.of(5).writeLong(output, 10L);
         output.align(1);
         assertArrayEquals(_Utils.fromHex("aa"), baos.toByteArray());
 
         final BitInput input = new DefaultBitInput(new StreamByteInput(new ByteArrayInputStream(_Utils.fromHex("aa"))));
         assertEquals(0b101, input.readUnsignedInt(3));
-        assertEquals(Long.valueOf(10L), HpackPrefixInteger.of(5).read(input));
+        assertEquals(10L, HpackPrefixInteger.of(5).readLong(input));
     }
 
     @Test
     void rejectsNullAndNegativeArguments() throws IOException {
         final BitOutput output = new DefaultBitOutput(new StreamByteOutput(new ByteArrayOutputStream()));
-        assertThrows(NullPointerException.class, () -> HpackPrefixInteger.of(5).read(null));
-        assertThrows(NullPointerException.class, () -> HpackPrefixInteger.of(5).write(null, Long.valueOf(0L)));
-        assertThrows(NullPointerException.class, () -> HpackPrefixInteger.of(5).write(output, null));
-        assertThrows(IllegalArgumentException.class, () -> HpackPrefixInteger.of(5).write(output, Long.valueOf(-1L)));
+        assertThrows(NullPointerException.class, () -> HpackPrefixInteger.of(5).readLong(null));
+        assertThrows(NullPointerException.class, () -> HpackPrefixInteger.of(5).writeLong(null, 0L));
+        assertThrows(IllegalArgumentException.class, () -> HpackPrefixInteger.of(5).writeLong(output, -1L));
     }
 
     private static long readStandalone(final int prefixSize, final byte[] bytes) throws IOException {
@@ -95,7 +94,7 @@ class HpackPrefixIntegerTest {
         if (prefixSize < Byte.SIZE) {
             input.skip(Byte.SIZE - prefixSize);
         }
-        return HpackPrefixInteger.of(prefixSize).read(input);
+        return HpackPrefixInteger.of(prefixSize).readLong(input);
     }
 
     private static byte[] writeStandalone(final int prefixSize, final long value) throws IOException {
@@ -104,7 +103,7 @@ class HpackPrefixIntegerTest {
         if (prefixSize < Byte.SIZE) {
             output.writeUnsignedInt(Byte.SIZE - prefixSize, 0);
         }
-        HpackPrefixInteger.of(prefixSize).write(output, Long.valueOf(value));
+        HpackPrefixInteger.of(prefixSize).writeLong(output, value);
         output.align(1);
         return baos.toByteArray();
     }

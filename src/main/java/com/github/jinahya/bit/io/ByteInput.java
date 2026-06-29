@@ -47,8 +47,7 @@ public interface ByteInput {
      * that exception.</p>
      *
      * @return an unsigned {@value java.lang.Byte#SIZE}-bit value; between {@code 0} and {@code 255}, both inclusive.
-     * @throws java.io.EOFException if a terminal source reaches its end.
-     * @throws IOException          if an I/O error occurs.
+     * @throws IOException if an I/O error occurs.
      * @see ByteOutput#write(int)
      */
     int read() throws IOException;

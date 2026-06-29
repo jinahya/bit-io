@@ -34,13 +34,12 @@ public final class BitIoConstants {
     static final int SIZE_MAX_SHORT_UNSIGNED = 15;
 
     // ------------------------------------------------------------------------------------------------------------- int
-    static final int SIZE_MAX_INT_UNSIGNED = 31;
+    public static final int SIZE_MAX_INT_UNSIGNED = 31;
 
     // ------------------------------------------------------------------------------------------------------------ long
     static final int SIZE_MAX_LONG_UNSIGNED = 63;
 
-    // -----------------------------------------------------------------------------------------------------
-    // float/double
+    // ---------------------------------------------------------------------------------------------------- float/double
 
     /**
      * The minimum size, inclusive, for an exponent of a {@code float}/{@code double} reduced encoding; the smallest
@@ -66,6 +65,8 @@ public final class BitIoConstants {
      */
     static final int MAX_FRACTION_SIZE_HALF = 10;
 
+    // ---------------------------------------------------------------------------------------------------------- single
+
     /**
      * The maximum size, inclusive, for an exponent of a {@code float} reduced encoding; the native {@code float}
      * exponent width.
@@ -77,6 +78,8 @@ public final class BitIoConstants {
      * fraction width.
      */
     static final int MAX_FRACTION_SIZE_FLOAT = 23;
+
+    // ---------------------------------------------------------------------------------------------------------- double
 
     /**
      * The maximum size, inclusive, for an exponent of a {@code double} reduced encoding; the native {@code double}

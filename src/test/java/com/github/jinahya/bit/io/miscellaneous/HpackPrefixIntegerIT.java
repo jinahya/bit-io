@@ -55,7 +55,7 @@ class HpackPrefixIntegerIT
         if (prefixSize < Byte.SIZE) {
             input.skip(Byte.SIZE - prefixSize);
         }
-        return HpackPrefixInteger.of(prefixSize).read(input).longValue();
+        return HpackPrefixInteger.of(prefixSize).readLong(input);
     }
 
     private static byte[] writeStandalone(final int prefixSize, final long value) throws Exception {
@@ -65,7 +65,7 @@ class HpackPrefixIntegerIT
         if (prefixSize < Byte.SIZE) {
             output.writeUnsignedInt(Byte.SIZE - prefixSize, 0);
         }
-        HpackPrefixInteger.of(prefixSize).write(output, Long.valueOf(value));
+        HpackPrefixInteger.of(prefixSize).writeLong(output, value);
         output.align(1);
         return baos.toByteArray();
     }

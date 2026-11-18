@@ -27,6 +27,10 @@ import java.nio.channels.WritableByteChannel;
 /**
  * A byte output which writes bytes to a writable byte channel.
  * <p>
+ * The channel is expected to be in blocking mode. A channel write which writes no bytes is retried, without any pause
+ * or limit, until at least one byte is written; hence a non-blocking channel makes {@link #write(int)} busy-wait.
+ * </p>
+ * <p>
  * Note that a flushing might be required when the {@code buffer}'s capacity is greater than {@code 1}.
  * <blockquote><pre>{@code
  * for (buffer.flip(); buffer.hasRemaining(); ) {

@@ -60,6 +60,81 @@ class ChannelProgressContractTest {
         assertArrayEquals(new byte[]{0x11, 0x22, 0x33}, channel.bytes.toByteArray());
     }
 
+    /**
+     * Tests that reads which read no bytes are retried until progress, neither dropping nor duplicating bytes.
+     *
+     * @throws IOException if an I/O error occurs.
+     * @see <a href="https://github.com/jinahya/bit-io/issues/20">#20</a>
+     */
+    @Test
+    void channelByteInputRetriesZeroProgressReads() throws IOException {
+        final StutteringReadableByteChannel channel = new StutteringReadableByteChannel(
+                new PartialReadableByteChannel(new byte[]{0x11, 0x22, 0x33, 0x44, 0x55}, 2), 3);
+        final ByteInput input = new ChannelByteInput(channel, ByteBuffer.allocate(4));
+
+        assertEquals(0x11, input.read());
+        assertEquals(0x22, input.read());
+        assertEquals(0x33, input.read());
+        assertEquals(0x44, input.read());
+        assertEquals(0x55, input.read());
+        assertThrows(java.io.EOFException.class, input::read);
+        assertTrue(channel.zeros > 0, "zero-progress reads occurred");
+    }
+
+    /**
+     * Tests that zero-progress reads through the public factory are retried until progress.
+     *
+     * @throws IOException if an I/O error occurs.
+     * @see <a href="https://github.com/jinahya/bit-io/issues/20">#20</a>
+     */
+    @Test
+    void channelFactoryInputRetriesZeroProgressReads() throws IOException {
+        final ByteInput input = BufferByteInput.from(new StutteringReadableByteChannel(
+                new PartialReadableByteChannel(new byte[]{0x11, 0x22}, 1), 2));
+
+        assertEquals(0x11, input.read());
+        assertEquals(0x22, input.read());
+        assertThrows(java.io.EOFException.class, input::read);
+    }
+
+    /**
+     * Tests that writes which write no bytes are retried until progress, neither dropping nor duplicating bytes.
+     *
+     * @throws IOException if an I/O error occurs.
+     * @see <a href="https://github.com/jinahya/bit-io/issues/20">#20</a>
+     */
+    @Test
+    void channelByteOutputRetriesZeroProgressWrites() throws IOException {
+        final PartialWritableByteChannel partial = new PartialWritableByteChannel(1);
+        final StutteringWritableByteChannel channel = new StutteringWritableByteChannel(partial, 3);
+        final ByteOutput output = new ChannelByteOutput(channel, ByteBuffer.allocate(2));
+
+        output.write(0x11);
+        output.write(0x22);
+        output.write(0x33);
+        output.write(0x44);
+
+        assertArrayEquals(new byte[]{0x11, 0x22, 0x33}, partial.bytes.toByteArray());
+        assertTrue(channel.zeros > 0, "zero-progress writes occurred");
+    }
+
+    /**
+     * Tests that zero-progress writes through the public factory are retried until progress.
+     *
+     * @throws IOException if an I/O error occurs.
+     * @see <a href="https://github.com/jinahya/bit-io/issues/20">#20</a>
+     */
+    @Test
+    void channelFactoryOutputRetriesZeroProgressWrites() throws IOException {
+        final PartialWritableByteChannel partial = new PartialWritableByteChannel(1);
+        final ByteOutput output = BufferByteOutput.from(new StutteringWritableByteChannel(partial, 2));
+
+        output.write(0x11);
+        output.write(0x22);
+
+        assertArrayEquals(new byte[]{0x11, 0x22}, partial.bytes.toByteArray());
+    }
+
     @Test
     void channelAdaptersToStringIncludeBufferedAdapter() {
         assertTrue(new ChannelByteInput(new ZeroProgressReadableByteChannel(), ByteBuffer.allocate(1))
@@ -175,5 +250,85 @@ class ChannelProgressContractTest {
         private final ByteArrayOutputStream bytes = new ByteArrayOutputStream();
 
         private final int maxBytesPerWrite;
+    }
+
+    /**
+     * A readable byte channel which reads no bytes for a number of calls before each delegated read.
+     */
+    private static final class StutteringReadableByteChannel
+            implements ReadableByteChannel {
+
+        private StutteringReadableByteChannel(final ReadableByteChannel delegate, final int zerosBeforeEach) {
+            this.delegate = delegate;
+            this.zerosBeforeEach = zerosBeforeEach;
+        }
+
+        @Override
+        public int read(final ByteBuffer dst) throws IOException {
+            if (pending++ < zerosBeforeEach) {
+                zeros++;
+                return 0;
+            }
+            pending = 0;
+            return delegate.read(dst);
+        }
+
+        @Override
+        public boolean isOpen() {
+            return true;
+        }
+
+        @Override
+        public void close() {
+            // no-op
+        }
+
+        private final ReadableByteChannel delegate;
+
+        private final int zerosBeforeEach;
+
+        private int pending;
+
+        private int zeros;
+    }
+
+    /**
+     * A writable byte channel which writes no bytes for a number of calls before each delegated write.
+     */
+    private static final class StutteringWritableByteChannel
+            implements WritableByteChannel {
+
+        private StutteringWritableByteChannel(final WritableByteChannel delegate, final int zerosBeforeEach) {
+            this.delegate = delegate;
+            this.zerosBeforeEach = zerosBeforeEach;
+        }
+
+        @Override
+        public int write(final ByteBuffer src) throws IOException {
+            if (pending++ < zerosBeforeEach) {
+                zeros++;
+                return 0;
+            }
+            pending = 0;
+            return delegate.write(src);
+        }
+
+        @Override
+        public boolean isOpen() {
+            return true;
+        }
+
+        @Override
+        public void close() {
+            // no-op
+        }
+
+        private final WritableByteChannel delegate;
+
+        private final int zerosBeforeEach;
+
+        private int pending;
+
+        private int zeros;
     }
 }

@@ -25,6 +25,12 @@ import java.io.IOException;
 /**
  * An interface for writing values of an arbitrary number of bits.
  *
+ * <p><strong>Failures of the underlying byte target.</strong> An exception thrown by the underlying byte target,
+ * checked or unchecked, propagates to the caller as is. After that, the state of this output, including
+ * {@link #getCount()}, is <em>unspecified</em>; it may still hold the octet which failed to be written, and it may or
+ * may not retry that octet on subsequent operations. Hence an output whose target has failed should be discarded, along
+ * with whatever has been written to the target, rather than used further.</p>
+ *
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  * @see BitInput
  */

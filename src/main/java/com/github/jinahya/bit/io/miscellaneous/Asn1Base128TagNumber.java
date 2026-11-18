@@ -27,32 +27,35 @@ import com.github.jinahya.bit.io.LongBitWriter;
 
 import java.io.IOException;
 
-import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullInput;
-import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullOutput;
-
 /**
- * A codec for ASN.1 high-tag-number base-128 content octets.
+ * A deprecated alias of {@link com.github.jinahya.bit.io.miscellaneous.itu.Asn1Base128TagNumber}, which this class
+ * delegates to.
  *
- * @see <a href="https://www.itu.int/rec/T-REC-X.690">ITU-T X.690: ASN.1 encoding rules</a>
+ * @deprecated Use {@link com.github.jinahya.bit.io.miscellaneous.itu.Asn1Base128TagNumber} instead;
+ *             this class will be removed in the next major version.
  */
+@Deprecated
 public final class Asn1Base128TagNumber
         implements LongBitReader, LongBitWriter {
 
+    /**
+     * The singleton instance of this class.
+     */
     public static final Asn1Base128TagNumber INSTANCE = new Asn1Base128TagNumber();
 
+    // -----------------------------------------------------------------------------------------------------------------
     private Asn1Base128TagNumber() {
         super();
     }
 
+    // -----------------------------------------------------------------------------------------------------------------
     @Override
     public long readLong(final BitInput input) throws IOException {
-        requireNonNullInput(input);
-        return Asn1Base128Util.read(input, true);
+        return com.github.jinahya.bit.io.miscellaneous.itu.Asn1Base128TagNumber.INSTANCE.readLong(input);
     }
 
     @Override
     public void writeLong(final BitOutput output, final long value) throws IOException {
-        requireNonNullOutput(output);
-        Asn1Base128Util.write(output, value);
+        com.github.jinahya.bit.io.miscellaneous.itu.Asn1Base128TagNumber.INSTANCE.writeLong(output, value);
     }
 }

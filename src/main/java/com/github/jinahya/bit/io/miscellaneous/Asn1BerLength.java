@@ -27,47 +27,41 @@ import com.github.jinahya.bit.io.LongBitWriter;
 
 import java.io.IOException;
 
-import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullInput;
-import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullOutput;
-
 /**
- * A codec for ASN.1 BER length octets.
+ * A deprecated alias of {@link com.github.jinahya.bit.io.miscellaneous.itu.Asn1BerLength}, which this class
+ * delegates to.
  *
- * <p>The {@link #readLong(BitInput)} and {@link #writeLong(BitOutput, long)} methods handle definite lengths only. A
- * BER indefinite length is a marker, not a non-negative length value, and is handled explicitly by
- * {@link #readBerIndefiniteLength(BitInput)} and {@link #writeBerIndefiniteLength(BitOutput)}.</p>
- *
- * @see <a href="https://www.itu.int/rec/T-REC-X.690">ITU-T X.690: ASN.1 encoding rules</a>
+ * @deprecated Use {@link com.github.jinahya.bit.io.miscellaneous.itu.Asn1BerLength} instead;
+ *             this class will be removed in the next major version.
  */
+@Deprecated
 public final class Asn1BerLength
         implements LongBitReader, LongBitWriter {
 
     /**
-     * Reads and verifies a BER indefinite length marker.
+     * Reads and verifies a BER indefinite length.
      *
-     * @param input the input to read from; must not be {@code null}.
-     * @throws IOException if an I/O error occurs, or if the next octet is not {@code 0x80}.
+     * @param input the input.
+     * @throws IOException if an I/O error occurs.
+     * @see com.github.jinahya.bit.io.miscellaneous.itu.Asn1BerLength#readBerIndefiniteLength(BitInput)
      */
     public static void readBerIndefiniteLength(final BitInput input) throws IOException {
-        requireNonNullInput(input);
-        Asn1LengthUtil.readIndefinite(input);
+        com.github.jinahya.bit.io.miscellaneous.itu.Asn1BerLength.readBerIndefiniteLength(input);
     }
 
     /**
-     * Writes a BER indefinite length marker.
+     * Writes a BER indefinite length.
      *
-     * @param output the output to write to; must not be {@code null}.
+     * @param output the output.
      * @throws IOException if an I/O error occurs.
+     * @see com.github.jinahya.bit.io.miscellaneous.itu.Asn1BerLength#writeBerIndefiniteLength(BitOutput)
      */
     public static void writeBerIndefiniteLength(final BitOutput output) throws IOException {
-        requireNonNullOutput(output);
-        Asn1LengthUtil.writeIndefinite(output);
+        com.github.jinahya.bit.io.miscellaneous.itu.Asn1BerLength.writeBerIndefiniteLength(output);
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
-
     /**
-     * The singleton instance of this codec.
+     * The singleton instance of this class.
      */
     public static final Asn1BerLength INSTANCE = new Asn1BerLength();
 
@@ -79,13 +73,11 @@ public final class Asn1BerLength
     // -----------------------------------------------------------------------------------------------------------------
     @Override
     public long readLong(final BitInput input) throws IOException {
-        requireNonNullInput(input);
-        return Asn1LengthUtil.readDefinite(input, false);
+        return com.github.jinahya.bit.io.miscellaneous.itu.Asn1BerLength.INSTANCE.readLong(input);
     }
 
     @Override
     public void writeLong(final BitOutput output, final long value) throws IOException {
-        requireNonNullOutput(output);
-        Asn1LengthUtil.writeDefinite(output, value);
+        com.github.jinahya.bit.io.miscellaneous.itu.Asn1BerLength.INSTANCE.writeLong(output, value);
     }
 }

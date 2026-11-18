@@ -27,32 +27,35 @@ import com.github.jinahya.bit.io.BooleanBitWriter;
 
 import java.io.IOException;
 
-import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullInput;
-import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullOutput;
-
 /**
- * A codec for ASN.1 BER BOOLEAN content octets.
+ * A deprecated alias of {@link com.github.jinahya.bit.io.miscellaneous.itu.Asn1BerBoolean}, which this class
+ * delegates to.
  *
- * @see <a href="https://www.itu.int/rec/T-REC-X.690">ITU-T X.690: ASN.1 encoding rules</a>
+ * @deprecated Use {@link com.github.jinahya.bit.io.miscellaneous.itu.Asn1BerBoolean} instead;
+ *             this class will be removed in the next major version.
  */
+@Deprecated
 public final class Asn1BerBoolean
         implements BooleanBitReader, BooleanBitWriter {
 
+    /**
+     * The singleton instance of this class.
+     */
     public static final Asn1BerBoolean INSTANCE = new Asn1BerBoolean();
 
+    // -----------------------------------------------------------------------------------------------------------------
     private Asn1BerBoolean() {
         super();
     }
 
+    // -----------------------------------------------------------------------------------------------------------------
     @Override
     public boolean readBoolean(final BitInput input) throws IOException {
-        requireNonNullInput(input);
-        return input.readUnsignedInt(Byte.SIZE) != 0;
+        return com.github.jinahya.bit.io.miscellaneous.itu.Asn1BerBoolean.INSTANCE.readBoolean(input);
     }
 
     @Override
     public void writeBoolean(final BitOutput output, final boolean value) throws IOException {
-        requireNonNullOutput(output);
-        output.writeUnsignedInt(Byte.SIZE, value ? 0xFF : 0x00);
+        com.github.jinahya.bit.io.miscellaneous.itu.Asn1BerBoolean.INSTANCE.writeBoolean(output, value);
     }
 }

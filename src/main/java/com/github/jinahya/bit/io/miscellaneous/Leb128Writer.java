@@ -20,74 +20,50 @@ package com.github.jinahya.bit.io.miscellaneous;
  * #L%
  */
 
+import com.github.jinahya.bit.io.BitInput;
 import com.github.jinahya.bit.io.BitOutput;
 import com.github.jinahya.bit.io.LongBitWriter;
 
 import java.io.IOException;
 
-import static com.github.jinahya.bit.io.miscellaneous.Leb128Constants.MASK_CONTINUATION;
-import static com.github.jinahya.bit.io.miscellaneous.Leb128Constants.MASK_PAYLOAD;
-import static com.github.jinahya.bit.io.miscellaneous.Leb128Constants.MASK_SIGN;
-import static com.github.jinahya.bit.io.miscellaneous.Leb128Constants.SIZE_PAYLOAD;
-import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullOutput;
-
 /**
- * A writer for LEB128-encoded {@code long} values.
+ * A deprecated alias of {@link com.github.jinahya.bit.io.miscellaneous.w3c.Leb128Writer}, which this class
+ * delegates to.
  *
- * @see <a href="https://dwarfstd.org/dwarf5std.html">DWARF Version 5 Standard</a>
- * @see Leb128Reader
+ * @deprecated Use {@link com.github.jinahya.bit.io.miscellaneous.w3c.Leb128Writer} instead;
+ *             this class will be removed in the next major version.
  */
+@Deprecated
 public abstract class Leb128Writer
         implements LongBitWriter {
 
-    private static final class Unsigned
+    private static final class Delegating
             extends Leb128Writer {
 
-        @Override
-        void writeValue(final BitOutput output, long value) throws IOException {
-            requireNonNullOutput(output);
-            if (value < 0L) {
-                throw new IllegalArgumentException("negative value: " + value);
-            }
-            do {
-                int group = (int) (value & MASK_PAYLOAD);
-                value >>>= SIZE_PAYLOAD;
-                if (value != 0L) {
-                    group |= MASK_CONTINUATION;
-                }
-                output.writeUnsignedInt(Byte.SIZE, group);
-            } while (value != 0L);
+        private Delegating(final com.github.jinahya.bit.io.miscellaneous.w3c.Leb128Writer delegate) {
+            super();
+            this.delegate = delegate;
         }
-    }
-
-    private static final class Signed
-            extends Leb128Writer {
 
         @Override
-        void writeValue(final BitOutput output, long value) throws IOException {
-            requireNonNullOutput(output);
-            while (true) {
-                final int group = (int) (value & MASK_PAYLOAD);
-                value >>= SIZE_PAYLOAD;
-                final boolean clear = (group & MASK_SIGN) == 0;
-                if ((value == 0L && clear) || (value == -1L && !clear)) {
-                    output.writeUnsignedInt(Byte.SIZE, group);
-                    return;
-                }
-                output.writeUnsignedInt(Byte.SIZE, group | MASK_CONTINUATION);
-            }
+        void writeValue(final BitOutput output, final long value) throws IOException {
+            delegate.writeLong(output, value);
         }
+
+        private final com.github.jinahya.bit.io.miscellaneous.w3c.Leb128Writer delegate;
     }
 
     /**
-     * A writer for unsigned LEB128 values representable as non-negative {@code long} values.
+     * An instance for unsigned LEB128 values.
      */
-    public static final Leb128Writer UNSIGNED = new Unsigned();
+    public static final Leb128Writer UNSIGNED =
+            new Delegating(com.github.jinahya.bit.io.miscellaneous.w3c.Leb128Writer.UNSIGNED);
 
     /**
-     * A writer for signed LEB128 values.
+     * An instance for signed LEB128 values.
      */
-    public static final Leb128Writer SIGNED = new Signed();
+    public static final Leb128Writer SIGNED =
+            new Delegating(com.github.jinahya.bit.io.miscellaneous.w3c.Leb128Writer.SIGNED);
 
     // -----------------------------------------------------------------------------------------------------------------
     private Leb128Writer() {
@@ -97,9 +73,8 @@ public abstract class Leb128Writer
     // -----------------------------------------------------------------------------------------------------------------
     @Override
     public final void writeLong(final BitOutput output, final long value) throws IOException {
-        requireNonNullOutput(output);
         writeValue(output, value);
     }
 
-    abstract void writeValue(BitOutput output, long value) throws IOException;
+    abstract void writeValue(final BitOutput output, final long value) throws IOException;
 }

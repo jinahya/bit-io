@@ -27,32 +27,35 @@ import com.github.jinahya.bit.io.LongBitWriter;
 
 import java.io.IOException;
 
-import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullInput;
-import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullOutput;
-
 /**
- * A codec for shortest-form CBOR integer values.
+ * A deprecated alias of {@link com.github.jinahya.bit.io.miscellaneous.ietf.CborDeterministicInt}, which this class
+ * delegates to.
  *
- * @see <a href="https://www.rfc-editor.org/rfc/rfc8949.html#section-4.2">RFC 8949 deterministic encoding</a>
+ * @deprecated Use {@link com.github.jinahya.bit.io.miscellaneous.ietf.CborDeterministicInt} instead;
+ *             this class will be removed in the next major version.
  */
+@Deprecated
 public final class CborDeterministicInt
         implements LongBitReader, LongBitWriter {
 
+    /**
+     * The singleton instance of this class.
+     */
     public static final CborDeterministicInt INSTANCE = new CborDeterministicInt();
 
+    // -----------------------------------------------------------------------------------------------------------------
     private CborDeterministicInt() {
         super();
     }
 
+    // -----------------------------------------------------------------------------------------------------------------
     @Override
     public long readLong(final BitInput input) throws IOException {
-        requireNonNullInput(input);
-        return CborIntUtil.read(input, true);
+        return com.github.jinahya.bit.io.miscellaneous.ietf.CborDeterministicInt.INSTANCE.readLong(input);
     }
 
     @Override
     public void writeLong(final BitOutput output, final long value) throws IOException {
-        requireNonNullOutput(output);
-        CborIntUtil.write(output, value);
+        com.github.jinahya.bit.io.miscellaneous.ietf.CborDeterministicInt.INSTANCE.writeLong(output, value);
     }
 }

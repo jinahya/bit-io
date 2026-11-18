@@ -27,17 +27,20 @@ import com.github.jinahya.bit.io.IntBitWriter;
 
 import java.io.IOException;
 
-import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullInput;
-import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullOutput;
-
 /**
- * A codec for CBOR simple values, excluding floats and the break stop code.
+ * A deprecated alias of {@link com.github.jinahya.bit.io.miscellaneous.ietf.CborSimpleValue}, which this class
+ * delegates to.
  *
- * @see <a href="https://www.rfc-editor.org/rfc/rfc8949.html">RFC 8949: Concise Binary Object Representation</a>
+ * @deprecated Use {@link com.github.jinahya.bit.io.miscellaneous.ietf.CborSimpleValue} instead;
+ *             this class will be removed in the next major version.
  */
+@Deprecated
 public final class CborSimpleValue
         implements IntBitReader, IntBitWriter {
 
+    /**
+     * The singleton instance of this class.
+     */
     public static final CborSimpleValue INSTANCE = new CborSimpleValue();
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -48,41 +51,11 @@ public final class CborSimpleValue
     // -----------------------------------------------------------------------------------------------------------------
     @Override
     public int readInt(final BitInput input) throws IOException {
-        requireNonNullInput(input);
-        final int first = input.readUnsignedInt(Byte.SIZE);
-        if ((first >>> 5) != 7) {
-            throw new IOException("not a CBOR simple/floating major type");
-        }
-        final int additional = first & 0x1F;
-        if (additional < 24) {
-            return additional;
-        }
-        if (additional == 24) {
-            final int value = input.readUnsignedInt(Byte.SIZE);
-            if (value < 32) {
-                throw new IOException("non-minimal CBOR simple value");
-            }
-            return value;
-        }
-        throw new IOException("not a CBOR simple value additional information: " + additional);
+        return com.github.jinahya.bit.io.miscellaneous.ietf.CborSimpleValue.INSTANCE.readInt(input);
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
     @Override
     public void writeInt(final BitOutput output, final int value) throws IOException {
-        requireNonNullOutput(output);
-        final int v = value;
-        if (v < 0 || v > 255) {
-            throw new IllegalArgumentException("CBOR simple value out of range: " + v);
-        }
-        if (v >= 24 && v < 32) {
-            throw new IllegalArgumentException("reserved CBOR simple value: " + v);
-        }
-        if (v < 24) {
-            output.writeUnsignedInt(Byte.SIZE, 0xE0 | v);
-        } else {
-            output.writeUnsignedInt(Byte.SIZE, 0xF8);
-            output.writeUnsignedInt(Byte.SIZE, v);
-        }
+        com.github.jinahya.bit.io.miscellaneous.ietf.CborSimpleValue.INSTANCE.writeInt(output, value);
     }
 }

@@ -27,22 +27,19 @@ import com.github.jinahya.bit.io.LongBitWriter;
 
 import java.io.IOException;
 
-import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullInput;
-import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullOutput;
-
 /**
- * A codec for ASN.1 DER definite length octets.
+ * A deprecated alias of {@link com.github.jinahya.bit.io.miscellaneous.itu.Asn1DerLength}, which this class
+ * delegates to.
  *
- * <p>DER uses definite, shortest-form length octets only. Indefinite and non-minimal BER forms are rejected on read,
- * and writes always use the shortest definite form.</p>
- *
- * @see <a href="https://www.itu.int/rec/T-REC-X.690">ITU-T X.690: ASN.1 encoding rules</a>
+ * @deprecated Use {@link com.github.jinahya.bit.io.miscellaneous.itu.Asn1DerLength} instead;
+ *             this class will be removed in the next major version.
  */
+@Deprecated
 public final class Asn1DerLength
         implements LongBitReader, LongBitWriter {
 
     /**
-     * The singleton instance of this codec.
+     * The singleton instance of this class.
      */
     public static final Asn1DerLength INSTANCE = new Asn1DerLength();
 
@@ -54,14 +51,11 @@ public final class Asn1DerLength
     // -----------------------------------------------------------------------------------------------------------------
     @Override
     public long readLong(final BitInput input) throws IOException {
-        requireNonNullInput(input);
-        return Asn1LengthUtil.readDefinite(input, true);
+        return com.github.jinahya.bit.io.miscellaneous.itu.Asn1DerLength.INSTANCE.readLong(input);
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
     @Override
     public void writeLong(final BitOutput output, final long value) throws IOException {
-        requireNonNullOutput(output);
-        Asn1LengthUtil.writeDefinite(output, value);
+        com.github.jinahya.bit.io.miscellaneous.itu.Asn1DerLength.INSTANCE.writeLong(output, value);
     }
 }

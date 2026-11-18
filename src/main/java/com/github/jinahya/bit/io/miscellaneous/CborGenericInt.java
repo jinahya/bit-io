@@ -27,32 +27,35 @@ import com.github.jinahya.bit.io.LongBitWriter;
 
 import java.io.IOException;
 
-import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullInput;
-import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullOutput;
-
 /**
- * A codec for CBOR integer values, accepting any definite integer width.
+ * A deprecated alias of {@link com.github.jinahya.bit.io.miscellaneous.ietf.CborGenericInt}, which this class
+ * delegates to.
  *
- * @see <a href="https://www.rfc-editor.org/rfc/rfc8949.html">RFC 8949: Concise Binary Object Representation</a>
+ * @deprecated Use {@link com.github.jinahya.bit.io.miscellaneous.ietf.CborGenericInt} instead;
+ *             this class will be removed in the next major version.
  */
+@Deprecated
 public final class CborGenericInt
         implements LongBitReader, LongBitWriter {
 
+    /**
+     * The singleton instance of this class.
+     */
     public static final CborGenericInt INSTANCE = new CborGenericInt();
 
+    // -----------------------------------------------------------------------------------------------------------------
     private CborGenericInt() {
         super();
     }
 
+    // -----------------------------------------------------------------------------------------------------------------
     @Override
     public long readLong(final BitInput input) throws IOException {
-        requireNonNullInput(input);
-        return CborIntUtil.read(input, false);
+        return com.github.jinahya.bit.io.miscellaneous.ietf.CborGenericInt.INSTANCE.readLong(input);
     }
 
     @Override
     public void writeLong(final BitOutput output, final long value) throws IOException {
-        requireNonNullOutput(output);
-        CborIntUtil.write(output, value);
+        com.github.jinahya.bit.io.miscellaneous.ietf.CborGenericInt.INSTANCE.writeLong(output, value);
     }
 }

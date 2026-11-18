@@ -21,86 +21,49 @@ package com.github.jinahya.bit.io.miscellaneous;
  */
 
 import com.github.jinahya.bit.io.BitInput;
+import com.github.jinahya.bit.io.BitOutput;
 import com.github.jinahya.bit.io.LongBitReader;
 
 import java.io.IOException;
 
-import static com.github.jinahya.bit.io.miscellaneous.Leb128Constants.MASK_CONTINUATION;
-import static com.github.jinahya.bit.io.miscellaneous.Leb128Constants.MASK_PAYLOAD;
-import static com.github.jinahya.bit.io.miscellaneous.Leb128Constants.MASK_SIGN;
-import static com.github.jinahya.bit.io.miscellaneous.Leb128Constants.SIZE_PAYLOAD;
-import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullInput;
-
 /**
- * A reader for LEB128-encoded {@code long} values.
+ * A deprecated alias of {@link com.github.jinahya.bit.io.miscellaneous.w3c.Leb128Reader}, which this class
+ * delegates to.
  *
- * @see <a href="https://dwarfstd.org/dwarf5std.html">DWARF Version 5 Standard</a>
- * @see Leb128Writer
+ * @deprecated Use {@link com.github.jinahya.bit.io.miscellaneous.w3c.Leb128Reader} instead;
+ *             this class will be removed in the next major version.
  */
+@Deprecated
 public abstract class Leb128Reader
         implements LongBitReader {
 
-    private static final class Unsigned
+    private static final class Delegating
             extends Leb128Reader {
+
+        private Delegating(final com.github.jinahya.bit.io.miscellaneous.w3c.Leb128Reader delegate) {
+            super();
+            this.delegate = delegate;
+        }
 
         @Override
         long readValue(final BitInput input) throws IOException {
-            requireNonNullInput(input);
-            long value = 0L;
-            for (int shift = 0; ; shift += SIZE_PAYLOAD) {
-                final int group = input.readUnsignedInt(Byte.SIZE);
-                final int payload = group & MASK_PAYLOAD;
-                if (shift == Long.SIZE - 1 && payload != 0) {
-                    throw new IOException("unsigned LEB128 value exceeds signed long range");
-                }
-                value |= ((long) payload) << shift;
-                if ((group & MASK_CONTINUATION) == 0) {
-                    return value;
-                }
-                if (shift >= Long.SIZE - 1) {
-                    throw new IOException("unterminated unsigned LEB128 value");
-                }
-            }
+            return delegate.readLong(input);
         }
-    }
 
-    private static final class Signed
-            extends Leb128Reader {
-
-        @Override
-        long readValue(final BitInput input) throws IOException {
-            requireNonNullInput(input);
-            long value = 0L;
-            for (int shift = 0; ; shift += SIZE_PAYLOAD) {
-                final int group = input.readUnsignedInt(Byte.SIZE);
-                final int payload = group & MASK_PAYLOAD;
-                if (shift == Long.SIZE - 1 && payload != 0x00 && payload != MASK_PAYLOAD) {
-                    throw new IOException("signed LEB128 value exceeds long range");
-                }
-                value |= ((long) payload) << shift;
-                if ((group & MASK_CONTINUATION) == 0) {
-                    final int nextShift = shift + SIZE_PAYLOAD;
-                    if (nextShift < Long.SIZE && (payload & MASK_SIGN) != 0) {
-                        value |= -1L << nextShift;
-                    }
-                    return value;
-                }
-                if (shift >= Long.SIZE - 1) {
-                    throw new IOException("unterminated signed LEB128 value");
-                }
-            }
-        }
+        private final com.github.jinahya.bit.io.miscellaneous.w3c.Leb128Reader delegate;
     }
 
     /**
-     * A reader for unsigned LEB128 values representable as non-negative {@code long} values.
+     * An instance for unsigned LEB128 values.
      */
-    public static final Leb128Reader UNSIGNED = new Unsigned();
+    public static final Leb128Reader UNSIGNED =
+            new Delegating(com.github.jinahya.bit.io.miscellaneous.w3c.Leb128Reader.UNSIGNED);
 
     /**
-     * A reader for signed LEB128 values.
+     * An instance for signed LEB128 values.
      */
-    public static final Leb128Reader SIGNED = new Signed();
+    public static final Leb128Reader SIGNED =
+            new Delegating(com.github.jinahya.bit.io.miscellaneous.w3c.Leb128Reader.SIGNED);
 
     // -----------------------------------------------------------------------------------------------------------------
     private Leb128Reader() {
@@ -110,9 +73,8 @@ public abstract class Leb128Reader
     // -----------------------------------------------------------------------------------------------------------------
     @Override
     public final long readLong(final BitInput input) throws IOException {
-        requireNonNullInput(input);
         return readValue(input);
     }
 
-    abstract long readValue(BitInput input) throws IOException;
+    abstract long readValue(final BitInput input) throws IOException;
 }

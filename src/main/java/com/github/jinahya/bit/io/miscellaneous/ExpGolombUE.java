@@ -27,89 +27,35 @@ import com.github.jinahya.bit.io.LongBitWriter;
 
 import java.io.IOException;
 
-import static com.github.jinahya.bit.io.BitIoUtils.highestOneBitIndex;
-import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullInput;
-import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullOutput;
-
 /**
- * A codec for unsigned Exp-Golomb {@code ue(v)} values.
+ * A deprecated alias of {@link com.github.jinahya.bit.io.miscellaneous.itu.ExpGolombUE}, which this class
+ * delegates to.
  *
- * <p>The codec accepts and returns non-negative {@code long} values; encoded values beyond
- * {@link Long#MAX_VALUE} are rejected.</p>
- *
- * @see <a href="https://www.itu.int/rec/T-REC-H.264">ITU-T H.264: Advanced video coding</a>
- * @see ExpGolombSE
+ * @deprecated Use {@link com.github.jinahya.bit.io.miscellaneous.itu.ExpGolombUE} instead;
+ *             this class will be removed in the next major version.
  */
+@Deprecated
 public final class ExpGolombUE
         implements LongBitReader, LongBitWriter {
 
     /**
-     * The singleton instance of this codec.
+     * The singleton instance of this class.
      */
     public static final ExpGolombUE INSTANCE = new ExpGolombUE();
 
-    static long readCodeNum(final BitInput input) throws IOException {
-        requireNonNullInput(input);
-        int leadingZeros = 0;
-        while (input.readUnsignedInt(1) == 0) {
-            if (++leadingZeros > Long.SIZE - 1) {
-                throw new IOException("Exp-Golomb codeNum exceeds signed long range");
-            }
-        }
-        if (leadingZeros == 0) {
-            return 0L;
-        }
-        final long suffix = input.readUnsignedLong(leadingZeros);
-        if (leadingZeros == Long.SIZE - 1) {
-            if (suffix != 0L) {
-                throw new IOException("Exp-Golomb codeNum exceeds signed long range");
-            }
-            return Long.MAX_VALUE;
-        }
-        return ((1L << leadingZeros) - 1L) + suffix;
-    }
-
-    static void writeCodeNum(final BitOutput output, final long codeNum) throws IOException {
-        requireNonNullOutput(output);
-        if (codeNum < 0L) {
-            throw new IllegalArgumentException("negative codeNum: " + codeNum);
-        }
-        final int leadingZeros;
-        final long suffix;
-        if (codeNum == Long.MAX_VALUE) {
-            leadingZeros = Long.SIZE - 1;
-            suffix = 0L;
-        } else {
-            final long info = codeNum + 1L;
-            leadingZeros = highestOneBitIndex(info);
-            suffix = info - (1L << leadingZeros);
-        }
-        if (leadingZeros > 0) {
-            output.writeUnsignedLong(leadingZeros, 0L);
-        }
-        output.writeUnsignedInt(1, 1);
-        if (leadingZeros > 0) {
-            output.writeUnsignedLong(leadingZeros, suffix);
-        }
-    }
-
+    // -----------------------------------------------------------------------------------------------------------------
     private ExpGolombUE() {
         super();
     }
 
+    // -----------------------------------------------------------------------------------------------------------------
     @Override
     public long readLong(final BitInput input) throws IOException {
-        requireNonNullInput(input);
-        return readCodeNum(input);
+        return com.github.jinahya.bit.io.miscellaneous.itu.ExpGolombUE.INSTANCE.readLong(input);
     }
 
     @Override
     public void writeLong(final BitOutput output, final long value) throws IOException {
-        requireNonNullOutput(output);
-        final long v = value;
-        if (v < 0L) {
-            throw new IllegalArgumentException("negative value: " + v);
-        }
-        writeCodeNum(output, v);
+        com.github.jinahya.bit.io.miscellaneous.itu.ExpGolombUE.INSTANCE.writeLong(output, value);
     }
 }

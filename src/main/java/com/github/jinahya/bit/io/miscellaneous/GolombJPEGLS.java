@@ -27,58 +27,54 @@ import com.github.jinahya.bit.io.LongBitWriter;
 
 import java.io.IOException;
 
-import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullInput;
-import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullOutput;
-
 /**
- * A value-level codec for one JPEG-LS-style Golomb-coded signed prediction error.
+ * A deprecated alias of {@link com.github.jinahya.bit.io.miscellaneous.itu.GolombJPEGLS}, which this class
+ * delegates to.
  *
- * <p>This class encodes only a signed error value for a supplied Golomb parameter. It applies the usual non-negative
- * mapped-error folding, then writes a JPEG-LS-style unary quotient using one bits followed by a zero stop bit. It does
- * not implement JPEG-LS prediction, context modeling, adaptive parameter update, run mode, {@code LIMIT},
- * {@code RESET}, or near-lossless reconstruction.</p>
- *
- * @see <a href="https://www.itu.int/rec/T-REC-T.87">ITU-T T.87: Lossless and near-lossless compression of
- *         continuous-tone still images</a>
+ * @deprecated Use {@link com.github.jinahya.bit.io.miscellaneous.itu.GolombJPEGLS} instead;
+ *             this class will be removed in the next major version.
  */
+@Deprecated
 public final class GolombJPEGLS
         implements LongBitReader, LongBitWriter {
 
     /**
-     * Returns a codec for specified Golomb parameter.
+     * Returns an instance for specified parameter.
      *
-     * @param parameter the Golomb parameter; between {@code 0} and {@code 62}, both inclusive.
-     * @return a codec for {@code parameter}.
+     * @param parameter the parameter.
+     * @return an instance for {@code parameter}.
+     * @see com.github.jinahya.bit.io.miscellaneous.itu.GolombJPEGLS#of(int)
      */
     public static GolombJPEGLS of(final int parameter) {
-        return new GolombJPEGLS(parameter);
+        return new GolombJPEGLS(com.github.jinahya.bit.io.miscellaneous.itu.GolombJPEGLS.of(parameter));
     }
 
-    private GolombJPEGLS(final int parameter) {
+    // -----------------------------------------------------------------------------------------------------------------
+    private GolombJPEGLS(final com.github.jinahya.bit.io.miscellaneous.itu.GolombJPEGLS delegate) {
         super();
-        this.parameter = RiceGolombCodeUtil.requireParameter(parameter);
+        this.delegate = delegate;
     }
 
+    // -----------------------------------------------------------------------------------------------------------------
     @Override
     public long readLong(final BitInput input) throws IOException {
-        requireNonNullInput(input);
-        return RiceGolombCodeUtil.unfoldSigned(RiceGolombCodeUtil.readUnsigned(input, parameter, 1));
+        return delegate.readLong(input);
     }
 
     @Override
     public void writeLong(final BitOutput output, final long value) throws IOException {
-        requireNonNullOutput(output);
-        RiceGolombCodeUtil.writeUnsigned(output, parameter, RiceGolombCodeUtil.foldSigned(value), 1);
+        delegate.writeLong(output, value);
     }
 
     /**
-     * Returns the Golomb parameter held by this codec.
+     * Returns the parameter of this instance.
      *
-     * @return the Golomb parameter held by this codec.
+     * @return the parameter of this instance.
      */
     public int parameter() {
-        return parameter;
+        return delegate.parameter();
     }
 
-    private final int parameter;
+    // -----------------------------------------------------------------------------------------------------------------
+    private final com.github.jinahya.bit.io.miscellaneous.itu.GolombJPEGLS delegate;
 }

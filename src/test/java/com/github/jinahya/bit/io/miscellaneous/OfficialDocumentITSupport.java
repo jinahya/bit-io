@@ -34,6 +34,7 @@ import com.github.jinahya.bit.io.LongBitReader;
 import com.github.jinahya.bit.io.LongBitWriter;
 import com.github.jinahya.bit.io.StreamByteInput;
 import com.github.jinahya.bit.io.StreamByteOutput;
+import com.github.jinahya.bit.io.miscellaneous.itu.Asn1Oid;
 import org.junit.jupiter.api.io.TempDir;
 
 import java.io.ByteArrayInputStream;
@@ -51,14 +52,14 @@ import java.util.function.Predicate;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * A base class for integration tests whose vectors are checked in, with references to the official documents they
- * come from.
+ * A base class for integration tests whose vectors are checked in, with references to the official documents they come
+ * from.
  *
  * <p>Live checks against those documents are disabled by default, so that the default verification does not depend
  * on external sites. Enable them with the {@value #LIVE_SOURCES_PROPERTY} system property, e.g., via the
  * {@code live-sources} Maven profile.</p>
  */
-abstract class OfficialDocumentITSupport {
+public abstract class OfficialDocumentITSupport {
 
     /**
      * The name of the system property which enables live checks against official documents.
@@ -96,7 +97,27 @@ abstract class OfficialDocumentITSupport {
         return document;
     }
 
+    /**
+     * Downloads specified binary source, such as an archive of test vectors, only if {@link #liveSources() live
+     * checks} are enabled.
+     *
+     * @param url      the URL of the source.
+     * @param maxBytes the maximum number of bytes to download.
+     * @return the downloaded bytes; {@code null} if live checks are disabled.
+     * @throws IOException if an I/O error occurs.
+     */
+    protected byte[] checkSourceBytes(final String url, final int maxBytes) throws IOException {
+        if (!liveSources()) {
+            return null;
+        }
+        return downloadBytes(url, maxBytes);
+    }
+
     private String downloadText(final String url, final int maxBytes) throws IOException {
+        return new String(downloadBytes(url, maxBytes), StandardCharsets.UTF_8);
+    }
+
+    private byte[] downloadBytes(final String url, final int maxBytes) throws IOException {
         final URLConnection connection = new URL(url).openConnection();
         connection.setConnectTimeout(15000);
         connection.setReadTimeout(15000);
@@ -113,7 +134,7 @@ abstract class OfficialDocumentITSupport {
         }
         final byte[] bytes = baos.toByteArray();
         Files.write(tempDir.resolve(url.replaceAll("[^A-Za-z0-9._-]", "_")), bytes);
-        return new String(bytes, StandardCharsets.UTF_8);
+        return bytes;
     }
 
     protected static <T> T read(final BitReader<T> reader, final byte[] bytes) throws IOException {

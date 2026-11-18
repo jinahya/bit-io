@@ -27,91 +27,54 @@ import com.github.jinahya.bit.io.LongBitWriter;
 
 import java.io.IOException;
 
-import static com.github.jinahya.bit.io.BitIoUtils.requireValidSizeForSignedByte;
-import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullInput;
-import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullOutput;
-
 /**
- * A codec for HPACK/QPACK integer representations with an N-bit prefix.
+ * A deprecated alias of {@link com.github.jinahya.bit.io.miscellaneous.ietf.HpackPrefixInteger}, which this class
+ * delegates to.
  *
- * <p>This codec reads and writes only the integer representation: first {@code prefixSize} bits, followed by zero or
- * more 7-bit continuation octets. For prefix sizes smaller than 8, callers are expected to read or write the enclosing
- * representation bits before this codec consumes or emits the low prefix bits.</p>
- *
- * @see <a href="https://www.rfc-editor.org/rfc/rfc7541.html#section-5.1">RFC 7541, Section 5.1</a>
- * @see <a href="https://www.rfc-editor.org/rfc/rfc9204.html">RFC 9204: QPACK</a>
+ * @deprecated Use {@link com.github.jinahya.bit.io.miscellaneous.ietf.HpackPrefixInteger} instead;
+ *             this class will be removed in the next major version.
  */
+@Deprecated
 public final class HpackPrefixInteger
         implements LongBitReader, LongBitWriter {
 
     /**
-     * Returns a codec for the specified prefix size.
+     * Returns an instance for specified prefixSize.
      *
-     * @param prefixSize the prefix size; between {@code 1} and {@code 8}, both inclusive.
-     * @return a codec for {@code prefixSize}.
+     * @param prefixSize the prefixSize.
+     * @return an instance for {@code prefixSize}.
+     * @see com.github.jinahya.bit.io.miscellaneous.ietf.HpackPrefixInteger#of(int)
      */
     public static HpackPrefixInteger of(final int prefixSize) {
-        return new HpackPrefixInteger(prefixSize);
+        return new HpackPrefixInteger(com.github.jinahya.bit.io.miscellaneous.ietf.HpackPrefixInteger.of(prefixSize));
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    private HpackPrefixInteger(final int prefixSize) {
+    private HpackPrefixInteger(final com.github.jinahya.bit.io.miscellaneous.ietf.HpackPrefixInteger delegate) {
         super();
-        this.prefixSize = requireValidSizeForSignedByte(prefixSize);
-        prefixLimit = (1 << prefixSize) - 1;
+        this.delegate = delegate;
     }
 
     // -----------------------------------------------------------------------------------------------------------------
     @Override
     public long readLong(final BitInput input) throws IOException {
-        requireNonNullInput(input);
-        long value = input.readUnsignedInt(prefixSize);
-        if (value < prefixLimit) {
-            return value;
-        }
-        for (int shift = 0; ; shift += 7) {
-            final int octet = input.readUnsignedInt(Byte.SIZE);
-            final int payload = octet & 0x7F;
-            if (shift >= Long.SIZE - 1 || payload > (Long.MAX_VALUE - value) >> shift) {
-                throw new IOException("HPACK prefix integer exceeds signed long range");
-            }
-            value += ((long) payload) << shift;
-            if ((octet & 0x80) == 0) {
-                return value;
-            }
-        }
+        return delegate.readLong(input);
     }
 
     @Override
     public void writeLong(final BitOutput output, final long value) throws IOException {
-        requireNonNullOutput(output);
-        long v = value;
-        if (v < 0L) {
-            throw new IllegalArgumentException("negative HPACK prefix integer: " + v);
-        }
-        if (v < prefixLimit) {
-            output.writeUnsignedInt(prefixSize, (int) v);
-            return;
-        }
-        output.writeUnsignedInt(prefixSize, prefixLimit);
-        v -= prefixLimit;
-        while (v >= 128L) {
-            output.writeUnsignedInt(Byte.SIZE, (int) (v & 0x7F) | 0x80);
-            v >>>= 7;
-        }
-        output.writeUnsignedInt(Byte.SIZE, (int) v);
+        delegate.writeLong(output, value);
     }
 
     /**
-     * Returns the prefix size.
+     * Returns the prefixSize of this instance.
      *
-     * @return the prefix size.
+     * @return the prefixSize of this instance.
      */
     public int prefixSize() {
-        return prefixSize;
+        return delegate.prefixSize();
     }
 
-    private final int prefixSize;
-
-    private final int prefixLimit;
+    // -----------------------------------------------------------------------------------------------------------------
+    private final com.github.jinahya.bit.io.miscellaneous.ietf.HpackPrefixInteger delegate;
 }

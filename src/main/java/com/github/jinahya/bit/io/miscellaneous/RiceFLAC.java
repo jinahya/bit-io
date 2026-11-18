@@ -27,60 +27,54 @@ import com.github.jinahya.bit.io.LongBitWriter;
 
 import java.io.IOException;
 
-import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullInput;
-import static com.github.jinahya.bit.io.miscellaneous._Utils.requireNonNullOutput;
-
 /**
- * A value-level codec for one FLAC Rice-coded signed residual.
+ * A deprecated alias of {@link com.github.jinahya.bit.io.miscellaneous.ietf.RiceFLAC}, which this class
+ * delegates to.
  *
- * <p>This class encodes only the signed residual value for a supplied Rice parameter. It does not encode FLAC residual
- * partition headers, method selectors, escape/raw residuals, predictor order, or block-level constraints.</p>
- *
- * @see <a href="https://xiph.org/flac/format.html">FLAC format specification</a>
+ * @deprecated Use {@link com.github.jinahya.bit.io.miscellaneous.ietf.RiceFLAC} instead;
+ *             this class will be removed in the next major version.
  */
+@Deprecated
 public final class RiceFLAC
         implements LongBitReader, LongBitWriter {
 
     /**
-     * Returns a codec for specified Rice parameter.
+     * Returns an instance for specified parameter.
      *
-     * @param parameter the Rice parameter; between {@code 0} and {@code 62}, both inclusive.
-     * @return a codec for {@code parameter}.
+     * @param parameter the parameter.
+     * @return an instance for {@code parameter}.
+     * @see com.github.jinahya.bit.io.miscellaneous.ietf.RiceFLAC#of(int)
      */
     public static RiceFLAC of(final int parameter) {
-        return new RiceFLAC(parameter);
+        return new RiceFLAC(com.github.jinahya.bit.io.miscellaneous.ietf.RiceFLAC.of(parameter));
     }
 
-    private RiceFLAC(final int parameter) {
+    // -----------------------------------------------------------------------------------------------------------------
+    private RiceFLAC(final com.github.jinahya.bit.io.miscellaneous.ietf.RiceFLAC delegate) {
         super();
-        this.parameter = RiceGolombCodeUtil.requireParameter(parameter);
+        this.delegate = delegate;
     }
 
     // -----------------------------------------------------------------------------------------------------------------
     @Override
     public long readLong(final BitInput input) throws IOException {
-        requireNonNullInput(input);
-        return RiceGolombCodeUtil.unfoldSigned(RiceGolombCodeUtil.readUnsigned(input, parameter, 0));
+        return delegate.readLong(input);
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
     @Override
     public void writeLong(final BitOutput output, final long value) throws IOException {
-        requireNonNullOutput(output);
-        RiceGolombCodeUtil.writeUnsigned(output, parameter, RiceGolombCodeUtil.foldSigned(value), 0);
+        delegate.writeLong(output, value);
     }
-
-    // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * Returns the Rice parameter held by this codec.
+     * Returns the parameter of this instance.
      *
-     * @return the Rice parameter held by this codec.
+     * @return the parameter of this instance.
      */
     public int parameter() {
-        return parameter;
+        return delegate.parameter();
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    private final int parameter;
+    private final com.github.jinahya.bit.io.miscellaneous.ietf.RiceFLAC delegate;
 }

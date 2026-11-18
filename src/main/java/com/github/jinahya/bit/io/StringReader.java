@@ -102,7 +102,7 @@ public class StringReader
      * @deprecated Use {@link #StringReader(int, Charset)} instead; this constructor will be removed in the next
      *             major version.
      */
-    @Deprecated
+    @Deprecated(forRemoval = true)
     public StringReader(final int lengthSize, final String charsetName) {
         this(lengthSize, charset(charsetName));
     }

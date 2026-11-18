@@ -22,6 +22,7 @@ package com.github.jinahya.bit.io;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.util.Objects;
 
 /**
  * A {@link BitWriter} for writing {@code String} values encoded as a length-prefixed array of full bytes in a named
@@ -93,9 +94,7 @@ public class StringWriter
      */
     public StringWriter(final int lengthSize, final Charset charset) {
         super();
-        if (charset == null) {
-            throw new NullPointerException("charset is null");
-        }
+        Objects.requireNonNull(charset, "charset is null");
         this.delegate = new ByteArrayWriter.Signed8(lengthSize);
         this.charset = charset;
     }
@@ -114,7 +113,7 @@ public class StringWriter
      * @deprecated Use {@link #StringWriter(int, Charset)} instead; this constructor will be removed in the next
      *             major version.
      */
-    @Deprecated
+    @Deprecated(forRemoval = true)
     public StringWriter(final int lengthSize, final String charsetName) {
         this(lengthSize, StringReader.charset(charsetName));
     }

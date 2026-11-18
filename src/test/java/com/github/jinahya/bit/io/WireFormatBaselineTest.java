@@ -83,6 +83,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
  * also write identical bytes, which 4.2.1 reads by construction (new writer, old reader). Never regenerate the baseline
  * from the current code.</p>
  */
+@SuppressWarnings("removal") // uses the String-name constructors, as main() must also compile against bit-io 4.2.1
 class WireFormatBaselineTest {
 
     static final String BASELINE = "wire-baseline-4.2.1.tsv";

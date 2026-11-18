@@ -618,6 +618,50 @@
         </pluginManagement>
       </build>
     </profile>
+    <profile> <!-- compares the public API with a released version; mvn -Pjapicmp package [-Djapicmp.oldVersion=...] -->
+      <id>japicmp</id>
+      <properties>
+        <japicmp.oldVersion>4.2.1</japicmp.oldVersion>
+      </properties>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>com.github.siom79.japicmp</groupId>
+            <artifactId>japicmp-maven-plugin</artifactId>
+            <!-- https://central.sonatype.com/artifact/com.github.siom79.japicmp/japicmp-maven-plugin/versions -->
+            <version>0.27.0</version>
+            <configuration>
+              <oldVersion>
+                <dependency>
+                  <groupId>${project.groupId}</groupId>
+                  <artifactId>${project.artifactId}</artifactId>
+                  <version>${japicmp.oldVersion}</version>
+                  <type>jar</type>
+                </dependency>
+              </oldVersion>
+              <newVersion>
+                <file>
+                  <path>${project.build.directory}/${project.build.finalName}.jar</path>
+                </file>
+              </newVersion>
+              <parameter>
+                <onlyModified>true</onlyModified>
+                <breakBuildOnBinaryIncompatibleModifications>false</breakBuildOnBinaryIncompatibleModifications>
+                <breakBuildOnSourceIncompatibleModifications>false</breakBuildOnSourceIncompatibleModifications>
+              </parameter>
+            </configuration>
+            <executions>
+              <execution>
+                <phase>package</phase>
+                <goals>
+                  <goal>cmp</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
     <profile> <!-- checks integration test vectors against live official documents; requires network access -->
       <id>live-sources</id>
       <properties>

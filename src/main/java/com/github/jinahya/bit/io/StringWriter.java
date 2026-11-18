@@ -36,13 +36,40 @@ public class StringWriter
      * Returns a new writer that writes a compressed ({@value java.lang.Byte#SIZE}{@code  - 1}-bit element)
      * {@code US-ASCII} string.
      *
+     * <p>The returned writer encodes values with {@link String#getBytes(java.nio.charset.Charset)}, which
+     * <em>silently replaces</em> each character that can't be mapped to {@code US-ASCII} (including an unpaired
+     * surrogate) with {@code '?'}; e.g., {@code "é"} is read back as {@code "?"}, indistinguishable from a literal
+     * question mark. Use {@link #ofAsciiStrict(int)} to reject such values instead.</p>
+     *
      * @param lengthSize the number of bits for the (byte) length; between {@code 1} and
      *                   ({@value java.lang.Integer#SIZE} - {@code 1}), both inclusive.
      * @return a new ASCII writer.
      * @see StringReader#ofAscii(int)
+     * @see #ofAsciiStrict(int)
      */
     public static BitWriter<String> ofAscii(final int lengthSize) {
-        return new AsciiWriter(lengthSize);
+        return new AsciiWriter(lengthSize, false);
+    }
+
+    /**
+     * Returns a new writer that writes a compressed ({@value java.lang.Byte#SIZE}{@code  - 1}-bit element)
+     * {@code US-ASCII} string, rejecting any value which contains a character that can't be mapped to
+     * {@code US-ASCII}.
+     *
+     * <p>For a value consisting only of {@code US-ASCII} characters ({@code U+0000} to {@code U+007F}), the returned
+     * writer writes exactly the same bits as {@link #ofAscii(int)}; hence values written by it can be read with
+     * {@link StringReader#ofAscii(int)}. For any other value, including one with an unpaired surrogate, its
+     * {@link BitWriter#write(BitOutput, Object) write} method throws an {@link IllegalArgumentException} before writing
+     * any bits.</p>
+     *
+     * @param lengthSize the number of bits for the (byte) length; between {@code 1} and
+     *                   ({@value java.lang.Integer#SIZE} - {@code 1}), both inclusive.
+     * @return a new strict ASCII writer.
+     * @see StringReader#ofAscii(int)
+     * @see #ofAscii(int)
+     */
+    public static BitWriter<String> ofAsciiStrict(final int lengthSize) {
+        return new AsciiWriter(lengthSize, true);
     }
 
     // -----------------------------------------------------------------------------------------------------------------

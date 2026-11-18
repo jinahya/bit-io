@@ -25,7 +25,6 @@ import lombok.NoArgsConstructor;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 class Asn1OidIT
@@ -33,8 +32,9 @@ class Asn1OidIT
 
     @Test
     void verifiesOidContentOctetsFromX690() throws Exception {
-        final String document = downloadText("https://www.itu.int/rec/T-REC-X.690", 128 * 1024);
-        assertTrue(document.contains("X.690") || document.contains("ASN.1"), "downloaded ITU-T X.690 page");
+        checkSource("https://www.itu.int/rec/T-REC-X.690", 128 * 1024,
+                    document -> document.contains("X.690") || document.contains("ASN.1"),
+                    "downloaded ITU-T X.690 page");
 
         final long[] oid = {1L, 2L, 840L, 113549L};
         final byte[] content = hex("2a864886f70d");

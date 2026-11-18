@@ -26,7 +26,6 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 class HpackPrefixIntegerIT
@@ -34,10 +33,13 @@ class HpackPrefixIntegerIT
 
     @Test
     void verifiesIntegerExamplesFromRfc7541() throws Exception {
-        final String hpack = downloadText("https://www.rfc-editor.org/rfc/rfc7541.txt", 384 * 1024);
-        final String qpack = downloadText("https://www.rfc-editor.org/rfc/rfc9204.txt", 384 * 1024);
-        assertTrue(hpack.contains("5.1.  Integer Representation"), "downloaded RFC 7541");
-        assertTrue(qpack.contains("prefixed integers") || qpack.contains("Prefixed Integers"), "downloaded RFC 9204");
+        checkSource("https://www.rfc-editor.org/rfc/rfc7541.txt", 384 * 1024,
+                    document -> document.contains("5.1.  Integer Representation"),
+                    "downloaded RFC 7541");
+        checkSource("https://www.rfc-editor.org/rfc/rfc9204.txt", 384 * 1024,
+                    document -> document.contains("prefixed integers")
+                                || document.contains("Prefixed Integers"),
+                    "downloaded RFC 9204");
 
         assertArrayEquals(hex("0a"), writeStandalone(5, 10L));
         assertEquals(10L, readStandalone(5, hex("0a")));

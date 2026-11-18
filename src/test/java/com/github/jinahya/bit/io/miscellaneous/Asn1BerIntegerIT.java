@@ -28,7 +28,6 @@ import java.math.BigInteger;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 class Asn1BerIntegerIT
@@ -36,8 +35,9 @@ class Asn1BerIntegerIT
 
     @Test
     void verifiesBerIntegerContentOctetsFromX690() throws Exception {
-        final String document = downloadText("https://www.itu.int/rec/T-REC-X.690", 128 * 1024);
-        assertTrue(document.contains("X.690") || document.contains("ASN.1"), "downloaded ITU-T X.690 page");
+        checkSource("https://www.itu.int/rec/T-REC-X.690", 128 * 1024,
+                    document -> document.contains("X.690") || document.contains("ASN.1"),
+                    "downloaded ITU-T X.690 page");
 
         assertArrayEquals(hex("00ff"), writeBerInteger(BigInteger.valueOf(255L)));
         assertArrayEquals(hex("ff01"), writeBerInteger(BigInteger.valueOf(-255L)));

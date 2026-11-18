@@ -1,0 +1,31 @@
+name: Live Sources
+
+# Checks the checked-in integration test vectors against the live official documents they come from.
+# Kept out of the default CI (maven.yml) so that external site outages cannot fail unrelated changes.
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 0 * * 1'
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Java 8 / Maven / live-sources
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Set up Java 8
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '8'
+          cache: maven
+
+      - name: Verify
+        run: mvn -B -ntp -Plive-sources verify

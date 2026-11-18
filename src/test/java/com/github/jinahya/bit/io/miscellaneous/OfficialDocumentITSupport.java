@@ -46,10 +46,57 @@ import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.function.Predicate;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+/**
+ * A base class for integration tests whose vectors are checked in, with references to the official documents they
+ * come from.
+ *
+ * <p>Live checks against those documents are disabled by default, so that the default verification does not depend
+ * on external sites. Enable them with the {@value #LIVE_SOURCES_PROPERTY} system property, e.g., via the
+ * {@code live-sources} Maven profile.</p>
+ */
 abstract class OfficialDocumentITSupport {
 
-    protected String downloadText(final String url, final int maxBytes) throws IOException {
+    /**
+     * The name of the system property which enables live checks against official documents.
+     */
+    static final String LIVE_SOURCES_PROPERTY = "bit-io.it.live-sources";
+
+    /**
+     * Indicates whether live checks against official documents are enabled.
+     *
+     * @return {@code true} if live checks are enabled; {@code false} otherwise.
+     */
+    protected static boolean liveSources() {
+        return Boolean.getBoolean(LIVE_SOURCES_PROPERTY);
+    }
+
+    /**
+     * Downloads specified official document and asserts its content, only if {@link #liveSources() live checks} are
+     * enabled.
+     *
+     * @param url      the URL of the official document.
+     * @param maxBytes the maximum number of bytes to download.
+     * @param check    a predicate which tests the downloaded text.
+     * @param message  the assertion message.
+     * @return the downloaded text; {@code null} if live checks are disabled.
+     * @throws IOException if an I/O error occurs.
+     */
+    protected String checkSource(final String url, final int maxBytes, final Predicate<String> check,
+                                 final String message)
+            throws IOException {
+        if (!liveSources()) {
+            return null;
+        }
+        final String document = downloadText(url, maxBytes);
+        assertTrue(check.test(document), message);
+        return document;
+    }
+
+    private String downloadText(final String url, final int maxBytes) throws IOException {
         final URLConnection connection = new URL(url).openConnection();
         connection.setConnectTimeout(15000);
         connection.setReadTimeout(15000);

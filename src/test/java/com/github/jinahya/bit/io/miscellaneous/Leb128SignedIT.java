@@ -28,7 +28,6 @@ import static com.github.jinahya.bit.io.miscellaneous.Leb128TestUtils.readSigned
 import static com.github.jinahya.bit.io.miscellaneous.Leb128TestUtils.writeSigned;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 class Leb128SignedIT
@@ -36,8 +35,9 @@ class Leb128SignedIT
 
     @Test
     void verifiesSignedLeb128ExampleFromWebAssemblySpec() throws Exception {
-        final String document = downloadText("https://webassembly.github.io/spec/core/binary/values.html", 256 * 1024);
-        assertTrue(document.contains("LEB128"), "downloaded WebAssembly binary values page");
+        checkSource("https://webassembly.github.io/spec/core/binary/values.html", 256 * 1024,
+                    document -> document.contains("LEB128"),
+                    "downloaded WebAssembly binary values page");
 
         assertArrayEquals(hex("c0bb78"), writeSigned(-123456L));
         assertEquals(-123456L, readSigned(hex("c0bb78")));

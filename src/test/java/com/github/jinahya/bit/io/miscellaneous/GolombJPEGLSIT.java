@@ -28,7 +28,6 @@ import static com.github.jinahya.bit.io.miscellaneous.RiceGolombTestUtils.readGo
 import static com.github.jinahya.bit.io.miscellaneous.RiceGolombTestUtils.writeGolombJpegLs;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 class GolombJPEGLSIT
@@ -36,8 +35,9 @@ class GolombJPEGLSIT
 
     @Test
     void verifiesGolombErrorCodingExamplesFromT87() throws Exception {
-        final String document = downloadText("https://www.itu.int/rec/T-REC-T.87", 128 * 1024);
-        assertTrue(document.contains("T.87") || document.contains("JPEG-LS"), "downloaded ITU-T T.87 page");
+        checkSource("https://www.itu.int/rec/T-REC-T.87", 128 * 1024,
+                    document -> document.contains("T.87") || document.contains("JPEG-LS"),
+                    "downloaded ITU-T T.87 page");
 
         assertArrayEquals(bits("000"), writeGolombJpegLs(2, 0L));
         assertArrayEquals(bits("001"), writeGolombJpegLs(2, -1L));

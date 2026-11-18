@@ -85,10 +85,7 @@ public final class SqliteVarint
             output.writeUnsignedInt(Byte.SIZE, (int) (value & 0xFF));
             return;
         }
-        int groups = 1;
-        while (groups < MAX_BYTES - 1 && (value >>> (groups * GROUP_SIZE)) != 0L) {
-            groups++;
-        }
+        final int groups = Math.max(1, (Long.SIZE - Long.numberOfLeadingZeros(value) + GROUP_SIZE - 1) / GROUP_SIZE);
         for (int i = groups - 1; i >= 0; i--) {
             final int group = (int) ((value >>> (i * GROUP_SIZE)) & 0x7F);
             output.writeUnsignedInt(Byte.SIZE, i > 0 ? CONTINUATION | group : group);

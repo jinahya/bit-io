@@ -58,11 +58,9 @@ final class Asn1Base128Util {
         if (value < 0L) {
             throw new IllegalArgumentException("negative ASN.1 base-128 value: " + value);
         }
-        int shift = 63;
-        while (shift > 0 && ((value >>> shift) & MASK_VALUE) == 0L) {
-            shift -= GROUP_SIZE;
-        }
-        for (; shift > 0; shift -= GROUP_SIZE) {
+        // the shift of the highest non-zero group; 0 for value 0
+        final int highest = (Long.SIZE - 1 - Long.numberOfLeadingZeros(value)) / GROUP_SIZE * GROUP_SIZE;
+        for (int shift = highest; shift > 0; shift -= GROUP_SIZE) {
             output.writeUnsignedInt(Byte.SIZE, (int) ((value >>> shift) & MASK_VALUE) | MASK_CONTINUATION);
         }
         output.writeUnsignedInt(Byte.SIZE, (int) value & MASK_VALUE);

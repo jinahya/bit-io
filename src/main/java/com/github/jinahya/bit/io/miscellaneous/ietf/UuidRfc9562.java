@@ -26,6 +26,7 @@ import com.github.jinahya.bit.io.BitReader;
 import com.github.jinahya.bit.io.BitWriter;
 
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -51,13 +52,8 @@ public final class UuidRfc9562
      * @return the {@code UUID} of {@code bytes}.
      */
     static UUID fromBytes(final byte[] bytes) {
-        long msb = 0L;
-        long lsb = 0L;
-        for (int i = 0; i < 8; i++) {
-            msb = (msb << Byte.SIZE) | (bytes[i] & 0xFFL);
-            lsb = (lsb << Byte.SIZE) | (bytes[i + 8] & 0xFFL);
-        }
-        return new UUID(msb, lsb);
+        final ByteBuffer buffer = ByteBuffer.wrap(bytes);
+        return new UUID(buffer.getLong(0), buffer.getLong(Long.BYTES));
     }
 
     /**
@@ -67,14 +63,10 @@ public final class UuidRfc9562
      * @return the octets of {@code value}.
      */
     static byte[] toBytes(final UUID value) {
-        final byte[] bytes = new byte[UuidRfc9562Bytes.LENGTH];
-        final long msb = value.getMostSignificantBits();
-        final long lsb = value.getLeastSignificantBits();
-        for (int i = 0; i < 8; i++) {
-            bytes[i] = (byte) (msb >>> (Long.SIZE - Byte.SIZE * (i + 1)));
-            bytes[i + 8] = (byte) (lsb >>> (Long.SIZE - Byte.SIZE * (i + 1)));
-        }
-        return bytes;
+        return ByteBuffer.allocate(UuidRfc9562Bytes.LENGTH)
+                .putLong(value.getMostSignificantBits())
+                .putLong(value.getLeastSignificantBits())
+                .array();
     }
 
     // -----------------------------------------------------------------------------------------------------------------

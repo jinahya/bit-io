@@ -155,7 +155,7 @@ public abstract class AbstractBitInput
 
     @Override
     public short readShort16Le() throws IOException {
-        return (short) (readByte8() & 0xFF | readByte8() << Byte.SIZE);
+        return Short.reverseBytes(readShort16());
     }
 
     // ------------------------------------------------------------------------------------------------------------- int
@@ -199,7 +199,7 @@ public abstract class AbstractBitInput
 
     @Override
     public int readInt32Le() throws IOException {
-        return readShort16Le() & 0xFFFF | readShort16Le() << Short.SIZE;
+        return Integer.reverseBytes(readInt32());
     }
 
     // ------------------------------------------------------------------------------------------------------------ long
@@ -243,7 +243,7 @@ public abstract class AbstractBitInput
 
     @Override
     public long readLong64Le() throws IOException {
-        return readInt32Le() & 0xFFFFFFFFL | ((long) readInt32Le()) << Integer.SIZE;
+        return Long.reverseBytes(readLong64());
     }
 
     // ------------------------------------------------------------------------------------------------------------ char

@@ -395,11 +395,7 @@ public final class Hierarchyid
 
     @Override
     public int hashCode() {
-        int result = 1;
-        for (final byte b : bytes) {
-            result = 31 * result + b;
-        }
-        return result;
+        return Arrays.hashCode(bytes);
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -414,14 +410,7 @@ public final class Hierarchyid
      */
     @Override
     public int compareTo(final Hierarchyid o) {
-        final int length = Math.min(bytes.length, o.bytes.length);
-        for (int i = 0; i < length; i++) {
-            final int c = (bytes[i] & 0xFF) - (o.bytes[i] & 0xFF);
-            if (c != 0) {
-                return c;
-            }
-        }
-        return bytes.length - o.bytes.length;
+        return Arrays.compareUnsigned(bytes, o.bytes);
     }
 
     // -----------------------------------------------------------------------------------------------------------------

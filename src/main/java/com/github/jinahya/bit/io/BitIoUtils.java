@@ -69,37 +69,27 @@ public final class BitIoUtils {
     }
 
     /**
-     * Returns the zero-based index of the highest set bit in specified value. A {@code 1.4}-safe replacement for
-     * {@code 31 - }{@link Integer#numberOfLeadingZeros(int)} ({@code Integer.numberOfLeadingZeros} is a Java {@code 5}
-     * method that the retro-translated {@code 1.3}/{@code 1.4} artifacts cannot rely on).
+     * Returns the zero-based index of the highest set bit in specified value; equivalent to
+     * {@code 31 - }{@link Integer#numberOfLeadingZeros(int)}.
      *
      * @param value the value.
      * @return the index of the highest set bit, between {@code 0} and {@code 31}, both inclusive; {@code -1} when
      *         {@code value} is {@code 0}.
      */
     public static int highestOneBitIndex(final int value) {
-        int index = -1;
-        for (int v = value; v != 0; v >>>= 1) {
-            index++;
-        }
-        return index;
+        return Integer.SIZE - 1 - Integer.numberOfLeadingZeros(value);
     }
 
     /**
-     * Returns the zero-based index of the highest set bit in specified value. A {@code 1.4}-safe replacement for
-     * {@code 63 - }{@link Long#numberOfLeadingZeros(long)} ({@code Long.numberOfLeadingZeros} is a Java {@code 5}
-     * method that the retro-translated {@code 1.3}/{@code 1.4} artifacts cannot rely on).
+     * Returns the zero-based index of the highest set bit in specified value; equivalent to
+     * {@code 63 - }{@link Long#numberOfLeadingZeros(long)}.
      *
      * @param value the value.
      * @return the index of the highest set bit, between {@code 0} and {@code 63}, both inclusive; {@code -1} when
      *         {@code value} is {@code 0}.
      */
     public static int highestOneBitIndex(final long value) {
-        int index = -1;
-        for (long v = value; v != 0L; v >>>= 1) {
-            index++;
-        }
-        return index;
+        return Long.SIZE - 1 - Long.numberOfLeadingZeros(value);
     }
 
     private BitIoUtils() {

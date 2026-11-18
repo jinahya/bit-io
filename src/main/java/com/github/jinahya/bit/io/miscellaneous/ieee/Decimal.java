@@ -237,11 +237,7 @@ public final class Decimal {
             if (point > 0) {
                 return builder.append(digits, 0, point).append('.').append(digits, point, digits.length()).toString();
             }
-            builder.append("0.");
-            for (int i = point; i < 0; i++) {
-                builder.append('0');
-            }
-            return builder.append(digits).toString();
+            return builder.append("0.").append("0".repeat(-point)).append(digits).toString();
         }
         builder.append(digits.charAt(0));
         if (digits.length() > 1) {

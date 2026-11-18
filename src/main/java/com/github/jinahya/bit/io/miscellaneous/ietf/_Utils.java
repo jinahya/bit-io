@@ -27,26 +27,6 @@ import java.util.Objects;
 
 final class _Utils {
 
-    static byte[] fromHex(final String value) {
-        requireNonNullValue(value);
-        final String hex;
-        if ((value.length() & 1) == 0) {
-            hex = value;
-        } else {
-            hex = "0" + value;
-        }
-        final byte[] bytes = new byte[hex.length() >> 1];
-        for (int i = 0; i < bytes.length; i++) {
-            final int high = Character.digit(hex.charAt(i << 1), 16);
-            final int low = Character.digit(hex.charAt((i << 1) + 1), 16);
-            if (high < 0 || low < 0) {
-                throw new IllegalArgumentException("invalid hexadecimal string: " + value);
-            }
-            bytes[i] = (byte) ((high << 4) | low);
-        }
-        return bytes;
-    }
-
     static <T extends BitInput> T requireNonNullInput(final T input) {
         return Objects.requireNonNull(input, "input is null");
     }

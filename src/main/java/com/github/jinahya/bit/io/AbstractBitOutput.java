@@ -167,8 +167,7 @@ public abstract class AbstractBitOutput
 
     @Override
     public void writeShort16Le(final short value) throws IOException {
-        writeByte8((byte) value);
-        writeByte8((byte) (value >> Byte.SIZE));
+        writeShort16(Short.reverseBytes(value));
     }
 
     // ------------------------------------------------------------------------------------------------------------- int
@@ -211,8 +210,7 @@ public abstract class AbstractBitOutput
 
     @Override
     public void writeInt32Le(final int value) throws IOException {
-        writeShort16Le((short) value);
-        writeShort16Le((short) (value >> Short.SIZE));
+        writeInt32(Integer.reverseBytes(value));
     }
 
     // ------------------------------------------------------------------------------------------------------------ long
@@ -254,8 +252,7 @@ public abstract class AbstractBitOutput
 
     @Override
     public void writeLong64Le(final long value) throws IOException {
-        writeInt32Le((int) value);
-        writeInt32Le((int) (value >> Integer.SIZE));
+        writeLong64(Long.reverseBytes(value));
     }
 
     // ------------------------------------------------------------------------------------------------------------ char

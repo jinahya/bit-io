@@ -33,6 +33,7 @@ import org.junit.jupiter.api.Test;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.HexFormat;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -55,16 +56,16 @@ class HpackPrefixIntegerTest {
 
     @Test
     void writesRfc7541Examples() throws IOException {
-        assertArrayEquals(_Utils.fromHex("0a"), writeStandalone(5, 10L));
-        assertArrayEquals(_Utils.fromHex("1f9a0a"), writeStandalone(5, 1337L));
-        assertArrayEquals(_Utils.fromHex("2a"), writeStandalone(8, 42L));
+        assertArrayEquals(HexFormat.of().parseHex("0a"), writeStandalone(5, 10L));
+        assertArrayEquals(HexFormat.of().parseHex("1f9a0a"), writeStandalone(5, 1337L));
+        assertArrayEquals(HexFormat.of().parseHex("2a"), writeStandalone(8, 42L));
     }
 
     @Test
     void readsRfc7541Examples() throws IOException {
-        assertEquals(10L, readStandalone(5, _Utils.fromHex("0a")));
-        assertEquals(1337L, readStandalone(5, _Utils.fromHex("1f9a0a")));
-        assertEquals(42L, readStandalone(8, _Utils.fromHex("2a")));
+        assertEquals(10L, readStandalone(5, HexFormat.of().parseHex("0a")));
+        assertEquals(1337L, readStandalone(5, HexFormat.of().parseHex("1f9a0a")));
+        assertEquals(42L, readStandalone(8, HexFormat.of().parseHex("2a")));
     }
 
     @Test
@@ -74,9 +75,10 @@ class HpackPrefixIntegerTest {
         output.writeUnsignedInt(3, 0b101);
         HpackPrefixInteger.of(5).writeLong(output, 10L);
         output.align(1);
-        assertArrayEquals(_Utils.fromHex("aa"), baos.toByteArray());
+        assertArrayEquals(HexFormat.of().parseHex("aa"), baos.toByteArray());
 
-        final BitInput input = new DefaultBitInput(new StreamByteInput(new ByteArrayInputStream(_Utils.fromHex("aa"))));
+        final BitInput input = new DefaultBitInput(
+                new StreamByteInput(new ByteArrayInputStream(HexFormat.of().parseHex("aa"))));
         assertEquals(0b101, input.readUnsignedInt(3));
         assertEquals(10L, HpackPrefixInteger.of(5).readLong(input));
     }

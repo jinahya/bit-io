@@ -53,37 +53,23 @@ class CompressedUnicodeWriter
     public void write(final BitOutput output, final String value) throws IOException {
         Objects.requireNonNull(output, "output is null");
         Objects.requireNonNull(value, "value is null");
-        final int length = codePointCount(value);
+        final int[] codePoints = value.codePoints().toArray();
+        for (final int codePoint : codePoints) {
+            if (isSurrogate(codePoint)) { // only an unpaired surrogate comes out as a surrogate code point
+                throw new IllegalArgumentException("unpaired surrogate code point: " + codePoint);
+            }
+        }
+        final int length = codePoints.length;
         if ((length >>> lengthSize) != 0) {
             throw new IllegalArgumentException(
                     "code point length(" + length + ") requires more than lengthSize(" + lengthSize + ") bits");
         }
         output.writeUnsignedInt(lengthSize, length);
-        for (int offset = 0; offset < value.length(); ) {
-            final int codePoint = value.codePointAt(offset);
+        for (final int codePoint : codePoints) {
             writeCodePoint(output, codePoint);
-            offset += Character.charCount(codePoint);
         }
     }
 
-    /**
-     * Counts the code points of specified value, rejecting any unpaired surrogate before anything is written.
-     *
-     * @param value the value.
-     * @return the number of code points of {@code value}.
-     * @throws IllegalArgumentException if {@code value} contains an unpaired surrogate.
-     */
-    private static int codePointCount(final String value) {
-        int count = 0;
-        for (int offset = 0; offset < value.length(); count++) {
-            final int codePoint = value.codePointAt(offset);
-            if (isSurrogate(codePoint)) {
-                throw new IllegalArgumentException("unpaired surrogate code point: " + codePoint);
-            }
-            offset += Character.charCount(codePoint);
-        }
-        return count;
-    }
 
     private static void writeCodePoint(final BitOutput output, final int codePoint) throws IOException {
         if (codePoint <= 0x7F) {

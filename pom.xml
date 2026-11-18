@@ -201,7 +201,8 @@
         <configuration>
           <exportScr>true</exportScr>
           <instructions>
-            <Automatic-Module-Name>io.github.jinahya.bit.io</Automatic-Module-Name>
+            <!-- explicit; otherwise bnd exports META-INF/versions/22 as a package -->
+            <Export-Package>com.github.jinahya.bit.io,com.github.jinahya.bit.io.miscellaneous.*</Export-Package>
             <Multi-Release>true</Multi-Release>
             <_include>-bnd.bnd</_include>
           </instructions>
@@ -258,6 +259,10 @@
           <execution>
             <id>default-testCompile</id>
             <configuration>
+              <!-- tests compile into the module; its export/constructor lints are about API, not tests -->
+              <compilerArgs>
+                <arg>-Xlint:all,-exports,-missing-explicit-ctor</arg>
+              </compilerArgs>
               <compileSourceRoots>
                 <compileSourceRoot>${project.basedir}/src/test/java</compileSourceRoot>
                 <compileSourceRoot>${project.basedir}/src/main/java22</compileSourceRoot>
@@ -271,6 +276,8 @@
         <artifactId>maven-failsafe-plugin</artifactId>
         <version>${version.maven-failsafe}</version>
         <configuration>
+          <!-- ITs check the codecs against the specs; @TempDir would need test-only packages opened on the module path -->
+          <useModulePath>false</useModulePath>
           <systemPropertyVariables>
             <bit-io.it.live-sources>${bit-io.it.live-sources}</bit-io.it.live-sources>
           </systemPropertyVariables>

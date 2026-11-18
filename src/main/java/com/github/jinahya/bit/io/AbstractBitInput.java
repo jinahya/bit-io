@@ -21,6 +21,7 @@ package com.github.jinahya.bit.io;
  */
 
 import java.io.IOException;
+import java.util.Objects;
 
 import static com.github.jinahya.bit.io.BitIoConstants.FLAG_SIZE;
 import static com.github.jinahya.bit.io.BitIoUtils.requireValidExponentSizeDouble;
@@ -378,41 +379,31 @@ public abstract class AbstractBitInput
     // ------------------------------------------------------------------------------------------------------- primitive
     @Override
     public boolean readBoolean(final BooleanBitReader reader) throws IOException {
-        if (reader == null) {
-            throw new NullPointerException("reader is null");
-        }
+        Objects.requireNonNull(reader, "reader is null");
         return reader.readBoolean(this);
     }
 
     @Override
     public int readInt(final IntBitReader reader) throws IOException {
-        if (reader == null) {
-            throw new NullPointerException("reader is null");
-        }
+        Objects.requireNonNull(reader, "reader is null");
         return reader.readInt(this);
     }
 
     @Override
     public long readLong(final LongBitReader reader) throws IOException {
-        if (reader == null) {
-            throw new NullPointerException("reader is null");
-        }
+        Objects.requireNonNull(reader, "reader is null");
         return reader.readLong(this);
     }
 
     @Override
     public float readFloat(final FloatBitReader reader) throws IOException {
-        if (reader == null) {
-            throw new NullPointerException("reader is null");
-        }
+        Objects.requireNonNull(reader, "reader is null");
         return reader.readFloat(this);
     }
 
     @Override
     public double readDouble(final DoubleBitReader reader) throws IOException {
-        if (reader == null) {
-            throw new NullPointerException("reader is null");
-        }
+        Objects.requireNonNull(reader, "reader is null");
         return reader.readDouble(this);
     }
 
@@ -430,9 +421,7 @@ public abstract class AbstractBitInput
      */
     @Override
     public <T> T readObject(final BitReader<? extends T> reader) throws IOException {
-        if (reader == null) {
-            throw new NullPointerException("reader is null");
-        }
+        Objects.requireNonNull(reader, "reader is null");
         return reader.read(this);
     }
 

@@ -23,20 +23,16 @@ package com.github.jinahya.bit.io.miscellaneous.w3c;
 import com.github.jinahya.bit.io.BitInput;
 import com.github.jinahya.bit.io.BitOutput;
 
+import java.util.Objects;
+
 final class _Utils {
 
     static <T extends BitInput> T requireNonNullInput(final T input) {
-        if (input == null) {
-            throw new NullPointerException("input is null");
-        }
-        return input;
+        return Objects.requireNonNull(input, "input is null");
     }
 
     static <T extends BitOutput> T requireNonNullOutput(final T output) {
-        if (output == null) {
-            throw new NullPointerException("output is null");
-        }
-        return output;
+        return Objects.requireNonNull(output, "output is null");
     }
 
     // -----------------------------------------------------------------------------------------------------------------

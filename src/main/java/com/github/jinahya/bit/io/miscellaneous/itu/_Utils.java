@@ -23,29 +23,21 @@ package com.github.jinahya.bit.io.miscellaneous.itu;
 import com.github.jinahya.bit.io.BitInput;
 import com.github.jinahya.bit.io.BitOutput;
 
+import java.util.Objects;
 import java.util.function.Supplier;
 
 final class _Utils {
 
     static <T extends BitInput> T requireNonNullInput(final T input) {
-        if (input == null) {
-            throw new NullPointerException("input is null");
-        }
-        return input;
+        return Objects.requireNonNull(input, "input is null");
     }
 
     static <T extends BitOutput> T requireNonNullOutput(final T output) {
-        if (output == null) {
-            throw new NullPointerException("output is null");
-        }
-        return output;
+        return Objects.requireNonNull(output, "output is null");
     }
 
     static <T> T requireNonNullValue(final T value) {
-        if (value == null) {
-            throw new NullPointerException("value is null");
-        }
-        return value;
+        return Objects.requireNonNull(value, "value is null");
     }
 
     static <X extends Exception> int requireGreaterThanOrEqualsTo(final int value, final int minimum,

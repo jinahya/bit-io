@@ -21,6 +21,7 @@ package com.github.jinahya.bit.io;
  */
 
 import java.io.IOException;
+import java.util.Objects;
 
 /**
  * A default implementation of {@link BitInput} which reads bytes from an instance of {@link ByteInput}.
@@ -41,10 +42,7 @@ public class DefaultBitInput
      */
     public DefaultBitInput(final ByteInput delegate) {
         super();
-        if (delegate == null) {
-            throw new NullPointerException("delegate is null");
-        }
-        this.delegate = delegate;
+        this.delegate = Objects.requireNonNull(delegate, "delegate is null");
     }
 
     // -----------------------------------------------------------------------------------------------------------------

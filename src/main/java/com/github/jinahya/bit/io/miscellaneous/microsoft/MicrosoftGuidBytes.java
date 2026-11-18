@@ -27,6 +27,7 @@ import com.github.jinahya.bit.io.BitWriter;
 import com.github.jinahya.bit.io.miscellaneous.ietf.UuidRfc9562Bytes;
 
 import java.io.IOException;
+import java.util.Objects;
 
 /**
  * A codec for Microsoft GUID values in their 16-octet packet representation: {@code Data1} (4 octets), {@code Data2}
@@ -90,12 +91,8 @@ public final class MicrosoftGuidBytes
 
     @Override
     public void write(final BitOutput output, final byte[] value) throws IOException {
-        if (output == null) {
-            throw new NullPointerException("output is null");
-        }
-        if (value == null) {
-            throw new NullPointerException("value is null");
-        }
+        Objects.requireNonNull(output, "output is null");
+        Objects.requireNonNull(value, "value is null");
         if (value.length != LENGTH) {
             throw new IllegalArgumentException("value.length(" + value.length + ") != " + LENGTH);
         }

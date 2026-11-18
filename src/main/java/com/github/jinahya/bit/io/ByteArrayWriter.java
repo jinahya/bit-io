@@ -21,6 +21,7 @@ package com.github.jinahya.bit.io;
  */
 
 import java.io.IOException;
+import java.util.Objects;
 
 import static com.github.jinahya.bit.io.BitIoUtils.requireValidSizeByte;
 import static com.github.jinahya.bit.io.BitIoUtils.requireValidSizeForUnsignedInt;
@@ -121,12 +122,8 @@ public class ByteArrayWriter
      */
     @Override
     public void write(final BitOutput output, final byte[] value) throws IOException {
-        if (output == null) {
-            throw new NullPointerException("output is null");
-        }
-        if (value == null) {
-            throw new NullPointerException("value is null");
-        }
+        Objects.requireNonNull(output, "output is null");
+        Objects.requireNonNull(value, "value is null");
         final int length = value.length;
         if ((length >>> lengthSize) != 0) {
             throw new IllegalArgumentException(

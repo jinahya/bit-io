@@ -21,6 +21,7 @@ package com.github.jinahya.bit.io;
  */
 
 import java.io.IOException;
+import java.util.Objects;
 
 import static com.github.jinahya.bit.io.BitIoConstants.MAX_EXPONENT_SIZE_DOUBLE;
 import static com.github.jinahya.bit.io.BitIoConstants.MAX_EXPONENT_SIZE_FLOAT;
@@ -45,9 +46,7 @@ public final class BitIoUtils {
      * @throws IOException          if an I/O error occurs.
      */
     static boolean readPresenceFlag(final BitInput input) throws IOException {
-        if (input == null) {
-            throw new NullPointerException("input is null");
-        }
+        Objects.requireNonNull(input, "input is null");
         return input.readBoolean();
     }
 
@@ -63,9 +62,7 @@ public final class BitIoUtils {
      * @throws IOException          if an I/O error occurs.
      */
     static boolean writePresenceFlag(final BitOutput output, final Object value) throws IOException {
-        if (output == null) {
-            throw new NullPointerException("output is null");
-        }
+        Objects.requireNonNull(output, "output is null");
         final boolean present = value != null;
         output.writeBoolean(present);
         return present;

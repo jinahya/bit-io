@@ -26,6 +26,7 @@ import com.github.jinahya.bit.io.BitReader;
 import com.github.jinahya.bit.io.BitWriter;
 
 import java.io.IOException;
+import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -93,12 +94,8 @@ public final class MicrosoftGuid
 
     @Override
     public void write(final BitOutput output, final UUID value) throws IOException {
-        if (output == null) {
-            throw new NullPointerException("output is null");
-        }
-        if (value == null) {
-            throw new NullPointerException("value is null");
-        }
+        Objects.requireNonNull(output, "output is null");
+        Objects.requireNonNull(value, "value is null");
         MicrosoftGuidBytes.INSTANCE.write(output, toBytes(value));
     }
 }

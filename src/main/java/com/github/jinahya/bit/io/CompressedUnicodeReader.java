@@ -21,6 +21,7 @@ package com.github.jinahya.bit.io;
  */
 
 import java.io.IOException;
+import java.util.Objects;
 
 import static com.github.jinahya.bit.io.BitIoUtils.requireValidSizeForUnsignedInt;
 import static com.github.jinahya.bit.io.CompressedUnicodeUtils.TYPE_1;
@@ -49,9 +50,7 @@ class CompressedUnicodeReader
     // -----------------------------------------------------------------------------------------------------------------
     @Override
     public String read(final BitInput input) throws IOException {
-        if (input == null) {
-            throw new NullPointerException("input is null");
-        }
+        Objects.requireNonNull(input, "input is null");
         final int length = input.readUnsignedInt(lengthSize);
         final StringBuilder builder = new StringBuilder(length);
         for (int i = 0; i < length; i++) {

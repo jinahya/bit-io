@@ -26,6 +26,7 @@ import com.github.jinahya.bit.io.LongBitReader;
 import com.github.jinahya.bit.io.LongBitWriter;
 
 import java.io.IOException;
+import java.util.Objects;
 
 /**
  * A codec for the variable-length integer ("varint") of the SQLite database file format: a 64-bit two's-complement
@@ -62,9 +63,7 @@ public final class SqliteVarint
     // -----------------------------------------------------------------------------------------------------------------
     @Override
     public long readLong(final BitInput input) throws IOException {
-        if (input == null) {
-            throw new NullPointerException("input is null");
-        }
+        Objects.requireNonNull(input, "input is null");
         long value = 0L;
         for (int i = 0; i < MAX_BYTES - 1; i++) {
             final int b = input.readUnsignedInt(Byte.SIZE);
@@ -78,9 +77,7 @@ public final class SqliteVarint
 
     @Override
     public void writeLong(final BitOutput output, final long value) throws IOException {
-        if (output == null) {
-            throw new NullPointerException("output is null");
-        }
+        Objects.requireNonNull(output, "output is null");
         if ((value >>> (Long.SIZE - Byte.SIZE)) != 0L) { // nine bytes; 8 x 7 bits, then 8 bits
             for (int shift = Long.SIZE - GROUP_SIZE; shift >= Byte.SIZE; shift -= GROUP_SIZE) {
                 output.writeUnsignedInt(Byte.SIZE, CONTINUATION | (int) ((value >>> shift) & 0x7F));

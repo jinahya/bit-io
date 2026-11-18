@@ -21,6 +21,7 @@ package com.github.jinahya.bit.io;
  */
 
 import java.io.IOException;
+import java.util.Objects;
 
 import static com.github.jinahya.bit.io.BitIoConstants.FLAG_SIZE;
 import static com.github.jinahya.bit.io.BitIoUtils.requireValidExponentSizeDouble;
@@ -464,41 +465,31 @@ public abstract class AbstractBitOutput
     // ------------------------------------------------------------------------------------------------------- primitive
     @Override
     public void writeBoolean(final BooleanBitWriter writer, final boolean value) throws IOException {
-        if (writer == null) {
-            throw new NullPointerException("writer is null");
-        }
+        Objects.requireNonNull(writer, "writer is null");
         writer.writeBoolean(this, value);
     }
 
     @Override
     public void writeInt(final IntBitWriter writer, final int value) throws IOException {
-        if (writer == null) {
-            throw new NullPointerException("writer is null");
-        }
+        Objects.requireNonNull(writer, "writer is null");
         writer.writeInt(this, value);
     }
 
     @Override
     public void writeLong(final LongBitWriter writer, final long value) throws IOException {
-        if (writer == null) {
-            throw new NullPointerException("writer is null");
-        }
+        Objects.requireNonNull(writer, "writer is null");
         writer.writeLong(this, value);
     }
 
     @Override
     public void writeFloat(final FloatBitWriter writer, final float value) throws IOException {
-        if (writer == null) {
-            throw new NullPointerException("writer is null");
-        }
+        Objects.requireNonNull(writer, "writer is null");
         writer.writeFloat(this, value);
     }
 
     @Override
     public void writeDouble(final DoubleBitWriter writer, final double value) throws IOException {
-        if (writer == null) {
-            throw new NullPointerException("writer is null");
-        }
+        Objects.requireNonNull(writer, "writer is null");
         writer.writeDouble(this, value);
     }
 
@@ -516,9 +507,7 @@ public abstract class AbstractBitOutput
      */
     @Override
     public <T> void writeObject(final BitWriter<? super T> writer, final T value) throws IOException {
-        if (writer == null) {
-            throw new NullPointerException("writer is null");
-        }
+        Objects.requireNonNull(writer, "writer is null");
         writer.write(this, value);
     }
 

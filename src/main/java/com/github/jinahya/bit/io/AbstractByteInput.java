@@ -20,6 +20,8 @@ package com.github.jinahya.bit.io;
  * #L%
  */
 
+import java.util.Objects;
+
 /**
  * A skeletal implementation of {@link ByteInput} that holds the byte source. Subclasses implement
  * {@link ByteInput#read()} by reading from the {@link #source} field.
@@ -41,10 +43,7 @@ public abstract class AbstractByteInput<T>
      */
     protected AbstractByteInput(final T source) {
         super();
-        if (source == null) {
-            throw new NullPointerException("source is null");
-        }
-        this.source = source;
+        this.source = Objects.requireNonNull(source, "source is null");
     }
 
     // -----------------------------------------------------------------------------------------------------------------

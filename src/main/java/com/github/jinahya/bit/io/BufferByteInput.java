@@ -24,6 +24,7 @@ import java.io.EOFException;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.ReadableByteChannel;
+import java.util.Objects;
 
 /**
  * A byte input that reads bytes from a {@link ByteBuffer}.
@@ -62,9 +63,7 @@ public class BufferByteInput
      * @see BufferByteOutput#from(java.nio.channels.WritableByteChannel)
      */
     public static ByteInput from(final ReadableByteChannel channel) {
-        if (channel == null) {
-            throw new NullPointerException("channel is null");
-        }
+        Objects.requireNonNull(channel, "channel is null");
         return new ChannelByteInput(channel, ByteBuffer.allocate(1));
     }
 

@@ -20,6 +20,7 @@ package com.github.jinahya.bit.io;
  * #L%
  */
 
+import java.util.Objects;
 import java.util.function.Function;
 
 /**
@@ -67,9 +68,7 @@ public final class FilterBitReaders {
      */
     public static <T, U> FilterBitReader<T, U> mapping(final BitReader<? extends U> delegate,
                                                        final Function<? super U, ? extends T> mapper) {
-        if (mapper == null) {
-            throw new NullPointerException("mapper is null");
-        }
+        Objects.requireNonNull(mapper, "mapper is null");
         return new FilterBitReader<T, U>(delegate) {
             @Override
             protected T apply(final U value) {

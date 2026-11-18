@@ -21,6 +21,7 @@ package com.github.jinahya.bit.io;
  */
 
 import java.io.IOException;
+import java.util.Objects;
 
 /**
  * Static factory methods for composing {@link BitReader} instances.
@@ -42,9 +43,7 @@ public final class BitReaders {
      * @throws NullPointerException if {@code reader} is {@code null}.
      */
     public static <T> BitReader<T> nullable(final BitReader<? extends T> reader) {
-        if (reader == null) {
-            throw new NullPointerException("reader is null");
-        }
+        Objects.requireNonNull(reader, "reader is null");
         // not a FilterBitReader: a nullability wrapper reads its own flag bit and bypasses the apply(...) mapping,
         // so it
         // implements the interface directly rather than the value-mapping skeletal type.

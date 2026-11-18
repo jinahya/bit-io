@@ -21,6 +21,7 @@ package com.github.jinahya.bit.io;
  */
 
 import java.io.IOException;
+import java.util.Objects;
 
 /**
  * A skeletal {@link BitWriter} that maps a value through {@link #apply(Object)} before writing it with another writer
@@ -45,10 +46,7 @@ public abstract class FilterBitWriter<T, U>
      */
     protected FilterBitWriter(final BitWriter<? super U> delegate) {
         super();
-        if (delegate == null) {
-            throw new NullPointerException("delegate is null");
-        }
-        this.delegate = delegate;
+        this.delegate = Objects.requireNonNull(delegate, "delegate is null");
     }
 
     // -----------------------------------------------------------------------------------------------------------------

@@ -22,6 +22,7 @@ package com.github.jinahya.bit.io;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 
 /**
  * A {@link BitReader} for reading compressed ({@value java.lang.Byte#SIZE}{@code  - 1}-bit element) {@code US-ASCII}
@@ -42,9 +43,7 @@ class AsciiReader
 
     @Override
     public String read(final BitInput input) throws IOException {
-        if (input == null) {
-            throw new NullPointerException("input is null");
-        }
+        Objects.requireNonNull(input, "input is null");
         return new String(delegate.read(input), StandardCharsets.US_ASCII);
     }
 

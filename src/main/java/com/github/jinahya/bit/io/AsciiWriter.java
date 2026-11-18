@@ -22,6 +22,7 @@ package com.github.jinahya.bit.io;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 
 /**
  * A {@link BitWriter} for writing compressed ({@value java.lang.Byte#SIZE}{@code  - 1}-bit element) {@code US-ASCII}
@@ -43,12 +44,8 @@ class AsciiWriter
 
     @Override
     public void write(final BitOutput output, final String value) throws IOException {
-        if (output == null) {
-            throw new NullPointerException("output is null");
-        }
-        if (value == null) {
-            throw new NullPointerException("value is null");
-        }
+        Objects.requireNonNull(output, "output is null");
+        Objects.requireNonNull(value, "value is null");
         delegate.write(output, value.getBytes(StandardCharsets.US_ASCII));
     }
 

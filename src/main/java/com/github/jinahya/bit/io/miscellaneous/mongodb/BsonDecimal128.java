@@ -28,6 +28,7 @@ import com.github.jinahya.bit.io.miscellaneous.ieee.Decimal;
 
 import java.io.IOException;
 import java.math.BigInteger;
+import java.util.Objects;
 
 /**
  * A codec for the BSON {@code Decimal128} type: the IEEE 754 {@code decimal128} interchange format with its coefficient
@@ -81,9 +82,7 @@ public final class BsonDecimal128
     // -----------------------------------------------------------------------------------------------------------------
     @Override
     public Decimal read(final BitInput input) throws IOException {
-        if (input == null) {
-            throw new NullPointerException("input is null");
-        }
+        Objects.requireNonNull(input, "input is null");
         final byte[] bytes = new byte[BYTES];
         for (int i = bytes.length - 1; i >= 0; i--) { // little-endian; the most significant byte comes last
             bytes[i] = (byte) input.readUnsignedInt(Byte.SIZE);
@@ -117,12 +116,8 @@ public final class BsonDecimal128
 
     @Override
     public void write(final BitOutput output, final Decimal value) throws IOException {
-        if (output == null) {
-            throw new NullPointerException("output is null");
-        }
-        if (value == null) {
-            throw new NullPointerException("value is null");
-        }
+        Objects.requireNonNull(output, "output is null");
+        Objects.requireNonNull(value, "value is null");
         BigInteger bits;
         if (value.isInfinite()) {
             bits = BigInteger.valueOf(0x1EL).shiftLeft(122);

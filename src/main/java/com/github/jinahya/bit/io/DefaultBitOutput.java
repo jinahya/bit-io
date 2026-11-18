@@ -21,6 +21,7 @@ package com.github.jinahya.bit.io;
  */
 
 import java.io.IOException;
+import java.util.Objects;
 
 /**
  * A default implementation of {@link BitOutput} that writes bytes to an instance of {@link ByteOutput}.
@@ -41,10 +42,7 @@ public class DefaultBitOutput
      */
     public DefaultBitOutput(final ByteOutput delegate) {
         super();
-        if (delegate == null) {
-            throw new NullPointerException("delegate is null");
-        }
-        this.delegate = delegate;
+        this.delegate = Objects.requireNonNull(delegate, "delegate is null");
     }
 
     // -----------------------------------------------------------------------------------------------------------------

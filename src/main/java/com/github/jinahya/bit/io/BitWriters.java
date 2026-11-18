@@ -21,6 +21,7 @@ package com.github.jinahya.bit.io;
  */
 
 import java.io.IOException;
+import java.util.Objects;
 
 /**
  * Static factory methods for composing {@link BitWriter} instances.
@@ -42,9 +43,7 @@ public final class BitWriters {
      * @throws NullPointerException if {@code writer} is {@code null}.
      */
     public static <T> BitWriter<T> nullable(final BitWriter<? super T> writer) {
-        if (writer == null) {
-            throw new NullPointerException("writer is null");
-        }
+        Objects.requireNonNull(writer, "writer is null");
         // not a FilterBitWriter: a nullability wrapper writes its own flag bit and bypasses the apply(...) mapping,
         // so it
         // implements the interface directly rather than the value-mapping skeletal type.

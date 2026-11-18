@@ -21,6 +21,7 @@ package com.github.jinahya.bit.io;
  */
 
 import java.io.IOException;
+import java.util.Objects;
 
 import static com.github.jinahya.bit.io.BitIoUtils.requireValidSizeByte;
 import static com.github.jinahya.bit.io.BitIoUtils.requireValidSizeForUnsignedInt;
@@ -120,9 +121,7 @@ public class ByteArrayReader
      */
     @Override
     public byte[] read(final BitInput input) throws IOException {
-        if (input == null) {
-            throw new NullPointerException("input is null");
-        }
+        Objects.requireNonNull(input, "input is null");
         final byte[] value = new byte[input.readUnsignedInt(lengthSize)];
         for (int i = 0; i < value.length; i++) {
             value[i] = elementUnsigned ? input.readUnsignedByte(elementSize) : input.readByte(elementSize);

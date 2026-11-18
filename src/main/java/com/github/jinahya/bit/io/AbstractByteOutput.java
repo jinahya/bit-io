@@ -20,6 +20,8 @@ package com.github.jinahya.bit.io;
  * #L%
  */
 
+import java.util.Objects;
+
 /**
  * A skeletal implementation of {@link ByteOutput} that holds the byte target. Subclasses implement
  * {@link ByteOutput#write(int)} by writing to the {@link #target} field.
@@ -41,10 +43,7 @@ public abstract class AbstractByteOutput<T>
      */
     protected AbstractByteOutput(final T target) {
         super();
-        if (target == null) {
-            throw new NullPointerException("target is null");
-        }
-        this.target = target;
+        this.target = Objects.requireNonNull(target, "target is null");
     }
 
     // -----------------------------------------------------------------------------------------------------------------

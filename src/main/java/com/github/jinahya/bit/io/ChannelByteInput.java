@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.channels.ReadableByteChannel;
+import java.util.Objects;
 
 /**
  * A byte input which reads bytes from a readable byte channel. Bytes are read through an internal
@@ -55,9 +56,7 @@ class ChannelByteInput
      */
     ChannelByteInput(final ReadableByteChannel source, final ByteBuffer buffer) {
         super(source);
-        if (buffer == null) {
-            throw new NullPointerException("buffer is null");
-        }
+        Objects.requireNonNull(buffer, "buffer is null");
         if (buffer.capacity() == 0) {
             throw new IllegalArgumentException("buffer.capacity is zero");
         }

@@ -21,6 +21,7 @@ package com.github.jinahya.bit.io;
  */
 
 import java.io.IOException;
+import java.util.Objects;
 
 import static com.github.jinahya.bit.io.BitIoUtils.requireValidSizeForUnsignedInt;
 import static com.github.jinahya.bit.io.CompressedUnicodeUtils.TYPE_1;
@@ -50,12 +51,8 @@ class CompressedUnicodeWriter
     // -----------------------------------------------------------------------------------------------------------------
     @Override
     public void write(final BitOutput output, final String value) throws IOException {
-        if (output == null) {
-            throw new NullPointerException("output is null");
-        }
-        if (value == null) {
-            throw new NullPointerException("value is null");
-        }
+        Objects.requireNonNull(output, "output is null");
+        Objects.requireNonNull(value, "value is null");
         final int length = codePointCount(value);
         if ((length >>> lengthSize) != 0) {
             throw new IllegalArgumentException(

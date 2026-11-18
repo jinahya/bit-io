@@ -21,6 +21,7 @@ package com.github.jinahya.bit.io;
  */
 
 import java.io.IOException;
+import java.util.Objects;
 
 /**
  * A skeletal {@link BitReader} that maps the value read by another reader (the {@link #delegate delegate}) through
@@ -45,10 +46,7 @@ public abstract class FilterBitReader<T, U>
      */
     protected FilterBitReader(final BitReader<? extends U> delegate) {
         super();
-        if (delegate == null) {
-            throw new NullPointerException("delegate is null");
-        }
-        this.delegate = delegate;
+        this.delegate = Objects.requireNonNull(delegate, "delegate is null");
     }
 
     // -----------------------------------------------------------------------------------------------------------------

@@ -25,6 +25,7 @@ import com.github.jinahya.bit.io.BitOutput;
 
 import java.io.IOException;
 import java.math.BigInteger;
+import java.util.Objects;
 
 /**
  * A decimal interchange format with its coefficient in Densely Packed Decimal (DPD): a sign bit, a 5-bit combination
@@ -195,9 +196,7 @@ final class DecimalDpdFormat {
 
     // -----------------------------------------------------------------------------------------------------------------
     Decimal read(final BitInput input) throws IOException {
-        if (input == null) {
-            throw new NullPointerException("input is null");
-        }
+        Objects.requireNonNull(input, "input is null");
         final boolean negative = input.readBoolean();
         final int combination = input.readUnsignedInt(COMBINATION_SIZE);
         final int continuation = input.readUnsignedInt(exponentContinuationSize);
@@ -233,12 +232,8 @@ final class DecimalDpdFormat {
     }
 
     void write(final BitOutput output, final Decimal value) throws IOException {
-        if (output == null) {
-            throw new NullPointerException("output is null");
-        }
-        if (value == null) {
-            throw new NullPointerException("value is null");
-        }
+        Objects.requireNonNull(output, "output is null");
+        Objects.requireNonNull(value, "value is null");
         if (value.isInfinite()) {
             output.writeBoolean(value.isNegative());
             output.writeUnsignedInt(COMBINATION_SIZE, COMBINATION_INFINITY);

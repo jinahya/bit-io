@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.channels.WritableByteChannel;
+import java.util.Objects;
 
 /**
  * A byte output which writes bytes to a writable byte channel.
@@ -60,9 +61,7 @@ class ChannelByteOutput
      */
     ChannelByteOutput(final WritableByteChannel target, final ByteBuffer buffer) {
         super(target);
-        if (buffer == null) {
-            throw new NullPointerException("buffer is null");
-        }
+        Objects.requireNonNull(buffer, "buffer is null");
         if (buffer.capacity() == 0) {
             throw new IllegalArgumentException("buffer.capacity is zero");
         }

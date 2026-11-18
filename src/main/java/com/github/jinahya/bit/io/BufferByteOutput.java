@@ -23,6 +23,7 @@ package com.github.jinahya.bit.io;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.WritableByteChannel;
+import java.util.Objects;
 
 /**
  * A byte output that writes bytes to a {@link ByteBuffer}.
@@ -61,9 +62,7 @@ public class BufferByteOutput
      * @see BufferByteInput#from(java.nio.channels.ReadableByteChannel)
      */
     public static ByteOutput from(final WritableByteChannel channel) {
-        if (channel == null) {
-            throw new NullPointerException("channel is null");
-        }
+        Objects.requireNonNull(channel, "channel is null");
         return new ChannelByteOutput(channel, ByteBuffer.allocate(1));
     }
 

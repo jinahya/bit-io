@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * A value of SQL Server's {@code hierarchyid} type: a path of node labels from the root, each label a non-empty
@@ -201,14 +202,10 @@ public final class Hierarchyid
      *                                  than {@value #MAX_BYTES} bytes.
      */
     public static Hierarchyid of(final List<long[]> labels) {
-        if (labels == null) {
-            throw new NullPointerException("labels is null");
-        }
+        Objects.requireNonNull(labels, "labels is null");
         final List<long[]> copy = new ArrayList<long[]>(labels.size());
         for (final long[] label : labels) {
-            if (label == null) {
-                throw new NullPointerException("labels contains null");
-            }
+            Objects.requireNonNull(label, "labels contains null");
             copy.add(label.clone());
         }
         return new Hierarchyid(copy, encode(copy));
@@ -224,9 +221,7 @@ public final class Hierarchyid
      * @throws IllegalArgumentException if {@code string} is not a valid representation.
      */
     public static Hierarchyid parse(final String string) {
-        if (string == null) {
-            throw new NullPointerException("string is null");
-        }
+        Objects.requireNonNull(string, "string is null");
         if (!string.startsWith("/") || !string.endsWith("/")) {
             throw new IllegalArgumentException("not a hierarchyid: " + string);
         }
@@ -260,9 +255,7 @@ public final class Hierarchyid
      * @throws IllegalArgumentException if {@code bytes} is not a valid binary form.
      */
     public static Hierarchyid decode(final byte[] bytes) {
-        if (bytes == null) {
-            throw new NullPointerException("bytes is null");
-        }
+        Objects.requireNonNull(bytes, "bytes is null");
         if (bytes.length > MAX_BYTES) {
             throw new IllegalArgumentException("longer than " + MAX_BYTES + " bytes: " + bytes.length);
         }
@@ -490,9 +483,7 @@ public final class Hierarchyid
      * @throws NullPointerException if {@code parent} is {@code null}.
      */
     public boolean isDescendantOf(final Hierarchyid parent) {
-        if (parent == null) {
-            throw new NullPointerException("parent is null");
-        }
+        Objects.requireNonNull(parent, "parent is null");
         if (parent.labels.size() > labels.size()) {
             return false;
         }

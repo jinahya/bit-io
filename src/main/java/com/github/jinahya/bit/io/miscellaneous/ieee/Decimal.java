@@ -22,6 +22,7 @@ package com.github.jinahya.bit.io.miscellaneous.ieee;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.Objects;
 
 /**
  * A decimal floating-point datum, as the decimal interchange formats encode it: a finite number
@@ -96,9 +97,7 @@ public final class Decimal {
      * @throws IllegalArgumentException if the scale of {@code value} is {@link Integer#MIN_VALUE}.
      */
     public static Decimal valueOf(final BigDecimal value) {
-        if (value == null) {
-            throw new NullPointerException("value is null");
-        }
+        Objects.requireNonNull(value, "value is null");
         if (value.scale() == Integer.MIN_VALUE) {
             throw new IllegalArgumentException("scale(" + value.scale() + ") can't be negated");
         }
@@ -117,9 +116,7 @@ public final class Decimal {
      *                                  {@code int} range.
      */
     public static Decimal parse(final String string) {
-        if (string == null) {
-            throw new NullPointerException("string is null");
-        }
+        Objects.requireNonNull(string, "string is null");
         int i = 0;
         boolean negative = false;
         if (string.length() > 0 && (string.charAt(0) == '+' || string.charAt(0) == '-')) {
@@ -190,9 +187,7 @@ public final class Decimal {
     }
 
     private static BigInteger requireNonNegative(final BigInteger value, final String name) {
-        if (value == null) {
-            throw new NullPointerException(name + " is null");
-        }
+        Objects.requireNonNull(value, name + " is null");
         if (value.signum() < 0) {
             throw new IllegalArgumentException(name + "(" + value + ") < 0");
         }

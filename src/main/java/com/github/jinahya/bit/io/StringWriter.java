@@ -38,7 +38,7 @@ public class StringWriter
      *
      * <p>Values must consist of {@code US-ASCII} characters ({@code U+0000} through {@code U+007F}); making sure of it
      * is the caller's responsibility. The returned writer encodes values with
-     * {@link String#getBytes(java.nio.charset.Charset)}, which <em>silently replaces</em> each other character
+     * {@link String#getBytes(String)}, which <em>silently replaces</em> each other character
      * (including an unpaired surrogate) with {@code '?'}; e.g., {@code "é"} is read back as {@code "?"},
      * indistinguishable from a literal question mark. For text which may contain other characters, use
      * {@link #ofCompressedUnicode(int)}, or an instance for the {@code UTF-8} charset, instead.</p>

@@ -25,6 +25,10 @@ import org.junit.jupiter.api.Test;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.charset.IllegalCharsetNameException;
+import java.nio.charset.StandardCharsets;
+import java.nio.charset.UnsupportedCharsetException;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -52,9 +56,37 @@ class StringObjectRoundTripTest {
     }
 
     @Test
+    void charsetConstructorsWriteTheSameBytesAsCharsetNames() throws IOException {
+        for (final Charset charset : new Charset[]{StandardCharsets.UTF_8, StandardCharsets.UTF_16BE,
+                                                   StandardCharsets.ISO_8859_1, StandardCharsets.US_ASCII}) {
+            final String value = "caf\u00e9 \uc138\uacc4";
+            final byte[] byCharset = writeDirect(new StringWriter(8, charset), value);
+            assertArrayEquals(writeDirect(new StringWriter(8, charset.name()), value), byCharset, charset.name());
+            assertEquals(new StringReader(8, charset.name()).read(input(byCharset)),
+                         new StringReader(8, charset).read(input(byCharset)), charset.name());
+            assertEquals(new String(value.getBytes(charset), charset),
+                         new StringReader(8, charset).read(input(byCharset)));
+        }
+    }
+
+    @Test
+    void charsetNamesAreResolvedImmediately() {
+        assertThrows(UnsupportedCharsetException.class, () -> new StringReader(8, "no-such-charset"));
+        assertThrows(UnsupportedCharsetException.class, () -> new StringWriter(8, "no-such-charset"));
+        assertThrows(IllegalCharsetNameException.class, () -> new StringReader(8, "bad name!"));
+        assertThrows(IllegalCharsetNameException.class, () -> new StringWriter(8, "bad name!"));
+    }
+
+    @Test
     void stringReaderAndWriterRejectNullArguments() {
-        assertThrows(NullPointerException.class, () -> new StringReader(8, null));
-        assertThrows(NullPointerException.class, () -> new StringWriter(8, null));
+        assertEquals("charsetName is null",
+                     assertThrows(NullPointerException.class, () -> new StringReader(8, (String) null)).getMessage());
+        assertEquals("charsetName is null",
+                     assertThrows(NullPointerException.class, () -> new StringWriter(8, (String) null)).getMessage());
+        assertEquals("charset is null",
+                     assertThrows(NullPointerException.class, () -> new StringReader(8, (Charset) null)).getMessage());
+        assertEquals("charset is null",
+                     assertThrows(NullPointerException.class, () -> new StringWriter(8, (Charset) null)).getMessage());
 
         final StringReader reader = new StringReader(8, "UTF-8");
         final StringWriter writer = new StringWriter(8, "UTF-8");

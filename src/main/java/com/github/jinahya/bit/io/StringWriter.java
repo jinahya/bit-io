@@ -21,6 +21,7 @@ package com.github.jinahya.bit.io;
  */
 
 import java.io.IOException;
+import java.nio.charset.Charset;
 
 /**
  * A {@link BitWriter} for writing {@code String} values encoded as a length-prefixed array of full bytes in a named
@@ -82,34 +83,55 @@ public class StringWriter
     /**
      * Creates a new instance writing a length-prefixed array of full bytes encoded in specified charset.
      *
+     * @param lengthSize the number of bits for the (byte) length; between {@code 1} and
+     *                   ({@value java.lang.Integer#SIZE} - {@code 1}), both inclusive.
+     * @param charset    the charset for encoding; must not be {@code null}; e.g.,
+     *                   {@link java.nio.charset.StandardCharsets#UTF_8}.
+     * @throws NullPointerException     if {@code charset} is {@code null}.
+     * @throws IllegalArgumentException if {@code lengthSize} is not valid.
+     * @see StringReader#StringReader(int, Charset)
+     */
+    public StringWriter(final int lengthSize, final Charset charset) {
+        super();
+        if (charset == null) {
+            throw new NullPointerException("charset is null");
+        }
+        this.delegate = new ByteArrayWriter.Signed8(lengthSize);
+        this.charset = charset;
+    }
+
+    /**
+     * Creates a new instance writing a length-prefixed array of full bytes encoded in the charset of specified name.
+     * The name is resolved immediately, with {@link Charset#forName(String)}.
+     *
      * @param lengthSize  the number of bits for the (byte) length; between {@code 1} and
      *                    ({@value java.lang.Integer#SIZE} - {@code 1}), both inclusive.
      * @param charsetName the name of the charset for encoding; must not be {@code null}.
-     * @throws NullPointerException     if {@code charsetName} is {@code null}.
-     * @throws IllegalArgumentException if {@code lengthSize} is not valid.
+     * @throws NullPointerException                          if {@code charsetName} is {@code null}.
+     * @throws java.nio.charset.IllegalCharsetNameException  if {@code charsetName} is not a legal charset name.
+     * @throws java.nio.charset.UnsupportedCharsetException  if the charset of {@code charsetName} is not supported.
+     * @throws IllegalArgumentException                      if {@code lengthSize} is not valid.
+     * @deprecated Use {@link #StringWriter(int, Charset)} instead; this constructor will be removed in the next
+     *             major version.
      */
+    @Deprecated
     public StringWriter(final int lengthSize, final String charsetName) {
-        super();
-        if (charsetName == null) {
-            throw new NullPointerException("charsetName is null");
-        }
-        this.delegate = new ByteArrayWriter.Signed8(lengthSize);
-        this.charsetName = charsetName;
+        this(lengthSize, StringReader.charset(charsetName));
     }
 
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
      * {@inheritDoc} The {@code write(BitOutput, String)} method of {@code StringWriter} class encodes {@code value}
-     * with this writer's {@code charsetName} and writes the bytes through a {@link ByteArrayWriter} delegate (with an
-     * {@code elementSize} of {@value java.lang.Byte#SIZE}).
+     * with this writer's charset, replacing unmappable characters as {@link String#getBytes(Charset)} does, and
+     * writes the bytes through a {@link ByteArrayWriter} delegate (with an {@code elementSize} of
+     * {@value java.lang.Byte#SIZE}).
      *
      * @param output {@inheritDoc}
      * @param value  {@inheritDoc}
      * @throws NullPointerException     if {@code output} or {@code value} is {@code null}.
-     * @throws IllegalArgumentException if the {@code charsetName}-encoded byte length does not fit in
-     *                                  {@code lengthSize} bits.
-     * @throws IOException              {@inheritDoc} (including an unsupported {@code charsetName}).
+     * @throws IllegalArgumentException if the encoded byte length does not fit in {@code lengthSize} bits.
+     * @throws IOException              {@inheritDoc}
      */
     @Override
     public void write(final BitOutput output, final String value) throws IOException {
@@ -119,11 +141,11 @@ public class StringWriter
         if (value == null) {
             throw new NullPointerException("value is null");
         }
-        delegate.write(output, value.getBytes(charsetName));
+        delegate.write(output, value.getBytes(charset));
     }
 
     // -----------------------------------------------------------------------------------------------------------------
     private final ByteArrayWriter delegate;
 
-    private final String charsetName;
+    private final Charset charset;
 }

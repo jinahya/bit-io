@@ -21,6 +21,7 @@ package com.github.jinahya.bit.io;
  */
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 /**
  * A {@link BitReader} for reading compressed ({@value java.lang.Byte#SIZE}{@code  - 1}-bit element) {@code US-ASCII}
@@ -44,7 +45,7 @@ class AsciiReader
         if (input == null) {
             throw new NullPointerException("input is null");
         }
-        return new String(delegate.read(input), BitIoConstants.US_ASCII);
+        return new String(delegate.read(input), StandardCharsets.US_ASCII);
     }
 
     private final ByteArrayReader delegate;

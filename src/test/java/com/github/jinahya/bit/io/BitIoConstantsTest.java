@@ -37,11 +37,6 @@ class BitIoConstantsTest {
     }
 
     @Test
-    void US_ASCII() {
-        Assertions.assertEquals("US-ASCII", BitIoConstants.US_ASCII);
-    }
-
-    @Test
     void constructorThrowsAssertionError() throws Exception {
         final Constructor<?> constructor = BitIoConstants.class.getDeclaredConstructor();
         constructor.setAccessible(true);

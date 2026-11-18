@@ -21,6 +21,7 @@ package com.github.jinahya.bit.io;
  */
 
 import java.io.IOException;
+import java.nio.charset.Charset;
 
 /**
  * A {@link BitReader} for reading {@code String} values encoded as a length-prefixed array of full bytes in a named
@@ -70,19 +71,54 @@ public class StringReader
     /**
      * Creates a new instance reading a length-prefixed array of full bytes decoded in specified charset.
      *
+     * @param lengthSize the number of bits for the (byte) length; between {@code 1} and
+     *                   ({@value java.lang.Integer#SIZE} - {@code 1}), both inclusive.
+     * @param charset    the charset for decoding; must not be {@code null}; e.g.,
+     *                   {@link java.nio.charset.StandardCharsets#UTF_8}.
+     * @throws NullPointerException     if {@code charset} is {@code null}.
+     * @throws IllegalArgumentException if {@code lengthSize} is not valid.
+     * @see StringWriter#StringWriter(int, Charset)
+     */
+    public StringReader(final int lengthSize, final Charset charset) {
+        super();
+        if (charset == null) {
+            throw new NullPointerException("charset is null");
+        }
+        this.delegate = new ByteArrayReader.Signed8(lengthSize);
+        this.charset = charset;
+    }
+
+    /**
+     * Creates a new instance reading a length-prefixed array of full bytes decoded in the charset of specified name.
+     * The name is resolved immediately, with {@link Charset#forName(String)}.
+     *
      * @param lengthSize  the number of bits for the (byte) length; between {@code 1} and
      *                    ({@value java.lang.Integer#SIZE} - {@code 1}), both inclusive.
      * @param charsetName the name of the charset for decoding; must not be {@code null}.
-     * @throws NullPointerException     if {@code charsetName} is {@code null}.
-     * @throws IllegalArgumentException if {@code lengthSize} is not valid.
+     * @throws NullPointerException                          if {@code charsetName} is {@code null}.
+     * @throws java.nio.charset.IllegalCharsetNameException  if {@code charsetName} is not a legal charset name.
+     * @throws java.nio.charset.UnsupportedCharsetException  if the charset of {@code charsetName} is not supported.
+     * @throws IllegalArgumentException                      if {@code lengthSize} is not valid.
+     * @deprecated Use {@link #StringReader(int, Charset)} instead; this constructor will be removed in the next
+     *             major version.
      */
+    @Deprecated
     public StringReader(final int lengthSize, final String charsetName) {
-        super();
+        this(lengthSize, charset(charsetName));
+    }
+
+    /**
+     * Returns the charset of specified name.
+     *
+     * @param charsetName the name of the charset.
+     * @return the charset named {@code charsetName}.
+     * @throws NullPointerException if {@code charsetName} is {@code null}.
+     */
+    static Charset charset(final String charsetName) {
         if (charsetName == null) {
             throw new NullPointerException("charsetName is null");
         }
-        this.delegate = new ByteArrayReader.Signed8(lengthSize);
-        this.charsetName = charsetName;
+        return Charset.forName(charsetName);
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -90,23 +126,24 @@ public class StringReader
     /**
      * {@inheritDoc} The {@code read(BitInput)} method of {@code StringReader} class reads the bytes through a
      * {@link ByteArrayReader} delegate (with an {@code elementSize} of {@value java.lang.Byte#SIZE}) and decodes them
-     * with this reader's {@code charsetName}.
+     * with this reader's charset; malformed input and unmappable characters are replaced, as
+     * {@link String#String(byte[], Charset)} does.
      *
      * @param input {@inheritDoc}
      * @return {@inheritDoc}
      * @throws NullPointerException if {@code input} is {@code null}.
-     * @throws IOException          {@inheritDoc} (including an unsupported {@code charsetName}).
+     * @throws IOException          {@inheritDoc}
      */
     @Override
     public String read(final BitInput input) throws IOException {
         if (input == null) {
             throw new NullPointerException("input is null");
         }
-        return new String(delegate.read(input), charsetName);
+        return new String(delegate.read(input), charset);
     }
 
     // -----------------------------------------------------------------------------------------------------------------
     private final ByteArrayReader delegate;
 
-    private final String charsetName;
+    private final Charset charset;
 }

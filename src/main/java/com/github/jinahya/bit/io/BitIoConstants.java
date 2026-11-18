@@ -107,13 +107,6 @@ public final class BitIoConstants {
      */
     static final int FLAG_SIZE = 1;
 
-    // -----------------------------------------------------------------------------------------------------------------
-
-    /**
-     * The name of the {@code US-ASCII} charset; the charset used for compressed
-     * ({@value java.lang.Byte#SIZE}{@code  - 1}-bit element) ASCII strings.
-     */
-    static final String US_ASCII = "US-ASCII";
 
     // -----------------------------------------------------------------------------------------------------------------
 

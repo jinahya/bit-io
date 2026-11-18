@@ -85,11 +85,34 @@ public final class BitOutputs {
     /**
      * Creates a new bit output writing to specified data output.
      *
+     * <p>Note that a direct call with a {@link java.io.DataOutputStream} is ambiguous, since the stream is both an
+     * {@link OutputStream} and a {@link DataOutput}; use {@link #fromDataOutput(DataOutput)} instead.</p>
+     *
      * @param target the data output to which bytes are written; must not be {@code null}.
      * @return a new bit output.
      * @throws NullPointerException if {@code target} is {@code null}.
+     * @see #fromDataOutput(DataOutput)
      */
     public static BitOutput from(final DataOutput target) {
+        return from(new DataByteOutput(target));
+    }
+
+    /**
+     * Creates a new bit output writing to specified data output.
+     *
+     * <p>Unlike {@link #from(DataOutput)}, this method can be invoked, without any cast, with an object that is both
+     * an {@link OutputStream} and a {@link DataOutput}, such as a {@link java.io.DataOutputStream}.</p>
+     * <blockquote><pre>{@code
+     * DataOutputStream stream = new DataOutputStream(new ByteArrayOutputStream());
+     * BitOutput output = BitOutputs.fromDataOutput(stream);
+     * }</pre></blockquote>
+     *
+     * @param target the data output to which bytes are written; must not be {@code null}.
+     * @return a new bit output.
+     * @throws NullPointerException if {@code target} is {@code null}.
+     * @see BitInputs#fromDataInput(java.io.DataInput)
+     */
+    public static BitOutput fromDataOutput(final DataOutput target) {
         return from(new DataByteOutput(target));
     }
 

@@ -85,11 +85,34 @@ public final class BitInputs {
     /**
      * Creates a new bit input reading from specified data input.
      *
+     * <p>Note that a direct call with a {@link java.io.DataInputStream} is ambiguous, since the stream is both an
+     * {@link InputStream} and a {@link DataInput}; use {@link #fromDataInput(DataInput)} instead.</p>
+     *
      * @param source the data input from which bytes are read; must not be {@code null}.
      * @return a new bit input.
      * @throws NullPointerException if {@code source} is {@code null}.
+     * @see #fromDataInput(DataInput)
      */
     public static BitInput from(final DataInput source) {
+        return from(new DataByteInput(source));
+    }
+
+    /**
+     * Creates a new bit input reading from specified data input.
+     *
+     * <p>Unlike {@link #from(DataInput)}, this method can be invoked, without any cast, with an object that is both an
+     * {@link InputStream} and a {@link DataInput}, such as a {@link java.io.DataInputStream}.</p>
+     * <blockquote><pre>{@code
+     * DataInputStream stream = new DataInputStream(new ByteArrayInputStream(bytes));
+     * BitInput input = BitInputs.fromDataInput(stream);
+     * }</pre></blockquote>
+     *
+     * @param source the data input from which bytes are read; must not be {@code null}.
+     * @return a new bit input.
+     * @throws NullPointerException if {@code source} is {@code null}.
+     * @see BitOutputs#fromDataOutput(java.io.DataOutput)
+     */
+    public static BitInput fromDataInput(final DataInput source) {
         return from(new DataByteInput(source));
     }
 

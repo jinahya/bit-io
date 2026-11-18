@@ -11,11 +11,11 @@ A small zero-dependency Java library for bit-level I/O, with retro-translated ar
 unsigned `int`, or a `47`-bit signed `long`.
 
 ```java
-final BitOutput output = new DefaultBitOutput(new StreamByteOutput(out));
-output.writeBoolean(true);
-output.writeInt(true, 6, 42);
-output.writeLong(false, 47, -1L);
-output.align(1);
+final BitOutput output = BitOutputs.from(out);
+output.writeBoolean(true);          // 1 bit
+output.writeUnsignedInt(6, 42);     // 6-bit unsigned int
+output.writeLong(47, -1L);          // 47-bit signed long
+output.align(1);                    // flush the trailing partial byte
 ```
 
 ## Install
@@ -57,6 +57,19 @@ Guides, examples, and design notes are maintained in the
 [GitHub wiki](https://github.com/jinahya/bit-io/wiki).
 
 API reference: [javadoc.io/doc/io.github.jinahya/bit-io](https://javadoc.io/doc/io.github.jinahya/bit-io)
+
+## Building
+
+Build with JDK 8 and Maven 3.9+:
+
+```sh
+mvn verify                    # unit + integration tests; no access to external sites needed
+mvn -Plive-sources verify     # also checks test vectors against the live standards documents
+mvn -Pkotlin-compat-1.3.72 test         # Kotlin interop tests
+mvn -Pkotlin-compat-2.4.20-Beta1 test
+```
+
+See [Building](https://github.com/jinahya/bit-io/wiki/Building) in the wiki for details.
 
 ## Notes
 

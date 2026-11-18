@@ -506,10 +506,18 @@ public interface BitInput {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * Returns the number of bytes read so far. Only <em>complete</em> octets are counted; bits of the current
-     * partially-read octet are not included until the octet is completed (e.g. by {@link #align(int)}).
+     * Returns the number of octets fetched from the underlying byte source so far.
      *
-     * @return the number of bytes read so far.
+     * <p>An octet is counted as soon as it is fetched, which happens when the first of its bits is read. Hence the
+     * count <em>includes</em> the current octet even while it is only partially consumed; e.g., reading a single
+     * {@code boolean} from a fresh input yields a count of {@code 1}, and a subsequent {@link #align(int) align(1)}
+     * leaves the count unchanged.</p>
+     *
+     * <p>Note that this differs from {@link BitOutput#getCount()}, which counts an octet only after it has been
+     * completely written to the underlying byte target. For the same sequence of bit operations, the count of an input
+     * may thus exceed the count of the corresponding output by one, until both are aligned.</p>
+     *
+     * @return the number of octets fetched so far, including the current partially-consumed octet, if any.
      * @see BitOutput#getCount()
      */
     long getCount();

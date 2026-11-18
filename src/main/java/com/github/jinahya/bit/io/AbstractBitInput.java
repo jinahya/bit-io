@@ -473,9 +473,10 @@ public abstract class AbstractBitInput
     // ----------------------------------------------------------------------------------------------------------- count
 
     /**
-     * Returns the number of bytes read so far.
+     * Returns the number of octets fetched, via {@link #read()}, so far, including the current partially-consumed
+     * octet, if any.
      *
-     * @return the number of bytes read so far.
+     * @return the number of octets fetched so far.
      * @see #read()
      * @see AbstractBitOutput#getCount()
      */
@@ -497,7 +498,7 @@ public abstract class AbstractBitInput
     private int available = 0;
 
     /**
-     * The number of bytes read so far.
+     * The number of octets fetched so far, including the current one.
      */
     private long count;
 }

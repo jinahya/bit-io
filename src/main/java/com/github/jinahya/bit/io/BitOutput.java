@@ -538,6 +538,9 @@ public interface BitOutput {
      * Returns the number of bytes written so far. Only <em>complete</em> octets are counted; bits of the current
      * partially-written octet are not included until the octet is completed (e.g. by {@link #align(int)}).
      *
+     * <p>Note that this differs from {@link BitInput#getCount()}, which counts an octet as soon as it is fetched,
+     * including a partially-consumed one.</p>
+     *
      * @return the number of bytes written so far.
      * @see BitInput#getCount()
      */

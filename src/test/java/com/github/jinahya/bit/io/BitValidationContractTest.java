@@ -141,6 +141,22 @@ class BitValidationContractTest {
     }
 
     @Test
+    void bitInputCountIncludesPartialOctetWhileBitOutputCountDoesNot() throws IOException {
+        final byte[] array = new byte[1];
+        final BitOutput output = BitOutputs.from(array);
+        output.writeBoolean(true);
+        assertEquals(0L, output.getCount());
+        output.align(1);
+        assertEquals(1L, output.getCount());
+
+        final BitInput input = BitInputs.from(array);
+        input.readBoolean();
+        assertEquals(1L, input.getCount());
+        input.align(1);
+        assertEquals(1L, input.getCount());
+    }
+
+    @Test
     void bitInputRejectsOutOfRangeDelegateValues() {
         assertThrows(IOException.class, () -> new DefaultBitInput(new ConstantByteInput(-2)).readBoolean());
         assertThrows(IOException.class, () -> new DefaultBitInput(new ConstantByteInput(256)).readBoolean());

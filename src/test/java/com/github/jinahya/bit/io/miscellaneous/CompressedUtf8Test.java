@@ -26,7 +26,6 @@ import com.github.jinahya.bit.io.DefaultBitInput;
 import com.github.jinahya.bit.io.DefaultBitOutput;
 import com.github.jinahya.bit.io.StreamByteInput;
 import com.github.jinahya.bit.io.StreamByteOutput;
-
 import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;

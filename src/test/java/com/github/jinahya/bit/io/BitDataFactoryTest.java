@@ -38,8 +38,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * A class for testing {@link BitInputs#fromDataInput(DataInput)} and {@link BitOutputs#fromDataOutput(DataOutput)}
- * with concrete data stream types, which are ambiguous for the {@code from} overloads.
+ * A class for testing {@link BitInputs#fromDataInput(DataInput)} and {@link BitOutputs#fromDataOutput(DataOutput)} with
+ * concrete data stream types, which are ambiguous for the {@code from} overloads.
  *
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  * @see <a href="https://github.com/jinahya/bit-io/issues/23">#23</a>

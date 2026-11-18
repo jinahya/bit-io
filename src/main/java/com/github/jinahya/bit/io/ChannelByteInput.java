@@ -84,6 +84,7 @@ class ChannelByteInput
         if (!buffered.source.hasRemaining()) {
             for (buffered.source.clear(); buffered.source.position() == 0; ) {
                 if (source.read(buffered.source) == -1) {
+                    buffered.source.flip(); // leave drained (nothing read) so that a subsequent read() re-probes
                     throw new EOFException("end of channel reached");
                 }
             }

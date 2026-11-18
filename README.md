@@ -54,15 +54,14 @@ API reference: [javadoc.io/doc/io.github.jinahya/bit-io](https://javadoc.io/doc/
 
 ## Building
 
-Build with JDK 17 or later (CI builds with 17, 21, and 25; the compiler uses `--release 17`) and Maven 3.9+ (or
-`./mvnw`):
+Build with JDK 25 and Maven 3.9+ (or `./mvnw`). The jar targets Java 17 (`--release 17`); the tests compile with
+`--release 25`:
 
 ```sh
 mvn verify                    # unit + integration tests; no access to external sites needed
 mvn -Pjapicmp package         # compares the public API with the previous release
 mvn -Plive-sources verify     # also checks test vectors against the live standards documents
-mvn -Pkotlin-compat-1.3.72 test         # Kotlin interop tests
-mvn -Pkotlin-compat-2.4.20-Beta1 test
+mvn -Pkotlin-compat-2.4.20-Beta1 test   # Kotlin interop tests
 ```
 
 See [Building](https://github.com/jinahya/bit-io/wiki/Building) in the wiki for details.

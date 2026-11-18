@@ -43,9 +43,8 @@
   <properties>
     <!-- enables live checks against official documents in integration tests; see the live-sources profile -->
     <bit-io.it.live-sources>false</bit-io.it.live-sources>
-    <!-- Java 8, for both main and test; on JDK 9+, the jdk9+ profile also sets the release flag to check the API -->
-    <maven.compiler.source>1.8</maven.compiler.source>
-    <maven.compiler.target>${maven.compiler.source}</maven.compiler.target>
+    <!-- Java 17, for both main and test; the release flag also checks every reference against the Java 17 API -->
+    <maven.compiler.release>17</maven.compiler.release>
     <!-- https://central.sonatype.com/artifact/org.apache.maven.plugins/maven-failsafe-plugin/versions -->
     <version.maven-failsafe>${version.maven-surefire}</version.maven-failsafe>
     <version.maven-javadoc-plugin>3.12.0</version.maven-javadoc-plugin>
@@ -214,7 +213,7 @@
               <rules>
                 <dependencyConvergence />
                 <requireJavaVersion>
-                  <version>[1.8.0,)</version>
+                  <version>[17,)</version>
                 </requireJavaVersion>
               </rules>
             </configuration>
@@ -336,7 +335,7 @@
         <artifactId>maven-pmd-plugin</artifactId>
         <version>3.28.0</version>
         <configuration>
-          <targetJdk>1.8</targetJdk>
+          <targetJdk>17</targetJdk>
           <skipEmptyReport>false</skipEmptyReport> <!-- https://issues.apache.org/jira/browse/MPMD-225 -->
         </configuration>
       </plugin>
@@ -542,15 +541,6 @@
       <id>live-sources</id>
       <properties>
         <bit-io.it.live-sources>true</bit-io.it.live-sources>
-      </properties>
-    </profile>
-    <profile> <!-- on JDK 9+, compile with release 8, which also checks references against the Java 8 API -->
-      <id>jdk9+</id>
-      <activation>
-        <jdk>[9,)</jdk>
-      </activation>
-      <properties>
-        <maven.compiler.release>8</maven.compiler.release>
       </properties>
     </profile>
   </profiles>

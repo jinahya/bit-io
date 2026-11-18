@@ -15,8 +15,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # 8 is the baseline; 21 compiles with release 8 (jdk9+ profile), which also checks the Java 8 API surface
-        java: [ '8', '21' ]
+        # 17 is the baseline (release 17); 21 and 25 are the later LTS releases
+        java: [ '17', '21', '25' ]
 
     steps:
       - name: Checkout
@@ -41,9 +41,9 @@ jobs:
       matrix:
         include:
           - kotlin: '1.3.72'
-            java: '8'
+            java: '17'
           - kotlin: '2.4.20-Beta1'
-            java: '11'
+            java: '17'
 
     env:
       PROFILE: kotlin-compat-${{ matrix.kotlin }}

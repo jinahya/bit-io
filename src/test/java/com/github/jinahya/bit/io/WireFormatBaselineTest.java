@@ -60,6 +60,7 @@ import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HexFormat;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -365,19 +366,11 @@ class WireFormatBaselineTest {
     }
 
     private static String hex(final byte[] bytes) {
-        final StringBuilder builder = new StringBuilder();
-        for (final byte b : bytes) {
-            builder.append(String.format("%02x", b & 0xFF));
-        }
-        return builder.toString();
+        return HexFormat.of().formatHex(bytes);
     }
 
     private static byte[] bytes(final String hex) {
-        final byte[] bytes = new byte[hex.length() / 2];
-        for (int i = 0; i < bytes.length; i++) {
-            bytes[i] = (byte) Integer.parseInt(hex.substring(i * 2, i * 2 + 2), 16);
-        }
-        return bytes;
+        return HexFormat.of().parseHex(hex);
     }
 
     /**

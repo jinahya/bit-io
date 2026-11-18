@@ -34,6 +34,15 @@ version.
 Requires **Java 17** or later. For Java 1.3–16, use **4.2.1**, the last release line for those runtimes (including the
 `retrotranslated13` and `retrotranslated14` classifier artifacts).
 
+The jar is a named module, `io.github.jinahya.bit.io`, with no dependencies other than `java.base`. It is also a
+multi-release jar: `SegmentByteInput` and `SegmentByteOutput`, which read and write a `java.lang.foreign.MemorySegment`,
+are in its Java 22 part, so they require Java 22 or later; every other class runs on Java 17.
+
+`jar --validate` reports those two classes ("contains a new public class not found in base entries") and exits with 1.
+This is intentional: the multi-release format asks every version of a jar to expose the same public API, but these
+classes take a `MemorySegment`, which Java 17 doesn't have. The JVM, build tools, and OSGi don't apply that check; on
+Java 17–21 the classes are simply absent.
+
 ### Upgrading from 4.x
 
 - The minimum runtime is Java 17.
@@ -54,8 +63,8 @@ API reference: [javadoc.io/doc/io.github.jinahya/bit-io](https://javadoc.io/doc/
 
 ## Building
 
-Build with JDK 25 and Maven 3.9+ (or `./mvnw`). The jar targets Java 17 (`--release 17`); the tests compile with
-`--release 25`:
+Build with JDK 25 and Maven 3.9+ (or `./mvnw`). The jar targets Java 17 (`--release 17`), except for the
+`MemorySegment` adapters in `src/main/java22` (`--release 22`); the tests compile with `--release 25`:
 
 ```sh
 mvn verify                    # unit + integration tests; no access to external sites needed
@@ -68,5 +77,5 @@ See [Building](https://github.com/jinahya/bit-io/wiki/Building) in the wiki for 
 
 ## Notes
 
-- Runtime target: Java 17.
+- Runtime target: Java 17; Java 22 for the `MemorySegment` adapters.
 - License: [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0).

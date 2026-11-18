@@ -30,6 +30,7 @@ import org.junit.jupiter.api.Test;
 import java.io.ByteArrayOutputStream;
 import java.io.EOFException;
 import java.io.IOException;
+import java.util.HexFormat;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -90,10 +91,7 @@ class SqliteVarintTest {
 
     // -----------------------------------------------------------------------------------------------------------------
     private static long read(final String hex) throws IOException {
-        final byte[] bytes = new byte[hex.length() / 2];
-        for (int i = 0; i < bytes.length; i++) {
-            bytes[i] = (byte) Integer.parseInt(hex.substring(i * 2, i * 2 + 2), 16);
-        }
+        final byte[] bytes = HexFormat.of().parseHex(hex);
         final ArrayByteInput input = new ArrayByteInput(bytes);
         final long value = SqliteVarint.INSTANCE.readLong(new DefaultBitInput(input));
         assertEquals(bytes.length, input.getIndex(), "consumed bytes of " + hex);
@@ -105,10 +103,6 @@ class SqliteVarintTest {
         final BitOutput output = new DefaultBitOutput(new StreamByteOutput(bytes));
         SqliteVarint.INSTANCE.writeLong(output, value);
         output.align(1);
-        final StringBuilder builder = new StringBuilder();
-        for (final byte b : bytes.toByteArray()) {
-            builder.append(Integer.toHexString((b & 0xFF) | 0x100).substring(1));
-        }
-        return builder.toString();
+        return HexFormat.of().formatHex(bytes.toByteArray());
     }
 }

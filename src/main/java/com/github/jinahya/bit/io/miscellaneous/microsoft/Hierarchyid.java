@@ -387,10 +387,10 @@ public final class Hierarchyid
         if (this == obj) {
             return true;
         }
-        if (!(obj instanceof Hierarchyid)) {
+        if (!(obj instanceof Hierarchyid that)) {
             return false;
         }
-        return Arrays.equals(bytes, ((Hierarchyid) obj).bytes);
+        return Arrays.equals(bytes, that.bytes);
     }
 
     @Override

@@ -21,7 +21,6 @@ package com.github.jinahya.bit.io;
  */
 
 import java.io.IOException;
-import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.channels.WritableByteChannel;
 import java.util.Objects;
@@ -65,8 +64,7 @@ class ChannelByteOutput
         if (buffer.capacity() == 0) {
             throw new IllegalArgumentException("buffer.capacity is zero");
         }
-        // invoked via Buffer; JDK 9+ adds covariant ByteBuffer overrides which older runtimes lack
-        ((Buffer) buffer).clear(); // start with full remaining space
+        buffer.clear(); // start with full remaining space
         this.buffered = new BufferByteOutput(buffer);
     }
 
@@ -93,7 +91,7 @@ class ChannelByteOutput
     public void write(final int value) throws IOException {
         buffered.write(value);
         if (!buffered.target.hasRemaining()) {
-            for (((Buffer) buffered.target).flip(); buffered.target.position() == 0; ) {
+            for (buffered.target.flip(); buffered.target.position() == 0; ) {
                 target.write(buffered.target);
             }
             buffered.target.compact();

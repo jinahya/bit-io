@@ -251,10 +251,9 @@ public final class Decimal {
         if (this == obj) {
             return true;
         }
-        if (!(obj instanceof Decimal)) {
+        if (!(obj instanceof Decimal that)) {
             return false;
         }
-        final Decimal that = (Decimal) obj;
         return kind == that.kind && negative == that.negative && exponent == that.exponent
                && coefficient.equals(that.coefficient);
     }

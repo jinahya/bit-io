@@ -1,6 +1,6 @@
 #!/bin/sh
 if [ $# -lt 3 ]; then
-  echo "Usage: $0 <tag> <phases...>, e.g. $0 3-jdk-11-openj9 clean install"
+  echo "Usage: $0 <tag> <phases...>, e.g. $0 3-eclipse-temurin-25 clean install"
   echo "See https://hub.docker.com/_/maven for available tags"
   exit 1
 fi

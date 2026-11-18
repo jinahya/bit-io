@@ -32,6 +32,7 @@ import org.junit.jupiter.api.Test;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.math.BigInteger;
+import java.util.HexFormat;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -187,10 +188,7 @@ class DecimalDpdTest {
     }
 
     static Decimal read(final BitReader<Decimal> codec, final String hex) throws IOException {
-        final byte[] bytes = new byte[hex.length() / 2];
-        for (int i = 0; i < bytes.length; i++) {
-            bytes[i] = (byte) Integer.parseInt(hex.substring(i * 2, i * 2 + 2), 16);
-        }
+        final byte[] bytes = HexFormat.of().parseHex(hex);
         return codec.read(new DefaultBitInput(new ArrayByteInput(bytes)));
     }
 
@@ -199,10 +197,6 @@ class DecimalDpdTest {
         final BitOutput output = new DefaultBitOutput(new StreamByteOutput(bytes));
         codec.write(output, value);
         output.align(1);
-        final StringBuilder builder = new StringBuilder();
-        for (final byte b : bytes.toByteArray()) {
-            builder.append(Integer.toHexString((b & 0xFF) | 0x100).substring(1));
-        }
-        return builder.toString();
+        return HexFormat.of().formatHex(bytes.toByteArray());
     }
 }

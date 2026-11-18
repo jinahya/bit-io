@@ -22,7 +22,6 @@ package com.github.jinahya.bit.io;
 
 import java.io.EOFException;
 import java.io.IOException;
-import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.channels.ReadableByteChannel;
 import java.util.Objects;
@@ -60,8 +59,7 @@ class ChannelByteInput
         if (buffer.capacity() == 0) {
             throw new IllegalArgumentException("buffer.capacity is zero");
         }
-        // invoked via Buffer; JDK 9+ adds covariant ByteBuffer overrides which older runtimes lack
-        ((Buffer) buffer).position(buffer.limit()); // start drained so the first read() charges from the channel
+        buffer.position(buffer.limit()); // start drained so the first read() charges from the channel
         this.buffered = new BufferByteInput(buffer);
     }
 
@@ -87,13 +85,13 @@ class ChannelByteInput
     @Override
     public int read() throws IOException {
         if (!buffered.source.hasRemaining()) {
-            for (((Buffer) buffered.source).clear(); buffered.source.position() == 0; ) {
+            for (buffered.source.clear(); buffered.source.position() == 0; ) {
                 if (source.read(buffered.source) == -1) {
-                    ((Buffer) buffered.source).flip(); // leave drained (nothing read) so that a subsequent read() re-probes
+                    buffered.source.flip(); // leave drained (nothing read) so that a subsequent read() re-probes
                     throw new EOFException("end of channel reached");
                 }
             }
-            ((Buffer) buffered.source).flip();
+            buffered.source.flip();
         }
         return buffered.read();
     }

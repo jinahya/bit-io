@@ -33,7 +33,7 @@
     <connection>scm:git:git@github.com:jinahya/${project.artifactId}.git</connection>
     <developerConnection>scm:git:git@github.com:jinahya/${project.artifactId}.git</developerConnection>
     <url>https://github.com/jinahya/${project.artifactId}</url>
-    <tag>4.2.1</tag>
+    <tag>HEAD</tag>
   </scm>
   <issueManagement>
     <system>GitHub Issues</system>
@@ -44,12 +44,8 @@
     <!-- enables live checks against official documents in integration tests; see the live-sources profile -->
     <bit-io.it.live-sources>false</bit-io.it.live-sources>
     <!-- main: Java 17 (release also checks references against the Java 17 API); tests: Java 25, so build on JDK 25 -->
-    <maven.compiler.source>17</maven.compiler.source>
-    <maven.compiler.target>${maven.compiler.source}</maven.compiler.target>
-    <maven.compiler.release>${maven.compiler.target}</maven.compiler.release>
-    <maven.compiler.testSource>25</maven.compiler.testSource>
-    <maven.compiler.testTarget>${maven.compiler.testSource}</maven.compiler.testTarget>
-    <maven.compiler.testRelease>${maven.compiler.testTarget}</maven.compiler.testRelease>
+    <maven.compiler.release>17</maven.compiler.release>
+    <maven.compiler.testRelease>25</maven.compiler.testRelease>
     <!-- https://central.sonatype.com/artifact/org.apache.maven.plugins/maven-failsafe-plugin/versions -->
     <version.maven-failsafe>${version.maven-surefire}</version.maven-failsafe>
     <version.maven-javadoc-plugin>3.12.0</version.maven-javadoc-plugin>
@@ -62,7 +58,6 @@
         <groupId>org.junit</groupId>
         <artifactId>junit-bom</artifactId>
         <!-- https://central.sonatype.com/artifact/org.junit/junit-bom/versions -->
-        <!--        <version>6.1.0-M1</version>-->
         <version>5.10.5</version>
         <type>pom</type>
         <scope>import</scope>
@@ -72,7 +67,6 @@
         <artifactId>mockito-bom</artifactId>
         <!-- https://central.sonatype.com/artifact/org.mockito/mockito-bom/versions -->
         <version>4.11.0</version>
-        <!--        <version>5.23.0</version>-->
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -83,50 +77,20 @@
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>
       <!-- https://central.sonatype.com/artifact/ch.qos.logback/logback-classic/versions -->
-      <!-- 1.3.x is the last line compiled for Java 8; 1.4.x+ require Java 11 -->
-      <!--      <version>1.3.15</version>-->
       <version>1.3.16</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.commons</groupId>
-      <artifactId>commons-text</artifactId>
-      <version>1.15.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.jboss.weld</groupId>
       <artifactId>weld-junit5</artifactId>
       <version>2.0.2.Final</version>
-      <!--      <version>5.0.3.Final</version>-->
       <scope>test</scope>
-      <!--      <exclusions>-->
-      <!--        <exclusion> &lt;!&ndash; dependencyConvergence &ndash;&gt;-->
-      <!--          <groupId>org.junit.jupiter</groupId>-->
-      <!--          <artifactId>junit-jupiter-api</artifactId>-->
-      <!--        </exclusion>-->
-      <!--        <exclusion> &lt;!&ndash; dependencyConvergence &ndash;&gt;-->
-      <!--          <groupId>org.junit.jupiter</groupId>-->
-      <!--          <artifactId>junit-jupiter-engine</artifactId>-->
-      <!--        </exclusion>-->
-      <!--      </exclusions>-->
     </dependency>
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter</artifactId>
       <scope>test</scope>
     </dependency>
-    <!--    <dependency>-->
-    <!--      <groupId>org.junit.jupiter</groupId>-->
-    <!--      <artifactId>junit-jupiter-params</artifactId>-->
-    <!--      <scope>test</scope>-->
-    <!--    </dependency>-->
-    <!--    <dependency>-->
-    <!--      <groupId>org.mockito</groupId>-->
-    <!--      <artifactId>mockito-core</artifactId>-->
-    <!--      <version>${version.org.mockito}</version>-->
-    <!--      <scope>test</scope>-->
-    <!--    </dependency>-->
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-junit-jupiter</artifactId>
@@ -219,8 +183,7 @@
               <goal>enforce</goal>
             </goals>
             <configuration>
-              <rules>
-                <dependencyConvergence />
+              <rules> <!-- dependencyConvergence runs in the parent's enforce-dependency-convergence -->
                 <requireJavaVersion> <!-- main targets 17, but tests compile with release 25 -->
                   <version>[25,)</version>
                 </requireJavaVersion>
@@ -241,6 +204,7 @@
         </configuration>
         <executions>
           <!-- multi-release jar: classes needing Java 22 (src/main/java22) go to META-INF/versions/22 -->
+          <!-- they are public classes absent from the base API, so the jar tool's validation reports them, by design; see README.md -->
           <execution>
             <id>compile-java22</id>
             <phase>compile</phase>

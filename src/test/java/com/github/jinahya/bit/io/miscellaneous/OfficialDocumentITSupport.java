@@ -47,6 +47,7 @@ import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.HexFormat;
 import java.util.function.Predicate;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -243,24 +244,11 @@ public abstract class OfficialDocumentITSupport {
 
     protected static byte[] hex(final String value) {
         final String hex = (value.length() & 1) == 0 ? value : "0" + value;
-        final byte[] bytes = new byte[hex.length() >> 1];
-        for (int i = 0; i < bytes.length; i++) {
-            final int high = Character.digit(hex.charAt(i << 1), 16);
-            final int low = Character.digit(hex.charAt((i << 1) + 1), 16);
-            if (high < 0 || low < 0) {
-                throw new IllegalArgumentException("invalid hexadecimal string: " + value);
-            }
-            bytes[i] = (byte) ((high << 4) | low);
-        }
-        return bytes;
+        return HexFormat.of().parseHex(hex);
     }
 
     protected static String hex(final byte[] value) {
-        final StringBuilder builder = new StringBuilder(value.length << 1);
-        for (final byte b : value) {
-            builder.append(Character.forDigit((b & 0xF0) >>> 4, 16)).append(Character.forDigit(b & 0x0F, 16));
-        }
-        return builder.toString();
+        return HexFormat.of().formatHex(value);
     }
 
     protected static byte[] bits(final String value) {

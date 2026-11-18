@@ -29,6 +29,10 @@ import java.nio.channels.ReadableByteChannel;
  * A byte input which reads bytes from a readable byte channel. Bytes are read through an internal
  * {@link java.nio.ByteBuffer} which is recharged from the channel whenever it drains.
  *
+ * <p>The channel is expected to be in blocking mode. A channel read which reads no bytes is retried, without any pause
+ * or limit, until at least one byte is read or the end of the channel is reached; hence a non-blocking channel makes
+ * {@link #read()} busy-wait.</p>
+ *
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  * @see ChannelByteOutput
  */

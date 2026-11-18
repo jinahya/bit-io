@@ -49,6 +49,12 @@ public class BufferByteOutput
      * {@link WritableByteChannel#write(ByteBuffer) channel write} per byte; this is simple but <strong>not</strong>
      * efficient for high-throughput writing; when throughput matters, wrap the target in a buffering layer instead.
      *
+     * <p>The {@code channel} is expected to be in <em>blocking</em> mode; it is the caller's responsibility. The
+     * returned output retries a {@link WritableByteChannel#write(ByteBuffer) channel write} which writes no bytes,
+     * without any pause or limit, until the byte is written. Hence, with a non-blocking channel (or any channel which
+     * keeps writing no bytes), {@link ByteOutput#write(int) write(int)} busy-waits, occupying the calling thread, until
+     * the channel accepts the byte.</p>
+     *
      * @param channel the writable byte channel to which bytes are written; must not be {@code null}.
      * @return a new byte output writing to {@code channel}.
      * @throws NullPointerException if {@code channel} is {@code null}.

@@ -49,6 +49,12 @@ public class BufferByteInput
      * {@link ReadableByteChannel#read(ByteBuffer) channel read} per byte. This is simple but <strong>not</strong>
      * efficient for high-throughput reading; when throughput matters, wrap the source in a buffering layer instead.
      *
+     * <p>The {@code channel} is expected to be in <em>blocking</em> mode; it is the caller's responsibility. The
+     * returned input retries a {@link ReadableByteChannel#read(ByteBuffer) channel read} which reads no bytes, without
+     * any pause or limit, until at least one byte is read or the end of the channel is reached. Hence, with a
+     * non-blocking channel (or any channel which keeps reading no bytes), {@link ByteInput#read() read()} busy-waits,
+     * occupying the calling thread, until a byte becomes available.</p>
+     *
      * @param channel the readable byte channel from which bytes are read; must not be {@code null}.
      * @return a new byte input reading from {@code channel}; its {@link ByteInput#read() read()} method throws an
      *         {@link EOFException} when {@code channel} reaches its end.

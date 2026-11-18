@@ -36,40 +36,45 @@ public class StringWriter
      * Returns a new writer that writes a compressed ({@value java.lang.Byte#SIZE}{@code  - 1}-bit element)
      * {@code US-ASCII} string.
      *
-     * <p>The returned writer encodes values with {@link String#getBytes(java.nio.charset.Charset)}, which
-     * <em>silently replaces</em> each character that can't be mapped to {@code US-ASCII} (including an unpaired
-     * surrogate) with {@code '?'}; e.g., {@code "é"} is read back as {@code "?"}, indistinguishable from a literal
-     * question mark. Use {@link #ofAsciiStrict(int)} to reject such values instead.</p>
+     * <p>Values must consist of {@code US-ASCII} characters ({@code U+0000} through {@code U+007F}); making sure of it
+     * is the caller's responsibility. The returned writer encodes values with
+     * {@link String#getBytes(java.nio.charset.Charset)}, which <em>silently replaces</em> each other character
+     * (including an unpaired surrogate) with {@code '?'}; e.g., {@code "é"} is read back as {@code "?"},
+     * indistinguishable from a literal question mark. For text which may contain other characters, use
+     * {@link #ofCompressedUnicode(int)}, or an instance for the {@code UTF-8} charset, instead.</p>
      *
      * @param lengthSize the number of bits for the (byte) length; between {@code 1} and
      *                   ({@value java.lang.Integer#SIZE} - {@code 1}), both inclusive.
      * @return a new ASCII writer.
      * @see StringReader#ofAscii(int)
-     * @see #ofAsciiStrict(int)
      */
     public static BitWriter<String> ofAscii(final int lengthSize) {
-        return new AsciiWriter(lengthSize, false);
+        return new AsciiWriter(lengthSize);
     }
 
+
     /**
-     * Returns a new writer that writes a compressed ({@value java.lang.Byte#SIZE}{@code  - 1}-bit element)
-     * {@code US-ASCII} string, rejecting any value which contains a character that can't be mapped to
-     * {@code US-ASCII}.
+     * Returns a new writer that writes a compressed Unicode string, readable with
+     * {@link StringReader#ofCompressedUnicode(int)}.
      *
-     * <p>For a value consisting only of {@code US-ASCII} characters ({@code U+0000} to {@code U+007F}), the returned
-     * writer writes exactly the same bits as {@link #ofAscii(int)}; hence values written by it can be read with
-     * {@link StringReader#ofAscii(int)}. For any other value, including one with an unpaired surrogate, its
-     * {@link BitWriter#write(BitOutput, Object) write} method throws an {@link IllegalArgumentException} before writing
-     * any bits.</p>
+     * <p>Each code point is stored as a 2-bit block type followed by its payload bits; {@code 9} bits for
+     * {@code U+0000} through {@code U+007F}, {@code 13} bits through {@code U+07FF}, {@code 18} bits through
+     * {@code U+FFFF}, and {@code 23} bits through {@code U+10FFFF}; the payload bits of UTF-8, with a block type
+     * in place of its marker bits. The format is specific to this library; it is neither UTF-8 nor compatible
+     * with {@link #ofAscii(int)}. For text known to be {@code US-ASCII},
+     * {@link #ofAscii(int)} is smaller ({@code 7} bits per character).</p>
      *
-     * @param lengthSize the number of bits for the (byte) length; between {@code 1} and
+     * <p>The {@link BitWriter#write(BitOutput, Object) write} method of the returned writer throws an
+     * {@link IllegalArgumentException} for a value with an unpaired surrogate, or whose number of code points requires
+     * more than {@code lengthSize} bits.</p>
+     *
+     * @param lengthSize the number of bits for the length, in code points; between {@code 1} and
      *                   ({@value java.lang.Integer#SIZE} - {@code 1}), both inclusive.
-     * @return a new strict ASCII writer.
-     * @see StringReader#ofAscii(int)
-     * @see #ofAscii(int)
+     * @return a new compressed Unicode writer.
+     * @see StringReader#ofCompressedUnicode(int)
      */
-    public static BitWriter<String> ofAsciiStrict(final int lengthSize) {
-        return new AsciiWriter(lengthSize, true);
+    public static BitWriter<String> ofCompressedUnicode(final int lengthSize) {
+        return new CompressedUnicodeWriter(lengthSize);
     }
 
     // -----------------------------------------------------------------------------------------------------------------

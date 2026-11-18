@@ -30,7 +30,6 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class StringObjectRoundTripTest {
 
@@ -99,48 +98,6 @@ class StringObjectRoundTripTest {
         final byte[] bytes = writeDirect(StringWriter.ofAscii(8), "é");
 
         assertEquals("?", StringReader.ofAscii(8).read(input(bytes)));
-    }
-
-    @Test
-    void strictAsciiFactoryUsesSameWireFormatForAscii() throws IOException {
-        for (final String value : new String[]{"", "ABC", "ASCII 0123 ~", "\u0000\u007f?"}) {
-            final byte[] strict = writeDirect(StringWriter.ofAsciiStrict(5), value);
-
-            assertArrayEquals(writeDirect(StringWriter.ofAscii(5), value), strict, value);
-            assertEquals(value, StringReader.ofAscii(5).read(input(strict)));
-        }
-    }
-
-    @Test
-    void strictAsciiFactoryRejectsNonAsciiCharacterBeforeWritingAnyBits() throws IOException {
-        assertStrictAsciiRejects("café", 3);
-    }
-
-    @Test
-    void strictAsciiFactoryRejectsUnpairedSurrogateBeforeWritingAnyBits() throws IOException {
-        assertStrictAsciiRejects("a\ud800b", 1);
-        assertStrictAsciiRejects("ab\udc00", 2);
-    }
-
-    @Test
-    void strictAsciiFactoryRejectsNullArguments() {
-        final BitWriter<String> writer = StringWriter.ofAsciiStrict(8);
-
-        assertThrows(NullPointerException.class, () -> writer.write(null, "value"));
-        assertThrows(NullPointerException.class, () -> writer.write(output(new ByteArrayOutputStream()), null));
-    }
-
-    private static void assertStrictAsciiRejects(final String value, final int index) throws IOException {
-        final ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        final BitOutput output = output(bytes);
-        output.writeBoolean(true); // a partial octet which must stay intact
-
-        final IllegalArgumentException thrown = assertThrows(
-                IllegalArgumentException.class, () -> StringWriter.ofAsciiStrict(8).write(output, value));
-        assertTrue(thrown.getMessage().contains("at index " + index), thrown.getMessage());
-
-        output.align(1);
-        assertArrayEquals(new byte[]{(byte) 0x80}, bytes.toByteArray(), "no bits written by the rejected value");
     }
 
     private static void roundTripViaObject(final int lengthSize, final String charsetName, final String value)

@@ -45,6 +45,26 @@ public class StringReader
         return new AsciiReader(lengthSize);
     }
 
+    /**
+     * Returns a new reader that reads a compressed Unicode string, written by
+     * {@link StringWriter#ofCompressedUnicode(int)}.
+     *
+     * <p>Each code point is stored as a 2-bit block type followed by its payload bits; {@code 9} bits for
+     * {@code U+0000} through {@code U+007F}, {@code 13} bits through {@code U+07FF}, {@code 18} bits through
+     * {@code U+FFFF}, and {@code 23} bits through {@code U+10FFFF}; the payload bits of UTF-8, with a block type
+     * in place of its marker bits. The format is specific to this library; it is neither UTF-8 nor compatible
+     * with {@link #ofAscii(int)}. For text known to be {@code US-ASCII},
+     * {@link #ofAscii(int)} is smaller ({@code 7} bits per character).</p>
+     *
+     * @param lengthSize the number of bits for the length, in code points; between {@code 1} and
+     *                   ({@value java.lang.Integer#SIZE} - {@code 1}), both inclusive.
+     * @return a new compressed Unicode reader.
+     * @see StringWriter#ofCompressedUnicode(int)
+     */
+    public static BitReader<String> ofCompressedUnicode(final int lengthSize) {
+        return new CompressedUnicodeReader(lengthSize);
+    }
+
     // -----------------------------------------------------------------------------------------------------------------
 
     /**

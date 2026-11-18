@@ -67,6 +67,9 @@ public abstract class AbstractBitOutput
     /**
      * Writes given {@value java.lang.Byte#SIZE}-bit unsigned integer.
      *
+     * <p>An exception thrown by this method propagates to the caller as is, leaving this output in an unspecified
+     * state; see {@link BitOutput}.</p>
+     *
      * @param value the {@value java.lang.Byte#SIZE}-bit unsigned integer to write.
      * @throws IOException if an I/O error occurs.
      * @see AbstractBitInput#read()

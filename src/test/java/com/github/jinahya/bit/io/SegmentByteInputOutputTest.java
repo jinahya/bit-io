@@ -30,6 +30,7 @@ import java.lang.foreign.ValueLayout;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -84,6 +85,57 @@ class SegmentByteInputOutputTest {
         }
         assertThrows(IllegalStateException.class, () -> new SegmentByteInput(closed).read());
         assertThrows(IllegalStateException.class, () -> new SegmentByteOutput(closed).write(1));
+    }
+
+    @Test
+    void failedAccessesLeaveTheOffsetUnchanged() throws Exception {
+        final SegmentByteOutput readOnlyOutput = new SegmentByteOutput(MemorySegment.ofArray(new byte[1]).asReadOnly());
+        assertThrows(IllegalArgumentException.class, () -> readOnlyOutput.write(1));
+        assertEquals(0L, readOnlyOutput.getOffset());
+        final MemorySegment closed;
+        try (Arena arena = Arena.ofConfined()) {
+            closed = arena.allocate(1L);
+        }
+        final SegmentByteInput closedInput = new SegmentByteInput(closed);
+        assertThrows(IllegalStateException.class, closedInput::read);
+        assertEquals(0L, closedInput.getOffset());
+        final SegmentByteOutput closedOutput = new SegmentByteOutput(closed);
+        assertThrows(IllegalStateException.class, () -> closedOutput.write(1));
+        assertEquals(0L, closedOutput.getOffset());
+    }
+
+    @Test
+    void wrongThreadAccessesLeaveTheOffsetUnchangedForARetryOnTheOwner() throws Exception {
+        try (Arena arena = Arena.ofConfined()) {
+            final MemorySegment segment = arena.allocate(2L);
+            segment.set(ValueLayout.JAVA_BYTE, 0L, (byte) 0x5A);
+            final SegmentByteInput input = new SegmentByteInput(segment);
+            final SegmentByteOutput output = new SegmentByteOutput(segment);
+            final Throwable[] thrown = new Throwable[2];
+            final Thread other = new Thread(() -> {
+                try {
+                    input.read();
+                } catch (final Throwable t) {
+                    thrown[0] = t;
+                }
+                try {
+                    output.write(0x33);
+                } catch (final Throwable t) {
+                    thrown[1] = t;
+                }
+            });
+            other.start();
+            other.join();
+            assertInstanceOf(WrongThreadException.class, thrown[0]);
+            assertInstanceOf(WrongThreadException.class, thrown[1]);
+            assertEquals(0L, input.getOffset());
+            assertEquals(0L, output.getOffset());
+            assertEquals(0x5A, input.read()); // the same byte, on the owner thread
+            output.write(0x33);
+            assertEquals(1L, input.getOffset());
+            assertEquals(1L, output.getOffset());
+            assertEquals((byte) 0x33, segment.get(ValueLayout.JAVA_BYTE, 0L));
+        }
     }
 
     @Test

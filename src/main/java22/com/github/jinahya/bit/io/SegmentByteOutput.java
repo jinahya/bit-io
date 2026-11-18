@@ -65,7 +65,8 @@ public class SegmentByteOutput
 
     /**
      * {@inheritDoc} The {@code write(int)} method of {@code SegmentByteOutput} class sets the byte at the current
-     * {@link #getOffset() offset} of the segment, and increases the offset by {@code 1}.
+     * {@link #getOffset() offset} of the segment, and increases the offset by {@code 1}. The offset is left
+     * unchanged when the access fails.
      *
      * @param value {@inheritDoc}
      * @throws IOException if the current offset is not less than the size of the segment.
@@ -75,7 +76,8 @@ public class SegmentByteOutput
         if (offset >= target.byteSize()) {
             throw new IOException("segment is full; offset: " + offset);
         }
-        target.set(ValueLayout.JAVA_BYTE, offset++, (byte) value);
+        target.set(ValueLayout.JAVA_BYTE, offset, (byte) value);
+        offset++; // only after a successful access
     }
 
     // ---------------------------------------------------------------------------------------------------------- offset

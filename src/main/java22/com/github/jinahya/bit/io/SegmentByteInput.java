@@ -66,6 +66,7 @@ public class SegmentByteInput
     /**
      * {@inheritDoc} The {@code read()} method of {@code SegmentByteInput} class returns the byte at the current
      * {@link #getOffset() offset} of the segment, as an unsigned 8-bit value, and increases the offset by {@code 1}.
+     * The offset is left unchanged when the access fails.
      *
      * @return {@inheritDoc}
      * @throws EOFException if the current offset is not less than the size of the segment.
@@ -76,7 +77,9 @@ public class SegmentByteInput
         if (offset >= source.byteSize()) {
             throw new EOFException("end of segment reached; offset: " + offset);
         }
-        return source.get(ValueLayout.JAVA_BYTE, offset++) & 0xFF;
+        final int value = source.get(ValueLayout.JAVA_BYTE, offset) & 0xFF;
+        offset++; // only after a successful access
+        return value;
     }
 
     // ---------------------------------------------------------------------------------------------------------- offset

@@ -34,6 +34,7 @@ import java.io.IOException;
  * @see BitWriter
  * @see FilterBitReader
  */
+@FunctionalInterface
 public interface BitReader<T> {
 
     /**

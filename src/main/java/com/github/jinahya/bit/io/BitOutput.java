@@ -25,6 +25,9 @@ import java.io.IOException;
 /**
  * An interface for writing values of an arbitrary number of bits.
  *
+ * <p>Since 5.0, methods added to this interface are {@code default} methods, so that existing implementations keep
+ * compiling.</p>
+ *
  * <p><strong>Failures of the underlying byte target.</strong> An exception thrown by the underlying byte target,
  * checked or unchecked, propagates to the caller as is. After that, the state of this output, including
  * {@link #getCount()}, is <em>unspecified</em>; it may still hold the octet which failed to be written, and it may or

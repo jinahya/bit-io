@@ -25,6 +25,9 @@ import java.io.IOException;
 /**
  * An interface for reading values of an arbitrary number of bits.
  *
+ * <p>Since 5.0, methods added to this interface are {@code default} methods, so that existing implementations keep
+ * compiling.</p>
+ *
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  * @see BitOutput
  */

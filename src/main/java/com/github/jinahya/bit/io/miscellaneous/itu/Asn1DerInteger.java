@@ -79,12 +79,8 @@ public final class Asn1DerInteger
     public BigInteger read(final BitInput input) throws IOException {
         requireNonNullInput(input);
         final byte[] bytes = byteArrayReader.read(input);
-        requireGreaterThanOrEqualsTo(bytes.length, MIN_LENGTH, new _Supplier<IOException>() {
-            @Override
-            public IOException get() {
-                return new IOException("length(" + bytes.length + ") < " + MIN_LENGTH);
-            }
-        });
+        requireGreaterThanOrEqualsTo(
+                bytes.length, MIN_LENGTH, () -> new IOException("length(" + bytes.length + ") < " + MIN_LENGTH));
         requireMinimal(bytes);
         return new BigInteger(bytes);
     }
@@ -93,12 +89,9 @@ public final class Asn1DerInteger
     public void write(final BitOutput output, final BigInteger value) throws IOException {
         requireNonNullOutput(output);
         final byte[] bytes = requireNonNullValue(value).toByteArray();
-        requireGreaterThanOrEqualsTo(bytes.length, MIN_LENGTH, new _Supplier<IllegalArgumentException>() {
-            @Override
-            public IllegalArgumentException get() {
-                return new IllegalArgumentException("length(" + bytes.length + ") < " + MIN_LENGTH);
-            }
-        });
+        requireGreaterThanOrEqualsTo(
+                bytes.length, MIN_LENGTH,
+                () -> new IllegalArgumentException("length(" + bytes.length + ") < " + MIN_LENGTH));
         byteArrayWriter.write(output, bytes);
     }
 

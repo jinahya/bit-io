@@ -28,6 +28,7 @@ import java.io.IOException;
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  * @see IntBitWriter
  */
+@FunctionalInterface
 public interface IntBitReader {
 
     /**

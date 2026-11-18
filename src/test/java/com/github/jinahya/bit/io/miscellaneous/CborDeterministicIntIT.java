@@ -26,7 +26,6 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 class CborDeterministicIntIT
@@ -34,8 +33,9 @@ class CborDeterministicIntIT
 
     @Test
     void verifiesShortestIntegerExamplesFromRfc8949() throws Exception {
-        final String document = downloadText("https://www.rfc-editor.org/rfc/rfc8949.txt", 512 * 1024);
-        assertTrue(document.contains("Appendix A.  Examples of Encoded CBOR Data Items"), "downloaded RFC 8949");
+        checkSource("https://www.rfc-editor.org/rfc/rfc8949.txt", 512 * 1024,
+                    document -> document.contains("Appendix A.  Examples of Encoded CBOR Data Items"),
+                    "downloaded RFC 8949");
 
         final long[][] rows = {
                 {0L, 0x00L}, {1L, 0x01L}, {10L, 0x0AL}, {23L, 0x17L}, {24L, 0x1818L}, {1000L, 0x1903E8L},

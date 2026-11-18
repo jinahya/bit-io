@@ -41,6 +41,8 @@
   </issueManagement>
 
   <properties>
+    <!-- enables live checks against official documents in integration tests; see the live-sources profile -->
+    <bit-io.it.live-sources>false</bit-io.it.live-sources>
     <maven.compiler.source>1.6</maven.compiler.source>
     <maven.compiler.target>${maven.compiler.source}</maven.compiler.target>
     <maven.compiler.testSource>1.8</maven.compiler.testSource>
@@ -291,6 +293,11 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-failsafe-plugin</artifactId>
         <version>${version.maven-failsafe}</version>
+        <configuration>
+          <systemPropertyVariables>
+            <bit-io.it.live-sources>${bit-io.it.live-sources}</bit-io.it.live-sources>
+          </systemPropertyVariables>
+        </configuration>
         <executions>
           <execution>
             <goals>
@@ -610,6 +617,12 @@
           </plugins>
         </pluginManagement>
       </build>
+    </profile>
+    <profile> <!-- checks integration test vectors against live official documents; requires network access -->
+      <id>live-sources</id>
+      <properties>
+        <bit-io.it.live-sources>true</bit-io.it.live-sources>
+      </properties>
     </profile>
     <profile> <!-- just for IntelliJ IDEA -->
       <id>1.8</id>

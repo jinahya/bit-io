@@ -28,7 +28,6 @@ import static com.github.jinahya.bit.io.miscellaneous.RiceGolombTestUtils.readRi
 import static com.github.jinahya.bit.io.miscellaneous.RiceGolombTestUtils.writeRiceFlac;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 class RiceFLACIT
@@ -36,8 +35,9 @@ class RiceFLACIT
 
     @Test
     void verifiesRiceCodedResidualExamplesFromRfc9639() throws Exception {
-        final String document = downloadText("https://www.rfc-editor.org/rfc/rfc9639.txt", 768 * 1024);
-        assertTrue(document.contains("Rice-coded residual") && document.contains("Table 48"), "downloaded RFC 9639");
+        checkSource("https://www.rfc-editor.org/rfc/rfc9639.txt", 768 * 1024,
+                    document -> document.contains("Rice-coded residual") && document.contains("Table 48"),
+                    "downloaded RFC 9639");
 
         assertArrayEquals(bits("1110"), writeRiceFlac(3, 3L));        // RFC 9639 Table 48: q=0, r=6
         assertEquals(3L, readRiceFlac(3, bits("1110")));

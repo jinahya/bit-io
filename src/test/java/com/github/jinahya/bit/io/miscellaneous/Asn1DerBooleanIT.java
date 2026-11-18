@@ -26,7 +26,6 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 class Asn1DerBooleanIT
@@ -34,8 +33,9 @@ class Asn1DerBooleanIT
 
     @Test
     void verifiesDerBooleanContentOctetsFromX690() throws Exception {
-        final String document = downloadText("https://www.itu.int/rec/T-REC-X.690", 128 * 1024);
-        assertTrue(document.contains("X.690") || document.contains("ASN.1"), "downloaded ITU-T X.690 page");
+        checkSource("https://www.itu.int/rec/T-REC-X.690", 128 * 1024,
+                    document -> document.contains("X.690") || document.contains("ASN.1"),
+                    "downloaded ITU-T X.690 page");
 
         assertEquals(Boolean.FALSE, read(Asn1DerBoolean.INSTANCE, hex("00")));
         assertEquals(Boolean.TRUE, read(Asn1DerBoolean.INSTANCE, hex("ff")));

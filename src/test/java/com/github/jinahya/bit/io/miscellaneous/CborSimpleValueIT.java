@@ -26,7 +26,6 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 class CborSimpleValueIT
@@ -34,8 +33,9 @@ class CborSimpleValueIT
 
     @Test
     void verifiesSimpleValueExamplesFromRfc8949() throws Exception {
-        final String document = downloadText("https://www.rfc-editor.org/rfc/rfc8949.txt", 512 * 1024);
-        assertTrue(document.contains("CBOR Simple Values Registry"), "downloaded RFC 8949");
+        checkSource("https://www.rfc-editor.org/rfc/rfc8949.txt", 512 * 1024,
+                    document -> document.contains("CBOR Simple Values Registry"),
+                    "downloaded RFC 8949");
 
         final int[][] rows = {
                 {20, 0xF4}, {21, 0xF5}, {22, 0xF6}, {23, 0xF7}, {32, 0xF820}, {255, 0xF8FF}

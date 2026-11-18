@@ -28,7 +28,6 @@ import static com.github.jinahya.bit.io.miscellaneous.ExpGolombTestUtils.readSe;
 import static com.github.jinahya.bit.io.miscellaneous.ExpGolombTestUtils.writeSe;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 class ExpGolombSEIT
@@ -36,10 +35,12 @@ class ExpGolombSEIT
 
     @Test
     void verifiesSignedExpGolombTableFromH264H265() throws Exception {
-        final String h264 = downloadText("https://www.itu.int/rec/T-REC-H.264", 128 * 1024);
-        final String h265 = downloadText("https://www.itu.int/rec/T-REC-H.265", 128 * 1024);
-        assertTrue(h264.contains("H.264") || h264.contains("14496-10"), "downloaded ITU-T H.264 page");
-        assertTrue(h265.contains("H.265") || h265.contains("23008-2"), "downloaded ITU-T H.265 page");
+        checkSource("https://www.itu.int/rec/T-REC-H.264", 128 * 1024,
+                    document -> document.contains("H.264") || document.contains("14496-10"),
+                    "downloaded ITU-T H.264 page");
+        checkSource("https://www.itu.int/rec/T-REC-H.265", 128 * 1024,
+                    document -> document.contains("H.265") || document.contains("23008-2"),
+                    "downloaded ITU-T H.265 page");
 
         final Object[][] rows = {
                 {Long.valueOf(0L), "1"}, {Long.valueOf(1L), "010"}, {Long.valueOf(-1L), "011"},

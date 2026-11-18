@@ -26,7 +26,6 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 class CborGenericIntIT
@@ -34,8 +33,9 @@ class CborGenericIntIT
 
     @Test
     void verifiesGenericIntegerExamplesFromRfc8949() throws Exception {
-        final String document = downloadText("https://www.rfc-editor.org/rfc/rfc8949.txt", 512 * 1024);
-        assertTrue(document.contains("Appendix A.  Examples of Encoded CBOR Data Items"), "downloaded RFC 8949");
+        checkSource("https://www.rfc-editor.org/rfc/rfc8949.txt", 512 * 1024,
+                    document -> document.contains("Appendix A.  Examples of Encoded CBOR Data Items"),
+                    "downloaded RFC 8949");
 
         assertArrayEquals(hex("1818"), write(CborGenericInt.INSTANCE, 24L));
         assertEquals(0L, read(CborGenericInt.INSTANCE, hex("1800")));

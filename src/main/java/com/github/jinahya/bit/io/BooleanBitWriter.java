@@ -28,6 +28,7 @@ import java.io.IOException;
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  * @see BooleanBitReader
  */
+@FunctionalInterface
 public interface BooleanBitWriter {
 
     /**

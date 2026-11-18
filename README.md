@@ -31,25 +31,19 @@ output.align(1);                    // flush the trailing partial byte
 Use the [Maven Central page](https://central.sonatype.com/artifact/io.github.jinahya/bit-io) for the latest released
 version.
 
-Retro-translated artifacts are also published for legacy JVMs:
+Requires **Java 17** or later. For Java 1.3–16, use **4.2.1**, the last release line for those runtimes (including the
+`retrotranslated13` and `retrotranslated14` classifier artifacts).
 
-```xml
-<dependency>
-  <groupId>io.github.jinahya</groupId>
-  <artifactId>bit-io</artifactId>
-  <version>${bit-io.version}</version>
-  <classifier>retrotranslated13</classifier>
-</dependency>
-```
+### Upgrading from 4.x
 
-```xml
-<dependency>
-  <groupId>io.github.jinahya</groupId>
-  <artifactId>bit-io</artifactId>
-  <version>${bit-io.version}</version>
-  <classifier>retrotranslated14</classifier>
-</dependency>
-```
+- The minimum runtime is Java 17.
+- The deprecated aliases in `com.github.jinahya.bit.io.miscellaneous` are removed; import the same class names from
+  its subpackages: `itu` (ASN.1, Exp-Golomb, JPEG-LS Golomb), `ietf` (CBOR, HPACK, FLAC Rice, UUID bytes), and `w3c`
+  (LEB128). Code compiled against the old names must be recompiled.
+- Wire formats are unchanged; data written by 4.x reads identically.
+- The `java.util.UUID` codecs and mapping filters of [bit-io-ext](https://github.com/jinahya/bit-io-ext) are now part of
+  bit-io: `miscellaneous.ietf.UuidRfc9562`, `miscellaneous.microsoft.MicrosoftGuid` (with `MicrosoftGuidBytes`), and
+  `FilterBitReaders.mapping` / `FilterBitWriters.mapping`.
 
 ## Documentation
 
@@ -60,19 +54,19 @@ API reference: [javadoc.io/doc/io.github.jinahya/bit-io](https://javadoc.io/doc/
 
 ## Building
 
-Build with JDK 8 and Maven 3.9+:
+Build with JDK 25 and Maven 3.9+ (or `./mvnw`). The jar targets Java 17 (`--release 17`); the tests compile with
+`--release 25`:
 
 ```sh
 mvn verify                    # unit + integration tests; no access to external sites needed
+mvn -Pjapicmp package         # compares the public API with the previous release
 mvn -Plive-sources verify     # also checks test vectors against the live standards documents
-mvn -Pkotlin-compat-1.3.72 test         # Kotlin interop tests
-mvn -Pkotlin-compat-2.4.20-Beta1 test
+mvn -Pkotlin-compat-2.4.20-Beta1 test   # Kotlin interop tests
 ```
 
 See [Building](https://github.com/jinahya/bit-io/wiki/Building) in the wiki for details.
 
 ## Notes
 
-- Runtime target: Java 1.6.
-- Retro-translated artifacts are published with `retrotranslated13` and `retrotranslated14` classifiers.
+- Runtime target: Java 17.
 - License: [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0).

@@ -462,7 +462,7 @@
     <profile> <!-- compares the public API with a released version; mvn -Pjapicmp package [-Djapicmp.oldVersion=...] -->
       <id>japicmp</id>
       <properties>
-        <japicmp.oldVersion>5.0.0</japicmp.oldVersion>
+        <japicmp.oldVersion>5.1.0</japicmp.oldVersion>
       </properties>
       <build>
         <plugins>
